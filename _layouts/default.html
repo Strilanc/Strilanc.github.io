@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>{{ page.title }}</title>
+        <meta name="viewport" content="width=device-width">
+
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+        <!-- Custom JS dependencies -->
+        <!-- jQuery 2.1.0 -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+        <!-- mathjax latest -->
+        <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script>
+          MathJax.Hub.Config({
+            tex2jax: {
+              inlineMath: [['$','$']],
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+          });
+        </script>
+
+    </head>
+    <body>
+
+        <div class="site">
+          <div class="header">
+            <h1 class="title"><a href="/">{{ site.name }}</a></h1>
+            <a class="extra" href="/">home</a>
+          </div>
+
+          {{ content }}
+
+          <div class="footer">
+            <div class="contact">
+              <p>
+                Craig Gidney<br />
+                Professional and hobbyist software developer<br />
+                email: first.last at gmail<br />
+                <a href="https://github.com/strilanc">github: @strilanc</a><br />
+                <a href="https://twitter.com/craiggidney">twitter: @craiggidney</a><br />
+              </p>
+            </div>
+            <div class="contact">
+              <p>
+              </p>
+            </div>
+          </div>
+        </div>
+
+    </body>
+</html>
