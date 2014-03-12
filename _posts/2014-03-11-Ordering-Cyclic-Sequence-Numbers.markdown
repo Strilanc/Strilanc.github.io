@@ -36,7 +36,7 @@ new PriorityQueue<Packet>(comparator: (a, b) => (short)(b.seq - a.seq));
 
 This priority queue will work great, *as long as you don't put an intransitive set of values in it*. In the case of RTP sequence numbers this is not a problem, because of the way packets slowly count forward and are quickly consumed. Packets arriving now are consumed way, *way* before you get to where they would cause trouble (on the other side of the sequence number cycle).
 
-A side-benefit of using subtraction to determine our ordering is that it gives us a *distance*. It tells us how *far* ahead, or behind, a sequence number is (relative to the current sequence number). We can use that to play it safe, detecting when sequence numbers "skip" and failing fast:
+A side-benefit of using subtraction to determine our ordering is that it gives us a *distance*. It tells us how *far* ahead, or behind, a sequence number is (relative to the current sequence number). We can use that to play it safe, detecting when sequence numbers "skip":
 
 ``` csharp
 // priority queue with fail-fast check for big skips
@@ -66,7 +66,7 @@ long expandRollingSequenceId(short seq) {
 
 Seen above: beautifully simple code. (Gets uglier in C, where you have to manually wrap the signed overflow.)
 
-Again we're relying on the fact that sequence numbers increase slowly, instead of jumping all over the available range. In ZRTP this is the case, since packets aren't delayed by tens of minutes, so the above code can be used to keep the receiver's expanded sequence number in sync with the sender's expanded sequence number.
+Again we're relying on the fact that sequence numbers increase slowly, instead of jumping all over the available range. In ZRTP this is the case, since packets aren't delayed by tens of minutes so the above code can be used to keep the receiver's expanded sequence number in sync with the sender's expanded sequence number. Even when packets are being re-ordered.
 
 (Note: Beware an attacker forcing a sequence number desync by replaying packets after tens of minutes. You can prevent this attack by decrypting and authenticating packets before mutating the internal "current" expanded sequence number.)
 
