@@ -109,3 +109,7 @@ You, me, and your friend are in a room with a standard deck of 52 cards. I propo
 I give you prep-time to discuss strategy with your friend. The only communication you are allowed during the game is in the choosing of which card to not lay down, and the order of the cards you do lay down.
 
 Is it possible to win with certainty? How, or why not? What is the largest deck of cards where it's possible to win with certainty?
+
+---
+
+[Discuss on Reddit](http://www.reddit.com/r/programming/comments/207rhs/ordering_cyclic_sequence_numbers/)
