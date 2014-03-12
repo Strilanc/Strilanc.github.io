@@ -92,3 +92,7 @@ I hope this has given a little insight into how you go about making a quantum ci
 **Summary**
 
 A Quantum Fourier Transform is just a bunch of Hadamard gates with some phase corrections along the way, and a bit reversal thrown in if necessary.
+
+---
+
+[Discuss on Reddit](http://www.reddit.com/r/programming/comments/1ztgen/building_your_own_quantum_fourier_transform/)
