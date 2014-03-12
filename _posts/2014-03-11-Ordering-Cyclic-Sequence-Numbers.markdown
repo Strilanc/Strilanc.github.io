@@ -72,7 +72,7 @@ Again we're relying on the fact that sequence numbers increase slowly, instead o
 
 **Other Cycle Sizes**
 
-What about when the cycle you're dealing with isn't a 16 bit integer? What if it doesn't match up with a built-in numeric type? What if it's a continuous value, like an angle? Ordering and distance are just a matter of subtraction, except you have to follow up with forcing the result into the interval $[-\frac{n}{2}, \frac{n}{2})$, where $n$ is the length of the cycle:
+What about when the cycle you're dealing with isn't a 16 bit integer? What if it doesn't match up with a built-in numeric type? What if it's a continuous value, like an angle? Ordering and distance are still just a matter of subtraction, except you have to follow up with forcing the result into the interval $[-\frac{n}{2}, \frac{n}{2})$, where $n$ is the length of the cycle:
 
 ```java
 // Returns the smallest value x, by absolute value,
