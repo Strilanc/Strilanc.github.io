@@ -58,7 +58,7 @@ And the tests pass.
 Notice that we do have a negative test to make sure the code is not just `return true`. That's a very good thing (it's one of the many ways Apple's [`goto fail` security bug in iOS](http://www.wired.com/threatlevel/2014/02/gotofail/) could have been caught).
  Unfortunately, there's a typo that breaks the code. The size of the data being compared should be `160/8`, not `16/8`. The odds of a bad packet getting through should be one in a trillion trillion trillion trillions, but is instead more like one in a hundred thousand. The authentication only depends on the first two bytes of the HMAC, instead of all twenty.
 
-We had a test to reject naive programs like `return true // todo: implement`, but no tests to reject programs where the size given to memcmp was simply typo'd. Or tests to reject programs using `strncmp` instead of `memcmp`. Or to reject programs that don't depend on all the bytes for other reasons. Or programs that accidentally assign `contents.payload` instead of comparing against it.
+We had a test to reject naive programs like `return true // todo: implement`, but no tests to reject programs where the size given to memcmp was simply typo'd. Or tests to reject programs using `strncmp` [instead of](http://rdist.root.org/2008/03/25/wii-hacking-and-the-freeloader/) `memcmp`. Or to reject programs that don't depend on all the bytes for other reasons. Or programs that [accidentally assign](http://stackoverflow.com/a/2775046/52239) `contents.payload` instead of comparing against it.
 
 And that's my trick for avoiding positive bias: come up with wrong (but nearby) programs, and write tests to reject them.
 
