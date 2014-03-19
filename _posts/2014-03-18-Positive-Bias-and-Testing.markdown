@@ -65,3 +65,7 @@ And that's my trick for avoiding positive bias: come up with wrong (but nearby) 
 **Summary**
 
 Think of tests not just in terms of *what should happen*, but in terms of *what could be wrong*. Come up with plausible flawed implementations, and write tests to reject them.
+
+---
+
+[Discuss on Reddit](http://www.reddit.com/r/programming/comments/20sxmn/positive_bias_and_testing/)
