@@ -31,10 +31,10 @@ The tests all pass. But then you notice some compiler warnings and take a look a
         return s1._innerText.ToUpper() == s1._innerText.ToUpper();
     }
     public static bool operator!=(CaselessString s1, CaselessString s2) {
-        return s1._innerText.ToUpper() != s1._innerText.ToUpper();
+        return s1._innerText.ToUpper() != s2._innerText.ToUpper();
     }
 
-See it? The result is always `true`, because `s1` is being compared against itself instead of `s2`!
+See it? The result of `==` is always `true`, because `s1` is being compared against itself instead of `s2`!
 
 The tests didn't catch the problem because they're not testing any cases where the operators should return false. We missed an important negative case, because we were thinking in terms of satisfying instead of rejecting. We implicitly assumed `==` was the opposite of `!=` instead of testing it (or using a language that enforced that fact).
 
