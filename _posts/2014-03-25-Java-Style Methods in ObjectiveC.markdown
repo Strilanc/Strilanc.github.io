@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Bad Ideas 1: Java-Style Methods in Objective-C"
+title: "Bad Ideas #1: Java-Style Methods in Objective-C"
 date: 2014-03-25 10:00:00
 categories: bad-idea
 ---
