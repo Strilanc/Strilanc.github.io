@@ -2,7 +2,7 @@
 layout: post
 title: "Bad Ideas #1: Java-Style Methods in Objective-C"
 date: 2014-03-25 10:00:00
-categories: bad-idea
+categories: badidea
 ---
 
 Sometimes, when you're coding, you come up with ideas. Sometimes using those ideas is a bad idea. In this series of posts, "bad ideas", I come up with tempting tricks that you shouldn't actually use.
