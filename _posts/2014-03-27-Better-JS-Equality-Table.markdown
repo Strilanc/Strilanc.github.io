@@ -110,3 +110,17 @@ ctx.stroke();
 **Summary**
 
 JavaScript's `==` operator is intransitive and loose, flaws that absolutely justify using `===` instead, but it's not as bad as some tables make it look.
+
+*Update*
+
+It's a lot harder to make the `<` operator's truth table make sense ([js fiddle here](http://jsfiddle.net/G943v/16/)):
+
+![Truth table for JS less-than](http://i.imgur.com/VZ0ztaB.png)
+
+A comparison operator's truth table should look like a triangle, or stair case, when put in the right order. JS's has several holes and flecks, because of how coercion varies based on the context.
+
+(It's also notable that the best ordering for the comparison table is not a particularly good ordering for the equality table.)
+
+---
+
+[Discussion on Reddit](http://www.reddit.com/r/programming/comments/21k92r/dont_make_javascript_equality_look_worse_than_it/)
