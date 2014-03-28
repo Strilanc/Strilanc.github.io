@@ -109,4 +109,4 @@ ctx.stroke();
 
 **Summary**
 
-JavaScript's `==` operator is not reflexive and not transitive, which are terrible flaws that absolutely justify using `===` instead, but it's not as bad as some tables make it look.
+JavaScript's `==` operator is not reflexive, which is a terrible flaw that absolutely justifies using `===` instead, but it's not as bad as some tables make it look.
