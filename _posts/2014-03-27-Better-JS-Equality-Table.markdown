@@ -5,7 +5,7 @@ date: 2014-03-27 20:00:00
 categories: visualization
 ---
 
-Every now and then someone posts a table showing what values are equivalent according to javascript's `==` operator, like [this recent example](http://dorey.github.io/JavaScript-Equality-Table/). Then they point how disorganized the table is.
+Every now and then someone posts a table showing what values are equivalent according to javascript's `==` operator, like [this recent example](http://dorey.github.io/JavaScript-Equality-Table/). Then they point out how disorganized the table is.
 
 These posts are fundamentally right about `==` being poorly designed... but they make things *look* worse by failing to organize the table. For example, here's the table from the linked post:
 
