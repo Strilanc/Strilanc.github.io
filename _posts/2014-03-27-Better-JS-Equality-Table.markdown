@@ -17,7 +17,7 @@ By grouping equal values together, you get something more sensible:
 
 ![Grouped Javascript Equality Table](http://i.imgur.com/MIX9Uy5.png)
 
-That looks a lot better. Now you can see where things make sense, where reference equality is clashing with value equality, and where transitivity is violated.
+That looks a lot better. Now you can see where things make sense, where reference equality is clashing with value equality, where there's a lot of reaching going on to consider different things equal, and where transitivity is violated.
 
 Organizing the table reveals the actual flaws of `==`, instead of obscuring them behind flaws in the diagram itself.
 
