@@ -54,11 +54,13 @@ void doTheThing(int attempts, double timeout, ...) {
     // helpful errors
     if (attempts == 0) throw new IllegalArgumentException(
         // People tend to guess `0` when learning, so mention that they should try `1` instead.
-        "The number of attempts must be positive, not zero. The most commonly used number of attempts is 1.");
+        "The number of attempts must be positive, not zero."
+        + " The most commonly used number of attempts is 1.");
     if (timeout == 0) throw new IllegalArgumentException(
         // The mistake of assuming we follow the  misguided convention that a timeout of 0 means no timeout
         // is common enough to justify saying how to fix it in the error message.
-        "The timeout must be positive, not zero. Use Double.POSITIVE_INFINITY for an infinite timeout.");
+        "The timeout must be positive, not zero."
+        + " Use Double.POSITIVE_INFINITY for an infinite timeout.");
 
     if (attempts < 0) throw new IllegalArgumentException("The number of attempts must be positive, not negative.");
     if (timeout < 0) throw new IllegalArgumentException("The timeout must be positive, not negative.");
