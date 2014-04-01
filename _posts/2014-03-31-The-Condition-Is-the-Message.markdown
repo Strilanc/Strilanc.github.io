@@ -53,18 +53,21 @@ Here's the example method from the previous section, but modified to have helpfu
 void doTheThing(int attempts, double timeout, ...) {
     // helpful errors
     if (attempts == 0) throw new IllegalArgumentException(
-        // People tend to guess `0` when learning, so mention that they should try `1` instead.
+        // People tend to guess `0` when learning; suggest `1`.
         "The number of attempts must be positive, not zero."
         + " The most commonly used number of attempts is 1.");
     if (timeout == 0) throw new IllegalArgumentException(
-        // The mistake of assuming we follow the  misguided convention that a timeout of 0 means no timeout
+        // Assuming we follow the misguided convention that a timeout of 0 means no timeout
         // is common enough to justify saying how to fix it in the error message.
         "The timeout must be positive, not zero."
         + " Use Double.POSITIVE_INFINITY for an infinite timeout.");
 
-    if (attempts < 0) throw new IllegalArgumentException("The number of attempts must be positive, not negative.");
-    if (timeout < 0) throw new IllegalArgumentException("The timeout must be positive, not negative.");
-    if (Double.isNaN(timeout)) throw new IllegalArgumentException("The timeout must be positive, not NaN.");
+    if (attempts < 0) throw new IllegalArgumentException(
+        "The number of attempts must be positive, not negative.");
+    if (timeout < 0) throw new IllegalArgumentException(
+        "The timeout must be positive, not negative.");
+    if (Double.isNaN(timeout)) throw new IllegalArgumentException(
+        "The timeout must be positive, not NaN.");
     ...
 }
 ```
@@ -75,7 +78,8 @@ Including the extra information justifies the cost of translating the error cond
 ...
 if (getMonths() != 0) {
     throw new UnsupportedOperationException(
-        "Cannot convert to " + destintionType + " as this period contains months and months vary in length");
+        "Cannot convert to " + destintionType
+        + " as this period contains months and months vary in length");
 }
 ...
 ```
