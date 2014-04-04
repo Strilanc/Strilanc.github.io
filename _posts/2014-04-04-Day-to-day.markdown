@@ -1,0 +1,36 @@
+---
+layout: post
+title: "Unfathomable Bugs #8: Day to Day"
+date: 2014-04-04 11:30:00 EST
+categories: bugs
+---
+
+(This is a continuation of a series I started on [Twisted Oak's blog](http://twistedoakstudios.com/blog/))
+
+Today’s bug comes courtesy of GitHub/Jekyll. Thank you, GitHub/Jekyll, this series wouldn’t exist without the generous support of entities like you.
+
+—
+
+Last week I noticed a broken permalink on this blog. The date of the post [Building your own Quantum Fourier Transform](http://strilanc.com/quantum/2014/03/07/Building-your-own-Quantum-Fourier-Transform.html) had changed from March 7th to March 6th, causing the link to change and thus break.
+
+At first I just assumed I had accidentally modified the date of the post, but when I checked the post's markdown file the date seemed correct. To cross-check, I ran `jekyll serve` to serve the blog locally. The local version had the correct date, disagreeing with what github pages was serving despite being on the same commit.
+
+Okay... that's pretty strange. Same inputs, suddenly different outputs. I really wasn't sure what could be causing the problem. I fiddled with the post, to see if the bug was stable. Maybe some temporary bug on github's side had been cached, [and removing then adding](https://www.youtube.com/watch?v=nn2FB1P_Mn8) the post could fix the problem.
+
+Fortunately for my sanity, fiddling did not fix the problem. Unfortunately, I now had no idea what could be causing the problem. With nothing coming to mind, I [asked for help on stackoverflow](http://stackoverflow.com/q/22775932/52239).
+
+And... it's because I moved to New York.
+
+**Location, Location, Location**
+
+Two weeks ago I moved from Nova Scotia to New York. They are in different time zones: Atlantic (UTC-04:00) and Eastern (UTC-05:00) respectively.
+
+Once I got around to updating the time zone in the virtual machine I use when editing the blog, the next `git push` seems to have caused github to re-interpret all the post times. I had set the date on the post in question to `2014-03-07 0:30:00`. Since I didn't specify a timezone, the change in my implied timezone apparently pushed the post's publish time back by an hour. The post's time was so soon after midnight that the one hour difference moved it to the day before and broke the permalink.
+
+Yeah... I'll be putting timezones on all the post dates now.
+
+**Summary**
+
+A permalink broke because my implied timezone changed after I moved. Yet another example of the importance of specifying the timezone when entering dates and times.
+
+(The permalink *should* have been decided by the local date, with no time zone adjustment (see: [LocalDateTime](http://joda-time.sourceforge.net/apidocs/org/joda/time/LocalDateTime.html) from [JodaTime](http://www.joda.org/joda-time/)), but it's a completely understandable decision/oversight and easily avoided on my end.)
