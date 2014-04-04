@@ -7,7 +7,7 @@ categories: bugs
 
 (This is a continuation of a series I started on [Twisted Oak's blog](http://twistedoakstudios.com/blog/))
 
-Today’s bug comes courtesy of GitHub/Jekyll. Thank you, GitHub/Jekyll, this series wouldn’t exist without the generous support of entities like you.
+Today’s bug comes courtesy of GitHub/Jekyll/myself/Sandford Fleming. Thank you, GitHub/Jekyll/myself/Sandford Fleming, this series wouldn’t exist without the generous support of entities like you.
 
 —
 
