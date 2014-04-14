@@ -11,7 +11,7 @@ Today I read the paper [An Invitation to Quantum Game Theory](http://arxiv.org/p
 
 Imagine a game between [Captain Picard](http://en.wikipedia.org/wiki/Jean-Luc_Picard) and [Q](http://en.wikipedia.org/wiki/Q_%28Star_Trek%29) (not sure where Alice and Bob are, but I'll stick with the characters used by the paper). The game is very simple: they will take turns either flipping or not flipping a coin without being able to see it. If the coin ends up heads, then Picard wins. Tails, Q wins.
 
-The coin starts off tails. The game will end after three turns Q will get a chance to flip first, then Picard will get a chance, then Q will get to go one last time, then the coin will be revealed and the winner decided.
+The coin starts off tails, and the game will end after three turns. Q will get a chance to flip first, then Picard will get a chance, then Q will get to go one last time, then the coin will be revealed and the winner decided.
 
 Classically speaking, Picard can guarantee a 50% chance of winning by randomizing his choice to flip or not flip the coin. But Q, being an omnipotent trickster, has snuck a quantum coin into the game. So Q isn't limited to just flipping the coin, he can apply any single-qubit operation he wants during his turns. Picard remains unaware and restricted to either doing nothing, or [flipping](http://en.wikipedia.org/wiki/Quantum_gate#Pauli-X_gate) the coin.
 
