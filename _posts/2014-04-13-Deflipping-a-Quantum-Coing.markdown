@@ -13,7 +13,7 @@ Imagine a game between [Captain Picard](http://en.wikipedia.org/wiki/Jean-Luc_Pi
 
 The coin starts off tails, and the game will end after three turns. Q will get a chance to flip first, then Picard will get a chance, then Q will get to go one last time, then the coin will be revealed and the winner decided.
 
-Classically speaking, Picard can guarantee a 50% chance of winning by randomizing his choice to flip or not flip the coin. But Q, being an omnipotent trickster, has snuck a quantum coin into the game. So Q isn't limited to just flipping the coin, he can apply any single-qubit operation he wants during his turns. Picard remains unaware and restricted to either doing nothing, or [flipping](http://en.wikipedia.org/wiki/Quantum_gate#Pauli-X_gate) the coin.
+Classically speaking, Picard can guarantee a 50% chance of winning by randomizing his choice to flip or not flip the coin. But Q, being an omnipotent trickster, has snuck a quantum coin into the game. So Q isn't limited to just flipping the coin, he can apply any single-qubit operation he wants during his turns. Picard remains unaware and restricted to either doing nothing, or flipping the coin (flipping the coin applies an [X gate](http://en.wikipedia.org/wiki/Quantum_gate#Pauli-X_gate) to its state).
 
 The question is: can Q use his quantum advantage to guarantee a win?
 
