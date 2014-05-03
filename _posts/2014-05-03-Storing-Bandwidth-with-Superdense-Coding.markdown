@@ -47,7 +47,7 @@ Finally, Bob measures the two qubits and retrieves the message.
 
 **Storing Bandwidth**
 
-The interesting thing about superdense coding is that, although Bob still has to receive one qubit per classical , one of the qubits can be sent far in advance. Then, when the actual message has to be sent, half of what's needed to reconstruct it has already arrived.
+The interesting thing about superdense coding is that, although Bob still has to receive one qubit per classical bit, one of the qubits can be sent far in advance. Then, when the actual message has to be sent, half of what's needed to reconstruct it has already arrived.
 
 So, basically, the pre-shared Bell pairs let you *store bandwidth*. They are a fuel that you consume to transmit at double speed.
 
