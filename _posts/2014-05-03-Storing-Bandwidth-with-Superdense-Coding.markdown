@@ -64,3 +64,7 @@ There's tons of practical reasons it might not work out. But still, I enjoy the 
 **Summary**
 
 Superdense coding [<s>exploits</s> empowers](http://youtu.be/wkBPp9UovVU?t=8m29s) a quantum communication channel to send, ahead of time, half of what will be needed to reconstruct a classical message. This lets you transmit at double speed until the pre-delivered qubits run out.
+
+---
+
+[Discuss on Reddit](http://www.reddit.com/r/programming/comments/24n3iv/storing_bandwidth_with_superdense_coding/)
