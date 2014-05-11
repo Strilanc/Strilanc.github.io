@@ -102,3 +102,7 @@ I'll note again that none of this is practical yet. But, as with superdense codi
 **Summary**
 
 Quantum teleportation turns pre-shared entangled qubits into the ability to send quantum information over a classical channel. It can be used to improve the reliability and latency of quantum channels, when a good classical channel is available.
+
+---
+
+[Discuss on Reddit](http://www.reddit.com/r/programming/comments/25azlo/storing_bandwidth_with_quantum_teleportation/)
