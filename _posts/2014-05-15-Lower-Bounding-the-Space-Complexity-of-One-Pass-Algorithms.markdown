@@ -54,3 +54,7 @@ There may be a way to generalize the technique in some way, so that it applies i
 **Summary**
 
 If it is possible to determine $\Omega (g(|P|))$ items of the list prefix $P$, using only the results of querying the list statistic $F$ of various lists that start with $P$, then a one-pass algorithm for $F$ must use at least $\Omega(g(n))$ space.
+
+---
+
+[Discuss on Reddit](http://www.reddit.com/r/programming/comments/25mir1/lower_bounding_the_space_complexity_of_onepass/)
