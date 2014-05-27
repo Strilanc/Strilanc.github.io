@@ -1,28 +1,28 @@
 ---
 layout: post
 title: "Cancelling Cancellation"
-date: 2014-05-24 11:30:00 EST
+date: 2014-05-27 11:30:00 EST
 categories: software
 ---
 
-A cancel token accepts cleanup methods, and runs those methods when/if the token is cancelled. They make cleanup easier, especially in asynchronous cases, but I don't think they're very well known.
+A cancel token accepts cleanup methods, and runs those methods when/if the token is cancelled. They make cleanup easier, especially in asynchronous cases, but I don't think they're very well known or applied as widely as they should be. So I'll talk about them, and see if they catch on eventually.
 
-One of the neat applications of cancel tokens is... cancel tokens. When a cancellation callback becomes unnecessary, usually because an operation completed without being cancelled, you don't want it to just sit around taking up memory. You want to remove it.<
+One of the neat applications of cancel tokens is... cancel tokens. When a cancellation callback becomes unnecessary, usually because an operation completed without being cancelled, you don't want it to just sit around taking up memory. You want to remove it.
 
 In this post I talk about writing a proper cancel token, that can be applied to itself, in Java.
 
 **Basic Token**
 
-A basic cancel token, that only supports adding callbacks, is really simple to write. Have an object that stores a list of callbacks, give it a cancel method to run and discard all those callbacks, and also give it a "when-cancelled" method to add callbacks to the list (or run them right away, if cancellation already happened). Here's a basic token, written in 2 minutes:
+A basic cancel token, that only supports adding callbacks, is really simple to write. Have an object that stores a list of callbacks, give it a cancel method to run and discard all those callbacks, and also give it a "when-cancelled" method to add callbacks to the list (or run them right away, if cancellation already happened). Here's a basic token, written in three minutes:
 
 ```java
 // WARNING: not dealing with thread safety or re-entrancy
 class CancelToken {
-  private List<Action> callbacks = new ArrayList<Action>();
+  private List<Runnable> callbacks = new ArrayList<Runnable>();
   public boolean isCancelled() {
     return callbacks == null;
   }
-  public void whenCancelled(Action callback) {
+  public void whenCancelled(Runnable callback) {
     if (isCancelled()) {
       callback.call();
     } else {
@@ -31,7 +31,7 @@ class CancelToken {
   }
   public void cancel() {
     if (isCancelled()) return;
-    for (Action callback : callbacks) {
+    for (Runnable callback : callbacks) {
       callback.call();
     }
     callbacks = null;
@@ -39,7 +39,7 @@ class CancelToken {
 }
 ```
 
-and people would us the token like so:
+and people would use the token like so:
 
 ```java
 token.whenCancelled(() -> {
@@ -52,20 +52,22 @@ token.cancel();
 
 The problem with this basic token, besides the concurrency and re-entrancy issues, is that it can accumulate garbage. If the token lives for a long time, like "until the user closes this browser tab", then the cleanup callbacks of every operation conditioned on it *also* end up living for a long time. Depending on how many things those callbacks reference, this can be a pretty serious memory leak.
 
-If we want our cancel token to behave well in long-lived cases, we need a way to clean up the unnecessary callbacks. The simplest solution would be to add a "remove callback" method. On the other hand, that sounds an awful lot like cleanup and we're writing a tool to make cleanup easier. A tool that's supposed to be better than manually remembering to undo everything, not *cause it*. So, instead of a remove callback method, we're going to add support for adding callbacks conditioned on another token. If that other tokens is cancelled first, the callback is discarded without being run.
+If we want our cancel token to behave well in long-lived cases, we need a way to clean up the unnecessary callbacks. The simplest solution would be to add a "remove callback" method. On the other hand, that sounds an awful lot like cleanup and we're writing a tool to make cleanup easier. A tool that's supposed to be better than manually remembering to store and remove everything we add, not *cause exactly that*.
 
 **Conditional Callback**
 
-Here's the signature of the method we want to write:
+Instead of a "remove callback" method, we're going to support adding callbacks conditioned on another token. If that other token is cancelled first, the callback is discarded without being run. Here's the signature of the method we want to write:
 
 ```java
-void whenCancelledBefore(Action callback, CancelToken condition);
+void whenCancelledBefore(Runnable callback, CancelToken condition)
 ```
 
-and here's a (wrong) implementation of it:
+Seems pretty simple, but it's tricky to implement.
+
+Let's start with the obvious (and wrong) implementation:
 
 ```java
-  public void whenCancelledBefore(Action callback, CancelToken condition) {
+  public void whenCancelledBefore(Runnable callback, CancelToken condition) {
     if (isCancelled()) {
       if (condition.isCancelled()) return;
       callback.call();
@@ -76,35 +78,35 @@ and here's a (wrong) implementation of it:
   }
 ```
 
-Do you see the problem (besides concurrency and re-entrancy issues)? Now the *condition* token is accumulating unremovable cruft. We need to condition the condition.
+Do you see the problem (besides concurrency and re-entrancy issues)? Now the *condition* token is accumulating unremovable cruft, that becomes unnecessary if the original token is cancelled first. Clearly we need to condition the condition on the action being conditioned.
 
-Since we're writing a method that does exactly what we need, you might think you can just use it. That... doesn't go so well:
+Since we're writing a method that conditions callbacks, exactly what we need to do to finish said method, you might think we can just use recursion. That... doesn't go so well:
 
 ```java
-  public void whenCancelledBefore(Action callback, CancelToken condition) {
-    if (isCancelled()) {
-      if (condition.isCancelled()) return;
-      callback.call();
-    } else {
-      callbacks.add(callback);
-      condition.whenCancelledBefore(() -> callbacks.remove(callback), this); // *CRUNCH*
-    }
+public void whenCancelledBefore(Runnable callback, CancelToken condition) {
+  if (isCancelled()) {
+    if (condition.isCancelled()) return;
+    callback.call();
+  } else {
+    callbacks.add(callback);
+    condition.whenCancelledBefore(() -> callbacks.remove(callback), this); // *CRUNCH*
   }
+}
 ```
 
-If you call the above method, and both tokens aren't cancelled, it will keep recursing until it overflows the stack. The problem is that it keeps introducing new conditions that must be conditioned. Maybe it would work on a machine with infinite memory and time, depending on how said machine resolved this sort of non-halting case, but we don't have one of those.
+If you call the above method, and both tokens aren't cancelled, it will keep recursing until it overflows the stack. Instead of recursion making the problem smaller until it hits a base case, the problem is staying essentially the same, so the recursion never terminates. Maybe this would work on a machine with infinite memory and speed, depending on how said machine resolved this sort of non-halting case, but (unfortunately) we don't have such a machine.
 
 Instead of making an infinitely tall ladder of callbacks removing the callback below them, we need to make a cycle where two callbacks remove each other. This is tricky, for a few reasons. You might not have the information needed to remove a callback until after it's been added. You have to be careful not to remove the second callback until it's actually been added. Plus, in the concurrent case, tokens may be cancelled as the method progresses but if we synchronize on both tokens at the same time we'll have introduced a [lock ordering deadlock](http://en.wikipedia.org/wiki/Deadlock).
 
-The way I avoid those issues is to make the first callback do nothing the first time it is called. Then I call it once, after the second callback has been added. Essentially, this ensures the first callback can't run until after the second callback is removable. Here's what it looks like, assuming we have an add callback method that returns a remove-the-callback-you-just-added function:
+The way I avoid those issues is to make the first callback only do something the second time it is called, and do nothing the first time it is called. Then, after the second callback has been added, I call the first one once. Essentially, this ensures the first callback can't run until after the second callback has been added (and so can be removed). Here's what it looks like, assuming we have an add callback method that returns a remove-the-callback-you-just-added function:
 
 ```java
 // condition remover can't be initialized yet, but this is where it will end up
-Action[] conditionRemoverRef = new Action[1];
+Runnable[] conditionRemoverRef = new Runnable[1];
 
 // only remove the condition (and do the actual useful work) on the *second* call
 AtomicBoolean prepared = new AtomicBoolean();
-Action prepareElseRun = () -> {
+Runnable prepareElseRun = () -> {
   if (prepared.compareAndSet(false, true)) return;
 
   actualCallback.call();
@@ -113,7 +115,7 @@ Action prepareElseRun = () -> {
 };
 
 // set up the cycle
-Action triggerRemover = trigger.addCallbackReturnRemover(prepareElseRun);
+Runnable triggerRemover = trigger.addCallbackReturnRemover(prepareElseRun);
 conditionRemoverRef[0] = condition.addCallbackReturnRemover(triggerRemover);
 
 // everything's set up, good to run
@@ -126,10 +128,12 @@ Incorporating that into `whenCancelledBefore` results in a working method, and t
 
 If we use an array list to store the items, removing them is not efficient. The problem is that you have to find where the callback-to-be-removed is, and this requires a linear scan of the array (the actual removal is cheap because you can swap with the last item).
 
-A better data structure for this use case is a cyclical doubly linked list. When we add a callback, by creating a node referencing the callback and placing the node into the list, we can keep a reference to the node around. When it comes time to remove the callback, we don't need to search for it because we already know the node. Like this:
+A better data structure for this use case is a cyclical doubly linked list. When we add a callback, by creating a node referencing the callback and placing the node into the list, we can keep a reference to the node around. When it comes time to remove the callback, we don't need to search for it because we already know the node, and can do the removal in constant time.
+
+Here's what the "add callback and return remover" function looks like, when you're using a circular doubly-linked list:
 
 ```java
-Action addCallbackReturnRemover(Action callback) {
+Runnable addCallbackReturnRemover(Runnable callback) {
   // create node for callback
   Node n = new Node(callback);
   
@@ -147,44 +151,54 @@ Action addCallbackReturnRemover(Action callback) {
 }
 ```
 
-I'm sure it's possible to be more efficient than this, perhaps by using nodes that contain blocks of callbacks, but it's sufficient to demonstrate the point.
-
-We have one more corner case I want to tackle: tokens that *never* get cancelled. These are useful because they easily turn cancellable operations into simpler non-cancellable operations when that's what you want, which happens quite often when prototyping or testing.
+I'm sure it's possible to be more efficient than this, perhaps by using nodes that contain blocks of callbacks. Another optimization could be to use a singly-linked list, mark nodes as "to be removed", and gradually scan around the list removing those nodes as other operations occur. But I haven't implemented, let alone benchmarked, these ideas so I won't delve any deeper here. Suffice it to say we can achieve constant time insertion and removal.
 
 **Immortality**
 
-How can we detect that a token will never ever be cancelled?
+The second corner case I want to tackle is tokens that *never* get cancelled. These are useful because they naturally implement "I don't care about cancellation", which happens quite often when prototyping or testing.
 
-The approach I use is to separate the cancel method into a separate class, called the token's *source*. A token's source is the *only* way to cancel it. Meaning that, if the source becomes garbage and gets collected, the token is guaranteed to never be cancelled. We can detect this happening by given the source a finalizer, and discard the token's callbacks without running them.
+I find immortalizing tokens interesting because it's one of the few places where I think using a finalizer is the right solution. The idea goes like this: separate the cancel token into the token part and the source part. The source part gets the `cancel` method, while the token part gets the `whenCancelled` methods. Then, if the source gets finalized, we know that the token can never be cancelled and should be immortalized.
 
-This adds a third state to our tokens. Before they were cancelled or not, but now they can be cancelled, still-cancellable, or immortal. An immortal token is quite possible the most useless object you can imagine: when you give it a callback it just discards it without doing anything. But this is actually a really useful bit of logic for many cancellable operations, because it corresponds to the "I don't want to ever cancel" case.
+Finalizer-based immortalizing is better than a manual `immortalize` method because it happens automatically, without any effort from users, and there's no need to deal with "what if they try to immortalize cancelled tokens?" corner cases (I guess you could [resurrect](http://en.wikipedia.org/wiki/Object_resurrection) a source then try to cancel it, but that's your own fault). Separating the controller-esque `cancel` method from the consumption-esque `whenCancelled` methods is also good design. It lets you pass tokens around without worrying about them being cancelled elsewhere.
 
-The main distinction introduced into the code by immortality is we have to maintain to lists of things to run. There's the list of normal callbacks, which are run when the token is cancelled, but also the list of internal cleanups that also run when the token is cancelled but *also* run when the token becomes immortal. We don't expose "whenImmortal" functionality to callers, because finalization based cleanup is tricky to get right.
+Immortality introduces complications into the implementation. External callbacks shouldn't be run when the tokens becomes immortal, but internal cleanup callbacks still need to happen, so we will need two lists of callbacks instead of one. We could expose this "call when cancelled or immortal" functionality to the outside, but I don't think that's a good idea. Doing finalization-based cleanup correctly is tricky.
 
-For example, finalization keeps objects alive longer. When an object has a finalizer, the first garbage collector sweep that notices it is not referenced does not collect it. This promotes the object, *and everything it referenced*, to the next generation. This makes collecting them much more expensive.
+As an example of finalization being tricky, consider the lifetime of the list of callbacks to be run if the token is cancelled. If the source has a finalizer and a reference to the list of cancellation callbacks (via the token), then the callbacks will survive the first garbage collection pass where they could have been collected. This is extremely costly, because it increases memory pressure and promotes objects to older [generations](http://www.oracle.com/technetwork/java/javase/gc-tuning-6-140523.html#generations) where more work has to be done to determine if they're collectable. To avoid this cost we need to move the finalizer to an object that can't reach the cancellation callbacks. We also have to ensure the only strong reference to the cancellation callbacks is owned by the source. The token itself can only have a weak reference to the list, because the token can outlive the source, and the same goes for cleanup callbacks referencing nodes in the list.
 
-The token I've written is very carefully set up to allow callbacks to be collected by the *first* pass. This is done by having the source keep the only strong reference to the list of callbacks (the token itself has only a weak reference), and by moving the finalizer to an object held by the source that does not reference the list of callbacks. It also uses weak references when making the cleanup cycle.
+Another thing that makes finalization tricky is that anything you touch may itself have been finalized. Not much of a problem in this case, but a very good reason not to expose a `whenImmortal` method.
 
-**Diagrams**
+**Concurrency**
 
-Here are some diagrams of the cleanup process in each case:
+The last corner case, a really important one for cancel tokens since we want to use them in asynchronous cases, is working correctly under concurrency and re-entrancy.
+
+Normally we could deal with this issue by synchronizing the appropriate methods, [while being careful not to invoke the callbacks inside a lock](http://twistedoakstudios.com/blog/Post8424_deadlocks-in-practice-dont-hold-locks-while-notifying). But, because the `whenCancelledBefore` method touches *two* tokens, we run into the issue of lock ordering. If we're holding the trigger token's lock, and try to do a synchronized operation on the condition token, then an operation with the tokens reversed could be happening at the same time and cause us to deadlock.
+
+To get around this issue, the `whenCancelledBefore` method has to be split into pieces that require only one of the locks at a time. Basically you have to synchronously add or remove a callback, let go of any locks, see how things went, then allow the next thing to happen.
+
+**Implementation and Diagrams**
+
+My implementation of cancel tokens in Java is [available on github](https://github.com/Strilanc/Java-Cancel-Tokens). The design follows the advice outlined in this post.
+
+As part of making sure I understood what happens when conditional cancellation is being cleaned up, I made diagrams of what happens. The diagrams show strong references as solid lines, weak references as dashed lines, garbage collection is shown by red Xs, "was triggered / invoked" is shown by placing stars, and manual removal is shown with blue Xs. Removed objects are also blurred out (which ended up not looking so great).
+
+The first diagram covers what happens when the condition token is cancelled before the trigger token settles. The four nodes added by the conditional callback are removed, without running the callback:
 
 ![Condition cancelled](http://i.imgur.com/kAPu97r.gif)
 
+The next diagram covers what happens when the trigger token is cancelled before the condition token settles. The callback is run, and by the end the four nodes associated with the conditional callback have been removed:
+
 ![Trigger cancelled](http://i.imgur.com/m1faEgw.gif)
 
-![Condition immortal](http://i.imgur.com/YvSFpuG.gif)
+I also considered what happens when the tokens become immortal. The following diagram covers what happens when the trigger token is immortalized before the condition token settles. As with the condition being cancelled first, the callback is not run and all four conditional-callback-related nodes end up removed:
 
 ![Trigger immortal](http://i.imgur.com/DSnduvF.gif)
 
+The final case, which I think is the most interesting, is what happens when the condition token is immortalized before the trigger token settles. Now only three of the four nodes are removed, resulting in the callback being unconditional:
+
+![Condition immortal](http://i.imgur.com/RyxrZ8x.gif)
+
+I'm not sure how much the above diagrams help with understanding what's going on, but I found them really helpful as a reference.
+
 **Summary**
 
-Cancel tokens make cleanup easier. You should be able to use them on themselves, to cleanup cancellation callbacks.
-
-You can remove items from a doubly-linked list in constant time, if you keep track of the nodes. Finalizers are tricky things to use well.
-
-
-
-
-
-
+Cancel tokens make cleanup easier. You should be able to use them on themselves, to cleanup cancellation callbacks. I have a [Java implementation on github](https://github.com/Strilanc/Java-Cancel-Tokens).
