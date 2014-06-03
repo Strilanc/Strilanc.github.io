@@ -5,7 +5,7 @@ date: 2014-06-03 11:30:00 EST
 categories: software
 ---
 
-A [long-known](www.crockford.com/ec/lessons.html) maxim is "Don't trust the client". Web browsers, being clients, are no exception. *Usually* they'll run the javascript you provide, hide the hidden content you include, validate information you requested, and display the ads you piggy-backed along... but that's not *guaranteed*. Users may do anything to the content and functionality you expose.
+A [long-known](http://www.crockford.com/ec/lessons.html) maxim is "Don't trust the client". Web browsers, being clients, are no exception. *Usually* they'll run the javascript you provide, hide the hidden content you include, validate information you requested, and display the ads you piggy-backed along... but that's not *guaranteed*. Users may do anything to the content and functionality you expose.
 
 Recently I've started noticing a problem analogous to, but less serious than, trusting the client: writing javascript that ends up in bad states because it relied on the browser doing or not doing certain things. I'm going to call this "trusting the DOM" as a shorthand. This *can* be a security issue, but it's more likely to create usability problems.
 
