@@ -145,13 +145,17 @@ maximize x1 + x3 - 2 d2
 
 Which is maximized when `d2 = 0`. Along the way we implicitly assumed that assigning `d3 = (x2 - x3)/2` would give a whole and non-negative result, meaning that this solution only works if `x2 >= x3` while `x2` and `x3` have the same parity. If the opposite ordering constraint worked, so `x3 >= x2`, then the solution would be `x1 + x2` instead of `x1 + x3`. To cover both cases we can just say the solution is `x1 + min(x2, x3)`.
 
-If we'd assumed the final population was wolves, instead of lions, then the constraints would be on `x1` and `x3` instead of `x2` and `x3`. For goats it's `x1` and `x2`. The true solution is the maximum of these three cases, ignoring the ones where the parity constraint is violated. This simplifies quite nicely.
+If we'd assumed the final population was wolves, instead of lions, then the constraints would be on `x1` and `x3` instead of `x2` and `x3` and the solution would be `x2 + min(x1, x3)`. For goats the constraints are on `x1` and `x2` and the solution is `x3 + min(x1, x2)`. The true solution is the maximum of these three cases, ignoring the ones where the parity constraint is violated.
 
-When all variables have the same parity, the solution is `max(x1, x2, x3) + min(x1, x2, x3)`. If only two have the same parity, then the answer is `xa + min(xb, xc)`, where `xa` is the input with a different parity. No need for any searching, just a few clamping and adding operations. *You can do it by hand*.
+Because there's only two parities, odd and even, at most one of the variables can be the odd one out. This reduces the whole system to two cases. If only two of the variables have matching parities, then the answer is `xa + min(xb, xc)`, where `xa` is the input with a different parity. If all variables have the same parity then the solution is `max(x1 + min(x2,x3), x2 + min(x1, x3), x3 + min(x1,x2)`, which seems daunting until you realize it simplifies into `max(x1, x2, x3) + min(x1, x2, x3)`.
+
+So we can compute the answer by checking what case we're in, then using a couple clamping operations and an addition. It's so simple that *we can do it by hand*. What's the maximum stable population when there's `900017` lions, `900055` wolves, and `900006` goats? Well, `900006` is the odd one out so the answer is `900006 + min(900017, 900055) = 1800023`.
 
 **Summary**
 
 In this case, choice of algorithm trumped choice of language.
+
+*Edit*: The last few paragraphs were rewritten to be clearer.
 
 ---
 
