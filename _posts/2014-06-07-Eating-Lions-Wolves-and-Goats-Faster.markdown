@@ -143,11 +143,11 @@ Then we simplify:
 maximize x1 + x3 - 2 d2
 ```
 
-Which is maximized when `d2 = 0`. Along the way we implicitly assumed that `x2` and `x3` had the same parity and that `x2 >= x3`, because `d3 = (x2 + x3)/2` had to be whole and non-negative.
+Which is maximized when `d2 = 0`. Along the way we implicitly assumed that assigning `d3 = (x2 - x3)/2` would give a whole and non-negative result, meaning that this solution only works if `x2 >= x3` while `x2` and `x3` have the same parity. If the opposite ordering constraint worked, so `x3 >= x2`, then the solution would be `x1 + x2` instead of `x1 + x3`. To cover both cases we can just say the solution is `x1 + min(x2, x3)`.
 
-In total there are six cases we have to consider, with each having a parity constraint and an ordering constraint on two of the variables. Whichever case meets its constraints and has the largest answer is the actual answer.
+If we'd assumed the final population was wolves, instead of lions, then the constraints would be on `x1` and `x3` instead of `x2` and `x3`. For goats it's `x1` and `x2`. The true solution is the maximum of these three cases, ignoring the ones where the parity constraint is violated. This simplifies quite nicely.
 
-When all variables have the same parity, the cases reduce to the expression `max(x1, x2, x3) + min(x1, x2, x3)`. If only two have the same parity, then the answer is `xa + min(xb, xc)`, where `xa` is the input with a different parity. No need for any searching, just a few clamping and adding operations. *You can do it by hand*.
+When all variables have the same parity, the solution is `max(x1, x2, x3) + min(x1, x2, x3)`. If only two have the same parity, then the answer is `xa + min(xb, xc)`, where `xa` is the input with a different parity. No need for any searching, just a few clamping and adding operations. *You can do it by hand*.
 
 **Summary**
 
