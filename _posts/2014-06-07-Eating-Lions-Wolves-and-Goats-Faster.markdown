@@ -143,7 +143,7 @@ Then we simplify:
 maximize x1 + x3 - 2 d2
 ```
 
-Which is maximized when `d2 = 0`. Along the way we implicitly assumed that assigning `d3 = (x2 - x3)/2` would give a whole and non-negative result, meaning that this solution only works if `x2 >= x3` while `x2` and `x3` have the same parity. If the opposite ordering constraint worked, so `x3 >= x2`, then the solution would be `x1 + x2` instead of `x1 + x3`. To cover both cases we can just say the solution is `x1 + min(x2, x3)`.
+Which is maximized when `d2 = 0`. Along the way we implicitly assumed that assigning `d3 = (x2 - x3)/2` would give a whole and non-negative result, meaning that this solution only works when `x2` and `x3` have the same parity (i.e. they are both odd or both even) and also `x2 >= x3`. If the opposite ordering constraint worked, so `x3 >= x2`, then the solution would be `x1 + x2` instead of `x1 + x3`. To cover both cases we can just say the solution is `x1 + min(x2, x3)`.
 
 If we'd assumed the final population was wolves, instead of lions, then the constraints would be on `x1` and `x3` instead of `x2` and `x3` and the solution would be `x2 + min(x1, x3)`. For goats the constraints are on `x1` and `x2` and the solution is `x3 + min(x1, x2)`. The true solution is the maximum of these three cases, ignoring the ones where the parity constraint is violated.
 
