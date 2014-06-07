@@ -152,3 +152,7 @@ When all variables have the same parity, the cases reduce to the expression `max
 **Summary**
 
 In this case, choice of algorithm trumped choice of language.
+
+---
+
+[Discuss on Reddit](http://www.reddit.com/r/programming/comments/27jbii/eating_lions_wolves_and_goats_faster/)
