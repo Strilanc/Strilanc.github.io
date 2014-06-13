@@ -23,9 +23,11 @@ Naturally, the first thing to do with any word problem is to drop all of the unn
 
 Translating the eating operations into population deltas immediately reveals that the three types of animals are actually interchangeable. The problem talks about a lion eating a goat, as opposed to a goat eating a lion, but you always lose the eater and the eatee while gaining one of the uninvolved animal... so the differences don't matter.
 
-Even more importantly, though, is the realization that the order of operations doesn't matter when using deltas. We might get a negative number of goats along the way, but the total will end up the same. Not caring about order would *massively* simplify the problem. Lucky for us, it turns out that we can get away with this simplification. Assuming the final population is stable and positive, we're guaranteed to be able to re-order eating in a way that avoids negative populations.
+Even more important, though, is the realization that the order of operations doesn't matter when using deltas. We might get a negative number of goats along the way, but the total will end up the same. Not caring about order would *massively* simplify the problem. Lucky for us, it turns out that we can get away with this simplification. Assuming the final population is stable and positive, we're guaranteed to be able to re-order eating in a way that avoids negative populations.
 
-Basically our problem is now a linear system, meaning we can apply [integer programming](https://en.wikipedia.org/wiki/Integer_programming).
+Two more useful properties, apparent from the delta forms of the operations, are *preservation of relative parity* and *linear independence*. First, the operations we have can only adjust the difference between two populations by -2, 0, or +2. This means there's no sequence of X-eats-Y that can make an initially-even population end up equal to an initially-odd population. Second, because the vectors `[+1,-1,-1]`, `[-1,+1,-1]`, and `[-1,-1,+1]` are [linearly independent](http://en.wikipedia.org/wiki/Linear_independence), we can't recreate the effect of a wolf eating a goat by combining lions eating wolves with lions eating goats (even when allowing negative or continuous counts). This means that, ignoring order, there's *only one way* to go from the initial population to some specified final population.
+
+Basically, our problem is a simple linear system with nice properties and so [integer programming](https://en.wikipedia.org/wiki/Integer_programming) should be extremely effective.
 
 **Integer Program**
 
@@ -156,6 +158,8 @@ So we can compute the answer by checking what case we're in, then using a couple
 In this case, choice of algorithm trumped choice of language.
 
 *Edit*: The last few paragraphs were rewritten to be clearer.
+
+*Edit #2*: Added the paragraph about linear independence and relative parity.
 
 ---
 
