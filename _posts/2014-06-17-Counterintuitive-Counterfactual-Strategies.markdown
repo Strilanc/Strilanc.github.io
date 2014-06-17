@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "Counterfactual Strategies"
-date: 2014-06-15 11:30:00 EST
-categories: math
+title: "Counter-intuitive Counterfactual Strategies"
+date: 2014-06-17 11:30:00 EST
+categories: game-theory
 ---
 
 One of the interesting things about games where players have hidden information, like poker or crib, is how hard it is to solve them. Ultimately this comes down to the fact that counterfactuals, things that could have happened but didn't, affect the optimal strategies. Unlike games of perfect information, such as chess and backgammon, you can't find the optimal strategy by just recursing down the game tree the way [minimax](http://en.wikipedia.org/wiki/Minimax) and [expectiminimax](http://en.wikipedia.org/wiki/Expectiminimax_tree) do. The sub-trees interact.
@@ -111,7 +111,7 @@ The small green area in the contour plot is the space of strategies with positiv
 
 *Bonus puzzle*: Can you modify the game's payoffs so that the positive returns area doesn't touch the sides?
 
-**Counter-Intuitive Sub-Games**
+**Counter-intuitive Sub-Games**
 
 Put yourself in the shoes of an attacker who's just been told the seas are going to be stormy. The "calm" part of the game tree is unreachable. The -11 penalty for interrogating fate has already been applied. What do the remaining payoffs for our choices look like?
 
