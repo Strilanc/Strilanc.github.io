@@ -12,12 +12,14 @@ class JellyBeanGuessingContest(private readonly int actualAmount) {
   private readonly Dictionary<int, Person> guesses = new Dictionary<int, Person>();
   
   public void addGuess(int amount, Person person) {
-    if (guesses.ContainsKey(amount)) throw new PreconditionFailed("duplicate guess");
+    if (guesses.ContainsKey(amount))
+      throw new PreconditionFailed("duplicate guess");
     guesses[amount] = person;
   }
   
   public Person getWinner() {
-    if (guesses.Count == 0) throw new PreconditionFailed("no guesses");
+    if (guesses.Count == 0)
+      throw new PreconditionFailed("no guesses");
     // (in the event of a g+d vs g-d tie, the larger guess wins because I said so)
     return guesses.MaxBy(e => Math.Abs(e.Key - actualAmount + 0.25)).Value;
   }
@@ -47,12 +49,14 @@ class JellyBeanGuessingContest(private readonly int numberOfJellyBeans) {
   }
 
   public void addGuess(int amount, Person person) {
-    if (hasAnyoneGuessedAmount(amount)) throw new PreconditionFailed("!hasAnyoneGuessedAmount(amount)");
+    if (hasAnyoneGuessedAmount(amount))
+      throw new PreconditionFailed("!hasAnyoneGuessedAmount(amount)");
     guesses[amount] = person;
   }
   
   public Person getWinner() {
-    if (!hasAnyoneGuessedAnything()) throw new PreconditionFailed("hasAnyoneGuessedAnything()")
+    if (!hasAnyoneGuessedAnything())
+      throw new PreconditionFailed("hasAnyoneGuessedAnything()")
     // (in the event of a g+d vs g-d tie, the larger guess wins because I said so)
     return guesses.MaxBy(e => Math.Abs(e.Key - numberOfJellyBeans + 0.25)).Value;
   }
