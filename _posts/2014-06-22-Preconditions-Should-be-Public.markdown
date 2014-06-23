@@ -63,12 +63,14 @@ class JellyBeanGuessingContest(private readonly int numberOfJellyBeans) {
 }
 ```
 
-(We could also have changed the methods into `tryX` methods, returning false or null when they failed ala [TryParse](http://msdn.microsoft.com/en-us/library/f02979c7%28v=vs.110%29.aspx). As long as you're not using exceptions for non-exceptions things.)
-
 Generally speaking, making preconditions public is a good idea. The cases where it's not correspond well with "actually exceptional" exceptions. For example, no one would bother checking "has this iterator been invalidated due to the collection being modified?". That's almost always caused by a bug, meaning we probably can't handle the problem, and the correct response matches what exceptions do: propagate failure.
+
+All that being said, you should also consider whether having these preconditions in the first place is a good idea. Instead of making them public, you can remove them entirely. `addGuess` can be changed into `tryAddGuess` and return a boolean that indicates if it succeeded. `getWinner` can return null, or an empty `Maybe<Person>`, when there's no winner. But *if* you decide to have preconditions, *then* they should be public.
 
 **Summary**
 
 If a caller is expected to satisfy a precondition, make the precondition public so they can check it themselves. This doesn't just make the throw unambiguously their fault, it makes it easier to communicate and debug what's wrong.
 
 Making preconditions public is especially important when using languages or tools that treat them as part of a method's signature. For example, [.Net code contracts](http://research.microsoft.com/en-us/projects/contracts/) require that members used in a contract expression be at least as visible as what the contract applies to.
+
+*edit* Expanded the paragraph mentioning alternative designs. The message here is "don't have private preconditions", not "use lots of preconditions!". Avoiding preconditions entirely is also good.
