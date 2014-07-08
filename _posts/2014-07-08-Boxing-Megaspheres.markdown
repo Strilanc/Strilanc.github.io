@@ -234,3 +234,7 @@ So do be awestruck at the sheer vastness of the number of megaspheres we can put
 **Summary**
 
 How many million-dimensional spheres can we pack into a slightly wider box? A lot.
+
+---
+
+[Discuss on Reddit](http://www.reddit.com/r/math/comments/2a55h0/puzzle_boxing_megaspheres/)
