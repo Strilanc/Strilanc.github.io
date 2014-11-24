@@ -9,7 +9,7 @@ In this post: avoiding some issues when mapping from rotations to unitary matric
 
 **Common Mapping**
 
-[Last week](/quantum/2014/11/15/Interpolating-Qubit-Operations.html) I mentioned (and relied on the fact) that the space of 2x2 unitary matrices is very similar to the space of rotations. More specifically, 2x2 unitary matrices are isomorphic to the [biquaternions](http://en.wikipedia.org/wiki/Biquaternion) (i.e. the [complexification](http://en.wikipedia.org/wiki/Complexification) of the [quaternions](en.wikipedia.org/wiki/Quaternion), because the quaternions weren't complex enough I guess).
+[Last week](/quantum/2014/11/15/Interpolating-Qubit-Operations.html) I mentioned (and relied on the fact) that the space of 2x2 unitary matrices is very similar to the space of rotations. More specifically, 2x2 unitary matrices are isomorphic to the [biquaternions](http://en.wikipedia.org/wiki/Biquaternion) (i.e. the [complexification](http://en.wikipedia.org/wiki/Complexification) of the [quaternions](http://en.wikipedia.org/wiki/Quaternion), because the quaternions weren't complex enough I guess).
 
 Given that unitary matrices are "like" rotations, a thing you might occasionally want to do is convert a rotation into some unitary matrix that corresponds to the rotation in some useful way. The easiest way to do this, and the one you'll find if you go looking, is to represent the rotation as a quaternion and then replace the quaternion components with corresponding [Pauli matrices](http://en.wikipedia.org/wiki/Pauli_matrices) times $i$:
 
