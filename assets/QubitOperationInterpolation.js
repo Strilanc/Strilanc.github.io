@@ -332,7 +332,7 @@ quop.prototype.ulerp = function (other, t) {
 };
 
 var parseComplexPart = function (text, syndrome_label) {
-    var t = text.trim();
+    var t = text.trim().toLowerCase();
     if (t === "i") {
         return new complex(0, 1);
     }
