@@ -155,7 +155,8 @@ def rotation_to_matrix(x=0, y=0, z=0):
 
 def sinc(x):
     """
-    Returns sin(x)/x, but computed in a way that doesn't explode when x is equal to or near zero. sinc(0) is 1.
+    Returns sin(x)/x, but computed in a way that doesn't explode when x is equal to or near zero.
+    sinc(0) is 1.
     """
     if abs(x) < 0.0002:
         return 1 - x**2 / 6
