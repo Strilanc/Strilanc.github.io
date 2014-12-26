@@ -1,11 +1,11 @@
 ---
 layout: post
-title: "Popular Qubits #1: Quantum Compression"
+title: "[Un]popular Qubits #1: Quantum Compression"
 date: 2014-12-25 11:30:00 EST
 categories: quantum
 ---
 
-Usually, pop science articles are terrible at explaining quantum anything. The breadth of their audience prevents them from going into detail, nevermind including an equation. I am under no such constraint, and in this series of posts ("Popular Qubits") I look a bit more in-depth at quantum computing things reported by the media.
+Usually, pop science articles are terrible at explaining quantum anything. The breadth of their audience prevents them from going into detail, nevermind including an equation. I am under no such constraint, and in this series of posts ("[Un]popular Qubits") I look a bit more in-depth at quantum computing things reported by the media.
 
 In this installment: *quantum compression* ([example](http://motherboard.vice.com/read/physicists-succeed-in-compressing-quantum-data) [popular](http://physicsworld.com/cws/article/news/2014/sep/29/quantum-data-are-compressed-for-the-first-time) [articles](http://www.nature.com/news/quantum-bits-get-their-first-compression-1.15961); [the actual paper](http://arxiv.org/pdf/1410.3941.pdf)).
 
