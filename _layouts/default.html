@@ -23,6 +23,13 @@
         tex2jax: {
           inlineMath: [['$','$']],
           skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2]
+          }
         }
       });
     </script>
