@@ -9,7 +9,7 @@ When you want to send classical information, but are doing so over a quantum com
 
 However, there is a caveat to that limitation. If the sender and receiver happen to share a [bell pair](http://en.wikipedia.org/wiki/Bell_state), they can consume said bell pair to pack 2 classical bits into a single qubit in a process called [superdense coding](http://en.wikipedia.org/wiki/Superdense_coding). In [a previous post](http://strilanc.com/quantum/2014/05/03/Storing-Bandwidth-with-Superdense-Coding.html), I talked about how this is like "storing bandwidth".
 
-In this post, I'm going to go one step further. Instead of consuming previously shared bell pairs, we'll be making them on fly and thereby doubling the classical information flow in one direction... by sending quantum information in the *opposite* direction.
+In this post, I'm going to go one step further. Instead of consuming previously shared bell pairs, we'll be making them on the fly and thereby doubling the classical information flow in one direction... by sending quantum information in the *opposite* direction.
 
 **A Field of Swaps**
 
