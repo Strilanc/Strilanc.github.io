@@ -15,11 +15,11 @@ One of the hobby programs I work on from time to time is a quantum circuit simul
 
 Every quantum system is described by a bunch of complex weights, one for each basis state. You need $2^n$ weights to describe a system with $n$ qubits, because it has $2^n$ basis (i.e. classical) states. This makes visually representing quantum states with more than a few qubits difficult, because there's *so many numbers*.
 
-The first thing I tried, for visually representing the weights of the circuit's output in my simulator, was just a column vector. Each complex number was represented with an oriented circle, and I arranged them vertically in binary order (i.e. from $\ket{0000}$ to $\ket{1111}$). This was problematic, even with just four qubits. Not only was it hard to figure out which weight was where, it used the available space very poorly because it was so thin. So I re-arranged the column into a grid.
+The first thing I tried, for visually representing the weights of the circuit's output in my simulator, was just a column vector. Each complex number was represented with an oriented circle, and I arranged them vertically in binary order (i.e. from $\ket{0000}$ to $\ket{1111}$). This was problematic, even with just four qubits. Not only was it hard to figure out which weight was where, the available space was used poorly due to the column being thin. So I re-arranged the column into a grid.
 
 Arranging things into a grid turned out better than I expected. Suddenly, operations on half of the qubits had row-wise effects while operations on the other half had column-wise effects. I started using this as a mnemonic tool. When playing with circuits that involved two parties, I'd make distinguishing Alice's effects from Bob's effects easy by giving Alice the row-wise qubits and Bob the column-wise qubits.
 
-Eventually, I noticed that the state grid acted kind of like a matrix. If I had just created an entangled pair of qubits, and applied a gate to one of the qubits, the state would look like the matrix for that gate! And adding another qubit multiplied the "matrix" by the next gate (sortof)! I even got some use out of this: it helped me guess what [symmetry breaking would look like](http://strilanc.com/quantum/2014/12/06/Perfect-Symmetry-Breaking-with-Quantum-Computers.html).
+Eventually, I noticed that the state grid acted kind of like a matrix. If I had just created an entangled pair of qubits, and applied a gate to one of the qubits, the state would look like the matrix for that gate! And adding another gate multiplied the "matrix" by the next gate (sortof)! I even got some use out of this: it helped me guess what [symmetry breaking would look like](http://strilanc.com/quantum/2014/12/06/Perfect-Symmetry-Breaking-with-Quantum-Computers.html).
 
 Months later, thanks to learning from [Nielsen and Chuang](http://www.amazon.com/Quantum-Computation-Information-Anniversary-Edition/dp/1107002176) how the [Schmidt Decomposition](http://en.wikipedia.org/wiki/Schmidt_decomposition) related to the [Singular Value Decomposition](http://en.wikipedia.org/wiki/Singular_value_decomposition) and entanglement, I came to understand what was going with my "matrix states".
 
@@ -41,7 +41,7 @@ Rearranging the final state into a matrix, we find that $Grid(S\_1) = \begin{bma
 
 By representing the state as a matrix, we've simplified how we apply operations. Operating on the first qubit (the row-wise one) is equivalent to post-multiplying the state matrix by the transpose of the operation. Operating on the second qubit (the column-wise one) is equivalent to pre-multiplying the state matrix by the operation. We can even represent some multi-qubit operations (e.g. controlled-nots correspond to flipping the bottom row or right column), but we won't be using any in this post.
 
-Personally, I find it fascinating that the operations simplify like that. It makes it much easier to reason about the states you can reach from some starting state... so let's do that. Let's consider how the single-qubit operations behave when starting from two different states: an unentangled classical "lonely corner" state $\begin{bmatrix} 1 & 0 \\\\ 0 & 0 \end{bmatrix}$ and a completely entangled "shared diagonal" state $\begin{bmatrix} \sqrt{0.5} & 0 \\\\ 0 & \sqrt{0.5} \end{bmatrix}$.
+Personally, I find it fascinating and useful that the operations simplify like that. Thinking about the simplified operations makes it dead obvious why operations on different qubits must commute (they're accumulating on opposite sides). It also makes it much easier to reason about the states you can reach from some starting state... in fact, let's do that. Let's consider how the single-qubit operations behave when starting from two different states: an unentangled classical "lonely corner" state $\begin{bmatrix} 1 & 0 \\\\ 0 & 0 \end{bmatrix}$ and a completely entangled "shared diagonal" state $\begin{bmatrix} \sqrt{0.5} & 0 \\\\ 0 & \sqrt{0.5} \end{bmatrix}$.
 
 **Case 1: Lonely Corner**
 
@@ -97,9 +97,9 @@ Given the above facts, what's something interesting we might be able to do in th
 
 **Conclusions and Notes**
 
-In non-entangled systems, the state acts like a matrix made by combining two complex ratios. The ratios are controlled independently and orthogonally by operations on either side.
+In 2 qubit non-entangled systems, the state acts like a matrix made by combining two complex ratios. The ratios are controlled independently and orthogonally by operations on either side.
 
-In entangled systems, the state acts like a unitary matrix. All of the matrix coefficients are controlled by both sides, with overlapping effects. You can move effects between sides, if it's convenient, when designing circuits. Sides can undo or square each others' effects.
+In 2 qubit entangled systems, the state acts like a unitary matrix. All of the matrix coefficients are controlled by both sides, with overlapping effects. You can move effects between sides, if it's convenient, when designing circuits. Sides can undo or square each others' effects.
 
 Systems that are partially entangled, e.g. $\begin{bmatrix} 0.8 & 0 \\\\ 0 & 0.6 \end{bmatrix}$, can be understood as a linear combination of non-entangled and entangled. The non-entangled and entangled states are kind of like "Singular-Value-Decomposition basis states". Larger systems, with multiple qubits per party (but still just two parties), have more SVD basis states. The SVD is useful as a measure of entanglement because unitary operations preserve it.
 
