@@ -359,6 +359,32 @@ var createWidget = function(canvas, s1, s2, title) {
             state = state.asStateAfterOperationOn2(Quop.phaseMatrix(dt));
         }
 
+        var ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        ctx.font = "20px Helvetica";
+        ctx.fillStyle = 'gray';
+        ctx.fillText("Click to toggle ----->", w, b/2 + 8 + h);
+        ctx.fillStyle = 'black';
+        ctx.fillText(title, w + b + d/2 - ctx.measureText(title).width/2, h/2+6)
+        ctx.font = "12px Helvetica";
+        for (var i = 0; i < buttons.length; i++) {
+            var s = buttons[i].s;
+            var x = buttons[i].x;
+            var y = buttons[i].y;
+            ctx.strokeStyle = 'black';
+            ctx.fillStyle = buttons[i].on ? '#0F0' : '#FFF';
+            if (mousePos !== null && mousePos[0] > x && mousePos[1] > y && mousePos[0] < x + b && mousePos[1] < y + b) {
+                ctx.fillStyle = buttons[i].on ? '#2D2' : '#CCC';
+            }
+            ctx.fillRect(x, y, b, b);
+            ctx.strokeRect(x, y, b, b);
+            ctx.fillStyle = 'black';
+            ctx.fillText(s, x + b / 2 - ctx.measureText(s).width/2, y + b / 2 + 6);
+            ctx.fillText(s, x + b / 2 - ctx.measureText(s).width/2, y + b / 2 + 6);
+        }
+
+        state.draw(ctx, p + w, p + h, d);
     };
 
     setInterval(redraw, 50);
