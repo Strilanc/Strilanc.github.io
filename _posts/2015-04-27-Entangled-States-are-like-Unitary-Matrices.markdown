@@ -97,4 +97,13 @@ Unlike in the lonely corner case, none of the operations' matrix coefficients ar
 
 Given the above facts, what's something interesting we might be able to do in the shared diagonal case that we couldn't do in the lonely corner case? The first thing that jumps to my mind is that Alice can put *four* numbers into the state now, instead of *two*. That might let us encode more information... wait, that's [superdense coding](http://en.wikipedia.org/wiki/Superdense_coding)! Neat.
 
+**Conclusions and Notes**
+
+In non-entangled systems, the state acts like a matrix made by combining two complex ratios. The ratios are controlled independently and orthogonally by operations on either side.
+
+In entangled systems, the state acts like a unitary matrix. All of the matrix coefficients are controlled by both sides, with overlapping effects. You can move effects between sides, if it's convenient, when designing circuits. Sides can undo or square each others' effects.
+
+Systems that are partially entangled, e.g. $\begin{bmatrix} 0.8 & 0 \\\\ 0 & 0.6 \end{bmatrix}$, can be understood as a linear combination of non-entangled and entangled. The non-entangled and entangled states are kind of like "Singular-Value-Decomposition basis states". Larger systems, with multiple qubits per party (but still just two parties), have more SVD basis states. The SVD is useful as a measure of entanglement because unitary operations preserve it.
+
+This all breaks down if you have more than two parties.
 
