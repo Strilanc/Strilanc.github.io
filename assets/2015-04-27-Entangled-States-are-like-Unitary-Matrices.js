@@ -387,6 +387,28 @@ var createWidget = function(canvas, s1, s2, title) {
         state.draw(ctx, p + w, p + h, d);
     };
 
+    $(canvas).mousemove(function(e) {
+        var x = e.pageX - $(canvas).offset().left;
+        var y = e.pageY - $(canvas).offset().top;
+        mousePos = [x, y];
+        redraw();
+    });
+    $(canvas).mouseleave(function() {
+        mousePos = null;
+        redraw();
+    });
+    $(canvas).click(function(e) {
+        mousePos = [e.pageX - $(canvas).offset().left, e.pageY - $(canvas).offset().top];
+        for (var i = 0; i < buttons.length; i++) {
+            var x = buttons[i].x;
+            var y = buttons[i].y;
+            if (mousePos[0] > x && mousePos[1] > y && mousePos[0] < x + b && mousePos[1] < y + b) {
+                buttons[i].on ^= true;
+            }
+        }
+        redraw();
+    });
+
     setInterval(redraw, 50);
 };
 
