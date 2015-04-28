@@ -72,5 +72,3 @@ Looked at that way, it almost looks practical! We'd need to be able to consisten
 You can double the classical capacity, in one direction, of a two-way quantum channel by using the other direction to create bell pairs to fuel superdense coding.
 
 Unfortunately, the same trick doesn't work with quantum teleportation.
-
-(Test. Ignore. Debugging new post not appearing.)

@@ -5,6 +5,8 @@ date: 2015-04-25 11:30:00 EST
 categories: quantum
 ---
 
+(Currently testing why github is choking on this post by binary searching the content. Content may be missing.)
+
 Quantum entanglement is legendarily anti-intuitive. Learning the actual math behind entanglement is infinitely more enlightening than reading or watching pop-sci expositions about it... but you're still left with the question of how to think about entanglement *usefully* when solving problems.
 
 In this post, I describe one trick for thinking about entanglement. It is not an original trick, but I half-stumbled onto it on my own so I'm going to explain it anyways.
@@ -71,39 +73,4 @@ Examples of the kinds of states we can reach include $\begin{bmatrix} \sqrt{0.5}
 
 It's impossible to reach the shared diagonal state from the lonely corner state via independent operations, because the shared diagonal state can't be factored into vertical and horizontal ratios.
 
-**Case 2: Shared Diagonal**
-
-Now let's try starting from the matrix state $S\_0 = \begin{bmatrix} \sqrt{0.5} & 0 \\\\ 0 & \sqrt{0.5} \end{bmatrix}$ and exploring.
-
-If you check closely, you'll notice the system behaves differently in a lot of little ways. For example, there are still states where having both qubits rotating doesn't change the size of the circles much... but they're in a different place than they were in the lonely corner case (finding them is left as an exercise for the reader):
-
-<canvas id="drawCanvas2" width="400px" height="410px" style="border:1px dotted #BBB;"/>
-
-Let's analyze the situation algebraically, again. We apply $U\_1$ to the first qubit and $U\_2$ to the second qubit. We get:
-
-$S\_f = U\_2 S\_0 U\_1^T$
-
-$= U\_2 \begin{bmatrix} \sqrt{0.5} & 0 \\\\ 0 & \sqrt{0.5} \end{bmatrix} U\_1^T$
-
-$= U\_2 \sqrt{0.5} I U\_1^T$
-
-$= \sqrt{0.5} U\_2 U\_1^T$
-
-Well, that's interesting. The starting state is a unitary matrix (times $\sqrt{0.5}$), and all the operations correspond to multiplying the state by a unitary matrix, so the final state is also going to be a unitary matrix (times $\sqrt{0.5}$).
-
-Unlike in the lonely corner case, none of the operations' matrix coefficients are being discarded. Also, the effects of the operations are no longer orthogonal. Instead of one qubit controlling the horizontal, and the other the vertical, they both control it all. Anything Alice does to the first qubit, Bob can undo by applying the appropriate counter-operation to the second qubit. Or Bob can apply the same effect as Alice, effectively squaring the operation. Or Alice, if she knows what Bob will do, can put the system into any (unitary) final state she desires.
-
-Given the above facts, what's something interesting we might be able to do in the shared diagonal case that we couldn't do in the lonely corner case? The first thing that jumps to my mind is that Alice can put *four* numbers into the state now, instead of *two*. That might let us encode more information... wait, that's [superdense coding](http://en.wikipedia.org/wiki/Superdense_coding)! Neat.
-
-**Conclusions and Notes**
-
-In non-entangled systems, the state acts like a matrix made by combining two complex ratios. The ratios are controlled independently and orthogonally by operations on either side.
-
-In entangled systems, the state acts like a unitary matrix. All of the matrix coefficients are controlled by both sides, with overlapping effects. You can move effects between sides, if it's convenient, when designing circuits. Sides can undo or square each others' effects.
-
-Systems that are partially entangled, e.g. $\begin{bmatrix} 0.8 & 0 \\\\ 0 & 0.6 \end{bmatrix}$, can be understood as a linear combination of non-entangled and entangled. The non-entangled and entangled states are kind of like "Singular-Value-Decomposition basis states". Larger systems, with multiple qubits per party (but still just two parties), have more SVD basis states. The SVD is useful as a measure of entanglement because unitary operations preserve it.
-
-This all breaks down if you have more than two parties.
-
-<script src="/assets/2015-04-27-Entangled-States-are-like-Unitary-Matrices.js"></script>
 
