@@ -111,3 +111,53 @@ Quop.prototype.times = function (other) {
         c.times(e).plus(d.times(g)), c.times(f).plus(d.times(h))]);
 };
 
+Quop.prototype.draw = function (ctx, x, y, d) {
+    var w = d / 2;
+    var r = w / 2;
+
+    // Arrows
+    for (i = 0; i < 4; i++) {
+        var dx = i % 2;
+        var dy = (i - dx) / 2;
+        var cx = x + dx * w + r;
+        var cy = y + dy * w + r;
+        var v = this.m[i];
+
+        ctx.fillStyle = "lightgray";
+        var p = v.norm2();
+        ctx.fillRect(cx - r, cy - r + w*(1-p), w, w*p);
+
+        ctx.beginPath();
+        ctx.arc(cx, cy, Math.sqrt(v.norm2()) * r, 0, 2 * Math.PI);
+        ctx.fillStyle = "yellow";
+        ctx.fill();
+        ctx.strokeStyle = "gray";
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + v.r * r, cy - v.i * r);
+        ctx.strokeStyle = "black";
+        ctx.stroke();
+
+        // Text
+        var t = v.toString();
+        ctx.fillStyle = 'black';
+        ctx.fillText(t, cx - ctx.measureText(t).width/2, cy + r - 5);
+        t = ["|00〉", "|01〉", "|10〉", "|11〉"][i];
+        ctx.fillText(t, cx - r + 5, cy - r + 15);
+    }
+
+    // Grid
+    ctx.beginPath();
+    for (var i = 0; i <= 2; i++) {
+        ctx.moveTo(x + w * i, y);
+        ctx.lineTo(x + w * i, y + w * 2);
+
+        ctx.moveTo(x, y + w * i);
+        ctx.lineTo(x + w * 2, y + w * i);
+    }
+    ctx.strokeStyle = "black";
+    ctx.stroke();
+};
+
