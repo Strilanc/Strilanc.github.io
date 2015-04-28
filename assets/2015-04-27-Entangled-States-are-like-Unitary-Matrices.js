@@ -325,6 +325,43 @@ Quop.phaseMatrix = function(t) {
 };
 
 var createWidget = function(canvas, s1, s2, title) {
+    var state = new Quop([new Complex(s1, 0), new Complex(0, 0), new Complex(0, 0), new Complex(s2, 0)]);
+    var d = 300;
+    var b = 60;
+    var p = b;
+    var h = 30;
+    var w = 10;
+
+    var buttons = [
+        {x: w + p + d/2 - b/2, y: h, s: "Rotate(1)", on: true},
+        {x: w + p + d*0.75 - b/2, y: h, s: "Phase(1)", on: false},
+        {x: w, y: p + d/2 - b/2 + h, s: "Rotate(2)", on: false},
+        {x: w, y: p + d*0.75 - b/2 + h, s: "Phase(2)", on: false}
+    ];
+    var mousePos = null;
+
+    var t0 = performance.now();
+    var redraw = function () {
+        var t1 = performance.now();
+        var dt = (t1 - t0) / 1000;
+        t0 = t1;
+
+        if (buttons[0].on) {
+            state = state.asStateAfterOperationOn1(Quop.rotationMatrix(dt));
+        }
+        if (buttons[1].on) {
+            state = state.asStateAfterOperationOn1(Quop.phaseMatrix(dt));
+        }
+        if (buttons[2].on) {
+            state = state.asStateAfterOperationOn2(Quop.rotationMatrix(dt));
+        }
+        if (buttons[3].on) {
+            state = state.asStateAfterOperationOn2(Quop.phaseMatrix(dt));
+        }
+
+    };
+
+    setInterval(redraw, 50);
 };
 
 createWidget(document.getElementById("drawCanvas1"), 1, 0, "Operate on Independent Qubits");
