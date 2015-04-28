@@ -5,7 +5,7 @@ date: 2015-04-25 11:30:00 EST
 categories: quantum
 ---
 
-(Currently testing why github is choking on this post by binary searching the content. Content may be missing.)
+(Currently testing why github is choking on this post's script by binary searching the content. Content may be missing.)
 
 Quantum entanglement is legendarily anti-intuitive. Learning the actual math behind entanglement is infinitely more enlightening than reading or watching pop-sci expositions about it... but you're still left with the question of how to think about entanglement *usefully* when solving problems.
 
@@ -106,4 +106,6 @@ In entangled systems, the state acts like a unitary matrix. All of the matrix co
 Systems that are partially entangled, e.g. $\begin{bmatrix} 0.8 & 0 \\\\ 0 & 0.6 \end{bmatrix}$, can be understood as a linear combination of non-entangled and entangled. The non-entangled and entangled states are kind of like "Singular-Value-Decomposition basis states". Larger systems, with multiple qubits per party (but still just two parties), have more SVD basis states. The SVD is useful as a measure of entanglement because unitary operations preserve it.
 
 This all breaks down if you have more than two parties.
+
+<script src="/assets/2015-04-27-Entangled-States-are-like-Unitary-Matrices.js"></script>
 
