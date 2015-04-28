@@ -290,4 +290,43 @@ Quop.prototype.svd = function () {
         usv[2].times(q.adjoint()).times(r.adjoint()).times(p.adjoint())];
 };
 
+Quop.prototype.asStateAfterOperationOn1 = function(op) {
+    return this.times(op.transpose());
+};
+
+Quop.prototype.asStateAfterOperationOn2 = function(op) {
+    return op.times(this);
+};
+
+Quop.prototype.asStateAfterCNotOnto1 = function() {
+    var m = this.m;
+    return new Quop(
+        m[0], m[1],
+        m[3], m[2]);
+};
+
+Quop.prototype.asStateAfterCNotOnto2 = function() {
+    var m = this.m;
+    return new Quop(
+        m[0], m[3],
+        m[2], m[1]);
+};
+
+Quop.rotationMatrix = function(t) {
+    var s = new Complex(Math.sin(t), 0);
+    var c = new Complex(Math.cos(t), 0);
+    return new Quop([c, s.times(-1), s, c]);
+};
+
+Quop.phaseMatrix = function(t) {
+    var s = Math.sin(t);
+    var c = Math.cos(t);
+    return new Quop([new Complex(1, 0), new Complex(0, 0), new Complex(0, 0), new Complex(c, s)]);
+};
+
+var createWidget = function(canvas, s1, s2, title) {
+};
+
+createWidget(document.getElementById("drawCanvas1"), 1, 0, "Operate on Independent Qubits");
+createWidget(document.getElementById("drawCanvas2"), Math.sqrt(0.5), Math.sqrt(0.5), "Operate on Entangled Qubits");
 
