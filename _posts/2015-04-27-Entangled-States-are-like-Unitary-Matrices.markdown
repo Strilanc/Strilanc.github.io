@@ -5,8 +5,6 @@ date: 2015-04-25 11:30:00 EST
 categories: quantum
 ---
 
-(Currently testing why github is choking on this post's script by binary searching the content. Content may be missing. 8)
-
 Quantum entanglement is legendarily anti-intuitive. Learning the actual math behind entanglement is infinitely more enlightening than reading or watching pop-sci expositions about it... but you're still left with the question of how to think about entanglement *usefully* when solving problems.
 
 In this post, I describe one trick for thinking about entanglement. It is not an original trick, but I half-stumbled onto it on my own so I'm going to explain it anyways.
