@@ -212,3 +212,20 @@ And here's a circuit diagram, showing the exact operations that are occurring. E
 ![Solution as Quantum Circuit](http://i.imgur.com/3tdJvBb.png)
 
 And that's how you can superdense encode Bell pairs and other "flat" qubits: by cleaning up the garbage created by that process.
+
+**Conclusions**
+
+Superdense coding works on qubits, but the qubits must have "flat" phases (e.g. no amplitudes with imaginary components) and the qubits are copied instead of moved.
+
+--------
+--------
+--------
+
+# Update
+
+When I made the puzzle I was trying to exclude solutions that only used the normal type of superdense coding but, as noted by a commenter [on hackernews](https://news.ycombinator.com/item?id=9472450), there is such a solution. Whoops!
+
+Splitting the cleaner node into two pieces might fix the issue. Or maybe not! Give it a try:
+
+<a href="http://i.imgur.com/TgWzCsY.png"><img src="http://i.imgur.com/TgWzCsY.png" alt="Puzzle attempt number 2" style="width: 200px;"/></a>
+
