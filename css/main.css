@@ -61,7 +61,6 @@ a:visited { color: #a0a; }
   width: 55em;
   margin: 3em auto 2em;
   margin-top: 0.5em;
-  line-height: 1.5em;
 }
 
 .header a {
@@ -154,7 +153,6 @@ a:visited { color: #a0a; }
 .post code {
   border: 1px solid #ddd;
   background-color: #eef;
-  padding: 0 .2em;
 }
 
 .post pre code {
