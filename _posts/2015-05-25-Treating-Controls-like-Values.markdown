@@ -509,5 +509,5 @@ $\mu$ a succinct way to specify controlled operations, but ultimately amounts to
 
 {% include /comments/2015-05-25-Treating-Controls-like-Values.markdown %}
 
-[Comment via Pull Request](https://github.com/Strilanc/Strilanc.github.io/edit/master/index.html)
+[Comment via Pull Request](https://github.com/Strilanc/Strilanc.github.io/edit/master/_includes/comments/2015-05-25-Treating-Controls-like-Values.markdown)
 
