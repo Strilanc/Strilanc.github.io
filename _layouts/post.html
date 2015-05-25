@@ -4,23 +4,49 @@ layout: default
 <h1 class="post_title">{{ page.title }}</h1>
 <p class="meta">{{ page.date | date_to_string }}</p>
 
-<noscript>
-  <font color=red>
-    <hr>
-    <strong>Warning</strong>: <strong>javascript</strong> disabled. Some content won't render correctly.<br/>
-    <br/>
+    <noscript>
+      <font color=red>
+        This site uses javascript. You seem to have blocked it. Things may look awful.
+      </font>
+      <hr/>
+    </noscript>
+    <!-- MathJax latest -->
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax javascript was blocked.
+        LaTeX <strong>formulas won't render</strong>.
+      </font>
+      (Allow <strong>mathjax.org</strong> to fix.)
+      <hr/>
+    </noscript>
 
-    For noscript users such as myself:<br/>
-    <ul>
-      <li><strong>strilanc.com</strong>: This site.
-      <li><strong>cdn.mathjax.org</strong>: MathJax. Renders formulae. Most posts look awful without it. $e^{\tau i} = 1$
-      <li><strong>ajax.googleapis.com</strong>: JQuery. A few posts will have non-working example widgets without it.
-    </ul>
-    There's also google-analytics.com, but all it does is make numbers you can't see go up so I can feel happy inside. There's no need to allow it.
-    <hr>
-  </font>
-  <br/>
-</noscript>
+    <!-- jQuery 2.1.0 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    <noscript>
+      <font color=red>
+        jQuery javascript was blocked.
+        Some examples may not work.
+      </font>
+      (Many posts will be fine. Allow <strong>ajax.googleapis.com</strong> to fix.)
+      <hr/>
+    </noscript>
 
 <div class="post">
 {{ content }}
