@@ -1,6 +1,6 @@
-name: "@Strilanc - Craig Gidney's Blog"
+name: "Algorithmic Assertions - Craig Gidney's Blog"
 markdown: redcarpet
 pygments: true
-description: A computer-science / software-engineering / programming blog with absolutely no distinguishing features.
+description: A blog about computer science, software engineering, quantum computing, mathematical puzzles, and so forth.
 url: http://strilanc.com
 

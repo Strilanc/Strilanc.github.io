@@ -60,7 +60,7 @@ a:visited { color: #a0a; }
   text-align: justify;
   width: 55em;
   margin: 3em auto 2em;
-  margin-top: 0.5em;
+  margin-top: 0;
 }
 
 .header a {
