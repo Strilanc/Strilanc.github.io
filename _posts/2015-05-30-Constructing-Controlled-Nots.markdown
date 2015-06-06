@@ -1,183 +1,104 @@
 ---
 layout: post
-title: "Constructing Controlled Nots"
-date: 2015-05-17 11:30:00 EST
+title: "Constructing Large Controlled Nots"
+date: 2015-06-05 11:30:00 EST
 categories: circuits
 ---
 
-In this post: using ancilla bits to build NOT gates with lots of controls out of NOTs with two controls.
+A month or so ago, I got nerd-sniped by an exercise from [Nielsen and Chuang's textbook](http://www.amazon.com/Quantum-Computation-Information-Anniversary-Edition/dp/1107002176): using only $O(n^2)$ [Toffoli gates](https://en.wikipedia.org/wiki/Toffoli_gate) and single-qubit gates, and without using any [ancilla bits](https://en.wikipedia.org/wiki/Ancilla_Bit), construct a $C^nNOT$ gate (a NOT gate with $n$ controls).
 
-# Reversible
+I thought it was wasteful to use a quadratic number of gates, and decided to try to do it with only a linear number of gates.
+As a consequence, I had to figure out several different sub-problems: how to construct a $C^nNOT$ when you *do* have an ancilla bit, how to construct increment gates with an ancilla bit, and finally how to bootstrap an ancilla bit into existence using quantum gates.
 
-Reversible circuits avoid [one of the lower bounds](http://en.wikipedia.org/wiki/Landauer%27s_principle) on the energy required to do computation.
-They segue nicely into how quantum computers work. And they make for interesting theoretical challenges.
+Each sub-problem is getting its own post.
+In this first post, we'll be looking at how to use any ancilla bit to construct a $C^nNOT$ out of $O(n)$ Toffoli gates.
+Note that we won't be using any quantum gates.
+Although ultimately I'll use what's explained here to solve a quantum circuit problem, this post (and the next one) are purely classical circuit construction problems.
 
-Reversible circuits can't use all of the gates that logic circuits can use.
-In particular, they can't use NAND, AND, NOR, or OR gates.
-This is an osbtacle, because those gates are often the ones used to achieve universality.
+# Reversible Circuits
 
-Reversible circuits instead use the Toffoli gate (or the controlled-swap with some caveats, or lots of other unnamed options) to achieve universality.
+Practically speaking, reversible circuits are interesting because they avoid [one of the lower bounds on the energy required to do computation](http://en.wikipedia.org/wiki/Landauer%27s_principle).
+In principle, if you didn't have to spend energy pumping errors out, a reversible computation could be done for free (without consuming neg-entropy, i.e. turning energy into waste heat).
+(On the other hand, we're six orders of magnitude away from the Landauer limit so this is more of a far-off-future-hypothetically-useful kind of practicality.)
 
-Unlike the universality of irreversible circuits, classical reversible universality has a caveat: you may need ancilla bits.
+Theoretically speaking, reversible circuits are interesting because they're a source of problems and questions to solve.
+For example, you can [classify reversible gates](http://arxiv.org/abs/1504.05155) based on which equivalence class of operations they can construct.
+And, of course, there's the circuit construction problems themselves.
 
-In practice we only have circuit elements affecting a finite number of elements.
+Constructing reversible circuits is tricky because you're not allowed to use any of the gates that make it easy.
+All of the gates we typically use for universal computation (i.e. NAND, AND, NOR, and OR gates) are irreversible.
+There *are* still universal gates for reversible computation, and the Toffoli gate is one of them, but there's a caveat.
 
-We want to make large controlled nots out of Toffoli gates.
+# Permutations and Parity
 
-Shtetl paper on reversible circuits.
+Every reversible operation  must map from every input to a distinct output, and to every output from exactly one input.
+More specifically, it must be equivalent to a [permutation](https://en.wikipedia.org/wiki/Permutation) of the possible states.
 
-It's not always possible to only use the bits affected by the circuit when constructing that circuit. We may need **ancilla bits**
+[Permutations have a parity](http://en.wikipedia.org/wiki/Parity_of_a_permutation), based on the number of swaps it takes to rearrange the items to match the permutations.
+If it takes an odd number of swaps to perform a permutation, it has odd parity.
+Conversely, taking an even number of swaps means the permutation has even parity.
+When you chain permutations, applying one then the other, the parity of the resulting overall net permutation is the sum of the two chained permutations' parities.
+Chaining two even or two odd permutations gives an even permutation.
+Chaining one even and one odd permutation (in either order) gives an odd permutation.
+This means that, for example, you can't ever make an odd permutation by chaining even permutations.
 
-Ancilla bits come in different varieties. Sometimes, you know that they're guaranteed to be off.
-Other times, you don't know what value they'll have.
-Sometimes, you are required to restore the bits to their original value after you're done with them. Sometimes you're not.
+The fact that even permutations can't make odd permutations is useful surprisingly often, when you want to show that something is impossible.
+In particular, it creates a caveat on the universality of reversible gates.
 
-**Ancilla Bits**
+Consider a controlled-not that affects all the wires of a circuit.
+For example, suppose we have a 10-bit circuit and we want to toggle the last bit when the first nine are ON (i.e. we have a $C^9NOT$.
+The permutation corresponding to that $C^9NOT$ swaps the $1111111110$ state with the $1111111111$ state, but leaves all the other states untouched.
+Since it performs one swap, and that's an odd number, $C^9NOT$ is an operation with odd parity.
 
-Even with a universal reversible gate, there's a caveat when it comes to computing *all* possible functions.
-The caveat is that factoring the function into smaller gates may require some extra working space.
+Now consider *any* operation that doesn't touch all the wires.
+There is a bit $b$ that the operation doesn't depend on or affect.
+Therefore, when we look at the swaps performed by this operation, any swap it performs when $b=0$ must be matched by an equivalent swap performed when $b=1$.
+In other words, having an unaffected bit doubles the number of swaps (because the swap has to happen once in the $b=0$ case, and once in the $b=1$ case).
+Therefore this operation must have even parity, because it performs an even number of swaps.
 
-The underlying problem is that all reversible operations correspond to a permutation of the state space, and [permutations have a parity](http://en.wikipedia.org/wiki/Parity_of_a_permutation).
-For example, suppose we have a 10-bit circuit and we want to toggle the last bit when the first nine are ON (i.e. we apply a $CNOT\_{10}$.
-The permutation corresponding to $CNOT\_{10}$ swaps the 1111111110 state with the 1111111111 state, but leaves all the other states untouched.
-A controlled-not that affects all the wires has a permutation with exactly on swap, so it has *odd parity*.
-Conversely, any operation on a strict subset of the wires must have *even parity*.
-If an operation doesn't affect or depend on a bit, then the operation must perform the same swaps amongst the subset of states where that bit is 0 as it does amongst the states where that bit is 1.
-Every swap is happening twice, once per possible value of the unaffected bit, so there must be an even number of swaps.
+That brings us to our caveat. Since a controlled-not that affects every wire has odd parity, and *any* operation affecting fewer wires has even parity, and chaining even operations can't create an odd operation, it is impossible to reduce an all-wires-touched controlled not into smaller operations.
 
-The workaround for this problem is to give the circuit access to [ancilla bits](https://en.wikipedia.org/wiki/Ancilla_Bit). The extra bits give circuit constructions "room to move", simplifying them or making them possible in the first place.
+Fortunately, although chained permutations preserve the total number of swaps $\pmod{2}$, that's not true for other moduluses. It doesn't work $\pmod{4}$, for example. If we provided some working space, we can sidestep the parity problems.
 
-Usually you'll know the initial value of an ancilla bit, and be required to restore that value, but there are other possibilities.
-Being allowed to trash the value can easily halve the size of a circuit, because there's no need to uncompute effects.
-several possibles types of ancilla bits, based on whether or not you're allowed to trash the bits and whether you know their initial values.
-Usually you'll know the initial value and be required to restore the value, but in this post we'll explore four variations:
+# Ancilla Bits
 
-- **Burnable Bits**: Will be OFF beforehand, but with no restrictions on state afterwards.
-Basically, these are neg-entropy you can consume to perform (a small amount of) irreversible computation.
-- **Zeroed Bits**: Will be OFF beforehand, and must be OFF afterwards.
-Zero bits are like burnable bits, except you have to [uncompute](https://en.wikipedia.org/wiki/Uncomputation) effects on the ancilla bits before continuing. As a result, circuits using zeroed bits tend to be twice as large as circuits using burnable bits.
-- **Garbage Bits**: Could be in any state beforehand, and can be in any state afterwards.
-Using a garbage bit generally requires detecting that it was toggled.
-As with having to restore the initial state, this tends to double the size of circuits relative to burnable bits.
-- **Borrowed Bits**: Could be in any state beforehand, but must be restored to that same state afterwards.
-Combines the downsides of zeroed bits and garbage bits.
-The upside is that you can borrow bits *from yourself*.
-Tends to quadruple the size of circuits, relative to burnable bits.
+The way we provide working space is by adding ancilla bits to the circuit.
+Ancilla bits are extra bits, not involved in the logical operations being performed, that give circuit constructions "room to move".
+In addition to making constructions possible in the first place, ancilla bits can allow for simpler and more efficient constructions.
 
-Usually, the shortest circuits use burnable bits (and correspond to classical computations).
-Using zero bits often requires you to uncompute, by running the circuit twice, the effects on the bit.
-So they tend to be twice as large. Garbage bits can similarly have a factor of 2 cost, because you have to key effects on the bit being toggled instead of its value.
-Borrowed bits are the worst, paying both factors of 2 in cost, so they're four times as large.
+Ancilla bits come in different flavors, based on if you know their initial value and if you're required to restore that value. We'll be creating constructions for each case in this post, so I'll name them now to avoid ambiguities:
 
-On the other hand, borrowed bits are the most commonly available simply because every bit not involved in the current gate is borrowable.
-So if you can break a gate into much smaller gates, those smaller gates will each individually have access to lots of borrowable bits.
+- **Burnable Bits**: Guaranteed to be OFF initially, but with no restrictions on state afterwards.
+Basically, burnable bits are (a small amount of) neg-entropy you can consume to perform some irreversible computation.
+- **Zeroed Bits**: Guaranteed to be OFF initially, and you must ensure they're OFF when you're done.
+Zeroed bits are generally used exactly like burnable bits, except you [uncompute](https://en.wikipedia.org/wiki/Uncomputation) effects before continuing.
+Circuits using zeroed bits tend to be a constant factor larger than circuits using burnable bits because of the uncomputation tax.
+- **Garbage Bits**: Could be in any state initially, and you can add more garbage into the state (you don't have to restore the initial value).
+Garbage bits tend to be trickier to use than burnable or zeroed bits, because you need to base logic around *toggle detection*.
+Toggle detection typically involves repeating a self-undoing operation twice, conditioned on the potentially-toggled garbage bit.
+When no toggling occurs the operation either doesn't happen or happens twice and undoes itself.
+When toggling occurs, the operation happens exactly once.
+Circuits using garbage bits tend to be a constant factor larger than circuits using burnable bits because of the toggle-detection tax.
+- **Borrowed Bits**: Could be in any state beforehand, and must be restored to that same state afterwards.
+Borrowed bits have the downsides of both zeroed bits and garbage bits, and pay both of their boilerplate taxes.
+However, borrowed bits are much more common because you can borrow bits *from yourself*.
+Any operation that doesn't affect the entire circuit can use unaffected wires as de-facto borrowable bits.
 
-The number of available ancilla bits can also affect how easy it is to construct the circuit.
-We can do things that are much more convenient when we have $n$ ancilla bits, than when we have $1$ ancilla bit.
-If we have $0$ ancilla bits, some circuits are simply not possible to construct.
-For example, a controlled-not involving every wire can't be broken into smaller controlled nots.
+Now that we have a language for talking about ancilla bits, let's start constructing some large controlled nots. We've already discussed why the 0-bit case is impossible, but what about the 1-bit case?
 
-The problem is that in a reversible computation every gate corresponds to a permutation.
-The controlled-not touching every wire is a single swap, meaning its permutation has **odd parity**.
-But any gate that leaves a wire unaffected must have even parity, because it does some swaps in the case where that wire is off and identical swaps in the case where that wire is on.
-So it must have an even number of swaps.
+**1 Ancilla Bit**
 
-**Easy Case: Lots of Ancilla Bits**
+Given an $n+2$ circuit with $n$ control wires, one target wire, and one ancilla wire, we want to break a $C^{n}NOT$ into smaller operations. We want to take this:
 
-Suppose we want to construct a $CNOT_n$, and we have $n$ ancilla bits.
-How do we construct our large controlled not out of Toffoli gates?
+<img src="http://i.imgur.com/zqxs9PP.png" alt="Single ancilla bit circuit" height="280px"/>
 
-If we have burnable bits, it's really easy. We store the AND of the first two bits in one of the burnable bits, then keep AND'ing more bits on and storing the result in burnable bits.
-We touch every burnable bit twice and every value bit once.
+and break it into controlled-NOTs with fewer controls, so that we have more breathing room to work with for each individual sub-operation.
 
-    A ──•───── A
-        │ 
-    B ──•───── B
-        │ 
-    0 ──X•──── AB
-         │
-    C ───•──── C
-         │
-    0 ───X•─── ABC
-          │
-    D ────•─── D
-          │
-    0 ────X•── ABCD
-           │
-    E ─────•── E
-           │
-    T ─────X── T + ABCDE
+If our single ancilla bit is a burnable bit, it's easy to split the problem in two. Just use toggle the ancilla bit ON when four of the controls are ON, and then use a single control on the ancilla bit to play the role of those four controls:
 
-If we have zeroed bits, we do the same thing but with uncomputation. The result looks like an arrow pointing towards the target.
+<img src="http://i.imgur.com/Pfei41X.png" alt="Single burnable bit circuit construction" height="300px"/>
 
-    A ──•─────•── A
-        │     │
-    B ──•─────•── B
-        │     │
-    0 ──X•───•X── 0
-         │   │
-    C ───•───•─── C
-         │   │
-    0 ───X•─•X─── 0
-          │ │
-    D ────•─•──── D
-          │ │
-    0 ────X•X──── 0 
-           │
-    E ─────•───── E
-           │
-    T ─────X───── T + ABCDE
-
-If we have garbage bits, we have to rely on toggle detection. That's simple to do with controlled NOTs because they are their own inverse: just have the operation depend on the toggle-able bit and repeat it on both sides of the possible toggle. If the toggle doesn't happen, the operation will either not happen at all or happen twice and undo itself. If the toggle does happen, the operation happens exactly once. You can then wrap another toggle-detection around the bigger toggle, and keep going. The result looks like an arrow pointing away from the target (instead of towards it like with zerod bits):
-
-     A ─────•───── A
-            │ 
-     B ─────•───── B
-            │ 
-    x1 ────•X•──── x1 + AB
-           │ │
-     C ────•─•──── C
-           │ │
-    x2 ───•X X•─── x2 + ABC
-          │   │
-     D ───•───•─── D
-          │   │
-    x3 ──•X───X•── x3 + ABCD
-         │     │
-     E ──•─────•── E
-         │     │
-     T ──X─────X── T + ABCDE
-
-
-With borrowed bits we re-use the garbage bits strategy, and then uncompute:
-
-
-     A ─────•─────•──── A
-            │     │
-     B ─────•─────•──── B
-            │     │
-    x1 ────•X•───•X•─── x1
-           │ │   │ │
-     C ────•─•───•─•─── C
-           │ │   │ │
-    x2 ───•X─X•─•X─X•── x2
-          │   │ │   │
-     D ───•───•─•───•── D
-          │   │ │   │
-    x3 ──•X───X•X───X── x3
-         │     │
-     E ──•─────•─────── E
-         │     │
-     T ──X─────X─────── T + ABCDE
-
-Garbage bits zig, zeroed bits zag, and borrowed bits zig-zag.
-
-**Hard Case: Single Ancilla Bit**
-
-All of the previous constructions need an extra ancilla bit for each extra control bit. We need a different construction when there are fewer ancilla bits available. However, we no longer need to factor operations into Toffoli gates. We only need to factor them into $CNOT_\frac{n}{2}$ gates now, because once we hit that point we can borrow the other $n/2$ bits from ourselves in order to apply the $n/2$ borrowed bit construction above and finish the job.
-
-If we have 1 burnable bit, it's easy to split the gate in two:
-
+<!--
     A ──•──── A
         │
     B ──•──── B
@@ -195,10 +116,13 @@ If we have 1 burnable bit, it's easy to split the gate in two:
     T ──┼─X── T + ABCDEFG
         │ │
       ──X─•── ABCD
+-->
 
+If our ancilla bit is a zeroed bit, we need to uncompute the effects on it before finishing. In this case our effects are very simple, and can be undone by simply repeating what we did to mess things up:
 
-Again we add uncomputation to handle the zeroed bit case:
+<img src="http://i.imgur.com/Cr8XFaW.png" alt="Single zeroed bit circuit construction" height="300px"/>
 
+<!--
     A ──•───•── A
         │   │
     B ──•───•── B
@@ -216,9 +140,13 @@ Again we add uncomputation to handle the zeroed bit case:
     T ──┼─X─┼── T + ABCDEFG
         │ │ │
       ──X─•─X──
+-->
 
-And the garbage bit solution again looks like an inverted form of the zeroed bit solution:
+When the ancilla bit is a garbage bit, we do toggle-detection. We conditionally toggling T on both sides of the possible toggling of the ancilla bit, so that the T-toggling undoes itself unless the ancilla bit was toggled:
 
+<img src="http://i.imgur.com/t5b3Dq4.png" alt="Single garbage bit circuit construction" height="300px"/>
+
+<!--
     A ────•──── A
           │
     B ────•──── B
@@ -236,9 +164,13 @@ And the garbage bit solution again looks like an inverted form of the zeroed bit
     T ──X─┼─X── T + ABCDEFG
         │ │ │
     x ──•─X─•── x + ABCD
+-->
  
-And the borrowed bit solution again looks like a combination of the garbage and zeroed bit solutions:
+Finally, the borrowed bit case is just a combination of the garbage bit and zeroed bit tricks:
 
+<img src="http://i.imgur.com/8CIaLFv.png" alt="Single borrowed bit circuit construction" height="300px"/>
+
+<!--
     A ──•───•──── A
         │   │
     B ──•───•──── B
@@ -256,31 +188,148 @@ And the borrowed bit solution again looks like a combination of the garbage and 
     T ──┼─X─┼─X── T + ABCDEFG
         │ │ │ │
     x ──X─•─X─•── x
+-->
 
-All of the above constructions reduce the C(2N-1) case with 1 ancilla bit into four C(N)s with N ancilla bits.
+Each of the above constructions uses 1 ancilla bit to turn a $C^{n}NOT$ into $O(1)$ $C^{\frac{n}{2}}NOT$s (more specifically, we use $C^{\lceil \frac{n}{2} \lceil}NOT$s and $C^{\lceil \frac{n+1}{2} \rceil}NOT$s).
 
-We *could* apply the 1-bit construction iteratively, until we had halved enough to turn n into 2, but this is inefficient. The recurrence relation would $C(N) = 4 C(N/2)$ and this solves out to $C(N) = O(N^2)$. Borrowing our own bits avoids the quadratic blowup. Each reduced control affects only half of the bits, so there are suddenly $N-1$ available bits to borrow. So we can apply the $N-1$ borrowed bit construction from earlier. So we'll use $C(N) = 4 \cdot C(N/2) = 4 \cdot (4 N \cdot C(3)) = O(N)$ Toffoli gates
+We could apply this construction iteratively, turning $C^{n}NOT$s into $C^{\frac{n}{2}}NOT$s into $C^{\frac{n}{4}}NOT$s and so forth $p$ times until we hit the base case of Toffoli gates when $\frac{n}{2^p} \approx 2$. Unfortunately, doing that would use more than a linear number of Toffoli gates. For borrowable bits, the recurrence relation for the construction is $T(n) = 4 T(\frac{n}{2})$, which is $O(n^2)$. For the zeroed bits and garbage bits we get $T(n) = 3 T(\frac{n}{2})$, which is $O(n^{lg_3 2}) \approx O(n^{1.585})$. Even if we could apply the burnable bits case iteratively (despite trashing the single ancilla bit then trying to pretend it was still 0), $T(n) = 2 T(\frac{n}{2})$ is $O(n lg(n))$ instead of $O(n)$.
 
-**Impossible Case: 0 Ancilla Bits**
+Clearly we need a better construction. Fortunately, we've made our operations quite a lot smaller. We're guaranteed to have at least $\lceil \frac{n}{2} \rceil$ unaffected bits available and that our operations have size at most $C^{\lceil \frac{n+1}{2} \rceil}NOT$. That gives us the option of borrowing our own bits.
 
-As mentioned earlier, it's impossible construction a $CNOT_n$ (where $n>3$) out of Toffoli gates without an ancilla bit because a $CNOT$ affecting all wires has a permutation with odd parity whereas any smaller gate (including Toffoli gates) will have even parity.
+# $n-2$ Ancilla Bits
 
-Interestingly, this is *not* impossible to do with quantum operations. But that's a different post.
+Given a $2n-1$ wire circuit with $n$ control wires, $n-2$ ancilla wires, and one target wire, we want to break a $C^{n}NOT$ into a linear number of operations. This time we will intersperse the ancilla bits throughout the circuit, to make the constructions look simpler:
 
-**Summary**
+<img src="http://i.imgur.com/GotM44a.png" alt="Linear ancilla bits" height="280px"/>
 
-With no ancilla bits, you can't build larger controlled nots out of Toffoli gates.
 
-Just one ancilla bit is enough to build a large controlled-nots out of $\Theta(n)$ Toffoli gates. Even if the ancilla bit is in an unknown state that must be preserved.
+Once again, the burnable bits case is easy.
+We store intermediate results in the ancilla bits, allowing us to use one control to represent many, and we AND up the result one control at a time.
+In the end we've touch every burnable bit twice, and every value bit once.
+Not bad:
 
-$n$ ancilla bits aren't necessary, but they make it easy to use a smaller number of gates.
+<img src="http://i.imgur.com/qzigoTX.png" alt="Linear burnable bits circuit construction" height="300px"/>
 
-In terms of the number of needed gates, borrowed bits are more expensive than garbage bits and zero bits, and they in turn are more expensive than burnable bits.
+<!--
+     A ──•───── A
+         │ 
+     B ──•───── B
+         │ 
+    0₁ ──X•──── AB
+          │
+     C ───•──── C
+          │
+    0₂ ───X•─── ABC
+           │
+     D ────•─── D
+           │
+    0₃ ────X•── ABCD
+            │
+     E ─────•── E
+            │
+     T ─────X── T + ABCDE
+-->
 
-If the bit in a known state, or you don't have to restore it, you need 3/4 as many gates. If it's both known and not needed to be restored, you need 1/2 as many gates. If you have N ancilla bits to work with, instead of 1, you save factor of 4.
+With zeroed bits, we have to uncompute.
+We apply the same operations, except for the one toggling the target, but in the reverse order.
+This creates a circuit that looks like it's pointing towards the target:
 
----
+<img src="http://i.imgur.com/iB9FhXT.png" alt="Linear zeroed bits circuit construction" height="300px"/>
 
-Next time: increment and decrement gates.
+<!--
+     A ──•─────•── A
+         │     │
+     B ──•─────•── B
+         │     │
+    0₁ ──X•───•X── 0
+          │   │
+     C ───•───•─── C
+          │   │
+    0₂ ───X•─•X─── 0
+          │ │
+     D ────•─•──── D
+           │ │
+    0₃ ────X•X──── 0 
+            │
+     E ─────•───── E
+            │
+     T ─────X───── T + ABCDE
+-->
 
-Next next time: using quantum gates to make the no-ancilla-bit case possible.
+Garbage bits are again based on toggle detection, but this time we have to nest it.
+Nested toggle detectors propagate toggling until one of them fails to fire.
+The resulting circuit looks like an arrow pointing *away* from the target:
+
+<img src="http://i.imgur.com/YW39FOb.png" alt="Linear garbage bits circuit construction" height="300px"/>
+
+<!--
+     A ─────•───── A
+            │ 
+     B ─────•───── B
+            │ 
+    x₁ ────•X•──── x₁ + AB
+           │ │
+     C ────•─•──── C
+           │ │
+    x₂ ───•X─X•─── x₂ + ABC
+          │   │
+     D ───•───•─── D
+          │   │
+    x₃ ──•X───X•── x₃ + ABCD
+         │     │
+     E ──•─────•── E
+         │     │
+     T ──X─────X── T + ABCDE
+-->
+
+
+Once again, the borrowed bits solution combines toggle-detection with uncomputation.
+We take the garbage bits solution, then uncompute the non-target-affecting operations:
+
+
+<img src="http://i.imgur.com/yoivhJC.png" alt="Linear borrowed bits circuit construction" height="300px"/>
+
+<!--
+     A ─────•─────•──── A
+            │     │
+     B ─────•─────•──── B
+            │     │
+    x₁ ────•X•───•X•─── x₁
+           │ │   │ │
+     C ────•─•───•─•─── C
+           │ │   │ │
+    x₂ ───•X─X•─•X─X•── x₂
+          │   │ │   │
+     D ───•───•─•───•── D
+          │   │ │   │
+    x₃ ──•X───X•X───X── x₃
+         │     │
+     E ──•─────•─────── E
+         │     │
+     T ──X─────X─────── T + ABCDE
+-->
+
+Each of the above constructions uses $n-2$ ancilla bits to turn a $C^{n}NOT$ into $O(n)$ Toffoli gates.
+
+# Combination
+
+Our 1 ancilla bit construction was not efficient enough to be applied iteratively.
+Now that we have the efficient $n-2$ ancilla bit constructions, we can fix that problem by switching to the $n-2$ borrowed bit construction after applying the relevant 1 ancilla bit construction.
+
+This achieves the $O(n)$ bound we were hoping for, even if we only have a single ancilla bit in an unknown state that we must maintain (in which case we use $\approx 4 \cdot \frac{n}{2} \cdot 4 \approx 8n$ Toffoli gates). Furthermore, this is $\Theta(n)$ because we clearly need at least $n/3$ gates (otherwise one of the controls could not have been touched).
+
+The constant factor on the number of needed gates depends heavily on the type and number of ancilla bits. Starting with a burnable bit, instead of a borrowed bit, saves a factor of 2. Starting with $n$ burnable bits saves an additional factor of 4.
+
+# Summary
+
+You need an ancilla bit to build larger controlled nots out of Toffoli gates. Just one ancilla bit is enough to build a large controlled-nots out of $\Theta(n)$ Toffoli gates, even if the ancilla bit is in an important unknown state.
+
+Having a larger quantity, or better quality, of ancilla bits isn't necessary but it improves the efficiency of the construction.
+
+Next time: increment gates.
+
+Next next time: bootstrapping an ancilla bit with quantum gates.
+
+# Comments
+
+
