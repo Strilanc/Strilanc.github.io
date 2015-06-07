@@ -225,7 +225,7 @@ For a borrowable bit, the recurrence relation resulting from iterating down to t
 Given a burnable bit, you might expect the recurrence relation to be $T(n) = 2 T(\frac{n}{2}) \in O(n)$... but really we can only burn the bit once, so we'd have to switch to treating it as a garbage bit after the first iteration.
 
 For zeroed bits and garbage bits, things get more interesting.
-Naively, their recurrence relation should be just $T(n) = 3 T(\frac{n}{2}) \in O(n^{lg\_3 2}) \approx O(n^{1.585})$.
+Naively, their recurrence relation should be just $T(n) = 3 T(\frac{n}{2}) \in O(n^{\lg 3}) \approx O(n^{1.585})$.
 However, we don't have to use an even split between the sizes of the sub-operations.
 Because only one of the sub-operations happens twice, we can gain efficiency by giving it proportionally fewer controls.
 Therefore we should instead be analyzing the recurrence relation $T(n) = 2 T(c\_n \cdot n) + T((1-c\_n) \cdot n)$, where $c\_n$ is a parameter to be optimized that determines the asymmetry of the split.
