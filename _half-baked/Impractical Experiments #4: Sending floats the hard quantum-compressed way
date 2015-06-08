@@ -1,0 +1,12 @@
+Combining quantum compression with superdense coding of flat qubits should allow the sending of n copies
+of a qubit using only log(n)/2 bits. So you can send n^2 copies with log(n) bits.
+
+By measuring those n^2 copies and averaging, you get a distribution centered around the squared magnitude of the amplitude
+of the 1 state with a standard deviation proportional to 1/n I think. log(n) sent -> 1/n precision
+
+Classically, sending log(n) bits also gives you 1/n precision.
+
+Superdense coding of the classical bits gives you 1/n^2 precision.
+
+It might be possible to do something clever to estimate the phase of the n^2 copies that gives you 1/n^2 precision...
+Probably can't do better than that though, what with the maximum bandwidth theorems and such.
