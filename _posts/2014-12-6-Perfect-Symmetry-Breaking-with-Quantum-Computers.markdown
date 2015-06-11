@@ -24,14 +24,9 @@ I knew that the circuit I was looking for had to satisfy two properties:
 1. Symmetry. The same gates had to be applied to each side. Anything that happened to the A1 and A2 wires had to happen to the B1 and B2 wires.
 2. Anti-correlation. The output had to have no amplitude in the states where A1 and B1 agreed.
 
-I guessed that the solution would probably start with each side making a [Bell pair](http://en.wikipedia.org/wiki/Bell_state) (because, let's be honest, every distributed quantum algorithm starts by making bell pairs). Then they'd probably have to swap half of their pairs, and do... something? With that in mind, I started up my quantum circuit inspector and began dragging gates around.
-
-You can do the same, if you want. The inspector (also available [from jsfiddle](http://jsfiddle.net/c4f5z73v/2/), or [from github](https://github.com/Strilanc/Quantum-Circuit-Inspector)) is below. Drag gates from the toolbox onto the wires and see what happens (apologies to mobile readers; the touch events aren't handled correctly and the gates have hover tooltips):
-
-<canvas id="drawCanvas" width="800" height="550" style="border:1px solid #000000;"/>
-<script src="/assets/2014-12-06-QuantumCircuitInspector_ConstantTimeSymmetryBreaking.js"></script>
-
-Anyways, as I was saying, I was just mindlessly dragging gates around trying to make something interesting happen. After about ten minutes I found a solution.
+I guessed that the solution would probably start with each side making a [Bell pair](http://en.wikipedia.org/wiki/Bell_state) (because, let's be honest, every distributed quantum algorithm starts by making bell pairs). Then they'd probably have to swap half of their pairs, and do... something?
+With that in mind, I started up my quantum circuit inspector and began dragging gates around (you can try it [from jsfiddle](http://jsfiddle.net/c4f5z73v/2/); source is [on github](https://github.com/Strilanc/Quantum-Circuit-Inspector)).
+After about ten minutes I found a solution.
 
 **Solution**
 

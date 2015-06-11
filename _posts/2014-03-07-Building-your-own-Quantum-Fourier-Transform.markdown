@@ -24,6 +24,8 @@ Below is an interactive quantum circuit inspector, with some puzzles. The rest o
 
 (Hover your cursor over things to see descriptions and hints.)
 
+{% include /jQuery.dep %}
+
 <canvas id="drawCanvas" width="800" height="550" style="border:1px solid #000000;"/>
 <script src="/assets/QuantumCircuitInspector.js"></script>
 

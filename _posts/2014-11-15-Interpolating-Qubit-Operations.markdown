@@ -49,6 +49,8 @@ Why is this similarity to rotations important? Because we are going to exploit i
 
 Below is a demo of the method vaguely outlined above. You can enter start and end matrices into the text boxes, and (after it corrects the entered matrices to be unitary) a continuous transition between the two matrices is shown. It's a bit hard to check by eye if the intermediate matrices are unitary... you can see that the motion is smooth and the colored area is staying roughly constant, though.
 
+{% include /jQuery.dep %}
+
 <div style="width: 500px;">
     <div style="display: inline-block; float: left;">
         <div>

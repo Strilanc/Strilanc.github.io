@@ -49,6 +49,8 @@ When starting in the matrix state $S\_0 = \begin{bmatrix} 1 & 0 \\\\ 0 & 0 \end{
 
 I made a little javascript widget for you to experiment with. See what you can reach by rotating and phasing both qubits. In particular, see if you can reach the entangled shared diagonal state:
 
+{% include /jQuery.dep %}
+
 <canvas id="drawCanvas1" width="400px" height="410px" style="border:1px dotted #BBB;"/>
 
 Alright, enough toying around, let's analyze things algebraically.

@@ -29,6 +29,8 @@ The following table implements this type of solution. Enter a hand of five cards
 
 Note that scripts need to be enabled for the table to work:
 
+{% include /jQuery.dep %}
+
 <table border="1" cellspacing="0" cellpadding="8"><tr>
     <td>
         <label>Dealt to Player:</label><br />
