@@ -203,10 +203,3 @@ The key parts of the construction are a VanRentergem-style subtraction, toggle-d
 
 Next time: using quantum gates to bootstrap an ancilla bit.
 
---------------------------
-# Comments
-
-{% include /comments/2015-06-30-Constructing-Large-Controlled-Nots.md %}
-
-[Comment via Pull Request](https://github.com/Strilanc/Strilanc.github.io/edit/master/_includes/comments/2015-06-30-Constructing-Large-Controlled-Nots.md)
-

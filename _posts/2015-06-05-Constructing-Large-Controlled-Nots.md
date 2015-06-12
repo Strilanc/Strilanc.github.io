@@ -376,10 +376,3 @@ Having a larger quantity, or better quality, of ancilla bits improves the effici
 Next time: the same thing, but with increment gates.
 Next next time: using quantum gates to bootstrap an ancilla bit.
 
---------------------------
-# Comments
-
-{% include /comments/2015-06-30-Constructing-Large-Controlled-Nots.md %}
-
-[Comment via Pull Request](https://github.com/Strilanc/Strilanc.github.io/edit/master/_includes/comments/2015-06-30-Constructing-Large-Controlled-Nots.md)
-

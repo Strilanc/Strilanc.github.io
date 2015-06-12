@@ -504,10 +504,3 @@ By introducing a special value $\mu$, that the Kronecker product special-cases, 
 
 $\mu$ a succinct way to specify controlled operations, but ultimately amounts to technical debt due to breaking some useful mathematical identities.
 
---------------------------
-# Comments
-
-{% include /comments/2015-05-25-Treating-Controls-like-Values.markdown %}
-
-[Comment via Pull Request](https://github.com/Strilanc/Strilanc.github.io/edit/master/_includes/comments/2015-05-25-Treating-Controls-like-Values.markdown)
-
