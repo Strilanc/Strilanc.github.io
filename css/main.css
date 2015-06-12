@@ -106,14 +106,40 @@ a:visited { color: #a0a; }
   margin-top: 2em;
   overflow: hidden;
 }
+.footer .contact:hover {
+  color: #000;
+}
+.footer .license:hover {
+  color: #000;
+}
 
 .footer .contact {
   float: left;
   margin-right: 3em;
 }
 
-.footer .contact a {
+.footer a {
   color: #8085C1;
+}
+.footer .contact:hover a {
+  color: #0000EE;
+}
+.footer .license:hover a {
+  color: #0000EE;
+}
+
+.footer .license {
+  float: right;
+  margin-top: 1.1em;
+  margin-right: 3em;
+  max-width: 18em;
+}
+
+.footer .license img {
+  opacity: 0.4;
+}
+.footer .license:hover img {
+  opacity: 1;
 }
 
 .footer .rss {
