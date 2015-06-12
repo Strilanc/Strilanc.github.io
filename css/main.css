@@ -63,6 +63,11 @@ a:visited { color: #a0a; }
   margin-top: 0;
 }
 
+#site_banner {
+  min-width: 60em;
+  max-width: 100%;
+}
+
 .header a {
   font-weight: bold;
   text-decoration: none;

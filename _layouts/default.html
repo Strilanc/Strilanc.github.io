@@ -30,17 +30,12 @@
       })();
 
     </script>
-    <style>
-      #site_banner {
-        width: 100%;
-      }
-    </style>
   </head>
   <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="{{ site.name }}" id="site_banner"/></a>
+    </div>
     <div class="site">
-      <div class="header">
-        <a href="/"><img src="/assets/banner.png" alt="{{ site.name }}" id="site_banner"/></a>
-      </div>
 
       {{ content }}
 
