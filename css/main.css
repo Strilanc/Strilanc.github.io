@@ -59,8 +59,8 @@ a:visited { color: #a0a; }
   font-size: 115%;
   text-align: justify;
   width: 55em;
-  margin: 3em auto 2em;
-  margin-top: 0;
+  padding: 0 1em;
+  margin: 0 auto 2em;
 }
 
 #site_banner {
