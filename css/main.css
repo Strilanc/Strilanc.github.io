@@ -68,11 +68,6 @@ a:visited { color: #a0a; }
   max-width: 100%;
 }
 
-.header a {
-  font-weight: bold;
-  text-decoration: none;
-}
-
 .title {
   font-size: 20pt;
 }
@@ -85,13 +80,13 @@ a:visited { color: #a0a; }
   color: #000;
 }
 
-.header a.extra {
-  color: #aaa;
-  margin-left: 1em;
+.header img {
+  filter: contrast(1);
+  transition: 2s;
 }
-
-.header a.extra:hover {
-  color: #000;
+.header img:hover {
+  filter: contrast(1.5);
+  transition: 2s;
 }
 
 .meta {
