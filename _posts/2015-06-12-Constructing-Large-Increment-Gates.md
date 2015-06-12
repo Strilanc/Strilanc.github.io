@@ -201,6 +201,7 @@ Using that code to generate the 5-bit increment circuit, then crunching it down 
        │      │││││       │││ │││       │││││      │││││       │││ │││       ││││ │││││       ││  │││       ││ ││
     Z ─X──────XXX••───────••X─X••───────••XXXX─────XXX••───────••X─X••───────••XXX•••X•───────•X──•X•───────•X─•• Z
 
+(I sure hope your browser renders monospaced unicode correctly, or that will look like a mess.)
 
 If you squint a bit, you can see hints of a pattern.
 To make that pattern very apparent, I printed incrementally larger and larger cases then zoomed out:
