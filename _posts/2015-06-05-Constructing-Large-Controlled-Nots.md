@@ -9,7 +9,7 @@ Recently, I got [sniped](https://xkcd.com/356/).
 The sniper?
 An exercise in [Nielsen and Chuang's textbook](http://www.amazon.com/Quantum-Computation-Information-Anniversary-Edition/dp/1107002176):
 
-<img src="/assets/2015-06-30-Constructing-Large-Controlled-Nots/Nielsen_Exercise_4_29.png"
+<img src="/assets/2015-06-05-Constructing-Large-Controlled-Nots/Nielsen_Exercise_4_29.png"
       alt="Exercise 4.29: Find a circuit containing O(n^2) Toffoli, CNOT and single qubit gates which implements a C^n(X) gate (for n &gt; 3), using no work qubits." 
     title="Exercise 4.29: Find a circuit containing O(n^2) Toffoli, CNOT and single qubit gates which implements a C^n(X) gate (for n &gt; 3), using no work qubits." />
 
@@ -113,14 +113,14 @@ With those four types of ancilla bits in mind, let's start constructing some lar
 
 Given an $n+2$ wire circuit with $n$ control wires, one target wire, and one ancilla wire, we want to break a $C^{n}NOT$ into smaller operations. We want to take this:
 
-<img src="/assets/2015-06-30-Constructing-Large-Controlled-Nots/Single_Ancilla_Bit_Layout.png" alt="Single ancilla bit circuit" height="280px"/>
+<img src="/assets/2015-06-05-Constructing-Large-Controlled-Nots/Single_Ancilla_Bit_Layout.png" alt="Single ancilla bit circuit" height="280px"/>
 
 and break it into controlled-NOTs with fewer controls.
 We don't need to get all the way down to 2 controls just yet, but we do need some way of reducing the maximum number of controls per operation.
 
 The easiest case is when our single ancilla bit is burnable. We can toggle the ancilla bit to be ON when half of the controls are ON, and then use a single control on the ancilla bit to play the role of that half of the  controls:
 
-<img src="/assets/2015-06-30-Constructing-Large-Controlled-Nots/Single_Burnable_Bit.png" alt="Single burnable bit circuit construction" height="300px"/>
+<img src="/assets/2015-06-05-Constructing-Large-Controlled-Nots/Single_Burnable_Bit.png" alt="Single burnable bit circuit construction" height="300px"/>
 
 <!--
     A ──•──── A
@@ -145,7 +145,7 @@ The easiest case is when our single ancilla bit is burnable. We can toggle the a
 If our ancilla bit is a zeroed bit instead of a burnable bit, we need to uncompute the effects on it before finishing.
 Our effects happen to be very simple, and can be undone by simply repeating what we did to mess things up in the first place:
 
-<img src="/assets/2015-06-30-Constructing-Large-Controlled-Nots/Single_Zeroed_Bit.png" alt="Single zeroed bit circuit construction" height="300px"/>
+<img src="/assets/2015-06-05-Constructing-Large-Controlled-Nots/Single_Zeroed_Bit.png" alt="Single zeroed bit circuit construction" height="300px"/>
 
 <!--
     A ──•───•── A
@@ -170,7 +170,7 @@ Our effects happen to be very simple, and can be undone by simply repeating what
 When the ancilla bit is a garbage bit, we do toggle-detection.
 We conditionally toggle T on both sides of the possible toggling of the ancilla bit, so that the T-toggling undoes itself unless the ancilla bit was toggled:
 
-<img src="/assets/2015-06-30-Constructing-Large-Controlled-Nots/Single_Garbage_Bit.png" alt="Single garbage bit circuit construction" height="300px"/>
+<img src="/assets/2015-06-05-Constructing-Large-Controlled-Nots/Single_Garbage_Bit.png" alt="Single garbage bit circuit construction" height="300px"/>
 
 <!--
     A ────•──── A
@@ -194,7 +194,7 @@ We conditionally toggle T on both sides of the possible toggling of the ancilla 
  
 Finally, the borrowed bit case is just a combination of the garbage bit and zeroed bit tricks:
 
-<img src="/assets/2015-06-30-Constructing-Large-Controlled-Nots/Single_Borrowed_Bit.png" alt="Single borrowed bit circuit construction" height="300px"/>
+<img src="/assets/2015-06-05-Constructing-Large-Controlled-Nots/Single_Borrowed_Bit.png" alt="Single borrowed bit circuit construction" height="300px"/>
 
 <!--
     A ──•───•──── A
@@ -243,7 +243,7 @@ Oh, we can borrow all of those unaffected bits!
 Given a $2n-1$ wire circuit with $n$ control wires, $n-2$ ancilla wires, and one target wire, we want to break a $C^{n}NOT$ into a linear number of Toffoli gates.
 We will intersperse the ancilla bits throughout the circuit, instead of putting them all at the bottom, to make the constructions look simpler:
 
-<img src="/assets/2015-06-30-Constructing-Large-Controlled-Nots/N_Ancilla_Bits_Layout.png" alt="Linear ancilla bits" height="280px"/>
+<img src="/assets/2015-06-05-Constructing-Large-Controlled-Nots/N_Ancilla_Bits_Layout.png" alt="Linear ancilla bits" height="280px"/>
 
 Let's jump right in.
 
@@ -251,7 +251,7 @@ Once again, the burnable bits case is the simplest.
 We can use Toffoli gates to intersect controls together, and we can use the ancilla bits to store the gradually-accumulating intersection of all controls.
 In the end we'll have touched every burnable bit twice, and every control bit once:
 
-<img src="/assets/2015-06-30-Constructing-Large-Controlled-Nots/N_Burnable_Bits.png" alt="Linear burnable bits circuit construction" height="300px"/>
+<img src="/assets/2015-06-05-Constructing-Large-Controlled-Nots/N_Burnable_Bits.png" alt="Linear burnable bits circuit construction" height="300px"/>
 
 <!--
      A ──•───── A
@@ -277,7 +277,7 @@ With zeroed bits, we have to uncompute the garbage we added into the ancilla bit
 Uncomputing is just a matter of applying the same operations in reverse order, omitting only the operations that affected the target.
 This creates a circuit that looks like it's pointing towards the target:
 
-<img src="/assets/2015-06-30-Constructing-Large-Controlled-Nots/N_Zeroed_Bits.png" alt="Linear zeroed bits circuit construction" height="300px"/>
+<img src="/assets/2015-06-05-Constructing-Large-Controlled-Nots/N_Zeroed_Bits.png" alt="Linear zeroed bits circuit construction" height="300px"/>
 
 <!--
      A ──•─────•── A
@@ -303,7 +303,7 @@ The garbage bit construction is again based on toggle detection, but this time w
 Nested toggle detectors will propagate toggling until one of them fails to fire, so we just keep nesting until we've conditionally toggled the target.
 The resulting circuit looks like an arrow pointing *away* from the target:
 
-<img src="/assets/2015-06-30-Constructing-Large-Controlled-Nots/N_Garbage_Bits.png" alt="Linear garbage bits circuit construction" height="300px"/>
+<img src="/assets/2015-06-05-Constructing-Large-Controlled-Nots/N_Garbage_Bits.png" alt="Linear garbage bits circuit construction" height="300px"/>
 
 <!--
      A ─────•───── A
@@ -330,7 +330,7 @@ The borrowed bits solution again combines toggle-detection with uncomputation.
 We take the garbage bits solution, then uncompute the non-target-affecting operations:
 
 
-<img src="/assets/2015-06-30-Constructing-Large-Controlled-Nots/N_Borrowed_Bits.png" alt="Linear borrowed bits circuit construction" height="300px"/>
+<img src="/assets/2015-06-05-Constructing-Large-Controlled-Nots/N_Borrowed_Bits.png" alt="Linear borrowed bits circuit construction" height="300px"/>
 
 <!--
      A ─────•─────•──── A
@@ -361,7 +361,7 @@ Now that we have the efficient $n-2$ ancilla bit constructions, we can fix that 
 
 For example, here is the circuit resulting from using one borrowed bit to break a $C^7NOT$ into four $C^4NOT$s, then breaking each of those $C^4NOT$s into eight Toffoli gates by borrowing two unaffected bits:
 
-<img src="/assets/2015-06-30-Constructing-Large-Controlled-Nots/Full_Construction.png" alt="Full borrowed breakdown" width="100%"/>
+<img src="/assets/2015-06-05-Constructing-Large-Controlled-Nots/Full_Construction.png" alt="Full borrowed breakdown" width="100%"/>
 
 This construction uses $\approx 16n$ Toffoli gates, achieving the $O(n)$ bound we were hoping for. This is asymptotically optimal, because without $\Omega(n)$ gates we'd be unable to include enough Toffoli gates to even touch all of the involved wires.
 
