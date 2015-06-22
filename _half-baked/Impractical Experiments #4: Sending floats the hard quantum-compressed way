@@ -10,3 +10,11 @@ Superdense coding of the classical bits gives you 1/n^2 precision.
 
 It might be possible to do something clever to estimate the phase of the n^2 copies that gives you 1/n^2 precision...
 Probably can't do better than that though, what with the maximum bandwidth theorems and such.
+
+If you send n flat qubit copies (uncompressed), you get O(sqrt(n)) seperable values on the other side.
+That's truly terrible, considering you can get O(2^n) with the naive encoding and O(4^n) with superdense coding.
+
+If you use the Z axis in addition to the X axis, you get O(n).
+If you quantum-compress it jumps to a noisy O(2^n).
+You do even better if you have qubits in the state |n choose k>, getting rid of the noise.
+But the quantum copression of |n choose k> is just the naive encoding so... why were we doing this again?
