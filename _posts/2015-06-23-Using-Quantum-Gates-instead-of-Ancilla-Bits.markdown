@@ -330,3 +330,7 @@ Unlike classical computers, quantum computers don't need an ancilla bit to perfo
 They have the option of using exponentially precise phase shift gates instead.
 
 In either case a linear number of Toffoli-or-smaller gates is needed but, pragmatically speaking, it's simpler and more efficient to just have an ancilla bit available.
+
+-----
+
+[Discuss on Reddit](http://www.reddit.com/r/QuantumComputing/comments/3axiu1/using_quantum_gates_instead_of_ancilla_bits/)
