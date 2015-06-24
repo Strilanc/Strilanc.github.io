@@ -30,7 +30,7 @@ The fundamental property that will allow us to avoid using an ancilla bit, now t
 Given a quantum operation $U$, you can find a quantum operation $\sqrt{U}$ such that applying $\sqrt{U}$ to a circuit *twice* has the same effect as applying $U$ *once*.
 Similarly, applying $U$ and then its inverse $U^\dagger$ (or vice versa) will cause the operations to undo each other and result in a net effect of no effect.
 
-Classically, not all operations had square roots.
+Classically, not all operations have square roots.
 For example, the NOT gate has no classical square root.
 There's simply no boolean-to-boolean function $f$ such that $f(f(x)) = \overline{x}$. But, quantumly, the NOT gate *does* have a square root.
 
@@ -64,7 +64,7 @@ And, by arbitrarily picking principal square roots, we find one of the square ro
 $\rightarrow \frac{1}{2} \bimat{1}{1}{1}{1} + i \frac{1}{2} \bimat{1}{-1}{-1}{1} = \frac{1}{2} \bimat{1+i}{1-i}{1-i}{1+i}$
 
 You can check that squaring $\frac{1}{2} \bimat{1+i}{1-i}{1-i}{1+i}$ does in fact give you $\bimat{0}{1}{1}{0}$.
-Engineer a physical instantiation or simulation of $\frac{1}{2} \bimat{1+i}{1-i}{1-i}{1+i}$, apply it twice, and it will have the same effect as a NOT operation.
+Engineer a physical instantiation or simulation of $\frac{1}{2} \bimat{1+i}{1-i}{1-i}{1+i}$, apply it twice, and you will have performed a NOT operation.
 
 The inverse of a unitary matrix is much easier to find than the square root: the inverse is simply the [conjugate transpose](https://en.wikipedia.org/wiki/Conjugate_transpose) of the matrix.
 For example, the inverse of $\frac{1}{2} \bimat{1+i}{1-i}{1-i}{1+i}$ is just $\frac{1}{2} \bimat{1-i}{1+i}{1+i}{1-i}$ (another square root of NOT).
@@ -137,10 +137,10 @@ You phase shift each of the two wires by half as much, phase shift in the opposi
 
 ![Moving Controls off of Z axis Rotations](/assets/2015-06-23-Using-Quantum-Gates-instead-of-Ancilla-Bits/Moving_Controls_off_of_Z_axis_Rotations.png)
 
-(Note that, by $\sqrt[n]{Z}$, I always mean $\bimat{1}{0}{0}{e^{i \pi/ 2^n}}$.
-I don't mean an arbitrary $n$'th roots of $Z$.)
+(Note that, by $\sqrt[n]{Z}$, I always mean $\bimat{1}{0}{0}{e^{i \pi/ n}}$.
+I don't mean an arbitrary $n$'th root of $Z$.)
 
-To turn the Z-axis rotation construction into an X-axis rotation construction, we use the fact that bracketing with [Hadamard gates](https://en.wikipedia.org/wiki/Quantum_gate#Hadamard_gate) transforms X rotations into Z rotations, and vice versa:
+To turn the Z-axis rotation construction into an X-axis rotation construction, we use the fact that bracketing with [Hadamard gates](https://en.wikipedia.org/wiki/Quantum_gate#Hadamard_gate) transforms Z rotations into X rotations, and [vice versa](/puzzle/quantum/2014/04/13/Deflipping-a-Quantum-Coing.html):
 
 ![Moving Controls off of X axis Rotations](/assets/2015-06-23-Using-Quantum-Gates-instead-of-Ancilla-Bits/Moving_Controls_off_of_X_axis_Rotations.png)
 
@@ -163,7 +163,8 @@ And here are the start and end states without animation in between:
 
 ![Moving Many Controls from a Z-axis Rotation to NOTs](/assets/2015-06-23-Using-Quantum-Gates-instead-of-Ancilla-Bits/Moving_Many_Controls_from_a_Z_axis_Rotation_To_NOTs.png)
 
-We now have the ability to reduce the number of controls, and move all of the controls to NOT gates.
+So far, we've managed to reduce the maximum number of controls, and to move all of the controls to NOT gates.
+But we still need to clean up a bit.
 
 # Re-arranging into Increments
 
@@ -171,7 +172,7 @@ The construction so far creates a linear number of NOT gates.
 However, because those NOT gates have many controls, individually breaking them down into Toffoli gates would create a quadratic number of gates overall.
 Instead, we will re-arrange the NOT gates so that we can simplify the circuit.
 
-Because both phase shift gates and controls don't affect whether or not a wire is ON, we can move controlled-NOT gates over phase shift gates as long as the phase shift applies to one of the control wires (as opposed to the target wire).
+Because neither phase shift gates nor controls affect whether a wire is ON, we can move controlled-NOT gates over phase shift gates as long as the phase shift applies to one of the control wires (as opposed to the target wire).
 We can also move controlled-NOTs over other controlled-NOTs under the same conditions, as long as the other controlled-NOT cancels its effects by happening twice.
 
 This freedom of movement is all we need to re-arrange our controlled-NOTs into an increment gate and a decrement gate:
@@ -235,7 +236,7 @@ Notice that all of the operations on the right hand side leave at least one wire
 Let's convince ourselves that this overall construction works.
 We already know that the increment-decrement part acts like a controlled-$\sqrt{Z}$; it will add a phase factor of $i$ to the `ON, ON, ON, ON, ON, ON` and `ON, ON, ON, ON, ON, OFF` states.
 We also know that the Hadamard gates just switches between Z-rotation and X-rotation, so if we pretend the Hadamards aren't there and find that the circuit implements a controlled-Z then the circuit works.
-All that's left to account for is the four $\sqrt[4]{Z}$/$\sqrt[4]{Z}^\dagger$ and controlled-NOT gates.
+All that's left to account for is the four $\sqrt[4]{Z}$/$\sqrt[4]{Z}^\dagger$ and controlled-NOT gates at the start.
 Well, when all the control wires are ON, and the target wire is OFF, both of the $\sqrt{Z}^\dagger$ gates will fire and the `ON, ON, ON, ON, ON, OFF` state will gain a phase factor of $-i$.
 And when all the wires are ON, both of the $\sqrt{Z}$ gates fire instead and the `ON, ON, ON, ON, ON, ON` state will gain a phase factor of $+i$.
 
@@ -319,7 +320,9 @@ As soon as $n$ exceeds $p+1$, we won't be able to simulate a fully-controlled-Z 
 
 This is not proof positive that we need exponentially precise gates to solve the exercise.
 In particular, there may be some clever way of partially rotating around the X or Y axies in addition to the partial rotations around the Z axis.
-However, I would find that surprising because it seems to be hard to get back to a nice fraction of a turn after combining rotations around two axies (not counting 90 degree rotations or undoing each rotation in reverse order, of course).
+However, I would find that pleasantly surprising because it seems to be hard to get back to a nice fraction of a turn after combining rotations around two axies (not counting 90 degree rotations or undoing each rotation in reverse order, of course).
+
+Feel free to surprise me.
 
 # Summary
 
