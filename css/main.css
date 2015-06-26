@@ -84,10 +84,12 @@ a:visited { color: #a0a; }
 
 .header img {
   filter: contrast(1);
+  -webkit-filter: contrast(1);
   transition: 2s;
 }
 .header img:hover {
   filter: contrast(1.5);
+  -webkit-filter: contrast(1.5);
   transition: 2s;
 }
 
