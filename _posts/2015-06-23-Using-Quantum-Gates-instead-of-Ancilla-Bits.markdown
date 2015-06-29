@@ -235,7 +235,7 @@ Notice that all of the operations on the right hand side leave at least one wire
 
 Let's convince ourselves that this overall construction works.
 We already know that the increment-decrement part acts like a controlled-$\sqrt{Z}$; it will add a phase factor of $i$ to the `ON, ON, ON, ON, ON, ON` and `ON, ON, ON, ON, ON, OFF` states.
-We also know that the Hadamard gates just switches between Z-rotation and X-rotation, so if we pretend the Hadamards aren't there and find that the circuit implements a controlled-Z then the circuit works.
+We also know that the surrounding Hadamard gates just switch between Z-rotation and X-rotation, so if we pretend the Hadamards aren't there and find that the circuit implements a controlled-Z then the circuit works.
 All that's left to account for is the four $\sqrt[4]{Z}$/$\sqrt[4]{Z}^\dagger$ and controlled-NOT gates at the start.
 Well, when all the control wires are ON, and the target wire is OFF, both of the $\sqrt{Z}^\dagger$ gates will fire and the `ON, ON, ON, ON, ON, OFF` state will gain a phase factor of $-i$.
 And when all the wires are ON, both of the $\sqrt{Z}$ gates fire instead and the `ON, ON, ON, ON, ON, ON` state will gain a phase factor of $+i$.
