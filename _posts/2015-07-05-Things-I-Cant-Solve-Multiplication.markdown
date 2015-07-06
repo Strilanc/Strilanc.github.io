@@ -195,7 +195,7 @@ A side-benefit of requiring the number of pieces to be a power of two is that yo
 So not only do we need a fast basis change and a principal root of unity of large order, we have to be careful where that largeness comes from.
 If the order shares factors with the size of the ring, it won't work.
 
-(**Frustrating fact**: Using the [Hadamard Basis](https://en.wikipedia.org/wiki/Fast_Walsh%E2%80%93Hadamard_transform) gets you surprisingly close to the goal.
+(**Frustrating fact**: Using the [Hadamard Basis](https://en.wikipedia.org/wiki/Hadamard_transform) gets you surprisingly close to the goal.
 It takes $O(n \log n)$ time to perform the [Fast Hadamard Transform](https://en.wikipedia.org/wiki/Fast_Walsh%E2%80%93Hadamard_transform), do the point-wise squarings, and come back... but the basis doesn't quite satisfy the property that $v\_a \ast v\_b = 0$.
 [You end up with](http://dsp.stackexchange.com/a/7965/10155) $y\_j = \Sum{i=0}{n-1} x\_i x\_{j \oplus i}$ instead of $y\_j = \Sum{i=0}{n-1} x\_i x\_{j - i}$.
 So close, yet so far.)
