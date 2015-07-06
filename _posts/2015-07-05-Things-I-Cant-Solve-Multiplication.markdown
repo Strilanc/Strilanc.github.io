@@ -6,7 +6,7 @@ categories: computer-science
 comments: true
 ---
 
-In this post: how (some) [fast multiplication algorithms](](https://en.wikipedia.org/wiki/Multiplication_algorithm#Fast_multiplication_algorithms_for_large_inputs) work, and a couple gotchas I've run into due to toying with the problem.
+In this post: how (some) [fast multiplication algorithms](https://en.wikipedia.org/wiki/Multiplication_algorithm#Fast_multiplication_algorithms_for_large_inputs) work, and a couple gotchas I've run into due to toying with the problem.
 
 # Intro
 
