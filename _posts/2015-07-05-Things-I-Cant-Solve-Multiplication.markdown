@@ -18,7 +18,7 @@ For example, here's one minor insight: squaring is not easier than multiplying.
 If you can square quickly, then you can multiply quickly by rewriting $a \cdot b$ into a difference-of-squares form: $\frac{1}{4}\parens{(a + b)^2 - (a - b)^2}$.
 This asymptotic equivalence is convenient, because some multiplication algorithms are easier to understand as squaring algorithms (e.g. [Karatsuba's](https://en.wikipedia.org/wiki/Karatsuba_algorithm) in my opinion; because $(a \ll n + b)^2 = (a^2 \ll 2n) + (((a+b)^2 - a^2 - b^2) \ll n) + b^2$).
 
-I can't say I've made any progress on the fast-multiplication problem. At all. But I guess I've learned some things and I can talk about those.
+I can't say I've made any progress on the fast-multiplication problem. At all. But I guess I've learnt some things and I can talk about those.
 
 # Convolution and Principal Roots
 
@@ -157,7 +157,8 @@ The trick to doing this is to *sort the inputs into ascending order* (but keep t
         ordered_squared = []
         for e in ordered:
             while counter < e[0]:
-                # This inner-loop costs O(w 2^w) total because it runs at most 2^w times and costs w each time.
+                # This inner-loop costs O(w 2^w) total.
+                # It runs at most 2^w times and costs w each time.
                 counter_squared += counter
                 counter += 1
                 counter_squared += counter
