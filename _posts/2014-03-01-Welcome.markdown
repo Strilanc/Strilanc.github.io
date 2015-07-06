@@ -3,7 +3,6 @@ layout: post
 title: "A New Home (post Twisted Oak)"
 date: 2014-03-01 11:19:40
 categories: meta
-comments: true
 ---
 
 February was my last month at Twisted Oak Studios. It's been two years since I started working there, and about a year and a half since started writing a blog post each week for [their blog](http://twistedoakstudios.org/blog).

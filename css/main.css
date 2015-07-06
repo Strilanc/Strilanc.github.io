@@ -24,6 +24,16 @@ h1, h2, h3, h4, h5, h6 {
   color: darkred;
 }
 
+h2 {
+  font-size: 110%;
+  color: darkred;
+}
+
+h3 h4 h5 h6 {
+  font-size: 100%;
+  color: darkred;
+}
+
 h1 { margin-bottom: 1em; }
 p { margin: 1em 0; }
 
@@ -132,6 +142,15 @@ a:visited { color: #a0a; }
   margin-top: 1.1em;
   margin-right: 3em;
   max-width: 18em;
+}
+
+.footer .contact img {
+  margin: 5px 2px -4px 0px;
+  padding: 0px;
+  opacity: 0.4;
+}
+.footer .contact:hover img {
+  opacity: 1;
 }
 
 .footer .license img {
