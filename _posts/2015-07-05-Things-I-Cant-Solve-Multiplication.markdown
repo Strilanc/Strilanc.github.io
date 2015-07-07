@@ -168,7 +168,9 @@ The trick to doing this is to sort the inputs into ascending order (but keep tra
 
 This means that *if* you could perform an application-of-convolution-theorem basis change in $O(n \log{n})$ time, *and* end up with $O(n / \log(n))$ pieces of size $O(\log n)$, then you could multiply in $O(n \log{n})$ time.
 
-Let's cover one last thing to watch out for before finishing.
+This doesn't apply to SSA because working modulo $2^{2^s}+1$ doesn't give you enough pieces.
+
+... Okay, segway question that's been bothering me for awhile: why does SSA's modulus use a power-of-a-power-of-2 like $2^{2^s}$ instead of just a power of 2 like $2^m$?
 
 # Degenerate Orders
 
