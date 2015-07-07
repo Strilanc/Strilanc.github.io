@@ -270,9 +270,8 @@ I suppose I should justify that statement by noting some of the things I've trie
     [You end up computing](http://dsp.stackexchange.com/a/7965/10155) $y\_j = \Sum{i=0}{n-1} x\_i x\_{j \oplus i}$.
     
     ... Except we wanted to compute of $y\_j = \Sum{i=0}{n-1} x\_i x\_{j - i}$.
-    (The Hadamard basis doesn't quite satisfy the no-mixing property, that $v\_a \ast v\_b$ shoud always be 0.)
-
-    F*&$ that's close. Is math literally *toying* with me? Doesn't work.
+    
+    F@&$ that's close. Is math literally *toying* with me? Has cross-talk. Doesn't work.
 
 Hopefully that list of my failures was satisfying to the reader.
 The list is not exhaustive, but this post really is getting quite long.
