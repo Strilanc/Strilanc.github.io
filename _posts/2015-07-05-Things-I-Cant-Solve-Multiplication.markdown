@@ -170,7 +170,7 @@ This means that *if* you could perform an application-of-convolution-theorem bas
 
 This doesn't apply to SSA because working modulo $2^{2^s}+1$ doesn't give you enough pieces.
 
-... Okay, segway question that's been bothering me for awhile: why does SSA's modulus use a power-of-a-power-of-2 like $2^{2^s}$ instead of just a power of 2 like $2^m$?
+... Okay, segway question that's been bothering me for awhile: why does SSA's modulus use a power-of-a-power-of-2 like $2^{2^s}$ instead of just a normal power-of-2 like $2^m$?
 
 # Degenerate Orders
 
