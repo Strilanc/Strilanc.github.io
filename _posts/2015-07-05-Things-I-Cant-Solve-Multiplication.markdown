@@ -83,7 +83,7 @@ The $i$'th entry of the resulting vector will equal:
 
 $(v\_a \ast v\_b)_i = \Sum{j=0}{n-1} \lambda^{a j} \lambda^{(i-j) b} = \lambda^{b i} \Sum{j=0}{n-1} \lambda^{(a-b) j}$
 
-But notice that, in that last term, $j - k$ is constant and being multiplied against the iteration variable.
+But notice that, in that last term, $a - b$ is constant and being multiplied against the iteration variable.
 This is one of the sums that must come out zero if $\lambda$ is a principal root of unity!
 Therefore $v\_a \ast v\_b = 0$ when $a \neq b$.
 When $a = b$, we are instead summing up $n$ copies of $\lambda^0 = 1$ and multiplying that by what happens to be the original value of the vector.
