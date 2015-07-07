@@ -141,7 +141,7 @@ Logarithmically sized pieces would be great, because they let you short-circuit 
 
 # Performing Many Small Squarings Fast
 
-If you have $n/log(n)$ squarings of size $\log{n}$ to perform, you can perform them all in $O(n \log n)$ time.
+If you have $n/\log(n)$ squarings of size $\log{n}$ to perform, you can perform them all in $O(n \log n)$ time.
 The trick to doing this is to sort the inputs into ascending order (but keep track of the original order) and to then literally stream out every possible square number while iterating through the inputs:
 
     def stream_square(inputs):
@@ -186,13 +186,14 @@ We can't undo the multiplication by $n$ here!
 If we try to compute a convolution this way, we'll just end up pushing all of the information out off the ring.
 Whoops.
 
-This is actually why the Schönhage–Strassen algorithm requires you to use a field of size doubly-power-of-two size like $2^{2^s}+1$, instead of just $2^n+1$.
-The principal root of unity (two) has order $2n$ when working modulo $2^{s+1}$, but $2n$ may not have a multiplicative inverse.
-For example, when working modulo $2^9+1$, applying the convolution theorem will cause a multiplication by 9 but $2^9 = 513=57 \cdot 9$, so we can't undo that multiplication. The convolution throws away information in this ring.
+This is actually why the Schönhage–Strassen algorithm requires you to use a field of doubly-power-of-two size like $2^{2^s}+1$, instead of just $2^n+1$.
+The principal root of unity (two) has order $2n$ when working modulo $2^{n+1}$, but $2n$ may not have a multiplicative inverse in that context.
+For example, when working modulo $2^9+1$, applying the convolution theorem will cause a multiplication by 9 but $2^9 = 513=57 \cdot 9$, so we can't undo that multiplication.
+So a convolution would throw away information.
 
-(When $n$ is also a power of two there's guaranteed to be a multiplicative inverse, because our principal root of unity passes through every power of two on its cycle back to 1.
+When the $n$ in $2^n$ is also a power of two, there's guaranteed to be a multiplicative inverse because our principal root of unity passes through every power of two on its cycle back to 1.
 Thus why SSA sticks to $2^{2^s}+1$-sized fields.
-A side-benefit of requiring the number of pieces to be a power of two is that you can adapt the dead-simple [Cooley-Tukey algorithm](https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm) for the basis change, instead of using something more esoteric.)
+(A side-benefit of requiring the number of pieces to be a power of two is that you can adapt the dead-simple [Cooley-Tukey algorithm](https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm) for the basis change, instead of using something more esoteric.)
 
 So not only do we need a fast basis change and a principal root of unity of large order, we have to be careful where that largeness comes from.
 If the order shares factors with the size of the ring, it won't work.
