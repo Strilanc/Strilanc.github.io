@@ -202,7 +202,7 @@ Let's cover some more things that don't work.
 
 # Things I've Tried
 
-The title of this post says I can't solve the multiplication problem.
+The title of this post says I can't solve the multiplying-fast problem.
 I suppose I should justify that statement by noting some of the things I've tried that don't work.
 
 1. **Cache the squares.**
