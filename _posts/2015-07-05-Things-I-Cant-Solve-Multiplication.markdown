@@ -204,7 +204,7 @@ I suppose I should justify that statement by noting some of the things I've trie
 
 1. **Cache the squares.**
 
-    Caching all the multiplications up to numbers of size $lg(n)$ would take $O(n^2)$ space, but caching just the *squares* only takes $O(n)$ space.
+    Caching all the multiplications up to numbers of size $\log(n)$ would take $O(n^2)$ space, but caching just the *squares* only takes $O(n)$ space.
     Maybe we can make a lookup-table and perform $\log(n)$-sized squarings in constant time?
 
     Unfortunately, although this did give me the "sort inputs and stream squares" idea, there are practical and theoretical reasons this lookup table won't work.
@@ -244,7 +244,7 @@ I suppose I should justify that statement by noting some of the things I've trie
 
     Gives wrong answers. Doesn't work.
 
-5. **Okay, okay, these modulo ideas don't seem to be working. But what if we worked Modulo $lcm(2^n+1, 2*2^n+1)$**?
+5. **Okay, okay, these modulo ideas don't seem to be working. But what if we worked Modulo $lcm(2^n+1, 2 \cdot 2^n+1)$**?
 
     This particular ring is tempting.
     
@@ -252,8 +252,8 @@ I suppose I should justify that statement by noting some of the things I've trie
     That would let us tweak SSA to use $\sqrt[3]{n}^2$ pieces, instead of $\sqrt{n}$ pieces, which might avoid the $\log \log n$ overhead factor.
     
     Second, operations are cheap.
-    You can represent a number $x$ as a pair of numbers $[x \pmod{2^m+1}, x \pmod{2*2^m+1}]$ and later recover its value thanks to the [Chinese remainder theorem](https://en.wikipedia.org/wiki/Chinese_remainder_theorem).
-    Within that representation, adding or multiplying two values is simply done point-wise, e.g. $[2, 3] * [5, 7] = [2*5, 3*7]$.
+    You can represent a number $x$ as a pair of numbers $[x \bmod (2^m+1), x \bmod (2 \cdot 2^m+1)]$ and later recover its value thanks to the [Chinese remainder theorem](https://en.wikipedia.org/wiki/Chinese_remainder_theorem).
+    Within that representation, adding or multiplying two values is simply done point-wise, e.g. $[2, 3] \cdot [5, 7] = [2 \cdot 5, 3 \cdot 7]$.
     Combined with the fact that this representation turns every power of two into a pair of powers of two, we can directly steal SSA's tricks for performing twiddles cheaply.
 
     The problem?
