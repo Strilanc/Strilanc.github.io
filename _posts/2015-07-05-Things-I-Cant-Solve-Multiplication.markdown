@@ -28,7 +28,8 @@ They use a change of basis to turn [cyclic convolutions](https://en.wikipedia.or
 
 The underlying thing you need, in order to make the convolution theorem work, is a [principal root of unity](http://mathworld.wolfram.com/PrincipalRootofUnity.html).
 With such a root, you can create a set of basis vectors $v\_0, v\_1, \ldots, v\_{n-1}$ where there's no "cross-talk" when performing a cyclic convolution.
-That is to say, when we compute the circular convolution of two basis vectors $v\_a \ast v\_b$ we will get $v\_a^{\ast 2} + v\_b^{\ast 2}$ instead of $v\_a^{\ast 2} + v\_b^{\ast 2} + 2 v\_a \ast v\_b$.
+That is to say, when we compute the cyclic convolution of two basis vectors $v\_a \ast v\_b$ we will get $0$.
+This is useful because it means that convolutions-of-sums like $(v\_a + v\_b) \ast (v\_a + v\_b)$ will simplify into things like $v\_a^{\ast 2} + v\_b^{\ast 2}$ instead of $v\_a^{\ast 2} + v\_b^{\ast 2} + 2 v\_a \ast v\_b$.
 Losing the $2 v\_a \ast v\_b$ part reduces the fan-out when recursing, which is a big deal when it comes to asymptotic complexity.
 
 What *exactly* is a principal root of unity? Formally, an $n$'th principal root of unity $\lambda$ must satisfy two properties:
