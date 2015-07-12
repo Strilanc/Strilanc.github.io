@@ -180,16 +180,16 @@ It so happens that $2$ meets all the requirements to be a $2\cdot 3^{n-1}$'th pr
 Does that mean we can apply the convolution theorem in order to perform a multiplication cheaply?
 Not exactly.
 
-Recall that, in the special basis we create to turn convolution into point-wise multiplication, $v\_a^{\ast 2}$ is equal to $n v\_a$.
-In the case of the integers modulo $3^n$ with principal root of unity chosen to be two, $n$ comes out as $2 \cdot 3^{n-1} v\_k$.
-... But that's a multiple of three, and multiples of three have no multiplicative inverse when working modulo $3^n$.
-We can't undo the multiplication by $n$ here!
-If we try to compute a convolution this way, we'll just end up pushing all of the information out off the ring.
+Recall that, in the special basis we create to turn convolution into point-wise multiplication, $v\_a^{\ast 2}$ is equal to $n v\_a$ where $n$ is the order of the root.
+In the case of the integers modulo $3^n$ with principal root of unity chosen to be two, this comes out as $2 \cdot 3^{n-1} v\_k$.
+... But that multiplication includes a (rather large) power of three, and powers of three have no multiplicative inverse when working modulo $3^n$.
+In this ring, we can't undo the multiplication created by the convolution theorem!
+If we try to compute a convolution this way, we'll just end up pushing almost all of the information out off the ring.
 Whoops.
 
 This is actually why the Schönhage–Strassen algorithm requires you to use a field of doubly-power-of-two size like $2^{2^s}+1$, instead of just $2^n+1$.
 The principal root of unity (two) has order $2n$ when working modulo $2^{n+1}$, but $2n$ may not have a multiplicative inverse in that context.
-For example, when working modulo $2^9+1$, applying the convolution theorem will cause a multiplication by 9 but $2^9 = 513=57 \cdot 9$, so we can't undo that multiplication.
+For example, when working modulo $2^9+1$, applying the convolution theorem will cause a multiplication by 9 but $2^9 + 1 = 513=57 \cdot 9$, so we can't undo that multiplication.
 So a convolution would throw away information.
 
 When the $n$ in $2^n$ is also a power of two, there's guaranteed to be a multiplicative inverse because our principal root of unity passes through every power of two on its cycle back to 1.
