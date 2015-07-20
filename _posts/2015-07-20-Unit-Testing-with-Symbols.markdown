@@ -37,6 +37,9 @@ You *could* check lots of cases for specific inputs... or you could use symbols 
             t += e
         return s/n - (t/n)**2
 
+Notice that the doc test's expected result is basically a *definition* of the standard deviation of three elements.
+So if the symbolic inputs give a symbolic output that matches the expectation, it should work for *all* three element lists (as opposed to potentially only working for whatever specific numeric cases we test).
+
 (You either generate the expected result by hand, or by using a known-to-be-correct reference method.
 SymPy helps out by canonicalizing how it prints equations, with terms in lexicographic order.)
 
