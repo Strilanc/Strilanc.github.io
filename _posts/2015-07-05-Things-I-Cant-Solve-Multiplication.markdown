@@ -6,7 +6,7 @@ categories: computer-science
 comments: true
 ---
 
-In this post: how (some) [fast multiplication algorithms](https://en.wikipedia.org/wiki/Multiplication_algorithm#Fast_multiplication_algorithms_for_large_inputs) work, and a couple gotchas I've run into due to toying with the problem.
+In this post: how (some) [fast multiplication algorithms](https://en.wikipedia.org/wiki/Multiplication_algorithm#Fast_multiplication_algorithms_for_large_inputs) work, and a couple gotchas I've run into from toying with them.
 
 # Intro
 
@@ -28,7 +28,8 @@ They use a change of basis to turn [cyclic convolutions](https://en.wikipedia.or
 
 The underlying thing you need, in order to make the convolution theorem work, is a [principal root of unity](http://mathworld.wolfram.com/PrincipalRootofUnity.html).
 With such a root, you can create a set of basis vectors $v\_0, v\_1, \ldots, v\_{n-1}$ where there's no "cross-talk" when performing a cyclic convolution.
-That is to say, when we compute the circular convolution of two basis vectors $v\_a \ast v\_b$ we will get $v\_a^{\ast 2} + v\_b^{\ast 2}$ instead of $v\_a^{\ast 2} + v\_b^{\ast 2} + 2 v\_a \ast v\_b$.
+That is to say, when we compute the cyclic convolution of two basis vectors $v\_a \ast v\_b$ we will get $0$.
+This is useful because it means that convolutions-of-sums like $(v\_a + v\_b) \ast (v\_a + v\_b)$ will simplify into things like $v\_a^{\ast 2} + v\_b^{\ast 2}$ instead of $v\_a^{\ast 2} + v\_b^{\ast 2} + 2 v\_a \ast v\_b$.
 Losing the $2 v\_a \ast v\_b$ part reduces the fan-out when recursing, which is a big deal when it comes to asymptotic complexity.
 
 What *exactly* is a principal root of unity? Formally, an $n$'th principal root of unity $\lambda$ must satisfy two properties:
@@ -83,7 +84,7 @@ The $i$'th entry of the resulting vector will equal:
 
 $(v\_a \ast v\_b)_i = \Sum{j=0}{n-1} \lambda^{a j} \lambda^{(i-j) b} = \lambda^{b i} \Sum{j=0}{n-1} \lambda^{(a-b) j}$
 
-But notice that, in that last term, $j - k$ is constant and being multiplied against the iteration variable.
+But notice that, in that last term, $a - b$ is constant and being multiplied against the iteration variable.
 This is one of the sums that must come out zero if $\lambda$ is a principal root of unity!
 Therefore $v\_a \ast v\_b = 0$ when $a \neq b$.
 When $a = b$, we are instead summing up $n$ copies of $\lambda^0 = 1$ and multiplying that by what happens to be the original value of the vector.
@@ -141,8 +142,8 @@ Logarithmically sized pieces would be great, because they let you short-circuit 
 
 # Performing Many Small Squarings Fast
 
-If you have $n/log(n)$ squarings of size $\log{n}$ to perform, you can perform them all in $O(n \log n)$ time.
-The trick to doing this is to *sort the inputs into ascending order* (but keep track of the original order) and to then literally *stream out every possible square number* while iterating through the inputs:
+If you have $n/\log(n)$ squarings of size $\log{n}$ to perform, you can perform them all in $O(n \log n)$ time.
+The trick to doing this is to sort the inputs into ascending order (but keep track of the original order) and to then literally stream out every possible square number while iterating through the inputs:
 
     def stream_square(inputs):
         """
@@ -168,7 +169,9 @@ The trick to doing this is to *sort the inputs into ascending order* (but keep t
 
 This means that *if* you could perform an application-of-convolution-theorem basis change in $O(n \log{n})$ time, *and* end up with $O(n / \log(n))$ pieces of size $O(\log n)$, then you could multiply in $O(n \log{n})$ time.
 
-Let's cover one last thing to watch out for before finishing.
+This doesn't apply to SSA because working modulo $2^{2^s}+1$ doesn't give you enough pieces.
+
+... Okay, segway question that's been bothering me for awhile: why does SSA's modulus use a power-of-a-power-of-2 like $2^{2^s}$ instead of just a normal power-of-2 like $2^m$?
 
 # Degenerate Orders
 
@@ -177,28 +180,105 @@ It so happens that $2$ meets all the requirements to be a $2\cdot 3^{n-1}$'th pr
 Does that mean we can apply the convolution theorem in order to perform a multiplication cheaply?
 Not exactly.
 
-Recall that, in the special basis we create to turn convolution into point-wise multiplication, $v\_a^{\ast 2}$ is equal to $n v\_a$.
-In the case of the integers modulo $3^n$ with principal root of unity chosen to be two, $n$ comes out as $2 \cdot 3^{n-1} v\_k$.
-... But that's a multiple of three, and multiples of three have no multiplicative inverse when working modulo $3^n$.
-We can't undo the multiplication by $n$ here!
-If we try to compute a convolution this way, we'll just end up pushing all of the information out off the ring.
+Recall that, in the special basis we create to turn convolution into point-wise multiplication, $v\_a^{\ast 2}$ is equal to $n v\_a$ where $n$ is the order of the root.
+In the case of the integers modulo $3^n$ with principal root of unity chosen to be two, this comes out as $2 \cdot 3^{n-1} v\_k$.
+... But that multiplication includes a (rather large) power of three, and powers of three have no multiplicative inverse when working modulo $3^n$.
+In this ring, we can't undo the multiplication created by the convolution theorem!
+If we try to compute a convolution this way, we'll just end up pushing almost all of the information out off the ring.
 Whoops.
 
-This is actually why the Schönhage–Strassen algorithm requires you to use a field of size doubly-power-of-two size like $2^{2^s}+1$, instead of just $2^n+1$.
-The principal root of unity (two) has order $2n$ when working modulo $2^{s+1}$, but $2n$ may not have a multiplicative inverse.
-For example, when working modulo $2^9+1$, applying the convolution theorem will cause a multiplication by 9 but $2^9 = 513=57 \cdot 9$, so we can't undo that multiplication and have thrown away some information.
+This is actually why the Schönhage–Strassen algorithm requires you to use a field of doubly-power-of-two size like $2^{2^s}+1$, instead of just $2^n+1$.
+The principal root of unity (two) has order $2n$ when working modulo $2^{n+1}$, but $2n$ may not have a multiplicative inverse in that context.
+For example, when working modulo $2^9+1$, applying the convolution theorem will cause a multiplication by 9 but $2^9 + 1 = 513=57 \cdot 9$, so we can't undo that multiplication.
+So a convolution would throw away information.
 
-(When $n$ is also a power of two there's guaranteed to be a multiplicative inverse, because our principal root of unity passes through every power of two on its cycle back to 1.
+When the $n$ in $2^n$ is also a power of two, there's guaranteed to be a multiplicative inverse because our principal root of unity passes through every power of two on its cycle back to 1.
 Thus why SSA sticks to $2^{2^s}+1$-sized fields.
-A side-benefit of requiring the number of pieces to be a power of two is that you can adapt the dead-simple [Cooley-Tukey algorithm](https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm) for the basis change, instead of using something more esoteric.)
+(A side-benefit of requiring the number of pieces to be a power of two is that you can adapt the dead-simple [Cooley-Tukey algorithm](https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm) for the basis change, instead of using something more esoteric.)
 
 So not only do we need a fast basis change and a principal root of unity of large order, we have to be careful where that largeness comes from.
 If the order shares factors with the size of the ring, it won't work.
 
-(**Frustrating fact**: Using the [Hadamard Basis](https://en.wikipedia.org/wiki/Hadamard_transform) gets you surprisingly close to the goal.
-It takes $O(n \log n)$ time to perform the [Fast Hadamard Transform](https://en.wikipedia.org/wiki/Fast_Walsh%E2%80%93Hadamard_transform), do the point-wise squarings, and come back... but the basis doesn't quite satisfy the property that $v\_a \ast v\_b = 0$.
-[You end up with](http://dsp.stackexchange.com/a/7965/10155) $y\_j = \Sum{i=0}{n-1} x\_i x\_{j \oplus i}$ instead of $y\_j = \Sum{i=0}{n-1} x\_i x\_{j - i}$.
-So close, yet so far.)
+Let's cover some more things that don't work.
+
+# Things I've Tried
+
+The title of this post says I can't solve the multiplying-fast problem.
+I suppose I should justify that statement by noting some of the things I've tried that don't work.
+
+1. **Cache the squares.**
+
+    Caching all the multiplications up to numbers of size $\log(n)$ would take $O(n^2)$ space, but caching just the *squares* only takes $O(n)$ space.
+    Maybe we can make a lookup-table and perform $\log(n)$-sized squarings in constant time?
+
+    Unfortunately, although this did give me the "sort inputs and stream squares" idea, there are practical and theoretical reasons this lookup table won't work.
+    
+    Practically speaking, your computer can already square numbers up to 128 bits in size in constant time.
+    And you simply won't have the space to store a table with more than $2^{128}$ elements.
+    
+    Theoretically speaking, the table lookup falls afoul of the rules of the abstract machine we're using.
+    If we're working in the [RAM model with logarithmically sized words](http://blog.computationalcomplexity.org/2009/05/shaving-logs-with-unit-cost.html), then we can already do the squarings we're caching in constant time.
+    If we're working with *bit complexity*, then lookups aren't constant time because you need $O(\log n)$ time just to read the bits of the offset to jump to.
+    And if we're thinking of multi-tape turing machines, then we're really hosed because those can't do random access.
+    
+    No actual benefit. Doesn't work.
+
+2. **Use the field of integers modulo a prime $p$.**
+
+    The SSA algorithm is based on using an alternative system of arithmetic, the integers modulo $2^{2^s}+1$. Maybe there are better systems to use?
+    
+    There are primes where two is a $p-1$'th principal root of unity modulo $p$.
+    That's as proportionally large as the order of a root of unity is going to get; we cycle through every single other value in the field before returning to 1!
+    Except, that means the powers of two can't possibly satisfy any property for making the twiddling factors cheap to apply.
+    
+    Too expensive. Doesn't work.
+
+3. **What about Modulo $(2^n+1)^2$ or $(2^n-1)^2$**?
+    
+    The hope for this idea was: maybe squaring the size would happen to square the order of the root, and not ruin everything in the process? That hope was wrong.
+
+    Instead of squaring the root's order, e.g. from $2m$ to $4m^2$, squaring the size of the ring seems to multiply the root's order by the same factor that the ring's size was multiplied by.
+    That's a problem, because it means the ring size will no longer be co-prime to the order of the root, meaning bye-bye information when convolving.
+    
+    Gives wrong answers. Doesn't work.
+
+4. **Modulo $3^n$?**
+
+    As explained earlier in the post: size of field not co-prime to order of root.
+
+    Gives wrong answers. Doesn't work.
+
+5. **Okay, okay, these modulo ideas don't seem to be working. But what if we worked Modulo $lcm(2^n+1, 2 \cdot 2^n+1)$**?
+
+    This particular ring is tempting.
+    
+    First, it takes quadratically many doublings (w.r.t. $n$) to get back to 1.
+    That would let us tweak SSA to use $\sqrt[3]{n}^2$ pieces, instead of $\sqrt{n}$ pieces, which might avoid the $\log \log n$ overhead factor.
+    
+    Second, operations are cheap.
+    You can represent a number $x$ as a pair of numbers $[x \bmod (2^m+1), x \bmod (2 \cdot 2^m+1)]$ and later recover its value thanks to the [Chinese remainder theorem](https://en.wikipedia.org/wiki/Chinese_remainder_theorem).
+    Within that representation, adding or multiplying two values is simply done point-wise, e.g. $[2, 3] \cdot [5, 7] = [2 \cdot 5, 3 \cdot 7]$.
+    Combined with the fact that this representation turns every power of two into a pair of powers of two, we can directly steal SSA's tricks for performing twiddles cheaply.
+
+    The problem?
+    Two is a root of unity of this field, but not a *principle* root of unity.
+
+    Has cross-talk. Doesn't work.
+
+6. **Use the [Hadamard Transform](https://en.wikipedia.org/wiki/Hadamard_transform).**
+
+    The Hadamard Transform is *extremely* similar to the Fast Fourier Transform, but can be done in $O(n \log n)$ time *without multiplying* thanks to the [Fast Walsh-Hadamard Transform](https://en.wikipedia.org/wiki/Fast_Walsh%E2%80%93Hadamard_transform).
+    So maybe something interesting will happen if we apply the convolution theorem to the Hadamard basis?
+    
+    Actually, something interesting does happen!
+    [You end up computing](http://dsp.stackexchange.com/a/7965/10155) $y\_j = \Sum{i=0}{n-1} x\_i x\_{j \oplus i}$.
+    
+    ... Except we wanted to compute of $y\_j = \Sum{i=0}{n-1} x\_i x\_{j - i}$.
+    
+    F@&$ that's close. Is math literally *toying* with me? Has cross-talk. Doesn't work.
+
+Hopefully that list of my failures was satisfying to the reader.
+The list is not exhaustive, but this post really is getting quite long.
 
 # Summary
 
@@ -207,3 +287,5 @@ Fast multiplication algorithms use a basis change and the convolution theorem to
 If you found a way to break a number into $n / \log(n)$ pieces of size $\log n$, and could perform the associated convolution-theorem basis change in $O(n \log n)$ time, you could use sorting and streaming of all the squares up to $\log n$ to create an overall $O(n \log n)$ multiplication algorithm.
 
 If you pick a principal root of unity of order $n$, and $n$ has no multiplicative inverse in the context you're working in, you're gonna have a bad time.
+
+*(Update: Added the "things I've tried" section.)*
