@@ -220,3 +220,6 @@ The key parts of the construction are the VanRentergem-style subtraction, and us
 
 Next time: using quantum gates to bootstrap an ancilla bit out of nothing.
 
+----
+
+[Discuss on Reddit](http://www.reddit.com/r/programming/comments/39m6pr/constructing_large_increment_gates/)

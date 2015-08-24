@@ -7,7 +7,7 @@ categories: meta
 
 February was my last month at Twisted Oak Studios. It's been two years since I started working there, and about a year and a half since started writing a blog post each week for [their blog](http://twistedoakstudios.org/blog).
 
-I still have a growing list of ideas for posts, all clawing to get out. This site, strilanc.com, is where that content will end up. (Strilanc doesn't mean anything. I chose it the same way [Randall Munroe chose xkcd](http://youtu.be/zJOS0sV2a24?t=44m30s), except I used random syllables instead of random characters.)
+I still have a growing list of ideas for posts, all clawing to get out. This site, <strike>strilanc.com</strike> [algorithmicassertions.com](http://algorithmicassertions.com), is where that content will end up. (Strilanc doesn't mean anything. I chose it the same way [Randall Munroe chose xkcd](http://youtu.be/zJOS0sV2a24?t=44m30s), except I used random syllables instead of random characters.)
 
 Twisted Oak was a wonderful work environment and I enjoyed it immensely. The hours were beyond flexible. As a cooperative, the closest thing I had to a boss was my amazing co-worker Jazz dealing with clients and pushing for what they wanted. Everyone was geniunely happy for me when I told them I had a job offer. (They even gave me permission to copy the twisted oak posts here, but I prefer to keep the links stable.)
 
