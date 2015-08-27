@@ -1,37 +1,53 @@
 ---
 layout: post
 title: "Simulating a Claimed NP=BQP Algorithm"
-date: 2015-08-25 11:30:00 EST
+date: 2015-08-27 11:30:00 EST
 categories: quantum
 comments: true
 ---
 
-[Last time](/quantum/2015/08/01/Checking-a-Claimed-BQP-NP-Algorithm.html), I summarized [a paper by Younes et al.](http://arxiv.org/abs/1507.05061) claiming to contain a polynomial-time quantum algorithm for an NP-Complete problem. Younes et al. left a comment disagreeing with the argument I gave (that moving the measurements around had no effect on the result).
+[In my last post](/quantum/2015/08/01/Checking-a-Claimed-BQP-NP-Algorithm.html), I argued that [this paper](http://arxiv.org/abs/1507.05061)'s claimed quantum polynomial-time 3-SAT algorithm actually took exponential time. I pointed out that the algorithm must be equivalent to random guessing because the final measurements could be done before any hard work happened.
 
-Explaining why and when the deferred measurement principle works would make a good topic for a post... but instead why don't we just simulate the algorithm and see what happens?
+The authors of the paper, Younes et al., left a comment politely disagreeing with my argument:
 
-# A Minimal Quantum Simulation Engine
+> [...] it is not correct to say that the measurements of the variable assignments can be brought forward to the start of the algorithm. The manipulation of the entangled target qubit involves measurements, and not purely control -and so this part of the algorithm will not commute with the measurement of the variable assignments. [... other points ...]
+
+Initially I thought I'd respond with a post explaining why and when measurements can be moved around without changing the overall effect of a circuit.
+That does seem like an interesting post to write... but I decided to take a different approach instead: simulation.
+
+In this post, I will give a quick guide to simulating quantum circuits, provide code for simulating Younes et al's algorithm, and use the results of that simulation to demonstrate that their algorithm takes exponential time.
+
+# Quantum Circuit Simulation
 
 Simulating a quantum circuit is not magic.
-Qubits occupy a well defined state space, and operations affect states from that space in a well defined way.
-Once you get past the rules being unfamiliar and counter-intuitive, but before you slam into the computational wall caused by the number of qubits increasing, it's not that hard to do.
+The state space may be unfamiliar and the effects of the operations may be counter-intuitive, but everything is mathematically well defined.
+The code is trivial (no, really, it is); the hard part is internalizing and understanding the rules.
+
+(Well... until you increase the number of qubits past 20.
+Then the hard part is slamming into the exponential cost walls).
 
 All of the code used by this post [is available on github](https://github.com/Strilanc/qbp_np_younes_test).
 
-The state of a quantum circuit can always be described as a so-called "[mixed state](https://en.wikipedia.org/wiki/Quantum_state#Mixed_states)". A mixed state is a probability distribution of "[pure states](https://en.wikipedia.org/wiki/Quantum_state#Pure_states)". A pure state is a superposition of classical states, and can represent the state of a quantum circuit as long as measurements and uncertainty aren't involved. A classical state is just an assignment of boolean values to each qubit: qubit #1 is Off, qubit #2 is On, etc.
+**Quantum States**
 
-We'll need programmatic representations of all three levels (classical, pure, and mixed) if we want to do any simulating.
+The type of state a quantum circuit can hold has a name: a "[mixed state](https://en.wikipedia.org/wiki/Quantum_state#Mixed_states)". A mixed state is a probability distribution of "[pure states](https://en.wikipedia.org/wiki/Quantum_state#Pure_states)". A pure state is a superposition of classical states. A classical state is an assignment of boolean values to each qubit: qubit #1 is Off, qubit #2 is On, etc.
 
-A very convenient way to store a bunch of boolean values is as an integer [bitmask](https://en.wikipedia.org/wiki/Mask_%28computing%29), so that's what I did in my implementation.
-The [ClassicalState class](https://github.com/Strilanc/qbp_np_younes_test/blob/master/classical_state.py) is a handful of convenience methods wrapped around an integer value, and that's it.
+That's a lot of definition to take in all at once, but I'll go through them one by one.
+We need programmatic representations of all three levels (classical, pure, and mixed) if we want to do any simulating.
+
+A *classical state* is just a bunch of bits.
+A very convenient way to store a bunch of bit values is as an integer [bitmask](https://en.wikipedia.org/wiki/Mask_%28computing%29), so that's what I did in my implementation.
+The [ClassicalState class](https://github.com/Strilanc/qbp_np_younes_test/blob/master/classical_state.py) is nothing more than a handful of convenience methods wrapped around an integer value:
 
     >>> print(ClassicalState(5))
     |00000101〉
     >>> print(ClassicalState(5).bit(2))
     True
 
-A pure state is a weighted combination of classical states (a "superposition"), with the caveat that if you sum the squares of all the weights (or "amplitudes") you must get a total of 1.
-The [PureState class](https://github.com/Strilanc/qbp_np_younes_test/blob/master/pure_state.py) uses a map to store the pure state: the keys are the classical states, and the associated values are the amplitudes.
+A *pure state*, also called a "superposition", is a weighted combination of classical states.
+The weight associated with each state is called an "amplitude", and is basically the square root of a probability.
+If you square the magnitudes of all the amplitudes, and add up those squares, you should get a total of 100% (otherwise it's not a valid superposition).
+The [PureState class](https://github.com/Strilanc/qbp_np_younes_test/blob/master/pure_state.py) uses a dictionary to store the pure state: the keys are the classical states, and the values are the amplitudes.
 
     >>> print(PureState({
             ClassicalState(2): -0.8,
@@ -39,8 +55,8 @@ The [PureState class](https://github.com/Strilanc/qbp_np_younes_test/blob/master
         }))
     -0.800*|00000010〉 + 0.600j*|00000111〉
 
-A mixed state is also a weighted combination, but this time the values are pure states instead of classical states and the weights are probabilities instead of amplitudes.
-The [MixedState class](https://github.com/Strilanc/qbp_np_younes_test/blob/master/mixed_state.py) uses a map to store the mixed state: the keys are the pure states, and the associated values are the probabilities.
+A *mixed state* is also a weighted combination of states, but this time it's pure states instead of classical states and the weights are probabilities instead of amplitudes.
+The [MixedState class](https://github.com/Strilanc/qbp_np_younes_test/blob/master/mixed_state.py) uses a dictionary to store the mixed state: the keys are the pure states, and the values are the probabilities.
 
     >>> print(MixedState({
             PureState({ClassicalState(4): -1}): 0.25,
@@ -49,15 +65,26 @@ The [MixedState class](https://github.com/Strilanc/qbp_np_younes_test/blob/maste
     75.0%: 0.707*|00000101〉 + -0.707*|00000110〉
     25.0%: -1.000*|00000100〉
 
+So the state of a quantum circuit is a probability distribution of superpositions of classical states.
+A convenient mathematical representation for this kind of state is as a [density matrix](https://en.wikipedia.org/wiki/Density_matrix), but I'm trying to be brief so let's stick with the code's dictionaries-of-dictionaries approach and move on to operations.
+
+**Quantum Operations**
+
 There are two types of operations that you can apply to quantum states: unitary operations, and measurement operations.
-Roughly speaking, unitary operations turn classical states into pure states whereas measurement operations turn pure states into mixed states.
+Roughly speaking, unitary operations turn classical states into pure states while measurement operations turn pure states into mixed states.
 
-A [unitary operation](https://en.wikipedia.org/wiki/Unitary_matrix) projects classical inputs into a superposition of outputs.
-When applied to a mixed state, a unitary operation just gets forwarded directly onto the contained pure states.
-When applied to a pure state, a unitary operation distributes linearly: it gets forwarded to each sub-case, the outputs' weights are scaled by the corresponding amplitude or probability, and the whole set of results gets flattened back down into a superposition by interfering colliding outputs.
-The main restriction on unitary operations is that they must preserve sum-of-squares-equals-1 property in all possible cases (i.e. the output vectors for each possible input must be orthonormal).
+A [unitary operation](https://en.wikipedia.org/wiki/Unitary_matrix) associates a pure state output with every allowed classical state.
+When applied to a pure state, the operation distributes linearly: it gets applied to each classical state in the superposition, and the amplitudes in the resulting output pure states are scaled by the associated input state's amplitude.
+The multiple output superpositions are then flattened into a single superposition by concatenating them together, except that matching classical states interfere (their amplitudes from each superposition get added together).
+See [the code](https://github.com/Strilanc/qbp_np_younes_test/blob/master/pure_state.py#L65) if the above sounds ambiguous or went way, way too fast.
 
-    >>> hadamard_first_bit = lambda c: PureState({
+When applied to a mixed state, unitary operations just distribute directly onto each pure state in the mixed state ([code](https://github.com/Strilanc/qbp_np_younes_test/blob/master/mixed_state.py#L82)).
+(There's no flattening or interference steps necessary at the mixed state level.)
+
+Here's an example of a unitary operation being applied to a mixed state:
+
+
+    >>> op_hadamard_on_first_bit = lambda c: PureState({
             c.with_bit(0, False): math.sqrt(0.5),
             c.with_bit(0, True): -math.sqrt(0.5) if c.bit(0) else +math.sqrt(0.5)
         })
@@ -65,13 +92,18 @@ The main restriction on unitary operations is that they must preserve sum-of-squ
             PureState({ClassicalState(4): -1}): 0.25,
             PureState({ClassicalState(5): math.sqrt(0.5), ClassicalState(6): -math.sqrt(0.5)}): 0.75
         })
-    >>> print(input.unitary_transform(hadamard_first_bit))
+    >>> print(input)
+    75.0%: 0.707*|00000101〉 - 0.707*|00000110〉
+    25.0%: -1.000*|00000100〉
+    >>> print(input.unitary_transform(op_hadamard_on_first_bit))
     75.0%: 0.500*|00000100〉 + -0.500*|00000101〉 + -0.500*|00000110〉 + -0.500*|00000111〉
     25.0%: -0.707*|00000100〉 + -0.707*|00000101〉
 
-A measurement operation allows information about a pure state to escape into the environment.
-Cases that have been distinguished in this way can no longer interfere, so they become separate branches of a mixed state.
-Although more general kinds of measurement are possible, in the code I they just distinguish flase cases from true cases:
+A [measurement operation](https://en.wikipedia.org/wiki/POVM) distinguishes between the classical states that make up a pure state, cleaving it into pieces.
+(Actually, measurements are a bit more general than that, but we'll stick to measuring in the computational basis for simplicity.
+Don't worry about it.)
+The resulting pieces' probabilities are determined by the sum of the squared amplitudes of the states within that piece.
+Each piece then becomes a separate branch at the mixed state level:
 
     >>> value_of_first_bit = lambda c: c.bit(0)
     >>> input = MixedState({
@@ -83,15 +115,19 @@ Although more general kinds of measurement are possible, in the code I they just
     37.5%: 1.000+0.000j*|00000101〉
     25.0%: -1.000+0.000j*|00000100〉
 
-The code also supports post-selecting, where you "force" a particular measurement outcome to happen and get to play with the resulting renormalized subset of states.
-In practice this is done by simply repeating experiments until the desired measurement happens, so the post-selection method also outputs how likely you are to succeed:
+The code [also supports](https://github.com/Strilanc/qbp_np_younes_test/blob/master/pure_state.py#L34) [post-selecting](https://en.wikipedia.org/wiki/Postselection), where you do a measurement but assert what the result will be.
+In practice this would involve running an experiment again and again, until you get the result you want.
+The code returns both the resulting renormalized state, and the probability of success:
 
+    >>> value_of_first_bit = lambda c: c.bit(0)
     >>> print(input.post_select(value_of_first_bit))
     (0.3750000000000001, MixedState({PureState({ClassicalState(5): (1+0j)}): 1.0}))
 
+With the ability to store states and perform operations, we now have ourselves a basic quantum circuit simulation engine.
+
 # Simulating Younes et al's Algorithm
 
-Younes et al's algorithm is implemented in the [younes_test.py file](https://github.com/Strilanc/qbp_np_younes_test/blob/master/younes_test.py).
+My implementation of Younes et al's algorithm is in the [younes_test.py file](https://github.com/Strilanc/qbp_np_younes_test/blob/master/younes_test.py).
 
 The code sets up useful values:
 
@@ -104,7 +140,7 @@ The code sets up useful values:
 
         state = MixedState({PureState({ClassicalState(0): 1}): 1})
 
-Superposes the variable-assignment bits and initializes the clause bits:
+Superposes the variable-assignment bits and initializes the entangled is-clause-satisfied bits:
 
         for i in var_bits:
             state = state.unitary_transform(hadamard_op(i))
@@ -113,20 +149,20 @@ Superposes the variable-assignment bits and initializes the clause bits:
             state = state.unitary_transform(
                 controlled_by(not_op(n + j), anti_clauses[j]))
 
-And does the iterative filtering work:
+And performs the iterated rejection testing based on the number of satisfied clauses:
 
         while True:
             [... track and output debug info ...]
 
             for j in clause_bits:
-                v = controlled_by(
-                    partial_x_rotation_op(ancilla_bit, m),
-                    {j: True})
-                state = state.unitary_transform(v)
-            p_survive, state = state.post_select(bit_check_predicate(ancilla_bit))
+                op_mx = controlled_by(
+                        partial_x_rotation_op(ancilla_bit, m),
+                        {j: True})
+                state = state.unitary_transform(op_mx)
+            p_pass, state = state.post_select(bit_check_predicate(ancilla_bit))
             state = state.unitary_transform(not_op(ancilla_bit))
 
-To test the algorithm, I picked a trivial 3-SAT instance where the only solution is assigning True to all of the variables:
+The 3-SAT instance I chose to use for testing is a trivial one, where the only solution is assigning True to all of 11 variables:
 
     simulate_younes_algo(anti_clauses=[
         # Force 0 true
@@ -142,29 +178,32 @@ To test the algorithm, I picked a trivial 3-SAT instance where the only solution
         # Force all true
         {0: True, 1: True, 2: False},
         {0: True, 1: True, 3: False},
-        ...
+        {0: True, 1: True, 4: False},
+        {0: True, 1: True, 5: False},
+        {0: True, 1: True, 6: False},
+        {0: True, 1: True, 7: False},
+        {0: True, 1: True, 8: False},
+        {0: True, 1: True, 9: False},
+        {0: True, 1: True, 10: False},
     ])
 
-So how did it go?
+There are two important values to track as the algorithm runs: `p_survived` and `p_correct`.
+`p_survived` is the probability that the algorithm has not been forced to restart, as it must if the post-selection following the rotate-based-on-number-of-satisfied-clauses-and-expect-True check fails.
+`p_correct` is the probability that, if you measured the clause bits and variable bits in the current iteration, you would get the correct answer (all clauses satisfied, all variables true).
+
+Both `p_survived` and `p_correct` act as multipliers on the running time of the algorithm.
+If you have to restart 99 out of a 100 times, due to `p_survived` being 1%, it will take 100 times longer for the algorithm to run.
+If you get the wrong answer 99 out of a 100 times, due to `p_correct` being 1%, you'll have to repeat the algorithm ~100 times before you expect to have seen a good answer.
+Furthermore, the effect of these two multipliers on the running time *stacks* so the real quantity we care about is the product `p_correct*p_survived`.
+
+Since the test case I choose has 11 variables, and the algorithm starts by putting them into a uniform superposition, `p_correct` is initially $\frac{1}{2^{11}} = \frac{1}{2048} \approx 0.0488\%$. `p_survived` starts at 100%, of course, since the post-selection only happens later.
+
+What we *want* to happen as the algorithm runs is for `p_correct` to trend upward towards 100%.
+It has to do so *faster* than `p_survived` trends downward, because `p_correct*p_survived` has to increase if we want the running time to decrease.
 
 # Results
 
-I tracked two things as the algorithm ran: the probability that the algorithm had not been forced to restart due to measuring a bad value after the partial rotation (`p_survived`) and the probability of observing the solution if the clause and variable-assignment bits were measured given the current state. (`p_correct`).
-
-Having a low `p_survived` is bad, because it acts as an inverse-multiplier on the running time.
-If you only have a 1% chance of surviving, you'll expect to run the algorithm 100 times before reaching the current point.
-Having a low `p_correct` is also bad, and it also acts an inverse-ultiplier on the running time.
-If you only have a 1% chance of seeing the correct answer at the current point, you'll expect to need to get here a 100 times before seeing the correct answer.
-
-Since both probabilities act as inverse-multipliers on the running time, and their effects stack, I'll also track their product.
-
-Initially, `p_survived` is 100% and `p_correct` is $\frac{1}{2^n}$ where $n$ is the number of qubits.
-In my test I used 11 qubits, so `p_correct` is initially $\frac{1}{2048} \approx 0.0488%$.
-
-What we *want* to happen as the algorithm runs is for `p_correct` to trend upward towards 100%.
-More importantly, we want it to trend upward *faster* than `p_survived` is trending downward, because if `p_correct*p_survived` doesn't go up then we're just trading bad-result-failures for restart-failures.
-
-So, we run the program and we get...
+When I run the simulation code, I get these results:
 
     iter 0;      p_survived: 100.0000%;  p_correct: 0.0488%;     p_correct*p_survived: 0.0488%
     iter 10;     p_survived: 71.6915%;   p_correct: 0.0681%;     p_correct*p_survived: 0.0488%
@@ -180,15 +219,19 @@ So, we run the program and we get...
     iter 1000;   p_survived: 0.0501%;    p_correct: 97.4508%;    p_correct*p_survived: 0.0488%
     iter 1090;   p_survived: 0.0493%;    p_correct: 99.0362%;    p_correct*p_survived: 0.0488%
 
-Yup, we're just trading bad-result-failures for restart-failures.
+As expected, `p_correct` is increasing over time (thanks to throwing out bad solutions) but `p_survived` is trending down (due to the post-selection).
 
-Although the chance of the resulting being correct is increasing over time (meaning the algorithm can give the right answer!), the chance of having to restart is exactly countering it as far as the runtime multiplier is concerned.
-As a consequence, we always expect to have to repeat the algorithm approximately 2048 times before we pass all the post-selection tests and end up with a correct answer, no matter how few or how many tests we run.
+Unfortunately, `p_survived*p_correct` is *not* increasing; it's staying *exactly* constant.
+This means that varying the number of iterations is simply trading correctness restarts for postselection restarts, without any improvements to the overall runtime.
+No matter what number of iterations we pick, the algorithm will require approximately $2^{n}$ retries before it both passes the postselection checks and returns a correct answer.
 
-This is indicative of the fact that all our optimization power is coming from post-selection, instead of from interference or entanglement or deduction or something else practical.
-We have a PostBQP algorithm, but we appear to be stuck in a BQP reality.
+This is exactly what I was expecting, based on the fact that the measurements can be done before the hard work happens: the algorithm is equivalent to random guessing, but done in a more complicated way.
+
+(The most likely reasons for these results to be wrong is a bug in the code, since I wrote something from scratch instead of using an existing simulator.)
 
 # Summary
 
-Younes et al's algorithm is using post-selection.
-This was already clear at a high level, thanks to the deferred measurement principle, but low-level simulation bears out that conclusion.
+Younes et al's algorithm is an obfsucated post-selection algorithm.
+All of the optimization power comes from restarting when things don't go perfectly, instead of from interference or entanglement or deduction or something else that works in practice.
+
+It would be a great algorithm if post-selection was free, but unfotunately we appear to be stuck in a BQP reality.

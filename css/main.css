@@ -41,6 +41,13 @@ a         { color: #00a; }
 a:hover   { color: #000; }
 a:visited { color: #a0a; }
 
+blockquote {
+  border-left: 2px solid #CCA;
+  color: #555;
+  margin: 0 1em;
+  padding: 0 1em;
+}
+
 /*****************************************************************************/
 /*
 /* Home
