@@ -1,90 +1,87 @@
 ---
 layout: post
-title: "Erasing Entanglement with Delayed Choice"
+title: "Recovering Entanglement with Erasure"
 date: 2015-08-30 11:30:00 EST
 categories: quantum
 comments: true
 ---
 
-Recently, I've been trying to internalize what's happening during [delayed choice quantum eraser experiments](https://en.wikipedia.org/wiki/Delayed_choice_quantum_eraser).
-This unexpectedly led me to a better solution to the [quantum network flow puzzle](/quantum/2015/05/01/Quantum-Network-Flow-Puzzle.html) I posted months ago.
+Recently, I was trying to internalize what's happening during the [delayed choice quantum eraser experiment](https://en.wikipedia.org/wiki/Delayed_choice_quantum_eraser).
+I tried to simplify the experiment, and stumbled onto a way to improve my solution to the [quantum network flow puzzle I posted months ago](/quantum/2015/05/01/Quantum-Network-Flow-Puzzle.html) by "erasing" a qubit out of a GHZ state.
 
-In this post: explaining and using quantum erasure.
+# GHZ Triplets and Bell Pairs
 
-# The Delayed Choice Eraser Experiment
+A [Bell pair](https://en.wikipedia.org/wiki/Bell_state) is a set of two qubits in a superposition of all-off and all-on, i.e. in the state $\frac{1}{\sqrt{2}} \ket{00} + \frac{1}{\sqrt{2}} \ket{11}$.
+A [GHZ state](https://en.wikipedia.org/wiki/Greenberger%E2%80%93Horne%E2%80%93Zeilinger_state) is like a Bell pair, but with more qubits involved.
+For example, a GHZ triplet is a set of three qubits in the state $\frac{1}{\sqrt{2}} \ket{000} + \frac{1}{\sqrt{2}} \ket{111}$.
 
-The delayed choice quantum eraser experiment goes as follows:
+You might expect that the qubits in a GHZ state are "more entangled" than the qubits in a Bell pair, since the superposition is larger, but actually the reverse is true.
+Because of the [monogamy of entanglement](http://www.quantiki.org/wiki/Monogamy_of_entanglement), qubits in a Bell pair are more entangled with each other than qubits in a GHZ state are.
+The third qubit in a GHZ triplet tends to be more of a third wheel than a useful resource, as far as doing-fun-things-with-quantum goes.
 
-1. Create two bell pairs, A and B.
-2. Give one of the qubits in pair A to Alice, and one of the qubits in pair B to Bob.
-3. Give the other qubit in each pair to Eve.
-4. Alice and Bob do some bell tests on their qubits.
-5. Later, Eve performs the inverse bell-pair-creation operation on her qubits and measures them.
-6. Within each measurement outcome, Alice and Bob's bell tests indicate that there was entanglement between A and B.
+Because Bell pairs are more entangled than GHZ states, it's useful to be able to reduce a GHZ state into a Bell pair by kicking one of the qubits out.
+Previously, I thought that the only way to do this was to hit the unwanted qubit with a controlled-not controlled by one of the other involved qubits.
+This clears the unwanted qubit (setting it to $\ket{0}$) by toggling its value in the all-ON part of the superposition while leaving it alone in the all-OFF part of the superposition.
 
-It's very important not to confuse "each sub case acts entangled" with "Even caused Alice and Bob's qubits to become entangled", as many popular articles do.
-If Eve was actually able to do that, you would have a (slightly noisy) faster-than-light-or-even-backwards-in-time communication mechanism from Eve to Alice and Bob.
+The above approach works, but it requires the unwanted qubit to be in the same time and place as one of the other qubits (because of the quantum controlled operation).
+Satisfying that condition will, generally, require consuming some quantum network bandwidth.
 
-Let's go over an actual circuit to perform this magic:
+It's possible to do better, by "erasing" the qubit: hit the qubit with a Hadamard gate to obscure its value, measure it, and use the measurement outcome to fix a possible phase parity issue.
 
-![](http://i.imgur.com/XOKyenD.png)
+# Circuit Manipulation
 
-And here's the final state:
+The "erasure" approach outlined at the end of the last section is basically equivalent to the controlled-not approach.
+I think that the easiest way to understand why the "erasure" approach works, and how, is to start from the circuit for the controlled-not approach and apply several simple obviously-correct transformations.
 
-?
+We'll start with a circuit that creates a GHZ triplet, then kicks the third qubit out of the GHZ state with a controlled-not:
 
-The important thing to notice about the final state is that each row *individually* has Alice's qubit entangled with Bob's qubit, but the type of entanglement *differs*.
-There's both-qubits-agree entanglement, both-qubits-agree-but-opposite-phase entanglement, both-qubits-disagree entanglement, and both-qubits-disagree-but-opposite phase entanglement in play.
-Because Alice and Bob will be seeing each type of entanglement a quarter of the time, and the different types of entanglement complement each other, they end up unable to distinguish this from not being entangled at all (so in effect they aren't).
-But if Eve tells them what the measurement result was, then Alice and Bob can go back and look at their results and see that yes, in fact, Eve is telling them what type of correlations were appearing.
+{% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
 
-You can make make an unentangled state out of a superposition of entangled states. Weird!
+![Using a controlled-not to cancel a qubit out of a GHZ state](/assets/{{ loc }}/GHZ_to_Bell_1.png)
 
-# Erasing GHZ States
+After it's been cleared, we can hit the third qubit with whatever operations we want (because it's not being used for anything anymore).
+Using the power of informed foresight, we'll hit it with a Hadamard gate and then a measurement:
 
-After I learned the above, I went looking for simpler or dual cases that were still interesting.
-Could I make entangled states out of a superposition of unentangled states, so Eve's results allowed Alice and Bob to see normality?
-Could I do something with 3 qubits instead of 4?
+![Added some followup operations on the unused qubits](/assets/{{ loc }}/GHZ_to_Bell_2_followup.png)
 
-I found an interesting thing to do with 3 qubits.
+Now we want to move the Hadamard operation over the Not gate.
+This is allowed, but it transforms the value-toggling Not gate into a phase-toggling Z gate (because $H \cdot X = Z \cdot H$):
 
-A bell pair is two qubits in the state $\frac{1}{\sqrt{2}} \ket{00} + \frac{1}{\sqrt{2}} \ket{11}$.
+![Hopped the Hadamard gate over the controlled-not](/assets/{{ loc }}/GHZ_to_Bell_3_move_H.png)
 
-A GHZ state is three qubits in the state $\frac{1}{\sqrt{2}} \ket{000} + \frac{1}{\sqrt{2}} \ket{111}$.
+The Z gate is a bit like a controlled operation in that it has no effect on qubits that are OFF.
+As a result, we can exchange the Z gate with any of its controls without changing what the circuit does:
 
-By many measure sof entanglement, bell pairs are "more entangled" than GHZ states.
-Basically, the extra qubit is a bit of a third wheel.
-If you try to ignore it, then it basically amounts to a measurement of the other two and you'll get no interesting effects.
-So techniques for getting rid of that third wheel are useful, sometimes.
+![Reversed the controlled-Z](/assets/{{ loc }}/GHZ_to_Bell_4_swap_CZ.png)
 
-Previously, I thought the only way to get rid of the third wheel was to controlled-not it against one of the other qubits.
-This has the downside of requiring two of the three qubits to be in the same place at the same time.
+Having the control on the third wire is useful because [controls commute with measurements](https://en.wikipedia.org/wiki/Deferred_Measurement_Principle) (i.e. classical conditions are equivalent to quantum conditions).
+This allows us to perform the phase correction *after* the measurement instead of *before*:
 
-But it turns out you can also uantum-eraser the third qubit.
-Hit it with a Hadamard gate, measure it, then phase-flip one of the other qubits if the measurement came out ON.
-Now we don't need two qubits in the same place at the same time, we only need to move the measurement result around instead of the original qubit, and that's much easier because classical networks are easier than quantum networks.
+![Hopped the control over the measurement](/assets/{{ loc }}/GHZ_to_Bell_5_classicalize.png)
 
-Why does this work?
+That's it, we're done!
+The final circuit:
 
-Well, start with the original solution of controlled-not-ing away.
-After the controlled-not, we can do whatever we want to the now-uninvolved-and-useless qubit.
-So let's hit it with a Hadamard then measure it, because I said so.
-Now move the Hadamard over the controlled-not.
-Moving an H over an X toggles it into a Z.
-A Z gate only does things when its input is ON, so it is interchangeable with its controls, so swap it.
-Controls commute with measurements, so move the controlled-Z after the measurement.
-That's it!
+1. Starts in the state $\ket{000}$.
+2. Creates a GHZ triplet state $\frac{1}{\sqrt{2}} \ket{000} + \frac{1}{\sqrt{2}} \ket{111}$.
+3. Hits the third qubit with a Hadamard, transitioning to the state $\frac{1}{2} \ket{000} + \frac{1}{2} \ket{001} + \frac{1}{2} \ket{110} - \frac{1}{2} \ket{111}$.
+4. Measures the third qubit, collapsing the system into either the state $\frac{1}{\sqrt{2}} \parens{\ket{00} + \ket{11}} \ket{0}$ or the state $\frac{1}{\sqrt{2}} \parens{\ket{00} - \ket{11}} \ket{1}$.
+5. Fixes the minus sign in the third-qubit-was-ON outcome with a Z gate controlled by the measurement outcome.
+6. Finishes with the first two qubits unconditionally in the Bell pair state $\frac{1}{\sqrt{2}} \ket{00} + \frac{1}{\sqrt{2}} \ket{11}$.
 
-# Improving the Old Puzzle
+We still had to send information about the third qubit to the second qubit, but now that information is classical instead of quantum.
 
-In the original puzzle post, my solution created extra entangled copies of qubits due to superdense-encoding them into other qubits.
-This effectively created a GHZ state, so I had to forward the original qubits to meet their partner and be cleaned up by intermediate nodes.
-Quantum erasure allows those forwarding links to be downgraded to classical links:
+# Updated Puzzle Solution
 
-![Data Flow Diagram](/assets/2015-08-30-Erasing-Entanglement-with-Delayed-Choice/NetworkPuzzleSolution.png)
+My original solution to the [previously posted quantum network flow puzzle](/quantum/2015/05/01/Quantum-Network-Flow-Puzzle.html) involved removing a qubit from a GHZ state.
+(I didn't want to make a GHZ state, but superdense-coding bell pairs into other bell pairs introduces unavoidable  de-facto copies into the system.)
+By "erasing" unwanted GHZ qubits, instead of moving them around, a couple parts of the network can be downgraded from quantum to classical.
 
-# Summary
+Here is a data flow diagram of the improved solution:
 
-The "weirdness" of the delayed choice quantum eraser experiment comes from the ability to create an unentangled state out of a superposition of entangled states.
+<a href="/assets/{{ loc }}/NetworkPuzzleSolution.png">
+    <img src="/assets/{{ loc }}/NetworkPuzzleSolution.png" alt="Updated solution data flow diagram" style="width: 400px;"/>
+</a>
 
-You can use erasure in other situations, by turning a controlled-not into a Hadamard-then-measure-then-conditionally-phase-toggle.
+I won't bore you with the details of the worked out solution.
+Given the content of the puzzle post, and of this post, it's obvious what changes have been made.
