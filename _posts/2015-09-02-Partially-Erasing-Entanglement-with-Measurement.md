@@ -29,7 +29,7 @@ Satisfying that condition will, usually, require moving qubits around (i.e. you 
 
 But it turns out that it's possible to avoid paying that quantum bandwidth cost.
 By hitting the qubit with a Hadamard gate to obscure its value, measuring it, and using the measurement outcome to fix a phase parity issue, you only need to use classical bandwidth.
-(I call this "erasing" the qubit only because of how I stumbled on the idea, not because of the actual operations that are happening.
+(I call this "erasing" the qubit only because of how I stumbled onto the idea, not because of the actual operations that are happening.
 I don't know the proper existing name for the technique.)
 
 # Circuit Manipulation
@@ -78,7 +78,7 @@ This technique also works for larger GHZ states involving more qubits: you can e
 
 # Updated Puzzle Solution
 
-Because my solution to the [previously posted quantum network flow puzzle](/quantum/2015/05/01/Quantum-Network-Flow-Puzzle.html) involves kicking a qubit from a GHZ state, using "erasure" to do the kicking allows a couple parts of the network to be downgraded from quantum to classical.
+Because my solution to the [previously posted quantum network flow puzzle](/quantum/2015/05/01/Quantum-Network-Flow-Puzzle.html) involves kicking a qubit out of a GHZ state, using "erasure" to do the kicking allows a couple parts of the network to be downgraded from quantum to classical.
 
 Here is a data flow diagram of the improved solution:
 
