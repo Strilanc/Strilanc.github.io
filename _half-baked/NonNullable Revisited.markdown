@@ -161,3 +161,42 @@ A non-nullable method:
 
 
 
+
+# Major Decisions:
+
+1. Use `T!` to get the non-nullable variant of a type.
+2. Use `nodefault T` to opt generic parameters into not disallowing `default(T)` but allowing non-nullable type arguments.
+3. Use `withdefault(T)` to strip non-nullability (in generic code for API compatibility purposes).
+4. Provide `ArrayBuilder<nodefault T>` for building a non-nullable array item by item.
+5. Don't support non-nullable fields (yet).
+
+# Minor Decisions:
+
+1. Backwards compatibility demands that existing expressions opt-into being seen as non-null, possibly with new syntax. For example:
+    - Use `var v = new T!();` instead of `var v = new T()` to get a `v` of type `T!`
+    - Use `var v = "some text"!;` instead of `var v = "some text";` to get a `v` of type `string!`.
+    - The compiler *could* be a bit forgiving here, e.g. `string! s = "literal"` could be allowed.
+2. Cast from `T!` to `T` is implicit.
+3. Cast from `T` to `T!` is implicit-with-warning.
+4. Overloads that differ only by non-nullability are not permitted.
+
+
+# Runtime side:
+
+1. Encode `!` suffix and `nodefault` prefix as annotations.
+2. `typeof(string!)` == `typeof(string)`.
+3. Support callers who don't understand the annotations by placing `if x is null then throw` guards at method entrances.
+4. Callers who understand the annotations (e.g. the new C# compiler) enforce non-nullability at compile time.
+5. Explicit cast from `T` to `T!` does a null check. Implicit cast from `T` to `T!` allowed.
+
+
+# No More Default Value
+
+
+
+1. Some types no longer have a default value. This means that, sometimes, the following must be compile errors:
+    - `default(T)`
+    - `new T[10]`
+    - `class C<T> { T field; }`
+    - `struct S<T> { T field; }`
+2. 

@@ -21,17 +21,17 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-size: 120%;
-  color: darkred;
+  color: black;
 }
 
 h2 {
   font-size: 110%;
-  color: darkred;
+  color: black;
 }
 
 h3 h4 h5 h6 {
   font-size: 100%;
-  color: darkred;
+  color: black;
 }
 
 h1 { margin-bottom: 1em; }
