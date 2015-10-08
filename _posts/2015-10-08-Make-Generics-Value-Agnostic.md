@@ -66,11 +66,11 @@ The internal implementation code may need special handling of null, but the expo
 By contrast, if you try to allow all nulls *everywhere*, you will find yourself *introducing* corner cases instead of removing them.
 For example, if `String#startsWith` is going to accept a null prefix argument, then you will need to arbitrarily decide whether or not the empty string starts with a null string or not.
 
-The intuition-pump I use, to decide which side of this treat-null-the-same-vs-ban-it distinction a case falls on, is to imagining non-nullable types being added to Java (though that would be a bit of an engineering miracle to pull off).
+The intuition-pump I use, to decide which side of this treat-null-the-same-vs-ban-it distinction a case falls on, is to imagine non-nullable types being added to Java (though that would be a bit of an engineering miracle to pull off).
 In that magical hypothetical future, I would immediately switch the signature of `String#startsWith`'s prefix argument from `String` to `String!`.
 But, for generic collections, I'd make the opposite decision.
 
-If you have non-nullable types available, saying `String` starts to mean more than it used to.
+Once you have non-nullable types available, saying `String` starts to mean more than it used to.
 You *could* have said `String!`, but you said `String`.
 You're *asking* for null to be allowed.
 So when `Optional<String>` rejects null, despite you *asking* for null, it seems kind of... backwards.
@@ -84,4 +84,4 @@ You should only be null-hostile when null really can't satisfy the code's needs 
 # Summary
 
 Null-hostililty is great for cleaning nulls out of your code base, but makes interop with null-friendly code hard and exposes value-dependent behavior in code that intuitively shouldn't depend on specific values.
-Generic code that treats all values the same, even null, is [easier to reason about](http://ttic.uchicago.edu/~dreyer/course/papers/wadler.pdf).
+Generic code that treats all values the same is [easier to reason about](http://ttic.uchicago.edu/~dreyer/course/papers/wadler.pdf).
