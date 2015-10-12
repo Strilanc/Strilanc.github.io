@@ -6404,6 +6404,7 @@ System.get("traceur-runtime@0.0.91/src/runtime/polyfills/polyfills.js" + '');
     var round = ("__i_" + dontTouchMyStuffSuffix);
     var allSharedBits = ("__shared_" + dontTouchMyStuffSuffix);
     var moves = ("__moves_" + dontTouchMyStuffSuffix);
+    var rand = ("__rand_" + dontTouchMyStuffSuffix);
     var allSharedBitsArrayText = JSON.stringify(Seq.range(count).map(function() {
       return Math.floor(Math.random() * (1 << sharedBitCount));
     }).toArray());
@@ -6412,7 +6413,7 @@ System.get("traceur-runtime@0.0.91/src/runtime/polyfills/polyfills.js" + '');
     }).join('');
     var CustomType = ("__custom_type__" + dontTouchMyStuffSuffix2);
     var wrapCode = function(code, refCoinMask) {
-      return ("\n        function " + CustomType + "() {}\n        " + CustomType + ".prototype.invokeCode = function(refChoice, sharedBits) {\n            // Be forgiving.\n            var refchoice = refChoice;\n            var ref_choice = refChoice;\n            var sharedbits = sharedBits;\n            var shared_bits = sharedBits;\n            var True = true;\n            var False = false;\n\n            var move = undefined;\n\n            eval(" + JSON.stringify(code) + ");\n\n            // Loose equality is on purpose, so people entering 'x ^ y' don't get an error.\n            if (!(move == true) && !(move == false)) {\n                throw new Error(\"'move' variable ended up \" + move + \" instead of true or false\");\n            }\n            return move == true;\n        };\n        (function() {\n            var " + allSharedBits + " = " + allSharedBitsArrayText + ";\n            var " + moves + " = [];\n            for (var " + round + " = 0; " + round + " < " + count + "; " + round + "++) {\n                var sharedBits = [];\n                var i;\n                for (i = 0; i < " + sharedBitCount + "; i++) {\n                    sharedBits.push((" + allSharedBits + "[" + round + "] & (1 << i)) !== 0);\n                }\n                i = undefined;\n\n                var refChoice = Math.random() < 0.5;\n                " + moves + ".push(refChoice);\n                " + moves + ".push(new " + CustomType + "().invokeCode(refChoice, sharedBits));\n            };\n            return " + moves + ";\n        })()");
+      return ("\n        function " + CustomType + "() {}\n        " + CustomType + ".prototype.invokeCode = function(refChoice, sharedBits) {\n            // Be forgiving.\n            var refchoice = refChoice;\n            var ref_choice = refChoice;\n            var sharedbits = sharedBits;\n            var shared_bits = sharedBits;\n            var True = true;\n            var False = false;\n\n            var move = undefined;\n\n            eval(" + JSON.stringify(code) + ");\n\n            // Loose equality is on purpose, so people entering 'x ^ y' don't get an error.\n            if (!(move == true) && !(move == false)) {\n                throw new Error(\"'move' variable ended up \" + move + \" instead of true or false\");\n            }\n            return move == true;\n        };\n        (function() {\n            var " + allSharedBits + " = " + allSharedBitsArrayText + ";\n            var " + moves + " = [];\n            var " + rand + " = Math.random;\n            for (var " + round + " = 0; " + round + " < " + count + "; " + round + "++) {\n                var sharedBits = [];\n                var i;\n                for (i = 0; i < " + sharedBitCount + "; i++) {\n                    sharedBits.push((" + allSharedBits + "[" + round + "] & (1 << i)) !== 0);\n                }\n                i = undefined;\n\n                var refChoice = " + rand + "() < 0.5;\n                " + moves + ".push(refChoice);\n                " + moves + ".push(new " + CustomType + "().invokeCode(refChoice, sharedBits));\n            };\n            return " + moves + ";\n        })()");
     };
     var wrapCode1 = wrapCode(code1, 1);
     var wrapCode2 = wrapCode(code2, 2);
@@ -6445,14 +6446,17 @@ System.get("traceur-runtime@0.0.91/src/runtime/polyfills/polyfills.js" + '');
     var rotateFunc = ("__rotate_" + dontTouchMyStuffSuffix);
     var measureFunc = ("__measure_" + dontTouchMyStuffSuffix);
     var amplitudes = ("__amps_" + dontTouchMyStuffSuffix);
+    var rand = ("__rand_" + dontTouchMyStuffSuffix);
+    var sqrt = ("__sqrt_" + dontTouchMyStuffSuffix);
+    var float32Array = ("__float32array_" + dontTouchMyStuffSuffix);
     var dontTouchMyStuffSuffix2 = Seq.range(10).map(function() {
       return Math.floor(Math.random() * 16).toString(16);
     }).join('');
     var CustomType = ("__custom_type__" + dontTouchMyStuffSuffix2);
     var createInvokeFunction = function(code, i) {
-      return ("\n        " + CustomType + ".prototype.invokeCode" + i + " = function(refChoice) {\n            // Available rotation axies.\n            var X = [1, 0, 0];\n            var Y = [0, 1, 0];\n            var Z = [0, 0, 1];\n            var H = [Math.sqrt(0.5), 0, Math.sqrt(0.5)];\n\n            // Available actions.\n            var measure = function() {\n                return " + measureFunc + "(" + amplitudes + ", " + i + ");\n            };\n            var turn = function(axis, degs) {\n                if (axis.length !== 3) throw new Error(\"First arg to 'turn' should be a rotation axis (X/Y/Z/H).\");\n                return " + rotateFunc + "(" + amplitudes + ", " + i + ", axis, (degs === undefined ? 180 : degs)*Math.PI/180, []);\n            };\n\n            // Be forgiving.\n            var refchoice = refChoice;\n            var ref_choice = refChoice;\n            var True = true;\n            var False = false;\n\n            var move = undefined;\n\n            //Easter egg.\n            var sharedQubit = \"containing a spooky ghost of Eisteinian proportions\";\n\n            eval(" + JSON.stringify(code) + ");\n\n            // Loose equality is on purpose, so people entering 'x ^ y' don't get an error.\n            if (!(move == true) && !(move == false)) {\n                throw new Error(\"'move' variable ended up \" + move + \" instead of true or false\");\n            }\n            return move == true;\n        };");
+      return ("\n        " + CustomType + ".prototype.invokeCode" + i + " = function(refChoice) {\n            // Available rotation axies.\n            var X = [1, 0, 0];\n            var Y = [0, 1, 0];\n            var Z = [0, 0, 1];\n            var H = [Math.sqrt(0.5), 0, Math.sqrt(0.5)];\n\n            // Available actions.\n            var measure = function() {\n                return " + measureFunc + "(" + amplitudes + ", " + i + ");\n            };\n            var turn = function(axis, degs) {\n                if (axis.length !== 3) throw new Error(\"First arg to 'turn' should be a rotation axis (X/Y/Z/H).\");\n                return " + rotateFunc + "(" + amplitudes + ", " + i + ", axis, (degs === undefined ? 180 : degs)*Math.PI/180, []);\n            };\n\n            // Be forgiving.\n            var refchoice = refChoice;\n            var ref_choice = refChoice;\n            var True = true;\n            var False = false;\n\n            var move = undefined;\n\n            //Easter egg.\n            var sharedQubit = \"containing a spooky ghost of Einsteinian proportions\";\n            var sharedQubits = [sharedQubit];\n\n            eval(" + JSON.stringify(code) + ");\n\n            // Loose equality is on purpose, so people entering 'x ^ y' don't get an error.\n            if (!(move == true) && !(move == false)) {\n                throw new Error(\"'move' variable ended up \" + move + \" instead of true or false\");\n            }\n            return move == true;\n        };");
     };
-    var wrappedCode = ("\n        var " + amplitudes + "; // <-- weakpoint\n        var " + rotateFunc + " = " + ROTATE_FUNC_STRING + ";\n        var " + measureFunc + " = " + MEASURE_FUNC_STRING + ";\n        function " + CustomType + "() {}\n        " + createInvokeFunction(code1, 0) + ";\n        " + createInvokeFunction(code2, 1) + ";\n        (function() {\n            var " + round + " = 0;\n            var " + moves + " = [];\n            for (; " + round + " < " + count + "; " + round + "++) {\n                // Create pre-shared entangled 00+11 state.\n                " + amplitudes + " = new Float32Array(2 << 2);\n                " + amplitudes + "[0] = Math.sqrt(0.5);\n                " + amplitudes + "[6] = Math.sqrt(0.5);\n\n                // Note: order shouldn't matter.\n                // Also, because these are run in the same web worker, it's much easier for them to cheat..\n                var refChoice1 = Math.random() < 0.5;\n                var refChoice2 = Math.random() < 0.5;\n                " + moves + ".push(refChoice1);\n                " + moves + ".push(refChoice2);\n                " + moves + ".push(new " + CustomType + "().invokeCode0(refChoice1));\n                " + moves + ".push(new " + CustomType + "().invokeCode1(refChoice2));\n            };\n            return " + moves + ";\n        })();");
+    var wrappedCode = ("\n        var " + amplitudes + ";\n        var " + rand + " = Math.random;\n        var " + sqrt + " = Math.sqrt;\n        var " + rotateFunc + " = " + ROTATE_FUNC_STRING.replace("Math.random", rand).replace("Math.sqrt", sqrt) + ";\n        var " + measureFunc + " = " + MEASURE_FUNC_STRING.replace("Math.random", rand).replace("Math.sqrt", sqrt) + ";\n        function " + CustomType + "() {}\n        " + createInvokeFunction(code1, 0) + ";\n        " + createInvokeFunction(code2, 1) + ";\n        (function() {\n            // Stash functions that user code can re-assign.\n            var " + float32Array + " = Float32Array;\n\n            var " + round + " = 0;\n            var " + moves + " = [];\n            for (; " + round + " < " + count + "; " + round + "++) {\n                // Create pre-shared entangled 00+11 state.\n                " + amplitudes + " = new " + float32Array + "(2 << 2);\n                " + amplitudes + "[0] = " + sqrt + "(0.5);\n                " + amplitudes + "[6] = " + sqrt + "(0.5);\n\n                // Note: order shouldn't matter.\n                // Also, because these are run in the same web worker, it's much easier for them to cheat..\n                var refChoice1 = " + rand + "() < 0.5;\n                var refChoice2 = " + rand + "() < 0.5;\n                " + moves + ".push(refChoice1);\n                " + moves + ".push(refChoice2);\n                " + moves + ".push(new " + CustomType + "().invokeCode0(refChoice1));\n                " + moves + ".push(new " + CustomType + "().invokeCode1(refChoice2));\n            };\n            return " + moves + ";\n        })();");
     var results = asyncEval(wrappedCode, timeoutMillis, cancelTaker);
     return results.then(function(moves) {
       if (!Array.isArray(moves) || moves.length !== 4 * count) {
@@ -6509,29 +6513,48 @@ System.get("traceur-runtime@0.0.91/src/runtime/polyfills/polyfills.js" + '');
     ctx.fillText(text, -w / 2, h / 2);
     ctx.restore();
   }
-  function drawOutcomeStats(ctx, outcomes, labelSetter) {
+  function drawChshOutcomeStats(ctx, outcomes, labelSetter, noWaitActuallyDoSignalling) {
     var playCount = outcomes.countPlays();
     var winCount = outcomes.countWins();
+    if (noWaitActuallyDoSignalling) {
+      winCount = outcomes.countForCase(true, false, false, true) + outcomes.countForCase(true, false, true, true) + outcomes.countForCase(true, true, false, true) + outcomes.countForCase(true, true, true, true) + outcomes.countForCase(false, false, false, false) + outcomes.countForCase(false, false, true, false) + outcomes.countForCase(false, true, false, false) + outcomes.countForCase(false, true, true, false);
+    }
     var mean = winCount / playCount;
     var sampleMean = (winCount + 1) / (playCount + 2);
     var sampleStdDev = Math.sqrt(sampleMean * (1 - sampleMean) / (playCount + 1));
     var errorBars = 3 * sampleStdDev;
-    var over = (Math.max(mean, 1 - mean) - 0.75) / sampleStdDev;
-    var msg1 = ("~" + (100 * mean).toFixed(1) + "% (\u00B1" + (errorBars * 100).toFixed(1) + "%)");
-    var msg2 = (winCount + " wins out of " + playCount + " plays");
-    var msg3 = over <= 1 ? 'No' : over <= 3 ? 'Probably Not' : over <= 5 ? 'Maybe. Could be lucky? \u03C3>3' : 'Looks like it! \u03C3>5';
-    labelSetter(msg1 + '\n' + msg2 + '\n' + msg3);
+    if (noWaitActuallyDoSignalling) {
+      var over = (Math.max(mean, 1 - mean) - 0.5) / sampleStdDev;
+      var msg1 = ("~" + (100 * mean).toFixed(1) + "% (\u00B1" + (errorBars * 100).toFixed(1) + "%)");
+      var msg2 = (winCount + " correct out of " + playCount);
+      var msg3 = over <= 1 ? 'Nope. Just noise.' : over <= 3 ? 'Probably Not.' : over <= 5 ? 'Maybe. Or lucky? \u03C3>3' : 'Looks like it! \u03C3>5';
+      labelSetter(msg1 + '\n' + msg2 + '\n' + msg3);
+    } else {
+      var over$__17 = (Math.max(mean, 1 - mean) - 0.75) / sampleStdDev;
+      var msg1$__18 = ("~" + (100 * mean).toFixed(1) + "% (\u00B1" + (errorBars * 100).toFixed(1) + "%)");
+      var msg2$__19 = (winCount + " wins out of " + playCount + " plays");
+      var msg3$__20 = over$__17 <= 1 ? 'No' : over$__17 <= 3 ? 'Probably Not' : over$__17 <= 5 ? 'Maybe. Could be lucky? \u03C3>3' : 'Looks like it! \u03C3>5';
+      labelSetter(msg1$__18 + '\n' + msg2$__19 + '\n' + msg3$__20);
+    }
     var inset = HEADER_UNIT * 6;
     ctx.clearRect(0, 0, 16 * CELL_SPAN + 10, 16 * CELL_SPAN + 10);
-    for (var i = 0; i < 16; i++) {
+    var numCases = noWaitActuallyDoSignalling ? 4 : 16;
+    for (var i = 0; i < numCases; i++) {
       var move2 = (i & 1) !== 0;
       var ref2 = (i & 2) !== 0;
       var move1 = (i & 4) !== 0;
       var ref1 = (i & 8) !== 0;
       var x = inset + (i & 3) * CELL_SPAN;
       var y = inset + ((i & 0xC) >> 2) * CELL_SPAN;
-      var caseCount = outcomes.countForCase(ref1, ref2, move1, move2);
       var isGoodCase = ChshGameOutcomeCounts.caseToIsWin(ref1, ref2, move1, move2);
+      var caseCount = outcomes.countForCase(ref1, ref2, move1, move2);
+      if (noWaitActuallyDoSignalling) {
+        x = inset + (i & 1) * CELL_SPAN;
+        y = inset + ((i & 2) >> 1) * CELL_SPAN;
+        ref1 = (i & 2) !== 0;
+        caseCount = outcomes.countForCase(ref1, false, false, move2) + outcomes.countForCase(ref1, true, false, move2) + outcomes.countForCase(ref1, false, true, move2) + outcomes.countForCase(ref1, true, true, move2);
+        isGoodCase = move2 == ref1;
+      }
       var casePortion = caseCount / playCount;
       var h = casePortion * CELL_SPAN;
       ctx.fillStyle = isGoodCase ? '#CFF' : '#FCC';
@@ -6551,15 +6574,15 @@ System.get("traceur-runtime@0.0.91/src/runtime/polyfills/polyfills.js" + '');
     try {
       for (var $__4 = void 0,
           $__3 = ([0, 1])[$traceurRuntime.toProperty(Symbol.iterator)](); !($__6 = ($__4 = $__3.next()).done); $__6 = true) {
-        var i$__17 = $__4.value;
+        var i$__21 = $__4.value;
         {
-          var name = i$__17 == 0 ? "BOB" : "ALICE";
-          var print = i$__17 == 0 ? function(t, x, y) {
+          var name = i$__21 == 0 ? "BOB" : "ALICE";
+          var print = i$__21 == 0 ? function(t, x, y) {
             return fillCenteredText(ctx, t, inset + x, y);
           } : function(t, y, x) {
             return fillCenteredText(ctx, t, x, inset + y, -Math.PI / 2);
           };
-          var line = i$__17 == 0 ? function(x, y, dx, dy) {
+          var line = i$__21 == 0 ? function(x, y, dx, dy) {
             ctx.beginPath();
             ctx.moveTo(inset + x, y);
             ctx.lineTo(inset + x + dx, y + dy);
@@ -6570,25 +6593,41 @@ System.get("traceur-runtime@0.0.91/src/runtime/polyfills/polyfills.js" + '');
             ctx.lineTo(x + dx, inset + y + dy);
             ctx.stroke();
           };
-          ctx.lineWidth = 1.5;
-          line(2 * CELL_SPAN, HEADER_UNIT * 2, 0, HEADER_UNIT * 4 + TABLE_SPAN);
-          ctx.lineWidth = 0.5;
-          line(0, HEADER_UNIT * 4, TABLE_SPAN, 0);
-          line(0, HEADER_UNIT * 2, TABLE_SPAN, 0);
-          line(0, HEADER_UNIT * 2, 0, HEADER_UNIT * 4 + TABLE_SPAN);
-          line(CELL_SPAN, HEADER_UNIT * 4, 0, HEADER_UNIT * 2 + TABLE_SPAN);
-          line(CELL_SPAN * 3, HEADER_UNIT * 4, 0, HEADER_UNIT * 2 + TABLE_SPAN);
-          line(TABLE_SPAN, HEADER_UNIT * 2, 0, HEADER_UNIT * 4 + TABLE_SPAN);
-          ctx.font = "12pt Helvetica";
-          print(name, 2 * CELL_SPAN, HEADER_UNIT);
-          ctx.font = "10pt Helvetica";
-          print("refChoice: False", CELL_SPAN, HEADER_UNIT * 3);
-          print("refChoice: True", CELL_SPAN * 3, HEADER_UNIT * 3);
-          ctx.font = "8pt Helvetica";
-          print("move:false", CELL_SPAN / 2, HEADER_UNIT * 5);
-          print("move:true", CELL_SPAN + CELL_SPAN / 2, HEADER_UNIT * 5);
-          print("move:false", CELL_SPAN * 2 + CELL_SPAN / 2, HEADER_UNIT * 5);
-          print("move:true", CELL_SPAN * 3 + CELL_SPAN / 2, HEADER_UNIT * 5);
+          if (noWaitActuallyDoSignalling) {
+            ctx.lineWidth = 0.5;
+            line(0, HEADER_UNIT * 4, TABLE_SPAN / 2, 0);
+            line(0, HEADER_UNIT * 2, TABLE_SPAN / 2, 0);
+            line(0, HEADER_UNIT * 2, 0, HEADER_UNIT * 4 + TABLE_SPAN / 2);
+            line(CELL_SPAN, HEADER_UNIT * 4, 0, HEADER_UNIT * 2 + TABLE_SPAN / 2);
+            line(TABLE_SPAN / 2, HEADER_UNIT * 2, 0, HEADER_UNIT * 4 + TABLE_SPAN / 2);
+            ctx.font = "12pt Helvetica";
+            print(name, CELL_SPAN, HEADER_UNIT);
+            ctx.font = "10pt Helvetica";
+            print(i$__21 == 1 ? "send" : "receive", CELL_SPAN, HEADER_UNIT * 3);
+            ctx.font = "8pt Helvetica";
+            print("false", CELL_SPAN / 2, HEADER_UNIT * 5);
+            print("true", CELL_SPAN + CELL_SPAN / 2, HEADER_UNIT * 5);
+          } else {
+            ctx.lineWidth = 1.5;
+            line(2 * CELL_SPAN, HEADER_UNIT * 2, 0, HEADER_UNIT * 4 + TABLE_SPAN);
+            ctx.lineWidth = 0.5;
+            line(0, HEADER_UNIT * 4, TABLE_SPAN, 0);
+            line(0, HEADER_UNIT * 2, TABLE_SPAN, 0);
+            line(0, HEADER_UNIT * 2, 0, HEADER_UNIT * 4 + TABLE_SPAN);
+            line(CELL_SPAN, HEADER_UNIT * 4, 0, HEADER_UNIT * 2 + TABLE_SPAN);
+            line(CELL_SPAN * 3, HEADER_UNIT * 4, 0, HEADER_UNIT * 2 + TABLE_SPAN);
+            line(TABLE_SPAN, HEADER_UNIT * 2, 0, HEADER_UNIT * 4 + TABLE_SPAN);
+            ctx.font = "12pt Helvetica";
+            print(name, 2 * CELL_SPAN, HEADER_UNIT);
+            ctx.font = "10pt Helvetica";
+            print("refChoice: False", CELL_SPAN, HEADER_UNIT * 3);
+            print("refChoice: True", CELL_SPAN * 3, HEADER_UNIT * 3);
+            ctx.font = "8pt Helvetica";
+            print("move:false", CELL_SPAN / 2, HEADER_UNIT * 5);
+            print("move:true", CELL_SPAN + CELL_SPAN / 2, HEADER_UNIT * 5);
+            print("move:false", CELL_SPAN * 2 + CELL_SPAN / 2, HEADER_UNIT * 5);
+            print("move:true", CELL_SPAN * 3 + CELL_SPAN / 2, HEADER_UNIT * 5);
+          }
         }
       }
     } catch ($__9) {
@@ -6607,6 +6646,7 @@ System.get("traceur-runtime@0.0.91/src/runtime/polyfills/polyfills.js" + '');
     }
   }
   function wireGame(codeTextArea1, codeTextArea2, rateLabel, countLabel, judgementLabel, errLabel, resultsDiv, canvas, initialCode1, initialCode2, precomputedInitialOutcome, asyncGameRunner) {
+    var noWaitActuallyDoSignalling = arguments[12] !== (void 0) ? arguments[12] : false;
     codeTextArea1.value = initialCode1;
     codeTextArea2.value = initialCode2;
     var ctx = canvas.getContext('2d');
@@ -6647,9 +6687,9 @@ System.get("traceur-runtime@0.0.91/src/runtime/polyfills/polyfills.js" + '');
         return asyncGameRunner(s1, s2, GAME_RUNS_PER_CHUNK, cancellorAdd);
       }, function(partialOutcomes) {
         totalOutcomes = totalOutcomes.mergedWith(partialOutcomes);
-        drawOutcomeStats(ctx, totalOutcomes, function(e) {
+        drawChshOutcomeStats(ctx, totalOutcomes, function(e) {
           return labelEventualSet(Promise.resolve(e));
-        });
+        }, noWaitActuallyDoSignalling);
       }, function(ex) {
         return labelEventualSet(delayed(ex, SHOW_ERR_GRACE_PERIOD, true));
       }, RUN_CHUNK_COUNT, RUN_CONCURRENCY, cancellorAdd);
@@ -6704,13 +6744,13 @@ System.get("traceur-runtime@0.0.91/src/runtime/polyfills/polyfills.js" + '');
         }
       }
     }
-    drawOutcomeStats(ctx, precomputedInitialOutcome, function(e) {
+    drawChshOutcomeStats(ctx, precomputedInitialOutcome, function(e) {
       return labelEventualSet(Promise.resolve(e));
-    });
+    }, noWaitActuallyDoSignalling);
   }
   return {
-    get drawOutcomeStats() {
-      return drawOutcomeStats;
+    get drawChshOutcomeStats() {
+      return drawChshOutcomeStats;
     },
     get wireGame() {
       return wireGame;
@@ -6721,7 +6761,7 @@ System.get("traceur-runtime@0.0.91/src/runtime/polyfills/polyfills.js" + '');
 ;System.registerModule("src/engine/Superposition.js", [], function() {
   "use strict";
   var __moduleName = "src/engine/Superposition.js";
-  var ROTATE_FUNC_STRING = "\n    (function(amps, target_bit_index, axis, theta, control_bit_indices) {\n        if (control_bit_indices === undefined) control_bit_indices = [];\n        var n = amps.length/2;\n        var x = axis[0];\n        var y = axis[1];\n        var z = axis[2];\n        // U = |z    x-iy|\n        //     |x+iy   -z|\n\n        // p = (-1)^t = cos(theta) + i sin(theta)\n        var pr = Math.cos(theta);\n        var pi = Math.sin(theta);\n\n        // M = U^t = ( (1+p)*I + (1-p)*U )/2 = | 1+p+(1-p)z    (1-p)(x-iy) |\n        //                                     | (1-p)(x+iy)    1+p-(1-p)z |\n        // Well, this ended up kind of complicated...\n        var ar = (1 + pr + z - pr*z)/2;\n        var ai = (pi - pi*z)/2;\n        var br = (x - pr*x - pi*y)/2;\n        var bi = (-y + pr*y - pi*x)/2;\n        var cr = (x - pr*x + pi*y)/2;\n        var ci = (y - pr*y - pi*x)/2;\n        var dr = (1 + pr - z + pr*z)/2;\n        var di = (pi + pi*z)/2;\n\n        for (var i = 0; i < n; i++) {\n            // Only process each amplitude pair once.\n            var skip = (i & (1 << target_bit_index)) !== 0;\n            // Skip parts of the superposition where control bits are off.\n            for (var k = 0; k < control_bit_indices.length; k++) {\n                skip |= (i & (1 << control_bit_indices[k])) === 0;\n            }\n            if (skip) continue;\n\n            var j1 = i*2;\n            var j2 = j1 + (2 << target_bit_index);\n\n            var ur = amps[j1];\n            var ui = amps[j1+1];\n            var vr = amps[j2];\n            var vi = amps[j2+1];\n\n            // | a b | |u| = |au+bv|\n            // | c d | |v|   |cu+dv|\n            var ur2 = ar*ur - ai*ui + br*vr - bi*vi;\n            var ui2 = ar*ui + ai*ur + br*vi + bi*vr;\n            var vr2 = cr*ur - ci*ui + dr*vr - di*vi;\n            var vi2 = cr*ui + ci*ur + dr*vi + di*vr;\n\n            amps[j1] = ur2;\n            amps[j1+1] = ui2;\n            amps[j2] = vr2;\n            amps[j2+1] = vi2;\n        }\n    })";
+  var ROTATE_FUNC_STRING = "\n    (function(amps, target_bit_index, axis, theta, control_bit_indices) {\n        if (control_bit_indices === undefined) control_bit_indices = [];\n        var n = amps.length/2;\n        var x = axis[0];\n        var y = axis[1];\n        var z = axis[2];\n        // U = |z    x-iy|\n        //     |x+iy   -z|\n\n        var isGoodNumber = function(val) {\n            return typeof val === \"number\" && isFinite(val) && val > -100000 && val < 100000;\n        };\n        if (!isGoodNumber(theta)) throw Error(\"Bad turn angle\");\n        if (!isGoodNumber(x)) throw Error(\"Bad turn axis x\");\n        if (!isGoodNumber(y)) throw Error(\"Bad turn axis y\");\n        if (!isGoodNumber(z)) throw Error(\"Bad turn axis z\");\n        var e = x*x + y*y + z*z - 1;\n        if (e*e > 0.0001) throw Error(\"Bad turn axis length\")\n\n        // p = (-1)^t = cos(theta) + i sin(theta)\n        var pr = Math.cos(theta);\n        var pi = Math.sin(theta);\n\n        // M = U^t = ( (1+p)*I + (1-p)*U )/2 = | 1+p+(1-p)z    (1-p)(x-iy) |\n        //                                     | (1-p)(x+iy)    1+p-(1-p)z |\n        // Well, this ended up kind of complicated...\n        var ar = (1 + pr + z - pr*z)/2;\n        var ai = (pi - pi*z)/2;\n        var br = (x - pr*x - pi*y)/2;\n        var bi = (-y + pr*y - pi*x)/2;\n        var cr = (x - pr*x + pi*y)/2;\n        var ci = (y - pr*y - pi*x)/2;\n        var dr = (1 + pr - z + pr*z)/2;\n        var di = (pi + pi*z)/2;\n\n        for (var i = 0; i < n; i++) {\n            // Only process each amplitude pair once.\n            var skip = (i & (1 << target_bit_index)) !== 0;\n            // Skip parts of the superposition where control bits are off.\n            for (var k = 0; k < control_bit_indices.length; k++) {\n                skip |= (i & (1 << control_bit_indices[k])) === 0;\n            }\n            if (skip) continue;\n\n            var j1 = i*2;\n            var j2 = j1 + (2 << target_bit_index);\n\n            var ur = amps[j1];\n            var ui = amps[j1+1];\n            var vr = amps[j2];\n            var vi = amps[j2+1];\n\n            // | a b | |u| = |au+bv|\n            // | c d | |v|   |cu+dv|\n            var ur2 = ar*ur - ai*ui + br*vr - bi*vi;\n            var ui2 = ar*ui + ai*ur + br*vi + bi*vr;\n            var vr2 = cr*ur - ci*ui + dr*vr - di*vi;\n            var vi2 = cr*ui + ci*ur + dr*vi + di*vr;\n\n            amps[j1] = ur2;\n            amps[j1+1] = ui2;\n            amps[j2] = vr2;\n            amps[j2+1] = vi2;\n        }\n    })";
   var MEASURE_FUNC_STRING = "\n    (function(amps, target_bit_index) {\n        var n = amps.length / 2;\n        // Weigh.\n        var p = 0;\n        for (var i = 0; i < n; i++) {\n            if ((i & (1 << target_bit_index)) !== 0) {\n                var vr = amps[i*2];\n                var vi = amps[i*2+1];\n                p += vr*vr + vi*vi;\n            }\n        }\n\n        // Collapse.\n        var outcome = Math.random() < p;\n\n        // Renormalize.\n        var w = Math.sqrt(outcome ? p : 1-p);\n        for (var i = 0; i < n; i++) {\n            var b = (i & (1 << target_bit_index)) !== 0;\n            if (b === outcome) {\n                amps[i*2] /= w;\n                amps[i*2+1] /= w;\n            } else {\n                amps[i*2] = 0;\n                amps[i*2+1] = 0;\n            }\n        }\n\n        return outcome;\n    })";
   return {
     get ROTATE_FUNC_STRING() {
@@ -6746,6 +6786,7 @@ System.get("traceur-runtime@0.0.91/src/runtime/polyfills/polyfills.js" + '');
   var ASYNC_EVAL_TIMEOUT = 2000;
   var classicalRecorded = [25186, 0, 12553, 12494, 0, 0, 0, 0, 24718, 0, 12468, 12581, 0, 0, 0, 0];
   var quantumRecorded = [10813, 1734, 10416, 1875, 1832, 10833, 1840, 10619, 10581, 1835, 1849, 10811, 1817, 10643, 10672, 1830];
+  var signallingRecorded = [24921, 0, 0, 0, 24960, 0, 0, 0, 25070, 0, 0, 0, 25049, 0, 0, 0];
   var precomputedClassicalOutcomeForDefaultStrategy = ChshGameOutcomeCounts.fromCountsByMap(Seq.range(16).toMap(function(i) {
     return ChshGameOutcomeCounts.caseToKey(i & 8, i & 2, i & 4, i & 1);
   }, function(i) {
@@ -6756,12 +6797,20 @@ System.get("traceur-runtime@0.0.91/src/runtime/polyfills/polyfills.js" + '');
   }, function(i) {
     return quantumRecorded[i];
   }));
+  var precomputedSignallingOutcomeForDefaultStrategy = ChshGameOutcomeCounts.fromCountsByMap(Seq.range(16).toMap(function(i) {
+    return ChshGameOutcomeCounts.caseToKey(i & 8, i & 2, i & 4, i & 1);
+  }, function(i) {
+    return quantumRecorded[i];
+  }));
   wireGame(document.getElementById('srcTextArea1_a'), document.getElementById('srcTextArea2_a'), document.getElementById('rateLabel_a'), document.getElementById('countLabel_a'), document.getElementById('judgementLabel_a'), document.getElementById('errorLabel_a'), document.getElementById('resultsTable_a'), document.getElementById('drawCanvas_a'), "// write any strategy you want!\nmove = false", "// write any strategy you want!\nmove = refChoice && sharedBits[0]", precomputedClassicalOutcomeForDefaultStrategy, function(code1, code2, runs, cancellor) {
     return asyncEvalClassicalChshGameRuns(code1, code2, runs, ASYNC_EVAL_TIMEOUT, SHARED_BIT_COUNT, cancellor);
   });
   wireGame(document.getElementById('srcTextArea1_b'), document.getElementById('srcTextArea2_b'), document.getElementById('rateLabel_b'), document.getElementById('countLabel_b'), document.getElementById('judgementLabel_b'), document.getElementById('errorLabel_b'), document.getElementById('resultsTable_b'), document.getElementById('drawCanvas_b'), "turn(X, -45) //rotate qubit -45\u00B0 around X axis\nif (refChoice) turn(X, 90)\nmove = measure()", "if (refChoice) turn(X, 90)\nmove = measure()", precomputedQuantumOutcomeForDefaultStrategy, function(code1, code2, runs, cancellor) {
     return asyncEvalQuantumChshGameRuns(code1, code2, runs, ASYNC_EVAL_TIMEOUT, cancellor);
   });
+  wireGame(document.getElementById('srcTextArea1_c'), document.getElementById('srcTextArea2_c'), document.getElementById('rateLabel_c'), document.getElementById('countLabel_c'), document.getElementById('judgementLabel_c'), document.getElementById('errorLabel_c'), document.getElementById('resultsTable_c'), document.getElementById('drawCanvas_c'), "if (refChoice) {\n  turn(X, 90)\n  measure()\n}", "turn(Y, 45)\nmove = measure()", precomputedQuantumOutcomeForDefaultStrategy, function(code1, code2, runs, cancellor) {
+    return asyncEvalQuantumChshGameRuns("move=false;" + code1, code2, runs, ASYNC_EVAL_TIMEOUT, cancellor);
+  }, true);
   return {};
 });
 //# sourceURL=src/main.js
