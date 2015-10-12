@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "YOU versus Bell Tests and the No Commmunication Theorem"
+title: "YOU versus Bell Tests and the No Communication Theorem"
 date: 2015-10-11 11:30:00 EST
 categories: quantum
 comments: true
