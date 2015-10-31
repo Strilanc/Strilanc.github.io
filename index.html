@@ -4,7 +4,12 @@ title: "Algorithmic Assertions - Craig Gidney's Computer Science Blog"
 ---
 
 <div id="home">
-  <h1 class="posts_list_title">Posts</h1>
+  <h1 class="posts_list_title">
+  	Posts
+  	<a href="/feed.xml">
+  	  <img src="/assets/feed-icon.png" width="24px" alt="Posts Feed" title="Posts Feed" style="vertical-align: text-top;"></img>
+  	</a>
+  </h1>
   <ul class="posts">
     {% for post in site.posts %}
       <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
