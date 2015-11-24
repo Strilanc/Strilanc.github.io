@@ -41,11 +41,14 @@ _**But I didn't want the collector to be a normal detector.**_
 
 I was interested in making the photon's various possible paths, which had different arrival times, interfere with each other.
 So I assumed a different kind of collector, which I'll call a "quantum latch" here.
-The quantum latch is very simple: it stores a qubit, and whenever a photon hits (and is absorbsed by) the latch, the qubit is toggled.
+The quantum latch is very simple: it stores a qubit, and whenever a photon hits (and is absorbed by) the latch, the qubit is toggled.
 
-To find out whether or not the photon was absorbed by the latch, just measure the latch's qubit.
-Is it still Off, as it was before you released the photon?
-Then the photon was still in the loop.
+Spoiler alert: the previous paragraph describes an impossible device.
+But for now let's continue like I did, blissfully ignorant, and see what symptoms result.
+
+The basic operational idea behind the latch is that, by measuring its qubit, you can find out whether or not the photon was absorbed yet.
+Is the qubit still Off, as it was before you released the photon?
+Then the photon was still in the loop when you measured.
 By running multiple experiments and measuring the latch at different times, you can track how the photon decays out of the loop and into the latch's qubit.
 
 # Decaying Probabilities
