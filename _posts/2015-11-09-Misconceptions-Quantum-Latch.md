@@ -134,7 +134,9 @@ Was it absorbed a nanosecond ago? Twenty years ago?
 You can't tell, and this prevents you from reversing the evolution.
 
 So the quantum latch is impossible; it violates the unitarity postulate of quantum mechanics.
-In fact, it exemplifies *why* evolution has to be unitary: non-unitary operations can create illogical situations where there's a more-than-100% chance of something happening, or a less-than-100% chance of *anything* happening.
+In fact, it exemplifies *why* the evolution has to be unitary: intermediate steps had possibilities that didn't add up to 100%!
+It was just an unlucky coincidence that the layout I chose obscured the problem by converging to a 100%-photon-in-sink state, instead of something ridiculous like 256%-photon-in-sink.
+That's the kind of thing that happens when your quantum operations don't preserve total squared magnitude.
 
 One way to fix the problem with the latch is to have it store the photon absorption times.
 For example, we could have the latch store an integer instead of a bit, have the photon trigger the 0-to-1 transition, and increment non-zero values after each time step.
@@ -144,5 +146,7 @@ All these new latch count states would distinguish between early-arrival paths a
 # Summary
 
 Quantum state transitions must be reversible.
+
+A device that absorbs a photon to flip a qubit is impossible, because time-of-arrival information is lost and that breaks reversibility.
 
 When you break reality's rules without realizing, weird things happen.
