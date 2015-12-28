@@ -13,7 +13,7 @@ In this post I'll go over the quantum teleportation process, and outline a few p
 
 **Quantum Teleportation**
 
-In case I can't explain things, [here's a video explanation of quantum teleportation by someone else](http://www.youtube.com/watch?v=w5rCn593Dig). You may have to watch the whole series of videos it's part of before things click, though.
+In case I can't explain things, [here's a video explanation of quantum teleportation by someone else](https://www.youtube.com/watch?v=3wZ35c3oYUE&list=PL1826E60FD05B44E4&index=18). You may have to watch the whole series of videos it's part of before things click, though.
 
 My circuit diagram for quantum teleportation is a lot like [the one for superdense coding](http://i.imgur.com/mXHpdbB.png), except the encoding and decoding steps are swapped:
 
