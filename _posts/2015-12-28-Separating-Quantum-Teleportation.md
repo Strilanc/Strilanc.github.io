@@ -91,3 +91,8 @@ That's because they are the two sub-tasks we can split quantum teleportation int
 # Summary
 
 Quantum teleportation can be split into two sub-tasks: a reduced form of quantum teleportation that copy-sends a qubit instead of moving a qubit, and a technique for erasing entanglement using only local quantum operations and classical communication.
+
+**Update:**
+I should really mention that, of course, you can break down the circuit further.
+I picked the split I did, and stopped at that coarseness, because the result was two LOCC coordination primitives that I found interesting.
+Smaller pieces, like "create an EPR pair" or "perform a bell basis measurement", are also interesting (and useful!)... they just don't involve any coordination and that's where I happened to draw the line.
