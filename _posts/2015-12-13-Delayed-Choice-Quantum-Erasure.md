@@ -8,19 +8,19 @@ comments: true
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
 
-If there was a prize for "most misunderstood experiment", I would award it to the [delayed choice quantum eraser](https://en.wikipedia.org/wiki/Delayed_choice_quantum_eraser).
-Popular presentations of the delayed choice quantum eraser experiment (hereafter just called the DCQE) treat it as a grand world-view-shattering mystery, with implied powers ranging from sending messages backwards in time to demonstrating the existence of conscious knowledge.
+If there was a prize for "most misunderstood experiment", the [delayed choice quantum eraser](https://en.wikipedia.org/wiki/Delayed_choice_quantum_eraser) would be a strong contender.
+Popular presentations of the DCQE tend to treat it as a grand world-view-shattering mystery, with implied powers ranging from sending messages backwards in time to demonstrating the existence of conscious knowledge.
 My goal in this post is to explain why that is not the case.
 
-Examples of these misconceptions are all over Q&A sites and forums, not to mention pop science articles.
-A particularly eggregious example is that a top result I get when googling "delayed choice quantum eraser" is [a video](https://www.youtube.com/watch?v=U7Z_TIw9InA) that mashes scenes from [What the #$*! Do We (K)now!?](http://www.imdb.com/title/tt0399877/) and the ["Microscopic Universe" episode of The Universe](http://www.imdb.com/title/tt2356685/).
-Both clips heavily imply that it's a person looking at the experiment that causes collapse, and by "heavily imply" I mean [literally showing a graphic of person turning waves into particles by opening their eyes](https://youtu.be/vnN85i_75EI?t=18m15s).
-The "Microscopic Universe" episode then goes on to talk about how we're only starting to grasp what this means for changing the past, and that reality is a figment of our imagination.
+Examples of misconceptions about the DCQE are all over the internet.
+Case in point: I googled "delayed choice quantum eraser", and the third result was [a video](https://www.youtube.com/watch?v=U7Z_TIw9InA).
+A video that's just a scene from the infamous [What the #$*! Do We (K)now!?](http://www.imdb.com/title/tt0399877/) pseudo-documentary followed by a scene from [a terrible episode of "The Universe"](http://www.imdb.com/title/tt2356685/).
+Both clips incorrectly imply that collapse is caused by humans looking in the general direction of an experiment, except that by "imply" I mean [literally showing a graphic of person turning waves into particles by opening their eyes](https://youtu.be/vnN85i_75EI?t=18m15s).
 (My eyes tried to roll right out of my skull.)
 
-In this post I will explain what you'd actually see if you ran a DCQE, and the underlying mathematical model.
 The DCQE may be counter-intuitive, it may be *interesting*, but it's not *mysterious* or *magical*.
 Interpretations of quantum mechanics explain it just fine without any reference to consciousness or backwards-in-time effects.
+In this post I will explain what you'd actually see if you ran a DCQE, and a simplified mathematical model of what's going on.
 
 # The Experiment
 
@@ -30,31 +30,38 @@ It builds on the classic double-slit experiment, then throws in entanglement and
 The core idea behind the experiment is to make an entangled copy of the which-slit-did-the-photon-go-through information.
 This entangled copy can then be measured to reveal an interference pattern hiding in results that apparently had no interference pattern.
 
-The most well known DCQE experiment is the one done by Kim et al. in 2000.
+The most famous DCQE experiment was done by Kim et al. in the year 2000.
 Taking a bit of insspiration from [one of the sites Wikipedia linked to](http://strangepaths.com/the-quantum-eraser-experiment/2007/03/20/en/), and as little inspiration as possible from [wikipedia's diagram](https://en.wikipedia.org/wiki/File:Kim_EtAl_Quantum_Eraser.svg), I made this diagram summarizing the setup:
 
 <img src="/assets/{{ loc }}/dcqe-photon-diagram.png" title="Over-simplified experimental setup diagram"/>
 
 I need to emphasize that this diagram is over-simplified.
 For example, the actual experiment has various lenses and prisms to direct the photons.
-It also uses detectors feeding to an electronic counter instead of screens.
+It also doesn't use screens; it uses synchronized detectors all connected to an electronic counter.
 
-Anyways, the process the diagram is intended to communicate is:
+Anyways, the process the diagram is intended to communicate is that the experiment works by having:
 
-1. **Entangled Superposition**:
+1.
+**Entangled Superposition**:
 A photon arrives, encounters the wall with two slits, and passes through the slits.
 This puts the photon's position into a superposition.
 Special crystals then [split the photon into two photons](https://en.wikipedia.org/wiki/Spontaneous_parametric_down-conversion).
-2. **Delayed**:
+
+2.
+**Delayed**:
 One of the resulting photons does the normal double-slit thing, building up an apparent lack-of-interference pattern on the interference screen.
 The other photon embodies the which-way information, and its journey is represented by the right half of the diagram.
-3. **Choice**:
+
+3.
+**Choice**:
 The "choice" to erase or not is performed by two beam splitters, one for the top slit and one for the bottom slit, acting on the which-way photon.
 (I think this is the weakest part of the setup, since using beam splitters is a bit like making both choices, but whatever it works fine.)
 If the which-way photon passes through the beam splitters without being reflected, its impact point at the top or bottom tells us which slit the original photon passed through.
 But if the which-way photon is reflected by the splitters then, regardless of the starting slit, the photon will show up in each erased case half of the time.
 This unconditional 50/50 split is how the which-way information is "erased".
-4. **Recovery**:
+
+4.
+**Recovery**:
 By grouping runs of the experiment into buckets based on where the which-way photon hit the which-way screen, and looking at the pattern on the interference screen built up by photons from each bucket individually, we find some interesting patterns.
 The top and bottom case buckets show nothing interesting happening, but the erased case buckets filter the apparent lack-of-interference pattern into sub interference patterns!
 
@@ -71,93 +78,68 @@ It's only when Alice and Bob get back together and compare notes, grouping Bob's
 
 # A Simplified Model
 
-This experiment is a lot clearer if you think in terms of qubits, instead of self-interfering photon paths.
+In my opinion, DCQE is a lot simpler if you think in terms of qubits.
 
-In the optical experiment, we have a photon in a superposition of going through the top slit and the bottom slit.
-It is the state $\frac{1}{\sqrt{2}} \ket{\text{top}} + \frac{1}{\sqrt{2}} \ket{\text{bottom}}$.
-We then create an entangled partner photon at the same slit, so we end up in this situation:
-$\frac{1}{\sqrt{2}} \ket{\text{top}\_1}\ket{\text{top}\_2} + \frac{1}{\sqrt{2}} \ket{\text{bottom}\_1}\ket{\text{bottom}\_2}$.
+In the optical experiment, a photon is placed into a superposition of going through the left slit or the right slit.
+This can be represented by a qubit: we'll call it $A$, use $A = \ket{0}$ to mean "went through the left slit", and $A = \ket{1}$ to mean "went through the right slit".
+After passing through the slits, but before the photon is down-converted into two photons, we're in the state $A = \frac{1}{\sqrt{2}} \ket{0} + \frac{1}{\sqrt{2}} \ket{1}$.
+The two photons resulting from down-conversion are in the same place, and entangled.
+They are in the state $AB = \frac{1}{\sqrt{2}} \ket{00} + \frac{1}{\sqrt{2}} \ket{11}$.
+In other words, they form an EPR pair.
 
-In an optical experiment this requires crazy non-linear crystals and there's frequency changes and... bleh.
-In a quantum circuit it's simpler, though more abstract.
-We'll represent the path information as qubits, with bottom corresponding to 0 while top corresponds to 1.
-So what we've done is create an EPR pair $\frac{1}{\sqrt{2}} \ket{00} + \frac{1}{\sqrt{2}} \ket{11}$
+We also need to translate the outcomes of the experiment.
+What does an interference pattern appearing on a screen mean, in terms of our qubits?
+Basically, it has to do with how the qubit varies as it is rotated around the X axis.
+If applying $X^t$ transformations to the qubit before measuring it changes how often we observe it to be ON or OFF, then it is "forming an interference pattern".
+If the $X^t$ operations have no effects, and the qubit is always 50/50 ON/OFF, then that corresponds to a lack-of-interference pattern.
 
-If we measure the second qubit in the computational basis we will reveal the value of the first qubit.
-But if we rotate the second qubit first, so we end up measuring it along a different axis, then we reveal something different about the first qubit.
-Instead of finding out if it's in the state $\ket{0}$ or $\ket{1}$, we find out if it's in the state $\ket{0}+\ket{1}$ or $\ket{0}-\ket{1}$.
+So our circuit will start by creating an EPR pair in the usual way (with a Hadamard gate and a controlled NOT gate).
+Then it will rotate Alice's qubit around the X axis and measure it.
+Then Bob chooses to either erase or reveal his information about Alice's qubit, by respectively applying or not applying a Hadamard gate before measuring.
 
-# Misconceptions Clarified
+Alice will always see a 50/50 frequency for her qubit being on and off.
+But, if we use Bob's measurement result to group her outcomes, things change.
 
-1. **You never *see* an interference pattern**.
-You will see the same thing on the test screen whether or not your partner chooses to erase or reveal the which-way information.
-Recovering the hidden interference pattern requires post-hoc splitting of the test-photon impacts into groups based on the outcome of a measurement (but that measurement can only be performed in the erasure case).
+When Bob *erases* his which-way information about Alice's qubit, conditioning on his measurement result does nothing.
+It's always 50/50 chances:
 
-2. **Backwards-in-time effects aren't needed**.
-My explanation of how the system's state was changing never involved rewriting previous states of the system.
-The assertions of retro-causality always come down to assuming the complementarity principle.
-The complementarity principle is simply wrong; quantum things simply aren't classical particles or classical waves.
+<img src="/assets/{{ loc }}/cycle-erased.gif" title="Erasing an EPR pair's entanglement"/>
 
-3. **Consciousness has nothing to do with it**.
-The experiment does the same stuff whether or not someone is in the room flirting with it.
+But if Bob instead *reveals* the which-way information, conditioning on his measurement suddenly throws the outputs all over the place!
+There's an interference pattern in the buckets:
 
+<img src="/assets/{{ loc }}/cycle-revealed.gif" title="Revealing an EPR pair's value"/>
 
+Actually, framed this way, the experiment seems kind of dumb.
+It basically says that if Bob measures along the same axis as Alice, he learns something about the value she measured.
+But if he measures along a perpendicular axis, he instead won't learn anything.
+That's just basic facts about EPR pairs!
 
-
-
-
-
-
-
-
-Alice creates an entangled pair of photons and performs tests on them that detect entanglement. All the tests come up negative.
-
-Bob measure his qubit along the right axis. There is a qubit for every one of Alice's experiments.
-
-Based on Bob's measurement, we group Alice's results into two groups.
-
-Within each group, entanglement is detected!
-
--------
-
-More specific:
-
-Entanglement really comes down to correlation along more than one axis at a time.
-
-Physicists love the singlet state because it disagrees along all 3 at the same time.
-
-There are three other distinct ways to be entangled, where you disagree along one axis but agree along the other two.
-
-Also you can be in a combination of the four.
-
-Now suppose you're in one of the four entangled states, but you don't know which one. Suppose it's X half the time or singlet half the time.
-
-When it's X we get agree,agree,disagree.
-When it's S we get dis, dis, dis.
-Together we get half-agree + dis/2, dis/2+agree/2, dis/2 + dis/2.
-Half dis and half agree is just random.
-So we see random, random, disagree.
-
-That's just normal correlation, not entanglement.
-
-The same thing will happen with all other pairs: one agree or disagree combined with two randoms. And if all four are equally likely then you only see random. *Probabilistic mixes of entangled states look unentangled.* This is the heart.
-
-But suppose someone else knows which state was actually sent. They know if you received X or S. Then after you do your experiments they can come over and tell you "these ones were X, those ones were S" and *within each group* you will see that confirmed by the detection of the corresponding entanglement.
-
-The delayed choice experiment adds just one more wrinkle.
-The which-one-is-it information is not measured, it's encoded along the Z axis of a qubit.
-But if you measure one of the other axies, you *can't* measure the Z axies.
-Whether or not the information is truly gone depends on the interpretation you're using (Copenhagen yes, Everett no), but it is certainly *intractable to access*.
-Basically you can think of measuring along the wrong axis as burning the information.
-No one will ever know which cases were X and which were S, and that will make detecting the mutually-hiding entanglements impossible.
-
----------
-
-The math and the circuits.
-
-I covered some of this previously in 'erasing a GHZ state'.
-
-You can apply the phase correction to restore the state, but you can also do that after the fact to the measurements... sortof.
+There's no need for retrocausal effects for the same reason we don't them to explain bell tests: other mechanisms work just fine.
+You *could* use backwards-in-time shenanigans, or you could use instantaneous collapse. Or many worlds. Or shut up and calculate.
 
 # Summary
 
+1.
+**You never *see* an interference pattern**.
+The interference pattern only shows up when filtering after-the-fact, using the chooser's measurement results to group experimental runs.
+
+2.
+**Backwards-in-time effects aren't needed**.
+In the Copenhagen interpretation, the which-way photon is collapsed by the test photon hitting the screen and this explains the observations.
+In the Shut-Up-And-Calculate interpretation, you get the right answer by shutting your mouth and calculating.
+In other interpretations, other explanatory mechanisms are used (e.g. many worlds).
+You *could* use backwards-in-time effects, but you certainly don't *need* them.
+
+3.
+**Consciousness has nothing to do with this**.
+The mathematical model simply makes no mention of anything besides the equipment.
+The experiment will have the same outcome whether or not a human is present.
+
+4.
+**This experiment should have been called "The Optional Information Recovery Experiment"**.
+Because that's ultimately all we're doing: either you measure the information needed to find the hidden interference patterns, or you don't.
+If you don't measure the needed information, you can't find the hidden patterns (duh).
+
+Unfortunately, people will continue to say stupid things about this experiment.
+No doubt I've said something dumb about it in this very post.
