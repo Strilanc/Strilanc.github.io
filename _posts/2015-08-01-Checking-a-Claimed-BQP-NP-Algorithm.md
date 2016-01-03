@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Checking a Claimed BQP=NP Algorithm"
+title: "Quantum vs NP #1: Checking a Claimed BQP=NP Algorithm"
 date: 2015-08-01 11:30:00 EST
 categories: quantum
 comments: true
@@ -70,3 +70,7 @@ If we didn't have to *pay for retries*, if we were working in [PostBQP](https://
 But we do have to pay for retries, so it doesn't.
 Postselection is not free.
 Quantum suicide is never the answer.
+
+# Update
+
+In response to the author's comments below, I made [a followup post](/quantum/2015/08/27/Simulating-a-Claimed-BQP-NP-Algorithm.html) that supports my conclusion by simulating the algorithm.
