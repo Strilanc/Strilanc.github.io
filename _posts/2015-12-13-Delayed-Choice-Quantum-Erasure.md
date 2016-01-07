@@ -30,15 +30,15 @@ I'll explain what you'd actually see if you ran a DCQE, show the same effects in
 # The Experiment
 
 The DCQE experiment is like a typical [double-split experiment](https://en.wikipedia.org/wiki/Double-slit_experiment), except that an entangled copy of the which-slit-did-the-photon-go-through information is made.
-By later measuring the entangled copy of the information, you can find some hidden interference patterns.
+By later measuring the entangled copy of the information along the wrong axis, you can find some hidden interference patterns.
 The framing is that, by choosing to recover or discard the relevant information, you choose whether there was "really" an interference pattern or not.
 
-[**Non**-delayed quantum eraser experiments](https://en.wikipedia.org/wiki/Quantum_eraser_experiment) have a convenient place to store the which-sli information: in the photon's own polarization.
+[**Non**-delayed quantum eraser experiments](https://en.wikipedia.org/wiki/Quantum_eraser_experiment) have a convenient place to store the which-slit information: in the photon's own polarization.
 That works great, except that a photon's polarization tends to be measured or unrecoverable when the photon is absorbed.
 Allowing the which-way information to be measured *later*, long after the photon was absorbed, requires a different storage location.
 
 The best known DCQE experiment is [the one performed by Kim et al in 2000](https://en.wikipedia.org/wiki/Delayed_choice_quantum_eraser#The_experiment_of_Kim_et_al._.282000.29).
-They store the which-way information into the position a second photon (by using a [special crystal that splits photons into two photons](https://en.wikipedia.org/wiki/Spontaneous_parametric_down-conversion)).
+They store the which-way information into the position of a second photon (by using a [special crystal that splits photons into two photons](https://en.wikipedia.org/wiki/Spontaneous_parametric_down-conversion)).
 Wikipedia has a complicated diagram of [the optical circuit they used](https://en.wikipedia.org/wiki/File:Kim_EtAl_Quantum_Eraser.svg), but I won't subject you to that.
 Instead, taking a a few liberties and some inspiration from [one of the sites Wikipedia linked to](http://strangepaths.com/the-quantum-eraser-experiment/2007/03/20/en/), I made this alternative diagram of Kim et al's setup:
 
@@ -62,7 +62,7 @@ Its journey is represented by the right half of the diagram, and can be delayed 
 2. **Choice**:
 The "choice" to erase is performed by two beam splitters (the "choosers"), one for the top slit and one for the bottom slit.
 If the which-way photon passes through the choosers without being reflected, its impact point at the top or bottom of the which-way screen tells us which slit the original photon passed through.
-But if the which-way photon is reflected by the choosers then, regardless of the starting slit, the photon will show up in each erased case near the center of the screen half of the time.
+But if the which-way photon is reflected by the choosers then, regardless of the starting slit, an "eraser" beam splitter will distribute the photon equally between the two erased cases.
 
     Because both the top slit and bottom slit create a 50/50 split between the two erased cases (when erased), the which-way information is lost.
     It cannot be recovered.
@@ -79,10 +79,10 @@ Here is a diagram (tweaked from one on wikipedia) summarizing what you would see
 
 <img src="/assets/{{ loc }}/dcqe-photon-graph.png" title="Resulting interference patterns"/>
 
-One crucial thing to notice about the above diagram is that you always see the same thing: a lack-of-interference pattern.
+One crucial thing to notice about the above diagram is that you *see* the same thing in both the erased and revealed cases: a lack-of-interference pattern.
 You never *directly* see an interference pattern.
 The interference patterns are hidden, even in the erased cases.
-To find the missing interference patterns, you need the apparently-useless which-way erased-case information.
+To find the hidden interference patterns, you need the apparently-useless which-way erased-case information.
 This happens because the two erased cases have complementary interference patterns: when you fail to separate them they get added together, and the ripples disappear.
 
 *(Side note: Technically,  in Kim et al's setup, finding the "erased" or "revealed" subsets as shown in the diagram's 'What you see' column would also require filtering.
@@ -90,7 +90,7 @@ That's because Kim et al use beam splitters instead of controllable mirrors to d
 They can't control which choice was made; they have to deduce which choice happened based on where the which-way photon landed.
 However, because the erased and revealed plots look exactly the same as the total plot, you're not missing out on much.)*
 
-The 'What you can see' column of the diagram is my answer to anyone who thinks DCQE can perform FTL communication "because Bob sees an interference pattern as soon as Alice erases the which-way information".
+The 'What you can see' column of the diagram is my answer to anyone who thinks DCQE can perform faster-than-light communication "because Bob sees an interference pattern as soon as Alice erases the which-way information".
 Even when Alice erases the which-way information, Bob doesn't see an interference pattern.
 It's only when Alice and Bob get back together and compare notes, grouping Bob's results based on Alice's erasure measurement outcomes, that the hidden interference patterns can be revealed.
 
@@ -113,38 +113,40 @@ Now the photon gets [SPDC](https://en.wikipedia.org/wiki/Spontaneous_parametric_
 Call the second photon $B$.
 The SPDC puts us into the state $AB = \frac{1}{\sqrt{2}} \ket{00} + \frac{1}{\sqrt{2}} \ket{11}$.
 In other words, the positions of the two photons form an [EPR pair](https://en.wikipedia.org/wiki/Bell_state).
+They are entangled.
 
 The appearance of an interference pattern (or lack thereof) can also be translated from photons to qubits.
 The relevant common property is [coherence](https://en.wikipedia.org/wiki/Coherence_%28physics%29#Quantum_coherence).
 When a photon is coherent, it can interfere with itself.
-A decohered photon won't interfere with itself.
+But a decohered photon won't interfere with itself.
 So we can think of DCQE as playing with whether or not a photon was coherent.
 
+Qubits can also be coherent or decohered.
 When a qubit is coherent, it has a "preferred direction" corresponding to a point on the surface of the [Bloch sphere](https://en.wikipedia.org/wiki/Bloch_sphere).
 An experiment where you prepare a coherent qubit, then measure along the preferred direction, will give the same answer every time.
-A fully decohered qubit has no preferred direction; its state corresponds to the center of the Bloch sphere.
+A fully decohered qubit has no preferred direction; its state corresponds to the *center* of the Bloch sphere.
 No matter which axis you measure a fully decohered qubit along, your results will look like coin flips.
 
-It so happens that, because entanglement is *suspiciously similarly* to measurement, qubits in an EPR pair appear to be fully decohered.
-It's only when you later compare results that you see they were coherent as a pair, instead of individually.
-We'll use this as our analogue for DCQE.
+It so happens that, because entanglement is *suspiciously similar* to measurement, qubits in an EPR pair appear to be fully decohered.
+It's only when you later compare results that you see they were coherent *as a pair*, instead of individually.
+DCQE is basically nothing but a reframing of this fact.
 
-More concretely, we're translating "is there an interference pattern?" into "does measuring the position qubit along different axes give different probabilities?".
+Concretely speaking, we're going to translate "does the photon make an interference pattern?" into "does measuring the qubit along different axes give probabilities other than 50/50?".
 We will run the qubit experiment many times, rotate Alice's qubit ($A$) by various amounts around the X axis, and see if the chance of getting ON when measuring $A$ in the computational basis stays at 50% or not.
-Because $A$ is part of an EPR pair, it will in fact stay at 50% and we will "conclude" that it is decohered.
+Because $A$ is part of an EPR pair, it will in fact stay at 50% and we will "conclude" that $A$ is decohered.
 
-After "confirming" that $A$ is decohered, we will measure Bob's qubit ($B$).
-We'll group our measurements of $A$ into a $B$-was-OFF bucket and a $B$-was-ON bucket, and see if we can find some hidden coherence.
-Two cases will be considered: one where Bob measures along the same axis as Alice, and one where Bob measures along a perpendicular axis.
+After "confirming" that $A$ is decohered, we will measure Bob's qubit ($B$, which was entangled with $A$).
+We'll group our measurements of $A$ into a $B$-was-OFF bucket and a $B$-was-ON bucket, and see if we can find some "hidden coherence".
+Two cases will be considered: one where Bob measures along an axis perpendicular to the ones Alice is using, and one where Bob just measures in the computational basis.
 
-Here's what happens when Bob measures along the same axis as Alice:
+Here's what happens when Bob just measures in the computational basis:
 
 <img src="/assets/{{ loc }}/cycle-revealed.gif" title="Revealing an EPR pair's value"/>
 
-As you can see above, initially Alice concludes that the qubit is decohered (i.e. she "doesn't see an interference pattern") because the measurement acts like a 50/50 coin flip.
-However, because Bob is measuring along the same axis as Alice and $A$ and $B$ form an EPR pair, his results are correlated with hers.
+As you can see above, initially Alice concludes that the qubit is decohered because the measurement always acts like a 50/50 coin flip even as she tries various rotations around the X axis (i.e. she "doesn't see an interference pattern").
+However, because Bob is measuring along a similar axis, and $A$ and $B$ form an EPR pair, his results are correlated with hers (more and less, as their measurement axies go into and out of alignment).
 So, when we group $A$ based on Bob's results, we don't see a 50/50 split anymore.
-So Alice concludes her qubit was secretly coherent (i.e. she "sees the hidden interference pattern").
+Given this, we conclude that Alice's qubit was "secretly coherent" (i.e. we "find the hidden interference pattern").
 
 Now for the "erased" case, where Bob measures along a perpendicular axis:
 
@@ -154,37 +156,40 @@ Bob's results are no longer correlated with Alice's, so grouping based on them d
 Alice concludes that her qubit was "really truly decohered".
 
 You might have noticed I used a lot of "air-quotes" in this section.
-That's because basically all of the conclusions are misleading.
+That's because basically all of the "conclusions" are misleading.
 They're a result of trying to force "$A$ and $B$ are entangled" into a false dichotomy between "$A$ was secretly coherent" and "$A$ was truly decohered".
 That's simply the *wrong way to think about it*.
+$A$ wasn't coherent, and it also wasn't decohered, it was simply entangled with $B$.
 
-Misconception-causing explanations of DCQE have the exact same problem, except instead of talking about coherent-vs-decoherent dicohotomy they talk about a took-one-path vs took-both-paths dicohotomy.
-They play framing games with conditional prbability, and end with technically-correct-but-misleading statements like "IF you think the photon must have either taking one path or else taken both paths, THEN you need backwards in time effects.".
-The actual explanation is to drop the false dichotomy, to learn how entanglement works instead of using wrong analogies.
+Misconception-causing explanations of DCQE have the exact same problem, they just use a took-one-path vs took-both-paths dichotomy instead of a coherence dichotomoy.
+If you check closely, you'll often find qualifiers like "**IF** you think the photon must have either taking one path or taken both paths" before the really crazy stuff.
+Which is technically correct... but demonstrably misleading.
+As soon as you drop the false dichotomy, and understand how entanglement is in play, the whole thing becomes kind of boring.
+
+(Another issue in play is that we're not really "erasing" so much as "not revealing".
+If Bob *measures along the wrong axis* (or just doesn't measure at all), he doesn't learn information about Alice's result.
+He could have recovered the information needed to split Alice's results into two interesting cases, but he didn't.
+It seems *really* boring when framed that way.)
 
 # Summary
 
-1.
-**You never *see* an interference pattern**.
+1. **You never *see* an interference pattern**.
 The interference pattern only shows up when filtering after-the-fact, using the chooser's measurement results to group experimental runs.
 
-2.
-**Backwards-in-time effects aren't needed**.
-Unless you try to enforce a false dichotomy about how the photon propagated.
-In the Copenhagen interpretation, the which-way photon is collapsed by the test photon hitting the screen and this explains the observations.
-In the Shut-Up-And-Calculate interpretation, you get the right answer by shutting your mouth and calculating.
-In other interpretations, other explanatory mechanisms are used (e.g. many worlds).
-You *could* use backwards-in-time effects, but you certainly don't *need* them.
+2. **Backwards-in-time effects aren't needed**.
+Unless you insist on a false dichotomy that precludes entanglement being a thing.
+Common interpretations of quantum mechanics simply don't have that dichotomy.
+For example, in the Copenhagen interpretation, the observations are explained by the which-way photon's state being collapsed as soon as the test photon hits the screen (before the delayed choice).
 
-3.
-**Consciousness has nothing to do with this**.
+3. **Consciousness has nothing to do with this**.
 The mathematical model simply makes no mention of anything besides the equipment.
 The experiment will have the same outcome whether or not a human is present.
 
-4.
-**This experiment should have been called "The Optional Information Recovery Experiment"**.
-Because that's ultimately all we're doing: either you measure the information needed to find the hidden interference patterns, or you don't.
-If you don't measure the needed information, you can't find the hidden patterns (duh).
+    (For example, consider that I just spent two thousand words explaining DCQE in detail, and the word "consciousness" only showed up in the context of common misconceptions.
+    That wasn't on purpose.
+    It just really isn't relevant.)
 
-Unfortunately, people will continue to say stupid things about this experiment.
-No doubt I've said something dumb about it in this very post.
+4. **Most of the 'weird' is due to presentation.**
+Ultimately all we're doing is either measuring the information needed to find the hidden interference patterns, or not.
+If you don't measure the needed information, you can't find the hidden patterns.
+Duh.
