@@ -148,8 +148,8 @@ However, because Bob is measuring along a similar axis, and $A$ and $B$ form an 
 So, when Alice groups $A$ based on Bob's results, she doesn't see a 50/50 split anymore.
 Given this, Alice concludes that her qubit was "secretly coherent" (i.e. she "revealed the hidden interference pattern").
 
-*(Side note: technically Alice is only checking axies in the XY plane, and should also check the Y axis before coming to conclusions about coherence.
-Just assume that she was promised that the input qubits would not be coherent in the Y direction.)*
+*(Side note: technically Alice is only checking axies in the YZ plane, and should also check the Y axis before coming to conclusions about coherence.
+Just assume that she was promised that the input qubits would not be coherent in the X direction.)*
 
 Now for the "erased" case, where Bob measures along a perpendicular axis:
 
