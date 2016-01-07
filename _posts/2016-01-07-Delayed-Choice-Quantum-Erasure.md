@@ -174,6 +174,13 @@ If Bob *measures along the wrong axis* (or just doesn't measure at all), he does
 He could have recovered the information needed to split Alice's results into two interesting cases, but he didn't.
 It seems *really* boring when framed that way.)
 
+(A possibly better example of DCQE in terms of qubits comes from the state $\frac{1}{2} (\ket{000} + \ket{011} + \ket{101} + \ket{110})$.
+The third qubit tells you whether first two qubits are entangled to agree or entangled to disagree.
+Without conditioning on the correct axis of the third qubit, the first two qubits will fail any test of entanglement you throw at them.
+Basically, two entangled states can look exactly like an unentangled state... if you don't know which entangled state you're in.
+But covering this example would lead into discussions of entanglement swapping and why that works and this post is long enough, I think.)
+
+
 # Summary
 
 1. **You never *see* an interference pattern**.
