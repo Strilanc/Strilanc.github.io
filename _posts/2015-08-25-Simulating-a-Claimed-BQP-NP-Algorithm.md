@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Simulating a Claimed NP=BQP Algorithm"
+title: "Quantum vs NP #1-B: Simulating a Claimed NP=BQP Algorithm"
 date: 2015-08-27 11:30:00 EST
 categories: quantum
 comments: true

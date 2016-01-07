@@ -220,6 +220,15 @@ The key parts of the construction are the VanRentergem-style subtraction, and us
 
 Next time: using quantum gates to bootstrap an ancilla bit out of nothing.
 
+
+# Navigation
+
+Part 1: [Constructing Large Controlled-Nots](/circuits/2015/06/05/Constructing-Large-Controlled-Nots.html)
+
+Part 2: (This Post)
+
+Part 3: [Using Quantum Gates instead of Ancilla Bits](/circuits/2015/06/22/Using-Quantum-Gates-instead-of-Ancilla-Bits.html)
+
 ----
 
 [Discuss on Reddit](http://www.reddit.com/r/programming/comments/39m6pr/constructing_large_increment_gates/)

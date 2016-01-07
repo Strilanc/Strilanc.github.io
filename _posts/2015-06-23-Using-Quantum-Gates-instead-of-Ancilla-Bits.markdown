@@ -331,6 +331,14 @@ They have the option of using exponentially precise phase shift gates instead.
 
 In either case a linear number of Toffoli-or-smaller gates is needed but, pragmatically speaking, it's simpler and more efficient to just have an ancilla bit available.
 
+# Navigation
+
+Part 1: [Constructing Large Controlled-Nots](/circuits/2015/06/05/Constructing-Large-Controlled-Nots.html)
+
+Part 2: [Constructing Large Increment Gates](/circuits/2015/06/12/Constructing-Large-Increment-Gates.html)
+
+Part 3: (This Post)
+
 -----
 
 [Discuss on Reddit](http://www.reddit.com/r/QuantumComputing/comments/3axiu1/using_quantum_gates_instead_of_ancilla_bits/)

@@ -376,3 +376,10 @@ Having a larger quantity, or better quality, of ancilla bits improves the effici
 Next time: the same thing, but with increment gates.
 Next next time: using quantum gates to bootstrap an ancilla bit.
 
+# Navigation
+
+Part 1: (This Post)
+
+Part 2: [Constructing Large Increment Gates](/circuits/2015/06/12/Constructing-Large-Increment-Gates.html)
+
+Part 3: [Using Quantum Gates instead of Ancilla Bits](/circuits/2015/06/22/Using-Quantum-Gates-instead-of-Ancilla-Bits.html)
