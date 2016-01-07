@@ -143,10 +143,13 @@ Here's what happens when Bob just measures in the computational basis:
 
 <img src="/assets/{{ loc }}/cycle-revealed.gif" title="Revealing an EPR pair's value"/>
 
-As you can see above, initially Alice concludes that the qubit is decohered because the measurement always acts like a 50/50 coin flip even as she tries various rotations around the X axis (i.e. she "doesn't see an interference pattern").
+As you can see above, initially Alice concludes that the input qubits are decohered because the measurement always acts like a 50/50 coin flip even as she tries various rotations around the X axis (i.e. she "doesn't see an interference pattern").
 However, because Bob is measuring along a similar axis, and $A$ and $B$ form an EPR pair, his results are correlated with hers (more and less, as their measurement axies go into and out of alignment).
 So, when Alice groups $A$ based on Bob's results, she doesn't see a 50/50 split anymore.
-Given this, Alice concludes that he qubit was "secretly coherent" (i.e. she "revealed the hidden interference pattern").
+Given this, Alice concludes that her qubit was "secretly coherent" (i.e. she "revealed the hidden interference pattern").
+
+*(Side note: technically Alice is only checking axies in the XY plane, and should also check the Y axis before coming to conclusions about coherence.
+Just assume that she was promised that the input qubits would not be coherent in the Y direction.)*
 
 Now for the "erased" case, where Bob measures along a perpendicular axis:
 
