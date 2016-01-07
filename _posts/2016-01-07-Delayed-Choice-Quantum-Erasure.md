@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "Delayed Choice Quantum Erasure"
-date: 2015-11-29 11:30:00 EST
+title: "Deflating Delayed Choice Quantum Erasure"
+date: 2016-01-07 11:30:00 EST
 categories: quantum
 comments: true
 ---
@@ -29,16 +29,16 @@ I'll explain what you'd actually see if you ran a DCQE, show the same effects in
 
 # The Experiment
 
-The DCQE experiment is like a typical [double-split experiment](https://en.wikipedia.org/wiki/Double-slit_experiment), except that an entangled copy of the which-slit-did-the-photon-go-through information is made.
+Your typical DCQE experiment is like a [double-split experiment](https://en.wikipedia.org/wiki/Double-slit_experiment), except that an entangled copy of the which-slit-did-the-photon-go-through information is made.
 By later measuring the entangled copy of the information along the wrong axis, you can find some hidden interference patterns.
 The framing is that, by choosing to recover or discard the relevant information, you choose whether there was "really" an interference pattern or not.
 
 [**Non**-delayed quantum eraser experiments](https://en.wikipedia.org/wiki/Quantum_eraser_experiment) have a convenient place to store the which-slit information: in the photon's own polarization.
-That works great, except that a photon's polarization tends to be measured or unrecoverable when the photon is absorbed.
+That works great, except that a photon's polarization tends to be ... gone ... after the photon is absorbed.
 Allowing the which-way information to be measured *later*, long after the photon was absorbed, requires a different storage location.
 
 The best known DCQE experiment is [the one performed by Kim et al in 2000](https://en.wikipedia.org/wiki/Delayed_choice_quantum_eraser#The_experiment_of_Kim_et_al._.282000.29).
-They store the which-way information into the position of a second photon (by using a [special crystal that splits photons into two photons](https://en.wikipedia.org/wiki/Spontaneous_parametric_down-conversion)).
+They stored the which-way information into the position of a second photon (by using a [special crystal that splits photons into two photons](https://en.wikipedia.org/wiki/Spontaneous_parametric_down-conversion)).
 Wikipedia has a complicated diagram of [the optical circuit they used](https://en.wikipedia.org/wiki/File:Kim_EtAl_Quantum_Eraser.svg), but I won't subject you to that.
 Instead, taking a a few liberties and some inspiration from [one of the sites Wikipedia linked to](http://strangepaths.com/the-quantum-eraser-experiment/2007/03/20/en/), I made this alternative diagram of Kim et al's setup:
 
@@ -125,7 +125,7 @@ Qubits can also be coherent or decohered.
 When a qubit is coherent, it has a "preferred direction" corresponding to a point on the surface of the [Bloch sphere](https://en.wikipedia.org/wiki/Bloch_sphere).
 An experiment where you prepare a coherent qubit, then measure along the preferred direction, will give the same answer every time.
 A fully decohered qubit has no preferred direction; its state corresponds to the *center* of the Bloch sphere.
-No matter which axis you measure a fully decohered qubit along, your results will look like coin flips.
+No matter which axis you measure a fully decohered qubit along, your results will look like coin flips (but then you know its coherent state again).
 
 It so happens that, because entanglement is *suspiciously similar* to measurement, qubits in an EPR pair appear to be fully decohered.
 It's only when you later compare results that you see they were coherent *as a pair*, instead of individually.
@@ -145,8 +145,8 @@ Here's what happens when Bob just measures in the computational basis:
 
 As you can see above, initially Alice concludes that the qubit is decohered because the measurement always acts like a 50/50 coin flip even as she tries various rotations around the X axis (i.e. she "doesn't see an interference pattern").
 However, because Bob is measuring along a similar axis, and $A$ and $B$ form an EPR pair, his results are correlated with hers (more and less, as their measurement axies go into and out of alignment).
-So, when we group $A$ based on Bob's results, we don't see a 50/50 split anymore.
-Given this, we conclude that Alice's qubit was "secretly coherent" (i.e. we "find the hidden interference pattern").
+So, when Alice groups $A$ based on Bob's results, she doesn't see a 50/50 split anymore.
+Given this, Alice concludes that he qubit was "secretly coherent" (i.e. she "revealed the hidden interference pattern").
 
 Now for the "erased" case, where Bob measures along a perpendicular axis:
 
