@@ -33,7 +33,7 @@ Case in point, let's try using it on the two posts I linked to in the introducti
 
 # Qubit Operations from Rotations
 
-In the [nice rotations post]([Converting Rotations into "Nice" Qubit Operations](/quantum/2014/11/24/Converting-Rotations-into-Nice-Qubit-Operations.html), I talk about mapping from rotations to operations on single qubits.
+In the [nice rotations post](/quantum/2014/11/24/Converting-Rotations-into-Nice-Qubit-Operations.html), I talk about mapping from rotations to operations on single qubits.
 
 The usual way to convert from a rotation around the $\hat{v}$ axis by $\theta$ radians into a unitary single-qubit operation $U$ is to compute $U\_{\hat{v}, \theta} = I \cos \frac{\theta}{2} + i \hat{v} \vec{\sigma} \sin \frac{\theta}{2}$, where $\vec{\sigma}$ is the [Pauli vector](https://en.wikipedia.org/wiki/Pauli_matrices#Pauli_vector), $I$ is the 2x2 identity matrix, and $i$ is $\sqrt{-1}$.
 The problem I had (and have) with this mapping is that it introduces an unwanted phase factor.
