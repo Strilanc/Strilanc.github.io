@@ -184,3 +184,8 @@ Which is the code used by the demo (except it's python instead of Javascript, hu
 Single qubit operations are a lot like rotations, but with an added phase factor. You can use this fact to create a method for interpolating between two 2x2 unitary matrices.
 
 The method described in this post works, but is not optimal. For example, it doesn't guarantee a constant angular velocity. Also, in some cases it doesn't take the shortest possible path.
+
+**Update**
+
+A much simpler method is to just define $\text{interpolate}(U\_0, U\_1, s) = U\_0 \cdot (U\_0^\dagger \cdot U\_1)^s$.
+See [Using Eigendecomposition to Convert Rotations and Interpolate Operations](/quantum/2016/01/10/eigendecomposition-for-rotation-and-interpolation.html).

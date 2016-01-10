@@ -206,3 +206,8 @@ Those values look good to me (modulo the rounding error introduced by the involv
 The common method for mapping rotations into unitary matrices is smooth, but can't generate the Pauli matrices and requires a 720° turn to get back to the starting point.
 
 By applying a phase correction we can fix those issues, but we're forced to introduce a phase discontinuity w.r.t. the axis of rotation.
+
+**Update**
+
+Converting from rotations to operations is better understood in terms of matrix exponentation.
+See [Using Eigendecomposition to Convert Rotations and Interpolate Operations](/quantum/2016/01/10/eigendecomposition-for-rotation-and-interpolation.html).
