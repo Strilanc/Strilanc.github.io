@@ -56,7 +56,7 @@ In [the interpolation post](/quantum/2014/11/15/Interpolating-Qubit-Operations.h
 Basically all of the machinery in that post can be replaced with this one equation: $U\_s = U\_0 \cdot \left( U\_0^{\dagger} \cdot U\_1 \right)^s$.
 The value $U\_0^{\dagger} \cdot U\_1$ is unitary, because it's a product of unitary matrices, so we can use the eigendecomposition to raise it to whatever intermediate power we want.
 
-Despite being conceputally much simpler than the machinery from the old post, this technique also generalizes much better.
+Despite being conceptually much simpler than the machinery from the old post, this technique also generalizes much better.
 It can interpolate between *any* two unitary matrices (of the same size), instead of just 2x2 matrices.
 It's even easy to write, assuming you have a linear algebra library handy.
 Slap together some python code to hit the eigenvalues of a matrix with a function, then use it to compute the interpolation:
