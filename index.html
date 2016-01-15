@@ -27,7 +27,14 @@ title: "Algorithmic Assertions - Craig Gidney's Computer Science Blog"
   </h1>
 
   <ul class="posts">
+    {% assign prevYear = 'now' | date: "%Y" %}
     {% for post in site.posts %}
+      {% assign curYear = post.date | date: "%Y" %}
+      {% if curYear != prevYear %}
+        <h2>{{ curYear }}</h2>
+      {% endif %}
+      {% assign prevYear = curYear %}
+
       <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
     {% endfor %}
   </ul>

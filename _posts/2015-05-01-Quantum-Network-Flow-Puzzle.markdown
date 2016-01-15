@@ -175,6 +175,11 @@ So it seems like we could send qubits through superdense coding, as long as thei
 
 But how often are qubits flat? Well... all the intermediate states of Grover's algorithm are flat. And quantum compression preserves flatness. But the most useful example I could think of was Bell pairs: qubits in the state $\frac{1}{\sqrt{2}} (\ket{00} + \ket{11})$ don't require phase information, because their phase is uniformly zero (i.e. along the positive real line).
 
+**Correction (Jan 2016)**:
+*I'm not sure how I ended up thinking only "flat" qubits could be dense-coded, but reading Aram Harrow's 2003 paper [Coherent Communication of Classical Messages](http://arxiv.org/abs/quant-ph/0307091) cleared things up.
+Superdense coding works on all qubits.
+The only catch is that the process creates an entangled copy of the qubits instead of moving the qubits.*
+
 So the first thing I tried was turning one shared Bell pair into two. I had the sender apply a Hadamard gate to two fresh qubits, putting them into the state $\frac{1}{\sqrt{2}} (\ket{0} + \ket{1})$, then superdense-encoded them (as if they were classical bits) into an existing Bell pair half. After superdense-decoding on the other side, the resulting qubits were entangled with the sender's qubits. Two Bell pairs from one!... Except that we had to send a qubit and consume a Bell pair to do this, so it's a bit of a "two steps forward and one step back" situation. We could have just used the sent qubit to send a normal Bell pair half. There's probably cryptographic applications to using superdense coding in this way, but it's not useful in terms of channel capacity.
 
 The next thing I tried was sending two Bell pair halves *from a third party* via superdense coding. I immediately ran into a problem: the superdense coding process doesn't *move* qubits into the entangled state, it *copies* them into the state. This is a problem, if you want to send a Bell pair half, because it makes a third half! This means your Bell pair isn't a Bell pair anymore, it's a [GHZ state](http://en.wikipedia.org/wiki/Greenberger%E2%80%93Horne%E2%80%93Zeilinger_state) (i.e. three qubits in the state $\frac{1}{\sqrt{2}} (\ket{000} + \ket{111})$).
@@ -229,3 +234,8 @@ Splitting the cleaner node into two pieces might fix the issue. Or maybe not! Gi
 
 <a href="http://i.imgur.com/TgWzCsY.png"><img src="http://i.imgur.com/TgWzCsY.png" alt="Puzzle attempt number 2" style="width: 200px;"/></a>
 
+# Update 2
+
+The solution can be improved, and the puzzle made harder, by using LOCC erasure to remove the extra entangled copies created by superdense coding the EPR pairs.
+This allows two of the communication links to be downgraded from quantum to classical.
+See [this post](http://localhost:4000/quantum/2015/09/02/Partially-Erasing-Entanglement-with-Measurement.html) for details.

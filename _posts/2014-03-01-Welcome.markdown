@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "A New Home (post Twisted Oak)"
+title: "[Meta] A New Home"
 date: 2014-03-01 11:19:40
 categories: meta
 ---
