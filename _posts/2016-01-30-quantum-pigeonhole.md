@@ -168,7 +168,7 @@ The paper's strategy is clever, sure.
 But concluding the pigeonhole priciple was violated because you cleverly discarded all the cases where coins were caught in the same state?
 That's just wrong.
 And describing this as world-view shattering?
-That's downright *stupid*.
+That's downright *absurd*.
 
 # Summary
 
