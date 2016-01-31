@@ -125,7 +125,7 @@ And we can't hurt the involved qubits when doing so, because they're not affecte
 
 So what's happening is:
 
-1. The two qubits touched by the referee end up in the even-parity state $\ket{01} + \ket{10}$ or the odd-parity state $\ket{00} + \ket{10}$.
+1. The two qubits touched by the referee end up in the even-parity state $\ket{00} + \ket{11}$ or the odd-parity state $\ket{01} + \ket{10}$.
 2. Rotating every qubit by 90° doesn't affect the untouched qubits, but inverts the parity of the touched qubits. If the referee wrote down "disagree", the two touched qubits now agree. If the referee wrote down "agree", the two touched qubits now disagree.
 4. When we measure the qubits and they all return the same result, we know the parity of every pair ended up "agree". And since we inverted the parity of the pair the referee measured, the referee must have measured "disagree".
 
