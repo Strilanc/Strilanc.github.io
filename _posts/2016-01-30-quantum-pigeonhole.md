@@ -25,12 +25,16 @@ The media picked up on the result both times, resulting in some choice quotes:
 
 That's... quite the hyperbole. And some of it quoted straight from the authors' mouths!
 
-Other physicists were a bit less enthusiastic:
+Physicists had more reserved, and mixed, reactions:
 
-> Reading further into the argument, it turns out that the first measurement is an *imaginary* measurement -- it  isn't actually  performed, but we *imagine* how it could have come out *if* it had been performed. [- Stephen Parrott](http://www.math.umb.edu/~sp/pigeonco.pdf)
+> There has been considerable interest in a recent preprint describing an effect named as the “Quantum
+Pigeonhole Principle”. [...]  a quantum mechanical measurement would imply that no more than 1 of the n objects is contained in any of the m boxes, even though n > m. [- Alastair Rae and Ted Forgan](http://arxiv.org/pdf/1412.1333v2.pdf)
 
 <!-- -->
 > some of the conclusions in the paper are ambiguous in the sense that they depend on the precise way one defines correlations, and that the “first experiments” the authors suggest has little if any bearing on their main theses. The far-reaching conclusions  the authors reach seems, therefore, premature. [- B. E. Y. Svensson](http://arxiv.org/ftp/arxiv/papers/1412/1412.0429.pdf)
+
+<!-- -->
+> Reading further into the argument, it turns out that the first measurement is an *imaginary* measurement -- it  isn't actually  performed, but we *imagine* how it could have come out *if* it had been performed. [- Stephen Parrott](http://www.math.umb.edu/~sp/pigeonco.pdf)
 
 My personal opinion is that the paper's *details* are correct, but that the authors' framing of those details is off-the-wall ridiculous.
 To justify that opinion, let's get into what the paper actually claims.
