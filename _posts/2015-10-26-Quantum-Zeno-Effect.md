@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Unpopular Qubits #2: The Quantum Zeno Effect"
+title: "[Un]popular Qubits #2: The Quantum Zeno Effect"
 date: 2015-10-26 11:30:00 EST
 categories: quantum
 comments: true
