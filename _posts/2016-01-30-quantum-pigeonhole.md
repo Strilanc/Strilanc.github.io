@@ -69,7 +69,7 @@ Simple.
 You win when the referee's parity measurement included the disagreeing coin, which happens 2/3 of the time.
 
 The reason you can't win 100% of the time is why the paper is called what it is: the [pigeonhole principle](https://en.wikipedia.org/wiki/Pigeonhole_principle).
-Theres three coins and two boxes (H and T), so two coins must end up in the same box and create a chance to lose.
+There's three coins and two boxes (H and T), so two coins must end up in the same box and create a chance to lose.
 You want the coins to all have disagreeing values, but there's not enough values!
 
 If only we won when the coins *agreed*, this would all be much easier.
