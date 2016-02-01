@@ -147,7 +147,7 @@ When there's an overlapping parity measurement, the qubits do still end up entan
 But now the entangled state involves three (or more) qubits instead of two.
 That [weakens the entanglement](https://quantiki.org/wiki/monogamy-entanglement), and X-rotations of the individual qubits no longer operate on the parity in the same way.
 
-This is a very important caveat, because actually verifying that the "pigeonhole principle was violated" would invove overlapping parity measurements.
+This is a very important caveat, because actually verifying that the "pigeonhole principle was violated" would involve overlapping parity measurements.
 
 Also I think this caveat means that the paper's experimental prediction, that you can pass three electrons through two paths and find that when post-selection succeeds there was no deflection (because they weren't "in the same box"), is wrong.
 Each deflection is a parity measurement, and they overlap, so... it won't work.
