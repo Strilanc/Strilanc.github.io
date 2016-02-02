@@ -120,8 +120,8 @@ Points on an axis aren't affected by rotations around that axis.
 
 Got all that?
 When the referee performs a parity measurement on the state we crafted, they are actually entangling the two qubits they touched.
-We don't know the parity of that entanglement, but we can toggle said parity by rotating the involved qubits around the X axis.
-And we can't hurt the involved qubits when doing so, because they're not affected by this particular rotation.
+We don't know the parity of that entanglement, but we can toggle said parity by rotating the touched qubits around the X axis.
+And rotating the wrong qubits can't hurt, because the untouched qubits are in a state not affected by this particular rotation.
 
 So what's happening is:
 
