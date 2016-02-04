@@ -133,6 +133,7 @@ blockquote {
 .footer .contact {
   float: left;
   margin-right: 3em;
+  line-height: 1.7;
 }
 
 .footer a {
@@ -150,10 +151,12 @@ blockquote {
   margin-top: 1.1em;
   margin-right: 3em;
   max-width: 18em;
+  line-height: 1.1;
+  font-size: 9px;
 }
 
 .footer .contact img {
-  margin: 5px 2px -4px 0px;
+  margin: 3px 2px -4px 2px;
   padding: 0px;
   opacity: 0.4;
 }
