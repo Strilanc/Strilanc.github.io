@@ -15,7 +15,7 @@ Although there's [continuous](http://jamesowenweatherall.com/SCPPRG/EllermanDavi
 Case in point: I googled for "delayed choice quantum eraser" videos.
 The top result?
 [This youtube video](https://www.youtube.com/watch?v=U7Z_TIw9InA).
-It mashes a scene from the infamous [What the #$*! Do We (K)now!?](http://www.imdb.com/title/tt0399877/) film into a scene from [a terrible episode of "The Universe"](http://www.imdb.com/title/tt2356685/).
+It mashes a scene from the infamous [What the #$\*! Do We \(K\)now!?](http://www.imdb.com/title/tt0399877/) film into a scene from [a terrible episode of "The Universe"](http://www.imdb.com/title/tt2356685/).
 Both clips mention backwards-in-time effects, and imply collapse is caused by humans looking in the general direction of an experiment.
 The forehead-slapping climaxes when a graphic *literally* shows [a person turning waves into particles by opening their eyes](https://youtu.be/vnN85i_75EI?t=18m16s) (argh!).
 
