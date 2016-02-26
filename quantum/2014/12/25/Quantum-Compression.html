@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>[Un]popular Qubits #1: Quantum Compression</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">[Un]popular Qubits #1: Quantum Compression</h1>
+<p class="meta">25 Dec 2014</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Usually, pop science articles are terrible at explaining quantum anything. The breadth of their audience prevents them from going into detail, nevermind including an equation. I am under no such constraint, and in this series of posts (&quot;[Un]popular Qubits&quot;) I look a bit more in-depth at quantum computing things reported by the media.</p>
+
+<p>In this installment: <em>quantum compression</em> (<a href="http://motherboard.vice.com/read/physicists-succeed-in-compressing-quantum-data">example</a> <a href="http://physicsworld.com/cws/article/news/2014/sep/29/quantum-data-are-compressed-for-the-first-time">popular</a> <a href="http://www.nature.com/news/quantum-bits-get-their-first-compression-1.15961">articles</a>; <a href="http://arxiv.org/pdf/1410.3941.pdf">the actual paper</a>).</p>
+
+<p><strong>Foreword</strong></p>
+
+<p>Writing this post opened up a bit of a rabbit&#39;s hole for me. Because quantum information theory is sort of a work in progress right now, a lot of relevant concepts are only available in papers. Papers that don&#39;t explain things as well as text books do. I am still groping around trying to internalize the relevant information, and this post is part of that process.</p>
+
+<p>So, keeping in mind that I&#39;ll try my best but am still toying with this, let&#39;s jump in.</p>
+
+<p><strong>Classical vs Quantum Compression</strong></p>
+
+<p>In classical computing, compression is used to make data smaller by removing redundancy. When you know some data will follow a pattern, there&#39;s opportunities to separate the how-it-follows-the-pattern parts from the how-it-deviates-from-the-pattern parts. By only transmitting or storing the latter, you save bandwidth and storage space.</p>
+
+<p>Quantum compression has an analogous goal: given that some quantum data follows certain patterns, can you separate the follow-the-pattern parts from the deviates-from-the-pattern parts in order to only send the latter? The paper <a href="http://arxiv.org/pdf/1410.3941.pdf">Quantum Data Compression of a Qubit Ensemble by Lee A. Rozema et al.</a> answers in the affirmative, at least for qubits that are identical.</p>
+
+<p>What does &quot;qubits that are identical&quot; mean? It means that the qubits are all interchangeable copies of each other. More specifically, the state of the qubits must be &quot;invariant under permutation&quot;. If you shuffle the qubits, you&#39;re still in the same state.</p>
+
+<p>Classically, this would be a really boring constraint. It would imply that either all of the bits were 0, or all of the bits were 1. Very easy to compress: send a bit to say if its 0s or 1s, and (when the size isn&#39;t obvious from the context or included in other overheads) then send $O(\log n)$ bits to say how many 0s or 1s there are.</p>
+
+<p>Quantumly, things are more interesting. A qubit can be in the state $\ket{0}$ or the state $\ket{1}$, but it can also be in the state $\frac{1}{\sqrt{2}} \ket{0} + \frac{i}{\sqrt{2}} \ket{1}$ or the state $\sqrt{\frac{3}{7}} \ket{0} - \sqrt{\frac{4}{7}} \ket{1}$ or generally any linear combination of the form $\alpha \ket{0} + \beta \ket{1}$ where $\alpha$ and $\beta$ are complex numbers satisfying $\left| \alpha \right|^2 + \left| \beta \right|^2 = 1$.</p>
+
+<p>Another complication is entanglement. The qubits might be in a <a href="http://en.wikipedia.org/wiki/Greenberger%E2%80%93Horne%E2%80%93Zeilinger_state">GHZ state</a> like $\frac{1}{\sqrt{2}} \parens{\ket{00000000} + \ket{11111111}}$, in a <a href="http://en.wikipedia.org/wiki/W_state">W state</a> like $\frac{1}{\sqrt{3}} \parens{\ket{001} + \ket{010} + \ket{100}}$, or plenty of other possibilities. (Notice that, although the W state is invariant under permutation, the classical possibilities it is made up of are not! Tricky.)</p>
+
+<p>To be honest, it&#39;s surprising to me that compressing these states is even possible. Quantum computing is filled with impossibility results that sound like they prevent exactly this sort of thing. For example, the <a href="http://en.wikipedia.org/wiki/Quantum_no-deleting_theorem">no-deleting theorem</a> says that (among other things) you can&#39;t merge two identical qubits into a single qubit with the same state. Another example is <a href="http://en.wikipedia.org/wiki/Liouville%27s_theorem_%28Hamiltonian%29">Liouville&#39;s theorem</a>, which says that if your inputs cover a certain &quot;volume&quot; of space then no quantum operations can &quot;squeeze&quot; that into a smaller output volume.</p>
+
+<p>Quantum compression skirts these impossibility results by not giving its output qubits &quot;the same state&quot; as its input qubits, and by only working for a comparatively small volume of inputs (i.e. the invariant-under-permutation ones). It <em>can</em> be done!</p>
+
+<p><strong>Method</strong></p>
+
+<p>One way to understand how quantum compression is possible is to look at how many unique amplitudes you get from expanding the $n$-identical-qubits state $\parens{\alpha \ket{0} + \beta \ket{1}}^N$. If we use the convention that $\ket{n \atop k}$ means &quot;all the ways of having $k$ out of $n$ qubits can be ON&quot;, e.g. $\ket{3 \atop 2} = \ket{110} + \ket{101} + \ket{011}$, then the expanded form is $\Sum{k=0}{n} \ket{n \atop k} \alpha^k \beta^{n-k}$. Notice that, although there are $2^n$ states, there are only $n+1$ distinct weights being used.</p>
+
+<p>Because all quantum operations are linear, and the distinct weights we&#39;re stuck with are not linear combinations of each other, there&#39;s no way for us to cancel the weights out. But we <em>can</em> move them around. In particular, we can re-arrange things so that the un-removable weights all end up on states where all but the first $\log \parens{n+1}$ qubits are OFF. This is guaranteed to be possible, with the main obstacle being figuring out <em>how</em> to do it. Or, more practically, how to do it <em>efficiently</em> and <em>elegantly</em>.</p>
+
+<p>Fortunately for me, the paper says exactly how to go about re-arranging the amplitudes: apply a <a href="http://arxiv.org/pdf/quant-ph/0601001v1.pdf">Schur-Weyl transform</a>. The Schur-Weyl transform, roughly speaking, separates qubit space into permutation-related-parts and not-permutation-related-parts. Which sounds like exactly what we want, since our inputs happen to be invariant under permutation.</p>
+
+<p>The paper even politely includes an example circuit, which I have tweaked slightly, that compresses 3 identical qubits into 2 qubits:</p>
+
+<p><img src="http://i.imgur.com/3NyMpUq.png" alt="3-to-2 compression circuit"></p>
+
+<p>The circuit uses several controlled gates. Two are common (the <a href="http://en.wikipedia.org/wiki/Quantum_gate#Pauli-X_gate">NOT gate</a> &quot;X&quot; and the <a href="http://en.wikipedia.org/wiki/Quantum_gate#Hadamard_gate">Hadamard gate</a> &quot;H&quot;) and two are unusual.</p>
+
+<p>The unusual gates, the ∠(-1/3) gate and the ∠(-2/3) gate, are rotation gates tuned to rotate from an amplitude where the qubit has a  particular probability of being ON to an amplitude where the qubit is guaranteed to be OFF. The ∠(-1/3) gate&#39;s matrix form is $\begin{bmatrix} \sqrt{\frac{2}{3}} &amp; \sqrt{\frac{1}{3}} \\ -\sqrt{\frac{1}{3}} &amp; \sqrt{\frac{2}{3}} \end{bmatrix}$; a rotation matrix with angle of rotation $\theta = \sin^{-1} -\sqrt{\frac{1}{3}} \approx -35.264$ degrees. Analogously, the ∠(-2/3) gate rotates by $\theta = \sin^{-1} -\sqrt{\frac{2}{3}} \approx -54.736$ degrees. (Note that the ∠ symbol is definitely not standard; I just picked something vaguely related to rotations.)</p>
+
+<p>The paper goes on to explain how they experimentally implemented that circuit as an optical system. Since I don&#39;t have the equipment for any of that, we&#39;ll have to settle for simulation.</p>
+
+<p><strong>Simulation</strong></p>
+
+<p>Using the <a href="https://github.com/Strilanc/Quantum-Circuit-Inspector">toy quantum circuit inspector</a> I&#39;ve been working on lately, I tried feeding various invariant-under-permutation states through the circuit given by the paper. For example, here&#39;s an animation of what happens when the qubits are all gradually rotated around the X axis of the <a href="http://en.wikipedia.org/wiki/Bloch_sphere">Block Sphere</a>:</p>
+
+<p><img src="http://i.imgur.com/vzpTOjg.gif" alt="Animated circuit with peek gates"></p>
+
+<p>(Note that the rotation-to-quantum-operation mapping I&#39;m using is <a href="http://strilanc.com/quantum/2014/11/24/Converting-Rotations-into-Nice-Qubit-Operations.html">the one I&#39;ve discussed previously</a>. Specifically, each qubit&#39;s pre-compressed state is following the curve $\psi(t) = \frac{1}{2} \parens{1 + e^{i t} } \ket{0} + \frac{1}{2} \parens{1 - e^{i t}} \ket{1}$.)</p>
+
+<p>In the above diagram, the changing percentage indicators indicate how likely you would be to find that the covered wire was ON, if you measured said wire at that point (but the simulator is not actually performing a simulated measurement, since that would mess up the outputs). Note that, before compression, all three wires are varying but, after compression, only the first two are varying. The three qubit states are being mapped onto just two qubits.</p>
+
+<p>Also note how the first output kind of swoops up to 50%, then slows down until the second output swoops to 100%, then itself swoops to 100%. That looks kind of neat.</p>
+
+<p>I tried lots of other cases: rotating around the Y axis, combinations of X and Y and Z, entangled states, etc. The output probabilities swoop differently when things are entangled, but otherwise the various cases act similarly.</p>
+
+<p>One interesting thing I noticed is how the output amplitudes behave as the input qubits are rotated. Here&#39;s an animation of the output amplitudes from the above circuit:</p>
+
+<p><img src="http://i.imgur.com/FQ4Hq8p.gif" alt="Output amplitudes"></p>
+
+<p>As the probability of each input wire being ON varies, the distribution of amplitudes appears to be tracking the <a href="http://www.wolframalpha.com/input/?i=plot+%281-p%29%5E%283-x%29+p%5Ex+binomial%283%2C+x%29+for+x%3D%7B0%2C1%2C2%2C3%7D%2C+0+%3C%3D+p+%3C%3D+1">probability of getting k heads with 3 biased coin flips</a>!</p>
+
+<p><img src="http://i.imgur.com/2YLhcDB.png" alt="Binomial distribution"></p>
+
+<p>The same thing happens for all the other inputs I tried, as long as they were invariant under permutation. Entangled states can even skip directly from 0 heads to 3 heads without passing through 1 and 2! It&#39;s like the compression circuit is sampling the qubits and counting how many of them are ON, despite not collapsing the superposition! Perhaps not useful, but definitely interesting.</p>
+
+<p>So... this quantum compression thing seems to work. What can we use it for?</p>
+
+<p><strong>Applications?</strong></p>
+
+<p>When it comes to possible applications of quantum compression, my first instinct was &quot;saving bandwidth&quot;. However, after thinking about it more, I&#39;m not so sure. Quantum communications generally have two big benefits: better coordination, and better secrecy... but compression doesn&#39;t seem to work in either case. The other possible applications are space-saving and pedagogic.</p>
+
+<p><em>Coordination</em></p>
+
+<p>In a quantum coordination protocol, like the <a href="/quantum/2014/12/06/Perfect-Symmetry-Breaking-with-Quantum-Computers.html">symmetry breaking protocol</a> I discussed recently, you do often want to send several entangled qubits that are &quot;identical&quot;. The problem is that it&#39;s the wrong type of &quot;identical&quot;: you want the sent qubits to all be entangled with <em>different</em> kept qubits, and this violates the constraint that they be invariant under permutation. To make quantum compression to work, you&#39;d have to entangle all of the sent qubits in the <em>same</em> way with the <em>same</em> kept qubit(s).</p>
+
+<p>For example, there&#39;s no way to use quantum compression on bell pairs (i.e. those things used by every coordination protocol). Being able to compress $n$ bell pair parts into less than $n$ qubits would be amazing. <em>Too</em> amazing. It would let you recursively nest <a href="/quantum/2014/05/03/Storing-Bandwidth-with-Superdense-Coding.html">superdense coding</a> inside of <a href="/quantum/2014/05/11/Storing-Bandwidth-with-Quantum-Teleportation.html">quantum teleportation</a> and vice versa. Each level of nesting would slowly, but exponentially, increase the amount of information being sent when you set the whole process into motion. With a single bit you could send ten bits. With those ten a hundred. And so on indefinitely, increasing the <a href="http://en.wikipedia.org/wiki/Entanglement-assisted_classical_capacity">entanglement-assisted classical capacity</a> of basically any quantum channel to infinity. In other words: clearly not possible.</p>
+
+<p>Even when we <em>can</em> compress and send a particular entangled state, it seems to be more efficient to send it in some other way. For example, suppose you want to send half the qubits of a GHZ state like $\frac{1}{\sqrt{2}} \parens{\ket{00000000} + \ket{11111111}}$. Given just one of those qubits, the receiver can easily make more with a controlled-not from said qubit onto a fresh initialized-to-OFF qubit. Why would we send $\log n$ compressed qubits instead of one uncompressed qubit?</p>
+
+<p>Another type of entangled state we might want to send is a W state like $\frac{1}{2} \parens{\ket{0001} + \ket{0010} + \ket{0100} + \ket{10000}}$. This case can also made trivial by only sending one qubit, and relying on the receiver to expand it into as many as needed.</p>
+
+<p>We <em>could</em> assume that the receiver wasn&#39;t able to make or extend these complicated entangled states for themselves... but that&#39;s a very odd assumption, given that the receiver can implement the intricate gates involved in the decompression process!</p>
+
+<p>There may be quantum coordination protocols that could benefit from quantum compression, but I can&#39;t think of any.</p>
+
+<p><em>Cryptography</em></p>
+
+<p>Could we use compression to make quantum cryptography protocols more efficient? The problem here is that cryptography abhors patterns and redundancy. Even classically, you must beware <a href="http://en.wikipedia.org/wiki/CRIME">the dangers of combining compression with encryption</a>.</p>
+
+<p>Quantum cryptography relies heavily on limitations related to measuring quantum states. Sending a lot of copies removes this limitation: the receiver or eavesdropper could infer the secret state by measuring a subset of the copies, and start making good-enough copies on their own.</p>
+
+<p>In other words, quantum compression sounds like a great way to <em>ruin</em> your cryptography instead of making it more efficient. I don&#39;t think they mix well.</p>
+
+<p><em>Space</em></p>
+
+<p>Quantum compression could be useful for reducing the space requirements of a quantum algorithm. Some algorithms may have not-needed-at-the-moment qubits that are identical, allowing the algorithm to temporarily compress them in order to fit other qubits into the computer (a big deal, given how slowly the number of qubits we can work with has been growing). In some cases you could even operate on the compressed representation.</p>
+
+<p><em>Pedagogic</em></p>
+
+<p>Quantum compression is surprising, enlightening, and engaging... at least it was for me. It demonstrates corner cases of a few impossibility theorems, it counts within a superposition, and it leads you deeper into useful parts of quantum information theory (like the Schur-Weyl transform). I think that, at the very least, makes it useful for teaching and learning.</p>
+
+<p><strong>Summary</strong></p>
+
+<p>When you have $n$ qubits whose combined state is invariant under permutation, a Schur-Weyl transform can re-arrange the state so that only the first $\log \parens{n + 1}$ qubits are used. This is analogous to how a Fourier transform of just-right low frequency data would also only require only the first few bits, except the Schur-Weyl transform works in a more surprising situation.</p>
+
+<p>Quantum compression may be useful as a tool for making a quantum algorithm more space efficient. I don&#39;t think it&#39;s useful for saving bandwidth, because cryptography abhors redundancy and quantum coordination requires entanglement that varies under permutation.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

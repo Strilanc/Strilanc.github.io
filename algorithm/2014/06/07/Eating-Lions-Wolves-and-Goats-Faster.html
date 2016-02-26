@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Eating Lions, Wolves, and Goats Faster</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Eating Lions, Wolves, and Goats Faster</h1>
+<p class="meta">07 Jun 2014</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Yesterday I read <a href="http://unriskinsight.blogspot.com/2014/06/fast-functional-goats-lions-and-wolves.html">Fast Functional Goats, Lions and Wolves</a> on the &quot;UnRisk Insight&quot; blog. The post is about benchmarking solutions to <a href="http://www.kaenguru.at/uploads/media/2014_Student_EN.pdf">problem #30 from the 2014 Austrian &quot;Math Kangaroo&quot; contest</a> in several languages, as a way of comparing how efficient the languages are.</p>
+
+<p>Reading the post was a bit surreal for me, because it&#39;s on a blog for a company that describes itself as &quot;passionate about quant finance and future technologies&quot;, but the solution they&#39;re using is absurdly inefficient. It&#39;s still a valid language comparison, but I spent the whole post waiting for them to mention the better algorithm. (They <a href="http://unriskinsight.blogspot.co.at/2014/04/three-ways-to-solve-goats-wolves-and.html">hint at it</a> in a single case, but not at all in the general case.)</p>
+
+<p>In this post I&#39;ll explain how to solve the problem more efficiently.</p>
+
+<p><strong>Lions, Wolves, and Goats</strong></p>
+
+<p>The problem being solved is about a population of lions, wolves, and goats. Stronger animals can eat weaker ones, with the twist that this transforms the stronger animal into another. When a wolf eats a goat, the wolf transforms into a lion. When a lion eats a goat, it transforms into a wolf. When a lion eats a wolf, it transforms into a goat.</p>
+
+<p>Every time one animal eats another, the total population goes down by 1. Eventually the population must become stable, with no animal able to eat another. We want to find a sequence of X-eats-Y operations that reaches as large of a stable population as possible.</p>
+
+<p>The actual question from the Math Kangaroo contest involved a specific case of this general problem, where the initial population was set to 6 lions, 55 wolves, and 17 goats. The possible answers (it was multiple choice) were 1, 6, 17, 23, or 35 animals left. We want to write an algorithm for the general case.</p>
+
+<p>Naturally, the first thing to do with any word problem is to drop all of the unnecessary details. The state of the system is just three numbers, one for each type of animal. Instead of thinking about 6 lions and 55 wolves and 17 goats, we&#39;ll work with <code>[6, 55, 17]</code>. The operations we can apply are changes to the population, with the lion-eats-goat case translating to <code>[-1, +1, -1]</code>, the lion-eats-wolf case becoming <code>[-1, -1, +1]</code>, and the wolf-eats-goat case becoming <code>[+1, -1, -1]</code>.</p>
+
+<p>Translating the eating operations into population deltas immediately reveals that the three types of animals are actually interchangeable. The problem talks about a lion eating a goat, as opposed to a goat eating a lion, but you always lose the eater and the eatee while gaining one of the uninvolved animal... so the differences don&#39;t matter.</p>
+
+<p>Even more important, though, is the realization that the order of operations doesn&#39;t matter when using deltas. We might get a negative number of goats along the way, but the total will end up the same. Not caring about order would <em>massively</em> simplify the problem. Lucky for us, it turns out that we can get away with this simplification. Assuming the final population is stable and positive, we&#39;re guaranteed to be able to re-order eating in a way that avoids negative populations.</p>
+
+<p>Two more useful properties, apparent from the delta forms of the operations, are <em>preservation of relative parity</em> and <em>linear independence</em>. First, the operations we have can only adjust the difference between two populations by -2, 0, or +2. This means there&#39;s no sequence of X-eats-Y that can make an initially-even population end up equal to an initially-odd population. Second, because the vectors <code>[+1,-1,-1]</code>, <code>[-1,+1,-1]</code>, and <code>[-1,-1,+1]</code> are <a href="http://en.wikipedia.org/wiki/Linear_independence">linearly independent</a>, we can&#39;t recreate the effect of a wolf eating a goat by combining lions eating wolves with lions eating goats (even when allowing negative or continuous counts). This means that, ignoring order, there&#39;s <em>only one way</em> to go from the initial population to some specified final population.</p>
+
+<p>Basically, our problem is a simple linear system with nice properties and so <a href="https://en.wikipedia.org/wiki/Integer_programming">integer programming</a> should be extremely effective.</p>
+
+<p><strong>Integer Program</strong></p>
+
+<p>If we have an initial population of <code>$[x_1, x_2, x_3]$</code>, and apply the operations <code>[+1,-1,-1]</code>, <code>[-1,+1,-1]</code>, <code>[-1,-1,+1]</code> a total of <code>$d_1$</code>, <code>$d_2$</code>, and <code>$d_3$</code> times respectively, then the resulting population will be <code>[$x_1+d_1-d_2-d_3$, $x_2-d_1+d_2-d_3$, $x_3-d_1-d_2+d_3$]</code>. We want to maximize the sum of that resulting population, which is <code>$x_1+x_2+x_3-d_1-d_2-d_3$</code>.</p>
+
+<p>We only have two constraints on the system. First, the delta operations can only be applied a non-negative integer number of times. We don&#39;t want lions throwing up goats or half-transforming into wolves. Second, the final population must have only one type of animal. This is the only way to guarantee nothing can eat anything else anymore, keeping things stable.</p>
+
+<p>The stable population constraint requires a <a href="https://en.wikipedia.org/wiki/Special_ordered_set">special ordered set</a>, but otherwise this integer program is trivial to write:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// output maximum stable population
+max: finalPopulation;
+finalPopulation = x1 + x2 + x3 - d1 - d2 - d3;
+
+// inputs
+x1 = 6; // lions
+x2 = 55; // wolves
+x3 = 17; // goats
+
+// individual final populations
+f1 = x1 + d1 - d2 - d3;
+f2 = x2 - d1 + d2 - d3;
+f3 = x3 - d1 - d2 + d3;
+
+// constrain final population to be stable, with exactly one of them being non-zero
+f1 + f2 + f3 &gt; 0;
+f1 + f2 + f3 = finalPopulation;
+// (special ordered set ensures at most one is non-zero)
+sos
+f1,f2,f3 &lt;= 1;
+
+// population changes are non-negative and discrete
+int d1, d2, d3;
+</code></pre></div>
+<p>You can run the above program with <a href="http://sourceforge.net/projects/lpsolve/">lpsolve</a>. (I would link to a web interpreter, instead of something you have to install, but I can&#39;t find any decent ones!) If you do, you&#39;ll see in the results tab that the solution has a final population of <code>23</code>, with <code>$d_1=36$</code>, <code>$d_2=0$</code>, and <code>$d_3=19$</code>. In other words, 19 wolves ate a goat and 36 lions ate a wolf.</p>
+
+<p>We can find a valid X-eats-Y sequence by bouncing back and forth between the two allowed operations while applying them as much as possible. Doing that, the population will progress as follows:</p>
+
+<ol>
+<li><code>[6,55,17] + 36[+1,-1,-1] + 19[-1,-1,+1]</code></li>
+<li><code>[23,38,0] + 19[+1,-1,-1] + 19[-1,-1,+1]</code></li>
+<li><code>[4,19,19] + 19[+1,-1,-1]</code></li>
+<li><code>[23,0,0]</code></li>
+</ol>
+
+<p>So an optimal eating sequence is: 17 wolves eat a goat, then 19 lions eat a wolf, then 19 wolves eat a goat, leaving a final population of 6+55+17-17-19-19=23 lions.</p>
+
+<p><strong>Efficiency</strong></p>
+
+<p>How fast is the above integer program, compared to the brute force approach used in the post I linked to? Well:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Goats   Wolves  Lions   Brute(C++)  LPSolve
+17      55      6       0.01s       0.050s
+117     155     106     0.05s       0.047s
+217     255     206     0.35s       0.015s
+317     355     306     1.20s       0.050s
+417     455     406     2.74s       0.049s
+517     555     506     5.09s       0.016s
+617     655     606     9.14s       0.014s
+717     755     706     14.50s      0.015s
+817     855     809     20.25s      0.016s
+917     955     906     28.77s      0.016s
+1,017   1,055   1,006   39.71s      0.018s
+2,017   2,055   2,006   335.07s     0.055s
+900,017 900,055 900,006 n/a         0.049s
+</code></pre></div>
+<p>Wow, the difference is so pronounced that it doesn&#39;t matter that I didn&#39;t average multiple runs or even use the same computer. The integer program is taking effectively the same amount of time regardless of the inputs, finishing faster than you can blink. Meanwhile, the brute force program is taking minutes for a few thousand animals.</p>
+
+<p>(Having a better algorithm is incredibly unfair.)</p>
+
+<p><strong>Convenience vs Precision</strong></p>
+
+<p>Because integer programming is based on solving linear systems, the solvers use floating point numbers internally. When inputs get large enough to cause rounding errors, you&#39;ll get the wrong answer. This is where the trade-off between the convenience of using a solver, and the exactness of hard-coding how it will solve your system comes into play. To finish off this post, let&#39;s figure out an exact solution.</p>
+
+<p>If we assume the largest stable population is all lions, then the linear system reduces to:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">maximize x1 + x2 + x3 - d1 - d2 - d3
+
+x1 + x2 + x3 - d1 - d2 - d3 = x1 + d1 - d2 - d3
+0 = x2 - d1 + d2 - d3
+0 = x3 - d1 - d2 + d3
+</code></pre></div>
+<p>Solving for <code>d1</code> in the first constraint gives:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">maximize x1 + x2 + x3 - d1 - d2 - d3
+
+d1 = (x2 + x3)/2
+0 = x2 - d1 + d2 - d3
+0 = x3 - d1 - d2 + d3
+</code></pre></div>
+<p>Then substituting <code>d1</code> into the other two and solving for <code>d3</code> or <code>d2</code> gives:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">maximize x1 + x2 + x3 - d1 - d2 - d3
+
+d1 = (x2 + x3)/2
+d2 = (x3 - x2)/2 + d3
+d3 = (x2 - x3)/2 + d2
+</code></pre></div>
+<p>Now we substitute <code>d1</code> and one of <code>d2</code> or <code>d3</code> into the maximized expression. Whether we use <code>d2</code> or <code>d3</code> depends on which of <code>x2</code> and <code>x3</code> is larger:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">maximize x1 + x2 + x3 - (x2 + x3)/2 - d2 - ((x2 - x3)/2 + d2)
+</code></pre></div>
+<p>Then we simplify:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">maximize x1 + x3 - 2 d2
+</code></pre></div>
+<p>Which is maximized when <code>d2 = 0</code>. Along the way we implicitly assumed that assigning <code>d3 = (x2 - x3)/2</code> would give a whole and non-negative result, meaning that this solution only works when <code>x2</code> and <code>x3</code> have the same parity (i.e. they are both odd or both even) and also <code>x2 &gt;= x3</code>. If the opposite ordering constraint worked, so <code>x3 &gt;= x2</code>, then the solution would be <code>x1 + x2</code> instead of <code>x1 + x3</code>. To cover both cases we can just say the solution is <code>x1 + min(x2, x3)</code>.</p>
+
+<p>If we&#39;d assumed the final population was wolves, instead of lions, then the constraints would be on <code>x1</code> and <code>x3</code> instead of <code>x2</code> and <code>x3</code> and the solution would be <code>x2 + min(x1, x3)</code>. For goats the constraints are on <code>x1</code> and <code>x2</code> and the solution is <code>x3 + min(x1, x2)</code>. The true solution is the maximum of these three cases, ignoring the ones where the parity constraint is violated.</p>
+
+<p>Because there&#39;s only two parities, odd and even, at most one of the variables can be the odd one out. This reduces the whole system to two cases. If only two of the variables have matching parities, then the answer is <code>xa + min(xb, xc)</code>, where <code>xa</code> is the input with a different parity. If all variables have the same parity then the solution is <code>max(x1 + min(x2,x3), x2 + min(x1, x3), x3 + min(x1,x2)</code>, which seems daunting until you realize it simplifies into <code>max(x1, x2, x3) + min(x1, x2, x3)</code>.</p>
+
+<p>So we can compute the answer by checking what case we&#39;re in, then using a couple clamping operations and an addition. It&#39;s so simple that <em>we can do it by hand</em>. What&#39;s the maximum stable population when there&#39;s <code>900017</code> lions, <code>900055</code> wolves, and <code>900006</code> goats? Well, <code>900006</code> is the odd one out so the answer is <code>900006 + min(900017, 900055) = 1800023</code>.</p>
+
+<p><strong>Summary</strong></p>
+
+<p>In this case, choice of algorithm trumped choice of language.</p>
+
+<p><em>Edit</em>: The last few paragraphs were rewritten to be clearer.</p>
+
+<p><em>Edit #2</em>: Added the paragraph about linear independence and relative parity.</p>
+
+<hr>
+
+<p><a href="http://www.reddit.com/r/programming/comments/27jbii/eating_lions_wolves_and_goats_faster/">Discuss on Reddit</a></p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

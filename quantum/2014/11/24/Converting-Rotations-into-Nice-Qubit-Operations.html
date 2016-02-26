@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Converting Rotations into "Nice" Qubit Operations</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Converting Rotations into "Nice" Qubit Operations</h1>
+<p class="meta">24 Nov 2014</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>In this post: avoiding some issues when mapping from rotations to unitary matrices, and running into <em>different</em> issues.</p>
+
+<p><strong>Common Mapping</strong></p>
+
+<p><a href="/quantum/2014/11/15/Interpolating-Qubit-Operations.html">Last week</a> I mentioned (and relied on the fact) that the space of 2x2 unitary matrices is very similar to the space of rotations. More specifically, 2x2 unitary matrices are isomorphic to the <a href="http://en.wikipedia.org/wiki/Biquaternion">biquaternions</a> (i.e. the <a href="http://en.wikipedia.org/wiki/Complexification">complexification</a> of the <a href="http://en.wikipedia.org/wiki/Quaternion">quaternions</a>, because the quaternions weren&#39;t complex enough I guess).</p>
+
+<p>Given that unitary matrices are &quot;like&quot; rotations, a thing you might occasionally want to do is convert a rotation into some unitary matrix that corresponds to the rotation in some useful way. The easiest way to do this, and the one you&#39;ll find if you go looking, is to represent the rotation as a quaternion and then replace the quaternion components with corresponding <a href="http://en.wikipedia.org/wiki/Pauli_matrices">Pauli matrices</a> times $i$:</p>
+
+<p>$1 \rightarrow I = \begin{bmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{bmatrix}$</p>
+
+<p>$i \rightarrow i \: \sigma_x = \begin{bmatrix} 0 &amp; i \\ i &amp; 0 \end{bmatrix}$</p>
+
+<p>$j \rightarrow i \: \sigma_y = \begin{bmatrix} 0 &amp; 1 \\ -1 &amp; 0 \end{bmatrix}$</p>
+
+<p>$k \rightarrow i \: \sigma_z = \begin{bmatrix} i &amp; 0 \\ 0 &amp; -i \end{bmatrix}$</p>
+
+<p>If our input rotation is a vector $v$, where the direction of $v$ is the rotation axis and the length $|v|$ is how much to rotate in radians, then the unitary matrix we will convert that rotation into is:</p>
+
+<p>$U(v) = I \cos{\frac{|v|}{2}} + i \hat{v} \sigma_{xyz} \sin{\frac{|v|}{2}}$</p>
+
+<p>Where $\hat{v} \sigma_{xyz}$ gives you the <a href="http://en.wikipedia.org/wiki/Pauli_matrices#Pauli_vector">Pauli vector</a> along $v$.</p>
+
+<p><strong>Flaws</strong></p>
+
+<p>The common mapping has a lot of nice properties, but has two flaws I would like to avoid.</p>
+
+<p>The first flaw is that the angles are being divided by two. Because of that, a 360° turn doesn&#39;t get you back to where you started: it gets you to $-I$. If we use this mapping, then we&#39;d have to &quot;turn&quot; 720° to <em>really</em> get back to the starting point. That&#39;s kind of confusing.</p>
+
+<p>The second flaw is that there&#39;s no rotation corresponding to the Pauli matrices. A 180° turn around the X axis gives us $i \sigma_x$ instead of just $\sigma_x$. That means that, if we wanted to use these rotations to define operations for a quantum computer, we can&#39;t even make a NOT gate! (At least, not without an annoying global phase factor tacked on.)</p>
+
+<p>Is it possible to avoid those flaws? Yes, but it will cost us something else.</p>
+
+<p><strong>Phase Correction</strong></p>
+
+<p>Both flaws I mentioned are caused by one problem: the global phase factor is wrong. What we need to do is add a specially crafted counter-phase factor.</p>
+
+<p>Currently a half-turn around the X axis gives us $i \sigma_x$. To turn it into $\sigma_x$ we&#39;ll need a phase correction factor of $-i$. Similarly, we&#39;ll want a phase correction factor of $-1$ for one full turn. Also, after three half turns around the X axis (or one half turn around the negative X axis), we want a phase correction factor of $i$. The phase correction factors are the same for the Y and Z axies, with respect to the amount of turning.</p>
+
+<p>Given the above information, it&#39;s clear we need a correction factor like $e ^{i s \frac{|v|}{2}}$ where $s$ is either $+1$ or $-1$ depending on the direction of rotation. Choosing $s$ is a bit of a sticking point that we&#39;ll get to later. For now, we&#39;ll just bring it along for the ride in the mapping:</p>
+
+<p>$U(v) = e^{i s \frac{|v|}{2}} \left( I \cos{\frac{|v|}{2}} + i \hat{v} \sigma_{xyz} \sin{\frac{|v|}{2}} \right)$</p>
+
+<p>Because the mapping formula now has two factors involving half-angles being multiplied together, there&#39;s opportunities to simplify. Let&#39;s start by expanding $e^{i x}$ into trig functions:</p>
+
+<p>$U(v) = \left( \cos \left( s \frac{|v|}{2} \right) + i \sin \left(s \frac{|v|}{2} \right) \right) \left( I \cos{\frac{|v|}{2}} + i \hat{v} \sigma_{xyz} \sin{\frac{|v|}{2}} \right)$</p>
+
+<p>Now we&#39;ll distribute until the trigonometric multiplications are simple, but things are still grouped based on the matrix factors:</p>
+
+<p>$U(v) = I \left( \cos{\frac{|v|}{2}} \cos \left( s \frac{|v|}{2} \right) + i \sin \left(s \frac{|v|}{2} \right) \cos{\frac{|v|}{2}} \right)  + i \hat{v} \sigma_{xyz} \left( \sin{\frac{|v|}{2}} \cos \left( s \frac{|v|}{2} \right) + i \sin{\frac{|v|}{2}} \sin \left(s \frac{|v|}{2} \right) \right)$</p>
+
+<p>And let&#39;s make the trig factors more similar by pulling out the sign factors based on parity (i.e. $\cos(s x) = \cos(x)$ and $\sin(s x) = s \: \sin(x)$):</p>
+
+<p>$U(v) = I \left( \cos^2{\frac{|v|}{2}} + i \: s \sin \frac{|v|}{2} \cos{\frac{|v|}{2}} \right) + i \hat{v} \sigma_{xyz} \left( \sin{\frac{|v|}{2}} \cos \frac{|v|}{2} + i \: s \sin^2 \frac{|v|}{2} \right)$</p>
+
+<p>Oh hey, a use for those <a href="http://mathworld.wolfram.com/Double-AngleFormulas.html">double-angle formulas</a> I can never remember!</p>
+
+<p>$U(v) = I \left( \frac{1}{2} (1 + \cos |v|) + i \: s \frac{1}{2} \sin |v| \right) + i \hat{v} \sigma_{xyz} \left( \frac{1}{2} \sin |v| + i \: s \frac{1}{2} (1 - \cos |v|) \right)$</p>
+
+<p>Simplify the factors a bit:</p>
+
+<p>$U(v) = \frac{1}{2} I \left( 1 + \cos |v| + i \: s \sin |v| \right) + \frac{1}{2} i \hat{v} \sigma_{xyz} \left( i \: s - i \: s \cos |v| + \sin |v| \right)$</p>
+
+<p>Now make the factors look like each other by pulling $i \: s$ out of the one on the right:</p>
+
+<p>$U(v) = \frac{1}{2} I \left( 1 + \cos |v| + i \: s \sin |v| \right) - \frac{1}{2} s \hat{v} \sigma_{xyz} \left( 1 - \cos |v| - i \: s \sin |v| \right)$</p>
+
+<p>And move the factor of $s$ into the trig functions so they can be merged into $\exp$ functions:</p>
+
+<p>$U(v) = \frac{1}{2} I \left( 1 + e^{i s |v|} \right) - \frac{1}{2} s \hat{v} \sigma_{xyz} \left( 1 - e^{i s |v|} \right)$</p>
+
+<p>That finally looks simple enough to me. The fact that the angles are no longer being divided by two hints at the 720° issue having been solved. Evaluating the mapping at $U(\left&lt;\pm \pi, 0, 0\right&gt;)$, $U(\left<0, \pm \pi, 0\right>)$, and $U(\left<0, 0, \pm \pi\right>)$ does give back $\pm \sigma_x$, $\pm \sigma_y$, and $\pm \sigma_z$ respectively. That&#39;s the right results, except we want to cancel the $\pm$s in the results by picking $s$ appropriately.</p>
+
+<p>How do we choose whether $s$ should be $+1$ or $-1$? A naive solution would be to always use $s=1$, or always use $s=-1$... but that would cause (for example) $U\left(\left&lt;\frac{\tau}{4}, 0, 0\right&gt;\right)$ to differ from $U\left(\left&lt;\frac{-3 \tau}{4}, 0, 0\right&gt;\right)$ despite starting from equivalent rotations. Negating a vector has to negate the $s$ we use because, otherwise, repeatedly doing and undoing a rotation would give matrices that were not inverses of each other, causing the phase factor to accumulate instead of rocking back and forth along with the rotations.</p>
+
+<p>Flipping $s$ without introducing a discontinuity in the phase correction requires $|v|$ to be a whole number of half turns, since that&#39;s the only time when $e^{i \pi \theta} = e^{-i \pi \theta}$. But we need to flip $s$ for all $v$-vs-$-v$ pairs including ones that aren&#39;t half-turns, and we can swivel the axis around to make the flips meet, so... no matter what we do we&#39;re going to end up with a discontinuity in our phase correction angle. <a href="http://www.wolframalpha.com/input/?i=plot+sqrt%28x%5E2+%2B+y%5E2%29+*+sign%28x+%2B+y%29">Something like this</a>:</p>
+
+<p><img src="http://i.imgur.com/HOtVOGJ.png" alt="Plot with discontinuity"></p>
+
+<p>(Okay you got me, it doesn&#39;t <em>have</em> to be one discontinuity. It can be more than one, too.)</p>
+
+<p>We can orient the plane where the discontinuity occurs so that you&#39;re unlikely to use rotation axies along it, but there&#39;s no way to avoid the fact that there <em>is</em> a plane-of-terribleness in the first place (... without changing to a different approach).</p>
+
+<p>Note that, even if you avoid rotation axies along the bad plane, you&#39;ll still run into problems when combining <em>multiple</em> rotations. This is a consequence of wanting half turns to correspond to the Pauli matrices. There&#39;s no way to avoid accumulating a global phase factor via multiple rotations because, although rotating a half turn around the X then Y then Z axis gives you no net rotation, $\sigma_x \cdot \sigma_y \cdot \sigma_z = i I \neq I$.</p>
+
+<p>So, although we&#39;ve solved two flaws from the original mapping (720° turns and no way to get the Pauli matrices), we&#39;ve introduced a discontinuity where the sign of the result switches as you swivel the rotation axis and we still have a multiple-rotations-can-accumulate-phase problem. Whether or not those flaws are preferable to the original flaws depends on the application.</p>
+
+<p><strong>Implementation</strong></p>
+
+<p>Here is python code implementing the final mapping from above:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Warning: flawed; see below</span>
+<span class="k">def</span> <span class="nf">rotation_to_matrix</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">copysign</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">11</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="o">-</span><span class="mi">13</span><span class="o">*</span><span class="n">y</span> <span class="o">+</span> <span class="o">-</span><span class="mi">17</span><span class="o">*</span><span class="n">z</span><span class="p">)</span>  <span class="c"># phase correction discontinuity on an awkward plane</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">z</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mat</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span> <span class="o">+</span>\
+        <span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mat</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1j</span><span class="p">],</span> <span class="p">[</span><span class="mi">1j</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span> <span class="o">+</span>\
+        <span class="n">z</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mat</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+
+    <span class="n">ci</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">cmath</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1j</span> <span class="o">*</span> <span class="n">s</span> <span class="o">*</span> <span class="n">theta</span><span class="p">)</span>
+    <span class="n">cv</span> <span class="o">=</span> <span class="n">s</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">cmath</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1j</span> <span class="o">*</span> <span class="n">s</span> <span class="o">*</span> <span class="n">theta</span><span class="p">))</span> <span class="o">/</span> <span class="n">theta</span>  <span class="c"># Potential division by zero!</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">ci</span> <span class="o">-</span> <span class="n">v</span> <span class="o">*</span> <span class="n">cv</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+</code></pre></div>
+<p>A notable problem in the above code is that we&#39;re dividing by the rotation angle in order to compute the unit vector along the axis of rotation. This will cause problems for small rotations. We <em>could</em> just have an &quot;if rotation is small, default to the identity matrix&quot; guard, but those are gross and generally poorly behaved. Instead, we&#39;re going to rewrite $\frac{1 - e^{i s \theta}}{\theta}$ so it doesn&#39;t involve a division.</p>
+
+<p>To avoid the division, we&#39;re going to use the <a href="http://en.wikipedia.org/wiki/Sinc_function">sinc function</a>: $\mathrm{sinc}(x) = \frac{\sin x}{x}$. To get to that point we&#39;ll expand the $exp$ into trig functions, simplify, use the half-angle identities, and simplify:</p>
+
+<p>$\frac{1 - e^{i s \theta}}{\theta}$</p>
+
+<p>$= \frac{1 - (\cos(s \theta) + i \sin(s \theta))}{\theta}$</p>
+
+<p>$= \frac{1 - \cos(\theta)}{\theta} - \frac{i s\sin(\theta)}{\theta}$</p>
+
+<p>$= \frac{1 - (1 - 2 \sin^2 \frac{\theta}{2})}{\theta} - \frac{i s \sin \theta}{\theta}$</p>
+
+<p>$= \frac{\sin^2 \frac{1}{2} \theta}{\frac{1}{2} \theta} - i \: s \: \frac{\sin{\theta}}{\theta}$</p>
+
+<p>$= \sin \frac{\theta}{2} \mathrm{sinc} \frac{\theta}{2} - i \: s \: \mathrm{sinc} \: \theta$</p>
+
+<p>Although sinc also has a division by zero, we can use the fact that $\sin x$ acts like $x$ near zero to cancel out the problem. As we get close to zero, the Taylor series $\sin x = x - \frac{x^3}{3!} + \frac{x^5}{5!} - ...$ divided by $x$ gives a good enough approximation $\frac{\sin x}{x} = 1 - \frac{x^2}{3!} + \frac{x^4}{5!} - ... \approx 1 - \frac{x^2}{6}$. We&#39;ll switch from directly computing $\frac{\sin x}{x}$ to using the approximation around the time where $1 + \frac{x^4}{120}$ starts getting rounded to $1$.</p>
+
+<p>Given the stable <code>sinc</code> function, and the arbitrarily chosen plane-of-terribleness, we can write the continuous-near-half-turns-and-away-from-the-plane-of-terribleness <code>rotation_to_matrix</code> function:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">cmath</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+
+<span class="k">def</span> <span class="nf">rotation_to_matrix</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a unitary matrix that corresponds, in a useful but not unique way, to a rotation around</span>
+<span class="sd">    the axis &lt;x, y, z&gt; by sqrt(x^2 + y^2 + z^2) radians.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">copysign</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">11</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="o">-</span><span class="mi">13</span><span class="o">*</span><span class="n">y</span> <span class="o">+</span> <span class="o">-</span><span class="mi">17</span><span class="o">*</span><span class="n">z</span><span class="p">)</span>  <span class="c"># phase correction discontinuity on an awkward plane</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">z</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mat</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span> <span class="o">+</span>\
+        <span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mat</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1j</span><span class="p">],</span> <span class="p">[</span><span class="mi">1j</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span> <span class="o">+</span>\
+        <span class="n">z</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mat</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+
+    <span class="n">ci</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">cmath</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1j</span> <span class="o">*</span> <span class="n">s</span> <span class="o">*</span> <span class="n">theta</span><span class="p">)</span>
+    <span class="n">cv</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sinc</span><span class="p">(</span><span class="n">theta</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">s</span> <span class="o">*</span> <span class="n">sinc</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">ci</span> <span class="o">-</span> <span class="n">s</span> <span class="o">*</span> <span class="n">v</span> <span class="o">*</span> <span class="n">cv</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+
+
+<span class="k">def</span> <span class="nf">sinc</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns sin(x)/x, but computed in a way that doesn&#39;t explode when x is equal to or near zero.</span>
+<span class="sd">    sinc(0) is 1.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.0002</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">6</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="n">x</span>
+</code></pre></div>
+<p>And we can double-check that it&#39;s doing what we want by printing out a few test values:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">suppress</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="s">&quot;I&quot;</span><span class="p">,</span> <span class="n">rotation_to_matrix</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&quot;I_2&quot;</span><span class="p">,</span> <span class="n">rotation_to_matrix</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;X&quot;</span><span class="p">,</span> <span class="n">rotation_to_matrix</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;Y&quot;</span><span class="p">,</span> <span class="n">rotation_to_matrix</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;Z&quot;</span><span class="p">,</span> <span class="n">rotation_to_matrix</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;H&quot;</span><span class="p">,</span> <span class="n">rotation_to_matrix</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">z</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="k">print</span> <span class="s">&quot;sqrt_1(X)&quot;</span><span class="p">,</span> <span class="n">rotation_to_matrix</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;sqrt_2(X)&quot;</span><span class="p">,</span> <span class="n">rotation_to_matrix</span><span class="p">(</span><span class="n">x</span><span class="o">=-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+<p>Which prints:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">I [[ 1.+0.j  0.+0.j]
+ [ 0.+0.j  1.+0.j]]
+I_2 [[ 1.+0.j  0.-0.j]
+ [ 0.-0.j  1.+0.j]]
+X [[ 0.-0.j  1.+0.j]
+ [ 1.+0.j  0.-0.j]]
+Y [[ 0.-0.j  0.-1.j]
+ [-0.+1.j  0.-0.j]]
+Z [[ 1.+0.j  0.+0.j]
+ [ 0.+0.j -1.-0.j]]
+H [[ 0.70711-0.j  0.70711+0.j]
+ [ 0.70711+0.j -0.70711-0.j]]
+sqrt_1(X) [[ 0.5-0.5j  0.5+0.5j]
+ [ 0.5+0.5j  0.5-0.5j]]
+sqrt_2(X) [[ 0.5+0.5j  0.5-0.5j]
+ [ 0.5-0.5j  0.5+0.5j]]
+</code></pre></div>
+<p>Those values look good to me (modulo the rounding error introduced by the involvement of $\pi$ and $\sqrt{2}$). The half-turns along each axis give the corresponding Pauli matrix, rotating one full turn gets us back to the identity matrix, the quarter turns are square roots of the half turns, and we even manage to get the Hadamard matrix by rotating a half turn around the X+Z axis.</p>
+
+<p><strong>Summary</strong></p>
+
+<p>The common method for mapping rotations into unitary matrices is smooth, but can&#39;t generate the Pauli matrices and requires a 720° turn to get back to the starting point.</p>
+
+<p>By applying a phase correction we can fix those issues, but we&#39;re forced to introduce a phase discontinuity w.r.t. the axis of rotation.</p>
+
+<p><strong>Update</strong></p>
+
+<p>Converting from rotations to operations is better understood in terms of matrix exponentation.
+See <a href="/quantum/2016/01/10/eigendecomposition-for-rotation-and-interpolation.html">Using Eigendecomposition to Convert Rotations and Interpolate Operations</a>.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

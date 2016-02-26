@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Rule of Thumb: The Condition is the Message</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Rule of Thumb: The Condition is the Message</h1>
+<p class="meta">31 Mar 2014</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>In this post: a simple time saver.</p>
+
+<p><strong>Prose vs Code</strong></p>
+
+<p>Many methods start by checking that the caller satisfied several preconditions. Typically with a big block of <code>if-then-throw</code> statements, like this:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">void</span> <span class="nf">doTheThing</span><span class="o">(</span><span class="kt">int</span> <span class="n">attempts</span><span class="o">,</span> <span class="kt">double</span> <span class="n">timeout</span><span class="o">,</span> <span class="o">...)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">attempts</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;The number of attempts must be positive.&quot;</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">timeout</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;The timeout can&#39;t be zero or negative.&quot;</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">Double</span><span class="o">.</span><span class="na">isNaN</span><span class="o">(</span><span class="n">timeout</span><span class="o">))</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;The timeout can&#39;t be NaN.&quot;</span><span class="o">);</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>I want to point out something about the above example: the error messages. Consider: why are they in English prose, instead of just verbatim repeating the code for the condition that failed?</p>
+
+<p>Are the messages in prose because the prose is more informative? Not in this case. The messages contain exactly the same information as the code.</p>
+
+<p>Are the messages in prose so the user can understand them? No, because exception messages aren&#39;t supposed to be shown to end users (unless you <em>want</em> to internationalize them...). They&#39;re hints for programmers, who understand code just fine.</p>
+
+<p>So why did we bother writing the messages in English? We already have a perfectly good description of what went wrong: the code for the condition. Why not just repeat it? Like this:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">void</span> <span class="nf">doTheThing</span><span class="o">(</span><span class="kt">int</span> <span class="n">attempts</span><span class="o">,</span> <span class="kt">double</span> <span class="n">timeout</span><span class="o">,</span> <span class="o">...)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">attempts</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;attempts &lt;= 0&quot;</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">timeout</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;timeout &lt;= 0&quot;</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">Double</span><span class="o">.</span><span class="na">isNaN</span><span class="o">(</span><span class="n">timeout</span><span class="o">))</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;Double.isNaN(timeout)&quot;</span><span class="o">);</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>Re-using the code for the condition saves time. It turns a translation problem into a copy-paste problem simple enough to be automated (e.g. Objective-C&#39;s <a href="https://developer.apple.com/library/ios/documentation/cocoa/reference/foundation/miscellaneous/foundation_functions/reference/reference.html#//apple_ref/c/macro/NSCParameterAssert">NSCParameterAssert</a> uses the C preprocessor to put the expression into the error message). Code is also more compact, and less ambiguous, than English.</p>
+
+<p>... That&#39;s it. A super simple time saver. Use it.</p>
+
+<p>Alright, alright. There are cases where you shouldn&#39;t.</p>
+
+<p><strong>When to Use Prose</strong></p>
+
+<p>The first case where it makes sense to translate an error condition into English is <em>when you actually include additional information</em>. Maybe the message explains why the condition is an error in the first place, or maybe it gives some hints for how to fix the problem. Anything beyond just restating the condition causing the problem will do.</p>
+
+<p>Here&#39;s the example method from the previous section, but modified to have helpful errors:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">void</span> <span class="nf">doTheThing</span><span class="o">(</span><span class="kt">int</span> <span class="n">attempts</span><span class="o">,</span> <span class="kt">double</span> <span class="n">timeout</span><span class="o">,</span> <span class="o">...)</span> <span class="o">{</span>
+    <span class="c1">// helpful errors</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">attempts</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span>
+        <span class="c1">// People tend to guess `0` when learning; suggest `1`.</span>
+        <span class="s">&quot;The number of attempts must be positive, not zero.&quot;</span>
+        <span class="o">+</span> <span class="s">&quot; The most commonly used number of attempts is 1.&quot;</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">timeout</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span>
+        <span class="c1">// Assuming we follow the misguided convention that a timeout of 0 means no timeout</span>
+        <span class="c1">// is common enough to justify saying how to fix it in the error message.</span>
+        <span class="s">&quot;The timeout must be positive, not zero.&quot;</span>
+        <span class="o">+</span> <span class="s">&quot; Use Double.POSITIVE_INFINITY for an infinite timeout.&quot;</span><span class="o">);</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">attempts</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span>
+        <span class="s">&quot;The number of attempts must be positive, not negative.&quot;</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">timeout</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span>
+        <span class="s">&quot;The timeout must be positive, not negative.&quot;</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">Double</span><span class="o">.</span><span class="na">isNaN</span><span class="o">(</span><span class="n">timeout</span><span class="o">))</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span>
+        <span class="s">&quot;The timeout must be positive, not NaN.&quot;</span><span class="o">);</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>Including the extra information justifies the cost of translating the error conditions to English. The place where this makes the most sense is at API boundaries, where the reader is likely <em>not you</em>. For example, here&#39;s a helpful error from <a href="http://www.joda.org/joda-time/">JodaTime</a>:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="o">...</span>
+<span class="k">if</span> <span class="o">(</span><span class="n">getMonths</span><span class="o">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="n">UnsupportedOperationException</span><span class="o">(</span>
+        <span class="s">&quot;Cannot convert to &quot;</span> <span class="o">+</span> <span class="n">destintionType</span>
+        <span class="o">+</span> <span class="s">&quot; as this period contains months and months vary in length&quot;</span><span class="o">);</span>
+<span class="o">}</span>
+<span class="o">...</span>
+</code></pre></div>
+<p>(Notice how the message mentions the intended result and justifies the condition being an error. (Also, the variable name has a typo. Tee hee.))</p>
+
+<p>The other common case where it doesn&#39;t make sense to re-use code verbatim for the message is <em>when the problem is explained by the exception&#39;s type</em>. For example, C#&#39;s <code>DivideByZeroException</code> and <code>ArgumentNullException</code> classes only need you to specify the parameter name they should use in their explanations. Also, exceptions like <code>SocketException</code> and <code>IOException</code> are often not associated with a particular expression failing so there&#39;s no code to re-use.</p>
+
+<p>The final reason I typically use prose is <em>consistency</em>. If all the other error messages are in aliterated Shakesperean English, then that&#39;s the theme thou throws throughout. Having one message not follow the same rule as the others is jarring.</p>
+
+<p><strong>Summary</strong></p>
+
+<p>Don&#39;t bother translating error cases into English prose if you&#39;re just going to restate the condition that caused the problem, without including any additional information or clarifications. Instead, just re-use the condition&#39;s code for the message.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

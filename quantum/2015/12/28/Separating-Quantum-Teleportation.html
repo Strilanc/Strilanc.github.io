@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Quantum Teleportation's Two Functions</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Quantum Teleportation's Two Functions</h1>
+<p class="meta">28 Dec 2015</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Quantum teleportation is a technique for sending quantum information over a classical communication channel, at the cost of some pre-existing entanglement.
+If you&#39;re not familiar with the process, you can watch Michael Nielson, co-author of the de-facto standard textbook for quantum computing, <a href="https://www.youtube.com/watch?v=3wZ35c3oYUE&amp;list=PL1826E60FD05B44E4&amp;index=18">explain it in a Khan-academy style video</a>.</p>
+
+<p>I won&#39;t be explaining quantum teleportation in detail in this post (<a href="/quantum/2014/05/11/Storing-Bandwidth-with-Quantum-Teleportation.html">I already did that</a>), but for reference, here is a circuit diagram of the quantum teleportation process:</p>
+
+<p><img src="/assets/2015-12-28-Separating-Quantum-Teleportation/quantum-teleportation-circuit.png" title="Quantum Teleportation Circuit" style="max-width: 100%;"/></p>
+
+<p>Typically, quantum teleportation is presented as a primitive.
+But, in this post, we will be discussing two useful sub-primitives that it can be split into.
+I will arbitrarily call the sub-primitives &quot;copy-sending&quot; and &quot;erasure&quot;.</p>
+
+<h1>Copy-sending</h1>
+
+<p>A &quot;copy-sending&quot; quantum channel is one that leaves an entangled copy of the sent qubit at the sender.
+Specifically, a copy-sending channel performs the operation $(\alpha \ket{0} + \beta \ket{1}) \ket{0} \rightarrow \alpha \ket{00} + \beta \ket{11}$.</p>
+
+<p>Note that a copy-sending channel doesn&#39;t create an <em>independent</em> copy, it doesn&#39;t perform <a href="https://en.wikipedia.org/wiki/No-cloning_theorem">the impossible task of cloning unknown quantum states</a>, it creates <em>entangled</em> copies.
+Also note that copy-sending channels differ from typical quantum channels.
+Typical quantum channels <em>move</em> qubits (i.e. they perform $\ket{\psi} \ket{0} \rightarrow \ket{0} \ket{\psi}$) instead of copying them.</p>
+
+<p>You can think of a copy-sending quantum channel as being like a long-distance controlled-NOT.
+The sender has the control qubit, the receiver has a target qubit in the OFF state, and the copy-send toggles the receiver&#39;s qubit when the sender&#39;s qubit is ON (without breaking superposition).
+But be aware of where the analogy breaks down: unlike a CNOT, copy-sending is not its own inverse.
+Copy-sending twice will create a second entangled copy at the receiver, instead of cancelling out the first copy.</p>
+
+<p>A copy-sending quantum channel is not less powerful than a qubit-moving quantum channel, but it may be less efficient due to creating cleanup work with every coherent send.</p>
+
+<p>Quantum teleportation does not act like a copy-sending channel, it acts like a qubit-moving channel.
+However, by cutting a few operations, we can streamline quantum teleportation into a process that performs a copy-send instead of a move.
+We get some benefit for our troubles: a quantum copy-teleportation only involves sending <em>one</em> classical bit, instead of two.</p>
+
+<p>Here is a circuit diagram of the quantum copy-teleportation process (note that it&#39;s a proper subset of the quantum teleportation cicuit):</p>
+
+<p><img src="/assets/2015-12-28-Separating-Quantum-Teleportation/quantum-copy-teleportation-circuit.png" title="Quantum Teleportation Circuit" style="max-width: 100%;"/></p>
+
+<p>Personally, seeing the above circuit diagram for the first time gave me insight into the essence of what quantum teleportation is doing.
+<strong>It&#39;s using the <a href="%5BEPR%20pair%5D(https://en.wikipedia.org/wiki/Bell_state)">EPR pair</a> as a <a href="https://en.wikipedia.org/wiki/One-time_pad">one-time pad</a>!</strong>
+Alice wants to transmit a message bit $a$ to Bob, but Eve (Nature) is listening in on the line.
+Fortunately, Alice and Bob have a shared &quot;really-truly&quot; random secret bit $s$.
+So Alice sends $m = a \oplus s$, masking the message with the pad, and Bob receives the message by computing $m \oplus s = (a \oplus s) \oplus s = a$.</p>
+
+<p>I also understand why we &quot;use up&quot; the EPR pair when performing teleportation now.
+If you re-use a one-time pad, the scheme is no longer secure because <a href="https://en.wikipedia.org/wiki/Venona_project#Decryption">Eve would learn how various messages relate to each other</a>.
+And remember that in this analogy Eve literally corresponds to Nature; she will <a href="https://en.wikiquote.org/wiki/Richard_Feynman#Rogers_Commission_Report_.281986.29"><em>not</em></a> be fooled.
+(For example, it&#39;s important that Bob overwrites his copy of $s$ in computing $a$.
+The value $s \oplus a$ was sent classically, so any copy of $s$ will act as a de-facto entangled copy of $a$ as far as decoherence is concerned.)</p>
+
+<p>So we can cut some bits off of quantum teleportation and get a copy-sending process, and this possibly gives us a few insights.
+But is it useful for anything?
+Well...</p>
+
+<p>Here&#39;s a hypothetical example of a situation where copy-teleportation is useful.
+Suppose we have a situation with an Alice, a Bob, and a Charlie working under <a href="https://en.wikipedia.org/wiki/LOCC">local operations, classical communication (LOCC)</a> constraints.
+The initial state is that Bob shares an EPR pair $x$ with Alice and a separate EPR pair $y$ with Charlie.
+The desired final state is the threesome sharing a <a href="https://en.wikipedia.org/wiki/Greenberger%E2%80%93Horne%E2%80%93Zeilinger_state">GHZ state</a> (instead of the two independent EPR pairs).
+How do we get from the initial state to the desired state?
+Well, Bob can use quantum copy-teleportation, fueled by $y$, to copy-send $x$ to Charlie.
+This leaves Alice, Bob, and Charlie each with an entangled copy of $x$; they are in the GHZ state $\ket{xxx} = \frac{1}{\sqrt{2}}\ket{000} + \frac{1}{\sqrt{2}}\ket{111}$, as desired.</p>
+
+<p>Anyways, I don&#39;t want to fret over copy-teleportation being useful or useless in practice.
+Let&#39;s move on to the second primitive, made up of the complementary subset of the quantum teleportation circuit.</p>
+
+<p><strong>Update (Feb 2017)</strong>:
+<em>Apparently, &quot;copy-sending a qubit&quot; is more typically called &quot;sending a coherent classical bit&quot;.
+See the 2004 paper <a href="http://arxiv.org/abs/quant-ph/0307091">Coherent Communication of Classical Messages</a> by Aram W. Harrow.</em></p>
+
+<h1>Erasure</h1>
+
+<p>I mentioned the <a href="https://en.wikipedia.org/wiki/LOCC"><strong>L</strong>ocal <strong>O</strong>perations, <strong>C</strong>lassical <strong>C</strong>ommunication</a> regime in the last section.
+In this regime, you can perform local quantum operations but you don&#39;t have access to quantum channels (only classical ones).
+There are a lots of interesting tasks that you can, and can&#39;t, do under LOCC constraints (e.g. see <a href="https://en.wikipedia.org/wiki/Quantum_catalyst">quantum catalysis</a>).
+For our purposes what matters is that you can&#39;t create entanglement under LOCC constraints... but you can <em>erase</em> it.</p>
+
+<p>I actually covered how to do this in a previous post <a href="http://localhost:4000/quantum/2015/09/02/Partially-Erasing-Entanglement-with-Measurement.html">about kicking qubits out of GHZ states</a>.
+You measure the qubit-to-be-erased along the X axis, transmit that measurement result to the receiver, and they perform a conditional phase correction.
+See that post for an explanation of why this works (it comes down to (1) moving Hadamard gates trades X gates for Z gates, (2) Z gates commute with their own controls, and (3) controls commute with measurements).</p>
+
+<p>Here is a circuit diagram of the LOCC entanglement erasure process:</p>
+
+<p><img src="/assets/2015-12-28-Separating-Quantum-Teleportation/locc-erasure-circuit.png" title="Quantum Teleportation Circuit" style="max-width: 100%;"/></p>
+
+<p>If you take the quantum copy-teleportation diagram and append the LOCC erasure diagram, you&#39;ll find that you&#39;ve ended up with the full quantum teleportation diagram.
+That&#39;s because they are the two sub-tasks we can split quantum teleportation into, without any overlap or oversight.</p>
+
+<h1>Summary</h1>
+
+<p>Quantum teleportation can be split into two sub-tasks: a reduced form of quantum teleportation that copy-sends a qubit instead of moving a qubit, and a technique for erasing entanglement using only local quantum operations and classical communication.</p>
+
+<p><strong>Update:</strong>
+I should really mention that, of course, you can break down the circuit further.
+I picked the split I did, and stopped at that coarseness, because the result was two LOCC coordination primitives that I found interesting.
+Smaller pieces, like &quot;create an EPR pair&quot; or &quot;perform a bell basis measurement&quot;, are also interesting (and useful!)... they just don&#39;t involve any coordination and that&#39;s where I happened to draw the line.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+  <script>
+  var idcomments_acct = '7d0006bd6a016f9a2892cc2ecc64de01';
+  var idcomments_post_id = '/quantum/2015/12/28/Separating-Quantum-Teleportation.html';
+  var idcomments_post_url = 'http://algorithmicassertions.com/quantum/2015/12/28/Separating-Quantum-Teleportation.html';
+  </script>
+  <span id="IDCommentsPostTitle" style="display:none"></span>
+  <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+  <noscript>
+    <hr>
+    <font color=red>
+      Comments script blocked. Comments won't work.
+    </font>
+    <br/>
+    Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>intensedebate.com</strong> to fix.
+  </noscript>
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

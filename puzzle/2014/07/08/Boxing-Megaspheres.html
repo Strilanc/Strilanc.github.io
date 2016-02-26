@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Puzzle: Boxing Megaspheres</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Puzzle: Boxing Megaspheres</h1>
+<p class="meta">08 Jul 2014</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Suppose you have a box, measuring one meter by one meter by one meter. If I give you spheres that are 0.99 meters in diameter, how many spheres can you fit into the box?</p>
+
+<p>Just one, obviously, so let&#39;s make things a bit more interesting.</p>
+
+<p><strong>A Million Dimensions</strong></p>
+
+<p>Instead of a 3d box, I give you a <em>megabox</em>: a <a href="http://en.wikipedia.org/wiki/Unit_cube#Unit_hypercube">million dimensional hypercube</a> spanning one meter along each axis. I also provide a bunch of <em>megaspheres</em>, <a href="http://en.wikipedia.org/wiki/N-sphere">million-dimensional hyperspheres</a> scaled to be 0.99 meters in diameter. When you place one of these spheres into the box, there&#39;s barely a centimeter of clearance along any given axis... but there&#39;s a whole lot of axies.</p>
+
+<p>How many megaspheres can you fit into the megabox?</p>
+
+<p><strong>Spacing</strong></p>
+
+<p>Try to work out a good lower bound before reading the hints below. Or just write down a guess, and read on.</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p><strong>Hint #1</strong></p>
+
+<p>Yes, it&#39;s more than one.</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p><strong>Hint #2</strong></p>
+
+<p>What&#39;s the distance between opposite corners of the box?</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p><strong>Hint #3</strong></p>
+
+<p>There&#39;s a huge number of corners to push things against.</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p><strong>More Than One</strong></p>
+
+<p>Let&#39;s convince ourselves that we can <em>at the very least</em> put two megaspheres into the box.</p>
+
+<p>The counter-intuitive thing you have to realize about this box is that, although side-to-side distance is quite cramped, there&#39;s <em>boatloads</em> of diagonal distance to work with. If the box goes from $(0,0,...,0)$ to $(1,1,...,1)$, i.e. it covers $[0,1]^{1000000}$, then the distance between two opposite corners is $\sqrt{1^2 + 1^2 + ... + 1^2} = \sqrt{1000000 \cdot 1^2} = 1000$. That&#39;s pretty surprising, I think, so let&#39;s try to use it by putting spheres along that long main diagonal.</p>
+
+<p>A sphere is inside the box when all of the coordinates for its center are between $0.495$ and $0.505$. This limits how much of that long diagonal we can use, but there&#39;s still more than enough to work with. We&#39;ll place sphere #1 at $(0.495, 0.495, ..., 0.495)$ and sphere #2 at $(0.505, 0.505, ..., 0.505)$. So sphere #1 is on the all-zero-ward corner of the valid range, touching all the zero-ward sides of the box, and sphere #2 is the same except it&#39;s one-ward.</p>
+
+<p>The distance between the two spheres is $\sqrt{(0.505-0.495)^2 + (0.505-0.495)^2 + ... + (0.505-0.495)^2}$, which simplifies to $\sqrt{1000000 \cdot 0.01^2} = \sqrt{100} = 10$. Because $10$ is more than $0.99$, the spheres are not touching. They&#39;re not even close to touching! We can easily fit eight more megaspheres on the same diagonal.</p>
+
+<p>Let&#39;s move on to a more complicated solution.</p>
+
+<p><strong>A Lower Bound</strong></p>
+
+<p>Unfortunately, because <a href="http://en.wikipedia.org/wiki/Packing_problems">packing problems</a> are notoriously difficult, we are not going to go for an exact solution. We&#39;re going to try to find a very rough lower bound, to get an idea of how large the answer is. To get that lower bound, we&#39;ll make two big simplifications to the problem.</p>
+
+<p>The first simplification is to assume that all of the spheres are pushed up against the sides of the box. That is to say, we only place spheres centered on corners of the imaginary smaller box covering just $[0.495, 0.505]^{1000000}$.</p>
+
+<p>This is a useful simplification because it moves the problem into the domain of <a href="http://en.wikipedia.org/wiki/Coding_theory">coding theory</a>. Each corner of the box is identified by a binary sequence like $010111...0101$, with the $i$&#39;th bit set to $1$ if the corner is one-ward along the $i$&#39;th dimension (i.e. its $i$&#39;th coordinate is $0.505$), and otherwise set to $0$ because the corner is zero-ward ($i$&#39;th coordinate is $0.495$).</p>
+
+<p>The true distance between two corners is determined by how many of their bits differ, which is known as the <a href="http://en.wikipedia.org/wiki/Hamming_distance">Hamming distance</a>. Adjacent corners have a Hamming distance of 1, because they only differ by one bit, and this corresponds to an actual Euclidean distance of 0.01 between them. If $d$ bits differ between two corners, then the Euclidean distance between those corners is $\sqrt{d \cdot 0.01^2} = \frac{\sqrt{d}}{100}$.</p>
+
+<p>Our megaspheres intersect if and only if their centers are less than a distance of $0.99$ apart. So if two corners each have a sphere placed on them, then those corners must have enough differing bits for $\frac{\sqrt{d}}{100} \geq 0.99$ to be satisfied. Simplifying, we find that the minimum Hamming distance between used corners is $d \geq 99^2 = 9801$.</p>
+
+<p>So our goal is to find a large set of corners, subject to the constraint that all corners in the set must differ from each other in at least $9801$ bit positions.</p>
+
+<p>Now comes the second simplification. Instead of finding an optimal set of points, we&#39;re going to use a pattern involving <a href="http://en.wikipedia.org/wiki/Finite_field_arithmetic">polynomials over finite fields</a>.</p>
+
+<p>We start by partitioning the million bits used to specify each corner into groups of size $16$.</p>
+
+<p>The bits in each group will encode a value from the (unique) finite field of size $2^{16}$, commonly called ${\mathbb{F}_{2^{16}}}$.
+Unfortunately, explaining how addition and multiplication work in finite fields is beyond the scope of this post.
+The main thing you have to know is that polynomials work almost exactly like they do over the reals. More specifically, what we care about is that when two polynomials of degree $b$ or less agree on $b+1$ or more points, then they must be the same polynomial. Conversely, if we start with two different polynomials of degree at most $b$ and sample $b+s$ points from each, then at least $s$ of those points must have differed.</p>
+
+<p>Each corner specifies $\frac{1000000}{16} = 62500$ points (each being a group of $16$ bits), and we need at least $9801$ bit differences. So we set $s=9801$ and $b=52699$. This is actually very conservative, because we&#39;re counting only 1 bit difference per point difference, but a single point difference could be up to 16 bit differences. (If you&#39;re wondering why I&#39;m not sidestepping that issue by using a smaller finite field, like ${\mathbb{F}_{2}}$, it&#39;s because the size of a finite field places a limit on the maximum degree of polynomials it can contain. We can only use the finite field with $2^{16}$ values because $2^{16} &gt; \frac{1000000}{16}$. Also the size must be a prime power, but I digress.)</p>
+
+<p>The way we will pick corners is by enumerating the polynomials of degree $52699$ (or less) in ${\mathbb{F}_{2^{16}}}$. There are $52700$ coefficients to pick (one for each power of $x$ from $x^0$ to $x^{52699}$), and each coefficient can be any of the $2^{16}$ values in the finite field, so there are $\left({2^{16}}\right)^{52700}$ such polynomials. For each polynomial $P(x)$ we will yield a corner whose $i$&#39;th group of bits encodes $P(i)$, the polynomial&#39;s value at $i$, for each $i$ in range. We place a megasphere on each yielded corner, and that&#39;s it.</p>
+
+<p>The spheres we just placed aren&#39;t touching, because the corners are generated in a way that guarantees they have a sufficiently large hamming distance, and the spheres are inside the box, because their centers fall in the valid range.</p>
+
+<p>How many spheres did we just fit?... Approximately $10^{253828}$.</p>
+
+<p>And our encoding is nowhere near optimal! The <a href="http://en.wikipedia.org/wiki/Hamming_bound">Hamming bound</a> on a million bit code with a minimum distance of $9801$ is $\frac{2^{1000000}}{\sum_{k=0}^{4900} {1000000 \choose k}}$, or approximately $10^{287591}$, which is tens of thousands of orders of magnitude better.</p>
+
+<p>And we limited ourselves to only using the corners! No matter what we do at the corners, there&#39;s still room for another sphere at the very center of the box (and plenty more along with it).</p>
+
+<p>So do be awestruck at the sheer vastness of the number of megaspheres we can put into this box, but don&#39;t be surprised if the true solution has far more digits than the puny quarter million digit lower bound I just gave.</p>
+
+<p><strong>Summary</strong></p>
+
+<p>How many million-dimensional spheres can we pack into a slightly wider box? A lot.</p>
+
+<hr>
+
+<p><a href="http://www.reddit.com/r/math/comments/2a55h0/puzzle_boxing_megaspheres/">Discuss on Reddit</a></p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

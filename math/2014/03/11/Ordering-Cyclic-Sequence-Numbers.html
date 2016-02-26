@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Ordering Cyclic Sequence Numbers</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Ordering Cyclic Sequence Numbers</h1>
+<p class="meta">11 Mar 2014</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>In this post: computing ordering and signed distance when numbers loop around.</p>
+
+<p><strong>Sequence Numbers</strong></p>
+
+<p>In the <a href="http://en.wikipedia.org/wiki/Real-time_Transport_Protocol">Real-time Transfer Protocol (RTP)</a>, every packet is assigned a <em>sequence number</em>. The sender increases the sequence number by one for each packet it sends, and the receiver uses the sequence number to consume potentially re-ordered packets in the right order.</p>
+
+<p>RTP&#39;s sequence numbers, like clocks and angles and odometers, do not just keep increasing without bound. They are 16 bit integers. After sending 65536 packets, the sender will have looped around the whole range and must start re-using previously sent sequence numbers.</p>
+
+<p>The looping around complicates how the receiver determines if a packet should be <em>before</em> or <em>after</em> another. You can&#39;t just assume the larger sequence number comes after, because your voip app would get stuck on sequence number 65535 and the call would fail. This is a tricky bug, because it takes tens of minutes to happen (i.e. you must specifically test for it, preferably <a href="http://twistedoakstudios.com/blog/Post3516_rule-of-thumb-ask-for-the-clock">without talking on a phone for an hour</a>).</p>
+
+<p>Another sequence number complication comes from <a href="http://en.wikipedia.org/wiki/ZRTP">ZRTP</a>, which secures the contents of RTP packets. ZRTP uses a block cipher in <a href="http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Counter_.28CTR.29">counter mode</a>, with the sequence number as the counter value. The problem is that repeating counter values is a security bug, like <a href="http://en.wikipedia.org/wiki/Venona_project#Breakthrough">re-using a one-time pad</a>: attackers could learn the difference between the encoding of what you said 10 minutes ago and what you&#39;re saying now. You&#39;d go from AES levels of security to talking-over-yourself levels of security. ZRTP solves this problem by internally <em>expanding</em> sequence numbers from 16 bits to 64 bits, increasing the cycle time from tens of minutes to billions of years.</p>
+
+<p>The rest of this post explains, and provides code for, the ordering and expanding of loopy sequence numbers.</p>
+
+<p>Note that the solutions will look trivial, and <em>are</em> trivial, but they&#39;re also <em>tricky</em>. When writing code to solve them, it&#39;s easy to end up in a terrible cycle of introducing corner cases by trying to handle other corner cases. I&#39;ve been in that place before, and I know others have too because it&#39;s one of the bugs I <a href="https://github.com/WhisperSystems/RedPhone/commit/56d2aedcf79a3214a96b017ac5e19f72712d7ffa">caught</a> in RedPhone.</p>
+
+<p><strong>Closer Ahead</strong></p>
+
+<p>The ordering we want for our sequence numbers is &quot;closer when going forward&quot;. We will say <code>y</code> is <em>ahead of</em> <code>x</code> when, starting from <code>x</code> and heading to <code>y</code>, it would take less time to travel forward (in the positive direction) than backward. For example, on a clock we would say 2 o&#39;clock is <em>ahead of</em> 11 o&#39;clock because 2 o&#39;clock is 9 hours counter-clockwise from 11 o&#39;clock but only 3 hours clockwise from 11 o&#39;clock.</p>
+
+<p>In the case of signed 16 bit sequence numbers, computing this ordering is trivial. You just subtract <code>y</code> from <code>x</code>, assuming your language handles signed overflow with wraparound. If the result is positive, then <code>y</code> is <em>ahead of</em> <code>x</code>. If the result is negative, then <code>y</code> is <em>behind</em> <code>x</code> (i.e. <code>x</code> is <em>ahead of</em> <code>y</code>). A zero result means <code>x = y</code>.</p>
+
+<p>You might be worrying that the &quot;ordering&quot; we&#39;re computing here is not transitive. That does make calling it an &quot;ordering&quot; a bit of a misnomer... but in practice we really do use it like a proper ordering. For example, we can make a priority queue that uses it:</p>
+<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="c1">// note: relying on signed overflow wrapping</span>
+<span class="k">new</span> <span class="n">PriorityQueue</span><span class="p">&lt;</span><span class="n">Packet</span><span class="p">&gt;(</span><span class="n">comparator</span><span class="p">:</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">(</span><span class="kt">short</span><span class="p">)(</span><span class="n">b</span><span class="p">.</span><span class="n">seq</span> <span class="p">-</span> <span class="n">a</span><span class="p">.</span><span class="n">seq</span><span class="p">));</span>
+</code></pre></div>
+<p>This priority queue will work great, <em>as long as you don&#39;t put an intransitive set of values in it</em>. In the case of RTP sequence numbers this is not a problem, because of the way packets slowly count forward and are quickly consumed. Packets arriving now are consumed way, <em>way</em> before you get to where they would cause trouble (on the other side of the sequence number cycle).</p>
+
+<p>A side-benefit of using subtraction to determine our ordering is that it gives us a <em>distance</em>. It tells us how <em>far</em> ahead, or behind, a sequence number is (relative to the current sequence number). We can use that to play it safe, detecting when sequence numbers &quot;skip&quot;:</p>
+<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="c1">// priority queue with fail-fast check for big skips</span>
+<span class="k">new</span> <span class="n">PriorityQueue</span><span class="p">&lt;</span><span class="n">Packet</span><span class="p">&gt;((</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="kt">short</span> <span class="n">d</span> <span class="p">=</span> <span class="n">b</span><span class="p">.</span><span class="n">seq</span> <span class="p">-</span> <span class="n">a</span><span class="p">.</span><span class="n">seq</span><span class="p">;</span>
+    <span class="c1">// fail if sequence number is more than a quarter-turn away, because something is wrong</span>
+    <span class="c1">// (caller should not be detecting such suspicious packets before forwarding to us)</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">Math</span><span class="p">.</span><span class="n">abs</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">&lt;</span> <span class="p">(</span><span class="m">1</span><span class="p">&lt;&lt;</span><span class="m">14</span><span class="p">));</span>
+    <span class="k">return</span> <span class="n">d</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>Slightly perverting a priority queue in this way, to use our ordering that is not quite an ordering, is really useful. It automatically solves the problems of buffering and ordering RTP packets to be consumed.</p>
+
+<p><strong>Expanding</strong></p>
+
+<p>Knowing that subtraction with signed overflow gives us a distance makes the expanding-to-64-bits problem a lot simpler. Just keep adding in the (signed) distances:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// expanding from 16 to 64 bits</span>
+<span class="kt">long</span> <span class="n">_expandedSeq</span><span class="o">;</span>
+<span class="kt">long</span> <span class="nf">expandRollingSequenceId</span><span class="o">(</span><span class="kt">short</span> <span class="n">seq</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">_expandedSeq</span> <span class="o">+=</span> <span class="o">(</span><span class="kt">short</span><span class="o">)(</span><span class="n">seq</span> <span class="o">-</span> <span class="n">_expandedSeq</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">_expandedSeq</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>Seen above: beautifully simple code. (Gets uglier in C, where you have to manually wrap the signed overflow.)</p>
+
+<p>Again we&#39;re relying on the fact that sequence numbers increase slowly, instead of jumping all over the available range. In ZRTP this is the case, since packets aren&#39;t delayed by tens of minutes so the above code can be used to keep the receiver&#39;s expanded sequence number in sync with the sender&#39;s expanded sequence number. Even when packets are being re-ordered.</p>
+
+<p>(Note: Beware an attacker forcing a sequence number desync by replaying packets after tens of minutes. You can prevent this attack by decrypting and authenticating packets before mutating the internal &quot;current&quot; expanded sequence number.)</p>
+
+<p><strong>Other Cycle Sizes</strong></p>
+
+<p>What about when the cycle you&#39;re dealing with isn&#39;t a 16 bit integer? What if it doesn&#39;t match up with a built-in numeric type? What if it&#39;s a continuous value, like an angle? Ordering and distance are still just a matter of subtraction, except you have to follow up with forcing the result into the interval $[-\frac{n}{2}, \frac{n}{2})$, where $n$ is the length of the cycle:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// Returns the smallest value x, by absolute value,</span>
+<span class="c1">// such that start+x is congruent to end (mod cycleLength)</span>
+<span class="kt">int</span> <span class="nf">cycleDelta</span><span class="o">(</span><span class="kt">int</span> <span class="n">start</span><span class="o">,</span> <span class="kt">int</span> <span class="n">end</span><span class="o">,</span> <span class="kt">int</span> <span class="n">cycleLength</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">assert</span><span class="o">(</span><span class="n">cycleLength</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">);</span>
+    <span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="o">;</span>
+
+    <span class="c1">// make smaller</span>
+    <span class="n">d</span> <span class="o">%=</span> <span class="n">cycleLength</span><span class="o">;</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">d</span><span class="o">*</span><span class="mi">2</span> <span class="o">&gt;=</span> <span class="n">cycleLength</span><span class="o">)</span> <span class="n">d</span> <span class="o">-=</span> <span class="n">cycleLength</span><span class="o">;</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">d</span><span class="o">*</span><span class="mi">2</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">cycleLength</span><span class="o">)</span> <span class="n">d</span> <span class="o">+=</span> <span class="n">cycleLength</span><span class="o">;</span>
+
+    <span class="k">return</span> <span class="n">d</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>Note that everything breaks if signed overflow occurs during the subtraction, so use a large enough numeric type. Changing all the <code>int</code>s to <code>float</code>s makes the code work on <code>float</code>s. If your language has a proper modulo operator, that returns non-negative results even for negative numerators (e.g. Python), you can remove the last adjustment line.</p>
+
+<p><strong>Summary</strong></p>
+
+<p>Sequence numbers are ordered by a non-transitive &quot;ahead of&quot; relationship that can be thought of as &quot;closer when going forward&quot;.</p>
+
+<p>In practice the non-transitive ordering works <em>like</em> a transitive ordering, because at any given time you&#39;re only looking at a small part of the cycle.</p>
+
+<p>The signed distance between two sequence numbers is the smallest value congruent to their difference (modulo the cycle length).</p>
+
+<p><strong>Bonus: Puzzle</strong></p>
+
+<p>Here&#39;s a puzzle related to today&#39;s post.</p>
+
+<p>You, me, and your friend are in a room with a standard deck of 52 cards. I propose a game. I tell you that I will shuffle the deck, then deal you five cards. You get to look at them, then pick four to lay down in whatever order you want. Then your friend has to predict what the last card is.</p>
+
+<p>I give you prep-time to discuss strategy with your friend. The only communication you are allowed during the game is in the choosing of which card to not lay down, and the order of the cards you do lay down.</p>
+
+<p>Is it possible to win with certainty? How, or why not? What is the largest deck of cards where it&#39;s possible to win with certainty?</p>
+
+<hr>
+
+<p><a href="http://www.reddit.com/r/programming/comments/207rhs/ordering_cyclic_sequence_numbers/">Discuss on Reddit</a></p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

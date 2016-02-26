@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Storing Bandwidth with Quantum Teleportation</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Storing Bandwidth with Quantum Teleportation</h1>
+<p class="meta">11 May 2014</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p><a href="http://en.wikipedia.org/wiki/Quantum_teleportation">Quantum teleportation</a> is the inverse of superdense coding (<a href="http://strilanc.com/quantum/2014/05/03/Storing-Bandwidth-with-Superdense-Coding.html">which I talked about last week</a>). Instead of consuming a previously shared qubit to encode two classical bits into a single quantum bit, quantum teleportation consumes a previously shared qubit to encode a desired qubit into two classical bits.</p>
+
+<p>People often focus on the fact that teleportation can send qubits at all but, because you already need the ability to send qubits in order to set quantum teleportation up in the first place, that&#39;s not what makes it <em>useful</em>. Instead, its utility comes from the ability to &quot;store&quot; quantum bandwidth and thereby improve quantum channels in interesting ways.</p>
+
+<p>In this post I&#39;ll go over the quantum teleportation process, and outline a few possible applications.</p>
+
+<p><strong>Quantum Teleportation</strong></p>
+
+<p>In case I can&#39;t explain things, <a href="https://www.youtube.com/watch?v=3wZ35c3oYUE&amp;list=PL1826E60FD05B44E4&amp;index=18">here&#39;s a video explanation of quantum teleportation by someone else</a>. You may have to watch the whole series of videos it&#39;s part of before things click, though.</p>
+
+<p>My circuit diagram for quantum teleportation is a lot like <a href="http://i.imgur.com/mXHpdbB.png">the one for superdense coding</a>, except the encoding and decoding steps are swapped:</p>
+
+<p><img src="http://i.imgur.com/zAQ2SFi.png" alt="Superdense coding circuit"></p>
+
+<p>Like last time, the top of the diagram corresponds to &quot;Alice&quot;, who wants to send a quantum bit to &quot;Bob&quot; (the bottom). Let&#39;s look at how the state of the system changes as time passes, and operations are applied, going from left to right.</p>
+
+<p>Initially, the system is in the all-zero state. Alice hasn&#39;t initialized her qubit, and the bell pair hasn&#39;t been created yet. We represent this algebraically, using <a href="http://en.wikipedia.org/wiki/Bra%E2%80%93ket_notation">ket notation</a>, as:</p>
+
+<p>$\left| 0 \right&gt;\left| 0 \right&gt;\left| 0 \right&gt; = \left| 000 \right&gt;$</p>
+
+<p>From this state we are going to create a bell pair, then have Alice encode her qubit, then decode it at Bob&#39;s.</p>
+
+<p><i>Creating the Bell Pair</i></p>
+
+<p>The first thing that must be done, before Alice can even consider teleporting a qubit to Bob, is the sharing of a bell pair. Two qubits must be placed into a superposition where they are either both true or both false. This is done by applying a <a href="http://en.wikipedia.org/wiki/Quantum_gate#Hadamard_gate">Hadamard operation</a> to one of the qubits, then applying a conditional not from that one to another.</p>
+
+<p>The Hadamard operation (H) sends the state $\left| 0 \right&gt;$ to the superposition $\left| 0 \right&gt; + \left| 1 \right&gt;$, and the state $\left| 1 \right&gt;$ to the superposition $\left| 0 \right&gt; - \left| 1 \right&gt;$. Well, actually there&#39;s also a factor $\sqrt{2}$ in there but I&#39;ll be ignoring those throughout. We will use the second and third bits for our bell pair, so let&#39;s apply H to the second position. Its value is $\left| 0 \right&gt;$, so it becomes $\left| 0 \right&gt; + \left| 1 \right&gt;$:</p>
+
+<p>$\rightarrow \left| 0 \right&gt;\left(\left| 0 \right&gt; + \left| 1 \right&gt;\right)\left| 0 \right&gt; = \left| 000 \right&gt; + \left| 010 \right&gt;$</p>
+
+<p>Notice how you can distribute the multiplication of kets across addition, which is useful for representing the state succinctly or in ways that are easy to operate on. Now we apply the conditional not, flipping the third bit in any parts of the superposition where the second bit is set:</p>
+
+<p>$\rightarrow \left| 000 \right&gt; + \left| 011 \right&gt; = \left| 0 \right&gt; \left(\left| 00 \right&gt; + \left| 11 \right&gt; \right)$</p>
+
+<p>The bell pair has been created. Alice and Bob each get one of entangled qubits, and we move on to encoding.</p>
+
+<p><i>Encoding</i></p>
+
+<p>Alice needs a qubit to send, so suppose she has applied some operations that have put the first bit into some unknown superposition $\alpha \left| 0 \right&gt; + \beta \left| 1 \right&gt;$. After those operations the state of the entire system changes to:</p>
+
+<p>$\rightarrow (\alpha \left| 0 \right&gt; + \beta \left| 1 \right&gt;) \left(\left| 00 \right&gt; + \left| 11 \right&gt; \right) = \alpha \left| 000 \right&gt; + \alpha \left| 011 \right&gt; + \beta \left| 100 \right&gt; + \beta \left| 111 \right&gt;$</p>
+
+<p>To encode the qubit for teleportation, Alice conditionally not&#39;s it into her half of the bell pair. So we flip the second bit in the parts of the superposition where the first bit is set:</p>
+
+<p>$\rightarrow \alpha \left| 000 \right&gt; + \alpha \left| 011 \right&gt; + \beta \left| 110 \right&gt; + \beta \left| 101 \right&gt;$</p>
+
+<p>After the conditional not, Alice must apply the Hadamard operation to her qubit (bit #1). Keeping in mind the &quot;0 to 0+1 and 1 to 0-1&quot; rule, we find that the operation changes the state to:</p>
+
+<p>$\rightarrow \alpha (\left| 000 \right&gt; + \left| 100 \right&gt;) + \alpha (\left| 011 \right&gt; + \left| 111 \right&gt;) + \beta (\left| 010 \right&gt; - \left| 110 \right&gt;) + \beta (\left| 001 \right&gt; - \left| 101 \right&gt;)$</p>
+
+<p>$= \alpha \left| 000 \right&gt; + \alpha \left| 100 \right&gt; + \alpha \left| 011 \right&gt; + \alpha \left| 111 \right&gt; + \beta \left| 010 \right&gt; - \beta \left| 110 \right&gt; + \beta \left| 001 \right&gt; - \beta \left| 101 \right&gt;$</p>
+
+<p>We&#39;re not going to worry about what measuring does to our state, because <a href="https://en.wikipedia.org/wiki/Deferred_Measurement_Principle">you can always delay measuring without changing the outcome</a>. So the encoding is done, and we can move on to decoding.</p>
+
+<p><i>Decoding</i></p>
+
+<p>Bob decodes the sent qubit by applying operations based on the classical bits he receives. He conditionally nots the second bit into his half of the bell pair, and conditionally Z-rotates his half of the bell pair based on the first bit.</p>
+
+<p>To do the conditional not we look at the superposition and flip the third bit wherever the second bit is set, resulting in this state:</p>
+
+<p>$\rightarrow \alpha \left| 000 \right&gt; + \alpha \left| 100 \right&gt; + \alpha \left| 010 \right&gt; + \alpha \left| 110 \right&gt; + \beta \left| 011 \right&gt; - \beta \left| 111 \right&gt; + \beta \left| 001 \right&gt; - \beta \left| 101 \right&gt;$</p>
+
+<p>Now we have to apply a Z gate, conditioned on the first bit, to the third bit. The Z gate negates the phase of $\left| 1 \right&gt;$, so whenever the first and third bit are both set, we multiply by -1:</p>
+
+<p>$\rightarrow \alpha \left| 000 \right&gt; + \alpha \left| 100 \right&gt; + \alpha \left| 010 \right&gt; + \alpha \left| 110 \right&gt; + \beta \left| 011 \right&gt; + \beta \left| 111 \right&gt; + \beta \left| 001 \right&gt; + \beta \left| 101 \right&gt;$</p>
+
+<p>And suddenly, things start to factor again:</p>
+
+<p>$= \alpha \left| 000 \right&gt; + \beta \left| 001 \right&gt; + \alpha \left| 100 \right&gt; + \beta \left| 101 \right&gt; + \alpha \left| 010 \right&gt; + \beta \left| 011 \right&gt; + \alpha \left| 110 \right&gt; + \beta \left| 111 \right&gt;$</p>
+
+<p>$= (\left| 00 \right&gt; + \left| 10 \right&gt; + \left| 01 \right&gt; + \left| 11 \right&gt;) (\alpha \left| 0 \right&gt; + \beta \left| 1 \right&gt;)$</p>
+
+<p>$= (\left| 0 \right&gt; + \left| 1 \right&gt;) (\left| 0 \right&gt; + \left| 1 \right&gt;) (\alpha \left| 0 \right&gt; + \beta \left| 1 \right&gt;)$</p>
+
+<p>Notice that the expression for the third qubit matches what Alice wanted to send. Her qubit was teleported to Bob, using only a classical channel, thanks to the previously shared bell pair. If the sent qubit had been entangled with other qubits, that would have been maintained as well (just like a normal quantum channel does).</p>
+
+<p><strong>Applications</strong></p>
+
+<p><em>Warning:</em> All of these applications are hypothetical. In particular, they all rely on being able to store qubits for long periods of time. We don&#39;t know a good way to do that, yet.</p>
+
+<p>As I mentioned in the introduction, my conception of what makes quantum teleportation useful is its ability to improve quantum channels by storing quantum bandwidth.</p>
+
+<p>For example, you can use quantum teleportation to increase the reliability of a quantum channel. Imagine you have a business that needs to send qubits to a bank, to verify <a href="https://en.wikipedia.org/wiki/Quantum_money">quantum money</a> you receive. Unfortunately, your ISP has been doing a terrible job maintaining the quantum channel (because screw you we&#39;ve got a monopoly). On any given day the quantum channel might go down for hours at a time, probably during business hours instead of at night when you don&#39;t need it. Quantum teleportation allows you to use that available night time bandwidth to share bell pairs, then use those shared pairs to maintain quantum communication with the bank during a daytime outage (as long as the classical internet is still working).</p>
+
+<p>You can also use quantum teleportation to reduce latency. Suppose you have the same business as before, but it&#39;s in the middle of nowhere. There is no fiber optic cable to send qubits over, just a classical satellite link. If you want to send qubits to the bank, or vice-versa, you literally have to <em>ship</em> them. In a <em>crate</em>. You have a quantum channel... but it has latency measured in <em>days</em> instead of seconds. Quantum teleportation lets you cut that latency down to the latency of your satellite link: just have the bank send a steady stream of entangled bell pair shipments, then use those to teleport qubits over the satellite link.</p>
+
+<p>Even if you have a quick reliable quantum channel available, quantum teleportation allows you to supplement it. Have a truck drop bell pairs off every day, and use those for additional bandwidth. Need more quantum bandwidth? Send a bigger truck. At least until you max out your classical bandwidth.</p>
+
+<p>The last application for quantum teleportation, that I can think of, is turning one way channels into two way channels. Suppose you need a quantum channel to your friend, to do a <a href="http://www.youtube.com/watch?v=CfTulV4PciM">private database query</a> or <a href="http://en.wikipedia.org/wiki/Quantum_key_distribution">generate a shared private key</a> or something, but neither of you can <em>send</em> qubits. However, you can both receive qubits from some third party. Quantum teleportation allows you to use bell pairs generated by the third party to create a proper quantum channel between you and your friend.</p>
+
+<p>Put that all together and quantum teleportation lets you turn a high-latency quantum channel that only goes one way and experiences frequent outages into a two-way low-latency quantum channel that works even if there&#39;s an outage. As long as you have a classical channel with those properties. Not bad.</p>
+
+<p>I&#39;ll note again that none of this is practical yet. But, as with superdense coding, I enjoy, for its own sake, the hypothetical image of trucks dropping off boxes of bandwidth.</p>
+
+<p><strong>Summary</strong></p>
+
+<p>Quantum teleportation turns pre-shared entangled qubits into the ability to send quantum information over a classical channel. It can be used to improve the reliability and latency of quantum channels, when a good classical channel is available.</p>
+
+<hr>
+
+<p><a href="http://www.reddit.com/r/programming/comments/25azlo/storing_bandwidth_with_quantum_teleportation/">Discuss on Reddit</a></p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

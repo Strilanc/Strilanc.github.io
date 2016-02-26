@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Deflating Delayed Choice Quantum Erasure</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Deflating Delayed Choice Quantum Erasure</h1>
+<p class="meta">07 Jan 2016</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>The <a href="https://en.wikipedia.org/wiki/Delayed_choice_quantum_eraser">Delayed Choice Quantum Eraser</a> is a widely misunderstood experiment.
+Apparently the common belief is that it&#39;s some kind of grand world-view-shattering mystery, with powers ranging from sending messages backwards in time (<a href="http://www.ibtimes.co.uk/quantum-weirdness-proved-again-measurement-changing-atoms-past-1504172">example pop-science article</a>) to demonstrating the existence of conscious knowledge (<a href="http://www.abovetopsecret.com/forum/thread1013362/pg1">example woo thread</a>).
+Although there&#39;s <a href="http://jamesowenweatherall.com/SCPPRG/EllermanDavid2012Man_QuantumEraser2.pdf">continuous</a> <a href="http://van.physics.illinois.edu/qa/listing.php?id=25872">effort</a> <a href="http://www.scientificamerican.com/article/quantum-eraser-delayed-choice-experiments/">to</a> <a href="https://www.physicsforums.com/threads/explain-delayed-choice-quantum-eraser-without-consciousness.808688/">correct</a> these misconceptions, it&#39;s easy to run into them.</p>
+
+<p>Case in point: I googled for &quot;delayed choice quantum eraser&quot; videos.
+The top result?
+<a href="https://www.youtube.com/watch?v=U7Z_TIw9InA">This youtube video</a>.
+It mashes a scene from the infamous <a href="http://www.imdb.com/title/tt0399877/">What the #$*! Do We (K)now!?</a> film into a scene from <a href="http://www.imdb.com/title/tt2356685/">a terrible episode of &quot;The Universe&quot;</a>.
+Both clips mention backwards-in-time effects, and imply collapse is caused by humans looking in the general direction of an experiment.
+The forehead-slapping climaxes when a graphic <em>literally</em> shows <a href="https://youtu.be/vnN85i_75EI?t=18m16s">a person turning waves into particles by opening their eyes</a> (argh!).</p>
+
+<p>Delayed choice erasure (hereafter DCQE) may be counter-intuitive, it may be <em>interesting</em>, but it&#39;s not <em>mysterious</em> or <em>magical</em>.
+We understand the math behind how it works.
+Interpretations of quantum mechanics explain it without any reference to consciousness or backwards-in-time effects.</p>
+
+<p>In this post, my goal is to add to the pile of &quot;DCQE is not magical&quot; effort in some small way.
+I&#39;ll explain what you&#39;d actually see if you ran a DCQE, show the same effects in a simplified model using qubits instead of photons, and hopefully convince that the common misconceptions are in fact misconceptions.</p>
+
+<h1>The Experiment</h1>
+
+<p>Your typical DCQE experiment is like a <a href="https://en.wikipedia.org/wiki/Double-slit_experiment">double-split experiment</a>, except that an entangled copy of the which-slit-did-the-photon-go-through information is made.
+By later measuring the entangled copy of the information along the wrong axis, you can find some hidden interference patterns.
+The framing is that, by choosing to recover or discard the relevant information, you choose whether there was &quot;really&quot; an interference pattern or not.</p>
+
+<p><a href="https://en.wikipedia.org/wiki/Quantum_eraser_experiment"><strong>Non</strong>-delayed quantum eraser experiments</a> have a convenient place to store the which-slit information: in the photon&#39;s own polarization.
+That works great, except that a photon&#39;s polarization tends to be ... gone ... after the photon is absorbed.
+Allowing the which-way information to be measured <em>later</em>, long after the photon was absorbed, requires a different storage location.</p>
+
+<p>The best known DCQE experiment is <a href="https://en.wikipedia.org/wiki/Delayed_choice_quantum_eraser#The_experiment_of_Kim_et_al._.282000.29">the one performed by Kim et al in 2000</a>.
+They stored the which-way information into the position of a second photon (by using a <a href="https://en.wikipedia.org/wiki/Spontaneous_parametric_down-conversion">special crystal that splits photons into two photons</a>).
+Wikipedia has a complicated diagram of <a href="https://en.wikipedia.org/wiki/File:Kim_EtAl_Quantum_Eraser.svg">the optical circuit they used</a>, but I won&#39;t subject you to that.
+Instead, taking a a few liberties and some inspiration from <a href="http://strangepaths.com/the-quantum-eraser-experiment/2007/03/20/en/">one of the sites Wikipedia linked to</a>, I made this alternative diagram of Kim et al&#39;s setup:</p>
+
+<p><img src="/assets/2016-01-07-Delayed-Choice-Quantum-Erasure/dcqe-photon-diagram.png" title="Over-simplified experimental setup diagram"/></p>
+
+<p>Be aware that the diagram is over-simplified.
+For example, the actual experiment has various lenses and prisms to direct the photons.
+Also, Kim et al didn&#39;t use screens; they used detectors connected to an electronic counter.</p>
+
+<p>Anyways, let&#39;s go over the process the diagram is intended to communicate in a bit more detail:</p>
+
+<ol>
+<li><p><strong>Entangled Superposition</strong>:
+A photon arrives, encounters a wall with two slits, and passes through the slits.
+This puts the photon&#39;s position into a superposition.
+Special crystals then <a href="https://en.wikipedia.org/wiki/Spontaneous_parametric_down-conversion">split the photon into two photons</a> (with entangled positions, without breaking the superposition).</p>
+
+<p>One of the resulting photons does the normal double-slit thing, building up an apparent lack-of-interference pattern on the interference screen.
+The other photon embodies the which-way information.
+Its journey is represented by the right half of the diagram, and can be delayed as long as desired.</p></li>
+<li><p><strong>Choice</strong>:
+The &quot;choice&quot; to erase is performed by two beam splitters (the &quot;choosers&quot;), one for the top slit and one for the bottom slit.
+If the which-way photon passes through the choosers without being reflected, its impact point at the top or bottom of the which-way screen tells us which slit the original photon passed through.
+But if the which-way photon is reflected by the choosers then, regardless of the starting slit, an &quot;eraser&quot; beam splitter will distribute the photon equally between the two erased cases.</p>
+
+<p>Because both the top slit and bottom slit create a 50/50 split between the two erased cases (when erased), the which-way information is lost.
+It cannot be recovered.</p>
+
+<p><em>(Side note: I think using controllable mirrors instead of beam splitters would impove the experiment, because using a beam splitter is a bit like making both choices instead of one choice.)</em></p></li>
+<li><p><strong>Recovery</strong>:
+Grouping runs of the experiment into &quot;where the which-way photon hit&quot; buckets reveals some interesting patterns.
+Within the bucket of test photons whose which-way photon went to the top case, no interference pattern is revealed.
+The same happens for the bottom case bucket.
+But the erased-case buckets filter the apparent lack-of-interference pattern we saw into two complementary interference patterns!</p></li>
+</ol>
+
+<p>Here is a diagram (tweaked from one on wikipedia) summarizing what you would see on the interference screen if you ran this experiment, and also the implied pattern within each group (which you can recover only by filtering afterwards):</p>
+
+<p><img src="/assets/2016-01-07-Delayed-Choice-Quantum-Erasure/dcqe-photon-graph.png" title="Resulting interference patterns"/></p>
+
+<p>One crucial thing to notice about the above diagram is that you <em>see</em> the same thing in both the erased and revealed cases: a lack-of-interference pattern.
+You never <em>directly</em> see an interference pattern.
+The interference patterns are hidden, even in the erased cases.
+To find the hidden interference patterns, you need the apparently-useless which-way erased-case information.
+This happens because the two erased cases have complementary interference patterns: when you fail to separate them they get added together, and the ripples disappear.</p>
+
+<p><em>(Side note: Technically,  in Kim et al&#39;s setup, finding the &quot;erased&quot; or &quot;revealed&quot; subsets as shown in the diagram&#39;s &#39;What you see&#39; column would also require filtering.
+That&#39;s because Kim et al use beam splitters instead of controllable mirrors to do the choosing.
+They can&#39;t control which choice was made; they have to deduce which choice happened based on where the which-way photon landed.
+However, because the erased and revealed plots look exactly the same as the total plot, you&#39;re not missing out on much.)</em></p>
+
+<p>The &#39;What you can see&#39; column of the diagram is my answer to anyone who thinks DCQE can perform faster-than-light communication &quot;because Bob sees an interference pattern as soon as Alice erases the which-way information&quot;.
+Even when Alice erases the which-way information, Bob doesn&#39;t see an interference pattern.
+It&#39;s only when Alice and Bob get back together and compare notes, grouping Bob&#39;s results based on Alice&#39;s erasure measurement outcomes, that the hidden interference patterns can be revealed.</p>
+
+<p>That&#39;s all I really have to say about the optical experiment.
+Let&#39;s try to simplify things a bit.</p>
+
+<h1>A Simplified Model</h1>
+
+<p>Performing DCQE does not inherently require light, and in my opinion thinking about it optically drags many unnecessary details along as baggage.
+DCQE is fundamentally not about photons, it is about quantum information and the odd things that happen when you try to copy it.
+As such, we should really be thinking in terms of <em>qubits</em> instead of in terms of photons.
+So let&#39;s translate this optical experiment into a quantum logic circuit operating on qubits.</p>
+
+<p>In the optical experiment, a photon is placed into a superposition of going through the left slit or the right slit.
+This can be represented by a qubit: we&#39;ll call the qubit $A$, use $A = \ket{0}$ to mean &quot;went through the left slit&quot;, and $A = \ket{1}$ to mean &quot;went through the right slit&quot;.
+Easy.
+Just after passing through the slits, the photon&#39;s position is in the state $A = \frac{1}{\sqrt{2}} \ket{0} + \frac{1}{\sqrt{2}} \ket{1}$.</p>
+
+<p>Now the photon gets <a href="https://en.wikipedia.org/wiki/Spontaneous_parametric_down-conversion">SPDC</a>&#39;d into two photons with the same position.
+Call the second photon $B$.
+The SPDC puts us into the state $AB = \frac{1}{\sqrt{2}} \ket{00} + \frac{1}{\sqrt{2}} \ket{11}$.
+In other words, the positions of the two photons form an <a href="https://en.wikipedia.org/wiki/Bell_state">EPR pair</a>.
+They are entangled.</p>
+
+<p>The appearance of an interference pattern (or lack thereof) can also be translated from photons to qubits.
+The relevant common property is <a href="https://en.wikipedia.org/wiki/Coherence_%28physics%29#Quantum_coherence">coherence</a>.
+When a photon is coherent, it can interfere with itself.
+But a decohered photon won&#39;t interfere with itself.
+So we can think of DCQE as playing with whether or not a photon was coherent.</p>
+
+<p>Qubits can also be coherent or decohered.
+When a qubit is coherent, it has a &quot;preferred direction&quot; corresponding to a point on the surface of the <a href="https://en.wikipedia.org/wiki/Bloch_sphere">Bloch sphere</a>.
+An experiment where you prepare a coherent qubit, then measure along the preferred direction, will give the same answer every time.
+A fully decohered qubit has no preferred direction; its state corresponds to the <em>center</em> of the Bloch sphere.
+No matter which axis you measure a fully decohered qubit along, your results will look like coin flips (but then you know its coherent state again).</p>
+
+<p>It so happens that, because entanglement is <em>suspiciously similar</em> to measurement, qubits in an EPR pair appear to be fully decohered.
+It&#39;s only when you later compare results that you see they were coherent <em>as a pair</em>, instead of individually.
+DCQE is basically nothing but a reframing of this fact.</p>
+
+<p>Concretely speaking, we&#39;re going to translate &quot;does the photon make an interference pattern?&quot; into &quot;does measuring the qubit along different axes give probabilities other than 50/50?&quot;.
+We will run the qubit experiment many times, rotate Alice&#39;s qubit ($A$) by various amounts around the X axis, and see if the chance of getting ON when measuring $A$ in the computational basis stays at 50% or not.
+Because $A$ is part of an EPR pair, it will in fact stay at 50% and we will &quot;conclude&quot; that $A$ is decohered.</p>
+
+<p>After &quot;confirming&quot; that $A$ is decohered, we will measure Bob&#39;s qubit ($B$, which was entangled with $A$).
+We&#39;ll group our measurements of $A$ into a $B$-was-OFF bucket and a $B$-was-ON bucket, and see if we can find some &quot;hidden coherence&quot;.
+Two cases will be considered: one where Bob measures along an axis perpendicular to the ones Alice is using, and one where Bob just measures in the computational basis.</p>
+
+<p>Here&#39;s what happens when Bob just measures in the computational basis:</p>
+
+<p><img src="/assets/2016-01-07-Delayed-Choice-Quantum-Erasure/cycle-revealed.gif" title="Revealing an EPR pair's value"/></p>
+
+<p>As you can see above, initially Alice concludes that the input qubits are decohered because the measurement always acts like a 50/50 coin flip even as she tries various rotations around the X axis (i.e. she &quot;doesn&#39;t see an interference pattern&quot;).
+However, because Bob is measuring along a similar axis, and $A$ and $B$ form an EPR pair, his results are correlated with hers (more and less, as their measurement axies go into and out of alignment).
+So, when Alice groups $A$ based on Bob&#39;s results, she doesn&#39;t see a 50/50 split anymore.
+Given this, Alice concludes that her qubit was &quot;secretly coherent&quot; (i.e. she &quot;revealed the hidden interference pattern&quot;).</p>
+
+<p><em>(Side note: technically Alice is only checking axies in the YZ plane, and should also check the X axis before coming to conclusions about coherence.
+Just assume that she was promised that the input qubits would not be coherent in the X direction.)</em></p>
+
+<p>Now for the &quot;erased&quot; case, where Bob measures along a perpendicular axis:</p>
+
+<p><img src="/assets/2016-01-07-Delayed-Choice-Quantum-Erasure/cycle-erased.gif" title="Erasing an EPR pair's entanglement"/></p>
+
+<p>Bob&#39;s results are no longer correlated with Alice&#39;s, so grouping based on them doesn&#39;t give any predictive power.
+Alice concludes that her qubit was &quot;really truly decohered&quot;.</p>
+
+<p>You might have noticed I used a lot of &quot;air-quotes&quot; in this section.
+That&#39;s because basically all of the &quot;conclusions&quot; are misleading.
+They&#39;re a result of trying to force &quot;$A$ and $B$ are entangled&quot; into a false dichotomy between &quot;$A$ was secretly coherent&quot; and &quot;$A$ was truly decohered&quot;.
+That&#39;s simply the <em>wrong way to think about it</em>.
+$A$ wasn&#39;t coherent, and it also wasn&#39;t decohered, it was simply entangled with $B$.</p>
+
+<p>Misconception-causing explanations of DCQE have the exact same problem, they just use a took-one-path vs took-both-paths dichotomy instead of a coherence dichotomoy.
+If you check closely, you&#39;ll often find qualifiers like &quot;<strong>IF</strong> you think the photon must have either taking one path or taken both paths&quot; before the really crazy stuff.
+Which is technically correct... but demonstrably misleading.
+As soon as you drop the false dichotomy, and understand how entanglement is in play, the whole thing becomes kind of boring.</p>
+
+<p>(Another issue in play is that we&#39;re not really &quot;erasing&quot; so much as &quot;not revealing&quot;.
+If Bob <em>measures along the wrong axis</em> (or just doesn&#39;t measure at all), he doesn&#39;t learn information about Alice&#39;s result.
+He could have recovered the information needed to split Alice&#39;s results into two interesting cases, but he didn&#39;t.
+It seems <em>really</em> boring when framed that way.)</p>
+
+<p>(A possibly better example of DCQE in terms of qubits comes from the state $\frac{1}{2} (\ket{000} + \ket{011} + \ket{101} + \ket{110})$.
+The third qubit tells you whether first two qubits are entangled to agree or entangled to disagree.
+Without conditioning on the correct axis of the third qubit, the first two qubits will fail any test of entanglement you throw at them.
+Basically, two entangled states can look exactly like an unentangled state... if you don&#39;t know which entangled state you&#39;re in.
+But covering this example would lead into discussions of entanglement swapping and why that works and this post is long enough, I think.)</p>
+
+<h1>Summary</h1>
+
+<ol>
+<li><p><strong>You never <em>see</em> an interference pattern</strong>.
+The interference pattern only shows up when filtering after-the-fact, using the chooser&#39;s measurement results to group experimental runs.</p></li>
+<li><p><strong>Backwards-in-time effects aren&#39;t needed</strong>.
+Unless you insist on a false dichotomy that precludes entanglement being a thing.
+Common interpretations of quantum mechanics simply don&#39;t have that dichotomy.
+For example, in the Copenhagen interpretation, the observations are explained by the which-way photon&#39;s state being collapsed as soon as the test photon hits the screen (before the delayed choice).</p></li>
+<li><p><strong>Consciousness has nothing to do with this</strong>.
+The mathematical model simply makes no mention of anything besides the equipment.
+The experiment will have the same outcome whether or not a human is present.</p>
+
+<p>(For example, consider that I just spent two thousand words explaining DCQE in detail, and the word &quot;consciousness&quot; only showed up in the context of common misconceptions.
+That wasn&#39;t on purpose.
+It just really isn&#39;t relevant.)</p></li>
+<li><p><strong>Most of the &#39;weird&#39; is due to presentation.</strong>
+Ultimately all we&#39;re doing is either measuring the information needed to find the hidden interference patterns, or not.
+If you don&#39;t measure the needed information, you can&#39;t find the hidden patterns.
+Duh.</p></li>
+</ol>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+  <script>
+  var idcomments_acct = '7d0006bd6a016f9a2892cc2ecc64de01';
+  var idcomments_post_id = '/quantum/2016/01/07/Delayed-Choice-Quantum-Erasure.html';
+  var idcomments_post_url = 'http://algorithmicassertions.com/quantum/2016/01/07/Delayed-Choice-Quantum-Erasure.html';
+  </script>
+  <span id="IDCommentsPostTitle" style="display:none"></span>
+  <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+  <noscript>
+    <hr>
+    <font color=red>
+      Comments script blocked. Comments won't work.
+    </font>
+    <br/>
+    Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>intensedebate.com</strong> to fix.
+  </noscript>
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

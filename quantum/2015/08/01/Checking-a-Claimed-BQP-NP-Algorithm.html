@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Quantum vs NP #1: Checking a Claimed BQP=NP Algorithm</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Quantum vs NP #1: Checking a Claimed BQP=NP Algorithm</h1>
+<p class="meta">01 Aug 2015</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Two weeks ago, there was <a href="https://news.ycombinator.com/item?id=9928657">a post on Hacker News</a> about <a href="http://arxiv.org/abs/1507.05061">a paper by Younes et al.</a>.
+The paper claims to provide a polynomial time quantum algorithm for 3-SAT, an NP-complete problem.</p>
+
+<p>The comments on the post are typical: optimists talking about how amazing this could be, pessimists warning others that this kind of paper is almost always wrong, and agnostics complaining that it&#39;s unfair to judge the paper <a href="http://wiki.lesswrong.com/wiki/Outside_view">before even looking at it</a>.</p>
+
+<p>So... does Younes&#39; algorithm work?</p>
+
+<p>The paper is simple enough and clear enough that I can definitively say: no.
+Since I&#39;ve always enjoyed Scott Aaronson explaining <a href="http://www.scottaaronson.com/blog/?p=1767#comment-103591">obvious</a> <a href="http://www.scottaaronson.com/blog/?p=1255">surface</a> <a href="http://www.scottaaronson.com/blog/?p=1211">flaws</a>, let&#39;s go over why.
+(I commented on the post at the time, but I can explain better here.)</p>
+
+<h1>The Algorithm</h1>
+
+<p>The underlying idea behind Younes&#39; algorithm is to eat away at the amplitudes of variable assignments that don&#39;t satisfy all of the clauses.
+The algorithm creates a uniform superposition of solutions, rotates a qubit so its OFF-ness is entangled with the assignments and related to how many clauses are satisfied, then measures that qubit.
+If the measurement doesn&#39;t look promising, the algorithm retries; otherwise it repeats the rotate-and-measure check enough times to be sure of itself before returning an answer.</p>
+
+<p>The following circuit diagram summarizes the algorithm:</p>
+
+<p><img src="/assets/2015-08-01-Checking-a-Claimed-BQP-NP-Algorithm/AlgorithmCircuit.png" alt="Algorithm Circuit"></p>
+
+<p>Normally, this is where I would start explaining the details of each gate and pointing out some simplifications that were missed.... but that&#39;s not necessary.
+Understanding the problem doesn&#39;t require knowing what exactly an $X^\frac{1}{m}$ gate does; it&#39;s all about the measurements.</p>
+
+<h1>The Problem</h1>
+
+<p>Quantum algorithms are supposed to get their answer-finding power from their unfair ability to destructively interfere wrong answers, but Younes&#39; algorithm is not doing that.
+In particular, notice that while the hard repetitive work is being done, <em>nothing is happening to the qubits storing the superposition of variable assignments</em>.
+Mixing the amplitudes of possible assignments, so they can destructively interfere, requires operating on those qubits.</p>
+
+<p>To see what&#39;s actually happening, we need to make a quick tweak to the circuit.
+Because the variable assignment qubits aren&#39;t being used during the hard work, there&#39;s no need to wait to measure them all the way on the right side of the circuit.
+In fact, because <a href="https://en.wikipedia.org/wiki/Deferred_Measurement_Principle">controls and measurements commute</a>, we don&#39;t even have to wait for the clause qubits to be initialized.
+We can measure the assignment qubits right after putting them into superposition, without changing the expected behavior of the circuit!
+The result of doing that is this:</p>
+
+<p><img src="/assets/2015-08-01-Checking-a-Claimed-BQP-NP-Algorithm/AlgorithmCircuitEquivalentEarlyMeasure.png" alt="Equivalent Circuit"></p>
+
+<p>Oh.
+They&#39;re just <a href="https://en.wikipedia.org/wiki/Postselection">post-selecting</a>.
+When you pick a non-satisfying answer, the repeatedly-rotate-qubit-and-measure  check causes you to restart (usually).
+When you pick a satisfying answer, you pass the checks after $O(n^6)$ work and finish.</p>
+
+<p>The mistake Younes et al. made is forgetting to include the cost of all those failures and retries in their runtime; they only counted the successes.
+But if exactly one out of the $2^n$ possible variable assignments satisfies all of the clauses, then the expected number of retries before that assignment is found and the algorithm can return &quot;Satisfiable!&quot; is $\Omega(2^n)$.</p>
+
+<p>For unsatisfiable instances, the expected number of retries gets even worse.
+My rough estimate is $2^{\Omega(n^6)}$ expected retries, based on the fact that most assignments should satisfy a constant fraction of the clauses so it&#39;s like winning $n^6$ bounded-bias coin flips.</p>
+
+<p>To get a grasp on the running time in practice, let&#39;s consider an instance with $1000$ variables, $1000$ clauses, and no satisfying assignment.
+To get an upper bound on the expected number of retries needed to trigger a false positive that allows the algorithm to terminate, we&#39;ll assume there&#39;s an assignment that matches $999$ out of the $1000$ clauses and it keeps being picked.</p>
+
+<p>The probability of that best-case assignment passing a single check is $\sin^2 \parens{\frac{\pi}{2} \frac{999}{1000}} \approx 99.99988\%$.
+Pretty good. But the probability of passing that check a <em>quintiliion times in a row</em> is so small that you need SI prefixes introduced in the mid-1960s to describe how many zeroes you&#39;ll be writing after the decimal point before getting to the actually useful digits.
+So we might end up retrying a lot.</p>
+
+<h1>Summary</h1>
+
+<p>If we didn&#39;t have to <em>pay for retries</em>, if we were working in <a href="https://en.wikipedia.org/wiki/PostBQP">PostBQP</a> instead of <a href="https://en.wikipedia.org/wiki/BQP">BQP</a>, then Younes&#39; algorithm would run in polynomial time.
+But we do have to pay for retries, so it doesn&#39;t.
+Postselection is not free.
+Quantum suicide is never the answer.</p>
+
+<h1>Update</h1>
+
+<p>In response to the author&#39;s comments below, I made <a href="/quantum/2015/08/27/Simulating-a-Claimed-BQP-NP-Algorithm.html">a followup post</a> that supports my conclusion by simulating the algorithm.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+  <script>
+  var idcomments_acct = '7d0006bd6a016f9a2892cc2ecc64de01';
+  var idcomments_post_id = '/quantum/2015/08/01/Checking-a-Claimed-BQP-NP-Algorithm.html';
+  var idcomments_post_url = 'http://algorithmicassertions.com/quantum/2015/08/01/Checking-a-Claimed-BQP-NP-Algorithm.html';
+  </script>
+  <span id="IDCommentsPostTitle" style="display:none"></span>
+  <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+  <noscript>
+    <hr>
+    <font color=red>
+      Comments script blocked. Comments won't work.
+    </font>
+    <br/>
+    Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>intensedebate.com</strong> to fix.
+  </noscript>
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

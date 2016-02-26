@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Things I Can't Solve: Multiplication</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Things I Can't Solve: Multiplication</h1>
+<p class="meta">05 Jul 2015</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>In this post: how (some) <a href="https://en.wikipedia.org/wiki/Multiplication_algorithm#Fast_multiplication_algorithms_for_large_inputs">fast multiplication algorithms</a> work, and a couple gotchas I&#39;ve run into from toying with them.</p>
+
+<h1>Intro</h1>
+
+<p>Finding an asymptotically fast algorithm for multiplication is one of those too-easily-accessed yet too-hard-to-solve problems that steals one of my weekends every now and then.
+Although the problem is hard, perhaps best exemplified by the <a href="https://en.wikipedia.org/wiki/F%C3%BCrer%27s_algorithm">asymptotically fastest known algorithm</a> having a running time of $O \parens{ n \log (n) 2^{3 \log^*{n}} }$ instead of the conjectured-to-be-optimal $O(n \log n)$, it hides lots of little accessible insights.
+And tinkering with the algorithms is fun in a frustrating kind of way.</p>
+
+<p>For example, here&#39;s one minor insight: squaring is not easier than multiplying.
+If you can square quickly, then you can multiply quickly by rewriting $a \cdot b$ into a difference-of-squares form: $\frac{1}{4}\parens{(a + b)^2 - (a - b)^2}$.
+This asymptotic equivalence is convenient, because some multiplication algorithms are easier to understand as squaring algorithms (e.g. <a href="https://en.wikipedia.org/wiki/Karatsuba_algorithm">Karatsuba&#39;s</a> in my opinion; because $(a \ll n + b)^2 = (a^2 \ll 2n) + (((a+b)^2 - a^2 - b^2) \ll n) + b^2$).</p>
+
+<p>I can&#39;t say I&#39;ve made any progress on the fast-multiplication problem. At all. But I guess I&#39;ve learnt some things and I can talk about those.</p>
+
+<h1>Convolution and Principal Roots</h1>
+
+<p>The fastest known multiplication algorithms are all based on the <a href="https://en.wikipedia.org/wiki/Convolution_theorem">convolution theorem</a>.
+They use a change of basis to turn <a href="https://en.wikipedia.org/wiki/Circular_convolution">cyclic convolutions</a> into <a href="https://en.wikipedia.org/wiki/Pointwise_product">point-wise products</a>.
+(The hard part of multiplying, adding up all the little sub-factors, can be reduced to a cyclic convolution.)</p>
+
+<p>The underlying thing you need, in order to make the convolution theorem work, is a <a href="http://mathworld.wolfram.com/PrincipalRootofUnity.html">principal root of unity</a>.
+With such a root, you can create a set of basis vectors $v_0, v_1, \ldots, v_{n-1}$ where there&#39;s no &quot;cross-talk&quot; when performing a cyclic convolution.
+That is to say, when we compute the cyclic convolution of two basis vectors $v_a \ast v_b$ we will get $0$.
+This is useful because it means that convolutions-of-sums like $(v_a + v_b) \ast (v_a + v_b)$ will simplify into things like $v_a^{\ast 2} + v_b^{\ast 2}$ instead of $v_a^{\ast 2} + v_b^{\ast 2} + 2 v_a \ast v_b$.
+Losing the $2 v_a \ast v_b$ part reduces the fan-out when recursing, which is a big deal when it comes to asymptotic complexity.</p>
+
+<p>What <em>exactly</em> is a principal root of unity? Formally, an $n$&#39;th principal root of unity $\lambda$ must satisfy two properties:</p>
+
+<ol>
+<li><p>You have to get unity when you raise it to the $n$&#39;th power.
+(Otherwise it wouldn&#39;t be much of a &quot;root of unity&quot;.)</p>
+
+<p>$\lambda^n = 1$</p></li>
+<li><p>If you sum up all the powers of $\lambda$, or every second power (wrapping around), or every third power, or every $k$&#39;th power, you have to get a total of nothing.
+(This is the &quot;no-cross-talk&quot; part.)</p>
+
+<p>$\Sum{i=0}{n-1} \lambda^{k i} = 0$ for every $k \in [1, n)$</p></li>
+</ol>
+
+<p>For example, the number two is a fourth principal root of unity when working modulo five:</p>
+
+<ul>
+<li>Exponentiates to one: $2^4 = 16 = 1 \pmod{5}$. Check!</li>
+<li>Sum of powers is zero: $2^0 + 2^1 + 2^2 + 2^3 = 1 + 2 + 4 + 8 = 15 = 0 \pmod{5}$. Check!</li>
+<li>Sum of every second power is zero: $2^0 + 2^2 + 2^4 + 2^8 = 1 + 4 + 16 + 64 = 85 = 0 \pmod{5}$. Check!</li>
+<li>Sum of every third power is zero: $2^0 + 2^3 + 2^6 + 2^9 = 2^0 + 2^3 + 2^2 + 2^1 = 0 \pmod{5}$. Check!</li>
+</ul>
+
+<p>A more commonly used example of a principal root of unity is the <a href="https://en.wikipedia.org/wiki/Root_of_unity">complex roots of unity</a>.
+A specific example is that the complex number $\cos(\tau/3) + i \sin(\tau/3)$ is a third principal root of unity (go ahead, check).
+More generally, $e^{i \tau / n}$ is always an $n$&#39;th principal root of unity (and forms the foundation of the <a href="https://en.wikipedia.org/wiki/Fourier_transform">Fourier transform</a>).</p>
+
+<p>With a principal root of unity in hand, we can go about constructing a &quot;no-cross-talk&quot; basis.</p>
+
+<h1>A Useful Basis</h1>
+
+<p>Suppose we&#39;re given an $n$&#39;th principal root of unity $\lambda$.
+We know that $\lambda$ satisfies some useful properties related to sums of powers, sums of even powers, and so forth, so let&#39;s try to exploit that.
+We&#39;ll crib the entries of our vectors directly from the lists of things that must sum up to zero.
+More specifically, the $k$&#39;th vector&#39;s $j$&#39;th entry will be $\lambda^{kj}$.
+That gives us a set of basis vectors:</p>
+
+<p>$v_0 = [1, 1, 1, \ldots, 1]$</p>
+
+<p>$v_1 = [1, \lambda, \lambda^2, \ldots, \lambda^{n-1}]$</p>
+
+<p>$v_2 = [1, \lambda^2, \lambda^4, \ldots, \lambda^{(n-1)2}]$</p>
+
+<p>$\ldots$</p>
+
+<p>$v_k = [1, \lambda^{k}, \lambda^{2k}, \ldots, \lambda^{(n-1)k}]$</p>
+
+<p>$\ldots$</p>
+
+<p>$v_{n-1} = [1, \lambda^{n-1}, \lambda^{n-2}, \ldots, \lambda]$</p>
+
+<p>Now, consider what happens when we compute the cyclic convolution of two basis vectors $v_a \ast v_b$ with $a \neq b$.
+The $i$&#39;th entry of the resulting vector will equal:</p>
+
+<p>$(v_a \ast v_b)_i = \Sum{j=0}{n-1} \lambda^{a j} \lambda^{(i-j) b} = \lambda^{b i} \Sum{j=0}{n-1} \lambda^{(a-b) j}$</p>
+
+<p>But notice that, in that last term, $a - b$ is constant and being multiplied against the iteration variable.
+This is one of the sums that must come out zero if $\lambda$ is a principal root of unity!
+Therefore $v_a \ast v_b = 0$ when $a \neq b$.
+When $a = b$, we are instead summing up $n$ copies of $\lambda^0 = 1$ and multiplying that by what happens to be the original value of the vector.
+So we end up scaling: $v_a^{\ast 2} = n v_a$.</p>
+
+<p>The above facts imply great things when it comes to re-expressing a cyclic convolution in terms of our special basis $v$.
+We can decompose a vector $x$ into $x = a_0 v_0 + a_1 v_1 + \ldots + a_{n-1} v_{n-1}$, and then $x^{\ast 2}$ will simplify very nicely:</p>
+
+<p>$x^{\ast 2}$</p>
+
+<p>$= \parens{a_0 v_0 + a_1 v_1 + \ldots + a_{n-1} v_{n-1}}^{\ast 2}$</p>
+
+<p>$= \parens{a_0 v_0}^{\ast 2} + \parens{a_1 v_1}^{\ast 2} + \ldots + \parens{a_{n-1} v_{n-1}}^{\ast 2}$</p>
+
+<p>$= n \parens{a_0^2 v_0 + a_1^2 v_1 + \ldots + a_{n-1}^2 v_{n-1}}$</p>
+
+<p>This means that, if we can efficiently convert to and from our special basis (usually by adapting a <a href="https://en.wikipedia.org/wiki/Fast_Fourier_transform">Fast Fourier Transform</a> algorithm), then we can quickly square a number (or multiply two numbers) by converting to the special basis, squaring each coefficient there individually, then converting back.
+(Just don&#39;t forget to cancel out that pesky factor of $n$ when you&#39;re done.)</p>
+
+<h1>In Practice: The Schönhage–Strassen Algorithm</h1>
+
+<p>The <a href="https://en.wikipedia.org/wiki/Sch%C3%B6nhage%E2%80%93Strassen_algorithm">Schönhage–Strassen algorithm</a> (hereafter SSA) is a convolution-based multiplication algorithm, and was the fastest known for decades.
+SSA works in the ring of integers modulo $2^{2^s} + 1$.
+(Ah, that&#39;s a bit hard to read, so let&#39;s define $m = 2^s$. We&#39;re working modulo $2^m + 1$.)</p>
+
+<p>It so happens that two is a $2m$&#39;th principal root of unity of that ring.
+This is ultimately the reason SSA is so fast: the basis change can be done with shifts instead of multiplications (thanks, powers of two!).
+Instead of taking $\Omega(n \log^2{n})$ time, SSA uses only $O(n \log{n})$ time on its basis change.</p>
+
+<p>Although the SSA basis change takes $O(n \log{n})$ time, the <em>overall</em> running time of SSA is still $O(n \log(n) \log(\log(n)))$.
+What&#39;s going on?
+It has to do with the chosen principal root of unity wrapping around a bit too quickly.</p>
+
+<p>In a field with $2^m + 1$ elements, it takes only $m$ doublings to hit $2^m$, the value congruent to -1.
+After $m$ more doublings, effectively multiplying by -1 again, we&#39;ll be back to 1.
+SSA is using a principal root of unity of order $2^{s+1} = 2m$, and that order is logarithmic with respect to the field size $2^m + 1$.</p>
+
+<p>The logarithmic order of the principal root of unity has one major consequence: limiting how many pieces we can use when splitting up a number to be squared.
+We&#39;re trying to represent each piece as a linear combination of vectors from a basis with dimension equal to the order of the principal root of unity, but if we have more pieces than that then there must be some direction that we&#39;re failing to cover.
+You can&#39;t shove an $n$-dimensional vector space into an $(n-d)$-dimensional vector space without losing information.</p>
+
+<p>Suppose we divide the input number into $k$ pieces of size $\frac{n}{k}$.
+We need a field with at least $k$ roots to handle all those pieces, so $2m$ must be at least $k$.
+But we also need the field to be large enough to hold the $\frac{n}{k}$ bits we&#39;re putting into each piece, and that means $m$ must be at least $\frac{n}{k}$ (plus a bit more overhead).
+The latter constraint makes us want to use a lot of small pieces, but the former heavily constrains how small we can go.</p>
+
+<p>The two opposing constraints meet at a sweet spot around $k \approx \sqrt{n}$, so we end up using $\sqrt{n}$ pieces of $\sqrt{n}$ size.
+It takes $\log(\log(n))$ repeated square roots to go all the way from $n$ to a constant-sized base case, and that&#39;s where the extra $\log(\log(n))$ factor in the runtime complexity comes from.</p>
+
+<p>Contrast the above with what we could do if we were working modulo a prime $p$ with a $p-1$&#39;th principal root of unity.
+The piece-size and root-number constraints now look like $p \geq k$ and $p \geq 2^\frac{n}{k}$.
+These new constraints let the sweet spot drop all the way to $k \approx \frac{n}{\log{n}}$, so we could use logarithmically sized pieces.</p>
+
+<p>Logarithmically sized pieces would be great, because they let you short-circuit the recursion right away.</p>
+
+<h1>Performing Many Small Squarings Fast</h1>
+
+<p>If you have $n/\log(n)$ squarings of size $\log{n}$ to perform, you can perform them all in $O(n \log n)$ time.
+The trick to doing this is to sort the inputs into ascending order (but keep track of the original order) and to then literally stream out every possible square number while iterating through the inputs:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">def stream_square(inputs):
+    &quot;&quot;&quot;
+    Squares n inputs of size w in O(w n log(n) + w 2^w) time.
+    &quot;&quot;&quot;
+    indexed = zip(inputs, range(len(inputs)))  # O(w n)
+    ordered = sorted(indexed, key=lambda e: e[0])  # O(w n log(n))
+
+    # O(n w + w 2^w)
+    counter = 0
+    counter_squared = 0
+    ordered_squared = []
+    for e in ordered:
+        while counter &lt; e[0]:
+            # This inner-loop costs O(w 2^w) total.
+            # It runs at most 2^w times and costs w each time.
+            counter_squared += counter
+            counter += 1
+            counter_squared += counter
+        ordered_squared.append((counter_squared, e[1]))
+    restored = sorted(ordered_squared, key=lambda e: e[1])  # O(w n log(n))
+    return [e[0] for e in restored]  # O(w n)
+</code></pre></div>
+<p>This means that <em>if</em> you could perform an application-of-convolution-theorem basis change in $O(n \log{n})$ time, <em>and</em> end up with $O(n / \log(n))$ pieces of size $O(\log n)$, then you could multiply in $O(n \log{n})$ time.</p>
+
+<p>This doesn&#39;t apply to SSA because working modulo $2^{2^s}+1$ doesn&#39;t give you enough pieces.</p>
+
+<p>... Okay, segway question that&#39;s been bothering me for awhile: why does SSA&#39;s modulus use a power-of-a-power-of-2 like $2^{2^s}$ instead of just a normal power-of-2 like $2^m$?</p>
+
+<h1>Degenerate Orders</h1>
+
+<p>Suppose we&#39;re working with the ring of integers modulo $3^n$.
+It so happens that $2$ meets all the requirements to be a $2\cdot 3^{n-1}$&#39;th principal root of unity for this ring.
+Does that mean we can apply the convolution theorem in order to perform a multiplication cheaply?
+Not exactly.</p>
+
+<p>Recall that, in the special basis we create to turn convolution into point-wise multiplication, $v_a^{\ast 2}$ is equal to $n v_a$ where $n$ is the order of the root.
+In the case of the integers modulo $3^n$ with principal root of unity chosen to be two, this comes out as $2 \cdot 3^{n-1} v_k$.
+... But that multiplication includes a (rather large) power of three, and powers of three have no multiplicative inverse when working modulo $3^n$.
+In this ring, we can&#39;t undo the multiplication created by the convolution theorem!
+If we try to compute a convolution this way, we&#39;ll just end up pushing almost all of the information out off the ring.
+Whoops.</p>
+
+<p>This is actually why the Schönhage–Strassen algorithm requires you to use a field of doubly-power-of-two size like $2^{2^s}+1$, instead of just $2^n+1$.
+The principal root of unity (two) has order $2n$ when working modulo $2^{n+1}$, but $2n$ may not have a multiplicative inverse in that context.
+For example, when working modulo $2^9+1$, applying the convolution theorem will cause a multiplication by 9 but $2^9 + 1 = 513=57 \cdot 9$, so we can&#39;t undo that multiplication.
+So a convolution would throw away information.</p>
+
+<p>When the $n$ in $2^n$ is also a power of two, there&#39;s guaranteed to be a multiplicative inverse because our principal root of unity passes through every power of two on its cycle back to 1.
+Thus why SSA sticks to $2^{2^s}+1$-sized fields.
+(A side-benefit of requiring the number of pieces to be a power of two is that you can adapt the dead-simple <a href="https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm">Cooley-Tukey algorithm</a> for the basis change, instead of using something more esoteric.)</p>
+
+<p>So not only do we need a fast basis change and a principal root of unity of large order, we have to be careful where that largeness comes from.
+If the order shares factors with the size of the ring, it won&#39;t work.</p>
+
+<p>Let&#39;s cover some more things that don&#39;t work.</p>
+
+<h1>Things I&#39;ve Tried</h1>
+
+<p>The title of this post says I can&#39;t solve the multiplying-fast problem.
+I suppose I should justify that statement by noting some of the things I&#39;ve tried that don&#39;t work.</p>
+
+<ol>
+<li><p><strong>Cache the squares.</strong></p>
+
+<p>Caching all the multiplications up to numbers of size $\log(n)$ would take $O(n^2)$ space, but caching just the <em>squares</em> only takes $O(n)$ space.
+Maybe we can make a lookup-table and perform $\log(n)$-sized squarings in constant time?</p>
+
+<p>Unfortunately, although this did give me the &quot;sort inputs and stream squares&quot; idea, there are practical and theoretical reasons this lookup table won&#39;t work.</p>
+
+<p>Practically speaking, your computer can already square numbers up to 128 bits in size in constant time.
+And you simply won&#39;t have the space to store a table with more than $2^{128}$ elements.</p>
+
+<p>Theoretically speaking, the table lookup falls afoul of the rules of the abstract machine we&#39;re using.
+If we&#39;re working in the <a href="http://blog.computationalcomplexity.org/2009/05/shaving-logs-with-unit-cost.html">RAM model with logarithmically sized words</a>, then we can already do the squarings we&#39;re caching in constant time.
+If we&#39;re working with <em>bit complexity</em>, then lookups aren&#39;t constant time because you need $O(\log n)$ time just to read the bits of the offset to jump to.
+And if we&#39;re thinking of multi-tape turing machines, then we&#39;re really hosed because those can&#39;t do random access.</p>
+
+<p>No actual benefit. Doesn&#39;t work.</p></li>
+<li><p><strong>Use the field of integers modulo a prime $p$.</strong></p>
+
+<p>The SSA algorithm is based on using an alternative system of arithmetic, the integers modulo $2^{2^s}+1$. Maybe there are better systems to use?</p>
+
+<p>There are primes where two is a $p-1$&#39;th principal root of unity modulo $p$.
+That&#39;s as proportionally large as the order of a root of unity is going to get; we cycle through every single other value in the field before returning to 1!
+Except, that means the powers of two can&#39;t possibly satisfy any property for making the twiddling factors cheap to apply.</p>
+
+<p>Too expensive. Doesn&#39;t work.</p></li>
+<li><p><strong>What about Modulo $(2^n+1)^2$ or $(2^n-1)^2$</strong>?</p>
+
+<p>The hope for this idea was: maybe squaring the size would happen to square the order of the root, and not ruin everything in the process? That hope was wrong.</p>
+
+<p>Instead of squaring the root&#39;s order, e.g. from $2m$ to $4m^2$, squaring the size of the ring seems to multiply the root&#39;s order by the same factor that the ring&#39;s size was multiplied by.
+That&#39;s a problem, because it means the ring size will no longer be co-prime to the order of the root, meaning bye-bye information when convolving.</p>
+
+<p>Gives wrong answers. Doesn&#39;t work.</p></li>
+<li><p><strong>Modulo $3^n$?</strong></p>
+
+<p>As explained earlier in the post: size of field not co-prime to order of root.</p>
+
+<p>Gives wrong answers. Doesn&#39;t work.</p></li>
+<li><p><strong>Okay, okay, these modulo ideas don&#39;t seem to be working. But what if we worked Modulo $lcm(2^n+1, 2 \cdot 2^n+1)$</strong>?</p>
+
+<p>This particular ring is tempting.</p>
+
+<p>First, it takes quadratically many doublings (w.r.t. $n$) to get back to 1.
+That would let us tweak SSA to use $\sqrt[3]{n}^2$ pieces, instead of $\sqrt{n}$ pieces, which might avoid the $\log \log n$ overhead factor.</p>
+
+<p>Second, operations are cheap.
+You can represent a number $x$ as a pair of numbers $[x \bmod (2^m+1), x \bmod (2 \cdot 2^m+1)]$ and later recover its value thanks to the <a href="https://en.wikipedia.org/wiki/Chinese_remainder_theorem">Chinese remainder theorem</a>.
+Within that representation, adding or multiplying two values is simply done point-wise, e.g. $[2, 3] \cdot [5, 7] = [2 \cdot 5, 3 \cdot 7]$.
+Combined with the fact that this representation turns every power of two into a pair of powers of two, we can directly steal SSA&#39;s tricks for performing twiddles cheaply.</p>
+
+<p>The problem?
+Two is a root of unity of this field, but not a <em>principle</em> root of unity.</p>
+
+<p>Has cross-talk. Doesn&#39;t work.</p></li>
+<li><p><strong>Use the <a href="https://en.wikipedia.org/wiki/Hadamard_transform">Hadamard Transform</a>.</strong></p>
+
+<p>The Hadamard Transform is <em>extremely</em> similar to the Fast Fourier Transform, but can be done in $O(n \log n)$ time <em>without multiplying</em> thanks to the <a href="https://en.wikipedia.org/wiki/Fast_Walsh%E2%80%93Hadamard_transform">Fast Walsh-Hadamard Transform</a>.
+So maybe something interesting will happen if we apply the convolution theorem to the Hadamard basis?</p>
+
+<p>Actually, something interesting does happen!
+<a href="http://dsp.stackexchange.com/a/7965/10155">You end up computing</a> $y_j = \Sum{i=0}{n-1} x_i x_{j \oplus i}$.</p>
+
+<p>... Except we wanted to compute of $y_j = \Sum{i=0}{n-1} x_i x_{j - i}$.</p>
+
+<p>F@&amp;$ that&#39;s close. Is math literally <em>toying</em> with me? Has cross-talk. Doesn&#39;t work.</p></li>
+</ol>
+
+<p>Hopefully that list of my failures was satisfying to the reader.
+The list is not exhaustive, but this post really is getting quite long.</p>
+
+<h1>Summary</h1>
+
+<p>Fast multiplication algorithms use a basis change and the convolution theorem to turn all-to-all multiplication into one-to-one multiplication.</p>
+
+<p>If you found a way to break a number into $n / \log(n)$ pieces of size $\log n$, and could perform the associated convolution-theorem basis change in $O(n \log n)$ time, you could use sorting and streaming of all the squares up to $\log n$ to create an overall $O(n \log n)$ multiplication algorithm.</p>
+
+<p>If you pick a principal root of unity of order $n$, and $n$ has no multiplicative inverse in the context you&#39;re working in, you&#39;re gonna have a bad time.</p>
+
+<p><em>(Update: Added the &quot;things I&#39;ve tried&quot; section.)</em></p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+  <script>
+  var idcomments_acct = '7d0006bd6a016f9a2892cc2ecc64de01';
+  var idcomments_post_id = '/computer-science/2015/07/05/Things-I-Cant-Solve-Multiplication.html';
+  var idcomments_post_url = 'http://algorithmicassertions.com/computer-science/2015/07/05/Things-I-Cant-Solve-Multiplication.html';
+  </script>
+  <span id="IDCommentsPostTitle" style="display:none"></span>
+  <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+  <noscript>
+    <hr>
+    <font color=red>
+      Comments script blocked. Comments won't work.
+    </font>
+    <br/>
+    Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>intensedebate.com</strong> to fix.
+  </noscript>
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

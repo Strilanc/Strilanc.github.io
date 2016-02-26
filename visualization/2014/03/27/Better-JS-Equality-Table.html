@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Don't Make Javascript Equality Look Worse Than It Is</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Don't Make Javascript Equality Look Worse Than It Is</h1>
+<p class="meta">27 Mar 2014</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Every now and then someone posts a table showing what values are equivalent according to javascript&#39;s <code>==</code> operator, like <a href="http://dorey.github.io/JavaScript-Equality-Table/">this recent example</a>. Then they point out how disorganized the table is.</p>
+
+<p>These posts are fundamentally right about <code>==</code> being poorly designed... but they make things <em>look</em> worse by failing to organize the table. For example, here&#39;s the table from the linked post:</p>
+
+<p><img src="http://i.imgur.com/yBaLYao.png" alt="Disorganized Javascript Equality Table"></p>
+
+<p>What a mess! But most of the mess is because of the <em>order of values in the table</em>.</p>
+
+<p>By grouping equal values together, you get something more sensible:</p>
+
+<p><img src="http://i.imgur.com/MIX9Uy5.png" alt="Grouped Javascript Equality Table"></p>
+
+<p>That looks a lot better. Now you can see where things make sense, where reference equality is clashing with value equality, where there&#39;s a lot of reaching going on to consider different things equal, and where transitivity is violated.</p>
+
+<p>Organizing the table reveals the actual flaws of <code>==</code>, instead of obscuring them behind flaws in the diagram itself.</p>
+
+<p><strong>Code</strong></p>
+
+<p>Below is the code I used to draw the organized table. It&#39;s also available <a href="http://jsfiddle.net/G943v/1/">as a jsfiddle</a>.</p>
+
+<p>Html:</p>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;canvas</span> <span class="na">id=</span><span class="s">&quot;drawCanvas&quot;</span> <span class="na">width=</span><span class="s">&quot;500&quot;</span> <span class="na">height=</span><span class="s">&quot;500&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+<p>Javascript:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">cmp</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">v1</span><span class="p">,</span> <span class="nx">v2</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">v1</span> <span class="o">==</span> <span class="nx">v2</span><span class="p">;</span> <span class="p">};</span>
+<span class="kd">var</span> <span class="nx">vals</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s2">&quot;false&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="p">}],</span> 
+    <span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}],</span>
+    <span class="p">[</span><span class="s1">&#39;&quot;&quot;&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="p">;</span> <span class="p">}],</span>
+    <span class="p">[</span><span class="s2">&quot;[[]]&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="p">[[]];</span> <span class="p">}],</span> 
+    <span class="p">[</span><span class="s2">&quot;[]&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="p">[];</span> <span class="p">}],</span> 
+    <span class="p">[</span><span class="s1">&#39;&quot;0&quot;&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="s2">&quot;0&quot;</span><span class="p">;</span> <span class="p">}],</span> 
+    <span class="p">[</span><span class="s2">&quot;[0]&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="p">[</span><span class="mi">0</span><span class="p">];</span> <span class="p">}],</span> 
+    <span class="p">[</span><span class="s2">&quot;[1]&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="p">[</span><span class="mi">1</span><span class="p">];</span> <span class="p">}],</span>
+    <span class="p">[</span><span class="s1">&#39;&quot;1&quot;&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="s2">&quot;1&quot;</span><span class="p">;</span> <span class="p">}],</span>
+    <span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span>  <span class="mi">1</span><span class="p">;</span> <span class="p">}],</span>
+    <span class="p">[</span><span class="s2">&quot;true&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">true</span><span class="p">;</span> <span class="p">}],</span>
+    <span class="p">[</span><span class="s2">&quot;-1&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="p">}],</span>
+    <span class="p">[</span><span class="s1">&#39;&quot;-1&quot;&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="s2">&quot;-1&quot;</span><span class="p">;</span> <span class="p">}],</span>
+    <span class="p">[</span><span class="s2">&quot;null&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">null</span><span class="p">;</span> <span class="p">}],</span>
+    <span class="p">[</span><span class="s2">&quot;undefined&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">undefined</span><span class="p">;</span> <span class="p">}],</span>
+    <span class="p">[</span><span class="s2">&quot;Infinity&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">Infinity</span><span class="p">;</span> <span class="p">}],</span>
+    <span class="p">[</span><span class="s2">&quot;-Infinity&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="o">-</span><span class="kc">Infinity</span><span class="p">;</span> <span class="p">}],</span>
+    <span class="p">[</span><span class="s1">&#39;&quot;false&quot;&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="s2">&quot;false&quot;</span><span class="p">;</span> <span class="p">}],</span>
+    <span class="p">[</span><span class="s1">&#39;&quot;true&quot;&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="s2">&quot;true&quot;</span><span class="p">;</span> <span class="p">}],</span>
+    <span class="p">[</span><span class="s2">&quot;{}&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="p">{};</span> <span class="p">}],</span> 
+    <span class="p">[</span><span class="s2">&quot;NaN&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">NaN</span><span class="p">;</span> <span class="p">}]</span>
+<span class="p">];</span>
+
+<span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;drawCanvas&quot;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;2d&quot;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">vals</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">r</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span> <span class="c1">// diameter of grid squares</span>
+<span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="mi">60</span><span class="p">;</span> <span class="c1">// padding space for labels</span>
+
+<span class="c1">// color grid cells</span>
+<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">v1</span> <span class="o">=</span> <span class="nx">vals</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">v2</span> <span class="o">=</span> <span class="nx">vals</span><span class="p">[</span><span class="nx">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]();</span>
+        <span class="kd">var</span> <span class="nx">eq</span> <span class="o">=</span> <span class="nx">cmp</span><span class="p">(</span><span class="nx">v1</span><span class="p">,</span> <span class="nx">v2</span><span class="p">);</span>
+        <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="nx">eq</span> <span class="o">?</span> <span class="s2">&quot;orange&quot;</span> <span class="o">:</span> <span class="s2">&quot;white&quot;</span><span class="p">;</span>
+        <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="nx">p</span><span class="o">+</span><span class="nx">i</span><span class="o">*</span><span class="nx">r</span><span class="p">,</span><span class="nx">p</span><span class="o">+</span><span class="nx">j</span><span class="o">*</span><span class="nx">r</span><span class="p">,</span><span class="nx">r</span><span class="p">,</span><span class="nx">r</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// draw labels</span>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="mi">12</span><span class="p">;</span>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">font</span> <span class="o">=</span> <span class="nx">f</span> <span class="o">+</span> <span class="s2">&quot;px Helvetica&quot;</span><span class="p">;</span>
+<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">vals</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+    <span class="kd">var</span> <span class="nx">w</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">measureText</span><span class="p">(</span><span class="nx">s</span><span class="p">).</span><span class="nx">width</span><span class="p">;</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">save</span><span class="p">();</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">translate</span><span class="p">(</span><span class="nx">p</span><span class="o">+</span><span class="nx">i</span><span class="o">*</span><span class="nx">r</span><span class="o">+</span><span class="nx">r</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="nx">f</span><span class="o">*</span><span class="mf">0.4</span><span class="p">,</span><span class="nx">p</span><span class="o">-</span><span class="nx">w</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">rotate</span><span class="p">(</span><span class="mf">3.14159</span><span class="o">/</span><span class="mi">2</span><span class="p">);</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillText</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">restore</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">vals</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+    <span class="kd">var</span> <span class="nx">w</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">measureText</span><span class="p">(</span><span class="nx">s</span><span class="p">).</span><span class="nx">width</span><span class="p">;</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillText</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="nx">p</span><span class="o">-</span><span class="nx">w</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="nx">p</span><span class="o">+</span><span class="nx">i</span><span class="o">*</span><span class="nx">r</span><span class="o">+</span><span class="nx">r</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="nx">f</span><span class="o">*</span><span class="mf">0.4</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// draw grid lines</span>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">strokeStyle</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">;</span>
+<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">moveTo</span><span class="p">(</span><span class="nx">p</span><span class="o">+</span><span class="nx">r</span><span class="o">*</span><span class="nx">i</span><span class="p">,</span> <span class="nx">p</span><span class="p">);</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">lineTo</span><span class="p">(</span><span class="nx">p</span><span class="o">+</span><span class="nx">r</span><span class="o">*</span><span class="nx">i</span><span class="p">,</span> <span class="nx">p</span><span class="o">+</span><span class="nx">r</span><span class="o">*</span><span class="nx">n</span><span class="p">);</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">moveTo</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span> <span class="nx">p</span><span class="o">+</span><span class="nx">r</span><span class="o">*</span><span class="nx">i</span><span class="p">);</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">lineTo</span><span class="p">(</span><span class="nx">p</span><span class="o">+</span><span class="nx">r</span><span class="o">*</span><span class="nx">n</span><span class="p">,</span> <span class="nx">p</span><span class="o">+</span><span class="nx">r</span><span class="o">*</span><span class="nx">i</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">stroke</span><span class="p">();</span>
+</code></pre></div>
+<p><strong>Summary</strong></p>
+
+<p>JavaScript&#39;s <code>==</code> operator is intransitive and loose, flaws that absolutely justify using <code>===</code> instead, but it&#39;s not as bad as some tables make it look.</p>
+
+<p><em>Update</em></p>
+
+<p>It&#39;s a lot harder to make the <code>&lt;</code> operator&#39;s truth table make sense (<a href="http://jsfiddle.net/G943v/16/">js fiddle here</a>):</p>
+
+<p><img src="http://i.imgur.com/VZ0ztaB.png" alt="Truth table for JS less-than"></p>
+
+<p>A comparison operator&#39;s truth table should look like a triangle, or stair case, when put in the right order. JS&#39;s has several holes and flecks, because of how coercion varies based on the context.</p>
+
+<p>(It&#39;s also notable that the best ordering for the comparison table is not a particularly good ordering for the equality table.)</p>
+
+<hr>
+
+<p><a href="http://www.reddit.com/r/programming/comments/21k92r/dont_make_javascript_equality_look_worse_than_it/">Discussion on Reddit</a></p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

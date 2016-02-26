@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Interpolating Qubit Operations</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Interpolating Qubit Operations</h1>
+<p class="meta">15 Nov 2014</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>In this post: gradually transitioning between two single-qubit quantum operations.</p>
+
+<p><strong>Interpolation</strong></p>
+
+<p>Suppose you want to <em>ease into</em> the effects of a quantum operation, so you can animate what&#39;s happening without any jarring jumps. More generally, you want to be able to transition between any two operations without jumping. Can this be done?</p>
+
+<p>A first instinct, based on the fact that a quantum operation is always just a <a href="http://en.wikipedia.org/wiki/Unitary_matrix">unitary matrix</a>, might be to just do a linear interpolation between the matrices:</p>
+
+<p>$U_t = U_0 (1-t) + U_1 t$</p>
+
+<p>The problem with linear interpolation is that the intermediate matrices may not be valid operations. Linear interpolation will tend to create matrix entries that are too close to zero, meaning the resulting matrices will tend to shrink values instead of preserving their length (which kind of sucks, since the whole point of using unitary matrices is that they preserve length).</p>
+
+<p>Basically, we want to do the interpolation without leaving the <a href="http://en.wikipedia.org/wiki/Unitary_group">space of 2x2 unitary matrices</a>. Can <em>that</em> be done?</p>
+
+<p><strong>Inspiration</strong></p>
+
+<p>What does the space of 2x2 unitary matrices even look like? Well, one compact way to parametrize it is:</p>
+
+<p>$U = e^{\phi i} \left( I i \cos{\theta} + \hat{v} \sigma_{xyz} \sin{\theta} \right)$</p>
+
+<p>The above equation involves four constants and three variables. The constants are the identity matrix ($I$), the square root of negative one ($i$), Euler&#39;s constant ($e$), and the vector of <a href="http://en.wikipedia.org/wiki/Pauli_matrices">Pauli matrices</a> ($σ_{xyz}$). The three variables are the angle $\phi$, the angle $\theta$, and the unit vector $\hat{v}$.</p>
+
+<p>Each of the variables plays a different role. $\phi$ is a global phase factor. It&#39;s what distinguishes the group of unitary matrices U(2) from the <a href="http://en.wikipedia.org/wiki/Special_unitary_group">&quot;special&quot; unitary group SU(2)</a>. $\hat{v}$ and $\theta$ correspond to a rotation. $\hat{v}$ is like an axis to rotate around, and $\theta$ is how much to rotate around said axis.</p>
+
+<p>How are $\hat{v}$ and $\theta$ like a rotation? It becomes a bit clearer when you expand the compact parametrization from above. By inlining the Pauli matrices and splitting $\hat{v}$ into $\langle x, y, z \rangle$, we get:</p>
+
+<p>$U = e^{\phi i} \left(
+i \cos{\theta} \begin{bmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{bmatrix}
++ x \sin{\theta} \begin{bmatrix} 0 &amp; 1 \\ 1 &amp; 0 \end{bmatrix}
++ y \sin{\theta} \begin{bmatrix} 0 &amp; -i \\ i &amp; 0 \end{bmatrix}
++ z \sin{\theta} \begin{bmatrix} 1 &amp; 0 \\ 0 &amp; -1 \end{bmatrix} \right)$</p>
+
+<p>Alright, maybe that&#39;s not <em>quite</em> enough clarity. We&#39;re missing the thing it looks like: the equation to convert <a href="http://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation#Unit_quaternions">from an axis-angle style rotation to a unit quaternion style rotation</a>. That&#39;s:</p>
+
+<p>$q = \cos(\frac{\theta}{2}) + x \sin(\frac{\theta}{2}) i + y \sin(\frac{\theta}{2}) j + z \sin(\frac{\theta}{2}) k$</p>
+
+<p>See the resemblance? Ignoring that mysterious halving of the angles, the Pauli matrices are basically playing the roles of the <a href="http://en.wikipedia.org/wiki/Quaternion">quaternion</a> constants $i$, $j$, and $k$. In fact, if we multiply each of the Pauli matrices by $i$, we get $(i \sigma_{x})^2 = (i \sigma_{y})^2 = (i \sigma_{z})^2 = i^3 \sigma_{x} \sigma_{y} \sigma_{z} = -I$. Which looks an awful lot like the way quaternions are defined: $i^2 = j^2 = k^2 = ijk = -1$.</p>
+
+<p>Why is this similarity to rotations important? Because we are going to exploit it in order to interpolate. There are already existing methods to smoothly interpolate between quaternions, and we can use those to handle the rotation part of the unitary operation. Then, for the remaining phase part, we just have to interpolate between two angles.</p>
+
+<p><strong>Demonstration</strong></p>
+
+<p>Below is a demo of the method vaguely outlined above. You can enter start and end matrices into the text boxes, and (after it corrects the entered matrices to be unitary) a continuous transition between the two matrices is shown. It&#39;s a bit hard to check by eye if the intermediate matrices are unitary... you can see that the motion is smooth and the colored area is staying roughly constant, though.</p>
+
+<!-- jQuery 2.1.0 -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+
+<noscript>
+  <font color=red>
+    jQuery javascript was blocked.
+    Examples may not work.
+  </font>
+  (Allow <strong>ajax.googleapis.com</strong> to fix.)
+  <hr/>
+</noscript>
+
+<div style="width: 500px;">
+    <div style="display: inline-block; float: left;">
+        <div>
+            <label>Start</label>
+            <label id="matrix_fixes_1" style="color: red" />
+        </div>
+        <input type="text" id="matrix1" value="1, 0, 0, 1" style="width: 150px;" />
+    </div>
+    <div style="display: inline-block; float: right;">
+        <div>
+            <label>End</label>
+            <label id="matrix_fixes_2" style="color: red" />
+        </div>
+        <input type="text" id="matrix2" value="-1, i, i, -1" style="width: 150px;" />
+    </div>
+</div>
+
+<p><canvas id="drawCanvas" width="500px" height="200px" /></p>
+
+<script src="/assets/QubitOperationInterpolation.js"></script>
+
+<p>(Side note: The input correction is done by doing a <a href="http://en.wikipedia.org/wiki/Singular_value_decomposition">singular value decomposition</a> and omitting the non-unitary factor. This turns out to be really, really effective.)</p>
+
+<p>You can play with the <a href="http://jsfiddle.net/ezg6xn7u/1/">demo&#39;s source code on jsfiddle</a>.</p>
+
+<p>But enough demo, let&#39;s see how it&#39;s done.</p>
+
+<p><strong>Implementation</strong></p>
+
+<p>First, we need a way to break a unitary operation into its quaternion and phase parts. Let&#39;s start by crushing our parametrization of the unitary group into a single matrix:</p>
+
+<p>$U = e^{\phi i} \begin{bmatrix} i \cos{\theta} + z \sin{\theta} &amp; (x + i y) \sin{\theta} \\ (x - i y) \sin{\theta} &amp; i \cos{\theta} - z \sin{\theta} \end{bmatrix}$</p>
+
+<p>The values we want to extract are the phase $\phi$, and the quaternion-esque components $i \cos(\theta)$, $x \sin(\theta)$, $y \sin(\theta)$, and $z \sin(\theta)$.</p>
+
+<p>Notice that $x \sin(\theta)$ and $y \sin(\theta)$ only contribute to the top-right and bottom-left parts of the matrix. Additionally, $x \sin(\theta)$ contributes symmetrically while $y \sin(\theta)$ contributes anti-symmetrically. This lets us solve for their values, although still mixed with the phase, by taking the sum and difference along the diagonal. The same holds for $z \sin(\theta)$ and $i \cos(\theta)$ along the other diagonal.</p>
+
+<p>To remove the phase factor $e^{\phi i}$ from the values we extracted, we use the fact that it should be the only contributor of complex values. We can pick any one of the four quaternion components we extracted (as long as it&#39;s not zero), and pick a phase factor that will make our chosen component real. Because we&#39;re guaranteed that the given matrix is unitary, this same phase factor should make all the other quaternion components real.</p>
+
+<p>Here&#39;s some python code that does the described factoring:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+<span class="k">def</span> <span class="nf">unitary_breakdown</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Breaks a 2x2 unitary matrix into quaternion and phase components.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># Extract rotation components</span>
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">d</span><span class="p">)</span><span class="o">/</span><span class="mi">2j</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span><span class="o">/-</span><span class="mi">2j</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+
+    <span class="c"># Extract common phase factor</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="n">p</span> <span class="o">/=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">pt</span><span class="p">,</span> <span class="n">px</span><span class="p">,</span> <span class="n">py</span><span class="p">,</span> <span class="n">pz</span> <span class="o">=</span> <span class="n">t</span><span class="o">/</span><span class="n">p</span><span class="p">,</span> <span class="n">x</span><span class="o">/</span><span class="n">p</span><span class="p">,</span> <span class="n">y</span><span class="o">/</span><span class="n">p</span><span class="p">,</span> <span class="n">z</span><span class="o">/</span><span class="n">p</span>
+
+    <span class="n">q</span> <span class="o">=</span> <span class="p">[</span><span class="n">pt</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">px</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">py</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">pz</span><span class="o">.</span><span class="n">real</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">q</span><span class="p">,</span> <span class="n">p</span>
+</code></pre></div>
+<p>Now that we can factor the problem into the rotation and phase parts, we can interpolate them separately.</p>
+
+<p>For the rotation part, we&#39;re going to use <a href="http://en.wikipedia.org/wiki/Slerp">spherical interpolation</a> (i.e. &quot;slerping&quot;). To slerp between two points, $p_0$ and $p_1$, you find an angle satisfying $\cos(\theta) = p_0 \cdot p_1$ and then return this:</p>
+
+<p>$\text{Slerp}(p_0, p_1, t) = \frac{\sin(\theta (1-t))}{\sin(\theta)} p_0 + \frac{\sin(\theta t)}{\sin(\theta)} p_1$</p>
+
+<p>One obstacle here is the division by zero when $\theta$ is zero. Fortunately, because the numerator approaches zero in basically the same way as the denominator, this is a case where the resulting value does not diverge. We can define a function that computes $\frac{\sin(x f)}{\sin(x)}$, but switches to an approximation that doesn&#39;t divide by zero or magnify floating point errors when near zero:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">sin_scale_ratio</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">factor</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns sin(theta * factor) / sin(theta), with care around the origin to avoid dividing by zero.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># Near zero, switch to a Taylor series based approximation to avoid floating point error blowup.</span>
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.0001</span><span class="p">:</span>
+        <span class="c"># sin(x) = x - x^3/3! + ...</span>
+        <span class="c"># sin(f x) / sin(x)</span>
+        <span class="c"># = ((fx) - (fx)^3/3! + ...) / (x - x^3/3! + ...)</span>
+        <span class="c"># ~= ((fx) - (fx)^3/3!) / (x - x^3/3!)</span>
+        <span class="c"># = (f - f(fx)^2/3!) / (1 - x^2/3!)</span>
+        <span class="c"># = f (1 - f^2 x^2/6) / (1 - x^2/6)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">*</span> <span class="n">theta</span> <span class="o">/</span> <span class="mi">6</span>
+        <span class="k">return</span> <span class="n">factor</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">d</span> <span class="o">*</span> <span class="n">factor</span> <span class="o">*</span> <span class="n">factor</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span> <span class="o">*</span> <span class="n">factor</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+</code></pre></div>
+<p>We&#39;ll use the above method in the full interpolation method when slerping.</p>
+
+<p>To do the angular interpolation, we do the obvious: figure out the difference between the two angles, watch out for going the long way around, and then do what is effectively a linear interpolation. Getting the sign of the difference correct is tricky, but I&#39;ve <a href="http://strilanc.com/math/2014/03/11/Ordering-Cyclic-Sequence-Numbers.html">previously explained how do it</a> so we&#39;ll just assume it&#39;s easy.</p>
+
+<p>Putting it all together, we get:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">unitary_lerp</span><span class="p">(</span><span class="n">u1</span><span class="p">,</span> <span class="n">u2</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Interpolates between two 2x2 unitary numpy matrices.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># Split into rotation and phase parts</span>
+    <span class="n">q1</span><span class="p">,</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">unitary_breakdown</span><span class="p">(</span><span class="n">u1</span><span class="p">)</span>
+    <span class="n">q2</span><span class="p">,</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">unitary_breakdown</span><span class="p">(</span><span class="n">u2</span><span class="p">)</span>
+
+    <span class="c"># Spherical interpolation of rotation</span>
+    <span class="n">dot</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">v1</span><span class="o">*</span><span class="n">v2</span> <span class="k">for</span> <span class="n">v1</span><span class="p">,</span><span class="n">v2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">dot</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c"># Don&#39;t go the long way around...</span>
+        <span class="n">q2</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">p2</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">dot</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">acos</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">dot</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">c1</span> <span class="o">=</span> <span class="n">sin_scale_ratio</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="mi">1</span><span class="o">-</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">sin_scale_ratio</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+    <span class="n">u3</span> <span class="o">=</span> <span class="p">(</span><span class="n">u1</span> <span class="o">*</span> <span class="n">c1</span> <span class="o">/</span> <span class="n">p1</span> <span class="o">+</span> <span class="n">u2</span> <span class="o">*</span> <span class="n">c2</span> <span class="o">/</span> <span class="n">p2</span><span class="p">)</span>
+
+    <span class="c"># Angular interpolation of phase</span>
+    <span class="n">a1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span>
+    <span class="n">a2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span>
+    <span class="n">da</span> <span class="o">=</span> <span class="p">(</span><span class="n">a2</span> <span class="o">-</span> <span class="n">a1</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span>  <span class="c"># smallest signed angle distance (mod 2pi)</span>
+    <span class="n">a3</span> <span class="o">=</span> <span class="n">a1</span> <span class="o">+</span> <span class="n">da</span> <span class="o">*</span> <span class="n">t</span>
+    <span class="n">p3</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">a3</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">u3</span> <span class="o">*</span> <span class="n">p3</span>
+</code></pre></div>
+<p>Which is the code used by the demo (except it&#39;s python instead of Javascript, hurray!).</p>
+
+<p><strong>Summation</strong></p>
+
+<p>Single qubit operations are a lot like rotations, but with an added phase factor. You can use this fact to create a method for interpolating between two 2x2 unitary matrices.</p>
+
+<p>The method described in this post works, but is not optimal. For example, it doesn&#39;t guarantee a constant angular velocity. Also, in some cases it doesn&#39;t take the shortest possible path.</p>
+
+<p><strong>Update</strong></p>
+
+<p>A much simpler method is to just define $\text{interpolate}(U_0, U_1, s) = U_0 \cdot (U_0^\dagger \cdot U_1)^s$.
+See <a href="/quantum/2016/01/10/eigendecomposition-for-rotation-and-interpolation.html">Using Eigendecomposition to Convert Rotations and Interpolate Operations</a>.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

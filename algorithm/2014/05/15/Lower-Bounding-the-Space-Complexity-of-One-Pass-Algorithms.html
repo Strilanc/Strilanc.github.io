@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Lower Bounding the Space Complexity of One-Pass Algorithms</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Lower Bounding the Space Complexity of One-Pass Algorithms</h1>
+<p class="meta">15 May 2014</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>A <a href="http://en.wikipedia.org/wiki/One-pass_algorithm">one-pass algorithm</a> is one that computes its output using only a single in-order scan of its input. In other words, one-pass algorithms still work when given an <code>IEnumerator&lt;T&gt;</code> instead of an <code>IEnumerable&lt;T&gt;</code> or <code>List&lt;T&gt;</code>.</p>
+
+<p>One thing I like about one-pass algorithms is how easy it can be to place lower bounds on their space requirements. In this post I will explain a technique for doing that, based on showing too much information can be extracted from intermediate states.</p>
+
+<p><strong>Querying Medians</strong></p>
+
+<p>Suppose I claim to have a one-pass algorithm that can compute the <a href="http://en.wikipedia.org/wiki/Median">median</a> of a list, using only a constant amount of space. You want to show that I&#39;m mistaken. We will do so by deducing already-processed items.</p>
+
+<p>The intermediate state of a one-pass algorithm can be thought of as a checkpoint. You can save this checkpoint, and later use it to resume the computation. More importantly for our purposes, the checkpoint is <em>independent of items later in the list</em>. If you run the algorithm on two lists with the same prefix, then the state of both runs will match until the end of the common prefix, because a one-pass algorithm can&#39;t look ahead or go backwards.</p>
+
+<p>Given a large number of lists that start with a common prefix, taking a checkpoint can be a huge time saver. But we&#39;re not interested in time savings. We&#39;re interested in what we can figure out about a prefix that has been processed, using only the checkpoint and specially crafted suffixes. So let&#39;s play a game.</p>
+
+<p>I will generate the first $n$ items of a list of length $2n+1$ at random, run my median algorithm over those items, then give you the intermediate checkpoint state. Your goal is to use that checkpoint to figure out the random items I generated, by finishing the algorithm on suffixes of your choosing. How many of the items can you figure out by &quot;suffix querying&quot; the median? Well, here&#39;s a hint:</p>
+
+<p>$median(2,3,5,7, \infty, \infty, \infty) = 7$</p>
+
+<p>$median(2,3,5,7, -\infty, \infty, \infty) = 5$</p>
+
+<p>$median(2,3,5,7, -\infty, -\infty, \infty) = 3$</p>
+
+<p>$median(2,3,5,7, -\infty, -\infty, -\infty) = 2$</p>
+
+<p>By using a suffix of $n-1$ items all set to $+\infty$ (or perhaps <code>MAX_INT</code>), you can compute what the largest item in my list was. Then, to figure out the second largest item, you just change one of those $+\infty$ items to a $-\infty$ and recompute (again starting from the checkpoint). By changing more and more positive infinities to negative infinities, you can recover <em>every single item I generated</em> (though not their ordering).</p>
+
+<p>Thought of another way, we can use the checkpoint as a <a href="http://en.wikipedia.org/wiki/Multiset">multiset</a> containing $n$ items (although with an odd way of recovering those items). But a multiset with $n$ arbitrary items requires at least $\Omega(n)$ space, and my claimed median algorithm only uses a constant amount of space. Therefore my algorithm must be incorrect. A one-pass median algorithm must use at least a linear amount of space.</p>
+
+<p><strong>More Cases</strong></p>
+
+<p>This idea, of deducing information about a prefix by querying with suffixes, can be applied to other one-pass problems.</p>
+
+<p>As with the median, any <a href="http://en.wikipedia.org/wiki/Percentile">percentile</a> (except the 0th and 100th) can be suffix-queried to deduce the whole prefix. Therefore percentiles can&#39;t be computed in one pass with less than linear space. You can also use the <a href="http://en.wikipedia.org/wiki/Mode_%28statistics%29">mode</a> to suffix-query all of the items in a hidden prefix, so it must also require at least linear space to compute in one pass (left as an exercise or the reader).</p>
+
+<p>Things also work out for values that <em>can</em> be computed in one pass with constant space, like the maximum, the minimum, the mean, the sum, the count, and even the standard deviation. You&#39;ll find that, for each of these, you <em>can&#39;t</em> determine more than a constant amount of information about the prefix by suffix querying. For example, using the maximum you can&#39;t learn anything about the prefix except its maximum (because $max(concat(A, B)) = max(max(A), max(B))$).</p>
+
+<p>Often you can tweak a statistic to make it more efficient, and this will also decrease what you can infer about the prefix. For example, using the <a href="http://web.ipac.caltech.edu/staff/fmasci/home/statistics_refs/Remedian.pdf">remedian</a> instead of the median, or the <a href="http://www.cs.utexas.edu/users/boyer/ftp/ics-reports/cmp32.pdf">majority</a> instead of the mode.</p>
+
+<p><strong>One Pass Only</strong></p>
+
+<p>It&#39;s tempting to try to use this technique to lower-bound other algorithms, but unfortunately it relies too crucially on the suffix not affecting how the prefix is processed. Even allowing just one more pass breaks everything.</p>
+
+<p>For example, consider my made-up statistic <code>SumPluck</code>, which returns the sum&#39;th item of a list (wrapping around if necessary). More exactly: <code>SumPluck(a) = a[a.Sum() % a.Count]</code>. Suffix-querying <code>SumPluck</code> trivially allows the recovery of a prefix (just add a single item and keep incrementing it to scan across the list). So <code>SumPluck</code> can&#39;t be computed in one pass using only constant space.</p>
+
+<p>On the other hand, if we allow two passes, then <code>SumPluck</code> can be computed in constant space by using the first pass to compute the sum and the second pass to pluck out the correct item. No need to worry about random access. Even a single extra pass invalidates the space bound.</p>
+
+<p>There may be a way to generalize the technique in some way, so that it applies in more cases, but I don&#39;t know how to do it.</p>
+
+<p><strong>Summary</strong></p>
+
+<p>If it is possible to determine $\Omega (g(|P|))$ items of the list prefix $P$, using only the results of querying the list statistic $F$ of various lists that start with $P$, then a one-pass algorithm for $F$ must use at least $\Omega(g(n))$ space.</p>
+
+<hr>
+
+<p><a href="http://www.reddit.com/r/programming/comments/25mir1/lower_bounding_the_space_complexity_of_onepass/">Discuss on Reddit</a></p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

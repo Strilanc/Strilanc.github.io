@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Quantum vs NP #2: Zachary B. Walters 'A linear time quantum algorithm for 3SAT'</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Quantum vs NP #2: Zachary B. Walters 'A linear time quantum algorithm for 3SAT'</h1>
+<p class="meta">01 Nov 2015</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>At the end of September, Zachary B. Walters published a preprint to arXiv titled <a href="http://arxiv.org/abs/1510.00409">A linear time quantum algorithm for 3SAT</a>.</p>
+
+<p>I enjoy looking through papers like this one, because they&#39;re an excellent source of subtle misconceptions worth explaining.
+In the <a href="http://algorithmicassertions.com/quantum/2015/08/27/Simulating-a-Claimed-BQP-NP-Algorithm.html">last paper I covered</a>, the problem was that all the optimization came from post-selection.
+This paper has a different mistake: using measurements to erase information.</p>
+
+<p><em>(Note: these posts are <strong>not</strong> in a mocking tone.
+I remember working through these same misconceptions; the only difference is I tried to explain them to a computer.)</em></p>
+
+<h1>The Algorithm</h1>
+
+<p>I have to admit I had some trouble understanding the details in the paper.
+This is not the author&#39;s fault, for the most part.
+They do a good job unambiguously defining their operations, but it&#39;s done in a way that I&#39;m not used to (physics style, instead of quantum computing style).
+For example, instead of saying &quot;rotate qubit $t$ around the Y axis, conditioned on qubit $c$ along the $a$ axis&quot;, the paper defines:</p>
+
+<p>$\text{CROT}^{c \rightarrow t}_a(\theta) = R^t(\theta/2) \cdot R_a^{c \rightarrow t}(\theta/2)$</p>
+
+<p>$R_{a}^{c \rightarrow t}(\theta) = \exp(\pm i \sigma_a^c \sigma_y^t \theta / 2)$</p>
+
+<p>$R^t(\theta) = \exp(i \sigma_y^t \theta/2)$</p>
+
+<p>That&#39;s a fine definition, and I wrote some <a href="https://gist.github.com/Strilanc/230c486dee03af917708">code computing the operation&#39;s matrix</a> to be sure I was correctly understanding the intent, but I really would have preferred <a href="http://www2.warwick.ac.uk/fac/sci/physics/research/cfsa/people/pastmembers/charemzam/pastprojects/mcharemza_quant_circ.pdf">quantum circuit diagrams</a>.</p>
+
+<p>Anyways, the algorithm described by the paper essentially comes down to this pseudo-code:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">initialize assignment qubits to a uniform superposition
+repeat enough times:
+  foreach clause (m1,m2,m3):
+    introduce a scratch qubit S initialized to be False
+    toggle S from False to True if the clause is not satisfied
+    perform small conditional rotations of qubits m1, m2, and m3, with S as the control
+    erase S by measuring it along the X axis (perpendicular to the computational basis)
+</code></pre></div>
+<p>The underlying idea here is that amplitude in non-satisfying states keeps getting pushed around, and so hopefully we get some kind of efficient <a href="https://en.wikipedia.org/wiki/Quantum_walk">quantum walk</a> towards the solution.</p>
+
+<p>The huge red flag here is &quot;erase S by measuring&quot;.
+Typically, when it comes to quantum algorithms, measurement is not essential.
+<em>Measurement is just an optimization</em>.
+<a href="https://en.wikipedia.org/wiki/Deferred_Measurement_Principle">You can always defer measurements</a> without changing the expected result, assuming you have enough quantum memory to hold all the unmeasured qubits.
+In fact, with scratch bits, you can defer measurement past the point where you have the result of the algorithm!</p>
+
+<p>(<em>Side note: a notable exception to this rule of thumb is <a href="https://en.wikipedia.org/wiki/One-way_quantum_computer">cluster state computing</a>.)</em></p>
+
+<p>Let&#39;s look closer at this &quot;erasing with measurement&quot; business.</p>
+
+<h1>The Mistake</h1>
+
+<p>Walters thinks that you can erase a qubit&#39;s value along one axis by measuring it along a perpendicular axis.
+For example:</p>
+
+<blockquote>
+<p>the state of bit $c$ is now encoded in the scratch bit’s projection onto the $\hat{x}$ axis – the “axis of truth” – measurement along an axis orthogonal to this, such as the $\hat{z}$ axis, makes the rotation irreversible without measuring any information about the state of bit $c$</p>
+</blockquote>
+
+<p>There is <a href="https://en.wikipedia.org/wiki/Observable#Incompatibility_of_observables_in_quantum_mechanics">some truth</a> here, but a subtle danger that I&#39;ll clarify with an example.</p>
+
+<p>Suppose you have pair of qubits, $p$ and $q$, in the EPR state $\frac{1}{\sqrt{2}} \ket{00} + \frac{1}{\sqrt{2}} \ket{11}$.
+You then introduce a scratch qubit $s$, initialized to be false, and perform a controlled-not of $q$ onto $s$.
+This puts the $pqs$ system into a GHZ state $\frac{1}{\sqrt{2}} \ket{000} + \frac{1}{\sqrt{2}} \ket{111}$.</p>
+
+<p>Now we try to erase $s$ out of the GHZ state by measuring it along the $X$ axis, perpendicular to the entanglement axis (i.e. $Z$).
+What happens to $p$ and $q$?</p>
+
+<p>I think that Walters thinks that $p$ and $q$ end up back in the $\frac{1}{\sqrt{2}} \ket{00} + \frac{1}{\sqrt{2}} \ket{11}$ state.
+Unfortunately, what actually happens is that $p$ and $q$ end up decohered.
+There&#39;s still a 50% chance they&#39;re both false and a 50% chance they&#39;re both true, but they&#39;re in a mixed state instead of a pure state.</p>
+
+<p>More concretely, introducing and &quot;erasing&quot; $s$ causes the <a href="https://en.wikipedia.org/wiki/Density_matrix">density matrix</a> describing $p$ and $q$&#39;s state to transition from this:</p>
+
+<p>$\rho_{i} = \frac{1}{2} \begin{bmatrix} 1&amp;0&amp;0&amp;1 \\ 0&amp;0&amp;0&amp;0 \\ 0&amp;0&amp;0&amp;0 \\ 1&amp;0&amp;0&amp;1 \end{bmatrix}$.</p>
+
+<p>To this:</p>
+
+<p>$\rho_{f} = \frac{1}{2} \begin{bmatrix} 1&amp;0&amp;0&amp;0 \\ 0&amp;0&amp;0&amp;0 \\ 0&amp;0&amp;0&amp;0 \\ 0&amp;0&amp;0&amp;1 \end{bmatrix}$.</p>
+
+<p>The state $\rho_{i}$ corresponds to an entangled quantum superposition, but $\rho_{f}$ just corresponds to a classical probability distribution.
+You could use $\rho_{i}$ to pass Bell tests, but not $\rho_{f}$.</p>
+
+<p>$\rho_{i}$ is the same state we&#39;d have ended up in if we&#39;d measured $s$ along the $Z$ axis, or just ignored $s$ by tracing over it.
+Even though we didn&#39;t measure along the axis we cared about, <em>the system still decohered along it</em>.</p>
+
+<p>Since the point of this post is to dig into a misconception and understand, let&#39;s investigate this decoherence thing by computing what happens step by step.</p>
+
+<h1>The Work</h1>
+
+<p>We start in the EPR state $\rho_{i}$, defined above.
+Then we introduce the scratch qubit $s$, and toggle $s$ to match the existing qubits.
+That puts the three-qubit system into a GHZ state:</p>
+
+<p>$\rho_{2} = \frac{1}{2} \begin{bmatrix}
+1&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;1 \\
+0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0 \\
+0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0 \\
+0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0 \\
+0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0 \\
+0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0 \\
+0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0 \\
+1&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;1 \end{bmatrix}$.</p>
+
+<p>When we measure $s$ along the $X$ axis, we are projecting $\rho_{2}$ onto the third-qubit-X-negative case and the third-qubit-X-positive case.
+The projection matrices corresponding to those cases are:</p>
+
+<p>$P_{\text{3,X,false}} = \frac{1}{2} \begin{bmatrix}
+1&amp;0&amp;0&amp;0&amp;1&amp;0&amp;0&amp;0 \\
+0&amp;1&amp;0&amp;0&amp;0&amp;1&amp;0&amp;0 \\
+0&amp;0&amp;1&amp;0&amp;0&amp;0&amp;1&amp;0 \\
+0&amp;0&amp;0&amp;1&amp;0&amp;0&amp;0&amp;1 \\
+1&amp;0&amp;0&amp;0&amp;1&amp;0&amp;0&amp;0 \\
+0&amp;1&amp;0&amp;0&amp;0&amp;1&amp;0&amp;0 \\
+0&amp;0&amp;1&amp;0&amp;0&amp;0&amp;1&amp;0 \\
+0&amp;0&amp;0&amp;1&amp;0&amp;0&amp;0&amp;1 \end{bmatrix}$</p>
+
+<p>and:</p>
+
+<p>$P_{\text{3,X,true}} = \frac{1}{2} \begin{bmatrix}
+1&amp;0&amp;0&amp;0&amp;-1&amp;0&amp;0&amp;0 \\
+0&amp;1&amp;0&amp;0&amp;0&amp;-1&amp;0&amp;0 \\
+0&amp;0&amp;1&amp;0&amp;0&amp;0&amp;-1&amp;0 \\
+0&amp;0&amp;0&amp;1&amp;0&amp;0&amp;0&amp;-1 \\
+-1&amp;0&amp;0&amp;0&amp;1&amp;0&amp;0&amp;0 \\
+0&amp;-1&amp;0&amp;0&amp;0&amp;1&amp;0&amp;0 \\
+0&amp;0&amp;-1&amp;0&amp;0&amp;0&amp;1&amp;0 \\
+0&amp;0&amp;0&amp;-1&amp;0&amp;0&amp;0&amp;1 \end{bmatrix}$.</p>
+
+<p>We compute the two possible output states by left- and right-multiplying the projectors onto our state.
+When the measurement returns false, the density state of the system is (before renormalizing):</p>
+
+<p>$\rho_{\text{false}} = (P_{\text{3,X,false}}) \cdot \rho_{2} \cdot (P_{3,X,False}) = \frac{1}{4} \begin{bmatrix}
+1&amp;0&amp;0&amp;1&amp;1&amp;0&amp;0&amp;1 \\
+0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0 \\
+0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0 \\
+1&amp;0&amp;0&amp;1&amp;1&amp;0&amp;0&amp;1 \\
+1&amp;0&amp;0&amp;1&amp;1&amp;0&amp;0&amp;1 \\
+0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0 \\
+0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0 \\
+1&amp;0&amp;0&amp;1&amp;1&amp;0&amp;0&amp;1 \end{bmatrix}$</p>
+
+<p>And when the measurement returns true, we&#39;re in this state (still not renormalized):</p>
+
+<p>$\rho_{\text{true}} = (P_{\text{3,X,true}}) \cdot \rho_{2} \cdot (P_{3,X,True}) = \frac{1}{4} \begin{bmatrix}
+1&amp;0&amp;0&amp;-1&amp;-1&amp;0&amp;0&amp;1 \\
+0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0 \\
+0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0 \\
+-1&amp;0&amp;0&amp;1&amp;1&amp;0&amp;0&amp;-1 \\
+-1&amp;0&amp;0&amp;1&amp;1&amp;0&amp;0&amp;-1 \\
+0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0 \\
+0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0&amp;0 \\
+1&amp;0&amp;0&amp;-1&amp;-1&amp;0&amp;0&amp;1 \end{bmatrix}$</p>
+
+<p>To get the density matrices for just $p$ and $q$, we trace over $s$.
+That gives us these two equally likely outcome states (again, not normalized):</p>
+
+<p>$\rho&#39;_{\text{false}} = \frac{1}{4} \begin{bmatrix}
+1&amp;0&amp;0&amp;1 \\
+0&amp;0&amp;0&amp;0 \\
+0&amp;0&amp;0&amp;0 \\
+1&amp;0&amp;0&amp;1 \end{bmatrix}$
+and
+$\rho&#39;_{\text{true}} = \frac{1}{4} \begin{bmatrix}
+1&amp;0&amp;0&amp;-1 \\
+0&amp;0&amp;0&amp;0 \\
+0&amp;0&amp;0&amp;0 \\
+-1&amp;0&amp;0&amp;1 \end{bmatrix}$</p>
+
+<p>Because we&#39;re not actually using the measurement result anywhere (e.g. by <a href="/quantum/2015/09/02/Partially-Erasing-Entanglement-with-Measurement.html">performing conditional phase corrections</a>), we don&#39;t need to consider the two outcome states separately; we can just add them together.
+(They need to be scaled by how likely they are, but because we didn&#39;t normalize them they&#39;re already weighted correctly.)
+That gives us the final state of the system, which agrees with what I claimed in the previous section:</p>
+
+<p>$\rho_{f} = \rho&#39;_{\text{false}} + \rho&#39;_{\text{true}} = \frac{1}{2} \begin{bmatrix} 1&amp;0&amp;0&amp;0 \\ 0&amp;0&amp;0&amp;0 \\ 0&amp;0&amp;0&amp;0 \\ 0&amp;0&amp;0&amp;1 \end{bmatrix}$</p>
+
+<p>I hope that was clear.
+Measuring along a perpendicular axis doesn&#39;t prevent decoherence.
+Let&#39;s move on to how this mistake impacts the algorithm.</p>
+
+<h1>The Consequences</h1>
+
+<p>Recall the paper&#39;s algorithm&#39;s inner loop:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">introduce a scratch qubit S initialized to be False
+toggle S from False to True if the clause is not satisfied
+perform conditional rotation of the clause bits, with S as the control
+erase S by measuring it along the X axis (perpendicular to the computational basis)
+</code></pre></div>
+<p>Also recall that the existence of $S$ decoheres the $S$-is-false case from the $S$-is-true case, even if we measure $S$ along a perpendicular axis.
+In fact we can pretend $S$ is never measured at all, and the algorithm will have the same expected results.</p>
+
+<p>Thus we can think of the core operation as implementing the following mapping, with the first three qubits corresponding to variable assignments, the fourth qubit corresponding to a fresh scratch qubit, and the associated clause being &quot;any variable is true&quot;:</p>
+
+<p>$\ket{0000} \rightarrow
+\alpha^3 \ket{0001} +
+\alpha^2 \beta \ket{1001} +
+\alpha^2 \beta \ket{0101} +
+\alpha^2 \beta \ket{0011} +
+\alpha \beta^2 \ket{1101} +
+\alpha \beta^2 \ket{1011} +
+\alpha \beta^2  \ket{0111} +
+\beta^3 \ket{1111}$</p>
+
+<p>$\ket{abc0} \rightarrow \ket{abc0}$</p>
+
+<p>$\ket{abc1} $ never occurs</p>
+
+<p>Notice that none of the mapping&#39;s outputs will ever overlap when we run the algorithm.
+States that end in 1 never occur as inputs, because the scratch bits are always initialized, so they contribute no outputs.
+Seven of the eight remaining input states satisfy the clause, and so are unchanged by the operation.
+They contribute non-overlapping outputs ending in 0.
+The single remaining state does get operated on, but all its outputs end in 1, and so don&#39;t overlap with the outputs from the satisfying states.</p>
+
+<p>Because new scratch bits are introduced for every operation, the outputs never overlap for any operation.
+Because the outputs never overlap, there will never be any interference.
+Because there&#39;s never any interference, we don&#39;t need to store the amplitudes; we can just track the probabilities.
+Because we only need the probabilities, this algorithm is actually in BPP.</p>
+
+<p>Bluntly stated, the paper describes a <a href="https://en.wikipedia.org/wiki/Simulated_annealing">simulated annealing</a> algorithm with a trivial heuristic.
+It is only pretending to be quantum.</p>
+
+<p>Because the nature of the algorithm differs radically from what the author presumed, I&#39;m not going to check whether the analysis of its runtime is correct.
+Suffice it to say that it&#39;s not.</p>
+
+<h1>Summary</h1>
+
+<p>A measurement that doesn&#39;t distinguish between two states can still decohere a superposition of those two states.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+  <script>
+  var idcomments_acct = '7d0006bd6a016f9a2892cc2ecc64de01';
+  var idcomments_post_id = '/quantum/2015/11/01/Walters-Claimed-Quantum-Linear-3SAT.html';
+  var idcomments_post_url = 'http://algorithmicassertions.com/quantum/2015/11/01/Walters-Claimed-Quantum-Linear-3SAT.html';
+  </script>
+  <span id="IDCommentsPostTitle" style="display:none"></span>
+  <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+  <noscript>
+    <hr>
+    <font color=red>
+      Comments script blocked. Comments won't work.
+    </font>
+    <br/>
+    Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>intensedebate.com</strong> to fix.
+  </noscript>
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

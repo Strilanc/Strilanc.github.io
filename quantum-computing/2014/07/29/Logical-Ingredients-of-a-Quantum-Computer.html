@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Logical Ingredients of a Quantum Computer</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Logical Ingredients of a Quantum Computer</h1>
+<p class="meta">29 Jul 2014</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>In classical computers, some sets of basic operations are <a href="http://en.wikipedia.org/wiki/Functional_completeness">functionally complete</a>. By combining and recombining operations from such a set, you can make <em>any</em> operation. You don&#39;t even need a large set of operations, because the <a href="http://en.wikipedia.org/wiki/NAND_logic">NAND gate is functionally complete all by itself</a>!</p>
+
+<p>Does this also hold for quantum computers? Can every possible quantum operation be reduced to a common set of ingredients? <a href="http://en.wikipedia.org/wiki/Quantum_gate#Universal_quantum_gates">Well, sort of.</a> The space of possible quantum operations is actually continuous, and we&#39;re asking for a discrete set of operations, so the cardinalities won&#39;t quite match up. However, we can <em>approximate</em> arbitrary quantum operations to whatever accuracy is needed, using only a few types of gates.</p>
+
+<p>In this post, I&#39;ll review the controlled-not, Hadamard, and 45° phase gates and briefly cover why they form a universal quantum gate set. I like this particular gate set because a few of the tricky concepts required to understand quantum computing get distributed somewhat evenly amongst the gates. Roughly speaking: the CNOT gate controls measurement and entanglement, the Hadamard gate controls superposition, and the phase gate controls interference.</p>
+
+<p><strong>The Controlled-Not Gate</strong></p>
+
+<p>The controlled not (CNOT) gate applies to two qubits: a target and a control. If the control qubit is $\text{true}$, the target qubit is toggled between $\text{true}$ and $\text{false}$. If the control qubit is $\text{false}$, nothing happens. Importantly, <em>the gate works even when qubits are in superposition or entangled</em>: the target qubit is inverted only in the parts of the superposition where the control qubit is set.</p>
+
+<p>Suppose we&#39;re CNOT-ing $q_1$ into $q_2$ (meaning $q_1$ is the control and $q_2$ is the target). If the state of the system is $\left| q_1=\text{false}, q_2=\text{false} \right&gt; - \left| q_1=\text{true}, q_2=\text{true} \right&gt;$ then CNOT-ing $q_1$ into $q_2$ changes the state to $\left| q_1=\text{false}, q_2=\text{false} \right&gt; - \left| q_1=\text{true}, q_2=\text{false} \right&gt;$.</p>
+
+<p>The CNOT gate&#39;s role in this gate set is <em>interaction</em>. Without it, you&#39;re just doing a bunch of single-qubit computations. You wouldn&#39;t even be able to do interesting classical computations, nevermind entangling qubits. (One way you might simplify this gate set, at least pedagogically, is by replacing the CNOT gate with a <a href="http://en.wikipedia.org/wiki/Toffoli_gate">CCNOT gate</a>. That would allow all the classical stuff to be done by one gate.)</p>
+
+<p>I find the CNOT gate <em>philosophically</em> interesting because understanding its effects basically amounts to understanding quantum measurement. Measuring a qubit has <em>exactly</em> the same effects on a quantum computation as CNOT-ing that qubit into some otherwise-unused-by-the-computation qubit. Whether or not this resolves the <a href="http://en.wikipedia.org/wiki/Measurement_problem">measurement problem</a> in quantum mechanics is debatable, since taking it literally basically amounts to the <a href="http://en.wikipedia.org/wiki/Many-worlds_interpretation">MWI</a>, but there&#39;s definitely insight to be had here. (Still waiting for a chance to use the tongue-in-cheek line &quot;You see, consciousness is basically an unused qubit...&quot; on someone who thinks consciousness causes collapse.)</p>
+
+<p><strong>The Hadamard Gate</strong></p>
+
+<p>The Hadamard gate is applied to single qubits, and is used to create and interfere superpositions. If the target qubit&#39;s state is $\left| \text{false} \right&gt;$, applying a Hadamard gate changes its state to $\left| \text{false} \right&gt; + \left| \text{true} \right&gt;$. If the target qubit&#39;s state is $\text{true}$, the state changes to $\left| \text{false} \right&gt; - \left| \text{true} \right&gt;$ instead (see the difference?). Once again, when the qubit is in superposition, you apply the gate to each part of the superposition separately.</p>
+
+<p>For example, to evaluate $H(\left| \text{false} \right&gt; - \left| \text{true} \right&gt;)$, we apply the $H$ to each part like $H(\left| \text{false} \right&gt;) - H(\left| \text{true} \right&gt;)$, which expands to $(\left| \text{false} \right&gt; + \left| \text{true} \right&gt;) - (\left| \text{false} \right&gt; - \left| \text{true} \right&gt;)$, and that simplifies to $2 \left| \text{true} \right&gt;$, which is actually $\left| \text{true} \right&gt;$ when you don&#39;t completely leave out the normalizing factors of $\sqrt{\frac{1}{2}}$ like I&#39;ve been doing.</p>
+
+<p>Not surprisingly, the role of the Hadamard gate in this gate set is <em>superposition</em>. Without it, you&#39;re just doing a classical computation. Actually, you&#39;re not even doing that because the CNOT gate is not functionally complete classically and phase gates literally do nothing of any consequence if you can&#39;t cause interference. So the Hadamard gate is pretty crucial to this set.</p>
+
+<p><strong>45° Phase Gate</strong></p>
+
+<p>Like the Hadamard gate, the 45° phase gate applies to single qubits. But it has a much simpler function: changing the relative phase between the amplitudes of the $\left| \text{false} \right&gt;$ and $\left| \text{true} \right&gt;$ states of a qubit. It does this by doing nothing to the qubit when it&#39;s $\text{false}$, but multiplying its amplitude by $\frac{1+i}{\sqrt{2}}$ when the qubit is $\text{true}$.</p>
+
+<p>An example. We can evaluate $P_{45°}(\left| \text{false} \right&gt; - \left| \text{true} \right&gt;)$ by doing the usual apply-to-single-components thing to get $P_{45°}(\left| \text{false} \right&gt;) - P_{45°}(\left| \text{true} \right&gt;)$, and that evaluates to $\left| \text{false} \right&gt; - \frac{1+i}{\sqrt{2}} \left| \text{true} \right&gt;$.</p>
+
+<p>The role of the 45° degree phase gate is <em>controlling interference</em>. The Hadamard gate interferes things, but the phase gate affects whether that interference is constructive, destructive, or something in between. This is actually really important because, without this control, we lose a lot of power. If we remove the 45° phase gate from the set, or even if we replace it with the 90° phase gate, we end up limited to what&#39;s known as <a href="http://en.wikipedia.org/wiki/Gottesman%E2%80%93Knill_theorem">stabilizer circuits, which can be simulated efficiently classically</a>.</p>
+
+<p><strong>Universality</strong></p>
+
+<p>At a high level, showing that the CNOT/Hadamard/45° gate set is universal is done in two steps.</p>
+
+<p>First, we determine that the Hadamard and 45° gates can approximate any single-qubit operation. This is actually really easy to demonstrate, because every single-qubit operation <a href="http://en.wikipedia.org/wiki/Pauli_matrices">corresponds to a rotation in 3d</a>. The Hadamard operation is a 180° rotation around the X+Z axis, or equivalently a 90° rotation around the X then Z then X axies. The 45° degree phase gate is a 45° rotation around the Z axis.</p>
+
+<p>(You might think it&#39;s funny that I bothered repeating that 45°, or that I&#39;ve been avoiding radians, but I think it&#39;s funny that <a href="http://en.wikipedia.org/wiki/Quantum_gate#Phase_shift_gates">Wikipedia says</a> an example of a phase gate is &quot;the $\frac{\pi}{8}$ gate, where $θ = \frac{\pi}{4}$&quot;. And <em>that&#39;s the correct definition</em>.)</p>
+
+<p>Grab something cube-shaped and, with a bit of experimentation, you can see that combining those two rotations lets you make all kinds of other rotations. You can get arbitrarily close to any target rotation, although you may need a long sequence of the two allowed rotations. (You can also check that the 90° phase gate is less powerful than the 45° phase gate here, because there&#39;s no way to end up with a tilted cube!)</p>
+
+<p>Second, we need to factor quantum operations into single-qubit operations and CNOTs. Every quantum operation corresponds to a <a href="http://en.wikipedia.org/wiki/Unitary_matrix">unitary matrix</a>, so this ends up being really similar to the way you break a matrix down into scaling, swapping, and adding rows when inverting it by <a href="http://en.wikipedia.org/wiki/Gaussian_elimination">Gaussian elimination</a>. You may end up with exponentially many factors, because these matrices are exponentially huge, but you can <a href="http://staffhome.ecm.uwa.edu.au/%7E00043886/humour/invalid.proofs.html#1.3Proofbyvigoroushandwaving">always</a> do the factoring.</p>
+
+<p>Factoring causing an exponential blowup in the number of operations is a bit troubling, but actually the same thing happens with classical circuits. Classically, there are $2^{(2^N)}$ operations that take $N$ bits as input and return a single bit of output, but there are only $\approx G^G$ ways to wire $G$ NAND gates together. We&#39;re trying to match a super-exponential in $N$ with an exponential in $G$, so $G$ ends up having to be exponentially large in the worst case. The blowup is <em>worse</em> in the quantum case, but not <em>new</em>. (In a sense, these blowups are the only reason computational complexity exists as a discipline.)</p>
+
+<p><strong>Summary</strong></p>
+
+<p>Every quantum operation can be approximately factored into 45° phase, CNOT, and Hadamard operations.</p>
+
+<p>Measurement and entanglement are controlled-nots in disguise, superposition and interference are Hadamard operations in disguise, and <em>complicated</em> interference is phase gates in disguise.</p>
+
+<p>(<em>Author&#39;s Note: Sorry if this post is a bit too fast for people with no exposure to quantum computing, yet too simple for people who already know the basics. It could also use a little playground where you hit the three operations against a quantum state... but writer&#39;s block is a hell of a thing.</em>)</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

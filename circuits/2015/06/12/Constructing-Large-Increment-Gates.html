@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Constructing Large Increment Gates</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Constructing Large Increment Gates</h1>
+<p class="meta">12 Jun 2015</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>This post is Part 2 of solving a quantum circuit construction exercise.
+In Part 1, <a href="http://strilanc.com/circuits/2015/06/05/Constructing-Large-Controlled-Nots.html">Constructing Large Controlled Nots</a>, we figured out how to reduce a NOT with many controls into a linear number of NOTs with two controls (i.e. <a href="https://en.wikipedia.org/wiki/Toffoli_gate">Toffoli gates</a>).
+However, we needed an <a href="https://en.wikipedia.org/wiki/Ancilla_bit">ancilla bit</a> to make the construction work.</p>
+
+<p>In order to reach the end goal of constructing a NOT with many controls <em>without</em> an ancilla bit, we will need the ability to do large increments.
+That&#39;s what we&#39;ll be figuring out in this post: how to turn an $n$-bit increment gate into $O(n)$ Toffoli, <a href="https://en.wikipedia.org/wiki/Controlled_NOT_gate">CNOT</a>, and <a href="https://en.wikipedia.org/wiki/Quantum_gate#Pauli-X_gate">NOT</a> gates.</p>
+
+<p>As with the controlled-not gate construction, we will need an ancilla bit to make the increment construction work (the permutation parity obstacle applies again).
+But we won&#39;t need to do anything quantum; everything in this post applies to your normal, everyday, classical, reversible circuits.
+(The quantum gates only show up next time, to bootstrap the ancilla bit.)</p>
+
+<h1>Incrementing</h1>
+
+<p>An increment gate is an operation that increases the <a href="https://en.wikipedia.org/wiki/Two%27s_complement">two&#39;s-complement</a> value represented by a group of wires.
+For example, if a 3-bit increment gate is applied to a 3-bit circuit then the circuit&#39;s state will cycle from <code>[Off, Off, Off]</code> to <code>[On, Off, Off]</code> to <code>[Off, On, Off]</code> to <code>[On, On, Off]</code> to <code>[Off, Off, On]</code> to <code>[On, Off, On]</code> to <code>[Off, On, On]</code> to <code>[On, On, On]</code> and then back to <code>[Off, Off, Off]</code>.</p>
+
+<p>Implementing an increment gate out of NOT gates is easy, <em>if</em> you&#39;re allowed to have arbitrarily large numbers of controls.
+The increment only propagates, as a carry, through the bits until it encounters an <code>OFF</code> bit.
+Each bit flips if and only if all of the lower bits were <code>ON</code> before the incrementing started.
+In other words, each wire gets a NOT that is controlled by all the preceding wires:</p>
+
+<p><img src="/assets/2015-06-12-Constructing-Large-Increment-Gates/Increment_Circuit_Definition.png" alt="Incrementer definition" height="300px"/></p>
+
+<p>Our goal is to do the same thing that the above circuits do, but without using more than two controls on any NOT and without using more than $O(n)$ NOTs.</p>
+
+<p>The most immediately obvious thing to try is to apply the large controlled-not construction from last time.
+Unfortunately, because that construction requires $O(n)$ gates per controlled NOT, we&#39;d end up needing a quadratic number of gates in total (because $1 + 2 + 3 + 4 + ... + n \in \Theta(n^2)$).
+We need to break the increment apart more intelligently than that.</p>
+
+<p>Like last time, we&#39;ll solve the problem for various different types of ancilla bits.
+We&#39;ll consider <em>burnable</em> ancilla bits (initially zero, allowed to end up non-zero), <em>zeroed</em> ancilla bits (initially zero, must end up zero), and <em>borrowed</em> ancilla bits (unknown initial value, must end up as that same value).</p>
+
+<p>(<em>Side note: I&#39;m skipping garbage ancilla bits (unknown initial value, allowed to end up different) this time because I didn&#39;t find a nice way for them to provide much benefit over borrowed bits.</em>)</p>
+
+<p>We&#39;ll start with the single ancilla bit cases.</p>
+
+<h1>Single Ancilla Bit</h1>
+
+<p>Given an $n+1$ wire circuit with $n$ increment wires and one ancilla wire, we want to break the increment into smaller operations.
+The goal, in this section, is not about getting all the way down to Toffoli gates.
+Instead, we simply want to reduce the size of the operations.
+Once the operations are small enough, possibilities open up because we can borrow bits not used by an operation as ancilla for that operation.</p>
+
+<p>The first case to consider is what to do when the single given ancilla bit is burnable.
+The top wires, which store the low bits of the number we want to increment, can be incremented without depending on the bottom wires in any way.
+But the bottom wires, which store the high bits, should only be incremented when the top wires are all ON.
+We can avoid the bottom wires depending on $n/2$ top wires by storing the intersection of those wires in the ancilla bit.
+That way, the bottom increment only needs one control:</p>
+
+<p><img src="/assets/2015-06-12-Constructing-Large-Increment-Gates/1_Burnable.png" alt="Split incrementer from Burnable bit" height="350px"/></p>
+
+<p>It&#39;s possible to absorb the single extra control into the increment gate.
+A controlled increment gate is equivalent to an increment gate with the control wire as the new lowest bit, except that the final NOT on the low bit is missing.
+So absorbing a control into an increment is just a matter of post-toggling the former control wire:</p>
+
+<p><img src="/assets/2015-06-12-Constructing-Large-Increment-Gates/Absorbing_Control_into_Increment.png" alt="Top control = bigger increment with NOT"></p>
+
+<p>Note that it&#39;s important to treat the absorbed control bit as <em>the low bit</em>, even if the absorbed wire is in the &quot;wrong&quot; position.
+Either the control bit must be swapped into the right position, or a custom re-arranged increment gate will be needed.</p>
+
+<p>The next case to consider is the single zeroed bit case.
+All we need to do here is take our solution from the burnable bit case, and <a href="https://en.wikipedia.org/wiki/Uncomputation">uncompute</a> any effects on the ancilla bit.
+This is a simple addition to the circuit, because we only had one effect and it is easily reversed:</p>
+
+<p><img src="/assets/2015-06-12-Constructing-Large-Increment-Gates/1_Zeroed.png" alt="Split incrementer from Zeroed bit" height="350px"/></p>
+
+<p>The last single-ancilla-bit case we&#39;re considering is the borrowed ancilla bit case.
+This time, it takes more than a simple tweak to make things work.</p>
+
+<p>In the last post, we used <em>toggle detection</em> when working with garbage bits and borrowed bits.
+We repeated a self-undoing operation twice, conditioned on the ancilla bit, so that the operation would undo itself unless the bit was toggled.
+This won&#39;t work for incrementing, because the increment operation is not its own inverse.</p>
+
+<p>I was stuck on this problem for awhile, but eventually realized that the trick was to use the <em>bitwise complement</em>.
+When the bits of a two&#39;s-complement number $X$ are all toggled, they switch from storing $X$ to storing $\overline{X} = -X-1 \pmod{2^n}$.
+If we increment the complemented value, then take the complement again, we end up with the result $\overline{\overline{X} + 1} = \overline{-X - 1 + 1} = -(-X)-1 = X-1$.</p>
+
+<p>That means that surrounding an increment gate with NOTs turns it into a decrement! (And vice versa.)</p>
+
+<p><img src="/assets/2015-06-12-Constructing-Large-Increment-Gates/Increment_Not_Decrement.png" alt="Increment equals decrement surrounded by nots"></p>
+
+<p>The conversion from increment to decrement is useful to us because now we can now turn an increment into the inverse of an increment, and we can do it conditionally.
+That&#39;s the trick we&#39;ll use to make toggle detection work in this case:</p>
+
+<ul>
+<li>We will apply an increment gate and a decrement gate to the high bits of the number.</li>
+<li>Both operations will be conditioned on the borrowed ancilla bit.</li>
+<li>Whenever the low bits are all <code>On</code>, we will toggle the ancilla bit, and the high bits, before and after the decrement gate.
+
+<ul>
+<li>If the low bits are <em>not</em> all <code>On</code>, nothing will happen to the high bits.
+Either the borrowed ancilla bit will be <code>Off</code>, meaning neither the increment nor the decrement gate will take effect, or the borrowed ancilla bit will be <code>On</code> and both the increment and the decrement gate will apply, undoing each other.
+In either case, the net effect is no effect.</li>
+<li>If the low bits are all <code>On</code>, then the NOTs around the decrement gate fire and transform the decrement into an increment.
+If the borrowed ancilla bit is <code>On</code>, the increment gate will fire and the decrement-turned-increment gate will not.
+Otherwise the borrowed ancilla bit is <code>Off</code> and only the decrement-turned-increment gate will fire.</li>
+</ul></li>
+</ul>
+
+<p>So, with the above plan, the high bits will be incremented exactly once when the low bits are all <code>On</code>, but nothing happens to the high bits if any of the low bits is <code>Off</code>.
+That&#39;s exactly the logic we want for the high bits.</p>
+
+<p>Here&#39;s what the single borrowed bit construction looks like, for 8-bit numbers:</p>
+
+<p><img src="/assets/2015-06-12-Constructing-Large-Increment-Gates/1_Borrowed.png" alt="Split incrementer from Borrowed bit" height="350px"/></p>
+
+<p>The above circuit also uses one other trick, that I didn&#39;t mention.
+Because we want to toggle so many bits when the first $n/2$ bits are <code>ON</code>, but we don&#39;t want to pay the quadratic price of having $n/2$ controlled-nots of size $n/2$, we use toggle-detection to spread the toggling of the ancilla bit to all of the target bits.</p>
+
+<p>The single bit constructions we&#39;ve covered let us turn any $n$-bit increment gate into two or three $n/2$-bit increment gates, depending on what type of ancilla bit we have.
+We could apply these constructions again and again, cutting the size of the remaining gates in half until we hit simple base cases, but that would not be asymptotically efficient.</p>
+
+<p>(For example, the recurrence relation for iterating the single borrowed bit construction is $T(N) = 3 T(N/2) + O(N)$ and <a href="https://en.wikipedia.org/wiki/Master_theorem">that means</a> $T(n) \in O(n^{log_2(3)}) \approx O(n^{1.585})$, not $O(n)$. The recurrence relation for zeroed bits is $T(N) = 2 T(N/2) + O(N)$, which is better, but it still gives $T(N) \in O(n \log n)$ instead of $O(n)$.)</p>
+
+<p>To achieve a linear number of gates, we&#39;ll need to borrow a lot more bits.</p>
+
+<h1>$n$ Ancilla Bits</h1>
+
+<p>Given a $2n$ wire circuit, with $n$ target wires and $n$ ancilla wires, we want to increment the target wires.
+And we want to do it with at most $O(n)$ Toffoli-or-smaller gates.</p>
+
+<p>The burnable bits case only needs $n-2$ of the $n$ available ancilla bits.
+By using the burnable bits to accumulate the intersection of more and more controls, we get exactly the conditions we need for updating each target bit:</p>
+
+<p><img src="/assets/2015-06-12-Constructing-Large-Increment-Gates/N_Burnable.png" alt="Incrementer from n-2 Burnable bits" height="300px"/></p>
+
+<p>The zeroed bits case is solved by, as with the single bit case, taking the burnable bits solution and adding uncomputation. We simply sweep up after ourselves:</p>
+
+<p><img src="/assets/2015-06-12-Constructing-Large-Increment-Gates/N_Zeroed.png" alt="Incrementer from n-2 Zeroed bits" height="300px"/></p>
+
+<p>That leaves only the $n$ borrowed bits case.</p>
+
+<p>I have to admit, this case gave me a hard time.
+I was stuck on it for a solid week, if not more, unable to come up with anything that worked.
+I can think of a few reasons I wasn&#39;t making progress.
+First, I was trying to make things work with $n-2$ ancilla bits, instead of $n$.
+Second, I was trying to avoid putting any temporary garbage into the bits.
+Those two constraints made it difficult, if not impossible, to propagate a useful invariant from bit to bit.
+Third, it&#39;s surprisingly hard to find help for this sort of problem.
+It&#39;s difficult enough and specific enough that you&#39;ll get few responses on forums or Q/A sites, yet easy enough that it&#39;s not going to be the title of a paper (making it hard to find pre-existing solutions).</p>
+
+<p>Eventually, after spinning in circles for an embarrassing amount of time, I came across the <a href="http://ftp.qucis.queensu.ca/home/akl/cisc879/papers/PAPERS_FROM_UNCONVENTIONAL_COMPUTING/VOLUME_1_Issue_4/RENTERGEM.pdf">VanRentergem adder</a> (<a href="http://iopscience.iop.org/1751-8121/43/38/382002/fulltext/">source of diagram</a>):</p>
+
+<p><img src="/assets/2015-06-12-Constructing-Large-Increment-Gates/VanRentergem_Adder_Local_Copy.jpg" alt="VanRentergem adder"></p>
+
+<p>The VanRentergem adder takes a carry bit $c$, a two&#39;s complement value $a$, a two&#39;s complement value $b$, and turns $(c, a, b)$ into $(c, a, a+b+c)$.
+We&#39;ll use a tweaked version of the circuit, made out of Toffoli gates instead of controlled-swap gates, and reverse the gates so it does subtraction instead of addition:</p>
+
+<p><img src="/assets/2015-06-12-Constructing-Large-Increment-Gates/Subtraction_Widget.png" alt="Subtraction Widget" height="300px"/></p>
+
+<p>With the above widget, we can subtract a garbage carry bit $c$ and a garbage two&#39;s-complement value $g$ out of our target value-to-increment $v$.</p>
+
+<p>On its own, that subtraction seems like the wrong move to make.
+After all, it mixes a bunch of garbage into our target.
+However, we can use the bitwise complement trick from before to fix the problem.
+If we apply the subtraction widget again, but toggle $g$&#39;s bits first, then the target bits will have transitioned from storing $v$ to storing $v-c-g$ to storing $v-c-g-(-g-1)-c = v-2c+1$.
+By getting rid of the garbage from $g$, we create the $+1$ we&#39;re trying to perform!</p>
+
+<p>(<em>Caution: because we&#39;re storing one more bit of $v$ than we are of $g$, adding $g$ and its complement will toggle $v$&#39;s high bit. Put a NOT on the high bit to fix that problem.</em>)</p>
+
+<p>Now we need to get rid of the garbage from $c$.
+Consider how $v-2c+1$ behaves for each possible value of $c$.
+When $c$ is <code>On</code> we get $v \rightarrow v-2+1 = v-1$, meaning we <em>decremented</em> $v$.
+When $c$ is <code>Off</code> we get $v \rightarrow v+1$, meaning we <em>incremented</em> $v$.
+We always want to increment, and can easily turn a decrement into an increment by surrounding it with NOTs, so... just do that but conditioned on $c$.</p>
+
+<p>What we end up with is two VanRentergem-style subtractions. The non-carry-bit garbage is cancelled out by toggling it before and after one of the subtractions. The carry bit garbage is cancelled out by pre- and post-toggling the target bits when the carry bit is <code>On</code>. Finally, because the target value has one more bit than the garbage value, the highest bit needs special handling. Overall, you get this:</p>
+
+<p><img src="/assets/2015-06-12-Constructing-Large-Increment-Gates/N_Borrowed.png" alt="Incrementer from n Borrowed bits" width="100%"/></p>
+
+<p>With these asymptotically efficient $n$-ancilla-bit constructions in hand, we can fix the inefficiencies in our single bit constructions.</p>
+
+<h1>Putting It All Together</h1>
+
+<p>Basically all we need to do, to turn an $n$-bit increment with a single ancilla bit into a linear number of Toffoli-or-smaller gates, is apply the appropriate single bit construction and then apply the appropriate $n$ borrowed bit construction.
+However, there are a few caveats.</p>
+
+<p>First, after the single bit construction has been applied, the largest remaining operation has size $\lceil \frac{n}{2} \rceil$ and therefore has access to at most $\lfloor \frac{n}{2} \rfloor$ borrowable unaffected bits. Because $\lfloor \frac{n}{2} \rfloor$ can be one less than $\lceil \frac{n}{2} \rceil$, we sometimes need to apply the single bit construction twice before the operations are small enough that we can borrow enough bits to apply the $n$ bit construction. Alternatively, because increments only have one controlled-not that touches all the relevant wires, we can pull that operation out of the increment (reducing the increment&#39;s bit size by 1) and handle it separately.</p>
+
+<p>Second, the constructions make (a constant number of) controlled-not gates in addition to the created increment gates.
+You handle those by applying the construction from the large controlled-nots post.</p>
+
+<p>Third, although this construction is asymptotically efficient, it has a large constant factor.
+I didn&#39;t do a careful analysis, but it seems that an $n$ bit increment turns into something like $32n$ Toffoli-or-smaller gates.
+There are probably solutions with better constant factors.</p>
+
+<p>To make sure that the described construction actually works, I wrote some <a href="https://gist.github.com/Strilanc/1768464eb8cbca0981cd">hacky python code to test it</a>.
+Using that code to generate the 5-bit increment circuit, then crunching it down a little by hand so the thing fits on the page, gives:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">a ────•─•─•••X•───────•X──•X•───────•X─••──•─•─•◦•X•───────•X──•X•───────•X─•◦X─X••───────••X─X••───────••XX─ a+1
+      │ │ │││││       ││  │││       ││ ││  │ │ │││││       ││  │││       ││ │││ │││       │││ │││       ││││ 
+b ────•─•X┼┼┼•X•X•─•X─X••X┼•X•X•─•X─X••┼┼──•─•X┼┼┼•X•X•─•X─X••X┼•X•X•─•X─X••┼┼┼X┼┼┼X••─••X┼┼┼─┼┼┼X••─••X┼┼┼┼X b+a
+      │ │ ││││││││ ││ │││ ││││││ ││ │││││  │ │ ││││││││ ││ │││ ││││││ ││ │││││││││││││ ││││││ ││││││ ││││││││
+c ───•┼•┼X┼┼┼┼┼┼•X◦X••┼┼┼X┼┼┼┼•X•X••┼┼┼┼┼─•┼•┼X┼┼┼┼┼┼•X•X••┼┼┼X┼┼┼┼•X•X••┼┼┼┼┼┼┼┼┼┼┼┼┼X┼┼┼┼┼┼─┼┼┼┼┼┼X┼┼┼┼┼┼┼┼ c+ab
+     ││││ │││││││││││││││ │││││││││││││││ ││││ │││││││││││││││ ││││││││││││││││││││││││││││││ │││││││││││││││
+d ─X•X┼X┼•┼X┼┼┼X••┼••X┼┼┼─┼┼┼X••┼••X┼┼┼┼X•X┼X┼•┼X┼┼┼X••┼••X┼┼┼─┼┼┼X••┼••X┼┼┼┼X┼┼┼•X•X•┼•X┼X••X┼•X•X•┼•X┼X••┼┼ d+abc
+    │││││││ │││   │   │││ │││   │   ││││ │││││││ │││   │   │││ │││   │   ││││ │││││ ││││││││  │││ ││││││││ ││
+e X•X•X•XX┼•┼┼┼───X───┼┼┼─┼┼┼───X───┼┼┼┼•X•X•XX┼•┼┼┼───X───┼┼┼─┼┼┼───X───┼┼┼┼X┼┼┼┼┼─•X◦X••┼┼─X┼┼┼─•X•X••┼┼─┼┼ e+abcd
+   │      │││││       │││ │││       │││││      │││││       │││ │││       ││││ │││││       ││  │││       ││ ││
+Z ─X──────XXX••───────••X─X••───────••XXXX─────XXX••───────••X─X••───────••XXX•••X•───────•X──•X•───────•X─•• Z
+</code></pre></div>
+<p>(I sure hope your browser renders monospaced unicode correctly, or that will look like a mess.)</p>
+
+<p>If you squint a bit, you can see hints of a pattern.
+To make that pattern very apparent, I printed incrementally larger and larger cases then zoomed out:</p>
+
+<p><img src="/assets/2015-06-12-Constructing-Large-Increment-Gates/Delectable.png" alt="Linear scaling of full incrementer circuit"></p>
+
+<p>I guess this construction is creating some <em>delicious</em> circuits.
+mMMmMMMM.
+(I am so sorry. Please don&#39;t shun me.)</p>
+
+<h1>Summary</h1>
+
+<p>Given a single ancilla bit, in an unknown state that must be preserved, you can create $n$-wire increment gates using $O(n)$ Toffoli-or-smaller gates.</p>
+
+<p>The key parts of the construction are the VanRentergem-style subtraction, and using bitwise complements to conditionally switch between adding and subtracting.</p>
+
+<p>Next time: using quantum gates to bootstrap an ancilla bit out of nothing.</p>
+
+<h1>Navigation</h1>
+
+<p>Part 1: <a href="/circuits/2015/06/05/Constructing-Large-Controlled-Nots.html">Constructing Large Controlled-Nots</a></p>
+
+<p>Part 2: (This Post)</p>
+
+<p>Part 3: <a href="/circuits/2015/06/22/Using-Quantum-Gates-instead-of-Ancilla-Bits.html">Using Quantum Gates instead of Ancilla Bits</a></p>
+
+<hr>
+
+<p><a href="http://www.reddit.com/r/programming/comments/39m6pr/constructing_large_increment_gates/">Discuss on Reddit</a></p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

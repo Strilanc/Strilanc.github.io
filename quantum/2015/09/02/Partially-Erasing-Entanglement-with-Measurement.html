@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Partially Erasing Entanglement: Measuring a GHZ Triplet into a Bell Pair</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Partially Erasing Entanglement: Measuring a GHZ Triplet into a Bell Pair</h1>
+<p class="meta">02 Sep 2015</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Recently, while trying grok <a href="https://en.wikipedia.org/wiki/Delayed_choice_quantum_eraser">delayed choice quantum erasers</a> by simplifying/adjusting/toying-around-with the problem, I stumbled onto an improvement for my solution to the <a href="/quantum/2015/05/01/Quantum-Network-Flow-Puzzle.html">quantum network flow puzzle I posted months ago</a>.</p>
+
+<p>In this post: how to &quot;erase&quot; a qubit out of a GHZ state.</p>
+
+<h1>GHZ Triplets and Bell Pairs</h1>
+
+<p>A <a href="https://en.wikipedia.org/wiki/Bell_state">Bell pair</a> is a set of two qubits in a superposition of all-OFF and all-ON, i.e. in the state $\frac{1}{\sqrt{2}} \ket{00} + \frac{1}{\sqrt{2}} \ket{11}$.
+A <a href="https://en.wikipedia.org/wiki/Greenberger%E2%80%93Horne%E2%80%93Zeilinger_state">GHZ state</a> is like a Bell pair, but with more qubits involved.
+For example, a GHZ triplet is a set of three qubits in the state $\frac{1}{\sqrt{2}} \ket{000} + \frac{1}{\sqrt{2}} \ket{111}$.</p>
+
+<p>You might expect that the qubits in a GHZ state are &quot;more entangled&quot; than the qubits in a Bell pair, since the superposition is larger, but actually the reverse is true.
+Because of the <a href="http://www.quantiki.org/wiki/Monogamy_of_entanglement">monogamy of entanglement</a>, qubits in a Bell pair are more entangled with each other than qubits in a GHZ state are.
+The third qubit in a GHZ triplet tends to be more of a third wheel than a useful resource, as far as doing-fun-things-with-quantum goes.</p>
+
+<p>Because Bell pairs can be used for some tasks that GHZ states can&#39;t do (e.g. superdense coding), it&#39;s useful to be able to reduce a GHZ state into a Bell pair by kicking one of the qubits out.
+Previously, I thought that the only way to do this was to hit the unwanted qubit with a controlled-not controlled by one of the other involved qubits.
+This clears the unwanted qubit by toggling its value in the all-ON part of the superposition while leaving it alone in the all-OFF part of the superposition.</p>
+
+<p>The controlled-not approach works fine, but it requires the unwanted qubit to be in the same place as one of the other qubits (because of the quantum controlled operation).
+Satisfying that condition will, usually, require moving qubits around (i.e. you need some quantum channels with available bandwidth).</p>
+
+<p>But it turns out that it&#39;s possible to avoid paying that quantum bandwidth cost.
+By hitting the qubit with a Hadamard gate to obscure its value, measuring it, and using the measurement outcome to fix a phase parity issue, you only need to use classical bandwidth.
+(I call this &quot;erasing&quot; the qubit only because of how I stumbled onto the idea, not because of the actual operations that are happening.
+I don&#39;t know the proper existing name for the technique.)</p>
+
+<h1>Circuit Manipulation</h1>
+
+<p>I think that the easiest way to understand why the &quot;erasure&quot; approach works, and how, is to start from the circuit for the controlled-not approach and apply several simple obviously-correct transformations.</p>
+
+<p>We&#39;ll start with a circuit that creates a GHZ triplet, then uses a controlled-not to kick the third qubit out of the GHZ state:</p>
+
+<p><img src="/assets/2015-09-02-Partially-Erasing-Entanglement-with-Measurement/GHZ_to_Bell_1.png" alt="Using a controlled-not to cancel a qubit out of a GHZ state"></p>
+
+<p>After the third qubit has been cleared, we can hit it with whatever operations we want (because it&#39;s not being used for anything anymore).
+Using the power of informed foresight, we&#39;ll hit it with a Hadamard gate and then a measurement:</p>
+
+<p><img src="/assets/2015-09-02-Partially-Erasing-Entanglement-with-Measurement/GHZ_to_Bell_2_followup.png" alt="Added some followup operations on the unused qubits"></p>
+
+<p>Now it&#39;s time to hop the Hadamard gate over the Not gate.
+This is allowed, but it transforms the value-toggling Not gate into a phase-toggling Z gate (because $H \cdot X = Z \cdot H$):</p>
+
+<p><img src="/assets/2015-09-02-Partially-Erasing-Entanglement-with-Measurement/GHZ_to_Bell_3_move_H.png" alt="Hopped the Hadamard gate over the controlled-not"></p>
+
+<p>Z gates are a bit like controlled operations, in that they have no effect on qubits that are OFF.
+As a result, exchanging a Z gate with one of its controls doesn&#39;t change its effect.
+Let&#39;s do it:</p>
+
+<p><img src="/assets/2015-09-02-Partially-Erasing-Entanglement-with-Measurement/GHZ_to_Bell_4_swap_CZ.png" alt="Reversed the controlled-Z"></p>
+
+<p>Having the control on the third wire is useful because <a href="https://en.wikipedia.org/wiki/Deferred_Measurement_Principle">controls commute with measurements</a> (i.e. classical conditions are equivalent to quantum conditions).
+This allows us to perform the phase correction <em>after</em> the measurement instead of <em>before</em>:</p>
+
+<p><img src="/assets/2015-09-02-Partially-Erasing-Entanglement-with-Measurement/GHZ_to_Bell_5_classicalize.png" alt="Hopped the control over the measurement"></p>
+
+<p>That&#39;s it, we&#39;re done!
+The final circuit:</p>
+
+<ol>
+<li>Starts in the state $\ket{000}$.</li>
+<li>Creates a GHZ triplet state $\frac{1}{\sqrt{2}} \ket{000} + \frac{1}{\sqrt{2}} \ket{111}$.</li>
+<li>Hits the third qubit with a Hadamard, transitioning to the state $\frac{1}{2} \ket{000} + \frac{1}{2} \ket{001} + \frac{1}{2} \ket{110} - \frac{1}{2} \ket{111}$.</li>
+<li>Measures the third qubit, collapsing the system into either the state $\frac{1}{\sqrt{2}} \parens{\ket{00} + \ket{11}} \ket{0}$ or the state $\frac{1}{\sqrt{2}} \parens{\ket{00} - \ket{11}} \ket{1}$.</li>
+<li>Fixes the minus sign in the third-qubit-was-ON outcome, with a Z gate controlled by the measurement outcome.</li>
+<li>Finishes with the first two qubits unconditionally in the Bell pair state $\frac{1}{\sqrt{2}} \ket{00} + \frac{1}{\sqrt{2}} \ket{11}$.</li>
+</ol>
+
+<p>We still had to send information about the third qubit to the second qubit, but now the transmitted information is classical (i.e. a measurement result) instead of quantum (i.e. the original qubit).
+This technique also works for larger GHZ states involving more qubits: you can eject qubits from the state one by one by Hadamarding+measuring+conditional-Z-a-qubit-still-in-the-state-ing them.</p>
+
+<h1>Updated Puzzle Solution</h1>
+
+<p>Because my solution to the <a href="/quantum/2015/05/01/Quantum-Network-Flow-Puzzle.html">previously posted quantum network flow puzzle</a> involves kicking a qubit out of a GHZ state, using &quot;erasure&quot; to do the kicking allows a couple parts of the network to be downgraded from quantum to classical.</p>
+
+<p>Here is a data flow diagram of the improved solution:</p>
+
+<p><a href="/assets/2015-09-02-Partially-Erasing-Entanglement-with-Measurement/NetworkPuzzleSolution.png">
+    <img src="/assets/2015-09-02-Partially-Erasing-Entanglement-with-Measurement/NetworkPuzzleSolution.png" alt="Updated solution data flow diagram" style="width: 400px;"/>
+</a></p>
+
+<p>I won&#39;t bore you with the worked out details of the solution.
+It&#39;s obvious what changes to make, given the content of the puzzle post and of this post.</p>
+
+<h1>Summary</h1>
+
+<p>A qubit can be kicked out of a GHZ state by measuring it along a spin axis perpendicular to the entanglement axis, and using the measurement result to perform a phase correction.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+  <script>
+  var idcomments_acct = '7d0006bd6a016f9a2892cc2ecc64de01';
+  var idcomments_post_id = '/quantum/2015/09/02/Partially-Erasing-Entanglement-with-Measurement.html';
+  var idcomments_post_url = 'http://algorithmicassertions.com/quantum/2015/09/02/Partially-Erasing-Entanglement-with-Measurement.html';
+  </script>
+  <span id="IDCommentsPostTitle" style="display:none"></span>
+  <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+  <noscript>
+    <hr>
+    <font color=red>
+      Comments script blocked. Comments won't work.
+    </font>
+    <br/>
+    Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>intensedebate.com</strong> to fix.
+  </noscript>
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

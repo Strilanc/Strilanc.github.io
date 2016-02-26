@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Using Quantum Gates instead of Ancilla Bits</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Using Quantum Gates instead of Ancilla Bits</h1>
+<p class="meta">22 Jun 2015</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>This post is the third, and final, part of a worked solution to the following exercise:</p>
+
+<p><a href="http://www.johnboccio.com/research/quantum/notes/QC10th.pdf"><img src="/assets/2015-06-23-Using-Quantum-Gates-instead-of-Ancilla-Bits/Corrected_Exercise.png" alt="Exercise 4.29: Find a circuit containing a linear (used to say quadratic) number of Toffoli, CNOT, and single qubit gates which implements a NOT gate with n controls, using no work qubits."></a></p>
+
+<p>In part 1, <a href="/circuits/2015/06/05/Constructing-Large-Controlled-Nots.html">Constructing Large Controlled Nots</a>, I solved the classical version of the exercise (where an <a href="https://en.wikipedia.org/wiki/Ancilla_Bit">ancilla bit</a> <em>is</em> required).</p>
+
+<p>In part 2, <a href="/circuits/2015/06/12/Constructing-Large-Increment-Gates.html">Constructing Large Increment Gates</a>, I did the same thing (one ancilla bit, only classical gates) but for increment operations.</p>
+
+<p>In this part, we&#39;re going to use quantum gates (and the constructions from the previous two parts) to avoid that pesky ancilla bit.
+The basic progression will be as follows:</p>
+
+<ol>
+<li>Split operations with many controls into sub-operations with fewer controls, by using the fact that quantum operations have square roots.</li>
+<li>Rewrite operations so that controls are only applied to NOT gates.</li>
+<li>Fix smaller and smaller phase shift errors resulting from the above processes.</li>
+<li>Re-arrange the resulting mish-mash of controlled-NOTs into increment and decrement operations.</li>
+<li>Apply the constructions from the previous parts to reduce the remaining large operations into a linear number of Toffoli-or-smaller operations.</li>
+</ol>
+
+<p>(<em>Side note: It&#39;s a bit disconcerting to spill nine thousand words on such a short exercise, but I suppose that&#39;s the nature of having to explain one level back and noting nearby things instead of just showing the end result.</em>)</p>
+
+<h1>Quantum Operations Have Roots</h1>
+
+<p>The fundamental property that will allow us to avoid using an ancilla bit, now that we have access to quantum gates, is that <em>every quantum operation has a square root and an inverse</em>.
+Given a quantum operation $U$, you can find a quantum operation $\sqrt{U}$ such that applying $\sqrt{U}$ to a circuit <em>twice</em> has the same effect as applying $U$ <em>once</em>.
+Similarly, applying $U$ and then its inverse $U^\dagger$ (or vice versa) will cause the operations to undo each other and result in a net effect of no effect.</p>
+
+<p>Classically, not all operations have square roots.
+For example, the NOT gate has no classical square root.
+There&#39;s simply no boolean-to-boolean function $f$ such that $f(f(x)) = \overline{x}$. But, quantumly, the NOT gate <em>does</em> have a square root.</p>
+
+<p>Every quantum operation is a <a href="https://en.wikipedia.org/wiki/Unitary_matrix">unitary matrix</a>, and every unitary matrix is a realizable quantum operation.
+Unitary matrices always have square roots, and so quantum operations do too.
+Let&#39;s compute a square root of the NOT gate, just to check that this is actually possible. Start with <a href="https://en.wikipedia.org/wiki/Quantum_gate#Pauli-X_gate">its unitary matrix</a>:</p>
+
+<p>$X = \bimat{0}{1}{1}{0}$</p>
+
+<p>Then compute the <a href="https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors">eigenvalues and unit eigenvectors</a> of that matrix:</p>
+
+<p>$\lambda_1 = 1$, $v_1 = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ 1 \end{bmatrix}$</p>
+
+<p>$\lambda_2 = -1$, $v_2 = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ -1 \end{bmatrix}$</p>
+
+<p>Which gives us the <a href="https://en.wikipedia.org/wiki/Eigendecomposition_of_a_matrix">eigendecomposition</a> of the NOT gate&#39;s operation:</p>
+
+<p>$\bimat{0}{1}{1}{0}
+= \lambda_1 v_1 v_1^{\dagger} + \lambda_2 v_2 v_2^{\dagger}
+= \lambda_1 \frac{1}{2} \bimat{1}{1}{1}{1} + \lambda_2 \frac{1}{2} \bimat{1}{-1}{-1}{1}$</p>
+
+<p>The eigendecomposition form of a matrix is very useful because most functions, when applied to a matrix, correspond to simply transforming the eigenvalues.
+To find the square root of the matrix, we simply replace the eigenvalue coefficients with their square roots:</p>
+
+<p>$\sqrt{\bimat{0}{1}{1}{0}}
+= \sqrt{\lambda_1} v_1 v_1^{\dagger} + \sqrt{\lambda_2} v_2 v_2^{\dagger}
+= \sqrt{1} \frac{1}{2} \bimat{1}{1}{1}{1} + \sqrt{-1} \frac{1}{2} \bimat{1}{-1}{-1}{1}$</p>
+
+<p>And, by arbitrarily picking principal square roots, we find one of the square roots of NOT:</p>
+
+<p>$\rightarrow \frac{1}{2} \bimat{1}{1}{1}{1} + i \frac{1}{2} \bimat{1}{-1}{-1}{1} = \frac{1}{2} \bimat{1+i}{1-i}{1-i}{1+i}$</p>
+
+<p>You can check that squaring $\frac{1}{2} \bimat{1+i}{1-i}{1-i}{1+i}$ does in fact give you $\bimat{0}{1}{1}{0}$.
+Engineer a physical instantiation or simulation of $\frac{1}{2} \bimat{1+i}{1-i}{1-i}{1+i}$, apply it twice, and you will have performed a NOT operation.</p>
+
+<p>The inverse of a unitary matrix is much easier to find than the square root: the inverse is simply the <a href="https://en.wikipedia.org/wiki/Conjugate_transpose">conjugate transpose</a> of the matrix.
+For example, the inverse of $\frac{1}{2} \bimat{1+i}{1-i}{1-i}{1+i}$ is just $\frac{1}{2} \bimat{1-i}{1+i}{1+i}{1-i}$ (another square root of NOT).</p>
+
+<h1>Removing a Control</h1>
+
+<p>If you have some operation $U$ with multiple controls, and access to a gate that is the square root of $U$ as well as a gate that is the inverse of that square root, then you can rewrite the circuit to use fewer controls per operation.
+The construction for doing so is detailed on page 182 of <a href="http://www.johnboccio.com/research/quantum/notes/QC10th.pdf">Nielsen and Chuang&#39;s textbook</a>.
+Here it is (<em>note that the top &quot;wire&quot; is actually a bundle of $n$ wires</em>):</p>
+
+<p><img src="/assets/2015-06-23-Using-Quantum-Gates-instead-of-Ancilla-Bits/Reducing_Max_Controls_by_One.png" alt="Reducing the maximum number of controls per operation by one, using square roots and inverses"></p>
+
+<p>Let&#39;s convince ourselves, by case analysis, that the above control-reducing construction works.
+We want there to be no effect if any of the control wires is OFF, but if all of the control wires are ON then the overall effect should be a $U$ applied to the target wire.
+There are four cases to consider:</p>
+
+<ul>
+<li><strong>OFF, OFF</strong>:
+If any of the wires in the top wire bundle is OFF, and the middle control wire is also OFF, then none of the operations happen.
+Clearly this is a no-op overall.</li>
+<li><strong>ON, OFF</strong>:
+If all of the control wires in the top wire bundle are ON, but the middle control wire is OFF, then the middle wire will be temporarily toggled ON during the $\sqrt{U}^\dagger$ gate but back OFF for the $\sqrt{U}$ gate that depends on the middle wire.
+The $\sqrt{U}$ gate that depends on the top control wires <em>does</em> apply, though.
+Overall nothing happens, because $\sqrt{U}^\dagger \cdot \sqrt{U} = I$.</li>
+<li><strong>OFF, ON</strong>:
+If any of the top wire bundle&#39;s wires are OFF, but the middle control wire is ON, then basically the same thing happens as in the <strong>ON, OFF</strong> case.
+The $\sqrt{U}^\dagger$ gate applies, but only one of the $\sqrt{U}$ gates applies, so they undo each other&#39;s effects.</li>
+<li><strong>ON, ON</strong>:
+If all of the control wires are ON, then the $\sqrt{U}^\dagger$ gate will not occur (because the middle wire was temporarily toggled OFF) but both of the $\sqrt{U}$ gates will fire.
+So the net effect is a $\sqrt{U}^2 = U$ operation applied to the target wire.</li>
+</ul>
+
+<p>By case analysis, we see that the control-reducing construction does in fact apply a $U$ if and only if all the controls are ON (and nothing happens otherwise).</p>
+
+<h1>Iteratively Removing Controls Hits a Wall</h1>
+
+<p>By nesting the control-reducing construction inside of itself, again and again, we can remove many controls instead of just one:</p>
+
+<p><img src="/assets/2015-06-23-Using-Quantum-Gates-instead-of-Ancilla-Bits/Iteratively_Turning_Controls_into_Square_Roots.gif" alt="Iteratively turning controls into square roots"></p>
+
+<p>Unfortunately, this stops working for the last control.
+The construction will still be <em>correct</em> when there&#39;s one control, in that the resulting circuit will be equivalent to the input circuit, but we won&#39;t end up with a circuit using no controls:</p>
+
+<p><img src="/assets/2015-06-23-Using-Quantum-Gates-instead-of-Ancilla-Bits/Last_Control_Survives.png" alt="The Last Control Survives"></p>
+
+<p>This is a problem, because the surviving controls are on gates that aren&#39;t NOT gates, and according to the rules of the exercise we aren&#39;t allowed to do that.</p>
+
+<p>We will definitely need to apply the control-reducing construction once, because we need an uninvolved bit in order to apply the constructions from last time and the time before.
+However, after that single application, we should switch to a construction that moves controls off of special gates and onto NOT gates.</p>
+
+<h1>Moving Controls to NOT Gates</h1>
+
+<p>It&#39;s possible to factor a controlled quantum operation into pieces that only have controls on NOT gates.
+The overall idea is to find matrices $A$, $B$, and $C$, plus a phase factor $e^{i\theta}$, such that $e^{i\theta} A \cdot X \cdot B \cdot X \cdot C = U$ and $A \cdot B \cdot C = I$.
+Those pieces allow you to do this:</p>
+
+<p><img src="/assets/2015-06-23-Using-Quantum-Gates-instead-of-Ancilla-Bits/Moving_Controls_to_NOT_Gates.png" alt="Moving Controls to NOT Gates"></p>
+
+<p>When the control wire in the above circuit is OFF, the overall effect on the bottom wire is $A \cdot B \cdot C$.
+The controlled-NOTs don&#39;t fire because their controls are not satisfied, and the <a href="https://en.wikipedia.org/wiki/Quantum_gate#Phase_shift_gates">phase shift gate</a> (the $Z(\theta)$ gate) doesn&#39;t fire because phase shifts only apply to the ON state.
+We required $A \cdot B \cdot C$ to be equal to the identity matrix, so nothing happened as required.
+If the control wire was ON, then the overall effect would be $e^{i\theta} A \cdot X \cdot B \cdot X \cdot C = U$, again as required.</p>
+
+<p>There&#39;s a procedure for finding appropriate values for $A$, $B$, $C$, and $\theta$ from a given $U$, but explaining how takes a lot of words.
+If you&#39;re curious, see pages 176, 180, and 181 of <a href="http://www.johnboccio.com/research/quantum/notes/QC10th.pdf">the textbook</a>.</p>
+
+<p>For the purposes of this post, we&#39;ll only be working with the roots of $X$ gates, and $Z$ gates.
+I&#39;ll just provide some $A$, $B$, $C$, and $\theta$ values that work.</p>
+
+<p>For phase shift gates, i.e. Z-axis rotations, moving controls onto NOT gates is relatively simple.
+You phase shift each of the two wires by half as much, phase shift in the opposite direction (also by half as much) when the wires differ, and that&#39;s all:</p>
+
+<p><img src="/assets/2015-06-23-Using-Quantum-Gates-instead-of-Ancilla-Bits/Moving_Controls_off_of_Z_axis_Rotations.png" alt="Moving Controls off of Z axis Rotations"></p>
+
+<p>(Note that, by $\sqrt[n]{Z}$, I always mean $\bimat{1}{0}{0}{e^{i \pi/ n}}$.
+I don&#39;t mean an arbitrary $n$&#39;th root of $Z$.)</p>
+
+<p>To turn the Z-axis rotation construction into an X-axis rotation construction, we use the fact that bracketing with <a href="https://en.wikipedia.org/wiki/Quantum_gate#Hadamard_gate">Hadamard gates</a> transforms Z rotations into X rotations, and <a href="/puzzle/quantum/2014/04/13/Deflipping-a-Quantum-Coing.html">vice versa</a>:</p>
+
+<p><img src="/assets/2015-06-23-Using-Quantum-Gates-instead-of-Ancilla-Bits/Moving_Controls_off_of_X_axis_Rotations.png" alt="Moving Controls off of X axis Rotations"></p>
+
+<p>It&#39;s easiest to apply the Hadamard bracketing one time at the very top level before we&#39;ve even applied the control-reducing construction, instead of doing it as part of each transformation we make to the circuit.</p>
+
+<h1>Iterative Phase Corrections</h1>
+
+<p>The control-moving constructions from the previous part have a problem: the top wire ends up with an operation, instead of just controls.
+When there are multiple control wires present, that new operation on the top wire (which is not a NOT) becomes a controlled operation:</p>
+
+<p><img src="/assets/2015-06-23-Using-Quantum-Gates-instead-of-Ancilla-Bits/Leftover_Phase_Correction_from_Moving_Controls.png" alt="Leftover Phase Correction from Moving Controls"></p>
+
+<p>Fortunately, because the new controlled operation has one fewer control than the original controlled operation, fixing the problem is just a matter of repeating the procedure again and again.
+Eventually the resulting phase correction will have no controls.
+Here is what the repeated application looks like:</p>
+
+<p><img src="/assets/2015-06-23-Using-Quantum-Gates-instead-of-Ancilla-Bits/Iteratively_Moving_Controls_from_Phase_Gates_to_Not_Gates.gif" alt="Iteratively moving controls from phase gates to not gates"></p>
+
+<p>And here are the start and end states without animation in between:</p>
+
+<p><img src="/assets/2015-06-23-Using-Quantum-Gates-instead-of-Ancilla-Bits/Moving_Many_Controls_from_a_Z_axis_Rotation_To_NOTs.png" alt="Moving Many Controls from a Z-axis Rotation to NOTs"></p>
+
+<p>So far, we&#39;ve managed to reduce the maximum number of controls, and to move all of the controls to NOT gates.
+But we still need to clean up a bit.</p>
+
+<h1>Re-arranging into Increments</h1>
+
+<p>The construction so far creates a linear number of NOT gates.
+However, because those NOT gates have many controls, individually breaking them down into Toffoli gates would create a quadratic number of gates overall.
+Instead, we will re-arrange the NOT gates so that we can simplify the circuit.</p>
+
+<p>Because neither phase shift gates nor controls affect whether a wire is ON, we can move controlled-NOT gates over phase shift gates as long as the phase shift applies to one of the control wires (as opposed to the target wire).
+We can also move controlled-NOTs over other controlled-NOTs under the same conditions, as long as the other controlled-NOT cancels its effects by happening twice.</p>
+
+<p>This freedom of movement is all we need to re-arrange our controlled-NOTs into an increment gate and a decrement gate:</p>
+
+<p><img src="/assets/2015-06-23-Using-Quantum-Gates-instead-of-Ancilla-Bits/Merging_Controlled_Nots_into_Increments.gif" alt="Merging controlled nots into an increment and decrement"></p>
+
+<p>Here&#39;s where we were before moving controls, where we ended up after moving controls, and the final compact circuit after simplifying:</p>
+
+<p><img src="/assets/2015-06-23-Using-Quantum-Gates-instead-of-Ancilla-Bits/From_Controlled_Phase_Shift_to_Incremented_Phase_Shifts.png" alt="From Controlled Phase Shift to Incremented Phase Shifts"></p>
+
+<p>The final state ends up being surprisingly simple... but why does it work?
+Let&#39;s try to understand how controls can be replaced by incrementing.</p>
+
+<p>Think of each phase shift gate as adding or subtracting some value from a global counter, but the gate only fires and adjusts the count when the wire the phase shift gate is on is ON. If the smallest phase shift gate adds $a$ into the global counter, then here is the overall pattern of gates:</p>
+
+<p><img src="/assets/2015-06-23-Using-Quantum-Gates-instead-of-Ancilla-Bits/Incremented_Shift_Pattern.png" alt="Incremented Shifts Pattern"></p>
+
+<p>(Note that the &quot;+1&quot; and &quot;-1&quot; gates are working on the 2&#39;s complement value stored in the wires, not the global counter.
+Sorry if that&#39;s confusing.)</p>
+
+<p>There are two important details to notice.
+First, except for the top-most wire, the phase shift gates on each individual wire are opposites.
+Second, each phase shift gate inside the increment and decrement gates subtracts an amount equal to the sum of the amounts added by the phase shift gates that are higher-up and outside the increment and decrement gates.</p>
+
+<p>Suppose the $k$&#39;th wire is OFF, and all the wires for lesser bits are ON.
+Then every wire up to and including the $k$&#39;th wire will get toggled by the increment gates.
+Furthermore, the inside gate on the $k$&#39;th wire will fire while the outside gates on the lower bit wires will fire.
+But the inside gate of the $k$&#39;th wire subtracts the same amount that all of the outside gates on the lesser wires add.
+Therefore the phase shift gates on the wires up to and including the first OFF bit have no net effect.</p>
+
+<p>Suppose the $k$&#39;th wire is OFF, but some lower bit wire is also OFF.
+Then the increment&#39;s carry propagation will stop before reaching the $k$&#39;th wire, and it will not be toggled.
+Therefore the the phase shift gates on the $k$&#39;th wire will either both fire, undoing each other, or neither will fire.
+So the phase shift gates on wires <em>after</em> the first OFF bit have no net effect.</p>
+
+<p>Together, the previous two paragraphs show that if there is <em>any</em> OFF bit, nothing happens.
+Phase shift gates on each wire after the first OFF wire will undo themselves, and the phase shift gate on that first OFF wire will undo the phase shift gates on previous wires.</p>
+
+<p>That just leaves the case where all the bits are ON.
+Incrementing the all-ON state gives the all-OFF state.
+Therefore none of the inside gates will fire, but all of the outside gates will fire.
+The sum of the outside gates is $a + a + 2a + 4a + ... + 2^{n-1}a$ where $n$ is the number of involved wires, meaning the net effect is to add $2^n a$ to the global counter.</p>
+
+<p>So, by setting $a$ to $\frac{1}{2^n}$&#39;th of the phase shift we want, the incremented phase shift circuit will add that phase shift into the global counter if and only if all of the wires are ON.
+Exactly what we wanted.</p>
+
+<h1>Putting it All Together</h1>
+
+<p>Our construction so far is as follows:</p>
+
+<ul>
+<li>Replace the controlled-X that depends on every wire with a controlled-Z, by bracketing it with Hadmard gates.</li>
+<li>Free up a borrowable ancilla bit by using the control-reducing construction.</li>
+<li>Repeatedly apply the control-removing construction, until only NOT gates have controls on them.</li>
+<li>Re-arrange the resulting controlled-NOTs into increments.</li>
+</ul>
+
+<p>Here are the starting and ending states, for 6 wires.
+Notice that all of the operations on the right hand side leave at least one wire unaffected, so that the classical constructions from the previous parts will be applicable:</p>
+
+<p><img src="/assets/2015-06-23-Using-Quantum-Gates-instead-of-Ancilla-Bits/Bootstrapping_an_Ancilla_Bit.png" alt="Bootstrapping an Ancilla Bit"></p>
+
+<p>Let&#39;s convince ourselves that this overall construction works.
+We already know that the increment-decrement part acts like a controlled-$\sqrt{Z}$; it will add a phase factor of $i$ to the <code>ON, ON, ON, ON, ON, ON</code> and <code>ON, ON, ON, ON, ON, OFF</code> states.
+We also know that the surrounding Hadamard gates just switch between Z-rotation and X-rotation, so if we pretend the Hadamards aren&#39;t there and find that the circuit implements a controlled-Z then the circuit works.
+All that&#39;s left to account for is the four $\sqrt[4]{Z}$/$\sqrt[4]{Z}^\dagger$ and controlled-NOT gates at the start.
+Well, when all the control wires are ON, and the target wire is OFF, both of the $\sqrt{Z}^\dagger$ gates will fire and the <code>ON, ON, ON, ON, ON, OFF</code> state will gain a phase factor of $-i$.
+And when all the wires are ON, both of the $\sqrt{Z}$ gates fire instead and the <code>ON, ON, ON, ON, ON, ON</code> state will gain a phase factor of $+i$.</p>
+
+<p>The overall effect on the <code>ON, ON, ON, ON, ON, OFF</code> state was to gain a phase factor of $i$ and a phase factor of $-i$.
+In other words, there was no overall effect, because $i \cdot -i = 1$.
+That leaves <code>ON, ON, ON, ON, ON, ON</code> as the only affected state, and it gained two phase factors of $i$ for a net phase shift of $i^2 = -1$.
+Therefore the circuit, when ignoring the Hadamard gates, is a controlled-Z operation that depends on every wire.
+Meaning the overall circuit is in fact a full controlled-X, as desired.</p>
+
+<p>That&#39;s it.
+Reduce the large controlled-nots and increments into a linear number of Toffoli-or-smaller gates by using the constructions from the last two posts, and we&#39;re done.
+I would show the resulting circuit in a diagram, if it weren&#39;t for the fact that the construction uses something like $\approx 100 n$ gates.
+Clearly, in practice, it&#39;s more efficient to just have $n$ zeroed ancilla bits available for use (because then you&#39;d only need $\approx 2n$ gates).</p>
+
+<p>That being said... isn&#39;t it bad that our solution needs smaller and smaller gates as $n$ increases?</p>
+
+<h1>Trying to Avoid Exponentially Precise Gates</h1>
+
+<p>Needing smaller and smaller gates is bad because, in practice, you only have a finite gate set and a finite amount of precision.
+For example, the most common <a href="https://en.wikipedia.org/wiki/Quantum_error_correction">quantum error correction</a> scheme stops at the $\sqrt[4]{Z}$ gate.</p>
+
+<p>Is there any way to avoid needing more and more precise gates?
+Well, there are a few possible workarounds:</p>
+
+<ol>
+<li><p><strong>Approximate</strong>:
+If you have a gate, or sequence of gates, that rotates by an irrational fraction of a turn, then you can get arbitrarily close to any given angle by repeating that rotation many times.
+For example, if you are given a gate that phase shifts by $\pi$ degrees (not radians, <em>degrees</em>), then applying that gate 6634751 times will get you within 0.000003 degrees of a 45 degree phase shift.</p></li>
+<li><p><strong>Don&#39;t Bother</strong>:
+If you simply don&#39;t perform the phase corrections, <em>something</em> happens.
+In the case of an un-phase-corrected controlled-Z, what happens is you apply the operation $e^{i Z \pi / 2}$ instead.
+If that happens to be the operation you wanted to apply, then mission accomplished!</p>
+
+<p><img src="/assets/2015-06-23-Using-Quantum-Gates-instead-of-Ancilla-Bits/Some_Operations_Dont_Need_Iterative_Phase_Correction.png" alt="Some operations don&#39;t need iterative phase correction"></p></li>
+<li><p><strong>Cancel it Out</strong>:
+If you happen to be applying <em>two</em> full-controlled operations, you can arrange for the phase corrections from one to exactly cancel out the phase corrections from the other:</p>
+
+<p><img src="/assets/2015-06-23-Using-Quantum-Gates-instead-of-Ancilla-Bits/A_Second_Operation_Can_Negate_The_Iterative_Phase_Correction.png" alt="A second operation can negate the iterative phase correction"></p></li>
+<li><p><strong>Use an Uneven Root</strong>:
+If your controlled operation is a $p$&#39;th root of the identity matrix, and $p$ is not even, then the phase corrections will <em>cycle</em>.
+For example, $Z^{2/3}$ is a cubic root of the identity matrix.
+It is also its own fourth root, so the phase corrections can bounce between $Z^{2/3}$ and $Z^{4/3}$ instead of becoming exponentially small:</p>
+
+<p><img src="/assets/2015-06-23-Using-Quantum-Gates-instead-of-Ancilla-Bits/Phase_Corrections_Can_Cycle.png" alt="Phase corrections can cycle"></p></li>
+<li><p><strong>Have an Ancilla Bit</strong>:
+With an ancilla bit, the classical construction from part 1 works (without using any square roots).
+In practice, this is how you would solve the problem.</p></li>
+</ol>
+
+<p>Unfortunately, none of the above workarounds apply to the exercise we&#39;re solving, and I suspect that there&#39;s simply no way to avoid the exponentially precise gates without cheating.</p>
+
+<h1>Unavoidable Exponentially Precise Gates</h1>
+
+<p>The reason I suspect that the exponentially precise gates are necessary has to do with thinking of phases as counters.</p>
+
+<p>Suppose that we are given a very precise phase shift gate: $\sqrt[2^p]{Z}$ for some large $p$.
+Applying $\sqrt[2^p]{Z}$ a total of $2^{p+1}$ times will rotate any affected phases by a full turn, back to where they started.
+In effect, this means we can treat each state as having a counter that wraps around after being incremented $2^{p+1}$ times.</p>
+
+<p>Let&#39;s consider what happens to the counter system when we apply our available operation, and compare that to what happens when we apply our desired operation.</p>
+
+<p>When we apply the $\sqrt[2^p]{Z}$ gate, any states where the target wire is ON will have their counters incremented.
+This adds $2^{n-1}$ increments into the counter system, because that&#39;s how many states there are where the target wire is ON.</p>
+
+<p>Applying the desired operation, a controlled-Z that depends on every wire, only affects the all-ON state.
+However, the counter is incremented $2^p$ times (adding $2^p$ increments into the counter system), instead of once, because that&#39;s how many increments it takes to go half-way around.</p>
+
+<p>A counter wrapping around, from $2^{p+1}$ to $0$, removes $2^{p+1}$ increments from the system.
+The operation we <em>can</em> perform adds $2^{n-1}$ increments into the system.
+The operation we <em>want</em> to perform must add exactly $2^p$ increments into the system.</p>
+
+<p>Oh my.</p>
+
+<p>Unless $2^p$ is a multiple of $lcm(2^{n-1}, 2^{p+1})$, it is impossible for us to add exactly $2^p$ increments into the counter system by applying our available operation (even if we&#39;re allowed to repeatedly permute the states and apply the operation).
+Unless $min(p+1, n - 1) \leq p$, we&#39;re screwed.
+As soon as $n$ exceeds $p+1$, we won&#39;t be able to simulate a fully-controlled-Z operation anymore for the same reason that you can&#39;t reach an odd total by adding up only even numbers.</p>
+
+<p>(Why doesn&#39;t this argument also apply to the case where there&#39;s an ancilla bit? Because then the target operation adds $2^p$ into <em>two</em> states, for a total change of $2^{p+1}$, and that&#39;s always a multiple of $lcm(2^{p+1}, 2^{n-1})$.)</p>
+
+<p>This is not proof positive that we need exponentially precise gates to solve the exercise.
+In particular, there may be some clever way of partially rotating around the X or Y axies in addition to the partial rotations around the Z axis.
+However, I would find that pleasantly surprising because it seems to be hard to get back to a nice fraction of a turn after combining rotations around two axies (not counting 90 degree rotations or undoing each rotation in reverse order, of course).</p>
+
+<p>Feel free to surprise me.</p>
+
+<h1>Summary</h1>
+
+<p>Unlike classical computers, quantum computers don&#39;t need an ancilla bit to perform a controlled-NOT that depends on every wire.
+They have the option of using exponentially precise phase shift gates instead.</p>
+
+<p>In either case a linear number of Toffoli-or-smaller gates is needed but, pragmatically speaking, it&#39;s simpler and more efficient to just have an ancilla bit available.</p>
+
+<h1>Navigation</h1>
+
+<p>Part 1: <a href="/circuits/2015/06/05/Constructing-Large-Controlled-Nots.html">Constructing Large Controlled-Nots</a></p>
+
+<p>Part 2: <a href="/circuits/2015/06/12/Constructing-Large-Increment-Gates.html">Constructing Large Increment Gates</a></p>
+
+<p>Part 3: (This Post)</p>
+
+<hr>
+
+<p><a href="http://www.reddit.com/r/QuantumComputing/comments/3axiu1/using_quantum_gates_instead_of_ancilla_bits/">Discuss on Reddit</a></p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

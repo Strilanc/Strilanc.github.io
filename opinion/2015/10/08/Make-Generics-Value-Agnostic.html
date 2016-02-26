@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Rule of Thumb: Make Generic Code Value-Agnostic instead of Null-Hostile</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Rule of Thumb: Make Generic Code Value-Agnostic instead of Null-Hostile</h1>
+<p class="meta">08 Oct 2015</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Nulls are a big source of headaches, to <a href="http://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare">put it mildly</a>.
+Even the greatest programmers make stupid oversights (just like the greatest mathematicians make sign errors), and the possibility of any and every value being null introduces a whole lot of chances for stupid oversights when programming.</p>
+
+<p>There are lots of strategies and tactics for dealing with the null problem, but in this post I want to talk about one particular tactic, &quot;null-hostile&quot; collections, and why I find it problematic.</p>
+
+<p>A null-hostile collection is a collection that can contain arbitrary values... except for null.
+When you try to put a null item, key, or value into a null-hostile collection, your reward is a null reference exception.
+Sometimes the exception being thrown is unintentional, caused by a bug, but usually it&#39;s a purposeful design decision.</p>
+
+<p>(
+Java has both null-friendly and null-hostile collections in its standard libraries. Third-party libraries also tend to go both ways on this issue (<a href="https://github.com/google/guava/wiki/LivingWithNullHostileCollections">e.g. Guava</a>).
+Unfortunately, null-hostility generally isn&#39;t called out in class names; you have to memorize which collections have which trait.
+It&#39;s also not exposed by the type system.
+)</p>
+
+<h1>Tradeoffs</h1>
+
+<p>There are two reasons to design a collection to be null-hostile, that I can think of.
+First, it can make code simpler.
+For example, you can write <code>x.hashCode()</code> instead of <code>x == null ? 0 : x.hashCode()</code> when implementing equality.
+Second, in a code base where null is discouraged, null-hostility can help catch accidentally introduced nulls before they spread too far.</p>
+
+<p>The <em>problem</em> with null-hostile collections is, of course, that they don&#39;t work with null.
+This makes using them in glue code and utility code problematic, because the code inherits the collection&#39;s aversion to null and passes it on to downstream users.</p>
+
+<p>The best example of this problem, I think, is Java&#39;s <code>Optional&lt;T&gt;</code>.
+Consider the following method:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Optional&lt;T&gt; first(Iterable&lt;T&gt; sequence) {
+    for (T item : sequence) {
+        return Optional.of(item);
+    }
+    return Optional.absent();
+}
+</code></pre></div>
+<p><code>first</code>&#39;s signature implies this method will work on any iterable.
+But that&#39;s a bit of a mislead, because <code>Optional</code> is null-hostile while iterables are, generally speaking, allowed to contain nulls.
+When an iterable given to <code>first</code> starts with a null, you won&#39;t get an <code>Optional</code> containing the iterable&#39;s first value back; you&#39;ll get a runtime exception.</p>
+
+<p>Effectively, <code>first</code> has a precondition hidden inside its <em>return</em> type (normally associated with postconditions, not preconditions).
+If you want to implement a <code>first</code> that actually works on all iterables, you have to roll a custom null-friendly <code>Optional</code>.
+Otherwise, methods using <code>first</code> will also have to avoid null.</p>
+
+<p>The fact that users of null-hostile utilities must also be null-hostile (or else need lots of glue code) <em>is</em> acceptable within a single code base.
+Killing null is fun for everyone.
+But eventually you&#39;ll have to interop with external code, and it may not share your anti-null sensibilities.
+At that point, null-hostility can become more of a boilerplate-adapter-code-generator than a benefit.</p>
+
+<h1>Why not all nulls?</h1>
+
+<p>Why have I been talking specifically about generic collections this whole time?
+Don&#39;t the same &quot;you should allow null&quot; arguments apply to, say, requiring string arguments to be non-null?</p>
+
+<p>The difference, in my mind, is that generic collections tend not to care or depend upon the details of the items you put into them.
+There is no new behavior or corner cases needed for nulls; you just pass them through like every other value.
+The internal implementation code may need special handling of null, but the exposed logical interface can treat all values in the same way (i.e. be value-agnostic).</p>
+
+<p>By contrast, if you try to allow all nulls <em>everywhere</em>, you will find yourself <em>introducing</em> corner cases instead of removing them.
+For example, if <code>String#startsWith</code> is going to accept a null prefix argument, then you will need to arbitrarily decide whether or not the empty string starts with a null string or not.</p>
+
+<p>The intuition-pump I use, to decide which side of this treat-null-the-same-vs-ban-it distinction a case falls on, is to imagine non-nullable types being added to Java (though that would be a bit of an engineering miracle to pull off).
+In that magical hypothetical future, I would immediately switch the signature of <code>String#startsWith</code>&#39;s prefix argument from <code>String</code> to <code>String!</code>.
+But, for generic collections, I&#39;d make the opposite decision.</p>
+
+<p>Once you have non-nullable types available, saying <code>String</code> starts to mean more than it used to.
+You <em>could</em> have said <code>String!</code>, but you said <code>String</code>.
+You&#39;re <em>asking</em> for null to be allowed.
+So when <code>Optional&lt;String&gt;</code> rejects null, despite you <em>asking</em> for null, it seems kind of... backwards.
+And that fact would be reflected in a never-ending stream of StackOverflow questions asking why changing <code>Optional&lt;String!&gt;</code> to <code>Optional&lt;String&gt;</code> didn&#39;t work.</p>
+
+<p>Ultimately, I&#39;m saying that users of your generic code have more information than you about whether null is an expected value.
+<em>They</em> should decide whether or the generic type <code>T</code> logically includes null.
+Your job is to allow them to make that decision, and being value-agnostic is an effective way to do that.
+You should only be null-hostile when null really can&#39;t satisfy the code&#39;s needs (e.g. if there&#39;s a type constraint on the generic parameter).</p>
+
+<h1>Summary</h1>
+
+<p>Null-hostililty is great for cleaning nulls out of your code base, but makes interop with null-friendly code hard and exposes value-dependent behavior in code that intuitively shouldn&#39;t depend on specific values.
+Generic code that treats all values the same is <a href="http://ttic.uchicago.edu/%7Edreyer/course/papers/wadler.pdf">easier to reason about</a>.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+  <script>
+  var idcomments_acct = '7d0006bd6a016f9a2892cc2ecc64de01';
+  var idcomments_post_id = '/opinion/2015/10/08/Make-Generics-Value-Agnostic.html';
+  var idcomments_post_url = 'http://algorithmicassertions.com/opinion/2015/10/08/Make-Generics-Value-Agnostic.html';
+  </script>
+  <span id="IDCommentsPostTitle" style="display:none"></span>
+  <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+  <noscript>
+    <hr>
+    <font color=red>
+      Comments script blocked. Comments won't work.
+    </font>
+    <br/>
+    Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>intensedebate.com</strong> to fix.
+  </noscript>
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

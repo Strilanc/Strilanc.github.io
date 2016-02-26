@@ -1,9 +1,43 @@
----
-layout: default
-title: "Algorithmic Assertions - Craig Gidney's Computer Science Blog"
----
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Algorithmic Assertions - Craig Gidney's Computer Science Blog</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
 
-<div id="home">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <div id="home">
   <h1 class="posts_list_title">
     Posts
     <a href="/feed.xml">
@@ -12,15 +46,327 @@ title: "Algorithmic Assertions - Craig Gidney's Computer Science Blog"
   </h1>
 
   <ul class="posts">
-    {% assign prevYear = 'now' | date: "%Y" %}
-    {% for post in site.posts %}
-      {% assign curYear = post.date | date: "%Y" %}
-      {% if curYear != prevYear %}
-        <h2>{{ curYear }}</h2>
-      {% endif %}
-      {% assign prevYear = curYear %}
+    
+    
+      
+      
+      
 
-      <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
-    {% endfor %}
+      <li><span>30 Jan 2016</span> &raquo; <a href="/quantum/2016/01/30/quantum-pigeonhole.html">[Un]popular Qubits #3: The Quantum Pigeonhole Principle</a></li>
+    
+      
+      
+      
+
+      <li><span>19 Jan 2016</span> &raquo; <a href="/quantum/2016/01/19/unknown-but-equal.html">Unknowable, but Equal</a></li>
+    
+      
+      
+      
+
+      <li><span>10 Jan 2016</span> &raquo; <a href="/quantum/2016/01/10/eigendecomposition-for-rotation-and-interpolation.html">Using Eigendecomposition to Convert Rotations and Interpolate Operations</a></li>
+    
+      
+      
+      
+
+      <li><span>07 Jan 2016</span> &raquo; <a href="/quantum/2016/01/07/Delayed-Choice-Quantum-Erasure.html">Deflating Delayed Choice Quantum Erasure</a></li>
+    
+      
+      
+        <h2>2015</h2>
+      
+      
+
+      <li><span>28 Dec 2015</span> &raquo; <a href="/quantum/2015/12/28/Separating-Quantum-Teleportation.html">Quantum Teleportation's Two Functions</a></li>
+    
+      
+      
+      
+
+      <li><span>08 Nov 2015</span> &raquo; <a href="/misconception/2015/11/08/Misconceptions-Quantum-Latch.html">My Misconceptions: The Quantum Latch</a></li>
+    
+      
+      
+      
+
+      <li><span>01 Nov 2015</span> &raquo; <a href="/quantum/2015/11/01/Walters-Claimed-Quantum-Linear-3SAT.html">Quantum vs NP #2: Zachary B. Walters 'A linear time quantum algorithm for 3SAT'</a></li>
+    
+      
+      
+      
+
+      <li><span>26 Oct 2015</span> &raquo; <a href="/quantum/2015/10/26/Quantum-Zeno-Effect.html">[Un]popular Qubits #2: The Quantum Zeno Effect</a></li>
+    
+      
+      
+      
+
+      <li><span>11 Oct 2015</span> &raquo; <a href="/quantum/2015/10/11/Bell-Tests-vs-No-Communication.html">YOU versus Bell Tests and the No Communication Theorem</a></li>
+    
+      
+      
+      
+
+      <li><span>08 Oct 2015</span> &raquo; <a href="/opinion/2015/10/08/Make-Generics-Value-Agnostic.html">Rule of Thumb: Make Generic Code Value-Agnostic instead of Null-Hostile</a></li>
+    
+      
+      
+      
+
+      <li><span>17 Sep 2015</span> &raquo; <a href="/math/2015/09/17/Misconceptions-Unintegrable.html">My Misconceptions: The Unintegrable Function</a></li>
+    
+      
+      
+      
+
+      <li><span>02 Sep 2015</span> &raquo; <a href="/quantum/2015/09/02/Partially-Erasing-Entanglement-with-Measurement.html">Partially Erasing Entanglement: Measuring a GHZ Triplet into a Bell Pair</a></li>
+    
+      
+      
+      
+
+      <li><span>27 Aug 2015</span> &raquo; <a href="/quantum/2015/08/27/Simulating-a-Claimed-BQP-NP-Algorithm.html">Quantum vs NP #1-B: Simulating a Claimed NP=BQP Algorithm</a></li>
+    
+      
+      
+      
+
+      <li><span>01 Aug 2015</span> &raquo; <a href="/quantum/2015/08/01/Checking-a-Claimed-BQP-NP-Algorithm.html">Quantum vs NP #1: Checking a Claimed BQP=NP Algorithm</a></li>
+    
+      
+      
+      
+
+      <li><span>20 Jul 2015</span> &raquo; <a href="/programming/2015/07/20/Unit-Testing-with-Symbols.html">Unit Testing with Symbols</a></li>
+    
+      
+      
+      
+
+      <li><span>05 Jul 2015</span> &raquo; <a href="/computer-science/2015/07/05/Things-I-Cant-Solve-Multiplication.html">Things I Can't Solve: Multiplication</a></li>
+    
+      
+      
+      
+
+      <li><span>22 Jun 2015</span> &raquo; <a href="/circuits/2015/06/22/Using-Quantum-Gates-instead-of-Ancilla-Bits.html">Using Quantum Gates instead of Ancilla Bits</a></li>
+    
+      
+      
+      
+
+      <li><span>12 Jun 2015</span> &raquo; <a href="/circuits/2015/06/12/Constructing-Large-Increment-Gates.html">Constructing Large Increment Gates</a></li>
+    
+      
+      
+      
+
+      <li><span>05 Jun 2015</span> &raquo; <a href="/circuits/2015/06/05/Constructing-Large-Controlled-Nots.html">Constructing Large Controlled Nots</a></li>
+    
+      
+      
+      
+
+      <li><span>17 May 2015</span> &raquo; <a href="/impractical-experiments/2015/05/17/Treating-Controls-like-Values.html">Impractical Experiments #3: Treating Controls Like Values</a></li>
+    
+      
+      
+      
+
+      <li><span>01 May 2015</span> &raquo; <a href="/quantum/2015/05/01/Quantum-Network-Flow-Puzzle.html">A Quantum Network Flow Puzzle</a></li>
+    
+      
+      
+      
+
+      <li><span>25 Apr 2015</span> &raquo; <a href="/quantum/2015/04/25/Entangled-States-are-like-Unitary-Matrices.html">Entangled States are like Unitary Matrices</a></li>
+    
+      
+      
+      
+
+      <li><span>17 Jan 2015</span> &raquo; <a href="/quantum/2015/01/17/Superdense-Coding-on-the-Fly-and-in-Reverse.html">Superdense Coding on the Fly and in Reverse</a></li>
+    
+      
+      
+        <h2>2014</h2>
+      
+      
+
+      <li><span>25 Dec 2014</span> &raquo; <a href="/quantum/2014/12/25/Quantum-Compression.html">[Un]popular Qubits #1: Quantum Compression</a></li>
+    
+      
+      
+      
+
+      <li><span>12 Dec 2014</span> &raquo; <a href="/testing/2014/12/12/Test-Dusting.html">Dust your Tests</a></li>
+    
+      
+      
+      
+
+      <li><span>06 Dec 2014</span> &raquo; <a href="/quantum/2014/12/06/Perfect-Symmetry-Breaking-with-Quantum-Computers.html">Perfect Symmetry Breaking with Quantum Computers</a></li>
+    
+      
+      
+      
+
+      <li><span>24 Nov 2014</span> &raquo; <a href="/quantum/2014/11/24/Converting-Rotations-into-Nice-Qubit-Operations.html">Converting Rotations into "Nice" Qubit Operations</a></li>
+    
+      
+      
+      
+
+      <li><span>15 Nov 2014</span> &raquo; <a href="/quantum/2014/11/15/Interpolating-Qubit-Operations.html">Interpolating Qubit Operations</a></li>
+    
+      
+      
+      
+
+      <li><span>29 Jul 2014</span> &raquo; <a href="/quantum-computing/2014/07/29/Logical-Ingredients-of-a-Quantum-Computer.html">Logical Ingredients of a Quantum Computer</a></li>
+    
+      
+      
+      
+
+      <li><span>08 Jul 2014</span> &raquo; <a href="/puzzle/2014/07/08/Boxing-Megaspheres.html">Puzzle: Boxing Megaspheres</a></li>
+    
+      
+      
+      
+
+      <li><span>22 Jun 2014</span> &raquo; <a href="/rule-of-thumb/2014/06/22/Preconditions-Should-be-Public.html">Rule of Thumb: Preconditions Should be Public</a></li>
+    
+      
+      
+      
+
+      <li><span>17 Jun 2014</span> &raquo; <a href="/game-theory/2014/06/17/Counterintuitive-Counterfactual-Strategies.html">Counter-intuitive Counterfactual Strategies</a></li>
+    
+      
+      
+      
+
+      <li><span>07 Jun 2014</span> &raquo; <a href="/algorithm/2014/06/07/Eating-Lions-Wolves-and-Goats-Faster.html">Eating Lions, Wolves, and Goats Faster</a></li>
+    
+      
+      
+      
+
+      <li><span>03 Jun 2014</span> &raquo; <a href="/software/2014/06/03/Don't-Trust-the-DOM.html">Don't Trust the DOM</a></li>
+    
+      
+      
+      
+
+      <li><span>27 May 2014</span> &raquo; <a href="/software/2014/05/27/Cancel-Tokens-for-Java.html">Cancelling Cancellation</a></li>
+    
+      
+      
+      
+
+      <li><span>15 May 2014</span> &raquo; <a href="/algorithm/2014/05/15/Lower-Bounding-the-Space-Complexity-of-One-Pass-Algorithms.html">Lower Bounding the Space Complexity of One-Pass Algorithms</a></li>
+    
+      
+      
+      
+
+      <li><span>11 May 2014</span> &raquo; <a href="/quantum/2014/05/11/Storing-Bandwidth-with-Quantum-Teleportation.html">Storing Bandwidth with Quantum Teleportation</a></li>
+    
+      
+      
+      
+
+      <li><span>03 May 2014</span> &raquo; <a href="/quantum/2014/05/03/Storing-Bandwidth-with-Superdense-Coding.html">Storing Bandwidth with Superdense Coding</a></li>
+    
+      
+      
+      
+
+      <li><span>27 Apr 2014</span> &raquo; <a href="/quantum/2014/04/27/The-Not-Quantum-Laplace-Transform.html">The (not) Quantum Laplace Transform</a></li>
+    
+      
+      
+      
+
+      <li><span>13 Apr 2014</span> &raquo; <a href="/puzzle/quantum/2014/04/13/Deflipping-a-Quantum-Coing.html">Puzzle: Deflipping a Quantum Coin</a></li>
+    
+      
+      
+      
+
+      <li><span>04 Apr 2014</span> &raquo; <a href="/bugs/2014/04/04/Day-to-day.html">Unfathomable Bugs #8: Day to Day</a></li>
+    
+      
+      
+      
+
+      <li><span>31 Mar 2014</span> &raquo; <a href="/heuristic/2014/03/31/The-Condition-Is-the-Message.html">Rule of Thumb: The Condition is the Message</a></li>
+    
+      
+      
+      
+
+      <li><span>27 Mar 2014</span> &raquo; <a href="/visualization/2014/03/27/Better-JS-Equality-Table.html">Don't Make Javascript Equality Look Worse Than It Is</a></li>
+    
+      
+      
+      
+
+      <li><span>25 Mar 2014</span> &raquo; <a href="/badidea/2014/03/25/Java-Style-Methods-in-Objective-C.html">Bad Ideas #1: Java-Style Methods in Objective-C</a></li>
+    
+      
+      
+      
+
+      <li><span>18 Mar 2014</span> &raquo; <a href="/testing/2014/03/18/Positive-Bias-and-Testing.html">Positive Bias and Testing</a></li>
+    
+      
+      
+      
+
+      <li><span>16 Mar 2014</span> &raquo; <a href="/puzzle/2014/03/16/Encode-Hidden-Card-Puzzle.html">Puzzle: Encoding the Remaining Card</a></li>
+    
+      
+      
+      
+
+      <li><span>11 Mar 2014</span> &raquo; <a href="/math/2014/03/11/Ordering-Cyclic-Sequence-Numbers.html">Ordering Cyclic Sequence Numbers</a></li>
+    
+      
+      
+      
+
+      <li><span>07 Mar 2014</span> &raquo; <a href="/quantum/2014/03/07/Building-your-own-Quantum-Fourier-Transform.html">Building your own Quantum Fourier Transform</a></li>
+    
+      
+      
+      
+
+      <li><span>01 Mar 2014</span> &raquo; <a href="/meta/2014/03/01/Welcome.html">[Meta] A New Home</a></li>
+    
   </ul>
 </div>
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
