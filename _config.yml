@@ -1,9 +1,5 @@
 name: "Algorithmic Assertions - Craig Gidney's Computer Science Blog"
-markdown: kramdown
-kramdown:
-  use_coderay: true
-  coderay:
-    coderay_line_numbers:
-highlighter: rouge
+markdown: redcarpet
+highlighter: pygments
 description: A blog about computer science, software engineering, quantum computing, mathematical puzzles, and so forth.
 url: http://algorithmicassertions.com
