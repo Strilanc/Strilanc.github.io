@@ -9,9 +9,9 @@
 			<item>
 				<title>Don&#39;t Use Github Pages&#39; Jekyll Support</title>
 				<description>&lt;p&gt;A few weeks ago, GitHub announced &lt;a href=&quot;https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0&quot;&gt;&amp;quot;GitHub Pages now faster and simpler with Jekyll 3.0&amp;quot;&lt;/a&gt;. I would have titled the post... differently. Something like &amp;quot;Notice: upcoming breaking changes to github pages&amp;quot; or &amp;quot;We don&amp;#39;t understand &lt;a href=&quot;http://www.joelonsoftware.com/articles/APIWar.html&quot;&gt;how important backwards compatibility is&lt;/a&gt;&amp;quot;.&lt;/p&gt; &lt;h1&gt;Simply Breaking Changes&lt;/h1&gt; &lt;p&gt;The &amp;quot;simpler&amp;quot; in the title is bullshit marketing-speak for &amp;quot;removing features&amp;quot;. They dropped support for two Markdown engines:&lt;/p&gt; &lt;blockquote&gt; &lt;p&gt;&lt;strong&gt;Starting May 1st, 2016, GitHub Pages will only support &lt;a href=&quot;http://kramdown.gettalong.org/&quot;&gt;kramdown&lt;/a&gt;, Jekyll&amp;#39;s default Markdown engine.&lt;/strong&gt; If you are currently using &lt;a href=&quot;https://github.com/davidfstr/rdiscount&quot;&gt;Rdiscount&lt;/a&gt; or &lt;a href=&quot;https://github.com/vmg/redcarpet&quot;&gt;Redcarpet&lt;/a&gt; we&amp;#39;ve enabled kramdown&amp;#39;s GitHub-flavored Markdown support by default, meaning kramdown should...</description>
-				<pubDate>Wed, 24 Feb 2016 11:30:00 -0500</pubDate>
-				<link>http://algorithmicassertions.com/meta/2016/02/24/Github-Pages-Breaks-Compatibility.html</link>
-				<guid isPermaLink="true">http://algorithmicassertions.com/meta/2016/02/24/Github-Pages-Breaks-Compatibility.html</guid>
+				<pubDate>Thu, 25 Feb 2016 11:30:00 -0500</pubDate>
+				<link>http://algorithmicassertions.com/meta/2016/02/25/Github-Pages-Breaks-Compatibility.html</link>
+				<guid isPermaLink="true">http://algorithmicassertions.com/meta/2016/02/25/Github-Pages-Breaks-Compatibility.html</guid>
 			</item>
 		
 			<item>
