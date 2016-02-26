@@ -25,12 +25,16 @@ The media picked up on the result both times, resulting in some choice quotes:
 
 That's... quite the hyperbole. And some of it quoted straight from the authors' mouths!
 
-Other physicists were a bit less enthusiastic:
+Physicists had more reserved, and mixed, reactions:
 
-> Reading further into the argument, it turns out that the first measurement is an *imaginary* measurement -- it  isn't actually  performed, but we *imagine* how it could have come out *if* it had been performed. [- Stephen Parrott](http://www.math.umb.edu/~sp/pigeonco.pdf)
+> There has been considerable interest in a recent preprint describing an effect named as the “Quantum
+Pigeonhole Principle”. [...]  a quantum mechanical measurement would imply that no more than 1 of the n objects is contained in any of the m boxes, even though n > m. [- Alastair Rae and Ted Forgan](http://arxiv.org/pdf/1412.1333v2.pdf)
 
 <!-- -->
 > some of the conclusions in the paper are ambiguous in the sense that they depend on the precise way one defines correlations, and that the “first experiments” the authors suggest has little if any bearing on their main theses. The far-reaching conclusions  the authors reach seems, therefore, premature. [- B. E. Y. Svensson](http://arxiv.org/ftp/arxiv/papers/1412/1412.0429.pdf)
+
+<!-- -->
+> Reading further into the argument, it turns out that the first measurement is an *imaginary* measurement -- it  isn't actually  performed, but we *imagine* how it could have come out *if* it had been performed. [- Stephen Parrott](http://www.math.umb.edu/~sp/pigeonco.pdf)
 
 My personal opinion is that the paper's *details* are correct, but that the authors' framing of those details is off-the-wall ridiculous.
 To justify that opinion, let's get into what the paper actually claims.
@@ -65,7 +69,7 @@ Simple.
 You win when the referee's parity measurement included the disagreeing coin, which happens 2/3 of the time.
 
 The reason you can't win 100% of the time is why the paper is called what it is: the [pigeonhole principle](https://en.wikipedia.org/wiki/Pigeonhole_principle).
-Theres three coins and two boxes (H and T), so two coins must end up in the same box and create a chance to lose.
+There's three coins and two boxes (H and T), so two coins must end up in the same box and create a chance to lose.
 You want the coins to all have disagreeing values, but there's not enough values!
 
 If only we won when the coins *agreed*, this would all be much easier.
@@ -116,12 +120,12 @@ Points on an axis aren't affected by rotations around that axis.
 
 Got all that?
 When the referee performs a parity measurement on the state we crafted, they are actually entangling the two qubits they touched.
-We don't know the parity of that entanglement, but we can toggle said parity by rotating the involved qubits around the X axis.
-And we can't hurt the involved qubits when doing so, because they're not affected by this particular rotation.
+We don't know the parity of that entanglement, but we can toggle said parity by rotating the touched qubits around the X axis.
+And rotating the wrong qubits can't hurt, because the untouched qubits are in a state not affected by this particular rotation.
 
 So what's happening is:
 
-1. The two qubits touched by the referee end up in the even-parity state $\ket{01} + \ket{10}$ or the odd-parity state $\ket{00} + \ket{10}$.
+1. The two qubits touched by the referee end up in the even-parity state $\ket{00} + \ket{11}$ or the odd-parity state $\ket{01} + \ket{10}$.
 2. Rotating every qubit by 90° doesn't affect the untouched qubits, but inverts the parity of the touched qubits. If the referee wrote down "disagree", the two touched qubits now agree. If the referee wrote down "agree", the two touched qubits now disagree.
 4. When we measure the qubits and they all return the same result, we know the parity of every pair ended up "agree". And since we inverted the parity of the pair the referee measured, the referee must have measured "disagree".
 
@@ -143,7 +147,7 @@ When there's an overlapping parity measurement, the qubits do still end up entan
 But now the entangled state involves three (or more) qubits instead of two.
 That [weakens the entanglement](https://quantiki.org/wiki/monogamy-entanglement), and X-rotations of the individual qubits no longer operate on the parity in the same way.
 
-This is a very important caveat, because actually verifying that the "pigeonhole principle was violated" would invove overlapping parity measurements.
+This is a very important caveat, because actually verifying that the "pigeonhole principle was violated" would involve overlapping parity measurements.
 
 Also I think this caveat means that the paper's experimental prediction, that you can pass three electrons through two paths and find that when post-selection succeeds there was no deflection (because they weren't "in the same box"), is wrong.
 Each deflection is a parity measurement, and they overlap, so... it won't work.
@@ -168,7 +172,7 @@ The paper's strategy is clever, sure.
 But concluding the pigeonhole priciple was violated because you cleverly discarded all the cases where coins were caught in the same state?
 That's just wrong.
 And describing this as world-view shattering?
-That's downright *stupid*.
+That's downright *absurd*.
 
 # Summary
 

@@ -165,4 +165,4 @@ Analogously, there is an uncertainty relationship between position-*agreement* a
 If position and momentum are entangled to agree simultaneously, the individual values are necessarily uncertain.
 Furthermore, measuring the positions destroys the agreement in momentums while measuring the momentums destroys the agreement in positions.
 
-When you try to mess with Heisenburg, Heisenburg messes with you.
+When you try to mess with Heisenberg, Heisenberg messes with you.

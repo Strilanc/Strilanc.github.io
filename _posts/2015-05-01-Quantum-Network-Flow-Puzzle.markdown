@@ -238,4 +238,4 @@ Splitting the cleaner node into two pieces might fix the issue. Or maybe not! Gi
 
 The solution can be improved, and the puzzle made harder, by using LOCC erasure to remove the extra entangled copies created by superdense coding the EPR pairs.
 This allows two of the communication links to be downgraded from quantum to classical.
-See [this post](http://localhost:4000/quantum/2015/09/02/Partially-Erasing-Entanglement-with-Measurement.html) for details.
+See [this post](/quantum/2015/09/02/Partially-Erasing-Entanglement-with-Measurement.html) for details.

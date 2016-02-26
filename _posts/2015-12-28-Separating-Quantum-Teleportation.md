@@ -70,6 +70,10 @@ This leaves Alice, Bob, and Charlie each with an entangled copy of $x$; they are
 Anyways, I don't want to fret over copy-teleportation being useful or useless in practice.
 Let's move on to the second primitive, made up of the complementary subset of the quantum teleportation circuit.
 
+**Update (Feb 2017)**:
+*Apparently, "copy-sending a qubit" is more typically called "sending a coherent classical bit".
+See the 2004 paper [Coherent Communication of Classical Messages](http://arxiv.org/abs/quant-ph/0307091) by Aram W. Harrow.*
+
 # Erasure
 
 I mentioned the [**L**ocal **O**perations, **C**lassical **C**ommunication](https://en.wikipedia.org/wiki/LOCC) regime in the last section.

@@ -9,11 +9,11 @@ comments: true
 Nulls are a big source of headaches, to [put it mildly](http://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare).
 Even the greatest programmers make stupid oversights (just like the greatest mathematicians make sign errors), and the possibility of any and every value being null introduces a whole lot of chances for stupid oversights when programming.
 
-There are lots of strategies and tactics for dealing with the null problem, but in this post I want to talk about one particular tactic, "null-hostile" collections, and why I find problematic.
+There are lots of strategies and tactics for dealing with the null problem, but in this post I want to talk about one particular tactic, "null-hostile" collections, and why I find it problematic.
 
 A null-hostile collection is a collection that can contain arbitrary values... except for null.
 When you try to put a null item, key, or value into a null-hostile collection, your reward is a null reference exception.
-Sometimes this is a bug, but usually it's a purposeful design decision.
+Sometimes the exception being thrown is unintentional, caused by a bug, but usually it's a purposeful design decision.
 
 (
 Java has both null-friendly and null-hostile collections in its standard libraries. Third-party libraries also tend to go both ways on this issue ([e.g. Guava](https://github.com/google/guava/wiki/LivingWithNullHostileCollections)).
