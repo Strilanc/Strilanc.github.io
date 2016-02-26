@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Building your own Quantum Fourier Transform</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Building your own Quantum Fourier Transform</h1>
+<p class="meta">07 Mar 2014</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>In this post: an interactive quantum circuit inspector written in javascript, and an explanation of how to solve its &#39;Fourier&#39; puzzle.</p>
+
+<p><strong>Tactics</strong></p>
+
+<p>Every time I write about quantum computing, I try to take a different approach to explaining it.</p>
+
+<ul>
+<li><a href="http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm">Grover&#39;s Quantum Search Algorithm</a> used a bottom-up approach: discussing fundamental pieces, how to combine them, and building on that until it searched for things.</li>
+<li><a href="http://twistedoakstudios.com/blog/Post6536_implementing-quantum-pseudo-telepathy">Implementing Quantum Pseudo-Telepathy</a> explained things from the top down, by starting from the solution and breaking it into pieces until we hit math.</li>
+<li><a href="http://twistedoakstudios.com/blog/Post8887_what-quantum-computers-do-faster-with-caveats">What Quantum Computers do Faster, with Caveats</a> tried to keep things short. It gave information about the mechanism that quantum computers are exploiting, and little else.</li>
+</ul>
+
+<p>This post&#39;s tactic is <em>interactive puzzle solving</em>.</p>
+
+<p><strong>Quantum Circuit Inspector</strong></p>
+
+<p>Below is an interactive quantum circuit inspector, with some puzzles. The rest of this posts spoils the hardest puzzle, so give it a try before reading on. The goal is to drag gates onto the circuit to transform the given inputs into the desired outputs. You can switch between a few different puzzles.</p>
+
+<p>(Hover your cursor over things to see descriptions and hints.)</p>
+
+<!-- jQuery 2.1.0 -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+
+<noscript>
+  <font color=red>
+    jQuery javascript was blocked.
+    Examples may not work.
+  </font>
+  (Allow <strong>ajax.googleapis.com</strong> to fix.)
+  <hr/>
+</noscript>
+
+<p><canvas id="drawCanvas" width="800" height="550" style="border:1px solid #000000;"/>
+<script src="/assets/QuantumCircuitInspector.js"></script></p>
+
+<p>If you want to submit your own puzzles, feel free to send a pull request to the <a href="https://github.com/Strilanc/Quantum-Circuit-Inspector">quantum circuit inspector&#39;s github repo</a>. (There&#39;s also a lot of other things that could be improved, like the UX and general code cleanliness. You can try things out in <a href="http://jsfiddle.net/xkCLq/24/">the jsFiddle</a>.)</p>
+
+<p><strong>The Fourier Transform</strong></p>
+
+<p>Classical computers can compute a <a href="http://en.wikipedia.org/wiki/Fourier_transform">Fourier Transform</a>, determining what frequencies generate some given data, in $O(n \cdot \log{n})$ time using the <a href="http://en.wikipedia.org/wiki/Fast_Fourier_transform">Fast Fourier Transform</a> algorithm. The Fourier transform is a surprisingly versatile operation, so being able to compute it quickly is very important. </p>
+
+<p>The <a href="http://en.wikipedia.org/wiki/Quantum_Fourier_transform">Quantum Fourier Transform</a> (QFT) is a Fourier transform algorithm that runs on quantum computers, and is exponentially faster than the classical algorithm when you can use it. It does have some serious limitations: preparing the input state may not be possible or tractable, and you can only sample the output (which is why sometimes the QFT is called Quantum Fourier <em>Sampling</em>).</p>
+
+<p>Assuming you can prepare a useful input <em>and</em> process the output into a desired answer, like <a href="http://en.wikipedia.org/wiki/Shor%27s_algorithm">Shor&#39;s Quantum Factoring Algorithm</a> does, the QFT requires only $O(log^2{n})$ operations to Fourier transform a quantum computer&#39;s superposition.</p>
+
+<p><strong>Making a Fourier Transform Circuit</strong></p>
+
+<p>The hardest puzzle in the quantum circuit inspector, near the top of the post, tasks you with making your own QFT circuit. I am going to spoil that puzzle by explaining how to do it.</p>
+
+<p>The puzzle provides eight inputs to test the circuit with. Each test input is a different frequency, with its superposition phasing by $\frac{i}{8}$ turns per state. Each test input is associated with a desired output: just state $i$, the index of the input frequency. Our goal is to find some sequence of gates that turns the test inputs into the desired outputs.</p>
+
+<p>The first step to solving the puzzle, assuming you don&#39;t just start fiddling with gates (also a viable strategy), is noticing an important pattern present in the inputs. Look at the amplitudes for states that are $4$ apart:</p>
+
+<p><img src="http://i.imgur.com/lFN9Q6E.gif" alt="Similar Rows in Frequencies"></p>
+
+<p>Do you see it? After $4$ turns of $\frac{i}{8}$, the resulting state is always exactly equal or exactly opposite.</p>
+
+<p>Why is that useful? Because a Hadamard gate will factor out that pattern (it has exactly the same sort of regularity). Inserting an H gate on bit 2 (because $2^2 = 4$ and the pattern is $4$ apart) will make things simpler:</p>
+
+<p><img src="http://i.imgur.com/mJxRtJM.gif" alt="Hadamard Factoring"></p>
+
+<p>The above animation is showing that a Hadamard gate on bit 2 gets us  closer to our goal. We want each input frequency to end up as a single output, and after the H gate they&#39;re in four states instead of eight. Half way there!</p>
+
+<p>It&#39;s tempting to try to apply the same trick to bit 1, but it doesn&#39;t quite work:</p>
+
+<p><img src="http://i.imgur.com/bCe7yme.gif" alt="Hadamard Almost Factoring"></p>
+
+<p>Do you see the problem? Although the top four rows have the &#39;opposite or equal&#39; property (but spaced by $2$ instead of $4$), the bottom four rows don&#39;t. The bottom two rows are off by 90°.</p>
+
+<p>The bottom two rows are at offsets 6 and 7, which is 110 and 111 in binary. They are the states where bit 1 and bit 2 are both ON. We want to make the phases of these states rotate by 90°. The R(-90°) phase shift gate almost does what we want, but it is only conditional on a single bit. We make it conditional on both by setting the other bit&#39;s wire as a control for the operation.</p>
+
+<p>With the 90° fix-up in place, putting a Hadamard gate on bit 1 will factor out another half the junk:</p>
+
+<p><img src="http://i.imgur.com/xIKdw5l.gif" alt="Hadamard Factoring with Adjust"></p>
+
+<p>And now the pattern is clear for what needs to be done for the last bit. We&#39;ll use phase shift gates to ensure the two remaining non-empty states in each column have equal or opposite amplitudes, then Hadamard it. As a result, each frequency input ends up in a single unique output state.</p>
+
+<p>Great!... except they&#39;re the <em>wrong</em> states:</p>
+
+<p><img src="http://i.imgur.com/UgLXklY.png" alt="QFT reverses bits"></p>
+
+<p>We want a nice diagonal line, but right now things look more like a circle.</p>
+
+<p>The problem is that doing a QFT has a tendency to reverse our bits. Sometimes you can get away with ignoring this, but it&#39;s useful to know how to fix it. All we need to do is swap bit0 and bit2 to get the outputs in the proper order (just apply the solution of the &#39;swap&#39; puzzle).</p>
+
+<p>The resulting circuit is a QFT over three bits:</p>
+
+<p><img src="http://i.imgur.com/2UuwIPI.png" alt="QFT circuit"></p>
+
+<p>Of course that&#39;s not the <em>only</em> solution. For example, you could also swap the bits beforehand. A slight re-arrangement of the gates, and you get the circuit I used for the QFT animation from last time:</p>
+
+<p><a href="http://i.imgur.com/KRybZYE.gif"><img src="http://i.imgur.com/KRybZYE.gif" alt="QFT animation" style="width: 100%;"/></a></p>
+
+<p>You might worry that our QFT circuit won&#39;t work on combinations of frequencies, because we only tested single frequencies. Fortunately, quantum circuits always implement linear operations. That means scaling an input will scale the output, and adding inputs will add outputs. Handling combinations of inputs is free built-in functionality.</p>
+
+<p>I hope this has given a little insight into how you go about making a quantum circuit.</p>
+
+<p><strong>Summary</strong></p>
+
+<p>A Quantum Fourier Transform is just a bunch of Hadamard gates with some phase corrections along the way, and a bit reversal thrown in if necessary.</p>
+
+<hr>
+
+<p><a href="http://www.reddit.com/r/programming/comments/1ztgen/building_your_own_quantum_fourier_transform/">Discuss on Reddit</a></p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

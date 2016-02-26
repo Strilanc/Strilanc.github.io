@@ -1,21 +1,90 @@
----
-layout: none
----
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
-		<title>{{ site.name | xml_escape }}</title>
-		<description>{% if site.description %}{{ site.description | xml_escape }}{% endif %}</description>		
-		<link>{{ site.url }}</link>
-		<atom:link href="{{ site.url }}/feed.xml" rel="self" type="application/rss+xml" />
-		{% for post in site.posts limit:10 %}
+		<title>Algorithmic Assertions - Craig Gidney&#39;s Computer Science Blog</title>
+		<description>A blog about computer science, software engineering, quantum computing, mathematical puzzles, and so forth.</description>		
+		<link>http://algorithmicassertions.com</link>
+		<atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
+		
 			<item>
-				<title>{{ post.title | xml_escape }}</title>
-				<description>{{ post.content | truncatewords: 100 | xml_escape }}</description>
-				<pubDate>{{ post.date | date: "%a, %d %b %Y %H:%M:%S %z" }}</pubDate>
-				<link>{{ site.url }}{{ post.url }}</link>
-				<guid isPermaLink="true">{{ site.url }}{{ post.url }}</guid>
+				<title>[Un]popular Qubits #3: The Quantum Pigeonhole Principle</title>
+				<description>&lt;p&gt;Back in 2014, a preprint titled &amp;quot;&lt;a href=&quot;http://arxiv.org/abs/1407.3194&quot;&gt;The quantum pigeonhole principle and the nature of quantum correlations&lt;/a&gt;&amp;quot; was posted to arXiv by Y. Aharonov et al. This month, the paper was &lt;a href=&quot;http://www.pnas.org/content/113/3/532&quot;&gt;published for real in PNAS&lt;/a&gt;. The media picked up on the result both times, resulting in some choice quotes:&lt;/p&gt; &lt;blockquote&gt; &lt;p&gt;if you check the paths of any pair of the three original electrons, the detector will show no deflection has happened. In other words, you can have three pigeons and two boxes, and yet no two pigeons are ever found in the same box. A linkage must exist,...</description>
+				<pubDate>Sat, 30 Jan 2016 11:30:00 -0500</pubDate>
+				<link>http://algorithmicassertions.com/quantum/2016/01/30/quantum-pigeonhole.html</link>
+				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2016/01/30/quantum-pigeonhole.html</guid>
 			</item>
-		{% endfor %}
+		
+			<item>
+				<title>Unknowable, but Equal</title>
+				<description>&lt;p&gt;Consider this apparent paradox. The &lt;a href=&quot;https://en.wikipedia.org/wiki/Uncertainty_principle&quot;&gt;uncertainty principle&lt;/a&gt; applies to position and momentum. A particle &lt;em&gt;can&amp;#39;t&lt;/em&gt; have both an exact position and an exact momentum &lt;em&gt;ever&lt;/em&gt;. But we can produce particles &lt;a href=&quot;https://books.google.com/books?id=bsANMNMGvWUC&amp;amp;pg=PA71&amp;amp;lpg=PA71&amp;amp;dq=particle+entangled+position+velocity&amp;amp;source=bl&amp;amp;ots=3TblYV3CRD&amp;amp;sig=c6hGY-mB-3fQQtiroxXRDphnrCU&amp;amp;hl=en&amp;amp;sa=X&amp;amp;ved=0ahUKEwjvwbap1rTKAhXIMj4KHXqiAroQ6AEIQDAG#v=onepage&amp;amp;q=particle%20entangled%20position%20velocity&amp;amp;f=false&quot;&gt;with entangled momentums and positions&lt;/a&gt;. Then we can measure the position of one particle, and the momentum of the other. Which presumably tells us the position and momentum of both particles. Which is impossible.&lt;/p&gt; &lt;p&gt;If you know some quantum mechanics (i.e. can do the math), I&amp;#39;d recommend thinking about this for awhile. Why doesn&amp;#39;t this punch a hole in the uncertainty principle? What happens instead?&lt;/p&gt; &lt;h1&gt;Uncertainty in Qubit...</description>
+				<pubDate>Tue, 19 Jan 2016 11:30:00 -0500</pubDate>
+				<link>http://algorithmicassertions.com/quantum/2016/01/19/unknown-but-equal.html</link>
+				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2016/01/19/unknown-but-equal.html</guid>
+			</item>
+		
+			<item>
+				<title>Using Eigendecomposition to Convert Rotations and Interpolate Operations</title>
+				<description>&lt;p&gt;This post is an addendum to &lt;a href=&quot;/quantum/2014/11/15/Interpolating-Qubit-Operations.html&quot;&gt;Interpolating Qubit Operations&lt;/a&gt; and &lt;a href=&quot;/quantum/2014/11/24/Converting-Rotations-into-Nice-Qubit-Operations.html&quot;&gt;Converting Rotations into &amp;quot;Nice&amp;quot; Qubit Operations&lt;/a&gt;. Both of those posts are about smoothly travelling through the space of unitary operators, but they share the same massive omission (because I didn&amp;#39;t know about it at the time).&lt;/p&gt; &lt;p&gt;The omission? Using the &lt;a href=&quot;https://en.wikipedia.org/wiki/Eigendecomposition_of_a_matrix&quot;&gt;eigendecomposition&lt;/a&gt; to compute matrix functions like $U^t$ or $\ln(U)$ or $\exp(U)$.&lt;/p&gt; &lt;h1&gt;Eigenvalue Functions&lt;/h1&gt; &lt;p&gt;Unitary matrices have a lot of nice properties. A &lt;em&gt;particularly&lt;/em&gt; nice one is that every unitary matrix can be broken into orthogonal eigenvectors. You can always break a unitary $U$ into a sum like...</description>
+				<pubDate>Sun, 10 Jan 2016 11:30:00 -0500</pubDate>
+				<link>http://algorithmicassertions.com/quantum/2016/01/10/eigendecomposition-for-rotation-and-interpolation.html</link>
+				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2016/01/10/eigendecomposition-for-rotation-and-interpolation.html</guid>
+			</item>
+		
+			<item>
+				<title>Deflating Delayed Choice Quantum Erasure</title>
+				<description>&lt;p&gt;The &lt;a href=&quot;https://en.wikipedia.org/wiki/Delayed_choice_quantum_eraser&quot;&gt;Delayed Choice Quantum Eraser&lt;/a&gt; is a widely misunderstood experiment. Apparently the common belief is that it&amp;#39;s some kind of grand world-view-shattering mystery, with powers ranging from sending messages backwards in time (&lt;a href=&quot;http://www.ibtimes.co.uk/quantum-weirdness-proved-again-measurement-changing-atoms-past-1504172&quot;&gt;example pop-science article&lt;/a&gt;) to demonstrating the existence of conscious knowledge (&lt;a href=&quot;http://www.abovetopsecret.com/forum/thread1013362/pg1&quot;&gt;example woo thread&lt;/a&gt;). Although there&amp;#39;s &lt;a href=&quot;http://jamesowenweatherall.com/SCPPRG/EllermanDavid2012Man_QuantumEraser2.pdf&quot;&gt;continuous&lt;/a&gt; &lt;a href=&quot;http://van.physics.illinois.edu/qa/listing.php?id=25872&quot;&gt;effort&lt;/a&gt; &lt;a href=&quot;http://www.scientificamerican.com/article/quantum-eraser-delayed-choice-experiments/&quot;&gt;to&lt;/a&gt; &lt;a href=&quot;https://www.physicsforums.com/threads/explain-delayed-choice-quantum-eraser-without-consciousness.808688/&quot;&gt;correct&lt;/a&gt; these misconceptions, it&amp;#39;s easy to run into them.&lt;/p&gt; &lt;p&gt;Case in point: I googled for &amp;quot;delayed choice quantum eraser&amp;quot; videos. The top result? &lt;a href=&quot;https://www.youtube.com/watch?v=U7Z_TIw9InA&quot;&gt;This youtube video&lt;/a&gt;. It mashes a scene from the infamous &lt;a href=&quot;http://www.imdb.com/title/tt0399877/&quot;&gt;What the #$*! Do We (K)now!?&lt;/a&gt; film into...</description>
+				<pubDate>Thu, 07 Jan 2016 11:30:00 -0500</pubDate>
+				<link>http://algorithmicassertions.com/quantum/2016/01/07/Delayed-Choice-Quantum-Erasure.html</link>
+				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2016/01/07/Delayed-Choice-Quantum-Erasure.html</guid>
+			</item>
+		
+			<item>
+				<title>Quantum Teleportation&#39;s Two Functions</title>
+				<description>&lt;p&gt;Quantum teleportation is a technique for sending quantum information over a classical communication channel, at the cost of some pre-existing entanglement. If you&amp;#39;re not familiar with the process, you can watch Michael Nielson, co-author of the de-facto standard textbook for quantum computing, &lt;a href=&quot;https://www.youtube.com/watch?v=3wZ35c3oYUE&amp;amp;list=PL1826E60FD05B44E4&amp;amp;index=18&quot;&gt;explain it in a Khan-academy style video&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;I won&amp;#39;t be explaining quantum teleportation in detail in this post (&lt;a href=&quot;/quantum/2014/05/11/Storing-Bandwidth-with-Quantum-Teleportation.html&quot;&gt;I already did that&lt;/a&gt;), but for reference, here is a circuit diagram of the quantum teleportation process:&lt;/p&gt; &lt;p&gt;&lt;img src=&quot;/assets/2015-12-28-Separating-Quantum-Teleportation/quantum-teleportation-circuit.png&quot; title=&quot;Quantum Teleportation Circuit&quot; style=&quot;max-width: 100%;&quot;/&gt;&lt;/p&gt; &lt;p&gt;Typically, quantum teleportation is presented as a primitive. But, in this post, we will...</description>
+				<pubDate>Mon, 28 Dec 2015 11:30:00 -0500</pubDate>
+				<link>http://algorithmicassertions.com/quantum/2015/12/28/Separating-Quantum-Teleportation.html</link>
+				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2015/12/28/Separating-Quantum-Teleportation.html</guid>
+			</item>
+		
+			<item>
+				<title>My Misconceptions: The Quantum Latch</title>
+				<description>&lt;p&gt;When it comes to quantum things, self-learning can be a tricky business. A strange surprising answer &lt;em&gt;could&lt;/em&gt; be due to quantum mechanics being counter-intuitive... or it could be because you made a stupid mistake in line 3. There&amp;#39;s a good chance of fooling yourself, when you can&amp;#39;t tell the difference between the odd and the wrong, between apparent paradoxes and actual paradoxes.&lt;/p&gt; &lt;p&gt;As a person who&amp;#39;s trip into learning quantum things was initially ad-hoc and lacking in textbooks, I ran into this problem several times. Let&amp;#39;s look at one encounter, where I accidentally ate some probability.&lt;/p&gt; &lt;h1&gt;Playing with Photons&lt;/h1&gt; &lt;p&gt;My...</description>
+				<pubDate>Sun, 08 Nov 2015 11:30:00 -0500</pubDate>
+				<link>http://algorithmicassertions.com/misconception/2015/11/08/Misconceptions-Quantum-Latch.html</link>
+				<guid isPermaLink="true">http://algorithmicassertions.com/misconception/2015/11/08/Misconceptions-Quantum-Latch.html</guid>
+			</item>
+		
+			<item>
+				<title>Quantum vs NP #2: Zachary B. Walters &#39;A linear time quantum algorithm for 3SAT&#39;</title>
+				<description>&lt;p&gt;At the end of September, Zachary B. Walters published a preprint to arXiv titled &lt;a href=&quot;http://arxiv.org/abs/1510.00409&quot;&gt;A linear time quantum algorithm for 3SAT&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;I enjoy looking through papers like this one, because they&amp;#39;re an excellent source of subtle misconceptions worth explaining. In the &lt;a href=&quot;http://algorithmicassertions.com/quantum/2015/08/27/Simulating-a-Claimed-BQP-NP-Algorithm.html&quot;&gt;last paper I covered&lt;/a&gt;, the problem was that all the optimization came from post-selection. This paper has a different mistake: using measurements to erase information.&lt;/p&gt; &lt;p&gt;&lt;em&gt;(Note: these posts are &lt;strong&gt;not&lt;/strong&gt; in a mocking tone. I remember working through these same misconceptions; the only difference is I tried to explain them to a computer.)&lt;/em&gt;&lt;/p&gt; &lt;h1&gt;The Algorithm&lt;/h1&gt; &lt;p&gt;I have...</description>
+				<pubDate>Sun, 01 Nov 2015 11:30:00 -0500</pubDate>
+				<link>http://algorithmicassertions.com/quantum/2015/11/01/Walters-Claimed-Quantum-Linear-3SAT.html</link>
+				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2015/11/01/Walters-Claimed-Quantum-Linear-3SAT.html</guid>
+			</item>
+		
+			<item>
+				<title>[Un]popular Qubits #2: The Quantum Zeno Effect</title>
+				<description>&lt;p&gt;This month, a team of scientists published &lt;a href=&quot;http://journals.aps.org/prl/abstract/10.1103/PhysRevLett.115.140402&quot;&gt;a paper&lt;/a&gt; about an experiment related to the &lt;a href=&quot;https://en.wikipedia.org/wiki/Quantum_Zeno_effect&quot;&gt;quantum zeno effect&lt;/a&gt;. There were lots of pop science articles about it and, of course, they caused as much confusion as clarity.&lt;/p&gt; &lt;p&gt;One of the pervasive misconceptions people have about quantum mechanics is that &amp;quot;observation&amp;quot; means &amp;quot;watching&amp;quot;, i.e. a conscious human looking in the general direction of an experiment. It&amp;#39;s important to clear up this misconception when talking about the quantum zeno effect, because it uses repeated measurements (a.k.a. observations) to control a quantum system.&lt;/p&gt; &lt;p&gt;Journalists worry about their audience taking the wrong...</description>
+				<pubDate>Mon, 26 Oct 2015 12:30:00 -0400</pubDate>
+				<link>http://algorithmicassertions.com/quantum/2015/10/26/Quantum-Zeno-Effect.html</link>
+				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2015/10/26/Quantum-Zeno-Effect.html</guid>
+			</item>
+		
+			<item>
+				<title>YOU versus Bell Tests and the No Communication Theorem</title>
+				<description>&lt;style scoped&gt; table { margin: 0 auto; border-spacing: 0; } table, td, tr { padding: 0; } textarea { width: 370px; resize: vertical; overflow-x: auto; white-space: pre; } .codeBlock { background-color:#EEE; padding: 4px; } .hued { filter: hue-rotate(90deg); -webkit-filter: hue-rotate(90deg); } .resultTable { background-color: #EEE; padding: 3px 3px 0 3px; margin-top: 10px; border-spacing: 3px; } &lt;/style&gt; &lt;p&gt;In this post: I try to explain Bell Inequalities and the No-Communication Theorem, while you try to write short javascript strategies that violate them.&lt;/p&gt; &lt;h1&gt;An Apparent Paradox&lt;/h1&gt; &lt;p&gt;Quantum mechanics is frustratingly hard to explain. There are a lot of reasons for that. One of...</description>
+				<pubDate>Sun, 11 Oct 2015 12:30:00 -0400</pubDate>
+				<link>http://algorithmicassertions.com/quantum/2015/10/11/Bell-Tests-vs-No-Communication.html</link>
+				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2015/10/11/Bell-Tests-vs-No-Communication.html</guid>
+			</item>
+		
+			<item>
+				<title>Rule of Thumb: Make Generic Code Value-Agnostic instead of Null-Hostile</title>
+				<description>&lt;p&gt;Nulls are a big source of headaches, to &lt;a href=&quot;http://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare&quot;&gt;put it mildly&lt;/a&gt;. Even the greatest programmers make stupid oversights (just like the greatest mathematicians make sign errors), and the possibility of any and every value being null introduces a whole lot of chances for stupid oversights when programming.&lt;/p&gt; &lt;p&gt;There are lots of strategies and tactics for dealing with the null problem, but in this post I want to talk about one particular tactic, &amp;quot;null-hostile&amp;quot; collections, and why I find it problematic.&lt;/p&gt; &lt;p&gt;A null-hostile collection is a collection that can contain arbitrary values... except for null. When you try to put...</description>
+				<pubDate>Thu, 08 Oct 2015 12:30:00 -0400</pubDate>
+				<link>http://algorithmicassertions.com/opinion/2015/10/08/Make-Generics-Value-Agnostic.html</link>
+				<guid isPermaLink="true">http://algorithmicassertions.com/opinion/2015/10/08/Make-Generics-Value-Agnostic.html</guid>
+			</item>
+		
 	</channel>
 </rss>

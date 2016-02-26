@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>A Quantum Network Flow Puzzle</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">A Quantum Network Flow Puzzle</h1>
+<p class="meta">01 May 2015</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Quantum networks are... let&#39;s call it <em>interesting</em>. Information can flow through them in surprising ways. To illustrate this point, I have made a puzzle.</p>
+
+<p><strong>The Puzzle</strong></p>
+
+<p>Consider the following network of quantum computers and quantum channels:</p>
+
+<p><img src="http://i.imgur.com/ActbFbw.png" alt="Quantum Network Diagram"></p>
+
+<p>Each of the nodes in the diagram represents a quantum computer. Quantum computers can receive, process, introduce, and send qubits.</p>
+
+<p>Each of the edges in the diagram represents a one-way quantum channel, and the number next to the edge is the number of times the channel can be used to send a single qubit. For example, two qubits can be sent over the channel from the Sender to Helper $C$, but only one qubit can pass over the channel from the Receiver to Helper $A$.</p>
+
+<p>There is no pre-established entanglement between the nodes.</p>
+
+<p>The goal is to find some way to pass <strong>four</strong> classical bits of information from the Sender to the Receiver, by processing qubits at each node, sending them along the given channels, and respecting the capacity constraints.</p>
+
+<p>For example, sending two classical bits of information is easy. Just encode them in <a href="https://www.youtube.com/watch?v=X2q1PuI2RFI&amp;feature=youtu.be&amp;t=5m38s">the obvious way</a>, pass them from the Sender to Helper $C$ to the Receiver, and measure them.</p>
+
+<p>Of course the actual solution is a bit trickier than that, so I&#39;ll give you some space.</p>
+
+<p><strong>Thinking Space</strong></p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>How about a hint? You can use <a href="http://en.wikipedia.org/wiki/Superdense_coding">superdense coding</a> to transmit two classical bits over one quantum bit by consuming a <a href="http://en.wikipedia.org/wiki/Bell_state">Bell pair</a>.</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>Another hint? Classical bits aren&#39;t the only things amenable to superdense coding.</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>Time&#39;s up!</p>
+
+<p><strong>Forced Moves</strong></p>
+
+<p>Before I explain my solution to this puzzle, let&#39;s go over some parts that are forced by common constraints.</p>
+
+<p>The absolute maximum number of classical bits you can send per qubit is <em>two</em> (via superdense coding). The sender&#39;s outward capacity is two, and we have to send four bits, so we are forced to devote the sender&#39;s entire output capacity to superdense encoded bits.</p>
+
+<p>Superdense coding requires a Bell pair. A sender needs to touch one half of the Bell pair to encode the message, and a receiver needs to end up with <em>both</em> halves of the pair to decode the message. The only place our Sender can get Bell pair halves, where the other half could conceivably end up at the Receiver, is from Helper $B$. So Helper $B$ must be creating two Bell pairs, which we&#39;ll call $u$ and $v$, and must be using the entire capacity of its channels to broadcast half of $u$ and $v$ to both the Sender and Helper $A$.</p>
+
+<p>On the other side of the network, note that the Receiver has 3 inward capacity and 1 outward capacity. Also note that 3 is less than 4 (<em>gasp!</em>), and that without pre-existing entanglement the maximum number of classical bits you can receive per qubit is one. We&#39;re going to have to <a href="http://strilanc.com/quantum/2015/01/17/Superdense-Coding-on-the-Fly-and-in-Reverse.html">repurpose the outward quantum capacity as inward classical capacity</a>. Namely, the Receiver is forced to create a Bell pair, which we will call $w$, and send one of $w$&#39;s halves over its outward link.</p>
+
+<p>With those forced moves noted, we find ourselves in this situation:</p>
+
+<p><img src="http://i.imgur.com/iHKETa0.png" alt="Partial Solution as Network Diagram w/ Some Transmissions Noted"></p>
+
+<p>This is where I would have hit a wall, if I was solving this puzzle without knowing the trick ahead of time. We have to get $u$, $v$, $u_{a,b}$, and $v_{c,d}$ to the Receiver in order for superdense decoding to happen. That&#39;s four qubits to send, but only three qubits worth of capacity to receive. And three is less than four (<em>oh my!</em>).</p>
+
+<p>But it turns out that superdense coding is a little more flexible than it seems.</p>
+
+<p><strong>Superdense Bell Pairs</strong></p>
+
+<p>I discovered the trick to solving this puzzle when thinking about something I mentioned in the <a href="http://strilanc.com/quantum/2015/04/25/Entangled-States-are-like-Unitary-Matrices.html">previous post</a>: that an entangled pair allows you to put a 4 coefficient unitary matrix into the shared system (in contrast to the normal 2 coefficient unit vector). I started wondering if there were applications for that, besides superdense coding.</p>
+
+<p>The phase space of 2x2 unitary matrices can be parametrized as $U_{\phi,\theta,v} = e^{\phi i} \left( I i \cos{\theta} + \hat{v} \sigma_{xyz} \sin{\theta} \right)$, where $\phi$ and $\theta$ are angles and $\hat{v}$ is a unit vector in $\mathbb{R}^3$. We can ignore $\phi$, because global phase factors have no measurable effect. We can also fold $\theta$ into $\hat{v}$ to get a unit vector $\hat{v}_4$ in $\mathbb{R}^4$.</p>
+
+<p>What that means is: we can probably encode an arbitrary real unit 4-vector into an entangled state. With some fiddling around, I determined that this could in fact be done and that you could decode the vector into amplitudes on the receiving side. Actually, the existing superdense coding process is already sufficient.</p>
+
+<p>This is interesting. Being able to send a unit real 4-vector is an awful lot like being able to send two qubits. When you send two qubits, in the normal way, that&#39;s sending a unit 4-vector. It&#39;s just a <em>complex</em> unit 4-vector, instead of a real unit 4-vector.</p>
+
+<p>So it seems like we could send qubits through superdense coding, as long as their phase information was limited to positive-vs-negative. We can&#39;t send arbitrary qubits, but we can send &quot;flat&quot; qubits.</p>
+
+<p>But how often are qubits flat? Well... all the intermediate states of Grover&#39;s algorithm are flat. And quantum compression preserves flatness. But the most useful example I could think of was Bell pairs: qubits in the state $\frac{1}{\sqrt{2}} (\ket{00} + \ket{11})$ don&#39;t require phase information, because their phase is uniformly zero (i.e. along the positive real line).</p>
+
+<p><strong>Correction (Jan 2016)</strong>:
+<em>I&#39;m not sure how I ended up thinking only &quot;flat&quot; qubits could be dense-coded, but reading Aram Harrow&#39;s 2003 paper <a href="http://arxiv.org/abs/quant-ph/0307091">Coherent Communication of Classical Messages</a> cleared things up.
+Superdense coding works on all qubits.
+The only catch is that the process creates an entangled copy of the qubits instead of moving the qubits.</em></p>
+
+<p>So the first thing I tried was turning one shared Bell pair into two. I had the sender apply a Hadamard gate to two fresh qubits, putting them into the state $\frac{1}{\sqrt{2}} (\ket{0} + \ket{1})$, then superdense-encoded them (as if they were classical bits) into an existing Bell pair half. After superdense-decoding on the other side, the resulting qubits were entangled with the sender&#39;s qubits. Two Bell pairs from one!... Except that we had to send a qubit and consume a Bell pair to do this, so it&#39;s a bit of a &quot;two steps forward and one step back&quot; situation. We could have just used the sent qubit to send a normal Bell pair half. There&#39;s probably cryptographic applications to using superdense coding in this way, but it&#39;s not useful in terms of channel capacity.</p>
+
+<p>The next thing I tried was sending two Bell pair halves <em>from a third party</em> via superdense coding. I immediately ran into a problem: the superdense coding process doesn&#39;t <em>move</em> qubits into the entangled state, it <em>copies</em> them into the state. This is a problem, if you want to send a Bell pair half, because it makes a third half! This means your Bell pair isn&#39;t a Bell pair anymore, it&#39;s a <a href="http://en.wikipedia.org/wiki/Greenberger%E2%80%93Horne%E2%80%93Zeilinger_state">GHZ state</a> (i.e. three qubits in the state $\frac{1}{\sqrt{2}} (\ket{000} + \ket{111})$).</p>
+
+<p>Why is having a GHZ state a problem? Well, it&#39;s a totally different thing! For example, you can&#39;t do superdense coding with a GHZ state spread over three parties. And in order to cancel a qubit out of a GHZ state, turning it back into a Bell pair, you need one of the other qubits in the state to be in the same place at the same time.</p>
+
+<p>You might expect that the sender, who just created the extra copy, would have access to that copy and could use it to cancel out the original. However, because that copy is superdense encoded into a Bell pair, there&#39;s no way to extract it without both halves of the pair! If there was a way to do so, the receiver could immediately do it on their side (FTL communication would be possible).</p>
+
+<p>Having the receiver do the cancelling would work, but then we&#39;d have to spend channel capacity moving the garbage copy over. That would defeat the purpose of using superdense coding in the first place.</p>
+
+<p>So the only way this could work is if some intermediate node... Oh. <em>That&#39;s</em> what Helper $C$ is for. To clean up the garbage!</p>
+
+<p><strong>Solution</strong></p>
+
+<p>My solution to the puzzle goes as follows.</p>
+
+<p>First, Helper $B$ creates two Bell pairs ($u$ and $v$) and <strong>b</strong>roadcasts them to Helper $A$ and the Sender. The Sender gets one half of $u$ and one half of $v$. The other halves go to Helper $A$.</p>
+
+<p>Also first, the Receiver creates a Bell pair $w$ and sends one half of it to Helper $A$.</p>
+
+<p>Second, the Sender superdense-encodes 4 bits of classical information ($a$, $b$, $c$, and $d$) into $u$ and $v$. This creates $u_{a,b}$ and $v_{c,d}$, which the Sender sends to Helper $C$.</p>
+
+<p>Also second, Helper $A$ superdense-encodes $u$ and $v$ into $w$. This creates $w_{u,v}$, but turns the copies of $u$ and $v$ still held by Helper $A$ into garbage. Helper $A$ forwards this garbage to Helper $C$. Helper $A$ also sends $w_{u,v}$ to the Receiver.</p>
+
+<p>Helper $C$ <strong>c</strong>leans up the garbage by controlled-not-ing $u_{a,b}$ into $u$ and $v_{c,d}$ into $v$. This cancels the garbage $u$ and $v$ out, leaving behind qubits that happen to encode $b$ and $d$. Helper $C$ then forwards $u_{a,b}$ and $v_{c,d}$ to the Receiver.</p>
+
+<p>Finally, the Receiver consumes its half of $w$ to superdense-decode $w_{u,v}$ into $u$ and $v$. It then consumes $u$ and $v$ to superdense-decode $u_{a,b}$ and $v_{c,d}$ into qubits that return $a$, $b$, $c$, and $d$ when measured.</p>
+
+<p>Here&#39;s the network, with all of the edges annotated by the information passing over them:</p>
+
+<p><img src="http://i.imgur.com/0jzARIS.png" alt="Solution as Network Diagram w/ Transmissions Noted"></p>
+
+<p>And here&#39;s a circuit diagram, showing the exact operations that are occurring. Each colored area corresponds to a node in the network diagram:</p>
+
+<p><img src="http://i.imgur.com/3tdJvBb.png" alt="Solution as Quantum Circuit"></p>
+
+<p>And that&#39;s how you can superdense encode Bell pairs and other &quot;flat&quot; qubits: by cleaning up the garbage created by that process.</p>
+
+<p><strong>Conclusions</strong></p>
+
+<p>Superdense coding works on qubits, but the qubits must have &quot;flat&quot; phases (e.g. no amplitudes with imaginary components) and the qubits are copied instead of moved.</p>
+
+<hr>
+
+<hr>
+
+<hr>
+
+<h1>Update</h1>
+
+<p>When I made the puzzle I was trying to exclude solutions that only used the normal type of superdense coding but, as noted by a commenter <a href="https://news.ycombinator.com/item?id=9472450">on hackernews</a>, there is such a solution. Whoops!</p>
+
+<p>Splitting the cleaner node into two pieces might fix the issue. Or maybe not! Give it a try:</p>
+
+<p><a href="http://i.imgur.com/TgWzCsY.png"><img src="http://i.imgur.com/TgWzCsY.png" alt="Puzzle attempt number 2" style="width: 200px;"/></a></p>
+
+<h1>Update 2</h1>
+
+<p>The solution can be improved, and the puzzle made harder, by using LOCC erasure to remove the extra entangled copies created by superdense coding the EPR pairs.
+This allows two of the communication links to be downgraded from quantum to classical.
+See <a href="/quantum/2015/09/02/Partially-Erasing-Entanglement-with-Measurement.html">this post</a> for details.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

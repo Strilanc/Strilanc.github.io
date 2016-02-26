@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>[Un]popular Qubits #3: The Quantum Pigeonhole Principle</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">[Un]popular Qubits #3: The Quantum Pigeonhole Principle</h1>
+<p class="meta">30 Jan 2016</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Back in 2014, a preprint titled &quot;<a href="http://arxiv.org/abs/1407.3194">The quantum pigeonhole principle and the nature of quantum correlations</a>&quot; was posted to arXiv by Y. Aharonov et al.
+This month, the paper was <a href="http://www.pnas.org/content/113/3/532">published for real in PNAS</a>.
+The media picked up on the result both times, resulting in some choice quotes:</p>
+
+<blockquote>
+<p>if you check the paths of any pair of the three original electrons, the detector will show no deflection has happened. In other words, you can have three pigeons and two boxes, and yet no two pigeons are ever found in the same box. A linkage must exist, because it’s as if the particles know the other is there, and avoid each other. <a href="https://www.newscientist.com/article/mg22329802-300-pigeon-paradox-reveals-quantum-cosmic-connections/">- New Scientist (2014)</a></p>
+</blockquote>
+
+<!-- -->
+
+<blockquote>
+<p>&quot;This is at least as equally profound, if not more profound [than the EPR paradox].&quot;, [one of the authors] says. <a href="http://physicsworld.com/cws/article/news/2014/jul/25/paradoxical-pigeons-are-the-latest-quantum-conundrum">- physicsworld (2014)</a>:</p>
+</blockquote>
+
+<!-- -->
+
+<blockquote>
+<p>The phenomenon suggests there is a new type of quantum reality that impacts all matter. <a href="http://www.dailymail.co.uk/sciencetech/article-3409392/Forget-Schrodingers-cat-researchers-reveal-quantum-pigeonhole-principle-say-tests-basic-notion-physics.html">- Daily Mail (2016)</a></p>
+</blockquote>
+
+<!-- -->
+
+<blockquote>
+<p>This discovery could change the way we think about quantum physics, forever. <a href="http://www.telegraph.co.uk/news/newstopics/howaboutthat/12113646/forget-schrodingers-cat-can-you-solve-the-quantum-pigeonhole-principle.html">- Telegraph (2016)</a></p>
+</blockquote>
+
+<p>That&#39;s... quite the hyperbole. And some of it quoted straight from the authors&#39; mouths!</p>
+
+<p>Physicists had more reserved, and mixed, reactions:</p>
+
+<blockquote>
+<p>There has been considerable interest in a recent preprint describing an effect named as the “Quantum
+Pigeonhole Principle”. [...]  a quantum mechanical measurement would imply that no more than 1 of the n objects is contained in any of the m boxes, even though n &gt; m. <a href="http://arxiv.org/pdf/1412.1333v2.pdf">- Alastair Rae and Ted Forgan</a></p>
+</blockquote>
+
+<!-- -->
+
+<blockquote>
+<p>some of the conclusions in the paper are ambiguous in the sense that they depend on the precise way one defines correlations, and that the “first experiments” the authors suggest has little if any bearing on their main theses. The far-reaching conclusions  the authors reach seems, therefore, premature. <a href="http://arxiv.org/ftp/arxiv/papers/1412/1412.0429.pdf">- B. E. Y. Svensson</a></p>
+</blockquote>
+
+<!-- -->
+
+<blockquote>
+<p>Reading further into the argument, it turns out that the first measurement is an <em>imaginary</em> measurement -- it  isn&#39;t actually  performed, but we <em>imagine</em> how it could have come out <em>if</em> it had been performed. <a href="http://www.math.umb.edu/%7Esp/pigeonco.pdf">- Stephen Parrott</a></p>
+</blockquote>
+
+<p>My personal opinion is that the paper&#39;s <em>details</em> are correct, but that the authors&#39; framing of those details is off-the-wall ridiculous.
+To justify that opinion, let&#39;s get into what the paper actually claims.
+(More specifically, what the preprint claims. Since that&#39;s what I read.)</p>
+
+<h1>Think of it as a Game</h1>
+
+<p>My interpretation of Aharonov et al&#39;s main result is as a strategy for consistently winning a game.
+A game that, classically, couldn&#39;t be won consistently.
+But quantumly it can be.</p>
+
+<p>Of course the idea that quantum strategies can be superior to classical strategies isn&#39;t new.
+There&#39;s lots of games with a known quantum advantage (see Brassard et al&#39;s <a href="http://arxiv.org/pdf/quant-ph/0407221.pdf">&quot;Quantum Pseudo-Telepathy&quot;</a> paper for several examples), and the general concept dates back to the 1960s (i.e. <a href="https://en.wikipedia.org/wiki/Bell&#x27;s_theorem">the Bell inequalities</a>).
+So what&#39;s new is the <em>particular game</em> we&#39;re winning more often.</p>
+
+<p>So what&#39;s the game?
+Well, it involves three (or more) coins and progresses as follows:</p>
+
+<ol>
+<li><strong>You set up the coins</strong>. Each coin has to be either heads or tails, and you get to pick. For example, you might pick &quot;HHT&quot;.</li>
+<li><strong>A referee makes a secret parity measurement</strong>. You give the coins to a referee, they secretly pick two, and note down if the chosen coins agreed (HH/TT) or disagreed (HT/TH)</li>
+<li><strong>You decide whether or not to restart.</strong> The referee gives the coins back to you for inspection. You check them out, then announce either &quot;keep&quot; or &quot;restart&quot;. If you said &quot;restart&quot;, we throw away everything and go back to step 1.</li>
+<li><strong>You win if the coins disagreed</strong>. When you finally say &quot;keep&quot;, you win if the referee noted &quot;disagree&quot; back in step 2.</li>
+</ol>
+
+<p>There&#39;s really not much to the game, classically speaking.
+I mean, step 3 seems kind of... pointless?
+Who cares that you got the coins back and have the option of restarting?
+It&#39;s not like you&#39;re learning any new or relevant information to base that decision on.</p>
+
+<p>Optimal classical strategies for this game win 2/3 of the time.
+Here&#39;s one: randomly pick between &quot;THH&quot;, &quot;HTH&quot;, or &quot;HHT&quot; and never restart.
+Simple.
+You win when the referee&#39;s parity measurement included the disagreeing coin, which happens 2/3 of the time.</p>
+
+<p>The reason you can&#39;t win 100% of the time is why the paper is called what it is: the <a href="https://en.wikipedia.org/wiki/Pigeonhole_principle">pigeonhole principle</a>.
+There&#39;s three coins and two boxes (H and T), so two coins must end up in the same box and create a chance to lose.
+You want the coins to all have disagreeing values, but there&#39;s not enough values!</p>
+
+<p>If only we won when the coins <em>agreed</em>, this would all be much easier.
+We could just wait for a state like &quot;HHH&quot;, and know for sure that the referee measured &quot;agree&quot; because <em>every</em> pair agrees.
+If only there were some way to always toggle the parity touched be the referee... then we <em>could</em> look for all-agree states...</p>
+
+<h1>Quantum Game, Quantum Strategy</h1>
+
+<p>In order to make quantum strategies possible, our game needs qubits instead of coins.
+Instead of using classical 2-level systems, we&#39;ll be using quantum 2-level systems.
+Otherwise it would be impossible to place things in superposition, or perform unitary operations.</p>
+
+<p>Using qubits instead of coins opens up some possibilities.
+There are better strategies now.
+Strategies that win 100% of the time.
+The paper describes one such strategy, which I&#39;ve translated into a circuit diagram for the five coin game:</p>
+
+<p><img src="/assets/2016-01-30-quantum-pigeonhole/circuit.gif" alt="Representative circuit for paper's result"/></p>
+
+<p>In words, the winning strategy is to:</p>
+
+<ul>
+<li>Put each of the qubits into the $\ket{0} + \ket{1}$ state.</li>
+<li>Let the referee perform their secret parity measurement.</li>
+<li>Rotate each qubit by 90° around the X axis.</li>
+<li>Retry until the qubits measure as all ON or all OFF.</li>
+</ul>
+
+<p>Winning with this strategy might take awhile when there&#39;s a lot of coins (e.g. with five coins each run has a $\frac{1}{2^4}$ chance of working, so you expect ~16 restarts), but you&#39;re guaranteed to eventually win.</p>
+
+<h1>Why does it work?</h1>
+
+<p>There are a few background facts you need to know in order to understand why the described quantum strategy wins the game.</p>
+
+<p>First, <strong>performing a parity measurement on two qubits can entangle them</strong>.
+If you have two qubits in the state $\ket{0} + \ket{1}$ and you copy their parity into a scratch qubit, as the referee does in the game, the system will go from the state $(\ket{0} + \ket{1})(\ket{0} + \ket{1})\ket{0} = \ket{000} + \ket{100} + \ket{010} + \ket{110}$ to the state $\ket{000} + \ket{101} + \ket{011} + \ket{110}$.
+Measuring the scratch qubit then drops the initial two qubits into either the &#39;even-parity&#39; state $\ket{00} + \ket{11}$ or the &#39;odd-parity&#39; state $\ket{10} + \ket{01}$.
+Those are entangled <a href="https://en.wikipedia.org/wiki/Bell_state">EPR states</a>.</p>
+
+<p>Second, for both the entangled even-parity and odd-parity states, <strong>rotations around the X axis rotate the parity</strong> instead.
+If you&#39;re in the even-parity state $\ket{00} + \ket{11}$ and you hit the first qubit with a NOT gate (i.e. rotate it 180° around the X axis), you end up in the odd-parity state $\ket{10} + \ket{01}$.
+The same thing happens if you hit the second qubit with a NOT gate.
+And hitting either of them with a further NOT gate will return you to the even-parity state.
+This also works for partial rotations, which is crucial.
+Hitting both qubits with a 90° rotation around the X axis adds up to one full 180° NOT of the parity.</p>
+
+<p>Third, <strong>qubits in the initial unentangled state aren&#39;t affected by X rotations</strong>.
+The <a href="https://en.wikipedia.org/wiki/Bloch_sphere">Bloch sphere</a> point corresponding to the state $\ket{0} + \ket{1}$ is on the X axis.
+Points on an axis aren&#39;t affected by rotations around that axis.</p>
+
+<p>Got all that?
+When the referee performs a parity measurement on the state we crafted, they are actually entangling the two qubits they touched.
+We don&#39;t know the parity of that entanglement, but we can toggle said parity by rotating the touched qubits around the X axis.
+And rotating the wrong qubits can&#39;t hurt, because the untouched qubits are in a state not affected by this particular rotation.</p>
+
+<p>So what&#39;s happening is:</p>
+
+<ol>
+<li>The two qubits touched by the referee end up in the even-parity state $\ket{00} + \ket{11}$ or the odd-parity state $\ket{01} + \ket{10}$.</li>
+<li>Rotating every qubit by 90° doesn&#39;t affect the untouched qubits, but inverts the parity of the touched qubits. If the referee wrote down &quot;disagree&quot;, the two touched qubits now agree. If the referee wrote down &quot;agree&quot;, the two touched qubits now disagree.</li>
+<li>When we measure the qubits and they all return the same result, we know the parity of every pair ended up &quot;agree&quot;. And since we inverted the parity of the pair the referee measured, the referee must have measured &quot;disagree&quot;.</li>
+</ol>
+
+<p>The key point here is that there <em>are</em> states where all the parities are even, but there <em>aren&#39;t</em> any states where all the parities are odd (assuming we used at least 3 coins/qubits, of course).
+The pigeonhole principle prevents a watch-out-for-even-parities strategy from working consistently, because there&#39;s always at least one even parity.
+But the pigeonhole principle is not an obstacle for a watch-out-for-odd-parities strategy, because there&#39;s no law against stuffing arbitrarily many pigeons into one box (uh... you know what I mean).</p>
+
+<p>This fundamental difference between even-parity and odd-parity (i.e. that there exist all-pairs-even states but not all-pairs-odd states) is what forces us to go quantum and use entangled-half-rotation shenanigans.
+Classically, there&#39;s no way to consistently toggle the parity measured by the referee.</p>
+
+<h1>Caveat</h1>
+
+<p>Before moving on to interpretation, I want to mention a very important caveat on all this: the strategy stops working if the referee measures more than one parity.
+Non-overlapping parity measurements will work fine, but things break as soon as there&#39;s any overlap:</p>
+
+<p><img src="/assets/2016-01-30-quantum-pigeonhole/overlap.png" alt="Overlapping parity measurements cause problems"/></p>
+
+<p>When there&#39;s an overlapping parity measurement, the qubits do still end up entangled due to the referee&#39;s meddling.
+But now the entangled state involves three (or more) qubits instead of two.
+That <a href="https://quantiki.org/wiki/monogamy-entanglement">weakens the entanglement</a>, and X-rotations of the individual qubits no longer operate on the parity in the same way.</p>
+
+<p>This is a very important caveat, because actually verifying that the &quot;pigeonhole principle was violated&quot; would involve overlapping parity measurements.</p>
+
+<p>Also I think this caveat means that the paper&#39;s experimental prediction, that you can pass three electrons through two paths and find that when post-selection succeeds there was no deflection (because they weren&#39;t &quot;in the same box&quot;), is wrong.
+Each deflection is a parity measurement, and they overlap, so... it won&#39;t work.
+You&#39;ll see deflection even after post-selecting.
+(Then again, weak measurement is extremely flexible and I&#39;m no physicist...)</p>
+
+<h1>Interpretation</h1>
+
+<p>The authors of the paper go <em>waaay</em> over the top when interpretating what this all means.
+But let me give a classical analogy for what&#39;s going on.</p>
+
+<p>Suppose we tweaked the coin-parity game so that, when the referee measures a parity, <em>they have to flip one of the touched coins</em>.
+Now it&#39;s easy to win 100% of the time classically: restart until you see a state where all the coins agree.
+Even if the coins are assigned randomly and you don&#39;t get to see them in step 1, you can still win 100% of the time.</p>
+
+<p>By the logic the paper uses to conclude that the pigeonhole principle doesn&#39;t apply to quantum states, the above paragraph proves the pigeonhole principle doesn&#39;t apply to classical states.
+<em>Alternatively</em>, having a clever indirect way of knowing if a <strong>single</strong> unknown parity check came up odd doesn&#39;t quite equate to &quot;<strong>all</strong> the parities must have been odd and reality is a lie!&quot;.
+And the fact that overlapping parity checks, the ones that would actually confirm an impossible pigeonhole violating state, prevent the strategy from working is <em>kind of a big hint</em>.</p>
+
+<p>That&#39;s really all there is to it.
+The paper&#39;s strategy is clever, sure.
+But concluding the pigeonhole priciple was violated because you cleverly discarded all the cases where coins were caught in the same state?
+That&#39;s just wrong.
+And describing this as world-view shattering?
+That&#39;s downright <em>absurd</em>.</p>
+
+<h1>Summary</h1>
+
+<p>Measuring the parity of two qubits can entangle them.
+You can rotate the parity of that entanglement by rotating the individual qubits.
+This allows you to sometimes determine if a parity measurement was odd, by using the resulting entanglement to toggle the parity and watching for all-parities-agree states.</p>
+
+<p>The way this paper was framed and presented by the media, and <em>especially</em> by the authors, makes me sad.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+  <script>
+  var idcomments_acct = '7d0006bd6a016f9a2892cc2ecc64de01';
+  var idcomments_post_id = '/quantum/2016/01/30/quantum-pigeonhole.html';
+  var idcomments_post_url = 'http://algorithmicassertions.com/quantum/2016/01/30/quantum-pigeonhole.html';
+  </script>
+  <span id="IDCommentsPostTitle" style="display:none"></span>
+  <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+  <noscript>
+    <hr>
+    <font color=red>
+      Comments script blocked. Comments won't work.
+    </font>
+    <br/>
+    Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>intensedebate.com</strong> to fix.
+  </noscript>
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Puzzle: Deflipping a Quantum Coin</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Puzzle: Deflipping a Quantum Coin</h1>
+<p class="meta">13 Apr 2014</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Today I read the paper <a href="http://arxiv.org/pdf/quant-ph/0211191v1.pdf">An Invitation to Quantum Game Theory</a>. It&#39;s not very long, but it has a nice example of a situation where &quot;going quantum&quot; gives an unexpected advantage.</p>
+
+<p><strong>Quantum Q</strong></p>
+
+<p>Imagine a game between <a href="http://en.wikipedia.org/wiki/Jean-Luc_Picard">Captain Picard</a> and <a href="http://en.wikipedia.org/wiki/Q_%28Star_Trek%29">Q</a> (not sure where Alice and Bob are, but I&#39;ll stick with the characters used by the paper). The game is very simple: they will take turns either flipping or not flipping a coin without being able to see it. If the coin ends up heads, then Picard wins. Tails, Q wins.</p>
+
+<p>The coin starts off tails, and the game will end after three turns. Q will get a chance to flip first, then Picard will get a chance, then Q will get to go one last time, then the coin will be revealed and the winner decided.</p>
+
+<p>Classically speaking, Picard can guarantee a 50% chance of winning by randomizing his choice to flip or not flip the coin. But Q, being an omnipotent trickster, has snuck a quantum coin into the game. So Q isn&#39;t limited to just flipping the coin, he can apply any single-qubit operation he wants during his turns. Picard remains unaware and restricted to either doing nothing, or flipping the coin (flipping the coin applies an <a href="http://en.wikipedia.org/wiki/Quantum_gate#Pauli-X_gate">X gate</a> to its state).</p>
+
+<p>The question is: can Q use his quantum advantage to guarantee a win?</p>
+
+<p><strong>Thinking Space</strong></p>
+
+<p>Here&#39;s some space between the puzzle and my explanation of the solution.</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>You can try ideas in <a href="http://jsfiddle.net/xkCLq/24/embedded/result/">this</a> or <a href="http://www.davyw.com/quantum/">this</a> quantum circuit simulator. Picard is only allowed to use the X gate. Q wins if the output stays in state 0.</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p><strong>Solution</strong></p>
+
+<p>Q can win 100% of the time by applying the <a href="http://en.wikipedia.org/wiki/Quantum_gate#Hadamard_gate">Hadamard operation</a> to the coin on each of his turns. With this strategy, a coin that started off tails will end up as tails <em>whether or not Picard flips it</em>.</p>
+
+<p>Here&#39;s an animation showing a circuit of what&#39;s going on. Picard choosing to flip the coin is represented by the presence or absence of an <a href="http://en.wikipedia.org/wiki/Quantum_gate#Pauli-X_gate">X gate</a> (the quantum version of a NOT gate). But instead of flipping the coin like he expects, he ends up doing an operation that spins the phase of the &quot;head&quot; component of the state:</p>
+
+<p><img src="http://i.imgur.com/cLVne3P.gif" alt="HH and HXH circuits don&#39;t flip the output"></p>
+
+<p>I&#39;m guessing that, for a lot of readers, the above animation didn&#39;t convey why the solution works. Maybe something more geometric?</p>
+
+<p><strong>Geometric Explanation</strong></p>
+
+<p>A nice way to visualize the state of a qubit is the <a href="http://en.wikipedia.org/wiki/Bloch_sphere">Block Sphere</a>.</p>
+
+<p>Here&#39;s a diagram, modified from the one on Wikipedia, showing the state our system starts in:</p>
+
+<p><img src="http://i.imgur.com/gLHOuKD.png" alt="Block sphere with current state being tails / up"></p>
+
+<p>The green blob shows the starting state: at the very top, 100% tails. Other points on the surface of the sphere correspond to other quantum states the coin can be in.</p>
+
+<p>Flipping the coin corresponds to rotating by 180 degrees around the X axis. From the starting state, flipping the coin would move us to the very bottom at 100% heads. Like this:</p>
+
+<p><img src="http://i.imgur.com/Lzf4UKP.png" alt="Flipping the coin"></p>
+
+<p>But what Q has done is first rotate the state by 180 degrees around the diagonal axis X+Z. Starting from the tails state, this rotation moves the coin&#39;s state to the front of the sphere directly along the X axis:</p>
+
+<p><img src="http://i.imgur.com/TlHztwN.png" alt="Hadamarding the coin"></p>
+
+<p>Now if Picard goes to flip the coin by rotating around the X axis, nothing will happen:</p>
+
+<p><img src="http://i.imgur.com/fRaY0Tv.png" alt="Pointless flipping"></p>
+
+<p>And Q can restore the tails state by rotating around the X+Z axis by another 180 degrees:</p>
+
+<p><img src="http://i.imgur.com/REcCHEL.png" alt="Unhadamarding the coin"></p>
+
+<p>And so Q wins.</p>
+
+<p><strong>Summary</strong></p>
+
+<p>When you flip a quantum coin, you might not be doing what you think.</p>
+
+<p>Part of what made this puzzle interesting to me is that I already knew $H \cdot X \cdot H = Z$, but it never occurred to me to use it as a <em>trick</em>. Quantum mechanics has a knack for producing surprising situations from trivial mathematical facts.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

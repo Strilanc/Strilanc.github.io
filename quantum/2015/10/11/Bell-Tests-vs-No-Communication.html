@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>YOU versus Bell Tests and the No Communication Theorem</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">YOU versus Bell Tests and the No Communication Theorem</h1>
+<p class="meta">11 Oct 2015</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<style scoped>
+    table {
+        margin: 0 auto;
+        border-spacing: 0;
+    }
+
+    table, td, tr {
+        padding: 0;
+    }
+
+    textarea {
+        width: 370px;
+        resize: vertical;
+        overflow-x: auto;
+        white-space: pre;
+    }
+
+    .codeBlock {
+        background-color:#EEE;
+        padding: 4px;
+    }
+
+    .hued {
+        filter: hue-rotate(90deg);
+        -webkit-filter: hue-rotate(90deg);
+    }
+
+    .resultTable {
+        background-color: #EEE;
+        padding: 3px 3px 0 3px;
+        margin-top: 10px;
+        border-spacing: 3px;
+    }
+</style>
+
+<p>In this post: I try to explain Bell Inequalities and the No-Communication Theorem, while you try to write short javascript strategies that violate them.</p>
+
+<h1>An Apparent Paradox</h1>
+
+<p>Quantum mechanics is frustratingly hard to explain.
+There are a lot of reasons for that.
+One of the main reasons, and the one we&#39;ll be touching on throughout this post, is QM&#39;s complicated relationship with locality.
+In particular, it seems to both <em>require and prohibit</em> faster-than-light transfer of information.</p>
+
+<p>To make things worse, the requirements and prohibitions on quantum FTL signalling are <em>proven mathematical facts</em> known as <a href="https://en.wikipedia.org/wiki/Bell&#x27;s_theorem">Bell&#39;s Theorem</a> and the <a href="https://en.wikipedia.org/wiki/No-communication_theorem">No-Communication Theorem</a> respectively.
+They derive from the postulates we use to define quantum mechanics as a mathematical model.
+If we found experiments that contradicted either theorem, they would still be correct.
+Instead, our belief that reality is quantum mechanical would fall (or at least need some adjusting).</p>
+
+<p>We have a paradox here, but it is a paradox in the well-founded-but-seemingly-absurd sense instead of in the leads-to-a-contradiction sense.
+The need for FTL signalling and the ban on FTL signalling apply to subtly different cases.</p>
+
+<h1>Signalling Required: Bell Tests and the CHSH Game</h1>
+
+<p>In the 1960s, <a href="https://en.wikipedia.org/wiki/John_Stewart_Bell">John Bell</a> discovered that there are coordination games where quantum entanglement is a useful resource.
+Games where you can <em>win more</em> by taking advantage of reality being quantum mechanical.
+Classical players, without FTL signalling, simply can&#39;t win as much as quantum players at these games.</p>
+
+<p>The smallest coordination game where quantum entanglement is useful is known as the <a href="https://en.wikipedia.org/wiki/CHSH_inequality">&quot;CHSH&quot; game</a>.
+In this game, the goal is for two isolated players (Alice and Bob) to make moves that satisfy $(m_a \text{ xor } m_b) = (r_a \text{ and } r_b)$.
+The $r_a$ and $r_b$ values are the outcomes of coin flips by referees.
+$r_a$ is only told to Alice, while $r_b$ is only told to Bob.
+The $m_a$ and $m_b$ values are Alice and Bob&#39;s respective moves.
+In other words, Alice and Bob want to <em>make the same move unless the referees both flip heads</em>.
+This is difficult because each player sees only one of the coin flips.</p>
+
+<p>It is claimed that <strong>no classical strategy can expect to win the CHSH game more than 75% of the time</strong> (or less than 25% of the time), but <strong>quantum strategies can win up to 85.3% of the time</strong> (more specifically, $\cos^2 \frac{\pi}{8} = \frac{1 + \sqrt{2}}{2\sqrt{2}} \approx 85.35534...\%$ of the time).</p>
+
+<p>(Another game where quantum entanglement is useful is the <a href="https://users.wpi.edu/%7Eparavind/Publications/MSQUARE5.pdf">Mermin-peres magic square game</a>.
+It&#39;s the simplest game where the quantum strategy is better and <em>always</em> wins.)</p>
+
+<p>Checking that no deterministic strategy beats 75% is easy.
+There&#39;s only four deterministic strategies each player can follow: &quot;always false&quot;, &quot;always true&quot;, &quot;match referee&quot;, and &quot;contradict referee&quot;.
+That gives sixteen possible strategy combinations for two players; few enough that you can just check each one.
+(They all win either 25% or 75% of the time.)</p>
+
+<p>But what about probabilistic classical strategies?
+Maybe something interesting happens if each player randomly switches between the deterministic strategies, possibly based on the referee&#39;s coin flip?
+And what about that analogy people always give for entanglement, where you put the result of a coin flip into two boxes and opening one box instantly tells you what&#39;s in the other box?
+Maybe the pervasiveness of that analogy means that shared random bits are useful here?</p>
+
+<h1>Write Your Own Classical CHSH Strategy</h1>
+
+<p>Instead of trying to convince you with words that probabilistic classical strategies (including ones with pre-shared random bits) can&#39;t beat 75%, let&#39;s try something different.</p>
+
+<p>Below this paragraph, there is an interactive widget with two text areas.
+The text areas accept arbitrary javascript code, and the entered code is used in simulations of the CHSH game to determine the players&#39; strategies.
+All you have to do is assign true or false to the <code>move</code> variable.
+You can base the value you assign on the <code>refChoice</code> variable (i.e. the referee&#39;s coin flip), on values in the <code>sharedBits</code> array (i.e. the pre-shared coin flips), or on whatever else you want (I dunno, the time?).</p>
+
+<p>The goal is to win statistically-signicantly more than 75% of the time.
+Your results are summarized in the table at the bottom of the widget, and will update automatically as you edit the code.
+Go ahead, give it a try:</p>
+
+<!--
+    Sandbox escape mechanisms that shouldn't work:
+    - Code injection via mismatched braces. (JSON.stringify -> eval)
+    - Assigning values to a global and reading them out on the other side. (Seperate web workers)
+    - Re-assigning Math.random or other functions used by the surrounding glue code. (Their values are stashed into locals)
+
+    Things that might work:
+    - WebSockets
+    - Cracking Math.random's seed
+    - Browser-level exploits (Chrome does seem to crash if a bunch of web workers start...)
+-->
+
+<div style="width: 850px;">
+    <table align="center" style="background-color: #EEE; padding: 2px;">
+        <tr><td align="left">var sharedBits = [Math.random() &lt; 0.5, Math.random() &lt; 0.5, …]</td></tr>
+    </table>
+
+    <img src="/assets/2015-10-11-Bell-Tests-vs-No-Communication/bell_test_widget_split.png" style="margin: 0 auto; padding: 0; display: block;"/>
+
+    <div class="codeBlock" style="margin-left: 4px; float:left;">
+        <div>var refChoice = Math.random() &lt; 0.5;<br/>var move; //ALICE's move</div>
+        <textarea id="srcTextArea1_a" rows="4"></textarea>
+    </div>
+    <div class="codeBlock" style="margin-right: 4px; float:right;">
+        <div style="text-align: left;">var refChoice = Math.random() &lt; 0.5;<br/>var move; //BOB's move</div>
+        <textarea id="srcTextArea2_a" rows="4"></textarea>
+    </div>
+
+    <table><tr style="vertical-align: top;">
+        <td><img src="/assets/2015-10-11-Bell-Tests-vs-No-Communication/bell_test_widget_side_join.png"/></td>
+        <td>
+            <div style="text-align: center; max-width: 450px;">
+                <label id="errorLabel_a" style="font: 16pt bold Helvetica; color: red">
+                    ERROR: javascript disabled
+                </label>
+            </div>
+            <table id="resultsTable_a" class="resultTable">
+                <tr>
+                    <td align="right">Estimated Win Rate:</td>
+                    <td align="left"><label id="rateLabel_a" style="font-weight: bold;"></label></td>
+                </tr>
+                <tr>
+                    <td align="right">Violated Bell Inequality:</td>
+                    <td align="left"><label id="judgementLabel_a" style="font-weight: bold;"></label></td>
+                </tr>
+                <tr>
+                    <td align="right">Measured Wins:</td>
+                    <td align="left"><label id="countLabel_a"></label></td>
+                </tr>
+                <tr>
+                    <td align="right">Outcome Breakdown:</td>
+                    <td align="left"><canvas id="drawCanvas_a" width="281px" height="281px"></canvas></td>
+                </tr>
+            </table>
+        </td>
+        <td><img src="/assets/2015-10-11-Bell-Tests-vs-No-Communication/bell_test_widget_side_join.png" style="transform:scaleX(-1);"/></td>
+    </tr></table>
+</div>
+
+<p>So... assuming you actually tried, how did you do?
+Did you beat 75%?</p>
+
+<p>(Did you consider cheating? Maybe you can <a href="https://alexnisnevich.github.io/untrusted/">win by escaping the sandbox</a>.)</p>
+
+<p>The basic intuition I get, from playing with the widget, is that each quadrant gets 25% of the &quot;result fluid&quot; filling up the individual case boxes.
+When you try to shift fluid within a quadrant, you always end up causing an equivalent shift in an adjacent quadrant.
+This is fine in the top-left, because score-increasing shifts there correspond to score-increasing shifts in the adjacent quadrants.
+But in the bottom-right, score-increasing shifts correspond to score-<em>decreasing</em> shifts in the adjacant quadrants.
+There&#39;s a wall at 75% because at that point every improvement in the bottom-right is countered by a loss in the top-right or bottom-left (or vice-versa).</p>
+
+<p>An actual proof that 75% is classically optimal is left as an exercise for the reader.</p>
+
+<h1>Quantum CHSH Strategies</h1>
+
+<p>The best quantum strategies for the CHSH game are actually quite simple, operationally speaking.
+It&#39;s understanding the underlying model that&#39;s a bit complicated.</p>
+
+<p>When given a qubit, you can do two things: turn it, and measure it.
+When two qubits are entangled, their measurements will be correlated.
+The amount of correlation depends on the relative angle between the measurements that were performed on each qubit.</p>
+
+<p>Quantum mechanics says, and experiments confirm, that if one of the entangled qubits is measured along an axis $v$, the other is measured along an axis $w$, and the angle between $v$ and $w$ is $\theta$, then the proportion of agreeing outcomes is $\cos^2 \frac{\theta}{2}$.
+(This only applies to the first measurement on each. After that they&#39;re not entangled.)</p>
+
+<ul>
+<li>Measurements along axes that differ by 0°, i.e. along the same axis, agree 100% of the time.</li>
+<li>Parallel-but-opposite-in-direction axes, i.e. ones that differ by 180°, agree 0% of the time.</li>
+<li>Perpencidular axes, which differ by 90°, agree 50% of the time and disagree 50% of the time (i.e. are uncorrelated).</li>
+<li>Axes that differ by -45° or +45° will agree ~85.3% of the time while axes that differ by 135° will <em>disagree</em> ~85.3% of the time.</li>
+</ul>
+
+<p>(Actually, I&#39;m simplifying a bit.
+The correlations depend on which entangled state you start with.
+Physicists&#39; favorite entangled state is the &quot;<a href="https://en.wikipedia.org/wiki/Singlet_state">singlet state</a>&quot; $\frac{1}{\sqrt{2}} \ket{01} - \frac{1}{\sqrt{2}} \ket{10}$ where the qubits have opposite phase and value, but we&#39;ll be using the state $\frac{1}{\sqrt{2}} \ket{00} + \frac{1}{\sqrt{2}} \ket{11}$ where the qubits simply agree.
+The difference does matter, but you don&#39;t have to care about it here.)</p>
+
+<p>The trick quantum strategies can use is that, if you start with the measurement axes separated -45°, rotating by 90° <em>once</em> gets you to +45° but rotating by 90° <em>twice</em> gets you to 135°.
+This is useful in the CHSH game, because both the game and this 45-to-45-to-135 trick correspond to approximating an AND gate while using only local operations.
+One player choosing to rotate their qubit has no effect on the rate of agreement (both 45° and -45° agree 85.3% of the time), but <em>both</em> players choosing to rotate swaps us into the disagreeing-85.3%-of-the-time case.</p>
+
+<h1>Write Your Own Quantum CHSH Strategy</h1>
+
+<p>You can try out quantum strategies for the CHSH game using the widget in this section.
+You enter javascript into each of the text areas, and it will be used into simulations of the CHSH game.
+The difference compared to the last widget is that, here, you have access to two new functions: <code>turn</code> and <code>measure</code>.</p>
+
+<p>The <code>measure</code> function measures the player&#39;s qubit&#39;s value in the computational basis (along the Z axis).
+If you just use <code>move = measure()</code> for both strategies, the qubits act like a classical pre-shared random bit; to get other correlations, you need to <code>turn</code> them first.
+The <code>turn</code> function takes an axis (<code>X</code>, <code>Y</code>, or <code>Z</code>), as well as an angle in degrees, and applies a rotation operation to the qubit.
+For example, if you wanted to measure along the Y axis instead of the Z axis then you would <code>turn(X, 90)</code> before measuring.</p>
+
+<p>(Unfortunately, explaining exactly what each rotation operation does to the state is outside of the scope of this post.
+See <a href="/quantum/2014/11/24/Converting-Rotations-into-Nice-Qubit-Operations.html">Converting Rotations into &quot;Nice&quot; Qubit Operations</a> and <a href="/quantum/2015/04/25/Entangled-States-are-like-Unitary-Matrices.html">Entangled States are Like Unitary Matrices</a> if you&#39;re interested in that.)</p>
+
+<p>I pre-populated an optimal strategy into the widget, but feel free to erase it without looking and try to find one yourself.
+Or maybe see if you can find strategies that do <em>better</em> than 85.3%?</p>
+
+<!--
+    It's a lot easier to escape the sandbox here because both snippets are run in the same web worker.
+-->
+
+<div style="width: 850px;">
+    <table align="center" style="background-color: #EEE; padding: 2px;">
+        <tr><td align="left">sharedQubits = √½·|00〉+ √½·|11〉</td></tr>
+    </table>
+
+    <img src="/assets/2015-10-11-Bell-Tests-vs-No-Communication/bell_test_widget_split.png" class="hued" style="margin: 0 auto; padding: 0; display: block;"/>
+
+    <div class="codeBlock" style="margin-left: 4px; float:left;">
+        <div>var refChoice = Math.random() &lt; 0.5;<br/>var move; //ALICE's move</div>
+        <textarea id="srcTextArea1_b" rows="4"></textarea>
+    </div>
+    <div class="codeBlock" style="margin-right: 4px; float:right;">
+        <div style="text-align: left;">var refChoice = Math.random() &lt; 0.5;<br/>var move; //BOB's move</div>
+        <textarea id="srcTextArea2_b" rows="4"></textarea>
+    </div>
+
+    <table><tr style="vertical-align: top;">
+        <td><img src="/assets/2015-10-11-Bell-Tests-vs-No-Communication/bell_test_widget_side_join.png" class="hued"/></td>
+        <td>
+            <div style="text-align: center; max-width: 450px;">
+                <label id="errorLabel_b" style="font: 16pt bold Helvetica; color: red">
+                    ERROR: javascript disabled
+                </label>
+            </div>
+            <table id="resultsTable_b" class="resultTable">
+                <tr>
+                    <td align="right">Estimated Win Rate:</td>
+                    <td align="left"><label id="rateLabel_b" style="font-weight: bold;"></label></td>
+                </tr>
+                <tr>
+                    <td align="right">Violated Bell Inequality:</td>
+                    <td align="left"><label id="judgementLabel_b" style="font-weight: bold;"></label></td>
+                </tr>
+                <tr>
+                    <td align="right">Measured Wins:</td>
+                    <td align="left"><label id="countLabel_b"></label></td>
+                </tr>
+                <tr>
+                    <td align="right">Outcome Breakdown:</td>
+                    <td align="left"><canvas id="drawCanvas_b" width="281px" height="281px"></canvas></td>
+                </tr>
+            </table>
+        </td>
+        <td><img src="/assets/2015-10-11-Bell-Tests-vs-No-Communication/bell_test_widget_side_join.png" class="hued" style="transform:scaleX(-1);"/></td>
+    </tr></table>
+</div>
+
+<p>So quantum strategies can demonstrably outperform local classical strategies at the CHSH game.
+But before we move on to interpreting what this means, and jumping to conclusions about secret FTL signals, let&#39;s cover the No-Communication Theorem.</p>
+
+<h1>Signalling Prohibited: No Communication Allowed</h1>
+
+<p>What does it mean for Alice to communicate information to Bob?
+As with the Bell inequalities, we can think of this in terms of <em>winning a game</em>.</p>
+
+<p>The game is much simpler this time: there&#39;s only one referee, and only one of the players makes a move.
+The goal is to satisfy $m_b = r_a$.
+Once again, $r_a$ is the outcome of a coin flip performed by a referee and known to Alice.
+Also, $m_b$ is the yes-or-no move performed by Bob.
+You win when the moves correlate with the flips.</p>
+
+<p>The No-Communication Theorem states that Alice and Bob can&#39;t expect to win this game more than 50% of the time, even if they have access to pre-shared entangled qubits.</p>
+
+<p>Oh hey, another bound on the rate a game can be won that should apply to any strategy.
+That means it&#39;s time to-</p>
+
+<h1>Write Your Own Quantum Communication Strategy</h1>
+
+<p>The third (and final) interactive widget is found below.
+It works exactly like the quantum widget for the CHSH game explained earlier.
+Only the game has changed.
+Both players can still <code>turn</code> and <code>measure</code>, but this time only Alice cares about <code>refChoice</code> and only Bob needs to assign a value to <code>move</code>.
+The goal is for Bob&#39;s move to correspond to the referee choice that was given to Alice.</p>
+
+<p>People in the comment sections of pop science articles about entanglement are always suggesting strategies for this game.
+Maybe whether or not Alice measured the system can be detected by Bob, so entropy can squeak through by having Alice only measure when <code>refChoice</code> is true?
+Or maybe, since the axis that Alice measures will affect the states that the system can instaneously collapse into from across the universe, measuring along a different axis can be detected by Bob?</p>
+
+<p>Can <em>you</em> come up with a way to win more than 50% of the time?</p>
+
+<!--
+    How to win by cheating:
+    Alice: "Date.xxx = refChoice"
+    Bob: "move = Date.xxx"
+
+    Preventing this kind of cheating is difficult because, well, you're running this on a classical computer (also, javascript doesn't support blocking).
+    I could have split the strategies into two web workers and used async message passing, but that introduces dealing-with-async into the user code, and
+      I wanted it to be as simple as possible (and async/await isn't well supported yet).
+-->
+
+<div style="width: 850px;">
+    <table align="center" style="background-color: #EEE; padding: 2px;">
+        <tr><td align="left">sharedQubits = √½·|00〉+ √½·|11〉</td></tr>
+    </table>
+
+    <img src="/assets/2015-10-11-Bell-Tests-vs-No-Communication/bell_test_widget_split.png" class="hued" style="margin: 0 auto; padding: 0; display: block;"/>
+
+    <div class="codeBlock" style="margin-left: 4px; float:left; font-size: 11pt;">
+        <div>var refChoice=Math.random()&lt;0.5 //ALICE's value to send</div>
+        <textarea id="srcTextArea1_c" rows="4"></textarea>
+    </div>
+    <div class="codeBlock" style="margin-right: 4px; float:right;">
+        <div style="text-align: left;">var move; //BOB's received value</div>
+        <textarea id="srcTextArea2_c" rows="4"></textarea>
+    </div>
+
+    <table><tr style="vertical-align: top;">
+        <td><img src="/assets/2015-10-11-Bell-Tests-vs-No-Communication/bell_test_widget_side_join.png" class="hued" style="margin: 0 auto; padding: 0; display: block;"/></td>
+        <td>
+            <div style="text-align: center; max-width: 450px;">
+                <label id="errorLabel_c" style="font: 16pt bold Helvetica; color: red">
+                    ERROR: javascript disabled
+                </label>
+            </div>
+            <table id="resultsTable_c" class="resultTable" style="width: 450px;">
+                <tr>
+                    <td align="right">Estimated Hit Rate:</td>
+                    <td align="left"><label id="rateLabel_c" style="font-weight: bold;"></label></td>
+                </tr>
+                <tr>
+                    <td align="right">Communicating:</td>
+                    <td align="left"><label id="judgementLabel_c" style="font-weight: bold;"></label></td>
+                </tr>
+                <tr>
+                    <td align="right" style="width: 200px;">Measured Hits:</td>
+                    <td align="left"><label id="countLabel_c"></label></td>
+                </tr>
+                <tr>
+                    <td align="right">Outcome Breakdown:</td>
+                    <td align="left"><canvas id="drawCanvas_c" width="171px" height="171px"></canvas></td>
+                </tr>
+            </table>
+        </td>
+        <td><img src="/assets/2015-10-11-Bell-Tests-vs-No-Communication/bell_test_widget_side_join.png" class="hued" style="transform:scaleX(-1);margin: 0 auto; padding: 0; display: block;"/></td>
+    </tr></table>
+</div>
+
+<p>Don&#39;t try <em>too</em> long.</p>
+
+<p>My intuition for why this can&#39;t be done rests on the fact that quantum operations <em>commute when applied to separate qubits</em>.
+If &quot;Alice does X then Bob does Y&quot; causes result Z, then result Z must also occur for &quot;Bob does Y then Alice does X&quot;.
+I&#39;m not going to prove this, even though it&#39;s not hard, because it would require explaining in detail how quantum operations are represented mathematically and how to expand single-qubit operations into whole-system-operations.
+Suffice it to say that $(A \otimes I) \cdot (I \otimes B) = (I \otimes B) \cdot (A \otimes I)$, or that <a href="/quantum/2015/04/25/Entangled-States-are-like-Unitary-Matrices.html">Alice&#39;s operations accumulate as left-products while Bob&#39;s accumulate as right-products</a>.</p>
+
+<p>Because remote quantum operations commute, any strategy for sending quantum information instantaneously <em>could also send that information into the past</em>.
+If Alice could send information to Bob by twiddly-fwaddling her qubit before he blorgamorped his qubit, the math would also allow for Bob to receive the message while Alice <em>waited as long as she wanted to before doing the twiddly-fwaddling</em>.
+This is especially bad because it&#39;s not solved by giving the universe a preferred rest frame (i.e. we&#39;re not <a href="https://en.wikibooks.org/wiki/Special_Relativity/Faster_than_light_signals,_causality_and_Special_Relativity">bootstrapping the FTL signalling into time travel by using special relativity</a>; the time travel comes directly from the quantum mechanism we assumed).</p>
+
+<p>You might not have a distaste for time paradoxes being allowed but I find it to be a compelling reductio, so I&#39;ll bluntly leave my explanation for no-communication at that.
+If you want more not-in-depth discussion of the No-Communication Theorem, you can read <a href="http://physics.stackexchange.com/questions/109861/why-cant-i-use-bells-theorem-for-faster-than-light-communication">this</a> or <a href="http://lesswrong.com/lw/q2/spooky_action_at_a_distance_the_nocommunication/">this</a> or <a href="https://www.physicsforums.com/threads/no-communication-theorem-question.317397/">this</a> or <a href="http://forums.xkcd.com/viewtopic.php?f=18&amp;t=15911&amp;start=0&amp;st=0&amp;sk=t&amp;sd=a">this</a>.</p>
+
+<p>(In the specific case of Bell tests, the reason the non-local correlations can&#39;t be bootstrapped into communication is that <em>you need to compare results</em>.
+You can encode information into whether the CHSH game was won or lost, but the other party can&#39;t tell if they won or lost until you get back together and compare notes.
+Comparing notes requires getting those notes to the same place and the same time, and doing that is bounded by the speed of light.)</p>
+
+<h1>Intepretation</h1>
+
+<p>Alright, enough explanation and info-dumping.
+Let&#39;s address the paradox.
+We have two results:</p>
+
+<p>1) Bell tests show that a classical system would need FTL communication to simulate a quantum system. There are useful non-local correlations.</p>
+
+<p>2) FTL communication is impossible in quantum mechanics.</p>
+
+<p>How can these <em>possibly</em> both be true at the same time?
+I mean, they&#39;re not exact logical negations... but it still seems <em>kind of weird</em>.
+Why doesn&#39;t beating Bell tests prove that we can communicate?</p>
+
+<p>The answer is very simple, if unsatisfying: <em>reality ain&#39;t classical</em>.
+If reality was classical, <em>if</em> it matched our preconceptions, Bell tests would in fact prove that reality needs FTL communication to do what it does.
+But it&#39;s not, so it doesn&#39;t.</p>
+
+<p>Different interpretations of quantum mechanics concretely resolve this issue in different ways.
+Some interpretations have a notion of locality and use a different effect to explain the correlations (e.g. <a href="https://en.wikipedia.org/wiki/Many-worlds_interpretation">Many-Worlds</a>, <a href="https://en.wikipedia.org/wiki/Two-state_vector_formalism">Retrocausal</a>).
+Other interpretations just use blatantly non-local effects (e.g. <a href="https://en.wikipedia.org/wiki/Copenhagen_interpretation">Collapse</a>, <a href="https://en.wikipedia.org/wiki/Pilot_wave">Pilot-Wave</a>).
+Still other interpretations just don&#39;t give a damn (i.e. <a href="http://www.mtnmath.com/faq/meas-qm-6.html">SUAC</a>).
+But, ultimately, QM&#39;s postulates and the theorems we&#39;ve discussed force every interpretation to have <em>some</em> amount of weird.
+At best, you get to pick which brand of weird you find the least offensive.</p>
+
+<p>Physicists are telling the truth when they say quantum mechanics is counter-intuitive.
+Quantum mechanical systems have non-local correlations, but you can&#39;t use those correlations for communication.
+You can prove both of those statements, for yourself, from QM&#39;s postulates.
+You&#39;ll still be left with the blunt fact that that&#39;s <em>pretty weird</em>.
+You can learn the math, and how it applies to reality, but you&#39;re never going to find out that the math secretly predicts what evolution operating in the many-many-particles regime has shaped us to expect a-priori about locality.
+Those a-priori expectations are simply mistaken.
+How unfortunate.</p>
+
+<p>(Of course, calling reality weird is a bit funny.
+If anything, reality should set the standard for normal.
+We&#39;re the weird ones with our weird expectations, left pondering and bemused by reality&#39;s taste in regularity.)</p>
+
+<h1>Summary</h1>
+
+<p>Quantum strategies using entanglement can win some coordination games more often than would be possible classically.
+If the universe were classical, this would imply the players were secretly communicating.
+But communication is not one of the coordination games quantum strategies are better at.
+This is counter-intuitive.</p>
+
+<script src="/assets/2015-10-11-Bell-Tests-vs-No-Communication/bell_test_widget.js"></script>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+  <script>
+  var idcomments_acct = '7d0006bd6a016f9a2892cc2ecc64de01';
+  var idcomments_post_id = '/quantum/2015/10/11/Bell-Tests-vs-No-Communication.html';
+  var idcomments_post_url = 'http://algorithmicassertions.com/quantum/2015/10/11/Bell-Tests-vs-No-Communication.html';
+  </script>
+  <span id="IDCommentsPostTitle" style="display:none"></span>
+  <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+  <noscript>
+    <hr>
+    <font color=red>
+      Comments script blocked. Comments won't work.
+    </font>
+    <br/>
+    Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>intensedebate.com</strong> to fix.
+  </noscript>
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

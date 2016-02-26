@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Entangled States are like Unitary Matrices</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Entangled States are like Unitary Matrices</h1>
+<p class="meta">25 Apr 2015</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Quantum entanglement is legendarily anti-intuitive. Learning the actual math behind entanglement is infinitely more enlightening than reading or watching pop-sci expositions about it... but you&#39;re still left with the question of how to think about entanglement <em>usefully</em> when solving problems.</p>
+
+<p>In this post, I describe one trick for thinking about entanglement. It is not an original trick, but I half-stumbled onto it on my own so I&#39;m going to explain it anyways.</p>
+
+<p><strong>Representing Qubits</strong></p>
+
+<p>One of the hobby programs I work on from time to time is a quantum circuit simulator. It lets you drag and drop quantum gates onto a circuit, and shows representations of the output state (among other things).</p>
+
+<p>Every quantum system is described by a bunch of complex weights, one for each basis state. You need $2^n$ weights to describe a system with $n$ qubits, because it has $2^n$ basis (i.e. classical) states. This makes visually representing quantum states with more than a few qubits difficult, because there&#39;s <em>so many numbers</em>.</p>
+
+<p>The first thing I tried, for visually representing the weights of the circuit&#39;s output in my simulator, was just a column vector. Each complex number was represented with an oriented circle, and I arranged them vertically in binary order (i.e. from $\ket{0000}$ to $\ket{1111}$). This was problematic, even with just four qubits. Not only was it hard to figure out which weight was where, the available space was used poorly due to the column being thin. So I re-arranged the column into a grid.</p>
+
+<p>Arranging things into a grid turned out better than I expected. Suddenly, operations on half of the qubits had row-wise effects while operations on the other half had column-wise effects. I started using this as a mnemonic tool. When playing with circuits that involved two parties, I&#39;d make distinguishing Alice&#39;s effects from Bob&#39;s effects easy by giving Alice the row-wise qubits and Bob the column-wise qubits.</p>
+
+<p>Eventually, I noticed that the state grid acted kind of like a matrix. If I had just created an entangled pair of qubits, and applied a gate to one of the qubits, the state would look like the matrix for that gate! And adding another gate multiplied the &quot;matrix&quot; by the next gate (sortof)! I even got some use out of this: it helped me guess what <a href="http://strilanc.com/quantum/2014/12/06/Perfect-Symmetry-Breaking-with-Quantum-Computers.html">symmetry breaking would look like</a>.</p>
+
+<p>Months later, thanks to learning from <a href="http://www.amazon.com/Quantum-Computation-Information-Anniversary-Edition/dp/1107002176">Nielsen and Chuang</a> how the <a href="http://en.wikipedia.org/wiki/Schmidt_decomposition">Schmidt Decomposition</a> related to the <a href="http://en.wikipedia.org/wiki/Singular_value_decomposition">Singular Value Decomposition</a> and entanglement, I came to understand what was going with my &quot;matrix states&quot;.</p>
+
+<p><strong>State Times Operation</strong></p>
+
+<p>Consider the state $S_0 = a \ket{00} + b \ket{10} + c \ket{01} + d \ket{11}$, represented as the matrix $Grid(S_0) = \begin{bmatrix} a &amp; b \\ c &amp; d \end{bmatrix}$. What happens when we apply an operation $U = \begin{bmatrix} e &amp; f \\ g &amp; h \end{bmatrix}$ to the first qubit of $S_0$? (The first qubit is the row-wise one.)</p>
+
+<p>Running the math:</p>
+
+<p>$S_1 = (U \otimes I) \cdot S_0$</p>
+
+<p>$= \parens{ U \begin{bmatrix} a \\ b \end{bmatrix} } \otimes \ket{0} + \parens{ U \begin{bmatrix} c \\ d \end{bmatrix} } \otimes \ket{1}$</p>
+
+<p>$= \begin{bmatrix} ea + bf \\ ag + bh \end{bmatrix} \otimes \ket{0} + \begin{bmatrix} ec + df \\ cg + dh \end{bmatrix} \otimes \ket{1}$</p>
+
+<p>$= (ea + bf) \ket{00} + (ag + bh) \ket{10} + (ec + df) \ket{01} + (cg + dh) \ket{11}$</p>
+
+<p>Rearranging the final state into a matrix, we find that $Grid(S_1) = \begin{bmatrix} ea + bf &amp; ag + bh \\ ec + df &amp; cg + dh \end{bmatrix}$. This also happens to be equal to $Grid(S_0) \cdot U^T$. We can compute the results of applying the single-qubit operation while avoiding the tensor product! The same phenomenon occurs when applying $U$ to the second qubit, except there&#39;s no transpose and the multiplication happens on the other side: $Grid(S_2) = U \cdot Grid(S_0)$.</p>
+
+<p>By representing the state as a matrix, we&#39;ve simplified how we apply operations. Operating on the first qubit (the row-wise one) is equivalent to post-multiplying the state matrix by the transpose of the operation. Operating on the second qubit (the column-wise one) is equivalent to pre-multiplying the state matrix by the operation. We can even represent some multi-qubit operations (e.g. controlled-nots correspond to flipping the bottom row or right column), but we won&#39;t be using any in this post.</p>
+
+<p>Personally, I find it fascinating and useful that the operations simplify like that. Thinking about the simplified operations makes it dead obvious why operations on different qubits must commute (they&#39;re accumulating on opposite sides). It also makes it much easier to reason about the states you can reach from some starting state... in fact, let&#39;s do that. Let&#39;s consider how the single-qubit operations behave when starting from two different states: an unentangled classical &quot;lonely corner&quot; state $\begin{bmatrix} 1 &amp; 0 \\ 0 &amp; 0 \end{bmatrix}$ and a completely entangled &quot;shared diagonal&quot; state $\begin{bmatrix} \sqrt{0.5} &amp; 0 \\ 0 &amp; \sqrt{0.5} \end{bmatrix}$.</p>
+
+<p><strong>Case 1: Lonely Corner</strong></p>
+
+<p>When starting in the matrix state $S_0 = \begin{bmatrix} 1 &amp; 0 \\ 0 &amp; 0 \end{bmatrix}$, what kinds of states can we reach by operating independently on the first and second qubits?</p>
+
+<p>I made a little javascript widget for you to experiment with. See what you can reach by rotating and phasing both qubits. In particular, see if you can reach the entangled shared diagonal state:</p>
+
+<!-- jQuery 2.1.0 -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+
+<noscript>
+  <font color=red>
+    jQuery javascript was blocked.
+    Examples may not work.
+  </font>
+  (Allow <strong>ajax.googleapis.com</strong> to fix.)
+  <hr/>
+</noscript>
+
+<p><canvas id="drawCanvas1" width="400px" height="410px" style="border:1px dotted #BBB;"/></p>
+
+<p>Alright, enough toying around, let&#39;s analyze things algebraically.</p>
+
+<p>If we apply $U_1 = \begin{bmatrix} a &amp; b \\ c &amp; d \end{bmatrix}$ to the first qubit and $U_2 = \begin{bmatrix} e &amp; f \\ g &amp; h \end{bmatrix}$ to the second qubit (we can always merge multiple operations by multiplying them together, so this is w.l.o.g), we&#39;ll get:</p>
+
+<p>$S_f = U_2 S_0 U_1^T$</p>
+
+<p>$= \begin{bmatrix} e &amp; f \\ g &amp; h \end{bmatrix} \begin{bmatrix} 1 &amp; 0 \\ 0 &amp; 0 \end{bmatrix} \begin{bmatrix} a &amp; c \\ b &amp; d \end{bmatrix}$</p>
+
+<p>$= \begin{bmatrix} e &amp; 0 \\ g &amp; 0 \end{bmatrix} \begin{bmatrix} a &amp; b \\ c &amp; d \end{bmatrix}$</p>
+
+<p>$= \begin{bmatrix} ae &amp; be \\ ag &amp; bg \end{bmatrix}$</p>
+
+<p>$= \begin{bmatrix} e \\ g \end{bmatrix} \begin{bmatrix} a &amp; b \end{bmatrix}$</p>
+
+<p>We find that 1) two of the four coefficients from each operation get discarded, and that 2) the resulting state matrix can be described with just two complex ratios (plus a global phase factor that doesn&#39;t matter). The horizontal ratio is determined by operations on the first qubit, the vertical ratio is determined by the operations on the second qubit, and that&#39;s it.</p>
+
+<p>Examples of the kinds of states we can reach include $\begin{bmatrix} \sqrt{0.5} &amp; \sqrt{0.5} \\ 0 &amp; 0 \end{bmatrix}$, $\begin{bmatrix} 0.6 &amp; 0.8 \\ 0 &amp; 0 \end{bmatrix}$, $\begin{bmatrix} \sqrt{0.5} &amp; 0 \\ -\sqrt{0.5} &amp; 0 \end{bmatrix}$, and $\begin{bmatrix} 0.5 &amp; 0.5i \\ 0.5i &amp; -0.5 \end{bmatrix}$.</p>
+
+<p>It&#39;s impossible to reach the shared diagonal state from the lonely corner state via independent operations, because the shared diagonal state can&#39;t be factored into vertical and horizontal ratios.</p>
+
+<p><strong>Case 2: Shared Diagonal</strong></p>
+
+<p>Now let&#39;s try starting from the matrix state $S_0 = \begin{bmatrix} \sqrt{0.5} &amp; 0 \\ 0 &amp; \sqrt{0.5} \end{bmatrix}$ and exploring.</p>
+
+<p>If you check closely, you&#39;ll notice the system behaves differently in a lot of little ways. For example, there are still states where having both qubits rotating doesn&#39;t change the size of the circles much... but they&#39;re in a different place than they were in the lonely corner case (finding them is left as an exercise for the reader):</p>
+
+<p><canvas id="drawCanvas2" width="400px" height="410px" style="border:1px dotted #BBB;"/></p>
+
+<p>Let&#39;s analyze the situation algebraically, again. We apply $U_1$ to the first qubit and $U_2$ to the second qubit. We get:</p>
+
+<p>$S_f = U_2 S_0 U_1^T$</p>
+
+<p>$= U_2 \begin{bmatrix} \sqrt{0.5} &amp; 0 \\ 0 &amp; \sqrt{0.5} \end{bmatrix} U_1^T$</p>
+
+<p>$= U_2 \sqrt{0.5} I U_1^T$</p>
+
+<p>$= \sqrt{0.5} U_2 U_1^T$</p>
+
+<p>Well, that&#39;s interesting. The starting state is a unitary matrix (times $\sqrt{0.5}$), and all the operations correspond to multiplying the state by a unitary matrix, so the final state is also going to be a unitary matrix (times $\sqrt{0.5}$).</p>
+
+<p>Unlike in the lonely corner case, none of the operations&#39; matrix coefficients are being discarded. Also, the effects of the operations are no longer orthogonal. Instead of one qubit controlling the horizontal, and the other the vertical, they both control it all. Anything Alice does to the first qubit, Bob can undo by applying the appropriate counter-operation to the second qubit. Or Bob can apply the same effect as Alice, effectively squaring the operation. Or Alice, if she knows what Bob will do, can put the system into any (unitary) final state she desires.</p>
+
+<p>Given the above facts, what&#39;s something interesting we might be able to do in the shared diagonal case that we couldn&#39;t do in the lonely corner case? The first thing that jumps to my mind is that Alice can put <em>four</em> numbers into the state now, instead of <em>two</em>. That might let us encode more information... wait, that&#39;s <a href="http://en.wikipedia.org/wiki/Superdense_coding">superdense coding</a>! Neat.</p>
+
+<p><strong>Conclusions and Notes</strong></p>
+
+<p>In 2 qubit non-entangled systems, the state acts like a matrix made by combining two complex ratios. The ratios are controlled independently and orthogonally by operations on either side.</p>
+
+<p>In 2 qubit entangled systems, the state acts like a unitary matrix. All of the matrix coefficients are controlled by both sides, with overlapping effects. You can move effects between sides, if it&#39;s convenient, when designing circuits. Sides can undo or square each others&#39; effects.</p>
+
+<p>Systems that are partially entangled, e.g. $\begin{bmatrix} 0.8 &amp; 0 \\ 0 &amp; 0.6 \end{bmatrix}$, can be understood as a linear combination of non-entangled and entangled. The non-entangled and entangled states are kind of like &quot;Singular-Value-Decomposition basis states&quot;. Larger systems, with multiple qubits per party (but still just two parties), have more SVD basis states. The SVD is useful as a measure of entanglement because unitary operations preserve it.</p>
+
+<p>This all breaks down if you have more than two parties.</p>
+
+<script src="/assets/2015-04-27-Entangled-States-are-like-Unitary-Matrices.js"></script>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

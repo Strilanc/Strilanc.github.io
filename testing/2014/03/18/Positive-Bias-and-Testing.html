@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Positive Bias and Testing</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Positive Bias and Testing</h1>
+<p class="meta">18 Mar 2014</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Recently, I watched the YouTube video <a href="http://youtu.be/vKA4w2O61Xo">&quot;Can you solve this?&quot;</a>. In the video, Veritaseum (a science educator) poses a puzzle to people he is interviewing. They have to figure out a secret rule he is using to accept/reject number sequences. They can test sequences, to see if he accepts or rejects them, and he gets them started by saying his rule accepts the sequence $1,2,4$.</p>
+
+<p>People immediately catch on to the multiplying-by-two pattern in the hint, try a few sequences that follow the rule (e.g. $3,6,12$ and $16,32,64$), then go with that guess.</p>
+
+<p>And so the trap closes: they only tested sequences <em>they expected to be accepted</em>. They never checked that $[0,0,0]$ or $[1,2,3]$ or $[-1,\pi,i,4]$ are actually rejected, so they never realized the real rule is <em>more general</em> than the first rule that came to mind.</p>
+
+<p>This tendency to check positive predictions, instead of negative predictions, is known as <a href="http://lesswrong.com/lw/iw/positive_bias_look_into_the_dark/">positive bias</a>. It&#39;s one of the many things you should keep in mind when writing tests.</p>
+
+<p><strong>Equality</strong></p>
+
+<p>Suppose I make a custom case-insensitive string type for C#, that works exactly like a normal string, except all comparison operations ignore upper/lower casing. I ask you to test the equality operators. You write some tests:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">assert((CaselessString)&quot;&quot; == (CaselessString)&quot;&quot;);
+assert((CaselessString)&quot;&quot; != (CaselessString)&quot;a&quot;);
+assert((CaselessString)&quot;A&quot; == (CaselessString)&quot;A&quot;);
+assert((CaselessString)&quot;A&quot; == (CaselessString)&quot;a&quot;);
+assert((CaselessString)&quot;a&quot; == (CaselessString)&quot;A&quot;);
+assert((CaselessString)&quot;a&quot; != (CaselessString)&quot;b&quot;);
+...
+</code></pre></div>
+<p>The tests all pass. But then you notice some compiler warnings and take a look at the code:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">public static bool operator==(CaselessString s1, CaselessString s2) {
+    return s1._innerText.ToUpper() == s1._innerText.ToUpper();
+}
+public static bool operator!=(CaselessString s1, CaselessString s2) {
+    return s1._innerText.ToUpper() != s2._innerText.ToUpper();
+}
+</code></pre></div>
+<p>See it? The result of <code>==</code> is always <code>true</code>, because <code>s1</code> is being compared against itself instead of <code>s2</code>!</p>
+
+<p>The tests didn&#39;t catch the problem because they&#39;re not testing any cases where the operators should return false. We missed an important negative case, because we were thinking in terms of satisfying instead of rejecting. We implicitly assumed <code>==</code> was the opposite of <code>!=</code> instead of testing it (or using a language that enforced that fact).</p>
+
+<p><strong>Authentication</strong></p>
+
+<p>Let&#39;s look at another example: authenticating packets. Suppose you write some code to compute the <a href="http://en.wikipedia.org/wiki/Hash-based_message_authentication_code">HMAC</a> of a packet&#39;s payload, and compare it against the HMAC included in the packet:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">bool Packet::isAuthentic() {
+    return memcmp(hmac(contents.payload, secretKey), contents.hmac, 16/8) == 0;
+}
+</code></pre></div>
+<p>You also write some tests:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">assert(Packet(somePayload, someCorrectHmac).isAuthentic());
+assert(!Packet(somePayload, allZeroes).isAuthentic());
+assert(Packet(someOtherPayload, someOtherCorrectHmac).isAuthentic());
+...
+</code></pre></div>
+<p>And the tests pass.</p>
+
+<p>Notice that we do have a negative test to make sure the code is not just <code>return true</code>. That&#39;s a very good thing (it&#39;s one of the many ways Apple&#39;s <a href="http://www.wired.com/threatlevel/2014/02/gotofail/"><code>goto fail</code> security bug in iOS</a> could have been caught).
+ Unfortunately, there&#39;s a typo that breaks the code. The size of the data being compared should be <code>160/8</code>, not <code>16/8</code>. The odds of a bad packet getting through should be one in a trillion trillion trillion trillions, but is instead more like one in a hundred thousand. The authentication only depends on the first two bytes of the HMAC, instead of all twenty.</p>
+
+<p>We had a test to reject naive programs like <code>return true // todo: implement</code>, but no tests to reject programs where the size given to memcmp was simply typo&#39;d. Or tests to reject programs using <code>strncmp</code> <a href="http://rdist.root.org/2008/03/25/wii-hacking-and-the-freeloader/">instead of</a> <code>memcmp</code>. Or to reject programs that don&#39;t depend on all the bytes for other reasons. Or programs that <a href="http://stackoverflow.com/a/2775046/52239">accidentally assign</a> <code>contents.payload</code> instead of comparing against it.</p>
+
+<p>And that&#39;s my trick for avoiding positive bias: come up with wrong (but nearby) programs, and write tests to reject them.</p>
+
+<p><strong>Summary</strong></p>
+
+<p>Think of tests not just in terms of <em>what should happen</em>, but in terms of <em>what could be wrong</em>. Come up with plausible flawed implementations, and write tests to reject them.</p>
+
+<hr>
+
+<p><a href="http://www.reddit.com/r/programming/comments/20sxmn/positive_bias_and_testing/">Discuss on Reddit</a></p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

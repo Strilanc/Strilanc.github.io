@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>[Un]popular Qubits #2: The Quantum Zeno Effect</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">[Un]popular Qubits #2: The Quantum Zeno Effect</h1>
+<p class="meta">26 Oct 2015</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>This month, a team of scientists published <a href="http://journals.aps.org/prl/abstract/10.1103/PhysRevLett.115.140402">a paper</a> about an experiment related to the <a href="https://en.wikipedia.org/wiki/Quantum_Zeno_effect">quantum zeno effect</a>.
+There were lots of pop science articles about it and, of course, they caused as much confusion as clarity.</p>
+
+<p>One of the pervasive misconceptions people have about quantum mechanics is that &quot;observation&quot; means &quot;watching&quot;, i.e. a conscious human looking in the general direction of an experiment.
+It&#39;s important to clear up this misconception when talking about the quantum zeno effect, because it uses repeated measurements (a.k.a. observations) to control a quantum system.</p>
+
+<p>Journalists worry about their audience taking the wrong message away, so they are careful to clarify this kind of oft-misunderstood detai-
+Hahaha, of course not.
+Instead of informing people, let&#39;s use analogies that reinforce their existing misconceptions!
+Turns out &quot;<a href="http://www.news.cornell.edu/stories/2015/10/zeno-effect-verified-atoms-wont-move-while-you-watch">Atoms Won&#39;t Move While You Watch</a>&quot; because of the <a href="http://gizmodo.com/quantum-weeping-angel-effect-freezes-atoms-in-place-1730914717">Quantum &quot;Weeping Angel&quot; Effect</a>.
+And don&#39;t forget to quip about watched pots refusing to boil!</p>
+
+<p><em>*Sigh*</em></p>
+
+<p>I&#39;m exagerating a bit, and not all of the coverage was bad, but for the purpose of feeling clean again let&#39;s discuss the quantum zeno effect in more detail.</p>
+
+<h1>Controlling With Measurement</h1>
+
+<p>When a quantum state is measured twice in quick succession in the same basis, it doesn&#39;t have much time to change between the two measurements.
+This prevents it from getting very far from the state it was just measured to be in.
+So the second measurement has a very high probability of getting the same result again, and thus collapsing the quantum state back onto the same measured state that the first measurement did.</p>
+
+<p>If you do a third measurement very soon after the second measurement, the same thing happens again.
+The quantum state will be close to where the second measurement collapsed it, you&#39;ll get the same result a third time with high probability, and re-collapse the quantum state onto the same original measured state yet again.
+As long as you measure fast enough and frequently enough, you can keep this same-result-with-high-probability chain going indefinitely.</p>
+
+<p>To understand what&#39;s happening in mathematical detail, let&#39;s look at what happens when we pass photons through a series of slightly rotated <a href="https://en.wikipedia.org/wiki/Polarizer">polarizer filters</a>.</p>
+
+<p>For our purposes here, passing a photon through a polarizer filter is a measurement of the photon&#39;s polarization.
+If the photon&#39;s polarization matches the filter, it goes right through without being affected.
+If the photon&#39;s polarization is perpendicular to the filter&#39;s direction, the photon is absorbed.
+Photons with intermediate polarization directions, between parallel and perpendicular, pass through probabilistically.
+More exactly, a photon whose polarization deviates from the filter&#39;s by an angle $\theta$ will pass through the filter with probability $\cos^2 \theta$ (and, after passing through, the photon&#39;s polarization will be parallel to the filter&#39;s).</p>
+
+<p>Suppose we have a source of horizontally polarized photons, like sunlight reflected off of a lake at a shallow angle.
+If we pass the horizontally polarized light through a vertical filter, it will all be blocked.
+However, if we first pass the photons through a diagonal polarizer, <a href="https://www.youtube.com/watch?v=gm2LCsM_S5o">then some of the light will get through</a>.
+Assuming the diagonal polarizer is 45° off of horizontal, it will allow $\cos^2 45° = 50\%$ of the horizontally polarized photons to continue towards the vertical polarizer.
+Another half of the photons will be lost at the vertical polarizer, because they were diagonally polarized (45° off of vertical) by the diagonal polarizer.</p>
+
+<p>By using more and more filters, with finer and finer angular steps from horizontal to vertical, we can let through more and more light.
+If we have a series of nine polarizers stepping from horizontal to vertical in increments of 10°, then $(\cos^2 10°)^9 \approx 75\%$ of the photons will make it through.
+If we use ninety polarizers, and 1° steps, the survival rate increases to $(\cos^2 1°)^{90} \approx 97\%$ of the photons.</p>
+
+<p>In general, with $n$ polarizer steps, the probability of an incoming horizontally-polarized photon surviving the whole series of filters (and coming out vertically polarized) is $(\cos^2 \frac{90°}{n})^n$.
+As $n$ increases, the survival probability converges towards certainty:</p>
+
+<p><img src="/assets/2015-10-26-Quantum-Zeno-Effect/Step_Graph.png"/></p>
+
+<p>This is really surprising.
+We&#39;re <em>rotating</em> the polarization by <em>filtering</em> it!
+And we&#39;re not losing any photons in the process!</p>
+
+<p>Before I&#39;d read about the zeno effect, I would have never expected this to work.
+Obviously the filters would have to remove a non-negligible number of photons, otherwise how could they do any steering?
+Surely there&#39;d be <em>some</em> non-zero proportion of necessary loses here.</p>
+
+<p>Nope.
+I&#39;d have been dead wrong.
+The zeno effect is precisely the fact that you can steer states, with negligible loses, by filtering or measuring.</p>
+
+<p>(<em>Side rambling: My guess would have been that you could save at most $\frac{1}{e}$ of the photons, because that&#39;s what $(1-\frac{1}{n})^n$ limits to.
+Actually, $(cos \frac{1}{n})^{2n^2}$ also limits to $\frac{1}{e}$ and that&#39;s quite similar to the actual expression.
+Interesting.
+But still wrong.</em>)</p>
+
+<p>It&#39;s common to state the zeno effect in terms of an unchanging measurement stabilizing a time-varying state, instead of vice-versa like in the polarizer example (where a time-varying measurement causes a stable state to change).
+The example could be made &quot;more typical&quot; by using a <a href="https://en.wikipedia.org/wiki/Polarization_rotator">polarization rotator</a> material to make the photon&#39;s polarization rotate, then using closely spaced horizontal polarizer filters to hold the state stable against the rotation... but I think you get the idea.
+The underlying math is the same in both cases.</p>
+
+<h1>Summary</h1>
+
+<p>You can hold a time-varying quantum state stable, and even steer it, by frequently measuring it.</p>
+
+<p>The quantum zeno effect is a good counter-example to the idea that measurements unavoidably perturb quantum systems; they unavoidably <em>affect</em> the system, but don&#39;t have to perturb it.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+  <script>
+  var idcomments_acct = '7d0006bd6a016f9a2892cc2ecc64de01';
+  var idcomments_post_id = '/quantum/2015/10/26/Quantum-Zeno-Effect.html';
+  var idcomments_post_url = 'http://algorithmicassertions.com/quantum/2015/10/26/Quantum-Zeno-Effect.html';
+  </script>
+  <span id="IDCommentsPostTitle" style="display:none"></span>
+  <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+  <noscript>
+    <hr>
+    <font color=red>
+      Comments script blocked. Comments won't work.
+    </font>
+    <br/>
+    Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>intensedebate.com</strong> to fix.
+  </noscript>
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

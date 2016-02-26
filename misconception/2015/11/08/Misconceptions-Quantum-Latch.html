@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>My Misconceptions: The Quantum Latch</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">My Misconceptions: The Quantum Latch</h1>
+<p class="meta">08 Nov 2015</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>When it comes to quantum things, self-learning can be a tricky business.
+A strange surprising answer <em>could</em> be due to quantum mechanics being counter-intuitive... or it could be because you made a stupid mistake in line 3.
+There&#39;s a good chance of fooling yourself, when you can&#39;t tell the difference between the odd and the wrong, between apparent paradoxes and actual paradoxes.</p>
+
+<p>As a person who&#39;s trip into learning quantum things was initially ad-hoc and lacking in textbooks, I ran into this problem several times.
+Let&#39;s look at one encounter, where I accidentally ate some probability.</p>
+
+<h1>Playing with Photons</h1>
+
+<p>My first foray into actually understanding quantum things was toying, on paper, with optical interferometers.
+Starting that way wasn&#39;t intentional, I just happened to come across a <a href="http://lesswrong.com/lw/pd/configurations_and_amplitude/">straightforward walkthrough</a> of computing what happens for a given a setup of beam splitters, mirrors, and detectors.
+Knowing the math turned something confusing into something sensible, so I started exploring.</p>
+
+<p>(<em>Side note: actually I did take a modern physics course in university earlier on, but I don&#39;t remember the QM part being particularly enlightening.
+I remember it more like... &quot;here&#39;s the calculus problem that corresponds to situation X&quot;.
+Maybe the core ideas were there, but I didn&#39;t catch on to them at that point.</em>)</p>
+
+<p>One of the interesting setups I tried was <em>making a loop</em>: using three mirrors and a beam splitter to send a photon round and round.
+The idea was that photons would decay out of the system instead of leaving immediately.
+Here&#39;s a simple interferometer with a loop:</p>
+
+<p><img src="/assets/2015-11-09-Misconceptions-Quantum-Latch/optical_diagram.png" style="height: 256px;"/></p>
+
+<p>A photon trapped in the loop effectively has a (very short) half-life.
+Every time it goes around, there&#39;s a 50/50 chance of escape.
+You can tell whether or not it&#39;s escaped yet by using the collector.</p>
+
+<p>If the collector was a normal detector, e.g. one that makes an audible click when hit by a photon, then hearing the click would let you know that the photon escaped.</p>
+
+<p><em><strong>But I didn&#39;t want the collector to be a normal detector.</strong></em></p>
+
+<p>I was interested in making the photon&#39;s various possible paths, which had different arrival times, interfere with each other.
+So I assumed a different kind of collector, which I&#39;ll call a &quot;quantum latch&quot; here.
+The quantum latch is very simple: it stores a qubit, and whenever a photon hits (and is absorbed by) the latch, the qubit is toggled.</p>
+
+<p>Spoiler alert: the previous paragraph describes an impossible device.
+But for now let&#39;s continue like I did, blissfully ignorant, and see what symptoms result.</p>
+
+<p>The basic operational idea behind the latch is that, by measuring its qubit, you can find out whether or not the photon was absorbed yet.
+Is the qubit still Off, as it was before you released the photon?
+Then the photon was still in the loop when you measured.
+By running multiple experiments and measuring the latch at different times, you can track how the photon decays out of the loop and into the latch&#39;s qubit.</p>
+
+<h1>Decaying Probabilities</h1>
+
+<p>Assuming the collector in the above diagram is a quantum latch, the optical system simplifies down to three basic states: photon emitted from source (&quot;source&quot;), photon trapped in loop (&quot;loop&quot;), and photon caught by latch (&quot;sink&quot;).</p>
+
+<p>The flow of amplitudes between the states is not overly complicated: photons gain a phase factor of $i$ whenever they&#39;re reflected, and get evenly split between the passed-through and reflected-by cases when encountering a beam splitter.
+Here&#39;s a markov diagram of the amplitude flows:</p>
+
+<p><img src="/assets/2015-11-09-Misconceptions-Quantum-Latch/markov_diagram.png"/></p>
+
+<p>Initially, at step 0, all of the photon-is-here amplitude is in the &quot;source&quot; state.
+Then half of it passes through the beam splitter unaffected and moves into &quot;loop&quot;, while the other half gets reflected by the beam splitter into &quot;sink&quot; (gaining a phase factor of $i$ from the reflection).
+Now amplitude in &quot;loop&quot; is reflected three times, and half of it passes through to &quot;sink&quot; (net phase factor $i^3 = -i$) with the other half being reflected back into the loop with no net phase factor because $i^4=1$.
+Once the system is in the sink state, it stays there.</p>
+
+<p>Tracking the amplitude flows over several steps, and calculating the probability of finding the system in the sink state (by squaring the magnitude of its amplitude), shows something <em>odd</em> is happening:</p>
+
+<style>
+  #detection-table td, #detection-table th {
+    border: 1pt solid black;
+    padding: 0 5px;
+  }
+  #detection-table th {
+    text-align: center;
+    padding: 5px;
+  }
+</style>
+
+<table id="detection-table" style="border: 1pt solid black; border-collapse: collapse; border-spacing: 0;">
+  <tr><th>Step</th> <th>State (note: $s = \sqrt{\frac{1}{2}}$)</th> <th>Sink State Probability</th></tr>
+  <tr><td>0</td><td>$1 \ket{\text{source}} + 0 \ket{\text{loop}} + 0 \ket{\text{sink}}$</td><td>0%</td></tr>
+  <tr><td>1</td><td>$0 \ket{\text{source}} + s \ket{\text{loop}} + i s \ket{\text{sink}}$</td><td>50%</td></tr>
+  <tr><td>2</td><td>$0 \ket{\text{source}} + s^2 \ket{\text{loop}} + (i s - i s^2) \ket{\text{sink}}$</td><td>4.3%</td></tr>
+  <tr><td>3</td><td>$0 \ket{\text{source}} + s^3 \ket{\text{loop}} + (i s - i s^2 - i s^3) \ket{\text{sink}}$</td><td>2.1%</td></tr>
+  <tr><td>4</td><td>$0 \ket{\text{source}} + s^4 \ket{\text{loop}} + i (s - s^2 - s^3 - s^4) \ket{\text{sink}}$</td><td>15.7%</td>
+  <tr><td colspan="3" style="text-align: center;">...</td><tr/>
+  <tr>
+    <td>$n$</td>
+    <td>$0 \ket{\text{source}} + s^n \ket{\text{loop}} + i \parens{s - \sum_{k=2}^n s^k} \ket{\text{sink}}$</td>
+    <td><img src="/assets/2015-11-09-Misconceptions-Quantum-Latch/detection_plot.png" style="width: 300px"/></td>
+  </tr>
+  <tr><td colspan="3" style="text-align: center;">...</td><tr/>
+  <tr>
+    <td>$\infty$</td>
+    <td>
+      $0 \ket{\text{source}} + s^\infty \ket{\text{loop}} + i \parens{s - \sum_{k=2}^\infty s^k} \ket{\text{sink}}$<br/>
+      $= i \parens{s + 1 + s - \sum_{k=0}^\infty s^k} \ket{\text{sink}}$<br/>
+      $= i \parens{2s + 1 - \frac{1}{1-s}} \ket{\text{sink}}$<br/>
+      $= i \parens{2s + 1 - (2s + 2)} \ket{\text{sink}}$<br/>
+      $= -i \ket{\text{sink}}$
+    </td>
+    <td>100%</td>
+  </tr>
+</table>
+
+<p>Do you see it?
+The probability <em>goes down</em> for steps 2 and 3!
+Intuitively, the probability that the photon has escaped from the loop should be increasing monotonically towards certainty... but instead it dips before slowly climbing to 100%.
+Is the photon leaking <em>back into</em> the loop?
+How is the latch <em>doing this</em>?</p>
+
+<p>(Even more serious problem: the total probability at each step doesn&#39;t add up to 100%!
+But that&#39;s not what I noticed at the time.)</p>
+
+<p>I was initially tempted to come up with crazy physical interpretations of what&#39;s happening, or to dismiss the thought experiment&#39;s outcome as just typical quantum weirdness, but the truth is much more mundane: weird things are happening because <em>I was dumb and broke the rules</em>.
+The supposed &quot;quantum latch&quot; is a malformed idea, disallowed by the postulates of quantum mechanics.</p>
+
+<h1>Oops</h1>
+
+<p>The evolution of a quantum state is guaranteed to be <em>reversible</em>, because <a href="http://scale.engin.brown.edu/classes/EN2912C/lecture17.pdf">the evolution is always unitary</a>.
+(Even measurement can be thought of in a reversible way, though it&#39;s typically not thought of that way.)</p>
+
+<p>With that in mind, suppose we&#39;re working with our source/loop/sink system and happen to know that the system is currently in the $\ket{\text{sink}}$ state.
+We want to move backwards by one step; what is the preceeding state?</p>
+
+<p>One possible preceeding state is $\ket{\text{sink}}$, since amplitude stays in $\ket{\text{sink}}$ once it&#39;s there.
+But there&#39;s another valid solution, based on interfering combined contributions from the source and loop states: $i \frac{1}{\sqrt{2}} \ket{\text{source}} - i \frac{1}{\sqrt{2}} \ket{\text{loop}}$ also works as a preceeding state.
+Two distinct possible preceeding states are getting mapped to the same final state; clearly this is not reversible!</p>
+
+<p>The root problem is my supposed quantum latch <em>absorbing the photon</em>.
+When you run time backwards, and you know a photon was absorbed by the latch, the state of the system doesn&#39;t say <em>when</em> to un-absorb that photon.
+Was it absorbed a nanosecond ago? Twenty years ago?
+You can&#39;t tell, and this prevents you from reversing the evolution.</p>
+
+<p>So the quantum latch is impossible; it violates the unitarity postulate of quantum mechanics.
+In fact, it exemplifies <em>why</em> the evolution has to be unitary: intermediate steps had possibilities that didn&#39;t add up to 100%!
+It was just an unlucky coincidence that the layout I chose obscured the problem by converging to a 100%-photon-in-sink state, instead of something ridiculous like 256%-photon-in-sink.
+That&#39;s the kind of thing that happens when your quantum operations don&#39;t preserve total squared magnitude.</p>
+
+<p>One way to fix the problem with the latch is to have it store the photon absorption times.
+For example, we could have the latch store an integer instead of a bit, have the photon trigger the 0-to-1 transition, and increment non-zero values after each time step.
+Then, when running things backwards, we know the decrement from 1 to 0 is when the photon is un-absorbed.
+All these new latch count states would distinguish between early-arrival paths and late-arrival paths, preventing interference between them... which may be boring, but at least the probability of escaping the loop won&#39;t see-saw.</p>
+
+<h1>Summary</h1>
+
+<p>Quantum state transitions must be reversible.</p>
+
+<p>A device that absorbs a photon to flip a qubit is impossible, because time-of-arrival information is lost and that breaks reversibility.</p>
+
+<p>When you break reality&#39;s rules without realizing, weird things happen.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+  <script>
+  var idcomments_acct = '7d0006bd6a016f9a2892cc2ecc64de01';
+  var idcomments_post_id = '/misconception/2015/11/08/Misconceptions-Quantum-Latch.html';
+  var idcomments_post_url = 'http://algorithmicassertions.com/misconception/2015/11/08/Misconceptions-Quantum-Latch.html';
+  </script>
+  <span id="IDCommentsPostTitle" style="display:none"></span>
+  <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+  <noscript>
+    <hr>
+    <font color=red>
+      Comments script blocked. Comments won't work.
+    </font>
+    <br/>
+    Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>intensedebate.com</strong> to fix.
+  </noscript>
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

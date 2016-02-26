@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Perfect Symmetry Breaking with Quantum Computers</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Perfect Symmetry Breaking with Quantum Computers</h1>
+<p class="meta">06 Dec 2014</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p><strong>Symmetry Breaking</strong></p>
+
+<p>One of the many primitives used by <a href="http://en.wikipedia.org/wiki/Distributed_algorithm">distributed algorithms</a> is symmetry breaking. A symmetry breaking primitive takes two identical nodes, does its thing, and ends up assigning true to one node and false to the other (and the nodes agree about who got which value).</p>
+
+<p>Symmetry breaking algorithms typically rely on some form of randomness. For example, you may have a sequence of rounds where each node flips a coin then broadcasts the result. Whenever the coin flips agree, that&#39;s a failure and the nodes try again. Once the coins finally differ, the node that flipped tails gets true and the other gets false. To avoid incurring many round trip delays due to failures, you can batch hundreds of flips into each message.</p>
+
+<p>The fact that symmetry breaking algorithms have &quot;if it fails then retry&quot; steps is not an issue in practice, but it does nag at me. It would be so much <em>cleaner</em> if there was a way to guarantee completion after a single round. That&#39;s what was on my mind as I walked home from work yesterday, anyways.</p>
+
+<p>Then it occurred to me... quantum computers are able to better coordinate in a lot of esoteric cases... maybe this is one of those cases?</p>
+
+<p><strong>Playing Around</strong></p>
+
+<p>The approach I took to solving this problem was... let&#39;s call it informal. I just made a bunch of guesses about what the solution would probably look like, and then toyed around.</p>
+
+<p>I knew that the circuit I was looking for had to satisfy two properties:</p>
+
+<ol>
+<li>Symmetry. The same gates had to be applied to each side. Anything that happened to the A1 and A2 wires had to happen to the B1 and B2 wires.</li>
+<li>Anti-correlation. The output had to have no amplitude in the states where A1 and B1 agreed.</li>
+</ol>
+
+<p>I guessed that the solution would probably start with each side making a <a href="http://en.wikipedia.org/wiki/Bell_state">Bell pair</a> (because, let&#39;s be honest, every distributed quantum algorithm starts by making bell pairs). Then they&#39;d probably have to swap half of their pairs, and do... something?
+With that in mind, I started up my quantum circuit inspector and began dragging gates around (you can try it <a href="http://jsfiddle.net/c4f5z73v/2/">from jsfiddle</a>; source is <a href="https://github.com/Strilanc/Quantum-Circuit-Inspector">on github</a>).
+After about ten minutes I found a solution.</p>
+
+<p><strong>Solution</strong></p>
+
+<p>Here&#39;s the circuit I found:</p>
+
+<p><img src="http://i.imgur.com/SUuBsyk.png" alt="Initial solution"></p>
+
+<p>Reading the circuit from right to left, each side should:</p>
+
+<ol>
+<li>Make a bell pair (requires quantum system).</li>
+<li>Swap half of the bell pair for the other side&#39;s corresponding half (requires quantum network).</li>
+<li>Do a controlled-not.</li>
+<li>Do a controlled-<a href="http://en.wikipedia.org/wiki/Beam_splitter">half-not</a> in the opposite direction.</li>
+<li>A1 and B1 now disagree in all cases. Measure away.</li>
+</ol>
+
+<p>Here&#39;s a cleaned up circuit diagram, which better shows the symmetry:</p>
+
+<p><img src="http://i.imgur.com/EOXIT0q.png" alt="Cleaned up solution"></p>
+
+<p>And here&#39;s a diagram of the amplitudes making up the final state, with cells where A1 and B1 agree never getting any amplitude:</p>
+
+<p><img src="http://i.imgur.com/msvTZDs.png" alt="Output state"></p>
+
+<p>The above solution is completely impractical in practice, what with the not being able to make quantum computers thing. But, if we pretend noise isn&#39;t a thing that exists, it is 100% guaranteed to always finish after just one round and that&#39;s what the goal was. Another nice property the above solution has is that it only requires one qubit exchange. The classical algorithms expect you to send at least two bits on average.</p>
+
+<p>So... if you had billions of symmetry breaks to perform (you don&#39;t), and qubits were just as cheap as bits to send and store (they&#39;re not), and we hoped with all our might (...okay?), this might just be more cost-effective overall.</p>
+
+<p><strong>Worked Solution</strong></p>
+
+<p>Let&#39;s actually go through the solution in detail, tracking the state of the system as it progresses through the circuit. We&#39;ll ignore factors of $\sqrt{2}$ to make things slightly simpler.</p>
+
+<p>The initial state is:</p>
+
+<p>$\left| 0000 \right\rangle$</p>
+
+<p>The first thing each side does is create a bell pair. This causes the first two and last two qubits to be in a uniform superposition of both-on and both-off:</p>
+
+<p>$\left| 0000 \right\rangle$</p>
+
+<p>$\rightarrow_{bell} (\left| 00 \right\rangle + \left| 11 \right\rangle) \otimes (\left| 00 \right\rangle + \left| 11 \right\rangle)$</p>
+
+<p>$= \left| 0000 \right\rangle + \left| 0011 \right\rangle + \left| 1100 \right\rangle + \left| 1111 \right\rangle$ </p>
+
+<p>Now the sides each send their second qubit to the other, effectively swapping their second qubits (this is the only communication step):</p>
+
+<p>$\left| 0000 \right\rangle + \left| 0011 \right\rangle + \left| 1100 \right\rangle + \left| 1111 \right\rangle$</p>
+
+<p>$\rightarrow_{swap} \left| 0000 \right\rangle + \left| 0110 \right\rangle + \left| 1001 \right\rangle + \left| 1111 \right\rangle$ </p>
+
+<p>Next the sides do a controlled not from their kept qubit to the qubit they received, toggling the received qubit whenever the kept qubit is 1:</p>
+
+<p>$\left| 0000 \right\rangle + \left| 0110 \right\rangle + \left| 1001 \right\rangle + \left| 1111 \right\rangle$ </p>
+
+<p>$\rightarrow_{cnot} \left| 0000 \right\rangle + \left| 0111 \right\rangle + \left| 1101 \right\rangle + \left| 1010 \right\rangle$ </p>
+
+<p>Finally, they apply a square-root-of-not a.k.a. beam-splitter a.k.a. 90-degree X rotation gate (sends $\left| 0 \right\rangle$ to $(1-i) \left| 0 \right\rangle + (1+i) \left| 1 \right\rangle$ and $\left| 1 \right\rangle$ to $(1-i) \left| 0 \right\rangle + (1+i) \left| 1 \right\rangle$) to the kept qubit whenever the received qubit is 0:</p>
+
+<p>$\left| 0000 \right\rangle + \left| 0111 \right\rangle + \left| 1101 \right\rangle + \left| 1010 \right\rangle$ </p>
+
+<p>$\rightarrow_{split1} ((1-i) \left| 0000 \right\rangle + (1+i) \left| 0010 \right\rangle) + \left| 0111 \right\rangle + \left| 1101 \right\rangle + ((1-i) \left| 1010 \right\rangle + (1+i) \left| 1000 \right\rangle)$ </p>
+
+<p>$= (1-i) \left| 0000 \right\rangle + (1+i) \left| 0010 \right\rangle + \left| 0111 \right\rangle + \left| 1101 \right\rangle + (1-i) \left| 1010 \right\rangle + (1+i) \left| 1000 \right\rangle$ </p>
+
+<p>$\rightarrow_{split2} (-i \left| 0000 \right\rangle + \left| 1000 \right\rangle) + (\left| 0010 \right\rangle + i \left| 1010 \right\rangle) + \left| 0111 \right\rangle + \left| 1101 \right\rangle \\ + (-i \left| 1010 \right\rangle + \left| 0010 \right\rangle) + (\left| 1000 \right\rangle + i \left| 0000 \right\rangle)$</p>
+
+<p>$= (i-i) \left| 0000 \right\rangle + (1+1) \left| 1000 \right\rangle) + (1+1) \left| 0010 \right\rangle + (i-i) \left| 1010 \right\rangle) + \left| 0111 \right\rangle + \left| 1101 \right\rangle$</p>
+
+<p>$= \left| 1000 \right\rangle + \left| 0010 \right\rangle + \left| 0111 \right\rangle + \left| 1101 \right\rangle$</p>
+
+<p>$= (\left| 1 \_ 0 \_ \right\rangle + \left| 0 \_ 1 \_ \right\rangle) \otimes (\left| \_ 0 \_ 0 \right\rangle + \left| \_ 1 \_ 1 \right\rangle)$</p>
+
+<p>As can be seen above, in the final state the first and third qubits (of which each side has one) always differ.</p>
+
+<p><strong>Existing Work</strong></p>
+
+<p>Given that there are lots of papers on things like <a href="http://arxiv.org/pdf/0904.3945v2.pdf">Fair Distributed Quantum Coin Flipping</a>, which is like symmetry breaking except some of the participants aren&#39;t trustworthy, it&#39;s definitely already known that quantum networks can do a two-node symmetry break with a single qubit exchange. Unfortunately, I can&#39;t link to one of those papers because I can&#39;t <em>find</em> them! In physics, symmetry breaking means something different and those results are swamping out everything else when I search for quantum symmetry breaking algorithms.</p>
+
+<p><strong>Summary</strong></p>
+
+<p>Quantum computers connected by a quantum network only require a single exchanged qubit pair to perform a perfect symmetry break.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
