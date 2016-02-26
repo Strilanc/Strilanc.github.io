@@ -7,6 +7,14 @@
 		<atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>Don&#39;t Use Github Pages&#39; Jekyll Support</title>
+				<description>&lt;p&gt;A few weeks ago, GitHub announced &lt;a href=&quot;https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0&quot;&gt;&amp;quot;GitHub Pages now faster and simpler with Jekyll 3.0&amp;quot;&lt;/a&gt;. I would have titled the post... differently. Something like &amp;quot;Notice: upcoming breaking changes to github pages&amp;quot; or &amp;quot;We don&amp;#39;t understand &lt;a href=&quot;http://www.joelonsoftware.com/articles/APIWar.html&quot;&gt;how important backwards compatibility is&lt;/a&gt;&amp;quot;.&lt;/p&gt; &lt;h1&gt;Simply Breaking Changes&lt;/h1&gt; &lt;p&gt;The &amp;quot;simpler&amp;quot; in the title is bullshit marketing-speak for &amp;quot;removing features&amp;quot;. They dropped support for two Markdown engines:&lt;/p&gt; &lt;blockquote&gt; &lt;p&gt;&lt;strong&gt;Starting May 1st, 2016, GitHub Pages will only support &lt;a href=&quot;http://kramdown.gettalong.org/&quot;&gt;kramdown&lt;/a&gt;, Jekyll&amp;#39;s default Markdown engine.&lt;/strong&gt; If you are currently using &lt;a href=&quot;https://github.com/davidfstr/rdiscount&quot;&gt;Rdiscount&lt;/a&gt; or &lt;a href=&quot;https://github.com/vmg/redcarpet&quot;&gt;Redcarpet&lt;/a&gt; we&amp;#39;ve enabled kramdown&amp;#39;s GitHub-flavored Markdown support by default, meaning kramdown should...</description>
+				<pubDate>Wed, 24 Feb 2016 11:30:00 -0500</pubDate>
+				<link>http://algorithmicassertions.com/meta/2016/02/24/Github-Pages-Breaks-Compatibility.html</link>
+				<guid isPermaLink="true">http://algorithmicassertions.com/meta/2016/02/24/Github-Pages-Breaks-Compatibility.html</guid>
+			</item>
+		
+			<item>
 				<title>[Un]popular Qubits #3: The Quantum Pigeonhole Principle</title>
 				<description>&lt;p&gt;Back in 2014, a preprint titled &amp;quot;&lt;a href=&quot;http://arxiv.org/abs/1407.3194&quot;&gt;The quantum pigeonhole principle and the nature of quantum correlations&lt;/a&gt;&amp;quot; was posted to arXiv by Y. Aharonov et al. This month, the paper was &lt;a href=&quot;http://www.pnas.org/content/113/3/532&quot;&gt;published for real in PNAS&lt;/a&gt;. The media picked up on the result both times, resulting in some choice quotes:&lt;/p&gt; &lt;blockquote&gt; &lt;p&gt;if you check the paths of any pair of the three original electrons, the detector will show no deflection has happened. In other words, you can have three pigeons and two boxes, and yet no two pigeons are ever found in the same box. A linkage must exist,...</description>
 				<pubDate>Sat, 30 Jan 2016 11:30:00 -0500</pubDate>
@@ -76,14 +84,6 @@
 				<pubDate>Sun, 11 Oct 2015 12:30:00 -0400</pubDate>
 				<link>http://algorithmicassertions.com/quantum/2015/10/11/Bell-Tests-vs-No-Communication.html</link>
 				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2015/10/11/Bell-Tests-vs-No-Communication.html</guid>
-			</item>
-		
-			<item>
-				<title>Rule of Thumb: Make Generic Code Value-Agnostic instead of Null-Hostile</title>
-				<description>&lt;p&gt;Nulls are a big source of headaches, to &lt;a href=&quot;http://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare&quot;&gt;put it mildly&lt;/a&gt;. Even the greatest programmers make stupid oversights (just like the greatest mathematicians make sign errors), and the possibility of any and every value being null introduces a whole lot of chances for stupid oversights when programming.&lt;/p&gt; &lt;p&gt;There are lots of strategies and tactics for dealing with the null problem, but in this post I want to talk about one particular tactic, &amp;quot;null-hostile&amp;quot; collections, and why I find it problematic.&lt;/p&gt; &lt;p&gt;A null-hostile collection is a collection that can contain arbitrary values... except for null. When you try to put...</description>
-				<pubDate>Thu, 08 Oct 2015 12:30:00 -0400</pubDate>
-				<link>http://algorithmicassertions.com/opinion/2015/10/08/Make-Generics-Value-Agnostic.html</link>
-				<guid isPermaLink="true">http://algorithmicassertions.com/opinion/2015/10/08/Make-Generics-Value-Agnostic.html</guid>
 			</item>
 		
 	</channel>
