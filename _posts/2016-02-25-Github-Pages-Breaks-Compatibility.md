@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Don't Use Github Pages' Jekyll Support"
-date: 2016-02-24 11:30:00 EST
+date: 2016-02-25 11:30:00 EST
 categories: meta
 comments: true
 ---
