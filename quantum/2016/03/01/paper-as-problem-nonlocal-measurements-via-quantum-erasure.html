@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Paper as Problem: 'Non-local measurements via quantum erasure'</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Paper as Problem: 'Non-local measurements via quantum erasure'</h1>
+<p class="meta">01 Mar 2016</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>(<em>In &#39;Paper as Problem&#39; posts, I treat a paper&#39;s abstract as a puzzle.
+&quot;We discovered a way to X&quot; becomes &quot;Figure out how to do X&quot;.
+The goal is to solve the problem before reading the body of the paper.</em>)</p>
+
+<p>Two weeks ago, the paper &quot;Nonlocal Measurements via Quantum Erasure&quot; by Aharon Brodutch and Eliahu Cohen <a href="http://journals.aps.org/prl/abstract/10.1103/PhysRevLett.116.070404">was published in Physical Review Letters</a>.
+There&#39;s also a <a href="http://arxiv.org/abs/1409.1575">pre-print available on arXiv</a>, which is what I read.</p>
+
+<p>Based on the abstract, the paper&#39;s core contribution is:</p>
+
+<blockquote>
+<p>[...]
+We present a scheme for effectively generating the von Neumann Hamiltonian for nonlocal observables without the need to communicate and adapt.
+[...]</p>
+</blockquote>
+
+<h1>The Problem</h1>
+
+<p>The paper is about measuring non-local observables involving qubits spread over multiple parties, with the caveat that the parties can&#39;t just send the qubits to each other (they don&#39;t have access to quantum channels).</p>
+
+<p>For example, suppose you want to measure the Z-parity of two qubits (i.e. whether their spins agree or disagree along the Z axis).
+A simple way to recover the Z-parity is to measure each qubit along the Z axis, and compare the results.
+The problem with measuring both qubits along the Z axis, by measuring the $Z_1$ observable and the $Z_2$ observable, is that it disturbs the system more than only measuring the Z-parity observable $Z \otimes Z$.</p>
+
+<p>Suppose you took two qubits and prepared them so that a bit $x$ was stored in the X-parity observable $X \otimes X$ and a bit $z$ was stored in the Z-parity observable $Z \otimes Z$ (which is the trick behind <a href="https://en.wikipedia.org/wiki/Superdense_coding">superdense coding</a>).
+$X \otimes X$ commutes with $Z \otimes Z$, but it <a href="/quantum/2016/01/19/unknown-but-equal.html">doesn&#39;t</a> commute with $Z_1$ or $Z_2$.
+As a result, measuring either of the individual Z-values in the process of recovering the $z$ bit will destroy the $x$ bit.
+To recover both $x$ and $z$, we need to measure <em>only</em> the non-local observables $Z \otimes Z$ and $X \otimes X$.
+Not the local observables $Z_1$ or $Z_2$ or $X_1$ or $X_2$.</p>
+
+<p>When both qubits are in the same quantum computer, measuring $X \otimes X$ and $Z \otimes Z$ <a href="https://en.wikipedia.org/wiki/Bell_state#Bell_state_measurement">is easy</a>.
+Just CNOT one of the qubits onto the other, hit the former control with a Hadamard, then measure both qubits.
+But, in the paper&#39;s problem, the qubits are on separate quantum computers.
+We can&#39;t perform that crucial controlled-not operation.</p>
+
+<p>So a concrete form of the paper&#39;s core problem is: how can measure we the Z-parity of two qubits, without disturbing the X-parity of the two qubits, when those two qubits aren&#39;t in the same quantum computer?</p>
+
+<h1>My Solution</h1>
+
+<p>After thinking for a minute, it occurred to me that quantum teleportation would make this problem trivial.
+If we had access to pre-shared entanglement, we could burn it to teleport Alice&#39;s qubit to Bob, have Bob perform the measurement locally, then teleport the qubit back.
+We&#39;d have performed a non-local measurement, but at the cost of 2 bits of entanglement and 4 bits of classical communication to power the teleportations.</p>
+
+<p>I then realized I could cut the cost in half by throwing away the second half of the first teleport and the first half of the second teleport.
+<a href="/quantum/2015/12/28/Separating-Quantum-Teleportation.html">Copy-teleporting</a> Alice&#39;s qubit to Bob, then erasing Bob&#39;s entangled copy after performing the measurement, is sufficient; and only costs 1 bit of entanglement and 2 bits of classical communication.</p>
+
+<p>(<em>Side note: It&#39;s tempting to think of copy-teleporting one way then erasing the other way as a sort of &quot;temporary teleportation&quot;.
+That&#39;s an okay intuition for this post but, because the sender still has an entangled copy during the temporary teleport, there are caveats in the general case.</em>)</p>
+
+<p>Putting that idea into circuit form gives <strong>my guess at the solution to the paper&#39;s core problem</strong>:</p>
+
+<p><img src="/assets/2016-03-01-paper-as-problem-nonlocal-measurements-via-quantum-erasure/measuring-parity-under-locc.png" alt="Measuring parity under locc via entanglement" style="max-width: 100%;"/></p>
+
+<p>The process shown above:</p>
+
+<ul>
+<li>(prep) Create 1 bit of pre-shared entanglement</li>
+<li>(prep) Create the unknown input state $\psi$</li>
+<li>(prep) Give half of $\psi$ to Alice ($\psi_1$) and the other half ($\psi_2$) to Bob</li>
+<li>Copy-teleport an entangled copy of $\psi_1$ from Alice to Bob
+
+<ul>
+<li><em>costs 1 bit of entanglement</em></li>
+<li><em>costs 1 bit of classical communication</em></li>
+</ul></li>
+<li>Perform the Z-parity measurement at Bob&#39;s, using $\psi_2$ and his entangled copy of $\psi_1$</li>
+<li>Erase Bob&#39;s entangled copy of $\psi_1$
+
+<ul>
+<li><em>costs 1 bit of classical communication</em></li>
+</ul></li>
+</ul>
+
+<p>Note that the parity measurement can be replaced by other combined measurements of the two qubits.
+Also note that, although the diagram just says $\psi_1$ and $\psi_2$ for the circuit&#39;s output, the qubits storing $\psi$ have been decohered along $Z \otimes Z$ by the measurement.</p>
+
+<p>After coming up with the above solution, I started worrying about the requirement of pre-shared entanglement.
+Was the paper going to come up with some clever way of avoiding it?</p>
+
+<p>No.
+Definitely not.</p>
+
+<p>Suppose we took two qubits, each in the unentangled state $\ket{0} + \ket{1}$, and measured their parity.
+If the parity measurement was even, the qubits are now in the state $\ket{00} + \ket{11}$; otherwise they&#39;re in the state $\ket{01} + \ket{10}$.
+By hitting one of the qubits with a NOT when the parity measurement was odd, the qubits end up unconditionally entangled into the state $\ket{00} + \ket{11}$.</p>
+
+<p>In other words: a non-local parity measurement can create 1 bit of entanglement.
+But generating entanglement is impossible in the <a href="https://en.wikipedia.org/wiki/LOCC">local-operations-and-classical-communication (LOCC)</a> regime we&#39;re operating in (for a bunch of reasons; e.g. it would allow us to clone qubits).
+So it must cost at least 1 bit of entanglement to perform non-local parity measurements, else we&#39;d be generating entanglement for free.</p>
+
+<p>Performing a non-local measurement requires at least 1 bit of entanglement, and we have process that achieves that bound.
+Based on that, I predicted that the paper&#39;s solution to the problem was basically my circuit above.</p>
+
+<h1>The Paper&#39;s Solution</h1>
+
+<p><em>*Craig reads the paper.*</em></p>
+
+<p><strong><em>Argh! So close!</em></strong>
+My solution was on the right track, but I overlooked a crucial part of the problem statement: &quot;without the need to communicate and adapt&quot;.
+We&#39;re not working in the regime of local-operations-with-classical-communication, we&#39;re working in the regime of local-operations-with-after-the-fact-note-comparing.</p>
+
+<p>In practice, experimental physicists have a hard time bouncing messages between one quantum system and another during an experiment.
+It&#39;s much <em>much</em> easier for them to do post-processing of the results.
+For example, <a href="http://www.scottaaronson.com/blog/?p=2464">one of the recent loophole-free tests of Bell&#39;s inequality used entanglement swapping</a> but they didn&#39;t perform the conditional phase-corrections needed to make entanglement swapping work consistently.
+Instead, they simply threw out the runs ruined by the lack of corrections.</p>
+
+<p>That&#39;s the the easiest way to cut communication out of a protocol, after all: just <a href="https://en.wikipedia.org/wiki/Postselection">post-select</a> that it wasn&#39;t necessary.
+Assert that the communicated value will be 0, then compare notes after the fact and throw away any experiments that failed to meet the assertion.</p>
+
+<p>The paper&#39;s solution is exactly mine, except with communication replaced by post-selection:</p>
+
+<blockquote>
+<p>The entanglement and communication resources for our scheme are at most equivalent to a single round of teleportation.
+This can be compared to the naive strategy of teleporting, measuring and teleporting back.
+[...]
+However, the motivation for the protocol is the fact that it can be implemented without communication or adaptive components.
+[...]
+From a practical perspective we can easily imagine other situations such as linear optics, where the resources necessary for an adaptive scheme that requires communication outweigh the advantage of a deterministic protocol.</p>
+</blockquote>
+
+<p>Here&#39;s the paper&#39;s diagram of their non-local measurement process:</p>
+
+<p><img src="/assets/2016-03-01-paper-as-problem-nonlocal-measurements-via-quantum-erasure/paper-diagram.png" alt="Measuring parity under locc via entanglement" style="max-width: 100%;"/></p>
+
+<p>And here&#39;s the same thing again, but in my diagrammatic style (and performing a parity measurement instead of the alternative non-local measurement they were doing):</p>
+
+<p><img src="/assets/2016-03-01-paper-as-problem-nonlocal-measurements-via-quantum-erasure/measuring-parity-using-post-selection.png" alt="Measuring parity under locc via entanglement, using post-selection instead of communication" style="max-width: 100%;"/></p>
+
+<p>Note the similarities between the above diagram and the diagram for my initial solution.
+They&#39;re exactly the same, except operations controlled by remote values have been replaced with post-selection that the operation was unnecessary (due to the control not being satisfied).
+This avoids communication during the protocol, though of course it still requires some after-the-fact coordination where Alice and Bob tell each other which runs they ruined.</p>
+
+<p>The downside of post-selecting is that we&#39;ll lose three quarters of the runs, because each post-selection has a 50/50 chance of failing.
+The losses get exponentially worse as the number of involved qubits increases: a non-local measurement that involves moving $m$ qubits via post-selection will only succeed $4^{-m}$&#39;th of the time.</p>
+
+<h1>Summary</h1>
+
+<p>You can measure non-local observables by using pre-existing entanglement and post-selection to temporarily teleport entangled copies of qubits.</p>
+
+<p><a href="http://arxiv.org/abs/1409.1575">The paper</a> goes into plenty of details not covered in this post, such as explaining how to parameterize the strength of the non-local measurement.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+  <script>
+  var idcomments_acct = '7d0006bd6a016f9a2892cc2ecc64de01';
+  var idcomments_post_id = '/quantum/2016/03/01/paper-as-problem-nonlocal-measurements-via-quantum-erasure.html';
+  var idcomments_post_url = 'http://algorithmicassertions.com/quantum/2016/03/01/paper-as-problem-nonlocal-measurements-via-quantum-erasure.html';
+  </script>
+  <span id="IDCommentsPostTitle" style="display:none"></span>
+  <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+  <noscript>
+    <hr>
+    <font color=red>
+      Comments script blocked. Comments won't work.
+    </font>
+    <br/>
+    Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>intensedebate.com</strong> to fix.
+  </noscript>
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
