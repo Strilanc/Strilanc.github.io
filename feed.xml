@@ -7,6 +7,14 @@
 		<atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>Paper as Problem: &#39;Non-local measurements via quantum erasure&#39;</title>
+				<description>&lt;p&gt;(&lt;em&gt;In &amp;#39;Paper as Problem&amp;#39; posts, I treat a paper&amp;#39;s abstract as a puzzle. &amp;quot;We discovered a way to X&amp;quot; becomes &amp;quot;Figure out how to do X&amp;quot;. The goal is to solve the problem before reading the body of the paper.&lt;/em&gt;)&lt;/p&gt; &lt;p&gt;Two weeks ago, the paper &amp;quot;Nonlocal Measurements via Quantum Erasure&amp;quot; by Aharon Brodutch and Eliahu Cohen &lt;a href=&quot;http://journals.aps.org/prl/abstract/10.1103/PhysRevLett.116.070404&quot;&gt;was published in Physical Review Letters&lt;/a&gt;. There&amp;#39;s also a &lt;a href=&quot;http://arxiv.org/abs/1409.1575&quot;&gt;pre-print available on arXiv&lt;/a&gt;, which is what I read.&lt;/p&gt; &lt;p&gt;Based on the abstract, the paper&amp;#39;s core contribution is:&lt;/p&gt; &lt;blockquote&gt; &lt;p&gt;[...] We present a scheme for effectively generating the von Neumann Hamiltonian for nonlocal...</description>
+				<pubDate>Tue, 01 Mar 2016 11:30:00 -0500</pubDate>
+				<link>http://algorithmicassertions.com/quantum/2016/03/01/paper-as-problem-nonlocal-measurements-via-quantum-erasure.html</link>
+				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2016/03/01/paper-as-problem-nonlocal-measurements-via-quantum-erasure.html</guid>
+			</item>
+		
+			<item>
 				<title>Don&#39;t Use Github Pages&#39; Jekyll Support</title>
 				<description>&lt;p&gt;A few weeks ago, GitHub announced &lt;a href=&quot;https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0&quot;&gt;&amp;quot;GitHub Pages now faster and simpler with Jekyll 3.0&amp;quot;&lt;/a&gt;. I would have titled the post... differently. Something like &amp;quot;Notice: upcoming breaking changes to github pages&amp;quot; or &amp;quot;We don&amp;#39;t understand &lt;a href=&quot;http://www.joelonsoftware.com/articles/APIWar.html&quot;&gt;how important backwards compatibility is&lt;/a&gt;&amp;quot;.&lt;/p&gt; &lt;h1&gt;Simply Breaking Changes&lt;/h1&gt; &lt;p&gt;The &amp;quot;simpler&amp;quot; in the title is bullshit marketing-speak for &amp;quot;removing features&amp;quot;. They dropped support for two Markdown engines:&lt;/p&gt; &lt;blockquote&gt; &lt;p&gt;&lt;strong&gt;Starting May 1st, 2016, GitHub Pages will only support &lt;a href=&quot;http://kramdown.gettalong.org/&quot;&gt;kramdown&lt;/a&gt;, Jekyll&amp;#39;s default Markdown engine.&lt;/strong&gt; If you are currently using &lt;a href=&quot;https://github.com/davidfstr/rdiscount&quot;&gt;Rdiscount&lt;/a&gt; or &lt;a href=&quot;https://github.com/vmg/redcarpet&quot;&gt;Redcarpet&lt;/a&gt; we&amp;#39;ve enabled kramdown&amp;#39;s GitHub-flavored Markdown support by default, meaning kramdown should...</description>
 				<pubDate>Thu, 25 Feb 2016 11:30:00 -0500</pubDate>
@@ -76,14 +84,6 @@
 				<pubDate>Mon, 26 Oct 2015 12:30:00 -0400</pubDate>
 				<link>http://algorithmicassertions.com/quantum/2015/10/26/Quantum-Zeno-Effect.html</link>
 				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2015/10/26/Quantum-Zeno-Effect.html</guid>
-			</item>
-		
-			<item>
-				<title>YOU versus Bell Tests and the No Communication Theorem</title>
-				<description>&lt;style scoped&gt; table { margin: 0 auto; border-spacing: 0; } table, td, tr { padding: 0; } textarea { width: 370px; resize: vertical; overflow-x: auto; white-space: pre; } .codeBlock { background-color:#EEE; padding: 4px; } .hued { filter: hue-rotate(90deg); -webkit-filter: hue-rotate(90deg); } .resultTable { background-color: #EEE; padding: 3px 3px 0 3px; margin-top: 10px; border-spacing: 3px; } &lt;/style&gt; &lt;p&gt;In this post: I try to explain Bell Inequalities and the No-Communication Theorem, while you try to write short javascript strategies that violate them.&lt;/p&gt; &lt;h1&gt;An Apparent Paradox&lt;/h1&gt; &lt;p&gt;Quantum mechanics is frustratingly hard to explain. There are a lot of reasons for that. One of...</description>
-				<pubDate>Sun, 11 Oct 2015 12:30:00 -0400</pubDate>
-				<link>http://algorithmicassertions.com/quantum/2015/10/11/Bell-Tests-vs-No-Communication.html</link>
-				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2015/10/11/Bell-Tests-vs-No-Communication.html</guid>
 			</item>
 		
 	</channel>
