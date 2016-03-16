@@ -7,6 +7,14 @@
 		<atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>Wrapping Structure Around Batched Methods</title>
+				<description>&lt;p&gt;In this post: working around WebGL&amp;#39;s slow &lt;code&gt;readPixels&lt;/code&gt; method by using batching, and a simple trick for avoiding error-prone concatenation and slicing by wrapping some structure around the resulting batched method.&lt;/p&gt; &lt;h1&gt;Motivation&lt;/h1&gt; &lt;p&gt;One of the side projects I work on is &lt;a href=&quot;https://github.com/Strilanc/Quantum-Circuit-Inspector&quot;&gt;an HTML5 quantum circuit simulator&lt;/a&gt;. It lets you drag gates around, and shows details about what a quantum circuit is doing.&lt;/p&gt; &lt;p&gt;Originally, the simulator did all the number-crunching in javascript. However, since javascript isn&amp;#39;t exactly fast and applying a gate to an $n$ qubit system takes $O(2^n)$ operations behind the scenes, the code wasn&amp;#39;t scaling. To keep things...</description>
+				<pubDate>Wed, 16 Mar 2016 11:10:10 -0400</pubDate>
+				<link>http://algorithmicassertions.com/programming/2016/03/16/structure-batched.html</link>
+				<guid isPermaLink="true">http://algorithmicassertions.com/programming/2016/03/16/structure-batched.html</guid>
+			</item>
+		
+			<item>
 				<title>Paper as Problem: &#39;Non-local measurements via quantum erasure&#39;</title>
 				<description>&lt;p&gt;(&lt;em&gt;In &amp;#39;Paper as Problem&amp;#39; posts, I treat a paper&amp;#39;s abstract as a puzzle. &amp;quot;We discovered a way to X&amp;quot; becomes &amp;quot;Figure out how to do X&amp;quot;. The goal is to solve the problem before reading the body of the paper.&lt;/em&gt;)&lt;/p&gt; &lt;p&gt;Two weeks ago, the paper &amp;quot;Nonlocal Measurements via Quantum Erasure&amp;quot; by Aharon Brodutch and Eliahu Cohen &lt;a href=&quot;http://journals.aps.org/prl/abstract/10.1103/PhysRevLett.116.070404&quot;&gt;was published in Physical Review Letters&lt;/a&gt;. There&amp;#39;s also a &lt;a href=&quot;http://arxiv.org/abs/1409.1575&quot;&gt;pre-print available on arXiv&lt;/a&gt;, which is what I read.&lt;/p&gt; &lt;p&gt;Based on the abstract, the paper&amp;#39;s core contribution is:&lt;/p&gt; &lt;blockquote&gt; &lt;p&gt;[...] We present a scheme for effectively generating the von Neumann Hamiltonian for nonlocal...</description>
 				<pubDate>Tue, 01 Mar 2016 11:30:00 -0500</pubDate>
@@ -76,14 +84,6 @@
 				<pubDate>Sun, 01 Nov 2015 11:30:00 -0500</pubDate>
 				<link>http://algorithmicassertions.com/quantum/2015/11/01/Walters-Claimed-Quantum-Linear-3SAT.html</link>
 				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2015/11/01/Walters-Claimed-Quantum-Linear-3SAT.html</guid>
-			</item>
-		
-			<item>
-				<title>[Un]popular Qubits #2: The Quantum Zeno Effect</title>
-				<description>&lt;p&gt;This month, a team of scientists published &lt;a href=&quot;http://journals.aps.org/prl/abstract/10.1103/PhysRevLett.115.140402&quot;&gt;a paper&lt;/a&gt; about an experiment related to the &lt;a href=&quot;https://en.wikipedia.org/wiki/Quantum_Zeno_effect&quot;&gt;quantum zeno effect&lt;/a&gt;. There were lots of pop science articles about it and, of course, they caused as much confusion as clarity.&lt;/p&gt; &lt;p&gt;One of the pervasive misconceptions people have about quantum mechanics is that &amp;quot;observation&amp;quot; means &amp;quot;watching&amp;quot;, i.e. a conscious human looking in the general direction of an experiment. It&amp;#39;s important to clear up this misconception when talking about the quantum zeno effect, because it uses repeated measurements (a.k.a. observations) to control a quantum system.&lt;/p&gt; &lt;p&gt;Journalists worry about their audience taking the wrong...</description>
-				<pubDate>Mon, 26 Oct 2015 12:30:00 -0400</pubDate>
-				<link>http://algorithmicassertions.com/quantum/2015/10/26/Quantum-Zeno-Effect.html</link>
-				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2015/10/26/Quantum-Zeno-Effect.html</guid>
 			</item>
 		
 	</channel>
