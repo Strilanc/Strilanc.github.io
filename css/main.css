@@ -19,17 +19,17 @@ body {
   text-align: center;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-size: 120%;
-  color: black;
-}
-
-h2 {
+h1 {
   font-size: 110%;
   color: black;
 }
 
-h3 h4 h5 h6 {
+h2 {
+  font-size: 105%;
+  color: black;
+}
+
+h3, h4, h5, h6 {
   font-size: 100%;
   color: black;
 }

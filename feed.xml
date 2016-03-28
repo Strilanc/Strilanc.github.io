@@ -7,6 +7,14 @@
 		<atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>Protecting Control Flow with Nested Evals</title>
+				<description>&lt;p&gt;Javascript&amp;#39;s &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval&quot;&gt;eval&lt;/a&gt; function has a bad reputation, mostly (but not entirely) because of its tendency to create &lt;a href=&quot;https://en.wikipedia.org/wiki/Code_injection&quot;&gt;code injection attacks&lt;/a&gt;. In this post, I&amp;#39;ll show a way &lt;code&gt;eval&lt;/code&gt; can help &lt;strong&gt;defend&lt;/strong&gt; against code-injection attacks.&lt;/p&gt; &lt;p&gt;(&lt;em&gt;This post is &lt;strong&gt;not&lt;/strong&gt; a recommendation for eval, and &lt;strong&gt;won&amp;#39;t&lt;/strong&gt; prepare you for the many pitfalls of executing untrusted javascript. If you&amp;#39;re unfamiliar with injection attacks, or enjoy puzzles based on them, try out the game &lt;a href=&quot;https://alexnisnevich.github.io/untrusted/&quot;&gt;untrusted (&amp;#39;the continuing adventures of Dr. Eval&amp;#39;)&lt;/a&gt;.&lt;/em&gt;)&lt;/p&gt; &lt;h1&gt;Injecting Control Flow&lt;/h1&gt; &lt;p&gt;Injection attacks work in many ways, but a common method-of-action is hijacking the flow of code nested...</description>
+				<pubDate>Sun, 27 Mar 2016 11:10:10 -0400</pubDate>
+				<link>http://algorithmicassertions.com/programming/2016/03/27/protecting-control-flow-with-nested-evals.html</link>
+				<guid isPermaLink="true">http://algorithmicassertions.com/programming/2016/03/27/protecting-control-flow-with-nested-evals.html</guid>
+			</item>
+		
+			<item>
 				<title>Wrapping Structure Around Batched Methods</title>
 				<description>&lt;p&gt;In this post: working around WebGL&amp;#39;s slow &lt;code&gt;readPixels&lt;/code&gt; method by using batching, and a simple trick for avoiding error-prone concatenation and slicing by wrapping some structure around the resulting batched method.&lt;/p&gt; &lt;h1&gt;Motivation&lt;/h1&gt; &lt;p&gt;One of the side projects I work on is &lt;a href=&quot;https://github.com/Strilanc/Quantum-Circuit-Inspector&quot;&gt;an HTML5 quantum circuit simulator&lt;/a&gt;. It lets you drag gates around, and shows details about what a quantum circuit is doing.&lt;/p&gt; &lt;p&gt;Originally, the simulator did all the number-crunching in javascript. However, since javascript isn&amp;#39;t exactly fast and applying a gate to an $n$ qubit system takes $O(2^n)$ operations behind the scenes, the code wasn&amp;#39;t scaling. To keep things...</description>
 				<pubDate>Wed, 16 Mar 2016 11:10:10 -0400</pubDate>
@@ -76,14 +84,6 @@
 				<pubDate>Sun, 08 Nov 2015 11:30:00 -0500</pubDate>
 				<link>http://algorithmicassertions.com/misconception/2015/11/08/Misconceptions-Quantum-Latch.html</link>
 				<guid isPermaLink="true">http://algorithmicassertions.com/misconception/2015/11/08/Misconceptions-Quantum-Latch.html</guid>
-			</item>
-		
-			<item>
-				<title>Quantum vs NP #2: Zachary B. Walters &#39;A linear time quantum algorithm for 3SAT&#39;</title>
-				<description>&lt;p&gt;At the end of September, Zachary B. Walters published a preprint to arXiv titled &lt;a href=&quot;http://arxiv.org/abs/1510.00409&quot;&gt;A linear time quantum algorithm for 3SAT&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;I enjoy looking through papers like this one, because they&amp;#39;re an excellent source of subtle misconceptions worth explaining. In the &lt;a href=&quot;http://algorithmicassertions.com/quantum/2015/08/27/Simulating-a-Claimed-BQP-NP-Algorithm.html&quot;&gt;last paper I covered&lt;/a&gt;, the problem was that all the optimization came from post-selection. This paper has a different mistake: using measurements to erase information.&lt;/p&gt; &lt;p&gt;&lt;em&gt;(Note: these posts are &lt;strong&gt;not&lt;/strong&gt; in a mocking tone. I remember working through these same misconceptions; the only difference is I tried to explain them to a computer.)&lt;/em&gt;&lt;/p&gt; &lt;h1&gt;The Algorithm&lt;/h1&gt; &lt;p&gt;I have...</description>
-				<pubDate>Sun, 01 Nov 2015 11:30:00 -0500</pubDate>
-				<link>http://algorithmicassertions.com/quantum/2015/11/01/Walters-Claimed-Quantum-Linear-3SAT.html</link>
-				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2015/11/01/Walters-Claimed-Quantum-Linear-3SAT.html</guid>
 			</item>
 		
 	</channel>
