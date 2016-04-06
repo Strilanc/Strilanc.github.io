@@ -118,13 +118,16 @@ But, when you do finally touch the qubit, it will end up in a known state; vulne
 <li>Store a $2^n \times 2^n$ density matrix, initialized to the maximally mixed state, on an intractably powerful classical computer.</li>
 <li>Whenever an operation is applied to the identity-defining qubits, apply the same operation to the density matrix.</li>
 <li>Whenever an identity-defining qubits is measured, project the density matrix into the measurement&#39;s outcome.</li>
-<li>Arrange for new identity-defining qubits to be in known states (*see next section). Tensor them onto the density matrix when created.</li>
+<li>Arrange for new identity-defining qubits to be in known states (*see next section).
+Tensor them onto the density matrix when created.</li>
 </ul></li>
 <li><strong>Simulate and wait</strong>.
 
 <ul>
-<li>As the simulated brain interacts with the world and the identity-defining core, measurements of the identity-defining qubits cause the tracked density matrix to decay from fully-mixed (unknown) to nearly-pure (known).</li>
-<li>Eventually the purity will be high enough that we basically know the relevant quantum state. Alternatively, anything still not measured after a month probably doesn&#39;t affect who you are very much.</li>
+<li>As the simulated brain interacts with the world and the identity-defining core, measurements of the identity-defining qubits and post-selections of the tracked density matrix cause the two to converge.</li>
+<li>As the gradual copying process runs, you can compute an upper bound on how much the tracked density matrix might deviate from the identity-defining state.</li>
+<li>Eventually the deviations will be small enough that we basically know the relevant quantum state.
+Alternatively, anything still not measured after a month probably doesn&#39;t affect who you are very much.</li>
 </ul></li>
 <li><strong>Start printing copies</strong>!
 
@@ -133,9 +136,17 @@ But, when you do finally touch the qubit, it will end up in a known state; vulne
 </ul></li>
 </ol>
 
-<p>Got it?
-It&#39;s pretty straightforward.
-Let&#39;s move on to talking about situations where it won&#39;t work.</p>
+<p>Here&#39;s an example circuit showing that, even with intermediate mixing operations, matching operations while post-selecting based on the measurement results does push the tracked state and the secret state towards each other:</p>
+
+<p><img src="/assets/2016-04-05-copying-a-quantum-brain/gradual-copy-circuit.png" alt="Gradual Copy Circuit" style="max-width: 100%;"/></p>
+
+<p>The above diagram is a <em>bit</em> misleading, because the states it is showing are a weighted mix of the possible measurement outcomes.
+We care about the possible outcomes individually, not as a weighted group.
+Also I didn&#39;t explain why those controlled post-selections properly emulate a measurement.
+Still, I think it makes a good illustration.
+The individual possibilities look basically the same, just more pure.</p>
+
+<p>I hope that explanation was clear enough, because now we&#39;re moving on to talking about situations where this gradual copying process won&#39;t work.</p>
 
 <h1>Countermeasures</h1>
 
@@ -165,6 +176,8 @@ Entanglement with an external system (such as another brain) makes the unknown-n
 
 <p>Making a state hard to duplicate while interacting with the outside world via an untrusted quantum computer is an interesting cryptography problem.
 See: <a href="http://arxiv.org/abs/1110.5353">quantum copy-protection and quantum money</a>.</p>
+
+<p><strong>Updated (Apr 06, 2016)</strong>: <em>Added the example circuit diagram, and re-worded the &#39;copying process&#39; section.</em></p>
 
 </div>
 
