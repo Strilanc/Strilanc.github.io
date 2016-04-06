@@ -5,6 +5,8 @@ date: 2016-04-05 3:10:10 EST
 comments: true
 ---
 
+{% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
+
 Last month, YouTuber [CGP Grey](https://www.youtube.com/user/CGPGrey/videos) posted an [edutainment video about the philosophical implications of transporters](https://www.youtube.com/watch?v=nQHBAdShgYI).
 One of the points he focuses on is whether teleportation works by creating a copy of you and killing the original.
 
@@ -46,16 +48,27 @@ Here is the basic strategy I have in mind for copying a quantum brain:
     - Store a $2^n \times 2^n$ density matrix, initialized to the maximally mixed state, on an intractably powerful classical computer.
     - Whenever an operation is applied to the identity-defining qubits, apply the same operation to the density matrix.
     - Whenever an identity-defining qubits is measured, project the density matrix into the measurement's outcome.
-    - Arrange for new identity-defining qubits to be in known states (*see next section). Tensor them onto the density matrix when created.
+    - Arrange for new identity-defining qubits to be in known states (*see next section).
+        Tensor them onto the density matrix when created.
 3. **Simulate and wait**.
-    - As the simulated brain interacts with the world and the identity-defining core, measurements of the identity-defining qubits cause the tracked density matrix to decay from fully-mixed (unknown) to nearly-pure (known).
-    - Eventually the purity will be high enough that we basically know the relevant quantum state. Alternatively, anything still not measured after a month probably doesn't affect who you are very much.
+    - As the simulated brain interacts with the world and the identity-defining core, measurements of the identity-defining qubits and post-selections of the tracked density matrix cause the two to converge.
+    - As the gradual copying process runs, you can compute an upper bound on how much the tracked density matrix might deviate from the identity-defining state.
+    - Eventually the deviations will be small enough that we basically know the relevant quantum state.
+        Alternatively, anything still not measured after a month probably doesn't affect who you are very much.
 4. **Start printing copies**!
     - The tracked density matrix is your blueprint for the identity-defining quantum state.
 
-Got it?
-It's pretty straightforward.
-Let's move on to talking about situations where it won't work.
+Here's an example circuit showing that, even with intermediate mixing operations, matching operations while post-selecting based on the measurement results does push the tracked state and the secret state towards each other:
+
+<img src="/assets/{{ loc }}/gradual-copy-circuit.png" alt="Gradual Copy Circuit" style="max-width: 100%;"/>
+
+The above diagram is a *bit* misleading, because the states it is showing are a weighted mix of the possible measurement outcomes.
+We care about the possible outcomes individually, not as a weighted group.
+Also I didn't explain why those controlled post-selections properly emulate a measurement.
+Still, I think it makes a good illustration.
+The individual possibilities look basically the same, just more pure.
+
+I hope that explanation was clear enough, because now we're moving on to talking about situations where this gradual copying process won't work.
 
 # Countermeasures
 
@@ -85,3 +98,5 @@ Even if your identity is made of quantum information, the need to touch that inf
 
 Making a state hard to duplicate while interacting with the outside world via an untrusted quantum computer is an interesting cryptography problem.
 See: [quantum copy-protection and quantum money](http://arxiv.org/abs/1110.5353).
+
+**Updated (Apr 06, 2016)**: *Added the example circuit diagram, and re-worded the 'copying process' section.*
