@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Copying a Quantum Brain"
+title: "Gradually Copying a Quantum Brain"
 date: 2016-04-05 3:10:10 EST
 comments: true
 ---
