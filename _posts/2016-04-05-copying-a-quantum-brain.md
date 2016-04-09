@@ -28,12 +28,11 @@ But a polarizer can only tell you if the polarization was *along* or *against* t
 
 That being said, quantum information that just sits there being uncloneable doesn't really *do* much.
 In order to have a visible effect on the world, the information has to get mixed into the environment.
-**Qubits have to be measured to matter**.
+**Qubits have to affect a measurement to matter**.
 
-If a qubit is crucial to your identity, you must *eventually* touch it.
-Otherwise it would have absolutely no effect on your behavior, ever.
-Which is not very identity-defining-ish.
-But, when you do finally touch the qubit, it will end up in a known state; vulnerable to being copied.
+If an uncloneable detail is crucial to your identity, you eventually have to actually use it.
+Otherwise it would have absolutely no effect on your behavior, ever (which is not very identity-defining-ish).
+But, when you do finally use that detail, you reveal its state and make it vulnerable to copying.
 
 So technically all a brain-copier has to do is... wait.
 
@@ -43,7 +42,7 @@ Here is the basic strategy I have in mind for copying a quantum brain:
 
 1. **Move into computer**.
     - Scan the brain, breaking it down into the necessary classical and quantum information.
-    - Make sure the $n$ qubits of identity-defining information are kept safe in a quantum computer.
+    - Make sure the $n$ qubits of identity-defining information are moved into a quantum computer.
 2. **Track what's known about the state**.
     - Store a $2^n \times 2^n$ density matrix, initialized to the maximally mixed state, on an intractably powerful classical computer.
     - Whenever an operation is applied to the identity-defining qubits, apply the same operation to the density matrix.
@@ -100,3 +99,5 @@ Making a state hard to duplicate while interacting with the outside world via an
 See: [quantum copy-protection and quantum money](http://arxiv.org/abs/1110.5353).
 
 **Updated (Apr 06, 2016)**: *Added the example circuit diagram, and re-worded the 'copying process' section.*
+
+**Updated (Apr 09, 2016)**: *Re-worded some statements in an attempt to remove ambiguity between eventualy touching a specific qubit and eventually revealing unknown details.*
