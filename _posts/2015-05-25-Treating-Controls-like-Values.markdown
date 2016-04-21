@@ -174,7 +174,7 @@ After packing the sums back into $e^x$ form, and apologizing for playing it a bi
 $e^{a + b \mu} = e^a + \parens{e^{a+b} - e^a} \mu$.
 
 Notice that both exponentiating and raising to a power were affected in similar ways when generalized to work on tainted numbers.
-In both cases we found that $f(a + b \mu) = f(a) + \parens{f(b) - f(a)} \mu$.
+In both cases we found that $f(a + b \mu) = f(a) + \parens{f(a+b) - f(a)} \mu$.
 That's not a coincidence.
 
 Consider the matrices $I = \bimat{1}{0}{0}{1}$ and $M = \bimat{0}{0}{0}{1}$.
