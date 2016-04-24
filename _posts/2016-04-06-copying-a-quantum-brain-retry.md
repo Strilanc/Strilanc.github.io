@@ -10,7 +10,7 @@ comments: true
 [Last post](/2016/04/05/copying-a-quantum-brain.html), I tried to explain that interactions with the world can reveal the current state of a quantum system.
 
 I framed the post around the hypothetical of duplicating a brain despite the brain containing quantum information.
-I pointed to a couple examples of people saying it would be impossible to do that, since the [No-Cloning Theorem](https://en.wikipedia.org/wiki/No-cloning_theorem) prevents the duplication of unknown quantum states
+I pointed to a couple examples of people saying it would be impossible to do that, since the [No-Cloning Theorem](https://en.wikipedia.org/wiki/No-cloning_theorem) prevents the duplication of unknown quantum states.
 Then I tried to explain a copying algorithm based on moving the brain into a quantum computer and inferring its state by recording any measurements the brain decided to perform.
 
 Anyways, I didn't explain the concept very well and took flak from people thinking I was claiming obviously-wrong things.
@@ -32,13 +32,14 @@ Here's a diagram of the situation:
 
 Eve, being Eve, wants to snoop on Alice's information.
 Specifically, **she wants to make an eventual copy of Alice's state** despite knowing nothing about the initial state and not daring to apply any operations Alice doesn't ask for.
-That sounds quite hard (what with the quantumness), but Eve is nothing if not resourceful and patient.
+That sounds quite hard (what with the quantumness), but Eve is resourceful.
+And patient.
 
 The no-cloning theorem guarantees Eve can't make a copy of the initial state $\ket{\psi\_0}$.
 But Eve isn't focusing on $\ket{\psi\_0}$; she wants a copy of *any* $\ket{\psi\_t}$.
-Basically, Alice is explaining some process that causes $\ket{\psi\_0} \rightarrow \ket{\psi\_1} \rightarrow ... \rightarrow \ket{\psi\_t}$ but Eve wants to tamper with things so that $\ket{\psi\_0}\ket{?} \rightarrow \ket{\psi\_1}\ket{?} \rightarrow ... \rightarrow \ket{\psi\_t} \otimes \ket{\psi\_t}$ happens instead.
+Basically, Alice will be explaining some process that causes $\ket{\psi\_0} \rightarrow \ket{\psi\_1} \rightarrow ... \rightarrow \ket{\psi\_t}$ but Eve wants to tamper with things so that $\ket{\psi\_0}\ket{?} \rightarrow \ket{\psi\_1}\ket{?} \rightarrow ... \rightarrow \ket{\psi\_t} \otimes \ket{\psi\_t}$ happens instead.
 
-In the described situation, Alice is safe from Eve's snooping as long as she only asks for unitary operations.
+As long Alice only asks for unitary operations to be applied, she's safe from Eve's snooping.
 Rotating an unknown quantum state doesn't tell you anything about the state.
 But, whenever Alice asks for a measurement, *Eve gets to see the result*.
 Hmm...
@@ -46,8 +47,8 @@ Hmm...
 # Catching a Qubit
 
 Suppose Alice is storing only a single qubit in Eve's computer.
-In this trivial case, the jig is up as soon as the first measurement is applied.
-The measurement will collapse Alice's state to one of two possibilities, and the measurement result will tell Eve exactly which possibility it was.
+This case is trivial, because the jig is up as soon as the first measurement is applied.
+Any measurement will collapse Alice's state to one of two possibilities, and the measurement result will tell Eve exactly which possibility it was.
 
 *(Note: Eve's computer only supports single-qubit measurements in the computational basis.
 If Alice wants to perform weak measurements, or measurements in a different basis, she has to emulate them with a series of operations.)*
@@ -82,7 +83,7 @@ Eve may never see a snapshot of the whole state.
 
 There's a lot that could be said about the 2-qubit case, but let's focus on one particular type of thing Alice can do: obscuring a value with a unitary operation.
 Specifically, Alice will repeatedly ask Eve to CNOT $q\_1$ onto $q\_2$, and to measure then clear $q\_2$.
-However, to protect $q\_1$, Alice will apply an operation $U = \bimat{a}{b}{c}{d}$ to $q\_2$ just before the measurement.
+However, to protect $q\_1$'s value from Eve, Alice will apply a masking operation $U = \bimat{a}{b}{c}{d}$ to $q\_2$ just before the measurement.
 
 Here's a circuit diagram showing the operations Alice will ask Eve to apply over and over and over:
 
@@ -104,7 +105,7 @@ Now apply $U$, advancing the state to:
 
 $$\ket{\psi_{t+2}} = x a \ket{00} + x b \ket{01} + y c \ket{10} + y d \ket{11}$$
 
-Lastly, measure $q\_1$ and clear it.
+Lastly, measure $q\_2$ and clear it.
 There are two possible output states, one for the OFF measurement outcome and one for the ON outcome:
 
 $$\begin{align}
@@ -115,7 +116,7 @@ $$\begin{align}
 
 Those normalization factors are pretty gross.
 Let's ignore them by focusing on *proportions* instead of exact amplitudes.
-The proportional squared magnitudes for OFF:ON are:
+The proportional squared magnitudes $Q$ for $q\_1$ being OFF to $q\_1$ being ON are:
 
 $$\begin{align}
 Q\_t &= |x|^2:|y|^2
@@ -158,12 +159,12 @@ $$\begin{align}
 \tilde Q\_{t+3,ON} &= \tilde Q\_t + s\_u
 \end{align}$$
 
-So the effect of our circuit on the log-odds is to either add or subtract a constant...
+So the effect of our circuit on $q\_1$'s squared-magnitude log-odds is to either add or subtract a constant...
 Oh!
-The qubit is performing a [random walk](https://en.wikipedia.org/wiki/Random_walk) in log-odds space, with a step-size of $s\_u$!
+We're performing a [random walk](https://en.wikipedia.org/wiki/Random_walk) in log-odds space, with a step-size of $s\_u$!
 
 The limiting behavior of the walk is not immediately clear.
-Normally a random walk's probability $p$ of stepping positive-ward is constant, and whether or not it diverges is just a matter of checking that $p$ isn't 50%.
+Normally a random walk's probability $p$ of stepping forward is constant, and whether or not the walk diverges is just a matter of checking that $p$ isn't 50%.
 But in our case $p$ changes as the walk drifts left and right; it depends on $\ket{\psi\_t}$:
 
 $$\begin{align}
@@ -174,7 +175,7 @@ p &= |xb|^2 + |yd|^2
 \text{lerp}(|y|^2, 1-|a|^2, |a|^2)
 \end{align}$$
 
-Okay, so the probability is a [linear interpolation](https://en.wikipedia.org/wiki/Lerp_%28computing%29) from $1-|a|^2$ to $|a|^2$, controlled by $|y|^2$.
+Okay, so the probability of stepping forward is a [linear interpolation](https://en.wikipedia.org/wiki/Lerp_%28computing%29) from $1-|a|^2$ to $|a|^2$, controlled by $|y|^2$.
 What does that mean?
 
 Roughly speaking, $|a|^2$ corresponds to how much $U$ likes to toggle its input.
@@ -267,7 +268,7 @@ How can Eve track the state of Alice's system automatically, without knowing the
 Here's a really naive idea: write down a list of all the possible states, and simulate applying Alice's requested operations to each of them.
 When Alice says to rotate a qubit around the X axis, go through every single entry in the list and apply that rotation around the X axis.
 When Alice says to measure a qubit, do the measurement on the real qubit then post-select every entry in the list to match the result.
-If the entries are ever all in basically the same spot, that's Alice's state.
+If the list entries are ever all in basically the same spot, that's Alice's state.
 
 Of course we can't actually list *all* the possible quantum states, since there's uncountably many of them.
 But we can cover the state space as densely as desired, so that the true state is at most $\epsilon$ away from one of the entries in the list.
@@ -319,7 +320,7 @@ For the example inferrence animated below, I tried to pick some interesting oper
 First, I had Alice constantly generate entropy that can't be predicted by Eve.
 That's done by constantly putting the first qubit into the state $\ket{0} + \ket{1}$ and measuring it.
 Also, Alice mixes in some extra entropy she generated herself.
-Second, I made the second qubit only affect measurements indirectly via its effects on the third qubit.
+Second, I made the second qubit only affect measurements indirectly via its effects on the third qubit (which itself only indirectly affects the fourth qubit).
 
 Here's the actual Alice code I used:
 
@@ -381,23 +382,27 @@ But **there are also situations where Eve _can't_ infer Alice's whole state**.
 
 First, there may be **details of the state that don't affect any measurements**.
 Remember how, in the two-qubit case we analyzed, the step size of the random walk degenerated to 0 when the toggly-ness of $U$ hit 50%?
-Setting the toggly-ness to 50% results in Eve never learning anything about the qubit $q\_1$, because $q\_1$'s state no longer affected any measurement results.
+Setting the toggly-ness to 50% results in Eve never learning anything about the qubit $q\_1$, because $q\_1$'s state no longer influences any measurement results.
 
 If Eve's ultimate goal is to predict Alice's measurement probabilities, then not learning details that don't affect those probabilities is fine.
-But even so, it's quite hard for Eve to figure out if she has all the relevant details yet.
+But even so, it's quite hard for Eve to figure out if she has all the relevant details or not.
 Determining if an Alice program will ever use a specific qubit is as hard as the halting problem; incomputable.
 
 Second, if Eve's quantum computer can communicate with other quantum computers, Alice may ask Eve to **entangle her state with external states**.
-Although it's possible to clone an EPR pair *as a whole*, it's not possible to clone *half* of an EPR pair.
+This is a problem for Eve because, although it's possible to clone an EPR pair *as a whole*, it's not possible to clone *half* of an EPR pair.
 That's literally non-sensical: you're asking for a qubit that agrees with $a$, but not with $b$ (otherwise you'd have a GHZ state instead of a clone), despite $b$ agreeing with $a$.
 
-Including entanglement into the initial state isn't a problem.
+Alice may include external entanglement in the initial state, but that's not a problem.
 Eve's inferrence process handles that.
-The problem is if Alice can add *new* entanglement: it gives her a way to add entropy into Eve's inferred density matrix.
+The problem is if Alice can add *new* entanglement: it's the only way she can consistently add entropy into Eve's inferred density matrix.
 
 Third, there's **the pragmatic issue of size**.
 For $n$ qubits and $m$ operations, Eve's inferrence algorithm does $O(4^n m)$ work.
 So an easy way for Alice to defeat a naive Eve is to just concatenate 100 qubits onto the state.
+
+*On the other hand, in practice, Eve won't be so naive*.
+She'll be looking for opportunities to ignore some of the qubits, or to measure them early, or to factor the state into independent sub-parts.
+There are a lot of ways that Alice could accidentally make things very easy for Eve.
 
 # On Brains
 
@@ -408,14 +413,11 @@ Quantum-ness is necessary for clone-resistance, but not sufficient.
 By loading the brain into Eve's quantum clone computer and simulating its normal operation, we might learn all of the hidden details.
 
 The inferrence process won't work if the brain is intermittently refreshing external entanglement.
-
 And unused details will make it hard to tell if we've finished or not.
-
 And long-lived qubits with exponentially-small effects on measurements can add quite a lot of time to the process.
-
 And we're totally hosed in practice if we can't factor the problem into 30-qubit sub-systems.
-
 But still.
+The security is not unconditional.
 
 # Notes
 
@@ -435,7 +437,7 @@ But still.
 - **What about ancilla qubits that don't get measured (e.g. as in the Deutch-Josza algorithm)?**
 
     The final values of ancilla bits usually doesn't matter, or is implied by the measurements that *are* performed.
-    That's why, after the algorithm is over, you just let them decohere (i.e. get measured but ignore the result).
+    That's why, after the algorithm is over, you just let them decohere (i.e. they get measured but you don't bother recording the result).
     
     Feel free to try this case out!
     For example, the typical [example Deutch-Josza circuit](https://en.wikipedia.org/wiki/Deutsch%E2%80%93Jozsa_algorithm#/media/File:Deutsch-Jozsa_Algorithm.svg) has an unnecessary ancilla.
@@ -456,15 +458,14 @@ But still.
 - **The inferrence process is absurdly intractable.**
 
     Yup.
-    Still, the existence of an inferrence process downgrades security from [unconditional](https://en.wikipedia.org/wiki/Information-theoretic_security) to [computational-hardness-assumption](https://en.wikipedia.org/wiki/Computational_hardness_assumption).
-
-- **Doesn't the fact that we know the state or copied the state make it collapse / prevent it from being in superposition?**
-
-    No.
-    If we were making entangled copies, instead of independent copies, this would be a problem.
+    Still, the existence of a computable inferrence process downgrades security from [unconditional](https://en.wikipedia.org/wiki/Information-theoretic_security) to [computational-hardness-assumption](https://en.wikipedia.org/wiki/Computational_hardness_assumption).
 
 # Summary
 
 If you tell someone everything you're doing to your secret quantum state, and what measurement results you're getting, it gradually stops being a secret.
+
+A quantum computer knows everything you're asking it to do to your secret quantum state, and what measurement results you're getting.
+
+In principle, in some cases, a heedful quantum computer can gradually infer what state it's operating on.
 
 Putting quantum information into a brain is necessary, but not sufficient, for unconditional security against cloning.
