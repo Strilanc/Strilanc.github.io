@@ -1,21 +1,21 @@
 ---
 layout: post
 title: "Approximate Cloning"
-date: 2016-02-10 11:30:00 EST
+date: 2016-04-08 11:30:00 EST
 categories: quantum
 comments: true
 ---
 
-{% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
+{% assign loc = page.path | remove\_first: '\_posts/' | remove: '.md' %}
 
 Quantum mechanics is a fertile source of apparent paradoxes; that's one of the things I like about it.
 There's something very satisfying about being confused, thinking a bit longer, then not being confused anymore despite ending up with more questions.
 With that in mind, let's talk about cloning qubits.
 
-The [no-cloning theorem](https://en.wikipedia.org/wiki/No-cloning_theorem) says it's impossible to make independent copies of an unknown qubit.
+The [no-cloning theorem](https://en.wikipedia.org/wiki/No-cloning\_theorem) says it's impossible to make independent copies of an unknown qubit.
 But, if that's true, why can we *write down* the state of a qubit?
 Why can we figure out the description of qubits being produced by unknown processes, and then produce qubits matching that description?
-*Why doesn't [tomography](https://en.wikipedia.org/wiki/Quantum_tomography) count as a cloning procedure*?
+*Why doesn't [tomography](https://en.wikipedia.org/wiki/Quantum\_tomography) count as a cloning procedure*?
 
 This particular paradox doesn't require any deep insights to resolve.
 The no-cloning theorem only forbids *perfect* clones, and tomography is making *approximate* clones.
@@ -30,19 +30,19 @@ Before I can talk about how well a cloning process approximates a desired state,
 
 There are plenty of useful [distance measures between states](https://quantiki.org/wiki/distance-measures-between-states), but for our purposes we care about *distinguishability*.
 If we're given $A$ half of the time, and $B$ half of the time, how often are we able to correctly determine which one we were given?
-Given the [density matrices](https://en.wikipedia.org/wiki/Density_matrix) representing $A$ and $B$, the maximum probability of correctly distinguishing $A$ from $B$ is related to the [trace distance](https://en.wikipedia.org/wiki/Trace_distance) between the two matrices:
+Given the [density matrices](https://en.wikipedia.org/wiki/Density\_matrix) representing $A$ and $B$, the maximum probability of correctly distinguishing $A$ from $B$ is related to the [trace distance](https://en.wikipedia.org/wiki/Trace\_distance) between the two matrices:
 
-$$p_{A,B} = \frac{1}{2} + \frac{1}{4} \text{Tr} \left| A - B \right|$$
+$$p\_{A,B} = \frac{1}{2} + \frac{1}{4} \text{Tr} \left| A - B \right|$$
 
 You get a base-rate of 50% for free just by guessing, but the rest depends on how the eigendecomposition of the difference between the two states plays out (because the trace is adding up the magnitudes of all the eigenvalues).
 
 When working with pure states, the distinguishability is much easier to compute. If $A = \ket{a}\bra{a}$ and $B = \ket{b}\bra{b}$, then all you need is their dot product's magnitude:
 
-$$p_{\ket{a}\bra{a}, \ket{b}\bra{b}} = \frac{1}{2} + \frac{1}{2} \sqrt{1 - |\langle a | b \rangle|^2 }$$
+$$p\_{\ket{a}\bra{a}, \ket{b}\bra{b}} = \frac{1}{2} + \frac{1}{2} \sqrt{1 - |\langle a | b \rangle|^2 }$$
 
 Because the dot product of two unit vectors is the cosine of the angle between them, knowing the angle $\theta$ between two states gives a particularly easy computation:
 
-$$p_\theta = \frac{1}{2} + \frac{1}{2} \sin \theta$$
+$$p\_\theta = \frac{1}{2} + \frac{1}{2} \sin \theta$$
 
 Now let's consider how repetition affects these definitions.
 
@@ -54,14 +54,14 @@ This will bound how accurate our cloning process can be, and also inform us of h
 So suppose we have a qubit that could be in one of two states, and that the two states differ by an angle of $\theta$.
 The qubit is either in the state $a = \ket{0}$ or in the state $b = (\cos \theta) \ket{0} + (\sin \theta) \ket{1}$.
 
-If we only have one copy of this qubit, we can distinguish between the two states with probability $p_{a, b} = \frac{1}{2} + \frac{1}{2} \sqrt{1 - \langle a \| b \rangle^2} = \frac{1}{2} + \frac{1}{2} \sin \theta$.
+If we only have one copy of this qubit, we can distinguish between the two states with probability $p\_{a, b} = \frac{1}{2} + \frac{1}{2} \sqrt{1 - \langle a \| b \rangle^2} = \frac{1}{2} + \frac{1}{2} \sin \theta$.
 But if we have $n$ copies of the qubit we end up rausing the dot-product to the $n$'th power, and our distinguishability improves:
 
 $$\begin{align}
-  p_{a^{\otimes n}, b^{\otimes n}}
+  p\_{a^{\otimes n}, b^{\otimes n}}
   &= \frac{1}{2} + \frac{1}{2} \sqrt{1 - \langle a^{\otimes n} \| b^{\otimes n} \rangle^2}
-  \\&= \frac{1}{2} + \frac{1}{2} \sqrt{1 - \langle a \| b \rangle^{2n}}
-  \\&= \frac{1}{2} + \frac{1}{2} \sqrt{1 - \cos^{2n} \theta}
+  \\\\&= \frac{1}{2} + \frac{1}{2} \sqrt{1 - \langle a \| b \rangle^{2n}}
+  \\\\&= \frac{1}{2} + \frac{1}{2} \sqrt{1 - \cos^{2n} \theta}
 \end{align}$$
 
 To give a qualitative idea of how the distinguishability of repeated qubit states behaves, here's a contour plot of $\frac{1}{2} + \frac{1}{2} \sqrt{1 - \cos^{2n} \theta}$:
@@ -122,54 +122,54 @@ Then the most obvious possible thing we could do is count the number of qubits t
 
 Note that we can expand states like $R(t)^{\otimes m}$ by rewriting them as a sum of the states with each possible number of ON bits from $0$ to $m$, weighted appropriately:
 
-$$R(t)^{\otimes m} = \sum_{k=0}^{m} \left| {m \atop k} \right\rangle (\cos^{m-k} t) \cdot (\sin^k t)$$
+$$R(t)^{\otimes m} = \sum\_{k=0}^{m} \left| {m \atop k} \right\rangle (\cos^{m-k} t) \cdot (\sin^k t)$$
 
 Here is our target state, expanded:.
 
 $$\begin{align}
-  \psi_{\text{target}}
+  \psi\_{\text{target}}
   &= R(\theta)^{\otimes n+d}
-  \\&= \sum_{i=0}^{n+d} \left| {n+d \atop i} \right\rangle (\cos^{n+d-i} \theta) \cdot (\sin^i \theta)
+  \\\\&= \sum\_{i=0}^{n+d} \left| {n+d \atop i} \right\rangle (\cos^{n+d-i} \theta) \cdot (\sin^i \theta)
 \end{align}$$
 
 Our input state is similar, except we only get $n$ copies of $R(\theta)$, so the last $d$ qubits are in the state $\ket{0}$ instead of something useful:
 
 $$\begin{align}
-  \psi_{\text{input}}
+  \psi\_{\text{input}}
   &= R(\theta)^{\otimes n} \otimes \ket{0}^{\otimes d}
-  \\&= \sum_{k=0}^{n} \left| {n \atop k} \right\rangle (\cos^{n-k} \theta) \cdot (\sin^k \theta) \otimes \ket{0}^{\otimes d}
+  \\\\&= \sum\_{k=0}^{n} \left| {n \atop k} \right\rangle (\cos^{n-k} \theta) \cdot (\sin^k \theta) \otimes \ket{0}^{\otimes d}
 \end{align}$$
 
 The operations we apply to the $d$ qubits can be conditioned on the first $n$ qubits.
 In particular, we can rotate each of the qubits by an amount that depends on the number of ON-qubits (i.e. that depends on the summation variable $k$).
 Given that $k$ out of the $n$ qubits are ON, we would infer that the probability of the $\ket{1}$ state was roughly $\frac{k}{n}$.
-Since our amplitude for that state is set to $\sin \theta$, and the probability is the square of the amplitude, we infer $\frac{k}{n} \approx \sin^2 \theta$ and therefore $\theta \approx \theta_k = \arcsin \sqrt{\frac{k}{n}}$.
+Since our amplitude for that state is set to $\sin \theta$, and the probability is the square of the amplitude, we infer $\frac{k}{n} \approx \sin^2 \theta$ and therefore $\theta \approx \theta\_k = \arcsin \sqrt{\frac{k}{n}}$.
 Applying that approximation within each component of the sum gives our cloned state:
 
 $$\begin{align}
-  \psi_{\text{output}}
-  &= \sum_{k=0}^{n} \left| {n \atop k} \right\rangle (\cos^{n-k} \theta) \cdot (\sin^k \theta) \otimes R(\theta_k)^{\otimes d}
-  \\&= \sum_{k=0}^{n} \sum_{j=0}^{d} \left| {n \atop k} \right\rangle \otimes \left| {d \atop j} \right\rangle (\cos^{n-k} \theta) \cdot (\sin^k \theta) \cdot (\cos^{d-j} \theta_k) \cdot (\sin^j \theta_k)
+  \psi\_{\text{output}}
+  &= \sum\_{k=0}^{n} \left| {n \atop k} \right\rangle (\cos^{n-k} \theta) \cdot (\sin^k \theta) \otimes R(\theta\_k)^{\otimes d}
+  \\\\&= \sum\_{k=0}^{n} \sum\_{j=0}^{d} \left| {n \atop k} \right\rangle \otimes \left| {d \atop j} \right\rangle (\cos^{n-k} \theta) \cdot (\sin^k \theta) \cdot (\cos^{d-j} \theta\_k) \cdot (\sin^j \theta\_k)
 \end{align}$$
 
 To determine the distinguishability of this state versus the target state, we compute their dot product:
 
 $$\begin{align}
-  \psi_{target}^* \cdot \psi_{output}
-  &= \sum_{i=0}^{n+d} \sum_{k=0}^{n} \sum_{j=0}^d \left\langle {n+d \atop i} \right| \left( \left| {n \atop k} \right\rangle \otimes \left| {d \atop j} \right\rangle \right) \cdot (\cos \theta)^{2n+d-k-i} \cdot (\sin \theta)^{i+k} \cdot (\cos \theta_k)^{d-j} \cdot (\sin \theta_k)^j
-  \\&= \sum_{k=0}^{n} \sum_{j=0}^d {n \choose k} {d \choose j} \cdot (\cos \theta)^{2n-2k+d-j} \cdot (\sin \theta)^{2k+j} \cdot (\cos \theta_k)^{d-j} \cdot (\sin \theta_k)^j
-  \\&= \sum_{k=0}^{n} {n \choose k} (\cos \theta)^{2n-2k} \cdot (\sin \theta)^{2k} \cdot \sum_{j=0}^d {d \choose j} (\sin \theta \sin \theta_k)^j \cdot (\cos \theta \cos \theta_k)^{d-j}
-  \\&= \sum_{k=0}^{n} {n \choose k} (\cos \theta)^{2n-2k} \cdot (\sin \theta)^{2k} \cdot (\sin \theta \sin \theta_k + \cos \theta \cos \theta_k)^{d}
-  \\&= \sum_{k=0}^{n} {n \choose k} (\cos^2 \theta)^{n-k} \cdot (\sin^2 \theta)^{k} \cdot \cos^d (\theta - \theta_k)
-  \\&= \sum_{k=0}^{n} {n \choose k} (\cos^2 \theta)^{n-k} \cdot (\sin^2 \theta)^{k} \cdot \cos^d \left(\theta - \arcsin \sqrt{\frac{k}{n}}\right)
+  \psi\_{target}^* \cdot \psi\_{output}
+  &= \sum\_{i=0}^{n+d} \sum\_{k=0}^{n} \sum\_{j=0}^d \left\langle {n+d \atop i} \right| \left( \left| {n \atop k} \right\rangle \otimes \left| {d \atop j} \right\rangle \right) \cdot (\cos \theta)^{2n+d-k-i} \cdot (\sin \theta)^{i+k} \cdot (\cos \theta\_k)^{d-j} \cdot (\sin \theta\_k)^j
+  \\\\&= \sum\_{k=0}^{n} \sum\_{j=0}^d {n \choose k} {d \choose j} \cdot (\cos \theta)^{2n-2k+d-j} \cdot (\sin \theta)^{2k+j} \cdot (\cos \theta\_k)^{d-j} \cdot (\sin \theta\_k)^j
+  \\\\&= \sum\_{k=0}^{n} {n \choose k} (\cos \theta)^{2n-2k} \cdot (\sin \theta)^{2k} \cdot \sum\_{j=0}^d {d \choose j} (\sin \theta \sin \theta\_k)^j \cdot (\cos \theta \cos \theta\_k)^{d-j}
+  \\\\&= \sum\_{k=0}^{n} {n \choose k} (\cos \theta)^{2n-2k} \cdot (\sin \theta)^{2k} \cdot (\sin \theta \sin \theta\_k + \cos \theta \cos \theta\_k)^{d}
+  \\\\&= \sum\_{k=0}^{n} {n \choose k} (\cos^2 \theta)^{n-k} \cdot (\sin^2 \theta)^{k} \cdot \cos^d (\theta - \theta\_k)
+  \\\\&= \sum\_{k=0}^{n} {n \choose k} (\cos^2 \theta)^{n-k} \cdot (\sin^2 \theta)^{k} \cdot \cos^d \left(\theta - \arcsin \sqrt{\frac{k}{n}}\right)
 \end{align}$$
 
-A summary of the tricks we just used: merging the product into a triple-sum, setting $i = k+j$ because otherwise $\left\langle {n+d \atop i} \right\| \left( \left\| {n \atop k} \right\rangle \otimes \left\| {d \atop j} \right\rangle \right)$ is $0$, grouping the terms based on $j$ and $d$, noticing a binomial distribution over $j$, applying a trignometric identity, and expanding $\theta_k$.
+A summary of the tricks we just used: merging the product into a triple-sum, setting $i = k+j$ because otherwise $\left\langle {n+d \atop i} \right\| \left( \left\| {n \atop k} \right\rangle \otimes \left\| {d \atop j} \right\rangle \right)$ is $0$, grouping the terms based on $j$ and $d$, noticing a binomial distribution over $j$, applying a trignometric identity, and expanding $\theta\_k$.
 
 So the dot product of the target state and the naive-cloning-process' output state comes down to summing a binomial distribution... except each bucket of the distribution is suffering compounding losses related to the error of the inferred angle used for each clone.
 The actual distinguishability is:
 
-$$p_{\text{target}, \text{output}} = \frac{1}{2} + \frac{1}{2} \sqrt{1 - \left( \sum_{k=0}^{n} {n \choose k} (\cos^2 \theta)^{n-k} \cdot (\sin^2 \theta)^{k} \cdot \cos^d \left(\theta - \arcsin \sqrt{\frac{k}{n}}\right) \right)^2}$$
+$$p\_{\text{target}, \text{output}} = \frac{1}{2} + \frac{1}{2} \sqrt{1 - \left( \sum\_{k=0}^{n} {n \choose k} (\cos^2 \theta)^{n-k} \cdot (\sin^2 \theta)^{k} \cdot \cos^d \left(\theta - \arcsin \sqrt{\frac{k}{n}}\right) \right)^2}$$
 
 Which is... kind of complicated.
 It doesn't help that we have four values in play: $p$, $n$, $\theta$, and $d$.
@@ -217,172 +217,181 @@ So we'll just use $\ket{0}$.
 
 We start with our "unknown" input state:
 
-$\psi_{input} = \left(\ket{0} \bra{0}\right)^{\otimes n}$
+$\psi\_{\text{input}} = (\ket{0} \bra{0})^{\otimes n}$
 
-Append the randomized qubits:
+and our ancilla:
 
-$\psi_{expanded} = \left(\ket{0} \bra{0}\right)^{\otimes n} \otimes \left(\frac{1}{2} \ket{0}\bra{0} + \frac{1}{2} \ket{1}\bra{1} \right)^{\otimes d}$
+$\psi\_{\text{ancilla}}
+= \left(\frac{1}{2} \ket{0}\bra{0} + \frac{1}{2} \ket{1}\bra{1} \right)^{\otimes d}
+= \frac{1}{2^d} \sum\_{s}^d \sum\_{c}^{d \choose s} \ket{d \atop s}\_c \bra{d \atop s}\_c$
 
-Rewrite the expression into a sum:
+Concatenate them:
 
-$
-\psi_{expanded} =
- \sum_{x=0}^{2^d}
-  \frac{1}{2^d}
-  \left(
-    \ket{0}^{\otimes n}
-    \ket{x}
-  \right)
-  \left(
-    \bra{0}^{\otimes n}
-    \bra{x}
-  \right)
-$
+$\psi\_{\text{expanded}} = \psi\_{\text{input}} \otimes \psi\_{\text{ancilla}}$
+
+$= \frac{1}{2^d} \sum\_{s}^d \sum\_{c}^{d \choose s} \left(\ket{0}^{\otimes n} \ket{d \atop s}\_c\right) \left(\bra{0}^{\otimes n} \bra{d \atop s}\_c \right)$
 
 Now we want to project our expanded vector down into the symmetric subspace.
-To do that, we pre- and post- multiply by the projecter $P_{m} = \sum_{k=0}^m \ket{m \atop k} \bra{m \atop k}$:
+To do that, we pre- and post- multiply by the projector $P\_{m} = \sum\_{k=0}^m \hat{\ket{m \atop k}} \hat{\bra{m \atop k}}$.
 
-$$
-\begin{align}
-\psi_{projected} &= P_{n+d} \cdot \psi_{expanded} \cdot P_{n+d}
-\\
-&=
+Keep in mind that $\ket{m \atop k} = \sum\_{j=0}^{m \choose k} \ket{m \atop k}\_j$.
+
+$\psi\_{\text{projected}} = P\_{n+d} \cdot \psi\_{\text{expanded}} \cdot P\_{n+d}$
+
+$=
 \left[
-  \sum_{k}^{n+d}
-  \sum_{j}^{n+d \choose k}
-   \ket{n+d \atop k}
-   \bra{n+d \atop k}_j
+  \sum\_{k}^{n+d}
+   \hat{\ket{n+d \atop k}}
+   \hat{\bra{n+d \atop k}}
 \right]
 \cdot
 \left[
- \sum_{x}^{2^d}
   \frac{1}{2^d}
-  \left(
-    \ket{0}^{\otimes n}
-    \ket{x}
-  \right)
-  \left(
-    \bra{0}^{\otimes n}
-    \bra{x}
-  \right)
+  \sum\_{s}^d
+  \sum\_{c}^{d \choose s}
+    \left(\ket{0}^{\otimes n} \ket{d \atop s}\_c\right)
+    \left(\bra{0}^{\otimes n} \bra{d \atop s}\_c \right)
 \right]
 \cdot
 \left[
-  \sum_{k}^{n+d}
-  \sum_{j}^{n+d \choose k}
-   \ket{n+d \atop k}_j
-   \bra{n+d \atop k}
+  \sum\_{k}^{n+d}
+   \hat{\ket{n+d \atop k}}
+   \hat{\bra{n+d \atop k}}
 \right]
-\\
-&=
+$
+
+Pull all the sums to the left:
+
+$=
 \frac{1}{2^d}
-\sum_{k_0, k_1}^{n+d}
-\sum_{j_0}^{n+d \choose k_0}
-\sum_{j_1}^{n+d \choose k_1}
-\sum_{x}^{2^d}
-  \ket{n+d \atop k_0}
-  \bra{n+d \atop k_0}_{j_0}
-  \left(
-    \ket{0}^{\otimes n}
-    \ket{x}
-  \right)
-  \left(
-    \bra{0}^{\otimes n}
-    \bra{x}
-  \right)
-  \ket{n+d \atop k_1}_{j_1}
-  \bra{n+d \atop k_1}
-\\
-&=
+\sum\_{k\_0, k\_1}^{n+d}
+\sum\_{s}^d
+\sum\_{c}^{d \choose s}
+  \hat{\ket{n+d \atop k\_0}}
+  \hat{\bra{n+d \atop k\_0}}
+  \left(\ket{0}^{\otimes n} \ket{d \atop s}\_c\right)
+  \left(\bra{0}^{\otimes n} \bra{d \atop s}\_c \right)
+  \hat{\ket{n+d \atop k\_1}}
+  \hat{\bra{n+d \atop k\_1}}
+$
+
+Realize that $k\_0 = k\_1 = s$:
+
+$=
 \frac{1}{2^d}
-\sum_{x}^{2^d}
-\sum_{j_0,j_1}^{n+d \choose \text{ons}(x)}
-  \ket{n+d \atop \text{ons}(x)}
-  \bra{n+d \atop \text{ons}(x)}_{j_0}
-  \left(
-    \ket{0}^{\otimes n}
-    \ket{x}
-  \right)
-  \left(
-    \bra{0}^{\otimes n}
-    \bra{x}
-  \right)
-  \ket{n+d \atop \text{ons}(x)}_{j_1}
-  \bra{n+d \atop \text{ons}(x)}
-\\
-&=
+\sum\_{s}^d
+\sum\_{c}^{d \choose s}
+  \hat{\ket{n+d \atop s}}
+  \hat{\bra{n+d \atop s}}
+  \left(\ket{0}^{\otimes n} \ket{d \atop s}\_c\right)
+  \left(\bra{0}^{\otimes n} \bra{d \atop s}\_c \right)
+  \hat{\ket{n+d \atop s}}
+  \hat{\bra{n+d \atop s}}
+$
+
+Realize that $\hat{\bra{n+d \atop s}} \left(\ket{0}^{\otimes n} \ket{d \atop s}\_c\right) = {n+d \choose s}^{-0.5}$:
+
+$=
 \frac{1}{2^d}
-\sum_{y}^{d}
-\sum_{z}^{d \choose y}
-\sum_{j_0,j_1}^{n+d \choose \text{ons}(x)}
-  \ket{n+d \atop \text{ons}(x)}
-  \bra{n+d \atop \text{ons}(x)}_{j_0}
-  \left(
-    \ket{0}^{\otimes n}
-    \ket{X(y, z)}
-  \right)
-  \left(
-    \bra{0}^{\otimes n}
-    \bra{X(y, z)}
-  \right)
-  \ket{n+d \atop \text{ons}(x)}_{j_1}
-  \bra{n+d \atop \text{ons}(x)}
-\\
-&=
+\sum\_{s}^d
+\sum\_{c}^{d \choose s}
+  \hat{\ket{n+d \atop s}}
+  \hat{\bra{n+d \atop s}}
+  /{n+d \choose s}
+$
+
+Constant sum into factor:
+
+$=
 \frac{1}{2^d}
-\sum_{y}^{d}
-\sum_{z}^{d \choose y}
-\sum_{j_0,j_1}^{n+d \choose y}
-  \ket{n+d \atop y}
-  \bra{n+d \atop y}_{j_0, z}
-  \ket{n+d \atop y}_{j_1, z}
-  \bra{n+d \atop y}
-\\
-&=
+\sum\_{s}^d
+  {d \choose s}/{n+d \choose s}
+  \hat{\ket{n+d \atop s}}
+  \hat{\bra{n+d \atop s}}
+$
+
+Renormalize:
+
+$=
+\frac{n+1}{n+d+1}
+\sum\_{s}^d
+  {d \choose s}/{n+d \choose s}
+  \hat{\ket{n+d \atop s}}
+  \hat{\bra{n+d \atop s}}
+$
+
+Now compute trace distance:
+
+$=
+\left(1 - \frac{n+1}{d+n+1} \right)
++
+\frac{n+1}{n+d+1}
+\sum\_{s=1}^d
+  {d \choose s}/{n+d \choose s}
+$
+
+$= 1 - \frac{n+1}{d+n+1} + \frac{n+1}{d+n+1} \frac{d}{n+1}$
+
+$= 1 - \frac{n+1}{d+n+1} + \frac{d}{d+n+1}$
+
+$= 1 + \frac{d-n-1}{d+n+1}$
+
+$= \frac{d-n-1+d+n+1}{d+n+1}$
+
+$= \frac{2d}{d+n+1}$
+
+$\rightarrow \frac{d}{d+n+1}$
+
+Trace out all of the qubits except the first one:
+
+$\text{Tr}_{*}
+\frac{n+1}{n+d+1}
+\sum\_{s}^d
+  {d \choose s}/{n+d \choose s}
+  \ket{n+d \atop s}
+  \bra{n+d \atop s}
+$
+
+$
 \frac{1}{2^d}
-\sum_{y}^{d}
-\sum_{z}^{d \choose y}
-\sum_{j_0,j_1}^{n+d \choose y}
-  \ket{n+d \atop y}
-  {n+d \choose y}^{-1}
-  e^{i \tau (j_0-j_1) f_{?}(z) {n+d \choose y}^{-1}}
-  \bra{n+d \atop y}
-\\
-&=
-\frac{1}{2^d}
-\sum_{y}^{d}
-\sum_{z}^{d \choose y}
-\sum_{j}^{n+d \choose y}
-  \ket{n+d \atop y}
-  {n+d \choose y}^{-1}
-  e^{i \tau (j-j) f_{?}(z) {n+d \choose y}^{-1}}
-  \bra{n+d \atop y}
-\\
-&=
-\frac{1}{2^d}
-\sum_{y}^{d}
-\sum_{z}^{d \choose y}
-\sum_{j}^{n+d \choose y}
-  \ket{n+d \atop y}
-  {n+d \choose y}^{-1}
-  \bra{n+d \atop y}
-\\
-&=
-\frac{1}{2^d}
-\sum_{y}^{d}
-  \ket{n+d \atop y}
-  \bra{n+d \atop y}
-  {n+d \choose y}^{-1}
-  {n+d \choose y}
-  {d \choose y}
-\\
-&=
-\frac{1}{2^d}
-\sum_{y}^{d}
-  \ket{n+d \atop y}
-  \bra{n+d \atop y}
-  {d \choose y}
-\end{align}$$
+\sum\_{s}^d
+  {d \choose s}/{n+d \choose s}
+  \text{Tr}_{*}
+  \ket{n+d \atop s}
+  \bra{n+d \atop s}
+$
+
+$=
+\frac{n+1}{n+d+1}
+\sum\_{s}^d
+  {d \choose s}/{n+d \choose s}
+  \text{Tr}_{*}
+  \left( \ket{0}\ket{n+d-1 \atop s} + \ket{1}\ket{n+d-1 \atop s-1} \right)
+  \left( \bra{0}\bra{n+d-1 \atop s} + \bra{1}\bra{n+d-1 \atop s-1} \right)
+$
+
+$=
+\frac{n+1}{n+d+1}
+\sum\_{s}^d
+  {d \choose s}/{n+d \choose s}
+  \ket{0}\bra{0} \text{Tr} \ket{n+d-1 \atop s} \bra{n+d-1 \atop s}
+  +
+  \ket{1}\bra{1} \text{Tr} \ket{n+d-1 \atop s-1} \bra{n+d-1 \atop s-1}
+$
+
+$
+= \frac{n+1}{n+d+1} \ket{0}\bra{0} \sum\_{s=0}^d {d \choose s}/{n+d \choose s}
++ \frac{n+1}{n+d+1} \ket{1}\bra{1} \sum\_{s=1}^d {d \choose s}/{n+d \choose s}
+$
+
+$=
+\ket{0}\bra{0} + \frac{d}{n+d+1} \ket{1}\bra{1}
+$
+
+$=
+\frac{n+1}{n+d+1} \ket{0}\bra{0} + \frac{d}{n+d+1} I
+$
+
 
 Ugggghhh... Okay, so the above used facts about roots of unity and whether or not sets overlap... Let's just pretend it's all very clear.
 
@@ -391,13 +400,13 @@ We want the state with no one bits set, and there's a $\frac{1}{2^d} \frac{d}{n+
 
 The optimal distinguisher just measures the number of bits that are ON, so there's a $\frac{1}{2^d}$ chance we'll confuse them.
 
-$\psi_{target} = \ket{0}^\{otimes n+d} \bra{0}^\{otimes n+d}$
+$\psi\_{target} = \ket{0}^\{otimes n+d} \bra{0}^\{otimes n+d}$
 
-$\text{Tr} \| \psi_{\text{projected}}  - \psi_{\text{target}} \|$
+$\text{Tr} \| \psi\_{\text{projected}}  - \psi\_{\text{target}} \|$
 
 $= \text{Tr} \|
 \frac{1}{2^d}
-\sum_{y}^{d}
+\sum\_{y}^{d}
   \ket{n+d \atop y}
   \bra{n+d \atop y}
   {d \choose y}
