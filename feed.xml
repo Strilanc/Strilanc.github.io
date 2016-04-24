@@ -7,6 +7,14 @@
 		<atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>Eve&#39;s Quantum Clone Computer</title>
+				<description>&lt;p&gt;&lt;a href=&quot;/2016/04/05/copying-a-quantum-brain.html&quot;&gt;Last post&lt;/a&gt;, I tried to explain that interactions with the world can reveal the current state of a quantum system.&lt;/p&gt; &lt;p&gt;I framed the post around the hypothetical of duplicating a brain despite the brain containing quantum information. I pointed to a couple examples of people saying it would be impossible to do that, since the &lt;a href=&quot;https://en.wikipedia.org/wiki/No-cloning_theorem&quot;&gt;No-Cloning Theorem&lt;/a&gt; prevents the duplication of unknown quantum states. Then I tried to explain a copying algorithm based on moving the brain into a quantum computer and inferring its state by recording any measurements the brain decided to perform.&lt;/p&gt; &lt;p&gt;Anyways, I didn&amp;#39;t explain...</description>
+				<pubDate>Sun, 24 Apr 2016 04:10:10 -0400</pubDate>
+				<link>http://algorithmicassertions.com/2016/04/24/eves-quantum-clone-computer.html</link>
+				<guid isPermaLink="true">http://algorithmicassertions.com/2016/04/24/eves-quantum-clone-computer.html</guid>
+			</item>
+		
+			<item>
 				<title>Gradually Copying a Quantum Brain</title>
 				<description>&lt;p&gt;Last month, YouTuber &lt;a href=&quot;https://www.youtube.com/user/CGPGrey/videos&quot;&gt;CGP Grey&lt;/a&gt; posted an &lt;a href=&quot;https://www.youtube.com/watch?v=nQHBAdShgYI&quot;&gt;edutainment video about the philosophical implications of transporters&lt;/a&gt;. One of the points he focuses on is whether teleportation works by creating a copy of you and killing the original.&lt;/p&gt; &lt;p&gt;In response to the teleportation video, &lt;a href=&quot;https://www.youtube.com/user/minutephysics/videos&quot;&gt;MinutePhysics&lt;/a&gt; posted &lt;a href=&quot;https://www.youtube.com/watch?v=dAaHHGHuy1c&quot;&gt;a follow-up video about quantum teleportation&lt;/a&gt;. The follow-up video points out that quantum information can&amp;#39;t be copied, only moved, so if your identity somhow depends on quantum information then you don&amp;#39;t have to worry about being duplicated(-then-killed).&lt;/p&gt; &lt;p&gt;This idea, that if our brains operate on quantum information then they are duplication-proof thanks...</description>
 				<pubDate>Tue, 05 Apr 2016 04:10:10 -0400</pubDate>
@@ -76,14 +84,6 @@
 				<pubDate>Thu, 07 Jan 2016 11:30:00 -0500</pubDate>
 				<link>http://algorithmicassertions.com/quantum/2016/01/07/Delayed-Choice-Quantum-Erasure.html</link>
 				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2016/01/07/Delayed-Choice-Quantum-Erasure.html</guid>
-			</item>
-		
-			<item>
-				<title>Quantum Teleportation&#39;s Two Functions</title>
-				<description>&lt;p&gt;Quantum teleportation is a technique for sending quantum information over a classical communication channel, at the cost of some pre-existing entanglement. If you&amp;#39;re not familiar with the process, you can watch Michael Nielson, co-author of the de-facto standard textbook for quantum computing, &lt;a href=&quot;https://www.youtube.com/watch?v=3wZ35c3oYUE&amp;amp;list=PL1826E60FD05B44E4&amp;amp;index=18&quot;&gt;explain it in a Khan-academy style video&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;I won&amp;#39;t be explaining quantum teleportation in detail in this post (&lt;a href=&quot;/quantum/2014/05/11/Storing-Bandwidth-with-Quantum-Teleportation.html&quot;&gt;I already did that&lt;/a&gt;), but for reference, here is a circuit diagram of the quantum teleportation process:&lt;/p&gt; &lt;p&gt;&lt;img src=&quot;/assets/2015-12-28-Separating-Quantum-Teleportation/quantum-teleportation-circuit.png&quot; title=&quot;Quantum Teleportation Circuit&quot; style=&quot;max-width: 100%;&quot;/&gt;&lt;/p&gt; &lt;p&gt;Typically, quantum teleportation is presented as a primitive. But, in this post, we will...</description>
-				<pubDate>Mon, 28 Dec 2015 11:30:00 -0500</pubDate>
-				<link>http://algorithmicassertions.com/quantum/2015/12/28/Separating-Quantum-Teleportation.html</link>
-				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2015/12/28/Separating-Quantum-Teleportation.html</guid>
 			</item>
 		
 	</channel>

@@ -288,7 +288,7 @@ We conditionally toggle T on both sides of the possible toggling of the ancilla 
 
 <p>We could apply this construction iteratively, turning $C^{n}NOT$s into $C^{\frac{n}{2}}NOT$s into $C^{\frac{n}{4}}NOT$s and so forth $p$ times until we hit the base case of Toffoli gates when $\frac{n}{2^p} \approx 2$. Unfortunately, doing that would use more than a linear number of Toffoli gates.</p>
 
-<p>For a borrowable bit, the recurrence relation resulting from iterating down to the bae case would be $T(n) = 4 T(\frac{n}{2})$, which makes $T$ an $O(n^2)$ function.</p>
+<p>For a borrowable bit, the recurrence relation resulting from iterating down to the base case would be $T(n) = 4 T(\frac{n}{2})$, which makes $T$ an $O(n^2)$ function.</p>
 
 <p>Given a burnable bit, you might expect the recurrence relation to be $T(n) = 2 T(\frac{n}{2}) \in O(n)$... but really we can only burn the bit once, so we&#39;d have to switch to treating it as a garbage bit after the first iteration.</p>
 
