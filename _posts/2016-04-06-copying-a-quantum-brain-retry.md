@@ -10,7 +10,8 @@ comments: true
 [Last post](/2016/04/05/copying-a-quantum-brain.html), I tried to explain that interactions with the world can reveal the current state of a quantum system.
 
 I framed the post around the hypothetical of duplicating a brain despite the brain containing quantum information.
-I pointed to a couple examples of people saying it would be impossible to do that, since the [No-Cloning Theorem](https://en.wikipedia.org/wiki/No-cloning_theorem)'s prevents the duplication of unknown quantum states, then tried to explain a copying algorithm based on moving the brain into a quantum computer and inferring its state by recording any measurements the brain decided to perform.
+I pointed to a couple examples of people saying it would be impossible to do that, since the [No-Cloning Theorem](https://en.wikipedia.org/wiki/No-cloning_theorem) prevents the duplication of unknown quantum states
+Then I tried to explain a copying algorithm based on moving the brain into a quantum computer and inferring its state by recording any measurements the brain decided to perform.
 
 Anyways, I didn't explain the concept very well and took flak from people thinking I was claiming obviously-wrong things.
 So let's try this again, but slower.
@@ -23,7 +24,7 @@ Storing the information on Eve's computer is inconvenient.
 Whenever Alice wants to apply an operation or measure a qubit, she has to ask Eve to do it for her.
 Which is tedious.
 Also there's the fact that Eve could be snooping on Alice's state... but Alice figures the quantum-ness probably protects against that somehow.
-And Alice doesn't own a quantum of her own, so it's not like she has any other option.
+And Alice doesn't own a quantum computer of her own, so it's not like she has any other option.
 
 Here's a diagram of the situation:
 
@@ -46,10 +47,10 @@ Hmm...
 
 Suppose Alice is storing only a single qubit in Eve's computer.
 In this trivial case, the jig is up as soon as the first measurement is applied.
-The measurement will collapse Alice's state to one of two possibilities, and the measurement result will tell Eve exactly which possibilities it was.
+The measurement will collapse Alice's state to one of two possibilities, and the measurement result will tell Eve exactly which possibility it was.
 
 *(Note: Eve's computer only supports single-qubit measurements in the computational basis.
-If ALice wants to perform weak measurements, or measurements in a different basis, she has to emulate them with a series of operations.)*
+If Alice wants to perform weak measurements, or measurements in a different basis, she has to emulate them with a series of operations.)*
 
 Let's go over an example case where Eve ends up with a copy of Alice's state:
 
@@ -107,9 +108,9 @@ Lastly, measure $q\_1$ and clear it.
 There are two possible output states, one for the OFF measurement outcome and one for the ON outcome:
 
 $$\begin{align}
-\ket{\psi\_{t+3,\text{ON}}} &= \frac{x b \ket{00} + y d \ket{10}}{\sqrt{|xb|^2 + |yd|^2)}}
-\\\\
 \ket{\psi\_{t+3,\text{OFF}}} &= \frac{x a \ket{00} + y c \ket{10}}{\sqrt{|ax|^2 + |yd|^2}}
+\\\\
+\ket{\psi\_{t+3,\text{ON}}} &= \frac{x b \ket{00} + y d \ket{10}}{\sqrt{|xb|^2 + |yd|^2)}}
 \end{align}$$
 
 Those normalization factors are pretty gross.
@@ -126,7 +127,7 @@ Q\_{t+3,ON} &= |xb|^2:|yd|^2
 
 Based on $U=\bimat{a}{b}{c}{d}$ being unitary, we know that $|a|^2=|d|^2$ and $|b|^2 = |c|^2 = 1 - |a|^2$.
 Also we know that $|x|^2 = 1 - |y|^2$.
-That lets us cut the number of variables needs to describe the proportions:
+That lets us cut the number of variables needed to describe the proportions:
 
 $$\begin{align}
 Q\_t &= 1-|y|^2:|y|^2
@@ -187,7 +188,7 @@ Recall that $|y|^2$ is just the probability of $q\_1$ being ON.
 So, as $q\_1$ transition from mostly-ON to mostly-OFF, $p$ transitions from $U$'s toggly-ness to the complement of $U$'s togglyness.
 
 We now have enough information to summarize whether the random walk's steps are biased positive-ward (towards ON) or negative-ward (towards OFF) for various cases.
-By taking into account both the probability bias and the sign of $s\_u$ we can chart the overall bias:
+By taking into account both the probability bias and the sign of $s\_u$ we can chart whether the overall bias is postive-ward or negative-ward:
 
 <style>
   table, th, td {
@@ -256,7 +257,7 @@ In other words, the bias is *always away from the origin*.
 That means the random walk will diverge to one of the infinities; it won't keep coming back to the origin.
 Thus $q\_1$ almost surely converges to ON or converges to OFF.
 
-Based on the analysis we just did, Eve can succeed at making a copy of Alice's state by merely waiting long enough for the random walk to get for from 0.
+Based on the analysis we just did, Eve can succeed at making a copy of Alice's state by merely waiting long enough for the random walk to get far from the origin.
 But let's actually simulate what happens.
 
 # Simulating a 2-Qubit Inferrence
@@ -311,7 +312,7 @@ Making an inferred copy *smells* NP-Hard to me, but every time I try to make a r
 
 # Simulating More Qubits Being Inferred
 
-To show that the density matrix solution actually works, I implemented it.
+To show that the density matrix solution can actually work, I implemented it.
 You can find the code [on github in the Eve-Quantum-Clone-Computer repository](https://github.com/Strilanc/Eve-Quantum-Clone-Computer).
 
 For the example inferrence animated below, I tried to pick some interesting operations to apply.
@@ -376,8 +377,7 @@ You can test out your own cases by cloning the repository and editing `src/main.
 
 At this point I think I've definitively established that *sometimes* Eve can infer the state of Alice's system and thereby create a clone.
 I mean, I literally provided working code.
-But there are also situations where Eve *can't* infer Alice's state.
-Let's go over three.
+But **there are also situations where Eve _can't_ infer Alice's whole state**.
 
 First, there may be **details of the state that don't affect any measurements**.
 Remember how, in the two-qubit case we analyzed, the step size of the random walk degenerated to 0 when the toggly-ness of $U$ hit 50%?
@@ -387,38 +387,59 @@ If Eve's ultimate goal is to predict Alice's measurement probabilities, then not
 But even so, it's quite hard for Eve to figure out if she has all the relevant details yet.
 Determining if an Alice program will ever use a specific qubit is as hard as the halting problem; incomputable.
 
-Alice can also create situations with exponentially small effects on measurements, where Eve is forced to run Alice's system for a very very long time if she doesn't want to get caught.
-
 Second, if Eve's quantum computer can communicate with other quantum computers, Alice may ask Eve to **entangle her state with external states**.
 Although it's possible to clone an EPR pair *as a whole*, it's not possible to clone *half* of an EPR pair.
-That's literally mathematically non-sensical: you're asking for a qubit that agrees with $a$, but not with $b$, despite $b$ agreeing with $a$.
-If Alice can't create new entanglement then Eve's inferrence process will work fine, but if Alice is constantly adding new entanglement that allows her to re-mix Eve's estimate.
+That's literally non-sensical: you're asking for a qubit that agrees with $a$, but not with $b$ (otherwise you'd have a GHZ state instead of a clone), despite $b$ agreeing with $a$.
 
-Third, there's the pragmatic issue of size.
+Including entanglement into the initial state isn't a problem.
+Eve's inferrence process handles that.
+The problem is if Alice can add *new* entanglement: it gives her a way to add entropy into Eve's inferred density matrix.
+
+Third, there's **the pragmatic issue of size**.
 For $n$ qubits and $m$ operations, Eve's inferrence algorithm does $O(4^n m)$ work.
 So an easy way for Alice to defeat a naive Eve is to just concatenate 100 qubits onto the state.
-On the other hand, in practice Eve will often have context for what Alice is computing and that may allow her to see through those extra 100 qubits.
+
+# On Brains
+
+What does this all mean for inferring the state of quantum information in a brain?
+
+It means that not all possible quantum brain architectures are clone-resistant.
+Quantum-ness is necessary for clone-resistance, but not sufficient.
+By loading the brain into Eve's quantum clone computer and simulating its normal operation, we might learn all of the hidden details.
+
+The inferrence process won't work if the brain is intermittently refreshing external entanglement.
+
+And unused details will make it hard to tell if we've finished or not.
+
+And long-lived qubits with exponentially-small effects on measurements can add quite a lot of time to the process.
+
+And we're totally hosed in practice if we can't factor the problem into 30-qubit sub-systems.
+
+But still.
 
 # Notes
 
-- **Doesn't radnomness get unavoidably added into the state when measuring along non-commuting observables and degrade Eve's estimate?**
+- **Shouldn't measuring non-commuting observables, which has random unpredictable results, degrade Eve's estimate?**
 
     *(For example, keep setting a qubit to $\ket{0} + \ket{1}$ and measuring it to build up unknown-to-Eve information.)*
 
     No.
-    Entropy does get added into the state by the measurement, but then it's revealed by the measurement result.
+    Entropy does get added into the state by the measurement, but it's immediately revealed by the measurement result.
 
-    The 4-qubit example above actually tries to do this, and it doesn't hurt the inference process at all.
+    The 4-qubit simulation above actually does this.
+    It doesn't hurt the inference process at all.
     Eve can lose ground when unlikely measurements keep happening, biasing the inferrence towards a wrong answer, but the overall tendency is to gain ground.
     
     The only way to consistently add entropy into Eve's inferred density matrix is to introduce external entanglement.
 
 - **What about ancilla qubits that don't get measured (e.g. as in the Deutch-Josza algorithm)?**
 
-    After the algorithm is over, the ancilla aren't kept around; they're allowed to decohere (i.e. measured).
+    The final values of ancilla bits usually doesn't matter, or is implied by the measurements that *are* performed.
+    That's why, after the algorithm is over, you just let them decohere (i.e. get measured but ignore the result).
     
-    Secondarily, many algorithms have ancilla whose state is known or implied by the measurements that *are* performed.
-    Sometimes the ancilla aren't even necessary (e.g. the typical [example Deutch-Josza circuit](https://en.wikipedia.org/wiki/Deutsch%E2%80%93Jozsa_algorithm#/media/File:Deutsch-Jozsa_Algorithm.svg) has an unnecessary ancilla).
+    Feel free to try this case out!
+    For example, the typical [example Deutch-Josza circuit](https://en.wikipedia.org/wiki/Deutsch%E2%80%93Jozsa_algorithm#/media/File:Deutsch-Jozsa_Algorithm.svg) has an unnecessary ancilla.
+    Does Eve manage to infer it when Alice runs that circuit?
 
 - **Doesn't this violate the no-cloning theorem?**
 
@@ -444,11 +465,6 @@ On the other hand, in practice Eve will often have context for what Alice is com
 
 # Summary
 
-Sometimes, when a quantum system keeps interacting with the world, you can gradually infer its true state.
-Once you know the state, making copies is easy.
+If you tell someone everything you're doing to your secret quantum state, and what measurement results you're getting, it gradually stops being a secret.
 
-In terms of brains, making a brain 'quantum' is not sufficient for [unconditional security](https://en.wikipedia.org/wiki/Information-theoretic_security) against duplication.
-You still get security from computational hardness, but unconditional security requires stronger assumptions than just 'quantum' (such as sharing EPR pairs with other brains).
-
-- Mention that in practice Eve may be able to do things that Alice can't detect and this would make her stronger than I'm considering
-- 
+Putting quantum information into a brain is necessary, but not sufficient, for unconditional security against cloning.
