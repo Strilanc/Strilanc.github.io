@@ -9,11 +9,10 @@ comments: true
 
 [Last post](/2016/04/05/copying-a-quantum-brain.html), I tried to explain that interactions with the world can reveal the current state of a quantum system.
 
-I motivated the post by pointing to a couple examples of people saying it would be impossible to duplicate a quantum brain, since the [No-Cloning Theorem](https://en.wikipedia.org/wiki/No-cloning_theorem)'s prevents the duplication of unknown quantum states.
-But brains interact with the world, and this can reveal more and more information about their state.
-I tried to explain a computable way to do the duplication, based on moving the brain into a simulating quantum computer that records all measurements.
+I framed the post around the hypothetical of duplicating a brain despite the brain containing quantum information.
+I pointed to a couple examples of people saying it would be impossible to do that, since the [No-Cloning Theorem](https://en.wikipedia.org/wiki/No-cloning_theorem)'s prevents the duplication of unknown quantum states, then tried to explain a copying algorithm based on moving the brain into a quantum computer and recording any measurements the brain decided to perform.
 
-But I didn't explain the concept very well, and took flak from people thinking I was claiming obviously-wrong things.
+Anyways, I didn't explain the concept very well and took flak from people thinking I was claiming obviously-wrong things.
 So let's try this again, but slower.
 
 # Hold my Qubit
@@ -52,9 +51,9 @@ In this trivial case, the jig is up as soon as the first measurement is applied.
 The measurement will collapse Alice's state to one of two possibilities, and the measurement result will tell Eve exactly which possibilities it was.
 
 *(Note: Eve's computer only supports single-qubit measurements in the computational basis.
-Performing weak measurement or measurements in a different basis can be done, but you need to emulate them by applying operations and, sometimes, having ancilla qubits available in Alice's state.)*
+Weak measurement, or measurements in a different basis, have to be emulated.)*
 
-Let's go over an example case:
+Let's go over an example case, and see how Eve ends up with a copy of Alice's state:
 
 1. Alice securely loads her state into Eve's computer.
      - The initial state happens to be $\ket{\psi\_0} = \frac{1}{\sqrt 2}\ket{0} - \frac{1}{\sqrt 2}\ket{1}$.
@@ -68,8 +67,8 @@ Let's go over an example case:
     - Eve initializes $q_{\text{copy}}$ to $\ket{0}$.
 4. Eve wins.
 
-*(Keep in mind that Eve didn't clone Alice's *original* qubit.
-Eve copied a post-measurement state, not the preceeding unmeasured state.
+*(Keep in mind that Eve didn't clone Alice's original qubit.
+Eve cloned a post-measurement state, not the preceeding unmeasured state.
 That's why we aren't violating the no-cloning theorem.)*
 
 The single qubit case is kind of boring, as you can see.
@@ -78,8 +77,8 @@ To make the situation less black and white, we need more qubits.
 
 # Analyzing a 2-Qubit System
 
-Alice is now storing two qubits, $q\_1$ and $q\_2$, on Eve's computer.
-This is a big step up from one qubit, because now Alice can mix things up between measurements.
+Suppose Alice is storing two qubits, $q\_1$ and $q\_2$, on Eve's computer.
+This is a big step up from one qubit, because Alice can mix things up between measurements.
 Eve may never see a snapshot of the whole state.
 
 There's a lot that could be said about the 2-qubit case, but let's focus on one particular type of thing Alice can do: obscuring a value with a unitary operation.
@@ -89,7 +88,8 @@ Here's a circuit diagram showing the operations Alice will ask Eve to apply:
 
 <img src="/assets/{{ loc }}/2qubit_example_circuit.png" style="max-width: 100%;"/>
 
-To understand if Eve will still be able to learn the value of $q\_1$, we need to understand how this loop of operations affects $q\_1$.
+Will Eve be able to infer the value of $q\_1$ by recording the measurements of $q\_2$?
+To answer that question, we need to understand how $q\_1$ is affected by the repeated operations.
 (Yes, it's affected despite only being used as a control.)
 
 Suppose $q\_1$ starts in the state $x \ket{0} + y \ket{1}$.
@@ -106,7 +106,7 @@ Now apply $U$, advancing the state to:
 $$\ket{\psi_{t+2}} = x a \ket{00} + x b \ket{01} + y c \ket{10} + y d \ket{11}$$
 
 Lastly, measure $q\_1$ and clear it.
-There are two possible outcomes:
+There are two possible output states, one for the OFF measurement outcome and one for the ON outcome:
 
 $$\begin{align}
 \ket{\psi\_{t+3,\text{ON}}} &= \frac{x b \ket{00} + y d \ket{10}}{\sqrt{|xb|^2 + |yd|^2)}}
@@ -116,7 +116,7 @@ $$\begin{align}
 
 Okay... those normalization factors are pretty gross.
 Let's ignore them by focusing on *proportions* instead of exact amplitudes.
-The proportional squared magnitudes of OFF:ON are:
+The proportional squared magnitudes for OFF:ON are:
 
 $$\begin{align}
 Q\_t &= |x|^2:|y|^2
@@ -126,102 +126,163 @@ Q\_{t+3,OFF} &= |xa|^2:|yc|^2
 Q\_{t+3,ON} &= |xb|^2:|yd|^2
 \end{align}$$
 
-Based on $U=\bimat{a}{b}{c}{d}$ being unitary, we know that $|a|=|d|$ and $|b| = |c| = \sqrt{1 - |a|^2}$.
-That lets us rewrite our proportions in terms of just $|a|$.
+Based on $U=\bimat{a}{b}{c}{d}$ being unitary, we know that $|a|^2=|d|^2$ and $|b|^2 = |c|^2 = 1 - |a|^2$.
+Also we know that $|x|^2 = 1 - |y|^2$.
+That lets us cut the number of involved variables:
 
 $$\begin{align}
-Q\_t &= |x|^2:|y|^2
+Q\_t &= 1-|y|^2:|y|^2
 \\\\
-Q\_{t+3,OFF} &= |xa|^2:|y|^2 (1-|a|^2)
+Q\_{t+3,OFF} &= (1-|y|^2)|a|^2:|y| (1-|a|^2)
 \\\
-Q\_{t+3,ON} &= |x|^2 (1-|a|^2):|ya|^2
+Q\_{t+3,ON} &= (1-|y|^2) (1-|a|^2):|y|^2 |a|^2
 \end{align}$$
 
-And, by defining $r\_u = \frac{|a|^2}{1-|a|^2}$, we can simplify even further:
+By defining $r\_u = \frac{|a|^2}{1-|a|^2}$, we can simplify even further:
 
 $$\begin{align}
-Q\_t &= |x|^2:|y|^2
+Q\_t &= 1-|y|^2:|y|^2
 \\\\
-Q\_{t+3,OFF} &= |x|^2 \cdot r\_u:|y|^2
+Q\_{t+3,OFF} &= (1-|y|^2) \cdot r\_u:|y|^2
 \\\
-Q\_{t+3,ON} &= |x|^2:|y|^2 \cdot r\_u
+Q\_{t+3,ON} &= 1-|y|^2:|y|^2 \cdot r\_u
 \end{align}$$
 
 Our final simplification is to switch from odds $Q$ to [log-odds](https://wiki.lesswrong.com/wiki/Log_odds) $\tilde Q$:
 
 $$\begin{align}
-\tilde Q\_t &= 2 \lg |x| - 2 \lg |y|
+\tilde Q\_t &= \lg |y|^2 - \lg(1-|y|^2)
 \\\\
-\tilde Q\_{t+3,OFF} &= Q\_t + \lg r\_u
+\tilde Q\_{t+3,OFF} &= \tilde Q\_t - \lg r\_u
 \\\
-\tilde Q\_{t+3,ON} &= Q\_t - \lg r\_u
+\tilde Q\_{t+3,ON} &= \tilde Q\_t + \lg r\_u
 \end{align}$$
 
-Oh, our circuit causes the qubit to perform a [random walk](https://en.wikipedia.org/wiki/Random_walk) in log-odds space!
-The step-size only depends on $U$, not $\ket{\psi}$, so it stays constant as we apply the circuit again and again.
-But the limiting behavior of the walk is not immediately clear, because the probability $p$ of stepping forwards instead of backwards does depend on $\ket{\psi}$:
+So we start at some value $\tilde Q$ then stochastically either add or subtract a constant...
+
+Oh!
+The qubit is performing a [random walk](https://en.wikipedia.org/wiki/Random_walk) in log-odds space!
+We just need to know what the limiting behavior of the walk is.
+That's not *immediately* clear, because the probability $p$ of stepping forwards isn't constant.
+$p$ depends on $\ket{\psi}$ in addition to $U$:
 
 $$\begin{align}
 p &= |xb|^2 + |yd|^2
 \\\\&=
-|x|^2 (1-|a|^2) + |ya|^2
+(1-|y|^2) (1-|a|^2) + |a|^2 |y|^2
 \\\\&=
-\text{lerp}(|a|^2, |x|^2, |y|^2)
+\text{lerp}(|y|^2, 1-|a|^2, |a|^2)
 \end{align}$$
 
-Interpreting that [linear interpolation](https://en.wikipedia.org/wiki/Lerp_%28computing%29) requires understanding the meanings of $|a|^2$, $|x|^2$, and $|y|^2$.
+Okay, so the probability is a [linear interpolation](https://en.wikipedia.org/wiki/Lerp_%28computing%29) from $1-|a|^2$ to $|a|^2$, controlled by $|y|^2$.
+What does that mean?
 
-Roughly speaking, $|a|$ tells you how much $U$ likes to toggle its input.
+Roughly speaking, $|a|^2$ corresponds to how much $U$ likes to toggle its input.
 When $|a|^2$ is near 0, $U$ tends to not toggle its input.
 OFF stays OFF, and ON stays ON.
-When $|a|^2$ is near 1, $U$ likes to toggle its input.
+Around $|a|^2=0.5$ the toggling is completely unpredictable.
+When $|a|^2$ is near 1, $U$ tends to always toggle its input.
 OFF and ON get swapped.
-And when $|a|^2$ is near 0.5, $U$ toggles its input about half of the time.
 
-$|x|^2$ and $|y|^2$ are related to how ON $q\_1$.
-If you had measured $q\_1$ instead of applying our circuit, then $|x|^2$ and $|y|^2$ are the chances of that counter-factual measurement returning OFF or ON respectively.
+$|y|^2$ is the probability of $q\_1$ being ON.
+So, as $q\_1$ transition from mostly-ON to mostly-OFF, $p$ transitions from $U$'s toggly-ness to the complement of $U$'s togglyness.
 
-Putting those facts together we see that, when $U$ is toggly, ON results are more likely when $q\_1$ is OFF-ish and OFF results are molikely when $q|_1$ is ON-ish.
-When $U$ is un-toggly, the opposite happens: ON results are more likely when $q\_1$ is ON-ish.
-The dependence gets weaker and weaker as you push the toggly-ness towards 50%, where it hits 0 and then flips sign.
-However, that sign-flip is countered by a sign-flip in $\lg r\_u$.
-So what ends up happening is: when $q\_1$ is ON-ish, it's likely to step towards *more* ON-ish.
-Same for OFF: likely to step towards *more* OFF-ish.
+We now have enough information to summarize wether steps are biased positive-ward (towards ON) or negative-ward (towards OFF) for various cases.
+Note that we have to take into account both the bias in the probability and the sign of $\lg r\_u$:
 
-In other words, we have a random walk that's biased away from the origin in both directions.
-Therefore the random walk will almost always diverge to +infinity or -infinity, revisiting the origin only a finite number of times.
-$q\_1$ will converge to all-ON or all-OFF as we apply the circuit again and again.
+<style>
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+    padding: 2px;
+  }
+</style>
+<table>
+  <tr>
+    <td>State\Operation</td>
+    <td>Not Toggly<br/>$|a|^2 \approx 1, \lg r_u >> 0$</td>
+    <td>Less Toggly<br/>$\lg r_u > 0$</td>
+    <td>50% Toggly<br/>$|a|^2 = 0.5, \lg r_u = 0$</td>
+    <td>More Toggly<br/>$\lg r_u < 0$</td>
+    <td>Very Toggly<br/>$|a|^2 \approx 0, \lg r_u << 0$</td>
+  </tr>
+  <tr>
+    <td>Very OFF<br/>$p \approx 1-|a|^2$</td>
+    <td>----</td>
+    <td>--</td>
+    <td>0</td>
+    <td>--</td>
+    <td>----</td>
+  </tr>
+  <tr>
+    <td>Slightly OFF</td>
+    <td>--</td>
+    <td>-</td>
+    <td>0</td>
+    <td>-</td>
+    <td>--</td>
+  </tr>
+  <tr>
+    <td>50% ON<br/>$p = 0.5$</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>Slightly ON</td>
+    <td>++</td>
+    <td>+</td>
+    <td>0</td>
+    <td>+</td>
+    <td>++</td>
+  </tr>
+  <tr>
+    <td>Very ON<br/>$p \approx |a|^2$</td>
+    <td>++++</td>
+    <td>++</td>
+    <td>0</td>
+    <td>++</td>
+    <td>++++</td>
+  </tr>
+</table>
 
-That was kind of abstract; let's make it more concrete by actually simulating what happens.
+The important thing to notice about the above table is that the bias is OFF-ward when the state is OFF-ish, and ON-ward when the state is ON-ish.
+In other words, the bias is *away from the origin*: the random walk will diverge to one of the infinities and it won't keep coming back to the origin.
+Thus $q\_1$ almost surely converges to ON or converges to OFF.
+(Unless $U$'s togglyness is on that 50% line, where the step size is 0.)
 
-# Simulating a 2-Qubit System
+Based on the analysis we just did, Eve will succeed at making a copy of Alice's state.
+She just has to wait long enough for the states to converge.
+But let's actually simulate what happens.
+
+# Simulating a 2-Qubit Inferrence
 
 How can Eve track the state of Alice's system, without knowing the exact state?
 
 Here's a really naive idea: write down a list of all the possible states, and simulate applying Alice's requested operations to each of them.
-When Alice says to rotate a qubit around the X axis, you go through every single entry in the list and apply that rotation around the X axis.
-When Alice says to measure a qubit, you do the measurement but then post-select every entry in the list to match the result.
+When Alice says to rotate a qubit around the X axis, go through every single entry in the list and apply that rotation around the X axis.
+When Alice says to measure a qubit, do the measurement but then post-select every entry in the list to match the result.
 If the entries are ever all in basically the same spot, that's Alice's state.
 
 Of course we can't actually list *all* the possible quantum states, since there's uncountably many of them.
 But we can cover the state space as densely as desired, so that the true state is at most $\epsilon$ away from one of the entries in the list.
 (This is all horrendously inefficient, but let's ignore that for now.)
 
-It's pretty easy to write hacky code that generates a bunch of possible quantum states and simulates how those states change as Eve forces them to track what's happening to Alice's state.
-We can even give a nice representation of Eve's states, by plotting their single unknown qubit onto the Bloch sphere (we know the other qubit's state because we keep measuring it).
+It's straightforward to write hacky code that generates possible quantum states and simulates how those states change as Eve forces them to track what's happening to Alice's state.
+We can even give a nice representation of the list of states, by plotting entries onto the Bloch sphere (although there's 2 qubits in the state, one is known thanks to the measurements; plot the other one).
 
-If you write [that hacky code](/assets/{{ loc }}/infer-from-noisy-related-measurement.js), and set $U$ to be an 80-degree rotation around the Y axis, you'll see roughly this:
+If you write [that hacky code](/assets/{{ loc }}/infer-from-noisy-related-measurement.js), and set $U$ to be a 75-degree rotation around the Y axis, you'll see roughly this:
 
 <img src="/assets/{{ loc }}/infer-from-noisy-related-measurement.gif" style="max-width: 100%;"/>
 
-As you can see, it flickers back and forth as the random walk plays out.
-Eventually the true state (not shown) is far enough from the equator that the likelihood of overcoming the outward bias is negligible, and the other states get pulled along with it.
-If you run the code again the process will play out differently.
-It might converge to the opposite pole.
-It might take longer to converge.
-But ultimately this case [always](https://en.wikipedia.org/wiki/Almost_surely) converges.
+As you can see, the states flicker back and forth as the random walk plays out.
+Eventually the true state is far enough from the equator that the likelihood of overcoming the outward bias and returning to the equator is negligible.
+It gets pulled into a pole, and the other states get pulled along with it.
 
-It's possible to create 2-qubit cases where Eve's inferrence process *won't* converge, but before we talk about that we should talk about density matrices.
+It's possible to create 2-qubit cases where Eve's inferrence process *won't* converge like this one does, but before we talk about that we should talk about density matrices.
 
 # Density Matrices and Inefficiency
 
@@ -232,7 +293,7 @@ There's obvious room for improvement.
 A much better way to track what you know about a quantum state is the humble [density matrix](https://en.wikipedia.org/wiki/Density_matrix).
 
 I won't be explaining how density matrices work in this post.
-Suffice it to say that, given a probability distribution of possible quantum states, you can compute a density matrix.
+Suffice it to say that, given a probability distribution of possible quantum states, you can compute a corresponding density matrix.
 And that it's easy to apply operations and measurements and post-selections to density matrices.
 And that if two probability distributions of states have the same density matrix, then those two distributions are observationally indistinguishable.
 
@@ -241,24 +302,25 @@ This is not only more efficient, it allows us to use standard methods for comput
 
 Of course, operating on a $2^n \times 2^n$ amtrix is *kind of expensive*.
 This updated inferrence algorithm is better, but still hopelessly intractable before the number of qubits $n$ gets anywhere near 100.
-The algorithm will work in small cases, but for large cases it's merely a demonstration that security-against-cloning is based on a [computational hardness assumption](https://en.wikipedia.org/wiki/Computational_hardness_assumption) (as opposed to being [unconditionally secure]([unconditional](https://en.wikipedia.org/wiki/Information-theoretic_security))).
+The algorithm will work in small cases, but for large cases it's merely a demonstration that security-against-cloning is based on a [computational hardness assumption](https://en.wikipedia.org/wiki/Computational_hardness_assumption) instead of being [unconditionally secure](https://en.wikipedia.org/wiki/Information-theoretic_security).
 
-Unfortunately, I haven't been able to prove the problem is actually hard.
-To me it *smells* NP-Hard, but every time I try to make a reduction from 3-SAT or whatever I find that I forced Alice to find the solution instead of forcing Even to find the solution.
+I tried to prove that the hardness assumption we're making is strong, but didn't manage to do so.
+Making an inferred copy *smells* NP-Hard to me, but every time I try to make a reduction from 3-SAT or whatever I find that I forced Alice to find the solution instead of forcing Eve to find the solution.
 
-The problem would be easy if you had a [PostBQP machine](https://en.wikipedia.org/wiki/PostBQP), but post-selection is exponentially expensive with a mere quantum computer.
+*(Eve's task is trivial if she has a [PostBQP machine](https://en.wikipedia.org/wiki/PostBQP).)*
 
-# Simulating more qubits
+# Simulating More Qubits Being Inferred
 
 To show that the density matrix solution actually works, I implemented it.
 You can find the code [on github in the Eve-Quantum-Clone-Computer repository](https://github.com/Strilanc/Eve-Quantum-Clone-Computer).
 
-I tried to pick some interesting operations to apply.
-To try to generate entropy that can't be predicated by Eve, the first qubit keeps getting put into the state $\ket{0} + \ket{1}$ and measured.
+For the example inferrence animated below, I tried to pick some interesting operations to apply.
+First, entropy that can't be predicted by Eve is generated.
+The first qubit keeps getting put into the state $\ket{0} + \ket{1}$ and measured.
 Alice even mixes in some extra entropy she generated herself.
-Also, I included some doubly-indirect effects where the third qubit indirectly affects measurements and the second qubit only indirectly affects the third qubit.
+Second, the effects of the second qubit on the observed measurements are doubly-indirect: it partially rotates the third qubit, which partially rotates the measured qubit.
 
-Here's the actual A;oce code I used:
+Here's the actual Alice code I used:
 
     import Matrix from "src/math/Matrix.js"
     import EveQuantumComputer from "src/EveQuantumComputer.js"
@@ -302,11 +364,13 @@ Here's the actual A;oce code I used:
       }
     });
 
-You can test out your own cases by cloning the repository and editing `src/main.js`, but here's how things played out for my case:
+And here's how the inferrence process played out:
 
 <img src="/assets/{{ loc }}/infer_4qubits_density_matrix.gif" style="max-width: 100%;"/>
 
-As you can see, Eve managed to infer a pretty good copy despite my attempts to make things difficult.
+As you can see, Eve eventually managed to infer a pretty good copy of Alice's state despite my attempts to make things difficult.
+
+You can test out your own cases by cloning the repository and editing `src/main.js`.
 
 # The Uncloneable
 
