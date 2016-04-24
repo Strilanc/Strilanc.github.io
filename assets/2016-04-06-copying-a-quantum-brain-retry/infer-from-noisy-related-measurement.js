@@ -33,10 +33,10 @@ if (true) {
   possibles[actualIndex] = t;
 }
 
-const rot = 85;
+const rot = 75;
 let redraw = () => {
   ctx.fillStyle = 'white';
-  ctx.globalAlpha = 0.25;
+  ctx.globalAlpha = 0.5;
   ctx.fillRect(0, 0, 150, 150);
   ctx.globalAlpha = 1;
   let pts = [];
@@ -67,11 +67,12 @@ let redraw = () => {
     ctx.beginPath();
     let f = 10/(5-y);
     
-    ctx.arc(x*30*f+75, -z*30*f+75, f/2, 0, 7);
+    ctx.arc(x*30*f+75, -z*30*f+75, f, 0, 7);
     ctx.fillStyle = 'red';
     ctx.strokeStyle = 'black';
-    ctx.globalAlpha = 0.35;
+    ctx.globalAlpha = 1;
     ctx.fill();
+    ctx.stroke();
     ctx.globalAlpha = 1;
   }
   ctx.beginPath();
