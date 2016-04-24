@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Eve's Quantum Clone Computer</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Eve's Quantum Clone Computer</h1>
+<p class="meta">24 Apr 2016</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p><a href="/2016/04/05/copying-a-quantum-brain.html">Last post</a>, I tried to explain that interactions with the world can reveal the current state of a quantum system.</p>
+
+<p>I framed the post around the hypothetical of duplicating a brain despite the brain containing quantum information.
+I pointed to a couple examples of people saying it would be impossible to do that, since the <a href="https://en.wikipedia.org/wiki/No-cloning_theorem">No-Cloning Theorem</a> prevents the duplication of unknown quantum states.
+Then I tried to explain a copying algorithm based on moving the brain into a quantum computer and inferring its state by recording any measurements the brain decided to perform.</p>
+
+<p>Anyways, I didn&#39;t explain the concept very well and took flak from people thinking I was claiming obviously-wrong things.
+So let&#39;s try this again, but slower.</p>
+
+<h1>Hold my Qubit</h1>
+
+<p>Suppose Alice has some quantum information, but is storing it on Eve&#39;s quantum computer.</p>
+
+<p>Storing the information on Eve&#39;s computer is inconvenient.
+Whenever Alice wants to apply an operation or measure a qubit, she has to ask Eve to do it for her.
+Which is tedious.
+Also there&#39;s the fact that Eve could be snooping on Alice&#39;s state... but Alice figures the quantum-ness probably protects against that somehow.
+And Alice doesn&#39;t own a quantum computer of her own, so it&#39;s not like she has any other option.</p>
+
+<p>Here&#39;s a diagram of the situation:</p>
+
+<p><img src="/assets/2016-04-24-eves-quantum-clone-computer/alice_eve_diagram.png" style="max-width: 100%;"/></p>
+
+<p>Eve, being Eve, wants to snoop on Alice&#39;s information.
+Specifically, <strong>she wants to make an eventual copy of Alice&#39;s state</strong> despite knowing nothing about the initial state and not daring to apply any operations Alice doesn&#39;t ask for.
+That sounds quite hard (what with the quantumness), but Eve is resourceful.
+And patient.</p>
+
+<p>The no-cloning theorem guarantees Eve can&#39;t make a copy of the initial state $\ket{\psi_0}$.
+But Eve isn&#39;t focusing on $\ket{\psi_0}$; she wants a copy of <em>any</em> $\ket{\psi_t}$.
+Basically, Alice will be explaining some process that causes $\ket{\psi_0} \rightarrow \ket{\psi_1} \rightarrow ... \rightarrow \ket{\psi_t}$ but Eve wants to tamper with things so that $\ket{\psi_0}\ket{?} \rightarrow \ket{\psi_1}\ket{?} \rightarrow ... \rightarrow \ket{\psi_t} \otimes \ket{\psi_t}$ happens instead.</p>
+
+<p>As long Alice only asks for unitary operations to be applied, she&#39;s safe from Eve&#39;s snooping.
+Rotating an unknown quantum state doesn&#39;t tell you anything about the state.
+But, whenever Alice asks for a measurement, <em>Eve gets to see the result</em>.
+Hmm...</p>
+
+<h1>Catching a Qubit</h1>
+
+<p>Suppose Alice is storing only a single qubit in Eve&#39;s computer.
+This case is trivial, because the jig is up as soon as the first measurement is applied.
+Any measurement will collapse Alice&#39;s state to one of two possibilities, and the measurement result will tell Eve exactly which possibility it was.</p>
+
+<p><em>(Note: Eve&#39;s computer only supports single-qubit measurements in the computational basis.
+If Alice wants to perform weak measurements, or measurements in a different basis, she has to emulate them with a series of operations.)</em></p>
+
+<p>Let&#39;s go over an example case where Eve ends up with a copy of Alice&#39;s state:</p>
+
+<ol>
+<li>Alice securely loads her state into Eve&#39;s computer.
+
+<ul>
+<li>The initial state happens to be $\ket{\psi_0} = \frac{1}{\sqrt 2}\ket{0} - \frac{1}{\sqrt 2}\ket{1}$.</li>
+<li>Eve doesn&#39;t know $\ket{\psi_0}$, so she can&#39;t clone it.</li>
+</ul></li>
+<li>Alice asks Eve to hit the state with a Z gate.
+
+<ul>
+<li>The state becomes $\ket{\psi_1} = \frac{1}{\sqrt 2}\ket{0} + \frac{1}{\sqrt 2}\ket{1}$.</li>
+<li>Eve still knows nothing, so no cloning can happen.</li>
+</ul></li>
+<li>Alice asks Eve to measure the qubit.
+
+<ul>
+<li>The measurement result is &quot;Off&quot;, which Eve reports.</li>
+<li>Eve knows that &quot;Off&quot; corresponds to the state $\ket{0}$.</li>
+<li>Eve initializes $q_{\text{copy}}$ to $\ket{0}$.</li>
+</ul></li>
+<li>Eve wins.</li>
+</ol>
+
+<p><em>(Keep in mind that Eve didn&#39;t clone the original state of Alice&#39;s qubit.
+Eve cloned a post-measurement state, not the preceeding unmeasured state.
+That&#39;s why we aren&#39;t violating the no-cloning theorem.)</em></p>
+
+<p>The single qubit case is kind of boring, as you can see.
+Eve never has partial information about the qubit; it&#39;s all or nothing.
+To make the situation less black and white, we need more qubits.</p>
+
+<h1>Analyzing a 2-Qubit System</h1>
+
+<p>Now Alice is storing two qubits, $q_1$ and $q_2$, on Eve&#39;s computer.
+This is a big step up from one qubit, because Alice can mix things up between measurements.
+Eve may never see a snapshot of the whole state.</p>
+
+<p>There&#39;s a lot that could be said about the 2-qubit case, but let&#39;s focus on one particular type of thing Alice can do: obscuring a value with a unitary operation.
+Specifically, Alice will repeatedly ask Eve to CNOT $q_1$ onto $q_2$, and to measure then clear $q_2$.
+However, to protect $q_1$&#39;s value from Eve, Alice will apply a masking operation $U = \bimat{a}{b}{c}{d}$ to $q_2$ just before the measurement.</p>
+
+<p>Here&#39;s a circuit diagram showing the operations Alice will ask Eve to apply over and over and over:</p>
+
+<p><img src="/assets/2016-04-24-eves-quantum-clone-computer/2qubit_example_circuit.png" style="max-width: 100%;"/></p>
+
+<p>Will Eve be able to infer the value of $q_1$ by recording the measurements of $q_2$?
+To answer that question, we need to understand how $q_1$ is affected by the circuit.
+(Yes, it&#39;s affected despite only being used as a control.)</p>
+
+<p>Suppose $q_1$ starts in the pure state $x \ket{0} + y \ket{1}$, so the system as a whole is in this state:</p>
+
+<p>$$\ket{\psi_t} = x \ket{00} + y \ket{10}$$</p>
+
+<p>Apply the CNOT. The new state is:</p>
+
+<p>$$\ket{\psi_{t+1}} = x \ket{00} + y \ket{11}$$</p>
+
+<p>Now apply $U$, advancing the state to:</p>
+
+<p>$$\ket{\psi_{t+2}} = x a \ket{00} + x b \ket{01} + y c \ket{10} + y d \ket{11}$$</p>
+
+<p>Lastly, measure $q_2$ and clear it.
+There are two possible output states, one for the OFF measurement outcome and one for the ON outcome:</p>
+
+<p>$$\begin{align}
+\ket{\psi_{t+3,\text{OFF}}} &amp;= \frac{x a \ket{00} + y c \ket{10}}{\sqrt{|ax|^2 + |yd|^2}}
+\\
+\ket{\psi_{t+3,\text{ON}}} &amp;= \frac{x b \ket{00} + y d \ket{10}}{\sqrt{|xb|^2 + |yd|^2)}}
+\end{align}$$</p>
+
+<p>Those normalization factors are pretty gross.
+Let&#39;s ignore them by focusing on <em>proportions</em> instead of exact amplitudes.
+The proportional squared magnitudes $Q$ for $q_1$ being OFF to $q_1$ being ON are:</p>
+
+<p>$$\begin{align}
+Q_t &amp;= |x|^2:|y|^2
+\\
+Q_{t+3,OFF} &amp;= |xa|^2:|yc|^2
+\\
+Q_{t+3,ON} &amp;= |xb|^2:|yd|^2
+\end{align}$$</p>
+
+<p>Based on $U=\bimat{a}{b}{c}{d}$ being unitary, we know that $|a|^2=|d|^2$ and $|b|^2 = |c|^2 = 1 - |a|^2$.
+Also we know that $|x|^2 = 1 - |y|^2$.
+That lets us cut the number of variables needed to describe the proportions:</p>
+
+<p>$$\begin{align}
+Q_t &amp;= 1-|y|^2:|y|^2
+\\
+Q_{t+3,OFF} &amp;= (1-|y|^2)|a|^2:|y| (1-|a|^2)
+\\
+Q_{t+3,ON} &amp;= (1-|y|^2) (1-|a|^2):|y|^2 |a|^2
+\end{align}$$</p>
+
+<p>By defining $r_u = \frac{|a|^2}{1-|a|^2}$, we can simplify even further:</p>
+
+<p>$$\begin{align}
+Q_t &amp;= 1-|y|^2:|y|^2
+\\
+Q_{t+3,OFF} &amp;= (1-|y|^2) \cdot r_u:|y|^2
+\\
+Q_{t+3,ON} &amp;= 1-|y|^2:|y|^2 \cdot r_u
+\end{align}$$</p>
+
+<p>Our final simplification is to switch from odds $Q$ to <a href="https://wiki.lesswrong.com/wiki/Log_odds">log-odds</a> $\tilde Q$.
+We&#39;ll take the logarithm of both sides of $Q$ and track the difference (let $s_u = \lg r_u$ for simplicity):</p>
+
+<p>$$\begin{align}
+\tilde Q_t &amp;= \lg |y|^2 - \lg(1-|y|^2)
+\\
+\tilde Q_{t+3,OFF} &amp;= \tilde Q_t - s_u
+\\
+\tilde Q_{t+3,ON} &amp;= \tilde Q_t + s_u
+\end{align}$$</p>
+
+<p>So the effect of our circuit on $q_1$&#39;s squared-magnitude log-odds is to either add or subtract a constant...
+Oh!
+We&#39;re performing a <a href="https://en.wikipedia.org/wiki/Random_walk">random walk</a> in log-odds space, with a step-size of $s_u$!</p>
+
+<p>The limiting behavior of the walk is not immediately clear.
+Normally a random walk&#39;s probability $p$ of stepping forward is constant, and whether or not the walk diverges is just a matter of checking that $p$ isn&#39;t 50%.
+But in our case $p$ changes as the walk drifts left and right; it depends on $\ket{\psi_t}$:</p>
+
+<p>$$\begin{align}
+p &amp;= |xb|^2 + |yd|^2
+\\&amp;=
+(1-|y|^2) (1-|a|^2) + |a|^2 |y|^2
+\\&amp;=
+\text{lerp}(|y|^2, 1-|a|^2, |a|^2)
+\end{align}$$</p>
+
+<p>Okay, so the probability of stepping forward is a <a href="https://en.wikipedia.org/wiki/Lerp_%28computing%29">linear interpolation</a> from $1-|a|^2$ to $|a|^2$, controlled by $|y|^2$.
+What does that mean?</p>
+
+<p>Roughly speaking, $|a|^2$ corresponds to how much $U$ likes to toggle its input.
+When $|a|^2$ is near 0, $U$ is mostly-diagonal and tends to not toggle its input.
+OFF stays OFF, and ON stays ON.
+Around $|a|^2=0.5$ the toggling is completely unpredictable.
+When $|a|^2$ is near 1, $U$ is mostly-anti-diagonal and tends to always toggle its input.
+OFF and ON get swapped.</p>
+
+<p>Recall that $|y|^2$ is just the probability of $q_1$ being ON.
+So, as $q_1$ transition from mostly-ON to mostly-OFF, $p$ transitions from $U$&#39;s toggly-ness to the complement of $U$&#39;s togglyness.</p>
+
+<p>We now have enough information to summarize whether the random walk&#39;s steps are biased positive-ward (towards ON) or negative-ward (towards OFF) for various cases.
+By taking into account both the probability bias and the sign of $s_u$ we can chart whether the overall bias is postive-ward or negative-ward:</p>
+
+<style>
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+    padding: 2px;
+  }
+</style>
+
+<table>
+  <tr>
+    <td>State\Operation</td>
+    <td>Not Toggly<br/>$|a|^2 \approx 1, s_u >> 0$</td>
+    <td>Less Toggly<br/>$|a|^2 > 0.5, s_u > 0$</td>
+    <td>50% Toggly<br/>$|a|^2 = 0.5, s_u = 0$</td>
+    <td>More Toggly<br/>$|a|^2 < 0.5, s_u < 0$</td>
+    <td>Very Toggly<br/>$|a|^2 \approx 0, s_u << 0$</td>
+  </tr>
+  <tr>
+    <td>Very OFF<br/>$p \approx 1-|a|^2$</td>
+    <td>---</td>
+    <td>--</td>
+    <td>N/A</td>
+    <td>--</td>
+    <td>---</td>
+  </tr>
+  <tr>
+    <td>Slightly OFF</td>
+    <td>--</td>
+    <td>-</td>
+    <td>N/A</td>
+    <td>-</td>
+    <td>--</td>
+  </tr>
+  <tr>
+    <td>50% ON<br/>$p = 0.5$</td>
+    <td>0</td>
+    <td>0</td>
+    <td>N/A</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>Slightly ON</td>
+    <td>++</td>
+    <td>+</td>
+    <td>N/A</td>
+    <td>+</td>
+    <td>++</td>
+  </tr>
+  <tr>
+    <td>Very ON<br/>$p \approx |a|^2$</td>
+    <td>+++</td>
+    <td>++</td>
+    <td>N/A</td>
+    <td>++</td>
+    <td>+++</td>
+  </tr>
+</table>
+
+<p><em>(Note: when $U$&#39;s togglyness is 50%, the measurement result is independent of $q_1$&#39;s state.
+That&#39;s why step size degenerates to 0 in the center column.)</em></p>
+
+<p>The important thing to notice about the above table is that the bias is OFF-ward (negative) when the state is OFF-ish, and ON-ward (positive) when the state is ON-ish.
+In other words, the bias is <em>always away from the origin</em>.
+That means the random walk will diverge to one of the infinities; it won&#39;t keep coming back to the origin.
+Thus $q_1$ almost surely converges to ON or converges to OFF.</p>
+
+<p>Based on the analysis we just did, Eve can succeed at making a copy of Alice&#39;s state by merely waiting long enough for the random walk to get far from the origin.
+But let&#39;s actually simulate what happens.</p>
+
+<h1>Simulating a 2-Qubit Inferrence</h1>
+
+<p>How can Eve track the state of Alice&#39;s system automatically, without knowing the exact state?</p>
+
+<p>Here&#39;s a really naive idea: write down a list of all the possible states, and simulate applying Alice&#39;s requested operations to each of them.
+When Alice says to rotate a qubit around the X axis, go through every single entry in the list and apply that rotation around the X axis.
+When Alice says to measure a qubit, do the measurement on the real qubit then post-select every entry in the list to match the result.
+If the list entries are ever all in basically the same spot, that&#39;s Alice&#39;s state.</p>
+
+<p>Of course we can&#39;t actually list <em>all</em> the possible quantum states, since there&#39;s uncountably many of them.
+But we can cover the state space as densely as desired, so that the true state is at most $\epsilon$ away from one of the entries in the list.
+(This is all horrendously inefficient, but let&#39;s ignore that for now.)</p>
+
+<p>It&#39;s straightforward to write hacky code that generates possible quantum states and simulates how those states change as Eve forces them to track what&#39;s happening to Alice&#39;s state.
+We can even give a nice representation of the list of states, by plotting entries onto the Bloch sphere (although there&#39;s 2 qubits in the state, one is known thanks to the measurements; plot the other one).</p>
+
+<p>If you write <a href="/assets/2016-04-24-eves-quantum-clone-computer/infer-from-noisy-related-measurement.js">that hacky code</a>, and set $U$ to be a 75-degree rotation around the Y axis, you&#39;ll see roughly this:</p>
+
+<p><img src="/assets/2016-04-24-eves-quantum-clone-computer/infer-from-noisy-related-measurement.gif" style="max-width: 100%;"/></p>
+
+<p>As you can see, the states flicker back and forth as the random walk plays out.
+Eventually the true state is far enough from the equator that the likelihood of overcoming the outward bias and returning to the equator is negligible.
+The true state gets pulled into a pole and, since the true state is dictating the measurement results and the measurement results control the random walk, the other states get pulled along with it.</p>
+
+<p>It&#39;s possible to create 2-qubit cases where Eve&#39;s inferrence process won&#39;t converge like this one does, but before we talk about that we should talk about density matrices.</p>
+
+<h1>Density Matrices and Inefficiency</h1>
+
+<p>The inferrence-by-state-listing process I described above is simple, but horrendously inefficient.
+We&#39;re listing absurdly many states to get good coverage of the state space... and yet all the states end in the same place.
+There&#39;s obvious room for improvement.</p>
+
+<p>A much better way to track what you know about a quantum state is the humble <a href="https://en.wikipedia.org/wiki/Density_matrix">density matrix</a>.</p>
+
+<p>I won&#39;t be explaining how density matrices work in this post.
+Suffice it to say that, given a probability distribution of possible quantum states, you can compute a corresponding density matrix.
+And that it&#39;s easy to apply operations and measurements and post-selections to density matrices.
+And that if two probability distributions of states have the same density matrix, then those two distributions are observationally indistinguishable.</p>
+
+<p>Basically, instead of tracking who-knows-how-many states, we&#39;re going to be applying operations to a single $2^n \times 2^n$ matrix.
+This is not only more efficient, it allows us to use standard methods for computing how much uncertainty is left in the inferrence process (via the <a href="https://en.wikipedia.org/wiki/Von_Neumann_entropy">Von Neumann entropy</a>) and for comparing our inferred state to the true state (via the <a href="https://quantiki.org/wiki/trace-distance">trace distance</a>).</p>
+
+<p>Of course, operating on a $2^n \times 2^n$ matrix is <em>kind of expensive</em>.
+This updated inferrence algorithm is better, but still hopelessly intractable before the number of qubits $n$ gets anywhere near 100.
+The algorithm will work in small cases, but for large cases it&#39;s merely a demonstration that security-against-eventual-cloning is based on a <a href="https://en.wikipedia.org/wiki/Computational_hardness_assumption">computational hardness assumption</a> instead of being <a href="https://en.wikipedia.org/wiki/Information-theoretic_security">unconditionally secure</a>.</p>
+
+<p>I tried to prove that the hardness assumption we&#39;re making is strong, but didn&#39;t manage to do so.
+Making an inferred copy <em>smells</em> NP-Hard to me, but every time I try to make a reduction from 3-SAT or whatever I find that I forced Alice to find the solution instead of forcing Eve to find the solution.
+<em>(Note: Eve&#39;s task is trivial if she has a <a href="https://en.wikipedia.org/wiki/PostBQP">PostBQP machine</a>. But those don&#39;t exist in reality.)</em></p>
+
+<h1>Simulating More Qubits Being Inferred</h1>
+
+<p>To show that the density matrix solution can actually work, I implemented it.
+You can find the code <a href="https://github.com/Strilanc/Eve-Quantum-Clone-Computer">on github in the Eve-Quantum-Clone-Computer repository</a>.</p>
+
+<p>For the example inferrence animated below, I tried to pick some interesting operations to apply.
+First, I had Alice constantly generate entropy that can&#39;t be predicted by Eve.
+That&#39;s done by constantly putting the first qubit into the state $\ket{0} + \ket{1}$ and measuring it.
+Also, Alice mixes in some extra entropy she generated herself.
+Second, I made the second qubit only affect measurements indirectly via its effects on the third qubit (which itself only indirectly affects the fourth qubit).</p>
+
+<p>Here&#39;s the actual Alice code I used:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">import Matrix from &quot;src/math/Matrix.js&quot;
+import EveQuantumComputer from &quot;src/EveQuantumComputer.js&quot;
+
+let numQubits = 4;
+let qpu = EveQuantumComputer.withRandomInitialState(numQubits);
+
+// Pre-compute matrices for operations.
+let X0 = qpu.expandOperation(Matrix.PAULI_X, 0); // X gate on qubit 0.
+let X3 = qpu.expandOperation(Matrix.PAULI_X, 3);
+let H0 = qpu.expandOperation(Matrix.HADAMARD, 0);
+let CNOT_2_ONTO_3 = qpu.expandOperation(Matrix.PAULI_X, 3, [2]);
+let SMALL_Y_ROT_1 = qpu.expandOperation(
+  Matrix.fromAngleAxisPhaseRotation(Math.PI/3, [0, 1, 0]),
+  1);
+let SMALL_X_ROT_2_WHEN_1 = qpu.expandOperation(
+  Matrix.fromAngleAxisPhaseRotation(Math.PI/4, [1, 0, 0]),
+  2,
+  [1]);
+let CONFOUNDING_X3 = qpu.expandOperation(
+  Matrix.fromAngleAxisPhaseRotation(Math.PI/2 + 0.4, [1, 0, 0]),
+  3);
+
+qpu.drawLoop(() =&gt; {
+  let generatedEntropy = qpu.measureQubit(0);
+  if (Math.random() &lt; 0.3) { // Alice adding in her own home-grown entropy.
+    generatedEntropy = !generatedEntropy;
+  }
+  if (generatedEntropy) {
+    qpu.applyOperation(SMALL_Y_ROT_1);
+    qpu.applyOperation(X0);
+  }
+  qpu.applyOperation(H0); // Ensure next measurement of qubit 0 is 100% noise.
+
+  qpu.applyOperation(SMALL_X_ROT_2_WHEN_1); // 2 is affected by 1.
+  qpu.applyOperation(CNOT_2_ONTO_3); // And 3 is affected by 2.
+  qpu.applyOperation(CONFOUNDING_X3); // But the dependence is hidden by noise.
+  let measureResult = qpu.measureQubit(3);
+  if (measureResult) {
+    qpu.applyOperation(X3); // Clear.
+  }
+});
+</code></pre></div>
+<p>And here&#39;s how the inferrence process played out:</p>
+
+<p><img src="/assets/2016-04-24-eves-quantum-clone-computer/infer_4qubits_density_matrix.gif" style="max-width: 100%;"/></p>
+
+<p>As you can see, Eve eventually managed to infer a pretty good copy of Alice&#39;s state despite my attempts to make things difficult.</p>
+
+<p>You can test out your own cases by cloning the repository and editing <code>src/main.js</code>.</p>
+
+<h1>The Uncloneable</h1>
+
+<p>At this point I think I&#39;ve definitively established that <em>sometimes</em> Eve can infer the state of Alice&#39;s system and thereby create a clone.
+I mean, I literally provided working code.
+But <strong>there are also situations where Eve <em>can&#39;t</em> infer Alice&#39;s whole state</strong>.</p>
+
+<p>First, there may be <strong>details of the state that don&#39;t affect any measurements</strong>.
+Remember how, in the two-qubit case we analyzed, the step size of the random walk degenerated to 0 when the toggly-ness of $U$ hit 50%?
+Setting the toggly-ness to 50% results in Eve never learning anything about the qubit $q_1$, because $q_1$&#39;s state no longer influences any measurement results.</p>
+
+<p>If Eve&#39;s ultimate goal is to predict Alice&#39;s measurement probabilities, then not learning details that don&#39;t affect those probabilities is fine.
+But even so, it&#39;s quite hard for Eve to figure out if she has all the relevant details or not.
+Determining if an Alice program will ever use a specific qubit is as hard as the halting problem; incomputable.</p>
+
+<p>Second, if Eve&#39;s quantum computer can communicate with other quantum computers, Alice may ask Eve to <strong>entangle her state with external states</strong>.
+This is a problem for Eve because, although it&#39;s possible to clone an EPR pair <em>as a whole</em>, it&#39;s not possible to clone <em>half</em> of an EPR pair.
+That&#39;s literally non-sensical: you&#39;re asking for a qubit that agrees with $a$, but not with $b$ (otherwise you&#39;d have a GHZ state instead of a clone), despite $b$ agreeing with $a$.</p>
+
+<p>Alice may include external entanglement in the initial state, but that&#39;s not a problem.
+Eve&#39;s inferrence process handles that.
+The problem is if Alice can add <em>new</em> entanglement: it&#39;s the only way she can consistently add entropy into Eve&#39;s inferred density matrix.</p>
+
+<p>Third, there&#39;s <strong>the pragmatic issue of size</strong>.
+For $n$ qubits and $m$ operations, Eve&#39;s inferrence algorithm does $O(4^n m)$ work.
+So an easy way for Alice to defeat a naive Eve is to just concatenate 100 qubits onto the state.</p>
+
+<p><em>On the other hand, in practice, Eve won&#39;t be so naive</em>.
+She&#39;ll be looking for opportunities to ignore some of the qubits, or to measure them early, or to factor the state into independent sub-parts.
+There are a lot of ways that Alice could accidentally make things very easy for Eve.</p>
+
+<h1>On Brains</h1>
+
+<p>What does this all mean for inferring the state of quantum information in a brain?</p>
+
+<p>It means that not all possible quantum brain architectures are clone-resistant.
+Quantum-ness is necessary for clone-resistance, but not sufficient.
+By loading the brain into Eve&#39;s quantum clone computer and simulating its normal operation, we might learn all of the hidden details.</p>
+
+<p>The inferrence process won&#39;t work if the brain is intermittently refreshing external entanglement.
+And unused details will make it hard to tell if we&#39;ve finished or not.
+And long-lived qubits with exponentially-small effects on measurements can add quite a lot of time to the process.
+And we&#39;re totally hosed in practice if we can&#39;t factor the problem into 30-qubit sub-systems.
+But still.
+The security is not unconditional.</p>
+
+<h1>Notes</h1>
+
+<ul>
+<li><p><strong>Shouldn&#39;t measuring non-commuting observables, which has random unpredictable results, degrade Eve&#39;s estimate?</strong></p>
+
+<p><em>(For example, keep setting a qubit to $\ket{0} + \ket{1}$ and measuring it to build up unknown-to-Eve information.)</em></p>
+
+<p>No.
+Entropy does get added into the state by the measurement, but it&#39;s immediately revealed by the measurement result.</p>
+
+<p>The 4-qubit simulation above actually does this.
+It doesn&#39;t hurt the inference process at all.
+Eve can lose ground when unlikely measurements keep happening, biasing the inferrence towards a wrong answer, but the overall tendency is to gain ground.</p>
+
+<p>The only way to consistently add entropy into Eve&#39;s inferred density matrix is to introduce external entanglement.</p></li>
+<li><p><strong>What about ancilla qubits that don&#39;t get measured (e.g. as in the Deutch-Josza algorithm)?</strong></p>
+
+<p>The final values of ancilla bits usually doesn&#39;t matter, or is implied by the measurements that <em>are</em> performed.
+That&#39;s why, after the algorithm is over, you just let them decohere (i.e. they get measured but you don&#39;t bother recording the result).</p>
+
+<p>Feel free to try this case out!
+For example, the typical <a href="https://en.wikipedia.org/wiki/Deutsch%E2%80%93Jozsa_algorithm#/media/File:Deutsch-Jozsa_Algorithm.svg">example Deutch-Josza circuit</a> has an unnecessary ancilla.
+Does Eve manage to infer it when Alice runs that circuit?</p></li>
+<li><p><strong>Doesn&#39;t this violate the no-cloning theorem?</strong></p>
+
+<p>No.
+We&#39;re not cloning an unknown state, we&#39;re producing a known state.
+What&#39;s interesting is how we came to know that state.</p></li>
+<li><p><strong>In practice wouldn&#39;t measurement error and other intrinsic sources of noise be a problem?</strong></p>
+
+<p>Maybe.
+It might also be a resource.
+For example, all the states reachable by plausible noise could count as copies for our purposes.</p></li>
+<li><p><strong>The inferrence process is absurdly intractable.</strong></p>
+
+<p>Yup.
+Still, the existence of a computable inferrence process downgrades security from <a href="https://en.wikipedia.org/wiki/Information-theoretic_security">unconditional</a> to <a href="https://en.wikipedia.org/wiki/Computational_hardness_assumption">computational-hardness-assumption</a>.</p></li>
+</ul>
+
+<h1>Summary</h1>
+
+<p>If you tell someone everything you&#39;re doing to your secret quantum state, and what measurement results you&#39;re getting, it gradually stops being a secret.</p>
+
+<p>A quantum computer knows everything you&#39;re asking it to do to your secret quantum state, and what measurement results you&#39;re getting.</p>
+
+<p>In principle, in some cases, a heedful quantum computer can gradually infer what state it&#39;s operating on.</p>
+
+<p>Putting quantum information into a brain is necessary, but not sufficient, for unconditional security against cloning.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+  <script>
+  var idcomments_acct = '7d0006bd6a016f9a2892cc2ecc64de01';
+  var idcomments_post_id = '/2016/04/24/eves-quantum-clone-computer.html';
+  var idcomments_post_url = 'http://algorithmicassertions.com/2016/04/24/eves-quantum-clone-computer.html';
+  </script>
+  <span id="IDCommentsPostTitle" style="display:none"></span>
+  <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+  <noscript>
+    <hr>
+    <font color=red>
+      Comments script blocked. Comments won't work.
+    </font>
+    <br/>
+    Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>intensedebate.com</strong> to fix.
+  </noscript>
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
