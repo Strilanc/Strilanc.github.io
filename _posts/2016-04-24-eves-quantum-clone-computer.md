@@ -213,12 +213,12 @@ By taking into account both the probability $p$ of stepping along $s\_u$ instead
   <tr>
     <td>OFF<br/>$p = 1-|a|^2$</td>
     <td>N/A</td>
+    <td>----</td>
     <td>---</td>
-    <td>--</td>
     <td>N/A</td>
-    <td>--</td>
     <td>---</td>
     <td>----</td>
+    <td>-----</td>
   </tr>
   <tr>
     <td>Very OFF<br/>$p \approx 1-|a|^2$</td>
