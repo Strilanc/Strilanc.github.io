@@ -7,7 +7,7 @@ comments: true
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
 
-[Last post](/2016/04/05/copying-a-quantum-brain.html), I tried to explain that interactions with the world can reveal the current state of a quantum system.
+[Last post](/2016/04/05/copying-a-quantum-brain.html), I tried to explain an interesting consequence of the fact that interactions with the world can reveal the current state of a quantum system.
 
 I framed the post around the hypothetical of duplicating a brain despite the brain containing quantum information.
 I pointed to a couple examples of people saying it would be impossible to do that, since the [No-Cloning Theorem](https://en.wikipedia.org/wiki/No-cloning_theorem) prevents the duplication of unknown quantum states.
@@ -189,7 +189,7 @@ Recall that $|y|^2$ is just the probability of $q\_1$ being ON.
 So, as $q\_1$ transition from mostly-ON to mostly-OFF, $p$ transitions from $U$'s toggly-ness to the complement of $U$'s togglyness.
 
 We now have enough information to summarize whether the random walk's steps are biased positive-ward (towards ON) or negative-ward (towards OFF) for various cases.
-By taking into account both the probability bias and the sign of $s\_u$ we can chart whether the overall bias is postive-ward or negative-ward:
+By taking into account both the probability $p$ of stepping along $s\_u$ instead of against $s\_u$, and the sign of $s\_u$, we can chart whether the walk's bias is postive-ward or negative-ward in each case:
 
 <style>
   table, th, td {
@@ -201,57 +201,90 @@ By taking into account both the probability bias and the sign of $s\_u$ we can c
 </style>
 <table>
   <tr>
-    <td>State\Operation</td>
-    <td>Not Toggly<br/>$|a|^2 \approx 1, s_u >> 0$</td>
-    <td>Less Toggly<br/>$|a|^2 > 0.5, s_u > 0$</td>
-    <td>50% Toggly<br/>$|a|^2 = 0.5, s_u = 0$</td>
-    <td>More Toggly<br/>$|a|^2 < 0.5, s_u < 0$</td>
-    <td>Very Toggly<br/>$|a|^2 \approx 0, s_u << 0$</td>
+    <td>Operation →<br/>State &nbsp&nbsp Bias<br/>&nbsp&nbsp↓&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp↘</td>
+    <td>Stable<br/>$|a|^2 = 1$</br>$s_u = \infty$</td>
+    <td>Mostly Stable<br/>$|a|^2 \approx 1$</br>$s_u >> 0$</td>
+    <td>Slightly Stable<br/>$|a|^2 > 0.5$</br>$s_u > 0$</td>
+    <td>Random<br/>$|a|^2 = 0.5$</br>$s_u = 0$</td>
+    <td>Slightly Toggly<br/>$|a|^2 < 0.5$</br>$s_u < 0$</td>
+    <td>Mostly Toggly<br/>$|a|^2 \approx 0$</br>$s_u << 0$</td>
+    <td>Toggles<br/>$|a|^2 = 0$</br>$s_u = -\infty$</td>
+  </tr>
+  <tr>
+    <td>OFF<br/>$p = 1-|a|^2$</td>
+    <td>N/A</td>
+    <td>----</td>
+    <td>---</td>
+    <td>N/A</td>
+    <td>---</td>
+    <td>----</td>
+    <td>-----</td>
   </tr>
   <tr>
     <td>Very OFF<br/>$p \approx 1-|a|^2$</td>
+    <td>----</td>
     <td>---</td>
     <td>--</td>
     <td>N/A</td>
     <td>--</td>
     <td>---</td>
+    <td>----</td>
   </tr>
   <tr>
     <td>Slightly OFF</td>
+    <td>---</td>
     <td>--</td>
     <td>-</td>
     <td>N/A</td>
     <td>-</td>
     <td>--</td>
+    <td>---</td>
   </tr>
   <tr>
     <td>50% ON<br/>$p = 0.5$</td>
     <td>0</td>
     <td>0</td>
+    <td>0</td>
     <td>N/A</td>
+    <td>0</td>
     <td>0</td>
     <td>0</td>
   </tr>
   <tr>
     <td>Slightly ON</td>
+    <td>+++</td>
     <td>++</td>
     <td>+</td>
     <td>N/A</td>
     <td>+</td>
     <td>++</td>
+    <td>+++</td>
   </tr>
   <tr>
     <td>Very ON<br/>$p \approx |a|^2$</td>
+    <td>++++</td>
     <td>+++</td>
     <td>++</td>
     <td>N/A</td>
     <td>++</td>
     <td>+++</td>
+    <td>++++</td>
+  </tr>
+  <tr>
+    <td>ON<br/>$p = |a|^2$</td>
+    <td>+++++</td>
+    <td>++++</td>
+    <td>+++</td>
+    <td>N/A</td>
+    <td>+++</td>
+    <td>++++</td>
+    <td>N/A</td>
   </tr>
 </table>
 
-*(Note: when $U$'s togglyness is 50%, the measurement result is independent of $q\_1$'s state.
-That's why step size degenerates to 0 in the center column.)*
+*(Note: The corner N/As are due to those cases being impossible.
+They have 0 probability.
+The center N/As are due to the step size degenerating to 0 when $U$'s togglyness is 50%.)*
 
 The important thing to notice about the above table is that the bias is OFF-ward (negative) when the state is OFF-ish, and ON-ward (positive) when the state is ON-ish.
 In other words, the bias is *always away from the origin*.
