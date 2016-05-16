@@ -7,6 +7,14 @@
 		<atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>Reducing Test Boilerplate with Ascii Diagrams</title>
+				<description>&lt;p&gt;Sometimes, testing code ends up having a lot of finnicky boilerplate. That&amp;#39;s the issue I was having with &lt;a href=&quot;https://github.com/Strilanc/Quirk&quot;&gt;Quirk&lt;/a&gt;, anyways.&lt;/p&gt; &lt;p&gt;Quirk has a convenient UI for defining small quantum circuits, but the same could not be said of defining circuits for the tests. For example, suppose we want to test that Quirk is disabling operations it doesn&amp;#39;t support (lest it create garbage output). Here&amp;#39;s a specific case where an operation is blocked (because it would recohere a measured qubit):&lt;/p&gt; &lt;p&gt;&lt;img src=&quot;/assets/2016-05-15-reducing-test-boilerplate-with-diagrams/circuit-with-disabled-operation.png&quot; style=&quot;max-width: 200px;&quot;/&gt;&lt;/p&gt; &lt;p&gt;Simple situation. Clear requirement. A good candidate for a unit test. Let&amp;#39;s write it up:&lt;/p&gt; &lt;div...</description>
+				<pubDate>Sun, 15 May 2016 07:10:10 -0400</pubDate>
+				<link>http://algorithmicassertions.com/2016/05/15/reducing-test-boilerplate-with-diagrams.html</link>
+				<guid isPermaLink="true">http://algorithmicassertions.com/2016/05/15/reducing-test-boilerplate-with-diagrams.html</guid>
+			</item>
+		
+			<item>
 				<title>Eve&#39;s Quantum Clone Computer</title>
 				<description>&lt;p&gt;&lt;a href=&quot;/2016/04/05/copying-a-quantum-brain.html&quot;&gt;Last post&lt;/a&gt;, I tried to explain an interesting consequence of the fact that interactions with the world can reveal the current state of a quantum system.&lt;/p&gt; &lt;p&gt;I framed the post around the hypothetical of duplicating a brain despite the brain containing quantum information. I pointed to a couple examples of people saying it would be impossible to do that, since the &lt;a href=&quot;https://en.wikipedia.org/wiki/No-cloning_theorem&quot;&gt;No-Cloning Theorem&lt;/a&gt; prevents the duplication of unknown quantum states. Then I tried to explain a copying algorithm based on moving the brain into a quantum computer and inferring its state by recording any measurements the brain decided...</description>
 				<pubDate>Sun, 24 Apr 2016 04:10:10 -0400</pubDate>
@@ -76,14 +84,6 @@
 				<pubDate>Sun, 10 Jan 2016 11:30:00 -0500</pubDate>
 				<link>http://algorithmicassertions.com/quantum/2016/01/10/eigendecomposition-for-rotation-and-interpolation.html</link>
 				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2016/01/10/eigendecomposition-for-rotation-and-interpolation.html</guid>
-			</item>
-		
-			<item>
-				<title>Deflating Delayed Choice Quantum Erasure</title>
-				<description>&lt;p&gt;The &lt;a href=&quot;https://en.wikipedia.org/wiki/Delayed_choice_quantum_eraser&quot;&gt;Delayed Choice Quantum Eraser&lt;/a&gt; is a widely misunderstood experiment. Apparently the common belief is that it&amp;#39;s some kind of grand world-view-shattering mystery, with powers ranging from sending messages backwards in time (&lt;a href=&quot;http://www.ibtimes.co.uk/quantum-weirdness-proved-again-measurement-changing-atoms-past-1504172&quot;&gt;example pop-science article&lt;/a&gt;) to demonstrating the existence of conscious knowledge (&lt;a href=&quot;http://www.abovetopsecret.com/forum/thread1013362/pg1&quot;&gt;example woo thread&lt;/a&gt;). Although there&amp;#39;s &lt;a href=&quot;http://jamesowenweatherall.com/SCPPRG/EllermanDavid2012Man_QuantumEraser2.pdf&quot;&gt;continuous&lt;/a&gt; &lt;a href=&quot;http://van.physics.illinois.edu/qa/listing.php?id=25872&quot;&gt;effort&lt;/a&gt; &lt;a href=&quot;http://www.scientificamerican.com/article/quantum-eraser-delayed-choice-experiments/&quot;&gt;to&lt;/a&gt; &lt;a href=&quot;https://www.physicsforums.com/threads/explain-delayed-choice-quantum-eraser-without-consciousness.808688/&quot;&gt;correct&lt;/a&gt; these misconceptions, it&amp;#39;s easy to run into them.&lt;/p&gt; &lt;p&gt;Case in point: I googled for &amp;quot;delayed choice quantum eraser&amp;quot; videos. The top result? &lt;a href=&quot;https://www.youtube.com/watch?v=U7Z_TIw9InA&quot;&gt;This youtube video&lt;/a&gt;. It mashes a scene from the infamous &lt;a href=&quot;http://www.imdb.com/title/tt0399877/&quot;&gt;What the #$*! Do We (K)now!?&lt;/a&gt; film into...</description>
-				<pubDate>Thu, 07 Jan 2016 11:30:00 -0500</pubDate>
-				<link>http://algorithmicassertions.com/quantum/2016/01/07/Delayed-Choice-Quantum-Erasure.html</link>
-				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2016/01/07/Delayed-Choice-Quantum-Erasure.html</guid>
 			</item>
 		
 	</channel>

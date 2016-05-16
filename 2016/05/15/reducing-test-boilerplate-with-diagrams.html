@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Reducing Test Boilerplate with Ascii Diagrams</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Reducing Test Boilerplate with Ascii Diagrams</h1>
+<p class="meta">15 May 2016</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Sometimes, testing code ends up having a lot of finnicky boilerplate.
+That&#39;s the issue I was having with <a href="https://github.com/Strilanc/Quirk">Quirk</a>, anyways.</p>
+
+<p>Quirk has a convenient UI for defining small quantum circuits, but the same could not be said of defining circuits for the tests.
+For example, suppose we want to test that Quirk is disabling operations it doesn&#39;t support (lest it create garbage output).
+Here&#39;s a specific case where an operation is blocked (because it would recohere a measured qubit):</p>
+
+<p><img src="/assets/2016-05-15-reducing-test-boilerplate-with-diagrams/circuit-with-disabled-operation.png" style="max-width: 200px;"/></p>
+
+<p>Simple situation.
+Clear requirement.
+A good candidate for a unit test.
+Let&#39;s write it up:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">let</span> <span class="nx">circuitDef</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CircuitDefinition</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span>
+    <span class="k">new</span> <span class="nx">GateColumn</span><span class="p">([</span><span class="nx">Gates</span><span class="p">.</span><span class="nx">HalfTurns</span><span class="p">.</span><span class="nx">H</span><span class="p">,</span> <span class="nx">Gates</span><span class="p">.</span><span class="nx">Special</span><span class="p">.</span><span class="nx">Measure</span><span class="p">]),</span>
+    <span class="k">new</span> <span class="nx">GateColumn</span><span class="p">([</span><span class="nx">Gates</span><span class="p">.</span><span class="nx">Special</span><span class="p">.</span><span class="nx">Control</span><span class="p">,</span> <span class="nx">Gates</span><span class="p">.</span><span class="nx">HalfTurns</span><span class="p">.</span><span class="nx">X</span><span class="p">])</span>
+<span class="p">]);</span>
+<span class="nx">assertThat</span><span class="p">(</span><span class="nx">circuitDef</span><span class="p">.</span><span class="nx">disabledReasonAt</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)).</span><span class="nx">isNotEqualTo</span><span class="p">(</span><span class="kc">undefined</span><span class="p">);</span>
+</code></pre></div>
+<p>UUUUUUuuuuuuuuuugggggggggggggggghhhhh.
+Where do I start?</p>
+
+<ul>
+<li>It should not take 250 characters to write an assertion this simple.</li>
+<li>The columns are written out horizontally instead of vertically.
+That consistently tricks me into transposing the circuit.</li>
+<li>Everything is long and boilerplatey (<code>new GateColumn</code>, <code>new GateColumn</code>, <code>new GateColumn</code>, ...).</li>
+<li>There&#39;s required redundant information (e.g. the <code>2</code> is the wire count).</li>
+<li>I can&#39;t see what circuit this is talking about at a glance.</li>
+</ul>
+
+<p>If it was just this one test, these downsides might be acceptable.
+But Quirk is a circuit simulator.
+I have <em>kind of a lot</em> of tests that need to define a circuit!</p>
+
+<h1>Diagrams</h1>
+
+<p>The boilerplate issues are bad, but the real problem here is the fact that I don&#39;t recognize circuits after writing them into code.
+There&#39;s a large disconnect between how I think about circuits and the look of the code.</p>
+
+<p>When I&#39;m trying to communicate a circuit to someone over text, I don&#39;t describe it in prose or as a list-of-lists.
+I draw an ascii diagram.
+So, I figured, why not just do that?
+I wrote some code to parse simple ascii diagrams of circuits into <code>CircuitDefinition</code> instances, and started inlining diagrams into the tests.</p>
+
+<p>Now assertions look like this:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">assertThat(circuit(`-H-•-
+                    -M=X=`).disabledReasonAt(3, 1)).isNotEqualTo(undefined);
+</code></pre></div>
+<p>or this:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">let c = circuit(`-M=•=
+                 -M=◦=
+                 ---•-
+                 ---◦-
+                 ---X-`);
+
+assertTrue(c.doubleWireControlStartsAt(3, 0));
+assertFalse(c.doubleWireControlStartsAt(3, 2));
+...
+</code></pre></div>
+<p>Defining a circuit is more succinct, but more importantly it&#39;s now dead obvious what was defined.
+With this change, I make fewer mistakes when reading and writing the tests.</p>
+
+<p>It&#39;s a lot fewer mistakes, actually.
+Like an order of magnitude fewer.
+Which is <em>crazy</em>.
+You almost never see that kind of improvement in ease-of-programming.
+(For contrast, consider that the change in productivity from switching between static and dynamic types is small enough that no one has managed to convincingly measure it either way.)</p>
+
+<p>So I&#39;ll be looking for other opportunities to try this out: find a class of tests that takes a lot of boilerplate to set up, and somehow diagram-atize the boilerplate.
+(Proto buffers come to mind...)</p>
+
+<h1>Summary</h1>
+
+<p>When you&#39;re going to write a lot of tests that use an object, invest effort into making it really <em>really</em> easy to create instances of that object.
+You&#39;ll end up with tests that are easier to understand, and make fewer stupid mistakes when writing them.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+  <script>
+  var idcomments_acct = '7d0006bd6a016f9a2892cc2ecc64de01';
+  var idcomments_post_id = '/2016/05/15/reducing-test-boilerplate-with-diagrams.html';
+  var idcomments_post_url = 'http://algorithmicassertions.com/2016/05/15/reducing-test-boilerplate-with-diagrams.html';
+  </script>
+  <span id="IDCommentsPostTitle" style="display:none"></span>
+  <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+  <noscript>
+    <hr>
+    <font color=red>
+      Comments script blocked. Comments won't work.
+    </font>
+    <br/>
+    Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>intensedebate.com</strong> to fix.
+  </noscript>
+
+
+
+
+    </div>
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+            more: <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
