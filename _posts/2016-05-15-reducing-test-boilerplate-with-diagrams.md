@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Reducing Test Boilerplate with Ascii Diagrams"
-date: 2016-05-01 6:10:10 EST
+date: 2016-05-15 6:10:10 EST
 comments: true
 ---
 
