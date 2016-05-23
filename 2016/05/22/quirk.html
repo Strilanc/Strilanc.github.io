@@ -178,12 +178,22 @@ There&#39;s no need for a <code>&quot;Dear UI, please do the thing you knew I wo
 <p><strong>Comparison: Quirk</strong></p>
 
 <p>Quirk has no &#39;evaluate the circuit now&#39; button.
-Quirk is <em>always</em> evaluating the circuit; it&#39;s part of the drawing code.
-The difference in feel is quite noticeable, even in a recording:</p>
+Quirk is <em>always</em> evaluating the circuit; it&#39;s part of the drawing code.</p>
+
+<p>Originally, I tried using just raw javascript for the simulation.
+Things got slow around 7 qubits.
+Later, I read <a href="https://github.com/gwroblew/Quantum-Computing-Playground">the Quantum Computing Playground&#39;s source code</a>, saw that they were using webgl, and started experimenting with that.</p>
+
+<p>Webgl is a pain (a <em>giant</em> pain), but now Quirk starts getting slow around the <em>14</em> qubit mark.
+That&#39;s about 100X faster.
+And I figure it&#39;s possible to squeeze out another order of magnitude or two of speed by moving the display-drawing code into the GPU, pipelining, and interpolating.</p>
+
+<p>Still, those optimizations would just be gravy.
+The difference in experience, compared to the other two circuit simulators I mentioned, is already quite noticeable even in a recording:</p>
 
 <p><img src="/assets/2016-05-22-quirk/usage-quirk.gif" style="border: 1px solid black; max-height: 400px; max-width: 100%"/></p>
 
-<p>Quirk gives you feedback <em>two orders of magnitude</em> faster than IQE.
+<p>On a change-to-result basis, Quirk gives you feedback <em>two orders of magnitude</em> faster than IQE.
 Instead of being in the 10 second interaction bucket, Quirk is in <a href="https://www.nngroup.com/articles/powers-of-10-time-scales-in-ux/">the 0.1 second bucket</a>:</p>
 
 <blockquote>
@@ -200,7 +210,7 @@ Eventually, that feel turns into intuition.</p>
 
 <p><a href="http://davywybiral.blogspot.ca/2012/12/quantum-circuit-simulator.html">Davy Wybiral&#39;s Simulator</a>, which I already mentioned, is another in-browser drag-and-drop circuit simulator.</p>
 
-<p><a href="http://www.quantumplayground.net">Google&#39;s Quantum Computing Playground</a> is a browser-based quantum <em>program</em> simulator.</p>
+<p>The <a href="http://www.quantumplayground.net">Quantum Computing Playground</a> is a browser-based quantum <em>program</em> simulator.</p>
 
 <p><a href="http://stationq.github.io/Liquid/">Microsoft&#39;s LIQ𝑈𝑖⏐〉</a> is a serious useful-for-actual-research tool.</p>
 
