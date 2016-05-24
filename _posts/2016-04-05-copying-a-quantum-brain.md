@@ -7,7 +7,9 @@ comments: true
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
 
-**Update (May 2016)**: *This post is quite vague on the details. The followup post [Eve's Quantum Clone Computer](http://algorithmicassertions.com/2016/04/05/copying-a-quantum-brain.html) spends more time on them.*
+**Update (May 2016)**: *This post is quite vague on the details. The followup post [Eve's Quantum Clone Computer](/2016/04/24/eves-quantum-clone-computer.html) spends more time on them.*
+
+---
 
 Last month, YouTuber [CGP Grey](https://www.youtube.com/user/CGPGrey/videos) posted an [edutainment video about the philosophical implications of transporters](https://www.youtube.com/watch?v=nQHBAdShgYI).
 One of the points he focuses on is whether teleportation works by creating a copy of you and killing the original.
