@@ -7,6 +7,14 @@
 		<atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>Ultradense Coding would allow FTL Signalling</title>
+				<description>&lt;p&gt;The title spoils the question, but I&amp;#39;ll ask it anyways: how do we know that there&amp;#39;s no clever way to pack more than 2 bits into a transmitted qubit?&lt;/p&gt; &lt;p&gt;Initially, people assumed that &lt;a href=&quot;https://en.wikipedia.org/wiki/Holevo&amp;#x27;s_theorem&quot;&gt;Holevo&amp;#39;s theorem&lt;/a&gt; implied the bit-per-sent-qubit limit was 1. (Roughly speaking, the theorem says that you can encode at most $n$ bits of retrievable information into $n$ qubits.) But, in 1992, &lt;a href=&quot;http://journals.aps.org/prl/abstract/10.1103/PhysRevLett.69.2881&quot;&gt;Charles Bennett et al. figured out a way&lt;/a&gt; to sidestep the theorem: pre-shared entanglement. By burning an EPR pair that was sent ahead of time, &lt;a href=&quot;https://en.wikipedia.org/wiki/Superdense_coding&quot;&gt;superdense coding&lt;/a&gt; can pack 2 bits into a single...</description>
+				<pubDate>Sun, 29 May 2016 01:10:10 -0400</pubDate>
+				<link>http://algorithmicassertions.com/2016/05/29/ultra-dense-coding-allows-ftl.html</link>
+				<guid isPermaLink="true">http://algorithmicassertions.com/2016/05/29/ultra-dense-coding-allows-ftl.html</guid>
+			</item>
+		
+			<item>
 				<title>My Quantum Circuit Simulator: Quirk</title>
 				<description>&lt;p&gt;I&amp;#39;ve been working on a quantum circuit simulator that runs in your browser. It&amp;#39;s called Quirk. Quirk is open source (github repository: &lt;a href=&quot;https://github.com/Strilanc/Quirk&quot;&gt;Strilanc/Quirk&lt;/a&gt;), and there&amp;#39;s a live instance you can play with at &lt;a href=&quot;/quirk&quot;&gt;algorithmicassertions.com/quirk&lt;/a&gt;:&lt;/p&gt; &lt;style scoped&gt; #open-quirk img { filter: contrast(1); -webkit-filter: contrast(1); transition: 0.2s; } #open-quirk img:hover { filter: contrast(1.5); -webkit-filter: contrast(1.5); transition: 0.5s; } &lt;/style&gt; &lt;p&gt;&lt;a href=&quot;/quirk&quot; id=&quot;open-quirk&quot;&gt; &lt;img src=&quot;/assets/2016-05-22-quirk/open-quirk.png&quot;/&gt; &lt;/a&gt;&lt;/p&gt; &lt;p&gt;&lt;em&gt;(Not familiar with what a quantum circuit is? Watch the Khan-academy-style video series &lt;a href=&quot;https://www.youtube.com/playlist?list=PL1826E60FD05B44E4&quot;&gt;Quantum Computing for the Determined&lt;/a&gt;. It&amp;#39;s by Michael Nielson, co-author of the &lt;a href=&quot;http://www.amazon.com/Quantum-Computation-Information-10th-Anniversary/dp/1107002176&quot;&gt;de-facto standard textbook&lt;/a&gt;.)&lt;/em&gt;&lt;/p&gt; &lt;p&gt;&lt;strong&gt;Features&lt;/strong&gt;:&lt;/p&gt; &lt;ul&gt; &lt;li&gt;Drag-and-drop circuit editing.&lt;/li&gt;...</description>
 				<pubDate>Sun, 22 May 2016 07:10:10 -0400</pubDate>
@@ -32,7 +40,7 @@
 		
 			<item>
 				<title>Gradually Copying a Quantum Brain</title>
-				<description>&lt;p&gt;Last month, YouTuber &lt;a href=&quot;https://www.youtube.com/user/CGPGrey/videos&quot;&gt;CGP Grey&lt;/a&gt; posted an &lt;a href=&quot;https://www.youtube.com/watch?v=nQHBAdShgYI&quot;&gt;edutainment video about the philosophical implications of transporters&lt;/a&gt;. One of the points he focuses on is whether teleportation works by creating a copy of you and killing the original.&lt;/p&gt; &lt;p&gt;In response to the teleportation video, &lt;a href=&quot;https://www.youtube.com/user/minutephysics/videos&quot;&gt;MinutePhysics&lt;/a&gt; posted &lt;a href=&quot;https://www.youtube.com/watch?v=dAaHHGHuy1c&quot;&gt;a follow-up video about quantum teleportation&lt;/a&gt;. The follow-up video points out that quantum information can&amp;#39;t be copied, only moved, so if your identity somhow depends on quantum information then you don&amp;#39;t have to worry about being duplicated(-then-killed).&lt;/p&gt; &lt;p&gt;This idea, that if our brains operate on quantum information then they are duplication-proof thanks...</description>
+				<description>&lt;p&gt;&lt;strong&gt;Update (May 2016)&lt;/strong&gt;: &lt;em&gt;This post is quite vague on the details. The followup post &lt;a href=&quot;/2016/04/24/eves-quantum-clone-computer.html&quot;&gt;Eve&amp;#39;s Quantum Clone Computer&lt;/a&gt; spends more time on them.&lt;/em&gt;&lt;/p&gt; &lt;hr&gt; &lt;p&gt;Last month, YouTuber &lt;a href=&quot;https://www.youtube.com/user/CGPGrey/videos&quot;&gt;CGP Grey&lt;/a&gt; posted an &lt;a href=&quot;https://www.youtube.com/watch?v=nQHBAdShgYI&quot;&gt;edutainment video about the philosophical implications of transporters&lt;/a&gt;. One of the points he focuses on is whether teleportation works by creating a copy of you and killing the original.&lt;/p&gt; &lt;p&gt;In response to the teleportation video, &lt;a href=&quot;https://www.youtube.com/user/minutephysics/videos&quot;&gt;MinutePhysics&lt;/a&gt; posted &lt;a href=&quot;https://www.youtube.com/watch?v=dAaHHGHuy1c&quot;&gt;a follow-up video about quantum teleportation&lt;/a&gt;. The follow-up video points out that quantum information can&amp;#39;t be copied, only moved, so if your identity somhow depends on quantum...</description>
 				<pubDate>Tue, 05 Apr 2016 04:10:10 -0400</pubDate>
 				<link>http://algorithmicassertions.com/2016/04/05/copying-a-quantum-brain.html</link>
 				<guid isPermaLink="true">http://algorithmicassertions.com/2016/04/05/copying-a-quantum-brain.html</guid>
@@ -76,14 +84,6 @@
 				<pubDate>Sat, 30 Jan 2016 11:30:00 -0500</pubDate>
 				<link>http://algorithmicassertions.com/quantum/2016/01/30/quantum-pigeonhole.html</link>
 				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2016/01/30/quantum-pigeonhole.html</guid>
-			</item>
-		
-			<item>
-				<title>Unknowable, but Equal</title>
-				<description>&lt;p&gt;Consider this apparent paradox. The &lt;a href=&quot;https://en.wikipedia.org/wiki/Uncertainty_principle&quot;&gt;uncertainty principle&lt;/a&gt; applies to position and momentum. A particle &lt;em&gt;can&amp;#39;t&lt;/em&gt; have both an exact position and an exact momentum &lt;em&gt;ever&lt;/em&gt;. But we can produce particles &lt;a href=&quot;https://books.google.com/books?id=bsANMNMGvWUC&amp;amp;pg=PA71&amp;amp;lpg=PA71&amp;amp;dq=particle+entangled+position+velocity&amp;amp;source=bl&amp;amp;ots=3TblYV3CRD&amp;amp;sig=c6hGY-mB-3fQQtiroxXRDphnrCU&amp;amp;hl=en&amp;amp;sa=X&amp;amp;ved=0ahUKEwjvwbap1rTKAhXIMj4KHXqiAroQ6AEIQDAG#v=onepage&amp;amp;q=particle%20entangled%20position%20velocity&amp;amp;f=false&quot;&gt;with entangled momentums and positions&lt;/a&gt;. Then we can measure the position of one particle, and the momentum of the other. Which presumably tells us the position and momentum of both particles. Which is impossible.&lt;/p&gt; &lt;p&gt;If you know some quantum mechanics (i.e. can do the math), I&amp;#39;d recommend thinking about this for awhile. Why doesn&amp;#39;t this punch a hole in the uncertainty principle? What happens instead?&lt;/p&gt; &lt;h1&gt;Uncertainty in Qubit...</description>
-				<pubDate>Tue, 19 Jan 2016 11:30:00 -0500</pubDate>
-				<link>http://algorithmicassertions.com/quantum/2016/01/19/unknown-but-equal.html</link>
-				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2016/01/19/unknown-but-equal.html</guid>
 			</item>
 		
 	</channel>
