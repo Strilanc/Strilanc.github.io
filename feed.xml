@@ -7,6 +7,14 @@
 		<atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>Erasure is Post-Selection</title>
+				<description>&lt;p&gt;For a few months, I&amp;#39;ve intended to revisit my &lt;a href=&quot;http://algorithmicassertions.com/quantum/2015/11/01/Walters-Claimed-Quantum-Linear-3SAT.html&quot;&gt;&amp;#39;Quantum vs NP&amp;#39; post pointing out mistakes in Zachary B. Walters&amp;#39; claimed linear-time 3SAT paper&lt;/a&gt;. Walters commented on the post, and there was some back-and-forth, but we still disagree over whether his algorithm works. (I&amp;#39;m the one who thinks it obviously doesn&amp;#39;t.)&lt;/p&gt; &lt;p&gt;One of the mistakes Walters makes is actually a widespread misconception, so I figured I should talk about it separately. Thus this post.&lt;/p&gt; &lt;h1&gt;Lay Erasure&lt;/h1&gt; &lt;p&gt;Here&amp;#39;s a typical lay summary of a &lt;a href=&quot;https://en.wikipedia.org/wiki/Quantum_eraser_experiment&quot;&gt;quantum eraser experiment&lt;/a&gt;, &lt;a href=&quot;https://books.google.com/books?id=DNd2K6mxLpIC&amp;amp;lpg=PA197&amp;amp;dq=%22even%20though%20we%E2%80%99ve%20done%20nothing%20directly%20to%20the%20signal%20photons%22&amp;amp;pg=PA195#v=onepage&amp;amp;q=%22even%20though%20we%E2%80%99ve%20done%20nothing%20directly%20to%20the%20signal%20photons%22&amp;amp;f=false&quot;&gt;from Brian Greene&amp;#39;s &amp;#39;The Fabric of the Cosmos&amp;#39;&lt;/a&gt;:&lt;/p&gt; &lt;blockquote&gt; &lt;p&gt;even though...</description>
+				<pubDate>Sun, 05 Jun 2016 13:10:10 -0400</pubDate>
+				<link>http://algorithmicassertions.com/2016/06/05/erasure-is-postselection.html</link>
+				<guid isPermaLink="true">http://algorithmicassertions.com/2016/06/05/erasure-is-postselection.html</guid>
+			</item>
+		
+			<item>
 				<title>Ultradense Coding would allow FTL Signalling</title>
 				<description>&lt;p&gt;The title spoils the question, but I&amp;#39;ll ask it anyways: how do we know that there&amp;#39;s no clever way to pack more than 2 bits into a transmitted qubit?&lt;/p&gt; &lt;p&gt;Initially, people assumed that &lt;a href=&quot;https://en.wikipedia.org/wiki/Holevo&amp;#x27;s_theorem&quot;&gt;Holevo&amp;#39;s theorem&lt;/a&gt; implied the bit-per-sent-qubit limit was 1. (Roughly speaking, the theorem says that you can encode at most $n$ bits of retrievable information into $n$ qubits.) But, in 1992, &lt;a href=&quot;http://journals.aps.org/prl/abstract/10.1103/PhysRevLett.69.2881&quot;&gt;Charles Bennett et al. figured out a way&lt;/a&gt; to sidestep the theorem: pre-shared entanglement. By burning an EPR pair that was sent ahead of time, &lt;a href=&quot;https://en.wikipedia.org/wiki/Superdense_coding&quot;&gt;superdense coding&lt;/a&gt; can pack 2 bits into a single...</description>
 				<pubDate>Sun, 29 May 2016 01:10:10 -0400</pubDate>
@@ -76,14 +84,6 @@
 				<pubDate>Thu, 25 Feb 2016 11:30:00 -0500</pubDate>
 				<link>http://algorithmicassertions.com/meta/2016/02/25/Github-Pages-Breaks-Compatibility.html</link>
 				<guid isPermaLink="true">http://algorithmicassertions.com/meta/2016/02/25/Github-Pages-Breaks-Compatibility.html</guid>
-			</item>
-		
-			<item>
-				<title>[Un]popular Qubits #3: The Quantum Pigeonhole Principle</title>
-				<description>&lt;p&gt;Back in 2014, a preprint titled &amp;quot;&lt;a href=&quot;http://arxiv.org/abs/1407.3194&quot;&gt;The quantum pigeonhole principle and the nature of quantum correlations&lt;/a&gt;&amp;quot; was posted to arXiv by Y. Aharonov et al. This month, the paper was &lt;a href=&quot;http://www.pnas.org/content/113/3/532&quot;&gt;published for real in PNAS&lt;/a&gt;. The media picked up on the result both times, resulting in some choice quotes:&lt;/p&gt; &lt;blockquote&gt; &lt;p&gt;if you check the paths of any pair of the three original electrons, the detector will show no deflection has happened. In other words, you can have three pigeons and two boxes, and yet no two pigeons are ever found in the same box. A linkage must exist,...</description>
-				<pubDate>Sat, 30 Jan 2016 11:30:00 -0500</pubDate>
-				<link>http://algorithmicassertions.com/quantum/2016/01/30/quantum-pigeonhole.html</link>
-				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2016/01/30/quantum-pigeonhole.html</guid>
 			</item>
 		
 	</channel>
