@@ -191,7 +191,8 @@ So, as $q\_1$ transition from mostly-ON to mostly-OFF, $p$ transitions from $U$'
 We now have enough information to summarize whether the random walk's steps are biased positive-ward (towards ON) or negative-ward (towards OFF) for various cases.
 By taking into account both the probability $p$ of stepping along $s\_u$ instead of against $s\_u$, and the sign of $s\_u$, we can chart whether the walk's bias is postive-ward or negative-ward in each case:
 
-<style>
+<div>
+<style scoped>
   table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
@@ -281,6 +282,7 @@ By taking into account both the probability $p$ of stepping along $s\_u$ instead
     <td>N/A</td>
   </tr>
 </table>
+</div>
 
 *(Note: The corner N/As are due to those cases being impossible.
 They have 0 probability.
