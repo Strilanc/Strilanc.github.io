@@ -81,6 +81,9 @@ We'd just be replacing that simple sweep with a more complicated sweep.
 
 (However it is interesting that the complicated sweeps are slightly more biased away from fine-grained twiddle factors.)
 
+(Ironically, fast multiplication algorithms are themselves all based on Fourier transforms.
+We're using the classical Fourier transform to speed up the quantum Fourier transform.)
+
 **Summary**
 
 The phasing part of the QFT kind of involves multiplying the little-endian Z-value of some qubits by their X-value.

@@ -51,7 +51,7 @@ So what's actually going on?
 
 # What's Actually Happening
 
-People think this the quantum eraser works like this circuit, where an operation on one qubit affects the state of another:
+People think that the quantum eraser works like the following circuit, where an operation on one qubit affects the state of another:
 
 <img src="/assets/{{ loc }}/eraser-wrong.png"/>
 
