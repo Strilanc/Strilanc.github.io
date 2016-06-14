@@ -169,6 +169,9 @@ The trick to doing this is to sort the inputs into ascending order (but keep tra
 
 This means that *if* you could perform an application-of-convolution-theorem basis change in $O(n \log{n})$ time, *and* end up with $O(n / \log(n))$ pieces of size $O(\log n)$, then you could multiply in $O(n \log{n})$ time.
 
+**Update (June 2016):**
+*I have no idea why I ever thought this was a good idea, or why no one called me on it. Just performing the squarings separately is cheaper than $n \lg n$.*
+
 This doesn't apply to SSA because working modulo $2^{2^s}+1$ doesn't give you enough pieces.
 
 ... Okay, segway question that's been bothering me for awhile: why does SSA's modulus use a power-of-a-power-of-2 like $2^{2^s}$ instead of just a normal power-of-2 like $2^m$?

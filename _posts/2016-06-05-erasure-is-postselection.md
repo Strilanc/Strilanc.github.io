@@ -46,7 +46,7 @@ The misconception isn't limited to just lay audiences, either.
 > Measuring the projection of the scratch bit along [the Z] axis would resolve which branch of the conditional statement was executed, and destroy the probability for states which correspond to the other branch.
 > Instead, this information is deliberately destroyed by nonselectively measuring the scratch bit [along the X axis].
 
-Clearly a lot of people think that measuring on qubit can directly affect another.
+Clearly a lot of people think that measuring one qubit can directly affect another.
 So what's actually going on?
 
 # What's Actually Happening
@@ -84,7 +84,7 @@ The idea is that each photon's polarization contains the which-way information a
 Did you catch the post-selection?
 
 The diagonal polarizing filter *throws away half of the photons*.
-If you looked at the missing half, you'd find it containined an exactly complementary interference pattern.
+If you looked at the missing half, you'd find it contained an exactly complementary interference pattern.
 Put the two together (i.e. do the measurement but not the post-selection), and the result is no apparent interference pattern.
 
 # Consequences
@@ -92,7 +92,7 @@ Put the two together (i.e. do the measurement but not the post-selection), and t
 As I've already mentioned, this confusion between measuring and post-selecting is quite common.
 
 Because post-selection requires comparing notes after the fact, but measuring doesn't, there's a never-ending stream of people claiming erasure allows for FTL communication.
-And sometimes more sophisticated variants appear, like claiming erasure gives your quantum algorithm a novel non-unitary primative to work with.
+And sometimes more sophisticated variants appear, like claiming erasure gives your quantum algorithm a novel non-unitary primitive to work with.
 
 It's a problem.
 
