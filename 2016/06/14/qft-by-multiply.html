@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>My Misconceptions: The Unintegrable Function</title>
+    <title>Using Multiplication to Cut Gates from the QFT</title>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <meta name="viewport" content="width=device-width">
 
@@ -37,8 +37,8 @@
     </div>
     <div class="site">
 
-      <h1 class="post_title">My Misconceptions: The Unintegrable Function</h1>
-<p class="meta">17 Sep 2015</p>
+      <h1 class="post_title">Using Multiplication to Cut Gates from the QFT</h1>
+<p class="meta">14 Jun 2016</p>
 
     <!-- MathJax latest -->
     <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
@@ -71,64 +71,84 @@
     </noscript>
 
 <div class="post">
-<p>Sometimes, I have ideas.
-Dumb ideas.
-Usually I catch them, but sometimes I don&#39;t.</p>
+<p>In this post: pulling a multiplication out of the phase corrections performed during a quantum Fourier transform, and using it to save gates.</p>
 
-<p>In &quot;My Misconceptions&quot; posts, I poke fun at myself while discussing wrong things I&#39;ve thought.</p>
+<p><strong>Fourier Construction</strong></p>
 
-<h1>From Undifferentiable to Unintegrable</h1>
+<p>Here&#39;s a typical circuit for the Quantum Fourier Transform:</p>
 
-<p>Historically, there was a time when people thought that every continuous function was differentiable.
-People realized their error when pathological counter-examples, such as the <a href="https://en.wikipedia.org/wiki/Weierstrass_function">Weierstrass_function</a>, were discovered.</p>
+<p><img src="/assets/2016-06-14-qft-by-multiply/Fourier-naive.png" style="max-width: 100%"/></p>
 
-<p>For example, the function $f(x) = \Sum{n=0}{\infty} 2^{-n} \sin(4^n x)$ is continuous (due to higher terms in the sum being bounded between $\pm 2^{-n}$).
-But, if you differentiate $f$, then the $2^{-n}$ term gets multiplied by the $4^n$ factor inside the $\sin$ and you end up with $f&#39;(x) = \Sum{n=0}{\infty} 2^n \cos(4^n x)$.
-<em>That</em> sum fails to converge, because later terms are multiplied by $2^n$ instead of $2^{-n}$ and so can be arbitrarily large.
-The derivative does not exist.</p>
+<p>It&#39;s basically just the <a href="https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm">Cooley-Tukey FFT algorithm</a> translated directly into a quantum circuit.
+The Hadamards are the sums-and-differences part, the Zs are the phase gradient part, and the interleaving/recursing part is implicit in the positioning of the gates and the bit reversal.</p>
 
-<p>When I learned about the above trick for breaking differentation, I had an idea: why not break integration with the same idea in reverse?
-Just replace $\sin(4^n x)$ with $\sin(4^{-n} x)$, since integrating will divide by the internal $\sin$ factor instead of multiplying by it:</p>
+<p>One way to make the circuit look nicer is to separate the Hadamard gates from the phase gates.
+There&#39;s two ways to do that: we can push the Hadamards to the right, or to the left.</p>
 
-<p>$g(x) = \Sum{n=0}{\infty} 2^{-n} \sin(4^{-n} x)$</p>
+<p>If we push the Hadamards to the right, they cross over the Z gates.
+This turns the Z gates into X gates:</p>
 
-<p>$(\int g)(x)$
-$= \int \Sum{n=0}{\infty} 2^{-n} \sin(4^{-n} x) dx$</p>
+<p><img src="/assets/2016-06-14-qft-by-multiply/Fourier-Hadamards-Pushed-Right.png"/></p>
 
-<p>$= \Sum{n=0}{\infty} \int 2^{-n} \sin(4^{-n} x) dx$</p>
+<p>If we push the Hadamards to the left, they cross over the Z-is-On controls and turn them into X-is-On controls:</p>
 
-<p>$= -\Sum{n=0}{\infty} 2^n \cos(4^{-n} x)$</p>
+<p><img src="/assets/2016-06-14-qft-by-multiply/Fourier-Hadamards-Pushed-Left.png"/></p>
 
-<p>Notice that the infinite sum in the resulting expression for $\int g$ fails to converge (it always diverges towards infinity).
-And suppose for the moment that swapping the order of the infinite sum and the integral was justified.
-Clearly $\int g$ doesn&#39;t exist.</p>
+<p>Note that the above circuit is going through all the qubit pairs, and applying phases based on the AND of the pair&#39;s first qubit&#39;s Z-value and the second qubit&#39;s X value.
+Also note that if you look at the shape formed by each type of gate, you get diagonals.</p>
 
-<p>At least, that&#39;s what I thought for an embarassingly long time.</p>
+<p>To me, those diagonals-of-ways-you-can-combine-two-values <em>scream</em> <a href="https://en.wikipedia.org/wiki/Convolution">convolution</a> because my mental image of convolution is summing up the diagonals of a grid:</p>
 
-<h1>Fundamentally and Constantly Wrong</h1>
+<p><img src="/assets/2016-06-14-qft-by-multiply/Convolution.png"/></p>
 
-<p>What&#39;s especially bone-headed about this mistake is how obvious it is, at least in hindsight.</p>
+<p>Actually, because each diagonal corresponds to how many times a phase gate that&#39;s twice as powerful as the last is applied, we also have a carrying effect: 2 of a diagonal is worth 1 of the next diagonal.
+So this isn&#39;t convolution, it&#39;s <em>multiplication</em>.
+We&#39;re multiplying the litte-endian X-value of a block of qubits by the Z-value of those same qubits, and phasing based on the result!</p>
 
-<p>How obvious?
-Well, my conclusion violates a somewhat well-known theorem.
-A theorem that says that every continuous function (e.g. $g$) has an integral.
-You may have heard of it; it&#39;s called &quot;The Fundamental Theorem of Calculus&quot;.</p>
+<p>Okay, that&#39;s not quite right.
+The uncertainty principle prevents qubits from having an X-value and a Z-value at the same time.
+But we <em>can</em> pull out quite a large block where we only use one of the values for each qubit:</p>
 
-<p><em>Eventually</em> someone took pitty on me (or rather, got angry at me for being wrong on the internet) and pointed something out:</p>
+<p><img src="/assets/2016-06-14-qft-by-multiply/Fourier-X-by-Z-block.png"/></p>
 
-<p>$h(x) = -\Sum{n=0}{\infty} 2^n (\cos(4^{-n} x) - 1)$</p>
+<p>And then we can replace that block of controlled phase gradients with a multiplication and a single phase gradient:</p>
 
-<p>$h&#39;(x) = g(x)$</p>
+<p><img src="/assets/2016-06-14-qft-by-multiply/Fourier-with-multiply.png"/></p>
 
-<p>Oh.</p>
+<p>In terms of asymptotic gate count, this is an optimization.
+We replaced $O(n^2)$ gates with a construction that uses $O(M(n) + n)$ gates, where $M(n)$ is the number of gates needed to perform a multiplication.
+It&#39;s <a href="https://en.wikipedia.org/wiki/Sch%C3%B6nhage%E2%80%93Strassen_algorithm">known</a> <a href="https://en.wikipedia.org/wiki/F%C3%BCrer%27s_algorithm">that</a> $M(n) \in O(n (\lg n) (\lg \lg n))$, and conjectured that $M(n) \in O(n \lg n)$, so this is an improvement if $n$ is large enough.</p>
 
-<p>Well.</p>
+<p>Also notice that the parts before and after the multiplication are basically just half-sized QFTs.
+With some slight tweaks, we find this construction:</p>
 
-<p>That&#39;s definitely the worst forgetting-the-integration-constant mistake I&#39;ve ever made.</p>
+<p><img src="/assets/2016-06-14-qft-by-multiply/Fourier-by-multiply-and-recurse.png"/></p>
 
-<h1>Summary</h1>
+<p>Which has a gate-count recurrence relation of $F(n) = 2 F(n/2) + M(n)$.
+Solve that out, and you find that $F(n) \in O(\lg(n) M(n))$.</p>
 
-<p>If you&#39;re going to play fast and loose with the order of integrals and infinite sums, the consequences of forgetting your constant(s) of integation might get infinitely worse.</p>
+<p>Therefore this construction uses at most $O(n (\lg^2 n) (\lg \lg n))$ gates, and possibly $O(n \lg^2 n)$ gates.
+That&#39;s a pretty large improvement from the original construction&#39;s $O(n^2)$!
+(Though in practice we might care more about <em>depth</em> than count, not to mention topological constraints.)</p>
+
+<p><strong>Already Known</strong></p>
+
+<p>As with most things I stumble onto on my own, this is not an original discovery.
+See the paper <a href="http://arxiv.org/abs/quant-ph/0006004">Fast parallel circuits for the quantum Fourier transform</a> by Richard Cleve and John Watrous from Jan 2000.</p>
+
+<p><strong>Classical Uses?</strong></p>
+
+<p>You might expect that, since we started with a direct translation of the Cooley-Tukey algorithm and then asymptotically improved it, the new construction can be translated back for savings in the classical case.
+Unfortunately, that&#39;s not correct.
+It comes down to the fact that the phase gradient after each Hadamard could already be applied in a single sweep.
+We&#39;d just be replacing that simple sweep with a more complicated sweep.</p>
+
+<p>(However it is interesting that the complicated sweeps are slightly more biased away from fine-grained twiddle factors.)</p>
+
+<p><strong>Summary</strong></p>
+
+<p>The phasing part of the QFT kind of involves multiplying the little-endian Z-value of some qubits by their X-value.
+By extracting the multiplication, you can perform the QFT with asymptotically fewer gates than the naive construction.</p>
 
 </div>
 
@@ -136,8 +156,8 @@ You may have heard of it; it&#39;s called &quot;The Fundamental Theorem of Calcu
 
   <script>
   var idcomments_acct = '7d0006bd6a016f9a2892cc2ecc64de01';
-  var idcomments_post_id = '/math/2015/09/17/Misconceptions-Unintegrable.html';
-  var idcomments_post_url = 'http://algorithmicassertions.com/math/2015/09/17/Misconceptions-Unintegrable.html';
+  var idcomments_post_id = '/2016/06/14/qft-by-multiply.html';
+  var idcomments_post_url = 'http://algorithmicassertions.com/2016/06/14/qft-by-multiply.html';
   </script>
   <span id="IDCommentsPostTitle" style="display:none"></span>
   <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
@@ -159,12 +179,10 @@ You may have heard of it; it&#39;s called &quot;The Fundamental Theorem of Calcu
       <tr>
         <td align="left">
           
-            <a href="/quantum/2015/09/02/Partially-Erasing-Entanglement-with-Measurement.html">&laquo; Partially Erasing Entanglement: Measuring a GHZ Triplet into a Bell Pair</a>
+            <a href="/2016/06/05/erasure-is-postselection.html">&laquo; Erasure is Post-Selection</a>
           
         </td>
         <td align="right">
-          
-            <a href="/opinion/2015/10/08/Make-Generics-Value-Agnostic.html">Rule of Thumb: Make Generic Code Value-Agnostic instead of Null-Hostile &raquo;</a>
           
         </td>
       </tr>
