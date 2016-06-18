@@ -19,11 +19,8 @@ title: "Algorithmic Assertions - Craig Gidney's Computer Science Blog"
         <h2>{{ curYear }}</h2>
       {% endif %}
       {% assign prevYear = curYear %}
-
       <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">
-        {% if post.highlight_in_list %}<strong>{% endif %}
-          {{ post.title }}
-        {% if post.highlight_in_list %}</strong>{% endif %}
+        {% if post.highlight_in_list %}<strong>{% endif %}{{ post.title }}{% if post.highlight_in_list %}</strong>{% endif %}
       </a></li>
     {% endfor %}
 
