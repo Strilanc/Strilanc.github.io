@@ -4,6 +4,7 @@ title: "Things I Can't Solve: Multiplication"
 date: 2015-07-05 11:30:00 EST
 categories: computer-science
 comments: true
+highlight_in_list: true
 ---
 
 In this post: how (some) [fast multiplication algorithms](https://en.wikipedia.org/wiki/Multiplication_algorithm#Fast_multiplication_algorithms_for_large_inputs) work, and a couple gotchas I've run into from toying with them.
