@@ -117,13 +117,13 @@ Once again the correct fix would be to uncompute or to use multi-controlled gate
 
 <p>The idea behind this gate is that, when $c_1$ and $c_2$ and $c_3$ fail to meet a clause, they get rotated a bit.</p>
 
-<p>Note that this circuit has yet another attempt to destroy indestructable information by measuring it along a different axis.
+<p>Note that this circuit has yet another attempt to destroy indestructible information by measuring it along a different axis.
 But this time we can&#39;t fix it by adding more controls or by uncomputing, because the values we need to do that no longer commute with the values we have.
 This is the first <em>major</em> flaw in the paper, I think.</p>
 
 <p>Walters claims that measuring the scratch qubit along a perpendicular axis will fix the problem, and he&#39;s simply wrong.
 However... some phrasing in the paper indicates that the decoherence is actually... desired?
-The paper often talks about &quot;incoherently transfering&quot; states, for example.
+The paper often talks about &quot;incoherently transferring&quot; states, for example.
 So it&#39;s hard to say if this is a flaw-in-intent or flaw-in-execution or a flaw-in-explanation or what.</p>
 
 <p>Anyways... here&#39;s the whole <em><strong>DE̡͊͠͝CIMATION</strong></em> circuit, expanded in full:</p>
@@ -242,7 +242,7 @@ a or !b or h
 <p>(Originally I planned to do a 16 variable problem, but the simulation was a couple order of magnitudes slower than I expected ahead of time so I dropped back to 8.)</p>
 
 <p>Note that I did have to make a few guesses when implementing Walters&#39; algorithm.
-For example, the paper says to randomly vary the pertubation angle between two values for every clause and that the number of iterations needed should be constant (regardless of problem size).
+For example, the paper says to randomly vary the perturbation angle between two values for every clause and that the number of iterations needed should be constant (regardless of problem size).
 It doesn&#39;t give specific angles to use, or say exactly how big &quot;constant&quot; is, so I just picked values myself.</p>
 
 <p>Anyways, enough hedging.
