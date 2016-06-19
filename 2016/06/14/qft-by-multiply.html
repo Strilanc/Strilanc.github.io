@@ -73,7 +73,7 @@
 <div class="post">
 <p>In this post: pulling a multiplication out of the phase corrections performed during a quantum Fourier transform, and using it to save gates.</p>
 
-<p><strong>Fourier Construction</strong></p>
+<h1>Fourier Construction</h1>
 
 <p>Here&#39;s a typical circuit for the Quantum Fourier Transform:</p>
 
@@ -131,12 +131,12 @@ Solve that out, and you find that $F(n) \in O(\lg(n) M(n))$.</p>
 That&#39;s a pretty large improvement from the original construction&#39;s $O(n^2)$!
 (Though in practice we might care more about <em>depth</em> than count, not to mention topological constraints.)</p>
 
-<p><strong>Already Known</strong></p>
+<h1>Already Known</h1>
 
 <p>As with most things I stumble onto on my own, this is not an original discovery.
 See the paper <a href="http://arxiv.org/abs/quant-ph/0006004">Fast parallel circuits for the quantum Fourier transform</a> by Richard Cleve and John Watrous from Jan 2000.</p>
 
-<p><strong>Classical Uses?</strong></p>
+<h1>Classical Uses?</h1>
 
 <p>You might expect that, since we started with a direct translation of the Cooley-Tukey algorithm and then asymptotically improved it, the new construction can be translated back for savings in the classical case.
 Unfortunately, that&#39;s not correct.
@@ -148,7 +148,7 @@ We&#39;d just be replacing that simple sweep with a more complicated sweep.</p>
 <p>(Ironically, fast multiplication algorithms are themselves all based on Fourier transforms.
 We&#39;re using the classical Fourier transform to speed up the quantum Fourier transform.)</p>
 
-<p><strong>Summary</strong></p>
+<h1>Summary</h1>
 
 <p>The phasing part of the QFT kind of involves multiplying the little-endian Z-value of some qubits by their X-value.
 By extracting the multiplication, you can perform the QFT with asymptotically fewer gates than the naive construction.</p>
@@ -181,12 +181,10 @@ By extracting the multiplication, you can perform the QFT with asymptotically fe
     <table style="width: 100%;">
       <tr>
         <td align="left">
-          
-            <a href="/2016/06/05/erasure-is-postselection.html">&laquo; Erasure is Post-Selection</a>
-          
+          <a href="/2016/06/05/erasure-is-postselection.html">&laquo; Erasure is Post-Selection</a>
         </td>
         <td align="right">
-          
+          <a href="/post/1617">Quantum vs NP #2-B: Simulating 'A linear time quantum algorithm for 3SAT' &raquo;</a>
         </td>
       </tr>
     </table>

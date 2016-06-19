@@ -1,90 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-	<channel>
-		<title>Algorithmic Assertions - Craig Gidney&#39;s Computer Science Blog</title>
-		<description>A blog about computer science, software engineering, quantum computing, mathematical puzzles, and so forth.</description>		
-		<link>http://algorithmicassertions.com</link>
-		<atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
-		
-			<item>
-				<title>Using Multiplication to Cut Gates from the QFT</title>
-				<description>&lt;p&gt;In this post: pulling a multiplication out of the phase corrections performed during a quantum Fourier transform, and using it to save gates.&lt;/p&gt; &lt;p&gt;&lt;strong&gt;Fourier Construction&lt;/strong&gt;&lt;/p&gt; &lt;p&gt;Here&amp;#39;s a typical circuit for the Quantum Fourier Transform:&lt;/p&gt; &lt;p&gt;&lt;img src=&quot;/assets/2016-06-14-qft-by-multiply/Fourier-naive.png&quot; style=&quot;max-width: 100%&quot;/&gt;&lt;/p&gt; &lt;p&gt;It&amp;#39;s basically just the &lt;a href=&quot;https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm&quot;&gt;Cooley-Tukey FFT algorithm&lt;/a&gt; translated directly into a quantum circuit. The Hadamards are the sums-and-differences part, the Zs are the phase gradient part, and the interleaving/recursing part is implicit in the positioning of the gates and the bit reversal.&lt;/p&gt; &lt;p&gt;One way to make the circuit look nicer is to separate the Hadamard gates from the phase gates. There&amp;#39;s...</description>
-				<pubDate>Tue, 14 Jun 2016 01:10:10 -0400</pubDate>
-				<link>http://algorithmicassertions.com/2016/06/14/qft-by-multiply.html</link>
-				<guid isPermaLink="true">http://algorithmicassertions.com/2016/06/14/qft-by-multiply.html</guid>
-			</item>
-		
-			<item>
-				<title>Erasure is Post-Selection</title>
-				<description>&lt;p&gt;For a few months, I&amp;#39;ve intended to revisit my &lt;a href=&quot;http://algorithmicassertions.com/quantum/2015/11/01/Walters-Claimed-Quantum-Linear-3SAT.html&quot;&gt;&amp;#39;Quantum vs NP&amp;#39; post pointing out mistakes in Zachary B. Walters&amp;#39; claimed linear-time 3SAT paper&lt;/a&gt;. Walters commented on the post, and there was some back-and-forth, but we still disagree over whether his algorithm works. (I&amp;#39;m the one who thinks it obviously doesn&amp;#39;t.)&lt;/p&gt; &lt;p&gt;One of the mistakes Walters makes is actually a widespread misconception, so I figured I should talk about it separately. Thus this post.&lt;/p&gt; &lt;h1&gt;Lay Erasure&lt;/h1&gt; &lt;p&gt;Here&amp;#39;s a typical lay summary of a &lt;a href=&quot;https://en.wikipedia.org/wiki/Quantum_eraser_experiment&quot;&gt;quantum eraser experiment&lt;/a&gt;, &lt;a href=&quot;https://books.google.com/books?id=DNd2K6mxLpIC&amp;amp;lpg=PA197&amp;amp;dq=%22even%20though%20we%E2%80%99ve%20done%20nothing%20directly%20to%20the%20signal%20photons%22&amp;amp;pg=PA195#v=onepage&amp;amp;q=%22even%20though%20we%E2%80%99ve%20done%20nothing%20directly%20to%20the%20signal%20photons%22&amp;amp;f=false&quot;&gt;from Brian Greene&amp;#39;s &amp;#39;The Fabric of the Cosmos&amp;#39;&lt;/a&gt;:&lt;/p&gt; &lt;blockquote&gt; &lt;p&gt;even though...</description>
-				<pubDate>Sun, 05 Jun 2016 13:10:10 -0400</pubDate>
-				<link>http://algorithmicassertions.com/2016/06/05/erasure-is-postselection.html</link>
-				<guid isPermaLink="true">http://algorithmicassertions.com/2016/06/05/erasure-is-postselection.html</guid>
-			</item>
-		
-			<item>
-				<title>Ultradense Coding would allow FTL Signalling</title>
-				<description>&lt;p&gt;The title spoils the question, but I&amp;#39;ll ask it anyways: how do we know that there&amp;#39;s no clever way to pack more than 2 bits into a transmitted qubit?&lt;/p&gt; &lt;p&gt;Initially, people assumed that &lt;a href=&quot;https://en.wikipedia.org/wiki/Holevo&amp;#x27;s_theorem&quot;&gt;Holevo&amp;#39;s theorem&lt;/a&gt; implied the bit-per-sent-qubit limit was 1. (Roughly speaking, the theorem says that you can encode at most $n$ bits of retrievable information into $n$ qubits.) But, in 1992, &lt;a href=&quot;http://journals.aps.org/prl/abstract/10.1103/PhysRevLett.69.2881&quot;&gt;Charles Bennett et al. figured out a way&lt;/a&gt; to sidestep the theorem: pre-shared entanglement. By burning an EPR pair that was sent ahead of time, &lt;a href=&quot;https://en.wikipedia.org/wiki/Superdense_coding&quot;&gt;superdense coding&lt;/a&gt; can pack 2 bits into a single...</description>
-				<pubDate>Sun, 29 May 2016 01:10:10 -0400</pubDate>
-				<link>http://algorithmicassertions.com/2016/05/29/ultra-dense-coding-allows-ftl.html</link>
-				<guid isPermaLink="true">http://algorithmicassertions.com/2016/05/29/ultra-dense-coding-allows-ftl.html</guid>
-			</item>
-		
-			<item>
-				<title>My Quantum Circuit Simulator: Quirk</title>
-				<description>&lt;p&gt;I&amp;#39;ve been working on a quantum circuit simulator that runs in your browser. It&amp;#39;s called Quirk. Quirk is open source (github repository: &lt;a href=&quot;https://github.com/Strilanc/Quirk&quot;&gt;Strilanc/Quirk&lt;/a&gt;), and there&amp;#39;s a live instance you can play with at &lt;a href=&quot;/quirk&quot;&gt;algorithmicassertions.com/quirk&lt;/a&gt;:&lt;/p&gt; &lt;style scoped&gt; #open-quirk img { filter: contrast(1); -webkit-filter: contrast(1); transition: 0.2s; } #open-quirk img:hover { filter: contrast(1.5); -webkit-filter: contrast(1.5); transition: 0.5s; } &lt;/style&gt; &lt;p&gt;&lt;a href=&quot;/quirk&quot; id=&quot;open-quirk&quot;&gt; &lt;img src=&quot;/assets/2016-05-22-quirk/open-quirk.png&quot;/&gt; &lt;/a&gt;&lt;/p&gt; &lt;p&gt;&lt;em&gt;(Not familiar with what a quantum circuit is? Watch the Khan-academy-style video series &lt;a href=&quot;https://www.youtube.com/playlist?list=PL1826E60FD05B44E4&quot;&gt;Quantum Computing for the Determined&lt;/a&gt;. It&amp;#39;s by Michael Nielson, co-author of the &lt;a href=&quot;http://www.amazon.com/Quantum-Computation-Information-10th-Anniversary/dp/1107002176&quot;&gt;de-facto standard textbook&lt;/a&gt;.)&lt;/em&gt;&lt;/p&gt; &lt;p&gt;&lt;strong&gt;Features&lt;/strong&gt;:&lt;/p&gt; &lt;ul&gt; &lt;li&gt;Drag-and-drop circuit editing.&lt;/li&gt;...</description>
-				<pubDate>Sun, 22 May 2016 07:10:10 -0400</pubDate>
-				<link>http://algorithmicassertions.com/2016/05/22/quirk.html</link>
-				<guid isPermaLink="true">http://algorithmicassertions.com/2016/05/22/quirk.html</guid>
-			</item>
-		
-			<item>
-				<title>Reducing Test Boilerplate with Ascii Diagrams</title>
-				<description>&lt;p&gt;Sometimes, testing code ends up having a lot of finnicky boilerplate. That&amp;#39;s the issue I was having with &lt;a href=&quot;https://github.com/Strilanc/Quirk&quot;&gt;Quirk&lt;/a&gt;, anyways.&lt;/p&gt; &lt;p&gt;Quirk has a convenient UI for defining small quantum circuits, but the same could not be said of defining circuits for the tests. For example, suppose we want to test that Quirk is disabling operations it doesn&amp;#39;t support (lest it create garbage output). Here&amp;#39;s a specific case where an operation is blocked (because it would recohere a measured qubit):&lt;/p&gt; &lt;p&gt;&lt;img src=&quot;/assets/2016-05-15-reducing-test-boilerplate-with-diagrams/circuit-with-disabled-operation.png&quot; style=&quot;max-width: 200px;&quot;/&gt;&lt;/p&gt; &lt;p&gt;Simple situation. Clear requirement. A good candidate for a unit test. Let&amp;#39;s write it up:&lt;/p&gt; &lt;div...</description>
-				<pubDate>Sun, 15 May 2016 07:10:10 -0400</pubDate>
-				<link>http://algorithmicassertions.com/2016/05/15/reducing-test-boilerplate-with-diagrams.html</link>
-				<guid isPermaLink="true">http://algorithmicassertions.com/2016/05/15/reducing-test-boilerplate-with-diagrams.html</guid>
-			</item>
-		
-			<item>
-				<title>Eve&#39;s Quantum Clone Computer</title>
-				<description>&lt;p&gt;&lt;a href=&quot;/2016/04/05/copying-a-quantum-brain.html&quot;&gt;Last post&lt;/a&gt;, I tried to explain an interesting consequence of the fact that interactions with the world can reveal the current state of a quantum system.&lt;/p&gt; &lt;p&gt;I framed the post around the hypothetical of duplicating a brain despite the brain containing quantum information. I pointed to a couple examples of people saying it would be impossible to do that, since the &lt;a href=&quot;https://en.wikipedia.org/wiki/No-cloning_theorem&quot;&gt;No-Cloning Theorem&lt;/a&gt; prevents the duplication of unknown quantum states. Then I tried to explain a copying algorithm based on moving the brain into a quantum computer and inferring its state by recording any measurements the brain decided...</description>
-				<pubDate>Sun, 24 Apr 2016 04:10:10 -0400</pubDate>
-				<link>http://algorithmicassertions.com/2016/04/24/eves-quantum-clone-computer.html</link>
-				<guid isPermaLink="true">http://algorithmicassertions.com/2016/04/24/eves-quantum-clone-computer.html</guid>
-			</item>
-		
-			<item>
-				<title>Gradually Copying a Quantum Brain</title>
-				<description>&lt;p&gt;&lt;strong&gt;Update (May 2016)&lt;/strong&gt;: &lt;em&gt;This post is quite vague on the details. The followup post &lt;a href=&quot;/2016/04/24/eves-quantum-clone-computer.html&quot;&gt;Eve&amp;#39;s Quantum Clone Computer&lt;/a&gt; spends more time on them.&lt;/em&gt;&lt;/p&gt; &lt;hr&gt; &lt;p&gt;Last month, YouTuber &lt;a href=&quot;https://www.youtube.com/user/CGPGrey/videos&quot;&gt;CGP Grey&lt;/a&gt; posted an &lt;a href=&quot;https://www.youtube.com/watch?v=nQHBAdShgYI&quot;&gt;edutainment video about the philosophical implications of transporters&lt;/a&gt;. One of the points he focuses on is whether teleportation works by creating a copy of you and killing the original.&lt;/p&gt; &lt;p&gt;In response to the teleportation video, &lt;a href=&quot;https://www.youtube.com/user/minutephysics/videos&quot;&gt;MinutePhysics&lt;/a&gt; posted &lt;a href=&quot;https://www.youtube.com/watch?v=dAaHHGHuy1c&quot;&gt;a follow-up video about quantum teleportation&lt;/a&gt;. The follow-up video points out that quantum information can&amp;#39;t be copied, only moved, so if your identity somhow depends on quantum...</description>
-				<pubDate>Tue, 05 Apr 2016 04:10:10 -0400</pubDate>
-				<link>http://algorithmicassertions.com/2016/04/05/copying-a-quantum-brain.html</link>
-				<guid isPermaLink="true">http://algorithmicassertions.com/2016/04/05/copying-a-quantum-brain.html</guid>
-			</item>
-		
-			<item>
-				<title>Protecting Control Flow with Nested Evals</title>
-				<description>&lt;p&gt;Javascript&amp;#39;s &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval&quot;&gt;eval&lt;/a&gt; function has a bad reputation, mostly (but not entirely) because of its tendency to create &lt;a href=&quot;https://en.wikipedia.org/wiki/Code_injection&quot;&gt;code injection attacks&lt;/a&gt;. In this post, I&amp;#39;ll show a way &lt;code&gt;eval&lt;/code&gt; can help &lt;strong&gt;defend&lt;/strong&gt; against code-injection attacks.&lt;/p&gt; &lt;p&gt;(&lt;em&gt;This post is &lt;strong&gt;not&lt;/strong&gt; a recommendation for eval, and &lt;strong&gt;won&amp;#39;t&lt;/strong&gt; prepare you for the many pitfalls of executing untrusted javascript. If you&amp;#39;re unfamiliar with injection attacks, or enjoy puzzles based on them, try out the game &lt;a href=&quot;https://alexnisnevich.github.io/untrusted/&quot;&gt;untrusted (&amp;#39;the continuing adventures of Dr. Eval&amp;#39;)&lt;/a&gt;.&lt;/em&gt;)&lt;/p&gt; &lt;h1&gt;Injecting Control Flow&lt;/h1&gt; &lt;p&gt;Injection attacks work in many ways, but a common method-of-action is hijacking the flow of code nested...</description>
-				<pubDate>Sun, 27 Mar 2016 11:10:10 -0400</pubDate>
-				<link>http://algorithmicassertions.com/programming/2016/03/27/protecting-control-flow-with-nested-evals.html</link>
-				<guid isPermaLink="true">http://algorithmicassertions.com/programming/2016/03/27/protecting-control-flow-with-nested-evals.html</guid>
-			</item>
-		
-			<item>
-				<title>Wrapping Structure Around Batched Methods</title>
-				<description>&lt;p&gt;In this post: working around WebGL&amp;#39;s slow &lt;code&gt;readPixels&lt;/code&gt; method by using batching, and a simple trick for avoiding error-prone concatenation and slicing by wrapping some structure around the resulting batched method.&lt;/p&gt; &lt;h1&gt;Motivation&lt;/h1&gt; &lt;p&gt;One of the side projects I work on is &lt;a href=&quot;https://github.com/Strilanc/Quantum-Circuit-Inspector&quot;&gt;an HTML5 quantum circuit simulator&lt;/a&gt;. It lets you drag gates around, and shows details about what a quantum circuit is doing.&lt;/p&gt; &lt;p&gt;Originally, the simulator did all the number-crunching in javascript. However, since javascript isn&amp;#39;t exactly fast and applying a gate to an $n$ qubit system takes $O(2^n)$ operations behind the scenes, the code wasn&amp;#39;t scaling. To keep things...</description>
-				<pubDate>Wed, 16 Mar 2016 11:10:10 -0400</pubDate>
-				<link>http://algorithmicassertions.com/programming/2016/03/16/structure-batched.html</link>
-				<guid isPermaLink="true">http://algorithmicassertions.com/programming/2016/03/16/structure-batched.html</guid>
-			</item>
-		
-			<item>
-				<title>Paper as Problem: &#39;Non-local measurements via quantum erasure&#39;</title>
-				<description>&lt;p&gt;(&lt;em&gt;In &amp;#39;Paper as Problem&amp;#39; posts, I treat a paper&amp;#39;s abstract as a puzzle. &amp;quot;We discovered a way to X&amp;quot; becomes &amp;quot;Figure out how to do X&amp;quot;. The goal is to solve the problem before reading the body of the paper.&lt;/em&gt;)&lt;/p&gt; &lt;p&gt;Two weeks ago, the paper &amp;quot;Nonlocal Measurements via Quantum Erasure&amp;quot; by Aharon Brodutch and Eliahu Cohen &lt;a href=&quot;http://journals.aps.org/prl/abstract/10.1103/PhysRevLett.116.070404&quot;&gt;was published in Physical Review Letters&lt;/a&gt;. There&amp;#39;s also a &lt;a href=&quot;http://arxiv.org/abs/1409.1575&quot;&gt;pre-print available on arXiv&lt;/a&gt;, which is what I read.&lt;/p&gt; &lt;p&gt;Based on the abstract, the paper&amp;#39;s core contribution is:&lt;/p&gt; &lt;blockquote&gt; &lt;p&gt;[...] We present a scheme for effectively generating the von Neumann Hamiltonian for nonlocal...</description>
-				<pubDate>Tue, 01 Mar 2016 11:30:00 -0500</pubDate>
-				<link>http://algorithmicassertions.com/quantum/2016/03/01/paper-as-problem-nonlocal-measurements-via-quantum-erasure.html</link>
-				<guid isPermaLink="true">http://algorithmicassertions.com/quantum/2016/03/01/paper-as-problem-nonlocal-measurements-via-quantum-erasure.html</guid>
-			</item>
-		
-	</channel>
+    <channel>
+        <title>Algorithmic Assertions - Craig Gidney&#39;s Computer Science Blog</title>
+        <description>A blog about computer science, software engineering, quantum computing, mathematical puzzles, and so forth.</description>
+        <link>http://algorithmicassertions.com</link>
+        <atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
+        
+            <item>
+                <title>Quantum vs NP #2-B: Simulating &#39;A linear time quantum algorithm for 3SAT&#39;</title>
+                <description>&lt;p&gt;This is a followup to &lt;a href=&quot;/quantum/2015/11/01/Walters-Claimed-Quantum-Linear-3SAT.html&quot;&gt;a post from last year&lt;/a&gt;, about the pre-print &lt;a href=&quot;http://arxiv.org/abs/1510.00409&quot;&gt;&amp;#39;A linear time quantum algorithm for 3SAT&amp;#39; by Zachary B. Walters&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;In that post, I argued that the algorithm doesn&amp;#39;t do any quantum work. In the comments, Walters and I went back-and-forth. Since then, Walters...</description>
+                <pubDate>Sun, 19 Jun 2016 13:10:10 -0400</pubDate>
+                <link>http://algorithmicassertions.com/post/1617</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/post/1617</guid>
+            </item>
+            <item>
+                <title>Using Multiplication to Cut Gates from the QFT</title>
+                <description>&lt;p&gt;In this post: pulling a multiplication out of the phase corrections performed during a quantum Fourier transform, and using it to save gates.&lt;/p&gt; &lt;strong&gt;Fourier Construction&lt;/strong&gt; &lt;p&gt;Here&amp;#39;s a typical circuit for the Quantum Fourier Transform:&lt;/p&gt; &lt;p&gt;&lt;img src=&quot;/assets/2016-06-14-qft-by-multiply/Fourier-naive.png&quot; style=&quot;max-width: 100%&quot;/&gt;&lt;/p&gt; &lt;p&gt;It&amp;#39;s basically just the &lt;a href=&quot;https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm&quot;&gt;Cooley-Tukey FFT algorithm&lt;/a&gt; translated directly into a...</description>
+                <pubDate>Tue, 14 Jun 2016 01:10:10 -0400</pubDate>
+                <link>http://algorithmicassertions.com/2016/06/14/qft-by-multiply.html</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/2016/06/14/qft-by-multiply.html</guid>
+            </item>
+            <item>
+                <title>Erasure is Post-Selection</title>
+                <description>&lt;p&gt;For a few months, I&amp;#39;ve intended to revisit my &lt;a href=&quot;http://algorithmicassertions.com/quantum/2015/11/01/Walters-Claimed-Quantum-Linear-3SAT.html&quot;&gt;&amp;#39;Quantum vs NP&amp;#39; post pointing out mistakes in Zachary B. Walters&amp;#39; claimed linear-time 3SAT paper&lt;/a&gt;. Walters commented on the post, and there was some back-and-forth, but we still disagree over whether his algorithm works. (I&amp;#39;m the one who thinks it...</description>
+                <pubDate>Sun, 05 Jun 2016 13:10:10 -0400</pubDate>
+                <link>http://algorithmicassertions.com/2016/06/05/erasure-is-postselection.html</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/2016/06/05/erasure-is-postselection.html</guid>
+            </item>
+            <item>
+                <title>Ultradense Coding would allow FTL Signalling</title>
+                <description>&lt;p&gt;The title spoils the question, but I&amp;#39;ll ask it anyways: how do we know that there&amp;#39;s no clever way to pack more than 2 bits into a transmitted qubit?&lt;/p&gt; &lt;p&gt;Initially, people assumed that &lt;a href=&quot;https://en.wikipedia.org/wiki/Holevo&amp;#x27;s_theorem&quot;&gt;Holevo&amp;#39;s theorem&lt;/a&gt; implied the bit-per-sent-qubit limit was 1. (Roughly speaking, the theorem says that you can...</description>
+                <pubDate>Sun, 29 May 2016 01:10:10 -0400</pubDate>
+                <link>http://algorithmicassertions.com/2016/05/29/ultra-dense-coding-allows-ftl.html</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/2016/05/29/ultra-dense-coding-allows-ftl.html</guid>
+            </item>
+            <item>
+                <title>My Quantum Circuit Simulator: Quirk</title>
+                <description>&lt;p&gt;I&amp;#39;ve been working on a quantum circuit simulator that runs in your browser. It&amp;#39;s called Quirk. Quirk is open source (github repository: &lt;a href=&quot;https://github.com/Strilanc/Quirk&quot;&gt;Strilanc/Quirk&lt;/a&gt;), and there&amp;#39;s a live instance you can play with at &lt;a href=&quot;/quirk&quot;&gt;algorithmicassertions.com/quirk&lt;/a&gt;:&lt;/p&gt; &lt;style scoped&gt; #open-quirk img { filter: contrast(1); -webkit-filter: contrast(1); transition: 0.2s; } #open-quirk img:hover...</description>
+                <pubDate>Sun, 22 May 2016 07:10:10 -0400</pubDate>
+                <link>http://algorithmicassertions.com/2016/05/22/quirk.html</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/2016/05/22/quirk.html</guid>
+            </item>
+            <item>
+                <title>Reducing Test Boilerplate with Ascii Diagrams</title>
+                <description>&lt;p&gt;Sometimes, testing code ends up having a lot of finnicky boilerplate. That&amp;#39;s the issue I was having with &lt;a href=&quot;https://github.com/Strilanc/Quirk&quot;&gt;Quirk&lt;/a&gt;, anyways.&lt;/p&gt; &lt;p&gt;Quirk has a convenient UI for defining small quantum circuits, but the same could not be said of defining circuits for the tests. For example, suppose we want to...</description>
+                <pubDate>Sun, 15 May 2016 07:10:10 -0400</pubDate>
+                <link>http://algorithmicassertions.com/2016/05/15/reducing-test-boilerplate-with-diagrams.html</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/2016/05/15/reducing-test-boilerplate-with-diagrams.html</guid>
+            </item>
+            <item>
+                <title>Eve&#39;s Quantum Clone Computer</title>
+                <description>&lt;p&gt;&lt;a href=&quot;/2016/04/05/copying-a-quantum-brain.html&quot;&gt;Last post&lt;/a&gt;, I tried to explain an interesting consequence of the fact that interactions with the world can reveal the current state of a quantum system.&lt;/p&gt; &lt;p&gt;I framed the post around the hypothetical of duplicating a brain despite the brain containing quantum information. I pointed to a couple examples...</description>
+                <pubDate>Sun, 24 Apr 2016 04:10:10 -0400</pubDate>
+                <link>http://algorithmicassertions.com/2016/04/24/eves-quantum-clone-computer.html</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/2016/04/24/eves-quantum-clone-computer.html</guid>
+            </item>
+            <item>
+                <title>Gradually Copying a Quantum Brain</title>
+                <description>&lt;p&gt;&lt;strong&gt;Update (May 2016)&lt;/strong&gt;: &lt;em&gt;This post is quite vague on the details. The followup post &lt;a href=&quot;/2016/04/24/eves-quantum-clone-computer.html&quot;&gt;Eve&amp;#39;s Quantum Clone Computer&lt;/a&gt; spends more time on them.&lt;/em&gt;&lt;/p&gt; &lt;hr&gt; &lt;p&gt;Last month, YouTuber &lt;a href=&quot;https://www.youtube.com/user/CGPGrey/videos&quot;&gt;CGP Grey&lt;/a&gt; posted an &lt;a href=&quot;https://www.youtube.com/watch?v=nQHBAdShgYI&quot;&gt;edutainment video about the philosophical implications of transporters&lt;/a&gt;. One of the points he focuses on is...</description>
+                <pubDate>Tue, 05 Apr 2016 04:10:10 -0400</pubDate>
+                <link>http://algorithmicassertions.com/2016/04/05/copying-a-quantum-brain.html</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/2016/04/05/copying-a-quantum-brain.html</guid>
+            </item>
+            <item>
+                <title>Protecting Control Flow with Nested Evals</title>
+                <description>&lt;p&gt;Javascript&amp;#39;s &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval&quot;&gt;eval&lt;/a&gt; function has a bad reputation, mostly (but not entirely) because of its tendency to create &lt;a href=&quot;https://en.wikipedia.org/wiki/Code_injection&quot;&gt;code injection attacks&lt;/a&gt;. In this post, I&amp;#39;ll show a way &lt;code&gt;eval&lt;/code&gt; can help &lt;strong&gt;defend&lt;/strong&gt; against code-injection attacks.&lt;/p&gt; &lt;p&gt;(&lt;em&gt;This post is &lt;strong&gt;not&lt;/strong&gt; a recommendation for eval, and &lt;strong&gt;won&amp;#39;t&lt;/strong&gt; prepare you for the...</description>
+                <pubDate>Sun, 27 Mar 2016 11:10:10 -0400</pubDate>
+                <link>http://algorithmicassertions.com/programming/2016/03/27/protecting-control-flow-with-nested-evals.html</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/programming/2016/03/27/protecting-control-flow-with-nested-evals.html</guid>
+            </item>
+            <item>
+                <title>Wrapping Structure Around Batched Methods</title>
+                <description>&lt;p&gt;In this post: working around WebGL&amp;#39;s slow &lt;code&gt;readPixels&lt;/code&gt; method by using batching, and a simple trick for avoiding error-prone concatenation and slicing by wrapping some structure around the resulting batched method.&lt;/p&gt; &lt;strong&gt;Motivation&lt;/strong&gt; &lt;p&gt;One of the side projects I work on is &lt;a href=&quot;https://github.com/Strilanc/Quantum-Circuit-Inspector&quot;&gt;an HTML5 quantum circuit simulator&lt;/a&gt;. It lets you...</description>
+                <pubDate>Wed, 16 Mar 2016 11:10:10 -0400</pubDate>
+                <link>http://algorithmicassertions.com/programming/2016/03/16/structure-batched.html</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/programming/2016/03/16/structure-batched.html</guid>
+            </item>
+    </channel>
 </rss>
