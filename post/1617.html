@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Quantum vs NP #2-B: Simulating 'A linear time quantum algorithm for 3SAT'</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Quantum vs NP #2-B: Simulating 'A linear time quantum algorithm for 3SAT'</h1>
+<p class="meta">19 Jun 2016</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>This is a followup to <a href="/quantum/2015/11/01/Walters-Claimed-Quantum-Linear-3SAT.html">a post from last year</a>, about the pre-print <a href="http://arxiv.org/abs/1510.00409">&#39;A linear time quantum algorithm for 3SAT&#39; by Zachary B. Walters</a>.</p>
+
+<p>In that post, I argued that the algorithm doesn&#39;t do any quantum work.
+In the comments, Walters and I went back-and-forth.
+Since then, Walters has updated the paper three times.
+I suppose it&#39;s time to revisit.</p>
+
+<p>After reading the updated paper, I have the same objections as before:</p>
+
+<ol>
+<li>This is actually a classical algorithm in disguise.</li>
+<li>It runs in exponential time, not linear time.</li>
+</ol>
+
+<p>This time, I&#39;ll argue my point by simulating the algorithm with Microsoft&#39;s <a href="http://research.microsoft.com/en-us/projects/liquid/">LIQUi|&gt;</a> library.</p>
+
+<h1>Walters&#39; Algorithm</h1>
+
+<p>Before I jump into simulating the algorithm, I need to explain what the algorithm actually does.
+Basically, it&#39;s a quantum version of the idea &quot;if a clause isn&#39;t satisfied, perturb that clause&#39;s variables&quot;.</p>
+
+<p>The paper defines the relevant gates in Section 4.
+First, the paper defines a &quot;QOR&quot; gate (note: the &quot;R&quot; gates are rotating around the <em>Y</em> axis):</p>
+
+<p><img src="/assets/2016-06-19-quantum-vs-np-2b/define-qor.png"/></p>
+
+<p>This is supposed to set $s_2$ to $c_1 \lor c_2$, and it does.
+The problem is $s_1$, which ends up containing the parity of $c_1$ vs $c_2$.
+The paper recognizes that this is a problem (it will cause unwanted decoherence) but claims that measuring $s_1$ along the X axis can fix the problem.
+That&#39;s <a href="/2016/06/05/erasure-is-postselection.html">simply wrong</a>.
+The correct fix is to <a href="https://en.wikipedia.org/wiki/Uncomputation">uncompute</a> $s_1$, or avoid creating it in the first place via a doubly-controlled operation.</p>
+
+<p>The paper doubles down on the how-erasure-works misconception when defining the &quot;3OR&quot; gate:</p>
+
+<p><img src="/assets/2016-06-19-quantum-vs-np-2b/define-3or.png"/></p>
+
+<p>This gate initializes $s_4$ to $c_1 \lor c_2 \lor c_3$, but in the process it exposes $c_1 \oplus c_2$, $c_1 \lor c_2$, and $(c_1 \lor c_2) \oplus c_3$ to the environment via $s_1$, $s_2$, and $s_3$.
+This is enough to reconstruct all three inputs, so all the qubits are decohered after this gate is applied.
+Once again the correct fix would be to uncompute or to use multi-controlled gates.</p>
+
+<p>Finally we get to the pièce de résistance, the awesomely-named <em><strong>DECIMATION</strong></em> gate:</p>
+
+<p><img src="/assets/2016-06-19-quantum-vs-np-2b/define-decimation.png"/></p>
+
+<p>The idea behind this gate is that, when $c_1$ and $c_2$ and $c_3$ fail to meet a clause, they get rotated a bit.</p>
+
+<p>Note that this circuit has yet another attempt to destroy indestructable information by measuring it along a different axis.
+But this time we can&#39;t fix it by adding more controls or by uncomputing, because the values we need to do that no longer commute with the values we have.
+This is the first <em>major</em> flaw in the paper, I think.</p>
+
+<p>Walters claims that measuring the scratch qubit along a perpendicular axis will fix the problem, and he&#39;s simply wrong.
+However... some phrasing in the paper indicates that the decoherence is actually... desired?
+The paper often talks about &quot;incoherently transfering&quot; states, for example.
+So it&#39;s hard to say if this is a flaw-in-intent or flaw-in-execution or a flaw-in-explanation or what.</p>
+
+<p>Anyways... here&#39;s the whole <em><strong>DE̡͊͠͝CIMATION</strong></em> circuit, expanded in full:</p>
+
+<p><img src="/assets/2016-06-19-quantum-vs-np-2b/unfolded-decimation.png" style="max-width: 100%;"/></p>
+
+<p>Note that this circuit is specifically for true-or-true-or-true clauses.
+You have to temporarily invert the inputs to adapt it to other clauses.</p>
+
+<p>The above circuit is kind of daunting.
+But if you actually pay attention to how the paper describes the operation, and what it&#39;s supposed to do, a much simpler <em><strong>DE̡͊͠͝Cͮ̂҉̯͈͕̹̘̱IM̯͍̭̚​̐ATIO̘̝̙ͨ̃ͤ͂̾̆N</strong></em> circuit suggests itself:</p>
+
+<p><img src="/assets/2016-06-19-quantum-vs-np-2b/simplified-decimation.png"/></p>
+
+<p>Note that this circuit isn&#39;t <em>strictly</em> equivalent to Walters&#39; <em><strong>DE̡͊͠͝Cͮ̂҉̯͈͕̹̘̱I̶̷̧̨̱̹̭̯̙̲̝͖ͧ̾ͬͭ̏ͥͮͮ͟͏̮̪̝͍M̯͍̭̚​̐AT̴̨̟̟͙̞̥̫͎̭̑ͩ͌ͯ̿̔̀͝ͅIO̘̝̙ͨ̃ͤ͂̾̆N</strong></em> circuit.
+It causes a lot less decoherence, for example.
+Regardless, I think it&#39;s much closer to the paper&#39;s description of what the gate <em>should</em> do than the circuit that&#39;s actually included in the paper.</p>
+
+<p>Because I think this shorter circuit better represents the intent of the paper, I&#39;m torn between whether or not I should use it or the actual circuit from the paper when simulating.
+On the one hand, any changes I make could be pointed to as the reason the algorithm doesn&#39;t work.
+On the other hand, there&#39;s so many gates in Walters&#39; construction that I&#39;m more worried about misplacing one than I am about misinterpreting the intent of the algorithm.</p>
+
+<p>What I&#39;m going to do is compromise a bit.
+I&#39;m going to use my shorter circuit, but tweaked to do the wrong-axis erasure thing even though I think it&#39;s pointless.</p>
+
+<h1>Simulation Strategy</h1>
+
+<p>My simulation code is available on github, in the repository <a href="https://github.com/Strilanc/NP-vs-Quantum-Simulation-Walters-Algorithm">Strilanc/NP-vs-Quantum-Simulation-Walters-Algorithm</a>.</p>
+
+<p>Generally, the simplest way to show that a 3-SAT algorithm takes exponential time is to just find a problem instance it does poorly on.
+I think that Walters&#39; algorithm is equivalent to the classical algorithm where you randomly toggle variables in clauses that aren&#39;t satisfied, so that&#39;s the algorithm I used when looking for difficulties.
+After some experimentation, I found that there are three basic tricks to making a hard instance:</p>
+
+<ul>
+<li>Use clauses where only one of the three variables is correct, so that toggling tends to hurt twice as much as it helps.</li>
+<li>Make long chains, where variable N doesn&#39;t feel any toggle pressure until variable N-1 is correct.</li>
+<li>Include a reset mechanism, where one wrong variable tends to cause all variables to go wrong.</li>
+</ul>
+
+<p>Here&#39;s the F# code I use to construct hard instances.
+Note that when I say &quot;hard&quot; I just mean &quot;hard for this algorithm&quot;, not hard in general.
+The generated instances are actually very easy: there&#39;s always exactly one trivial solution.</p>
+
+<div style="overflow-y:scroll; max-height:200px;"><pre>
+let evil3SatInstance varCount =
+    let no i = {index = i; target = false}
+    let YA i = {index = i; target = true}
+
+    // Seeding. First three variables must be false.
+    let seed = [
+        Clause(no 0, YA 1, YA 2);
+        Clause(no 0, YA 1, no 2);
+        Clause(no 0, no 1, YA 2);
+        Clause(no 0, no 1, no 2);
+        Clause(YA 0, no 1, no 2);
+        Clause(YA 0, no 1, YA 2);
+        Clause(YA 0, YA 1, no 2);
+    ]
+
+    // Chaining. A variable must be false if the two before it are false.
+    let chain =
+        seq { 0 .. (varCount-4) }
+        |> Seq.map (fun i -> Clause(YA(i+1), YA(i+2), no(i+3)))
+        |> List.ofSeq
+
+    // Reset mechanism.
+    // 1. Every variable tends to become true if a,b is broken
+    // 2. Any true variable tends to break a,b
+    // 3. These tendencies are statistically stronger than the tendency to fix any one breakage
+    let reset =
+        seq { 0 .. (varCount-4) }
+        |> Seq.map (fun i ->
+            [
+                Clause(no(0), no(1), YA(i+3));
+                Clause(no(0), YA(1), YA(i+3));
+                Clause(YA(0), no(1), YA(i+3));
+            ])
+        |> Seq.concat
+        |> List.ofSeq
+
+    List.concat [seed; chain; reset]
+</pre></div>
+
+<p>And here&#39;s the 27 clauses that make up the 8-variable problem I&#39;ll actually be testing on:</p>
+
+<div style="overflow-y:scroll; max-height:200px;"><pre>
+!a or b or c
+!a or b or !c
+!a or !b or c
+!a or !b or !c
+a or !b or !c
+a or !b or c
+a or b or !c
+b or c or !d
+c or d or !e
+d or e or !f
+e or f or !g
+f or g or !h
+!a or !b or d
+!a or b or d
+a or !b or d
+!a or !b or e
+!a or b or e
+a or !b or e
+!a or !b or f
+!a or b or f
+a or !b or f
+!a or !b or g
+!a or b or g
+a or !b or g
+!a or !b or h
+!a or b or h
+a or !b or h
+</pre></div>
+
+<p>(Originally I planned to do a 16 variable problem, but the simulation was a couple order of magnitudes slower than I expected ahead of time so I dropped back to 8.)</p>
+
+<p>Note that I did have to make a few guesses when implementing Walters&#39; algorithm.
+For example, the paper says to randomly vary the pertubation angle between two values for every clause and that the number of iterations needed should be constant (regardless of problem size).
+It doesn&#39;t give specific angles to use, or say exactly how big &quot;constant&quot; is, so I just picked values myself.</p>
+
+<p>Anyways, enough hedging.
+Let&#39;s try it!</p>
+
+<h1>Simulation Results</h1>
+
+<p>Here&#39;s a recording of a typical run of Walters&#39; algorithm on the 8-qubit problem, stopping after 1000 iterations.
+Because we&#39;re using a simulator, we can see intermediate probabilities.
+The only valid solution is &quot;all qubits off&quot;, so we want all the probability-of-ON columns to be showing 0%.</p>
+
+<p>Watch closely:</p>
+
+<p><img src="/assets/2016-06-19-quantum-vs-np-2b/simulation-trace.gif" style="border: 1px solid black;"/></p>
+
+<p>I want you to focus on the second column from the right.
+In particular, notice how it sporadically jumps downward but then gets pulled back to 100%.
+Eventually, around iteration 900, it makes a big enough jump to escape and reach the solution state.</p>
+
+<p>If Walters is right when he claims that the algorithm should quickly decay to a satisfying solution, <em>what keeps pulling that qubit back to 100%-ON</em>?
+The paper describes the algorithm as a sort of gentle flow through the graph of states, accumulating at the solution.
+From that you would expect the probabilities to gradually transition from 50% to the target values, possibly with a few detours, as wrong states lose amplitude.
+But the simulation shows that actually the state is being jerked around and tossed into the later-qubits-are-mostly-ON bin again and again.</p>
+
+<p>When I run the classical variant of this algorithm, where you store a single state and randomly toggle variables in unsatisfied clauses, the same behavior shows up.
+The system gets stuck in states where the later variables are almost always true, and the reset mechanism keeps breaking the gradual chaining towards a solution.
+The &#39;jumps&#39; are just chains that made it unusually far before being reset.</p>
+
+<p>Both the classical algorithm and Walters&#39; algorithm take, typically, a couple thousand steps to solve the 8 variable instance.
+Sometimes they get lucky and solve it in a hundred, sometimes they get unlucky and the iterations-used-to-solve count spikes to ten thousand, but &quot;a thousand&quot; is a good order of magnitude description.
+(Note that this is worse than random guessing, because $1000 &gt; 2^8$.)</p>
+
+<p>Based on that high-level view of the behavior over time, and the stopping times being similar, and the obvious decoherence mechanism, my conclusion is that Walters&#39; algorithm is essentially equivalent to the classical algorithm.
+Secondarily, simulation of different sized problems has made it clear to me that the classical algorithm and Walters&#39; algorithm will take exponential time to solve larger and larger instances of the family of 3SAT problems defined in this post.</p>
+
+<h1>Advice</h1>
+
+<p>I&#39;m not sure if this post will convince Walters or not, but I can at least give feedback that applies regardless.</p>
+
+<p>First, dump section 4 from the paper.
+Just use standard circuit constructions instead of defining your own.
+Feel free to steal my simplified circuit.</p>
+
+<p>Second, drop the &quot;axis of truth&quot; stuff.
+The success of an algorithm can&#39;t depend on what you do to discarded qubits.
+It trivially violates the no-communication theorem.
+This is a serious mistake to have in the paper.</p>
+
+<p>Third, do your own simulations.
+They&#39;re an excellent way to convince people that something works and to find mistakes.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+  <script>
+  var idcomments_acct = '7d0006bd6a016f9a2892cc2ecc64de01';
+  var idcomments_post_id = '/post/1617';
+  var idcomments_post_url = 'http://algorithmicassertions.com/post/1617';
+  </script>
+  <span id="IDCommentsPostTitle" style="display:none"></span>
+  <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+  <noscript>
+    <hr>
+    <font color=red>
+      Comments script blocked. Comments won't work.
+    </font>
+    <br/>
+    Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>intensedebate.com</strong> to fix.
+  </noscript>
+
+
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/2016/06/14/qft-by-multiply.html">&laquo; Using Multiplication to Cut Gates from the QFT</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

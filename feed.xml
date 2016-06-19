@@ -7,6 +7,13 @@
         <atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Quantum vs NP #2-B: Simulating &#39;A linear time quantum algorithm for 3SAT&#39;</title>
+                <description>&lt;p&gt;This is a followup to &lt;a href=&quot;/quantum/2015/11/01/Walters-Claimed-Quantum-Linear-3SAT.html&quot;&gt;a post from last year&lt;/a&gt;, about the pre-print &lt;a href=&quot;http://arxiv.org/abs/1510.00409&quot;&gt;&amp;#39;A linear time quantum algorithm for 3SAT&amp;#39; by Zachary B. Walters&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;In that post, I argued that the algorithm doesn&amp;#39;t do any quantum work. In the comments, Walters and I went back-and-forth. Since then, Walters...</description>
+                <pubDate>Sun, 19 Jun 2016 13:10:10 -0400</pubDate>
+                <link>http://algorithmicassertions.com/post/1617</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/post/1617</guid>
+            </item>
+            <item>
                 <title>Using Multiplication to Cut Gates from the QFT</title>
                 <description>&lt;p&gt;In this post: pulling a multiplication out of the phase corrections performed during a quantum Fourier transform, and using it to save gates.&lt;/p&gt; &lt;strong&gt;Fourier Construction&lt;/strong&gt; &lt;p&gt;Here&amp;#39;s a typical circuit for the Quantum Fourier Transform:&lt;/p&gt; &lt;p&gt;&lt;img src=&quot;/assets/2016-06-14-qft-by-multiply/Fourier-naive.png&quot; style=&quot;max-width: 100%&quot;/&gt;&lt;/p&gt; &lt;p&gt;It&amp;#39;s basically just the &lt;a href=&quot;https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm&quot;&gt;Cooley-Tukey FFT algorithm&lt;/a&gt; translated directly into a...</description>
                 <pubDate>Tue, 14 Jun 2016 01:10:10 -0400</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Wed, 16 Mar 2016 11:10:10 -0400</pubDate>
                 <link>http://algorithmicassertions.com/programming/2016/03/16/structure-batched.html</link>
                 <guid isPermaLink="true">http://algorithmicassertions.com/programming/2016/03/16/structure-batched.html</guid>
-            </item>
-            <item>
-                <title>Paper as Problem: &#39;Non-local measurements via quantum erasure&#39;</title>
-                <description>&lt;p&gt;(&lt;em&gt;In &amp;#39;Paper as Problem&amp;#39; posts, I treat a paper&amp;#39;s abstract as a puzzle. &amp;quot;We discovered a way to X&amp;quot; becomes &amp;quot;Figure out how to do X&amp;quot;. The goal is to solve the problem before reading the body of the paper.&lt;/em&gt;)&lt;/p&gt; &lt;p&gt;Two weeks ago, the paper &amp;quot;Nonlocal Measurements via Quantum Erasure&amp;quot;...</description>
-                <pubDate>Tue, 01 Mar 2016 11:30:00 -0500</pubDate>
-                <link>http://algorithmicassertions.com/quantum/2016/03/01/paper-as-problem-nonlocal-measurements-via-quantum-erasure.html</link>
-                <guid isPermaLink="true">http://algorithmicassertions.com/quantum/2016/03/01/paper-as-problem-nonlocal-measurements-via-quantum-erasure.html</guid>
             </item>
     </channel>
 </rss>
