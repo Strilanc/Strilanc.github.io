@@ -9,7 +9,7 @@ comments: true
 
 In this post: pulling a multiplication out of the phase corrections performed during a quantum Fourier transform, and using it to save gates.
 
-**Fourier Construction**
+# Fourier Construction
 
 Here's a typical circuit for the Quantum Fourier Transform:
 
@@ -67,12 +67,12 @@ Therefore this construction uses at most $O(n (\lg^2 n) (\lg \lg n))$ gates, and
 That's a pretty large improvement from the original construction's $O(n^2)$!
 (Though in practice we might care more about *depth* than count, not to mention topological constraints.)
 
-**Already Known**
+# Already Known
 
 As with most things I stumble onto on my own, this is not an original discovery.
 See the paper [Fast parallel circuits for the quantum Fourier transform](http://arxiv.org/abs/quant-ph/0006004) by Richard Cleve and John Watrous from Jan 2000.
 
-**Classical Uses?**
+# Classical Uses?
 
 You might expect that, since we started with a direct translation of the Cooley-Tukey algorithm and then asymptotically improved it, the new construction can be translated back for savings in the classical case.
 Unfortunately, that's not correct.
@@ -84,7 +84,7 @@ We'd just be replacing that simple sweep with a more complicated sweep.
 (Ironically, fast multiplication algorithms are themselves all based on Fourier transforms.
 We're using the classical Fourier transform to speed up the quantum Fourier transform.)
 
-**Summary**
+# Summary
 
 The phasing part of the QFT kind of involves multiplying the little-endian Z-value of some qubits by their X-value.
 By extracting the multiplication, you can perform the QFT with asymptotically fewer gates than the naive construction.

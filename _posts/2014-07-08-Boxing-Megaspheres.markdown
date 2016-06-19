@@ -3,6 +3,7 @@ layout: post
 title: "Puzzle: Boxing Megaspheres"
 date: 2014-07-08 11:30:00 EST
 categories: puzzle
+highlight_in_list: true
 ---
 
 Suppose you have a box, measuring one meter by one meter by one meter. If I give you spheres that are 0.99 meters in diameter, how many spheres can you fit into the box?

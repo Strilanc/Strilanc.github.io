@@ -19,8 +19,9 @@ title: "Algorithmic Assertions - Craig Gidney's Computer Science Blog"
         <h2>{{ curYear }}</h2>
       {% endif %}
       {% assign prevYear = curYear %}
-
-      <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
+      <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">
+        {% if post.highlight_in_list %}<strong>{% endif %}{{ post.title }}{% if post.highlight_in_list %}</strong>{% endif %}
+      </a></li>
     {% endfor %}
 
     <h2>Twisted Oak Studios</h2>
@@ -74,7 +75,9 @@ title: "Algorithmic Assertions - Craig Gidney's Computer Science Blog"
         <li>
           <span>22 Dec 2013</span> &raquo;
           <a href="http://twistedoakstudios.com/blog/Post8424_deadlocks-in-practice-dont-hold-locks-while-notifying">
-            Deadlocks in Practice: Don&#8217;t Hold Locks While Notifying<img src="/assets/wikimedia_external_link.png"/>
+            <strong>
+              Deadlocks in Practice: Don&#8217;t Hold Locks While Notifying<img src="/assets/wikimedia_external_link.png"/>
+            </strong>
           </a>
         </li>
 
@@ -263,7 +266,9 @@ title: "Algorithmic Assertions - Craig Gidney's Computer Science Blog"
         <li>
           <span>02 Jul 2013</span> &raquo;
           <a href="http://twistedoakstudios.com/blog/Post4706_breaking-a-toy-hash-function">
-            Breaking a Toy Hash Function<img src="/assets/wikimedia_external_link.png"/>
+            <strong>
+              Breaking a Toy Hash Function<img src="/assets/wikimedia_external_link.png"/>
+            </strong>
           </a>
         </li>
 
@@ -403,7 +408,9 @@ title: "Algorithmic Assertions - Craig Gidney's Computer Science Blog"
         <li>
           <span>12 Feb 2013</span> &raquo;
           <a href="http://twistedoakstudios.com/blog/Post2353_when-one-way-latency-doesnt-matter">
-            When One-Way Latency Doesn&#8217;t Matter<img src="/assets/wikimedia_external_link.png"/>
+            <strong>
+              When One-Way Latency Doesn&#8217;t Matter<img src="/assets/wikimedia_external_link.png"/>
+            </strong>
           </a>
         </li>
 
@@ -552,7 +559,9 @@ title: "Algorithmic Assertions - Craig Gidney's Computer Science Blog"
         <li>
           <span>24 Sep 2012</span> &raquo;
           <a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake">
-            Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake<img src="/assets/wikimedia_external_link.png"/>
+            <strong>
+              Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake<img src="/assets/wikimedia_external_link.png"/>
+            </strong>
           </a>
         </li>
 
