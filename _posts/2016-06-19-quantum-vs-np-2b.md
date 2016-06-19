@@ -52,13 +52,13 @@ Finally we get to the pièce de résistance, the awesomely-named _**DECIMATION**
 
 The idea behind this gate is that, when $c\_1$ and $c\_2$ and $c\_3$ fail to meet a clause, they get rotated a bit.
 
-Note that this circuit has yet another attempt to destroy indestructable information by measuring it along a different axis.
+Note that this circuit has yet another attempt to destroy indestructible information by measuring it along a different axis.
 But this time we can't fix it by adding more controls or by uncomputing, because the values we need to do that no longer commute with the values we have.
 This is the first *major* flaw in the paper, I think.
 
 Walters claims that measuring the scratch qubit along a perpendicular axis will fix the problem, and he's simply wrong.
 However... some phrasing in the paper indicates that the decoherence is actually... desired?
-The paper often talks about "incoherently transfering" states, for example.
+The paper often talks about "incoherently transferring" states, for example.
 So it's hard to say if this is a flaw-in-intent or flaw-in-execution or a flaw-in-explanation or what.
 
 Anyways... here's the whole _**DE̡͊͠͝CIMATION**_ circuit, expanded in full:
@@ -175,7 +175,7 @@ a or !b or h
 (Originally I planned to do a 16 variable problem, but the simulation was a couple order of magnitudes slower than I expected ahead of time so I dropped back to 8.)
 
 Note that I did have to make a few guesses when implementing Walters' algorithm.
-For example, the paper says to randomly vary the pertubation angle between two values for every clause and that the number of iterations needed should be constant (regardless of problem size).
+For example, the paper says to randomly vary the perturbation angle between two values for every clause and that the number of iterations needed should be constant (regardless of problem size).
 It doesn't give specific angles to use, or say exactly how big "constant" is, so I just picked values myself.
 
 Anyways, enough hedging.
