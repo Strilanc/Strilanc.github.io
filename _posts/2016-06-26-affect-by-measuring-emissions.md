@@ -8,7 +8,7 @@ comments: true
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
 
-In April, ["Mapping quantum state dynamics in spontaneous emission" by M. Naghiloo1 et al](http://www.nature.com/ncomms/2016/160511/ncomms11527/full/ncomms11527.html) was published in Nature Communications.
+In April, ["Mapping quantum state dynamics in spontaneous emission" by M. Naghiloo et al](http://www.nature.com/ncomms/2016/160511/ncomms11527/full/ncomms11527.html) was published in Nature Communications.
 The paper didn't get much [coverage](http://thescienceexplorer.com/universe/quantum-entanglement-could-be-used-control-atoms-emit-light), but the authors released a [YouTube video about the paper, titled "How we look at light can affect the atom that emits it"](https://www.youtube.com/watch?v=mTxbHiAPSlA):
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/mTxbHiAPSlA" frameborder="0" allowfullscreen></iframe>
@@ -32,7 +32,7 @@ Surprisingly, this process plays out in qualitatively different ways depending o
 **Z axis**
 
 Let's start by just measuring in the computational basis, i.e. along the Z axis, as shown in the previous diagram.
-For flavor, we also imagine our quantucm computer is setup so that any On measurement will produce an audible *CLICK!*.
+For flavor, we also imagine our quantum computer is setup so that any On measurement will produce an audible *CLICK!*.
 
 We run the circuit.
 What happens?
@@ -49,13 +49,13 @@ We can explore this behavior in Quirk by displaying some measurement chances and
   <img style="max-width:100%; max-height: 275px;" src="/assets/{{ loc }}/measure-Z.png"/>
 </a>
 
-Notice how anytime a state indicator has a black "is On" control, the state is straight up (i.e. $\ket 1$), whereas the only-white-control "all Off" cases are essentially identicaly to the starting state.
+Notice how anytime a state indicator has a black "is On" control, the state is straight up (i.e. $\ket 1$), whereas the only-white-control "all Off" cases are essentially identically to the starting state.
 Also notice the chance-of-On staying pretty consistent.
 This circuit's measurements really do imply that $A$ is behaving as if its state has a half-life.
 
 **Other axis**
 
-Now lets try measuring along a different axis, by rotating the qubit a bit before the computation-basis measurement.
+Now lets try measuring along a different axis, by rotating the qubit a bit before the computational-basis measurement.
 When we do that, we see very different conditional states:
 
 <a href="http://algorithmicassertions.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%5D%2C%5B%22Bloch%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%5E%E2%85%9B%22%5D%2C%5B1%2C%22Y%5E%E2%85%93%22%5D%2C%5B1%2C%22Measure%22%5D%2C%5B1%2C%22Chance%22%5D%2C%5B%22Bloch%22%2C%22%E2%80%A2%22%5D%2C%5B%22Bloch%22%2C%22%E2%97%A6%22%5D%2C%5B%22%E2%80%A2%22%2C1%2C%22X%5E%E2%85%9B%22%5D%2C%5B1%2C1%2C%22Y%5E%E2%85%93%22%5D%2C%5B1%2C1%2C%22Measure%22%5D%2C%5B1%2C1%2C%22Chance%22%5D%2C%5B%22Bloch%22%2C%22%E2%80%A2%22%2C%22%E2%80%A2%22%5D%2C%5B%22Bloch%22%2C%22%E2%80%A2%22%2C%22%E2%97%A6%22%5D%2C%5B%22Bloch%22%2C%22%E2%97%A6%22%2C%22%E2%80%A2%22%5D%2C%5B%22Bloch%22%2C%22%E2%97%A6%22%2C%22%E2%97%A6%22%5D%2C%5B%22%E2%80%A2%22%2C1%2C1%2C%22X%5E%E2%85%9B%22%5D%2C%5B1%2C1%2C1%2C%22Y%5E%E2%85%93%22%5D%2C%5B1%2C1%2C1%2C%22Measure%22%5D%2C%5B1%2C1%2C1%2C%22Chance%22%5D%2C%5B%22Bloch%22%2C%22%E2%97%A6%22%2C%22%E2%97%A6%22%2C%22%E2%80%A2%22%5D%2C%5B%22Bloch%22%2C%22%E2%97%A6%22%2C%22%E2%97%A6%22%2C%22%E2%97%A6%22%5D%2C%5B%22%E2%80%A6%22%2C%22%E2%80%A6%22%2C%22%E2%80%A6%22%2C%22%E2%80%A6%22%2C%22%E2%80%A6%22%5D%5D%7D">
@@ -117,7 +117,7 @@ There's no control, at least not in the literal sense of the word.
 (*That being said, I feel uncomfortable bluntly leaving things at "there's no control".
 It has the wrong connotations, and probably some people will disagree about the shades of meaning.
 The thing we are doing would require control if this was a classical system.
-This is yet another example of entanglement riding the line beween "I can predict that!" and "I can control that!" in a way that's hard to summarize.*)
+This is yet another example of entanglement riding the line between "I can predict that!" and "I can control that!" in a way that's hard to summarize.*)
 
 # Summary
 

@@ -186,10 +186,10 @@ When $|a|^2$ is near 1, $U$ is mostly-anti-diagonal and tends to always toggle i
 OFF and ON get swapped.
 
 Recall that $|y|^2$ is just the probability of $q\_1$ being ON.
-So, as $q\_1$ transition from mostly-ON to mostly-OFF, $p$ transitions from $U$'s toggly-ness to the complement of $U$'s togglyness.
+So, as $q\_1$ transitions from mostly-ON to mostly-OFF, $p$ transitions from $U$'s toggly-ness to the complement of $U$'s togglyness.
 
 We now have enough information to summarize whether the random walk's steps are biased positive-ward (towards ON) or negative-ward (towards OFF) for various cases.
-By taking into account both the probability $p$ of stepping along $s\_u$ instead of against $s\_u$, and the sign of $s\_u$, we can chart whether the walk's bias is postive-ward or negative-ward in each case:
+By taking into account both the probability $p$ of stepping along $s\_u$ instead of against $s\_u$, and the sign of $s\_u$, we can chart whether the walk's bias is positive-ward or negative-ward in each case:
 
 <div>
 <style scoped>
