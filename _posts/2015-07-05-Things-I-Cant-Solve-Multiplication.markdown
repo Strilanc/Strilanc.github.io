@@ -63,7 +63,7 @@ With a principal root of unity in hand, we can go about constructing a "no-cross
 Suppose we're given an $n$'th principal root of unity $\lambda$.
 We know that $\lambda$ satisfies some useful properties related to sums of powers, sums of even powers, and so forth, so let's try to exploit that.
 We'll crib the entries of our vectors directly from the lists of things that must sum up to zero.
-More specifically, the $k$'th vector's $j$'th entry will be $\lambda^{kj}$.
+More specifically, the $(k+1)$'th vector's $(j+1)$'th entry will be $\lambda^{kj}$.
 That gives us a set of basis vectors:
 
 $v\_0 = [1, 1, 1, \ldots, 1]$
