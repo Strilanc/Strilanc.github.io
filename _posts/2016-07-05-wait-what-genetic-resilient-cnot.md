@@ -16,7 +16,7 @@ I was reading through the pre-print, when I saw figure 4 and did a double-take:
 
 *(Note: Yes, the same diagram is in the published paper)*
 
-Look at that diagram. Look at it some more. Understand what it's doing.
+Look at that diagram. Look at it some more. Savor that initial controlled-not of A1 onto A2. Take in the whole picture.
 
 See anything strange?
 
