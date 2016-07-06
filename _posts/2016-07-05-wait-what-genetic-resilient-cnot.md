@@ -36,9 +36,8 @@ You could make this circuit *strictly simpler* by throwing away every single ope
 
 <img style="max-width:100%;" src="/assets/{{ loc }}/cutting_gates.png"/>
 
-This reduced circuit isn't *exactly* equivalent to the original when errors are in the mix, but generally speaking you shouldn't be able to simplify an error-corrected circuit by *only* deleting gates.
-
-So what are the extra gates *for*?
+This reduced circuit isn't *exactly* equivalent to the original when errors are in the mix, but still.
+What are the extra gates *for*?
 Why would this seemingly-bloated circuit score highly on an error metric?
 
 # Purpose
