@@ -70,6 +70,8 @@ Maybe I'm overlooking something obvious, but the authors and the reviewers reall
 I'm sure the authors verified that the circuit scored highly on their error metric...
 but currently I think they should have thought some more about *why* it scored so highly.
 
+The mistakes in this one diagram put every result from the paper into question.
+
 Oh well.
 At least this will make [another](http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres) [good](http://www.michaeleisen.org/blog/?p=358) "it did what I said, not what I wanted" [anecdote](http://hforsten.com/evolutionary-algorithms-and-analog-electronic-circuits.html?PageSpeed=noscript).
 
