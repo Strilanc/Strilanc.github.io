@@ -3,7 +3,6 @@ layout: post
 title: "Turning Gradients into Additions into QFTs"
 date: 2016-07-31 12:10:10 pm EST
 permalink: post/1620
-comments: true
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
@@ -81,7 +80,7 @@ We can also combine this adding-into-gradients idea with the combine-phases-wher
 
 <img style="max-width:100%; border: 1px solid gray;" src="/assets/{{ loc }}/qft-with-gradient-multiply-accumulates.png"/>
 
-Compared to the linked post, MAC-into-gradient uses half as many multiply-accumulates and reduces the total number of phase gates (including preparation) from $O(n \lg n)$ to $O(n)$.
+Compared to the linked post, MAC-into-gradient uses half as many multiply-accumulates and reduces the total number of more-precise-than-$T$ phase gates (including preparation) from $O(n \lg n)$ to $O(n)$.
 That's a big improvement!
 
 (*Side note: At first I was hoping that we could recursively apply these improvements to the multiply-accumulates.
@@ -100,3 +99,7 @@ If you map what that polynomial FFT is doing into a quantum circuit form, in the
 Or, equivalently, the phase gradient has been Fourier transformed into a shift.
 
 So, in a sense, the Fourier transform on negacyclic polynomials is a Fourier-transformed Fourier transform.
+
+---
+
+[Discuss on Reddit](https://www.reddit.com/r/QuantumComputing/comments/4vkqol/turning_gradients_into_additions_into_quantum/)
