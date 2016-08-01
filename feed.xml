@@ -7,6 +7,13 @@
         <atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Turning Gradients into Additions into QFTs</title>
+                <description>&lt;p&gt;One of the annoying things about the Quantum Fourier transform is that it uses very small phase factors. An exact $n$-qubit QFT requires applying a $Z^{2^{-n}}$ gate.&lt;/p&gt; &lt;p&gt;Of course, in practice you don&amp;#39;t need your QFT to be exact. You can use multi-gate constructions that approximate small phase change gates,...</description>
+                <pubDate>Sun, 31 Jul 2016 13:10:10 -0400</pubDate>
+                <link>http://algorithmicassertions.com/post/1620</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/post/1620</guid>
+            </item>
+            <item>
                 <title>Wait, What?: Genetic Algorithms for Digital Quantum Simulations</title>
                 <description>&lt;p&gt;Last week, the paper &lt;a href=&quot;https://arxiv.org/abs/1512.00674&quot;&gt;&amp;#39;Genetic Algorithms for Digital Quantum Simulations&amp;#39; by U. Las Heras et al.&lt;/a&gt; was published &lt;a href=&quot;http://journals.aps.org/prl/abstract/10.1103/PhysRevLett.116.230504&quot;&gt;in Physical Review Letters&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;I was reading through the pre-print, when I saw figure 4 and did a double-take:&lt;/p&gt; &lt;blockquote&gt; &lt;p&gt;&lt;img style=&quot;max-width:100%; border: 1px solid gray;&quot; src=&quot;/assets/2016-07-05-wait-what-genetic-resilient-cnot/original_diagram.png&quot;/&gt;&lt;/p&gt; &lt;/blockquote&gt; &lt;p&gt;&lt;em&gt;(Note: Yes,...</description>
                 <pubDate>Tue, 05 Jul 2016 13:10:10 -0400</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sun, 24 Apr 2016 04:10:10 -0400</pubDate>
                 <link>http://algorithmicassertions.com/2016/04/24/eves-quantum-clone-computer.html</link>
                 <guid isPermaLink="true">http://algorithmicassertions.com/2016/04/24/eves-quantum-clone-computer.html</guid>
-            </item>
-            <item>
-                <title>Gradually Copying a Quantum Brain</title>
-                <description>&lt;p&gt;&lt;strong&gt;Update (May 2016)&lt;/strong&gt;: &lt;em&gt;This post is quite vague on the details. The followup post &lt;a href=&quot;/2016/04/24/eves-quantum-clone-computer.html&quot;&gt;Eve&amp;#39;s Quantum Clone Computer&lt;/a&gt; spends more time on them.&lt;/em&gt;&lt;/p&gt; &lt;hr&gt; &lt;p&gt;Last month, YouTuber &lt;a href=&quot;https://www.youtube.com/user/CGPGrey/videos&quot;&gt;CGP Grey&lt;/a&gt; posted an &lt;a href=&quot;https://www.youtube.com/watch?v=nQHBAdShgYI&quot;&gt;edutainment video about the philosophical implications of transporters&lt;/a&gt;. One of the points he focuses on is...</description>
-                <pubDate>Tue, 05 Apr 2016 04:10:10 -0400</pubDate>
-                <link>http://algorithmicassertions.com/2016/04/05/copying-a-quantum-brain.html</link>
-                <guid isPermaLink="true">http://algorithmicassertions.com/2016/04/05/copying-a-quantum-brain.html</guid>
             </item>
     </channel>
 </rss>
