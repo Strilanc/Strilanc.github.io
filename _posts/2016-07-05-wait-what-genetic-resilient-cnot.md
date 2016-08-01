@@ -16,7 +16,7 @@ I was reading through the pre-print, when I saw figure 4 and did a double-take:
 
 *(Note: Yes, the same diagram is in the published paper)*
 
-Look at that diagram. Look at it some more. Understand what it's doing.
+Look at that diagram. Look at it some more. Savor that initial controlled-not of A1 onto A2. Take in the whole picture.
 
 See anything strange?
 
@@ -36,9 +36,8 @@ You could make this circuit *strictly simpler* by throwing away every single ope
 
 <img style="max-width:100%;" src="/assets/{{ loc }}/cutting_gates.png"/>
 
-This reduced circuit isn't *exactly* equivalent to the original when errors are in the mix, but generally speaking you shouldn't be able to simplify an error-corrected circuit by *only* deleting gates.
-
-So what are the extra gates *for*?
+This reduced circuit isn't *exactly* equivalent to the original when errors are in the mix, but still.
+What are the extra gates *for*?
 Why would this seemingly-bloated circuit score highly on an error metric?
 
 # Purpose
@@ -69,6 +68,8 @@ The weirdness of this circuit jumps out at you if you look at it for more than a
 Maybe I'm overlooking something obvious, but the authors and the reviewers really should have noticed.
 I'm sure the authors verified that the circuit scored highly on their error metric...
 but currently I think they should have thought some more about *why* it scored so highly.
+
+The mistakes in this one diagram put every result from the paper into question.
 
 Oh well.
 At least this will make [another](http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres) [good](http://www.michaeleisen.org/blog/?p=358) "it did what I said, not what I wanted" [anecdote](http://hforsten.com/evolutionary-algorithms-and-analog-electronic-circuits.html?PageSpeed=noscript).
