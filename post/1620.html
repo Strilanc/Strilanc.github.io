@@ -147,7 +147,7 @@ That&#39;s pretty good!</p>
 
 <p><img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-07-31-qft-from-gradient-addition/qft-with-gradient-multiply-accumulates.png"/></p>
 
-<p>Compared to the linked post, MAC-into-gradient uses half as many multiply-accumulates and reduces the total number of phase gates (including preparation) from $O(n \lg n)$ to $O(n)$.
+<p>Compared to the linked post, MAC-into-gradient uses half as many multiply-accumulates and reduces the total number of more-precise-than-$T$ phase gates (including preparation) from $O(n \lg n)$ to $O(n)$.
 That&#39;s a big improvement!</p>
 
 <p>(<em>Side note: At first I was hoping that we could recursively apply these improvements to the multiply-accumulates.
@@ -167,25 +167,13 @@ Or, equivalently, the phase gradient has been Fourier transformed into a shift.<
 
 <p>So, in a sense, the Fourier transform on negacyclic polynomials is a Fourier-transformed Fourier transform.</p>
 
+<hr>
+
+<p><a href="https://www.reddit.com/r/QuantumComputing/comments/4vkqol/turning_gradients_into_additions_into_quantum/">Discuss on Reddit</a></p>
+
 </div>
 
 <!-- IntenseDebate comments -->
-
-  <script>
-  var idcomments_acct = '7d0006bd6a016f9a2892cc2ecc64de01';
-  var idcomments_post_id = '/post/1620';
-  var idcomments_post_url = 'http://algorithmicassertions.com/post/1620';
-  </script>
-  <span id="IDCommentsPostTitle" style="display:none"></span>
-  <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
-  <noscript>
-    <hr>
-    <font color=red>
-      Comments script blocked. Comments won't work.
-    </font>
-    <br/>
-    Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>intensedebate.com</strong> to fix.
-  </noscript>
 
 
 
