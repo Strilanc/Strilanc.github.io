@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Turning Gradients into Additions into QFTs</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Turning Gradients into Additions into QFTs</h1>
+<p class="meta">31 Jul 2016</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>One of the annoying things about the Quantum Fourier transform is that it uses very small phase factors.
+An exact $n$-qubit QFT requires applying a $Z^{2^{-n}}$ gate.</p>
+
+<p>Of course, in practice you don&#39;t need your QFT to be exact.
+You can use multi-gate constructions that approximate small phase change gates, and past some reasonable cutoff (that depends on your error budget) you can just completely skip the tiny phase changes because they have so little effect on the measured result.</p>
+
+<p>But still, it&#39;d be nice to be able to apply an exact QFT without having to deal with all these finnicky gates every time.
+In this post, I&#39;m going to explain one way to do that, by using a re-usable gradient resource that can be prepared ahead of time.</p>
+
+<h1>Shifting vs Phasing</h1>
+
+<p>The Fourier transform converts between the time domain and the frequency domain.
+One of the consequences of this fact is that, when you shift samples in the time domain, you end up phasing values in the frequency domain.
+Rotating indices gets turned into rotating values (and vice versa).</p>
+
+<p>Concretely speaking, this means that you can hop a QFT gate over an increment gate, without changing the function of the circuit, as long as you replace the increment with a phase gradient:</p>
+
+<p><img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-07-31-qft-from-gradient-addition/qft-converts-increment-to-gradient.png"/></p>
+
+<p>But keep in mind which direction you&#39;re hopping!
+If the QFT gate goes from left to right, instead of from right to left, the gradient is negated:</p>
+
+<p><img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-07-31-qft-from-gradient-addition/qft-converts-increment-to-gradient-opposite.png"/></p>
+
+<p>This &quot;increment is fourier-transformed phasing&quot; doesn&#39;t just apply to incrementing, it also applies to <em>conditional</em> incrementing.
+That allows us to also apply this transformation to addition.
+If you add $a$ into $b$, that&#39;s equivalent to Fourier-transforming $b$, applying a controlled phase gradient for each bit of $a$, then un-Fourier-transforming:</p>
+
+<p><img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-07-31-qft-from-gradient-addition/qft-converts-addition-to-gradients.png"/></p>
+
+<p>Now lets consider what happens when you increment <em>into</em> a phase gradient.
+Specifically, the phase gradient you get when you fourier-transform -1.
+Surprisingly, we end up <em>phasing the control</em> instead of affecting the gradient:</p>
+
+<p><img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-07-31-qft-from-gradient-addition/increment-gradient-phases-control.png"/></p>
+
+<p>What about addition?
+Basically the same thing happens.
+A phase gradient is unaffected when you add $a$ into it... except that $a$ itself gets phased by a gradient!</p>
+
+<p><img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-07-31-qft-from-gradient-addition/adding-into-gradient-phases-input.png"/></p>
+
+<h1>Applying to the Fourier Transform</h1>
+
+<p>The Fourier transform is basically <em>made</em> of phase gradients:</p>
+
+<p><img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-07-31-qft-from-gradient-addition/basic-qft.png"/></p>
+
+<p>And so, instead of using Z gates to create those gradients, we can use an addition into a pre-existing gradient:</p>
+
+<p><img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-07-31-qft-from-gradient-addition/qft-with-gradient-additions.png"/></p>
+
+<p><em>Note: I used subtraction in the diagram, not addition, but it&#39;s exactly the same idea.</em></p>
+
+<p>Why would we do this?
+Because <em>addition doesn&#39;t require arbitrarily precise gates</em>.
+We can implement it starting with a gate set containing just the Hadamard gate, the controlled-not gate, and the $Z^{1/4}$ gate (also known as the $T$ gate).</p>
+
+<p>By setting up the phase gradient ahead of time, we only need to pay the price of approximating exponentially precise gates <em>once</em>.
+We can then use that gradient again and again for as many QFTs, inverse QFTs, and various other things-that-need-precise-phase-gates, as we want.</p>
+
+<p>Also, this add-into-gradient approach combines well with using a precision cut-off.
+Just do smaller additions:</p>
+
+<p><img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-07-31-qft-from-gradient-addition/qft-with-gradient-additions-cutoff.png"/></p>
+
+<p>Assuming we need to accumulate at most $\epsilon$ phase error, this approach requires only $O(n \lg \frac{n}{\epsilon})$ gates.
+That&#39;s pretty good!</p>
+
+<p>We can also combine this adding-into-gradients idea with the combine-phases-where-possible-using-multiplication idea that I discussed <a href="/2016/06/14/qft-by-multiply.html">in another post</a>:</p>
+
+<p><img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-07-31-qft-from-gradient-addition/qft-with-gradient-multiply-accumulates.png"/></p>
+
+<p>Compared to the linked post, MAC-into-gradient uses half as many multiply-accumulates and reduces the total number of phase gates (including preparation) from $O(n \lg n)$ to $O(n)$.
+That&#39;s a big improvement!</p>
+
+<p>(<em>Side note: At first I was hoping that we could recursively apply these improvements to the multiply-accumulates.
+Fast multiplication algorithms start with a Fourier-transform of the inputs after all, and we&#39;re in the middle of doing that already.
+Alas, it doesn&#39;t quite seem to work because the QFT treats the <strong>amplitudes</strong> as the time-domain samples whereas the multiplication algorithm needs to treat the individual <strong>qubits</strong> as the samples.</em>)</p>
+
+<h1>Polynomial Similarities</h1>
+
+<p>Let me mention one last interesting thing.</p>
+
+<p>You may or may not be aware that Fourier transforms can be applied in fields other than the complex numbers.
+Basically all you need is a big root of -1, and lots of fields and even rings have a big root of -1.</p>
+
+<p>Specifically, you can do a Fourier transform within the space of polynomials modulo $x^n + 1$, where $x^n \equiv -1$ and $x$ is a $2n$&#39;th principal root of unity.
+If you map what that polynomial FFT is doing into a quantum circuit form, in the same way that the QFT circuit maps what the Cooley-Tukey algorithm is doing into a quantum circuit form, you end up with something that looks <em>exactly</em> like the adding-into-gradients circuit we just made... except that there&#39;s no phase gradient preparation at the start.
+Or, equivalently, the phase gradient has been Fourier transformed into a shift.</p>
+
+<p>So, in a sense, the Fourier transform on negacyclic polynomials is a Fourier-transformed Fourier transform.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+  <script>
+  var idcomments_acct = '7d0006bd6a016f9a2892cc2ecc64de01';
+  var idcomments_post_id = '/post/1620';
+  var idcomments_post_url = 'http://algorithmicassertions.com/post/1620';
+  </script>
+  <span id="IDCommentsPostTitle" style="display:none"></span>
+  <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+  <noscript>
+    <hr>
+    <font color=red>
+      Comments script blocked. Comments won't work.
+    </font>
+    <br/>
+    Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>intensedebate.com</strong> to fix.
+  </noscript>
+
+
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1619">&laquo; Wait, What?: Genetic Algorithms for Digital Quantum Simulations</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
