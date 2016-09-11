@@ -7,6 +7,13 @@
         <atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Java should Autobox Arrays, or maybe not</title>
+                <description>&lt;p&gt;I remember, the first time I used C#, being pleasantly surprised that &lt;code&gt;1.ToString()&lt;/code&gt; worked. For a seasoned C# programmer, that might seem a bit silly: why &lt;em&gt;wouldn&amp;#39;t&lt;/em&gt; it work? &lt;code&gt;ToString&lt;/code&gt; works on every other value, except null, so why wouldn&amp;#39;t I expect it work on a simple value like the...</description>
+                <pubDate>Sat, 10 Sep 2016 13:10:10 -0400</pubDate>
+                <link>http://algorithmicassertions.com/post/1621</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/post/1621</guid>
+            </item>
+            <item>
                 <title>Turning Gradients into Additions into QFTs</title>
                 <description>&lt;p&gt;One of the annoying things about the Quantum Fourier transform is that it uses very small phase factors. An exact $n$-qubit QFT requires applying a $Z^{2^{-n}}$ gate.&lt;/p&gt; &lt;p&gt;Of course, in practice you don&amp;#39;t need your QFT to be exact. You can use multi-gate constructions that approximate small phase change gates,...</description>
                 <pubDate>Sun, 31 Jul 2016 13:10:10 -0400</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sun, 15 May 2016 07:10:10 -0400</pubDate>
                 <link>http://algorithmicassertions.com/2016/05/15/reducing-test-boilerplate-with-diagrams.html</link>
                 <guid isPermaLink="true">http://algorithmicassertions.com/2016/05/15/reducing-test-boilerplate-with-diagrams.html</guid>
-            </item>
-            <item>
-                <title>Eve&#39;s Quantum Clone Computer</title>
-                <description>&lt;p&gt;&lt;a href=&quot;/2016/04/05/copying-a-quantum-brain.html&quot;&gt;Last post&lt;/a&gt;, I tried to explain an interesting consequence of the fact that interactions with the world can reveal the current state of a quantum system.&lt;/p&gt; &lt;p&gt;I framed the post around the hypothetical of duplicating a brain despite the brain containing quantum information. I pointed to a couple examples...</description>
-                <pubDate>Sun, 24 Apr 2016 04:10:10 -0400</pubDate>
-                <link>http://algorithmicassertions.com/2016/04/24/eves-quantum-clone-computer.html</link>
-                <guid isPermaLink="true">http://algorithmicassertions.com/2016/04/24/eves-quantum-clone-computer.html</guid>
             </item>
     </channel>
 </rss>
