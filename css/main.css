@@ -73,14 +73,15 @@ blockquote {
 .site {
   font-size: 115%;
   text-align: left;
-  width: 55em;
+  min-width: 25em;
+  max-width: 55em;
   padding: 0 1em;
   margin: 0 auto;
   line-height: 1.5em;
 }
 
 #site_banner {
-  min-width: 60em;
+  min-width: 20em;
   max-width: 100%;
 }
 
