@@ -7,6 +7,13 @@
         <atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Resource States won&#39;t get you out of Clifford Jail</title>
+                <description>&lt;p&gt;I noticed something interesting, while writing the post about &lt;a href=&quot;/post/1620&quot;&gt;implementing the QFT using addition into gradients&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;Suppose you want to construct a lot of precise power-of-2 phase gates $Z^{2^{-k}}$. You&amp;#39;re limited to Hadamard gates, controlled-NOTs, a resource state of your choosing, and the half-as-precise-as-what-you-need $Z^{2^{-k+1}}$ gate. Can you do...</description>
+                <pubDate>Sat, 10 Sep 2016 13:10:10 -0400</pubDate>
+                <link>http://algorithmicassertions.com/post/1622</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/post/1622</guid>
+            </item>
+            <item>
                 <title>Java should Autobox Arrays, or maybe not</title>
                 <description>&lt;p&gt;I remember, the first time I used C#, being pleasantly surprised that &lt;code&gt;1.ToString()&lt;/code&gt; worked. For a seasoned C# programmer, that might seem a bit silly: why &lt;em&gt;wouldn&amp;#39;t&lt;/em&gt; it work? &lt;code&gt;ToString&lt;/code&gt; works on every other value, except null, so why wouldn&amp;#39;t I expect it work on a simple value like the...</description>
                 <pubDate>Sat, 10 Sep 2016 13:10:10 -0400</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sun, 22 May 2016 07:10:10 -0400</pubDate>
                 <link>http://algorithmicassertions.com/2016/05/22/quirk.html</link>
                 <guid isPermaLink="true">http://algorithmicassertions.com/2016/05/22/quirk.html</guid>
-            </item>
-            <item>
-                <title>Reducing Test Boilerplate with Ascii Diagrams</title>
-                <description>&lt;p&gt;Sometimes, testing code ends up having a lot of finnicky boilerplate. That&amp;#39;s the issue I was having with &lt;a href=&quot;https://github.com/Strilanc/Quirk&quot;&gt;Quirk&lt;/a&gt;, anyways.&lt;/p&gt; &lt;p&gt;Quirk has a convenient UI for defining small quantum circuits, but the same could not be said of defining circuits for the tests. For example, suppose we want to...</description>
-                <pubDate>Sun, 15 May 2016 07:10:10 -0400</pubDate>
-                <link>http://algorithmicassertions.com/2016/05/15/reducing-test-boilerplate-with-diagrams.html</link>
-                <guid isPermaLink="true">http://algorithmicassertions.com/2016/05/15/reducing-test-boilerplate-with-diagrams.html</guid>
             </item>
     </channel>
 </rss>

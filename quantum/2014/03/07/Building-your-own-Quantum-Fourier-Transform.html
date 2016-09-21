@@ -128,19 +128,19 @@
 
 <p>The first step to solving the puzzle, assuming you don&#39;t just start fiddling with gates (also a viable strategy), is noticing an important pattern present in the inputs. Look at the amplitudes for states that are $4$ apart:</p>
 
-<p><img src="http://i.imgur.com/lFN9Q6E.gif" alt="Similar Rows in Frequencies"></p>
+<p><img style="max-width:100%;" alt="Similar Rows in Frequencies" src="/assets/2014-03-07-Building-your-own-Quantum-Fourier-Transform/row-comparison-1.gif"/></p>
 
 <p>Do you see it? After $4$ turns of $\frac{i}{8}$, the resulting state is always exactly equal or exactly opposite.</p>
 
 <p>Why is that useful? Because a Hadamard gate will factor out that pattern (it has exactly the same sort of regularity). Inserting an H gate on bit 2 (because $2^2 = 4$ and the pattern is $4$ apart) will make things simpler:</p>
 
-<p><img src="http://i.imgur.com/mJxRtJM.gif" alt="Hadamard Factoring"></p>
+<p><img style="max-width:100%;" alt="Hadamard factoring" src="/assets/2014-03-07-Building-your-own-Quantum-Fourier-Transform/row-comparison-2.gif"/></p>
 
 <p>The above animation is showing that a Hadamard gate on bit 2 gets us  closer to our goal. We want each input frequency to end up as a single output, and after the H gate they&#39;re in four states instead of eight. Half way there!</p>
 
 <p>It&#39;s tempting to try to apply the same trick to bit 1, but it doesn&#39;t quite work:</p>
 
-<p><img src="http://i.imgur.com/bCe7yme.gif" alt="Hadamard Almost Factoring"></p>
+<p><img style="max-width:100%;" alt="Hadamard almost factoring" src="/assets/2014-03-07-Building-your-own-Quantum-Fourier-Transform/row-comparison-3.gif"/></p>
 
 <p>Do you see the problem? Although the top four rows have the &#39;opposite or equal&#39; property (but spaced by $2$ instead of $4$), the bottom four rows don&#39;t. The bottom two rows are off by 90°.</p>
 
@@ -148,13 +148,13 @@
 
 <p>With the 90° fix-up in place, putting a Hadamard gate on bit 1 will factor out another half the junk:</p>
 
-<p><img src="http://i.imgur.com/xIKdw5l.gif" alt="Hadamard Factoring with Adjust"></p>
+<p><img style="max-width:100%;" alt="Hadamard Factoring with Adjust" src="/assets/2014-03-07-Building-your-own-Quantum-Fourier-Transform/row-comparison-4.gif"/></p>
 
 <p>And now the pattern is clear for what needs to be done for the last bit. We&#39;ll use phase shift gates to ensure the two remaining non-empty states in each column have equal or opposite amplitudes, then Hadamard it. As a result, each frequency input ends up in a single unique output state.</p>
 
 <p>Great!... except they&#39;re the <em>wrong</em> states:</p>
 
-<p><img src="http://i.imgur.com/UgLXklY.png" alt="QFT reverses bits"></p>
+<p><img style="max-width:100%;" alt="QFT reverses bits" src="/assets/2014-03-07-Building-your-own-Quantum-Fourier-Transform/row-comparison-5.png"/></p>
 
 <p>We want a nice diagonal line, but right now things look more like a circle.</p>
 
@@ -162,11 +162,11 @@
 
 <p>The resulting circuit is a QFT over three bits:</p>
 
-<p><img src="http://i.imgur.com/2UuwIPI.png" alt="QFT circuit"></p>
+<p><img style="max-width:100%;" alt="QFT circuit" src="/assets/2014-03-07-Building-your-own-Quantum-Fourier-Transform/row-comparison-6.png"/></p>
 
 <p>Of course that&#39;s not the <em>only</em> solution. For example, you could also swap the bits beforehand. A slight re-arrangement of the gates, and you get the circuit I used for the QFT animation from last time:</p>
 
-<p><a href="http://i.imgur.com/KRybZYE.gif"><img src="http://i.imgur.com/KRybZYE.gif" alt="QFT animation" style="width: 100%;"/></a></p>
+<p><img style="max-width:100%;" alt="QFT animation" src="/assets/2014-03-07-Building-your-own-Quantum-Fourier-Transform/qft-animation.gif"/></p>
 
 <p>You might worry that our QFT circuit won&#39;t work on combinations of frequencies, because we only tested single frequencies. Fortunately, quantum circuits always implement linear operations. That means scaling an input will scale the output, and adding inputs will add outputs. Handling combinations of inputs is free built-in functionality.</p>
 
