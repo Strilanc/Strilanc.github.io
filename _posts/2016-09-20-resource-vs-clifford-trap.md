@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Resource States won't get you out of Clifford Jail"
-date: 2016-09-10 12:10:10 pm EST
+date: 2016-09-20 12:10:10 pm EST
 permalink: post/1622
 ---
 
