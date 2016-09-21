@@ -24,18 +24,18 @@ There's two ways to do that: we can push the Hadamards to the right, or to the l
 If we push the Hadamards to the right, they cross over the Z gates.
 This turns the Z gates into X gates:
 
-<img src="/assets/{{ loc }}/Fourier-Hadamards-Pushed-Right.png"/>
+<img src="/assets/{{ loc }}/Fourier-Hadamards-Pushed-Right.png" style="max-width: 100%"/>
 
 If we push the Hadamards to the left, they cross over the Z-is-On controls and turn them into X-is-On controls:
 
-<img src="/assets/{{ loc }}/Fourier-Hadamards-Pushed-Left.png"/>
+<img src="/assets/{{ loc }}/Fourier-Hadamards-Pushed-Left.png" style="max-width: 100%"/>
 
 Note that the above circuit is going through all the qubit pairs, and applying phases based on the AND of the pair's first qubit's Z-value and the second qubit's X value.
 Also note that if you look at the shape formed by each type of gate, you get diagonals.
 
 To me, those diagonals-of-ways-you-can-combine-two-values *scream* [convolution](https://en.wikipedia.org/wiki/Convolution) because my mental image of convolution is summing up the diagonals of a grid:
 
-<img src="/assets/{{ loc }}/Convolution.png"/>
+<img src="/assets/{{ loc }}/Convolution.png" style="max-width: 100%"/>
 
 Actually, because each diagonal corresponds to how many times a phase gate that's twice as powerful as the last is applied, we also have a carrying effect: 2 of a diagonal is worth 1 of the next diagonal.
 So this isn't convolution, it's *multiplication*.
@@ -45,11 +45,11 @@ Okay, that's not quite right.
 The uncertainty principle prevents qubits from having an X-value and a Z-value at the same time.
 But we *can* pull out quite a large block where we only use one of the values for each qubit:
 
-<img src="/assets/{{ loc }}/Fourier-X-by-Z-block.png"/>
+<img src="/assets/{{ loc }}/Fourier-X-by-Z-block.png" style="max-width: 100%"/>
 
 And then we can replace that block of controlled phase gradients with a multiplication and a single phase gradient:
 
-<img src="/assets/{{ loc }}/Fourier-with-multiply.png"/>
+<img src="/assets/{{ loc }}/Fourier-with-multiply.png" style="max-width: 100%"/>
 
 In terms of asymptotic gate count, this is an optimization.
 We replaced $O(n^2)$ gates with a construction that uses $O(M(n) + n)$ gates, where $M(n)$ is the number of gates needed to perform a multiplication.
@@ -58,7 +58,7 @@ It's [known](https://en.wikipedia.org/wiki/Sch%C3%B6nhage%E2%80%93Strassen_algor
 Also notice that the parts before and after the multiplication are basically just half-sized QFTs.
 With some slight tweaks, we find this construction:
 
-<img src="/assets/{{ loc }}/Fourier-by-multiply-and-recurse.png"/>
+<img src="/assets/{{ loc }}/Fourier-by-multiply-and-recurse.png" style="max-width: 100%"/>
 
 Which has a gate-count recurrence relation of $F(n) = 2 F(n/2) + M(n)$.
 Solve that out, and you find that $F(n) \in O(\lg(n) M(n))$.
