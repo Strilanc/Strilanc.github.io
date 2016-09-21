@@ -5,6 +5,8 @@ date: 2014-03-07 12:30:01 EST
 categories: quantum
 ---
 
+{% assign loc = page.path | remove_first: '_posts/' | remove: '.markdown' %}
+
 In this post: an interactive quantum circuit inspector written in javascript, and an explanation of how to solve its 'Fourier' puzzle.
 
 
@@ -47,19 +49,19 @@ The puzzle provides eight inputs to test the circuit with. Each test input is a 
 
 The first step to solving the puzzle, assuming you don't just start fiddling with gates (also a viable strategy), is noticing an important pattern present in the inputs. Look at the amplitudes for states that are $4$ apart:
 
-![Similar Rows in Frequencies](http://i.imgur.com/lFN9Q6E.gif)
+<img style="max-width:100%;" alt="Similar Rows in Frequencies" src="/assets/{{ loc }}/row-comparison-1.gif"/>
 
 Do you see it? After $4$ turns of $\frac{i}{8}$, the resulting state is always exactly equal or exactly opposite.
 
 Why is that useful? Because a Hadamard gate will factor out that pattern (it has exactly the same sort of regularity). Inserting an H gate on bit 2 (because $2^2 = 4$ and the pattern is $4$ apart) will make things simpler:
 
-![Hadamard Factoring](http://i.imgur.com/mJxRtJM.gif)
+<img style="max-width:100%;" alt="Hadamard factoring" src="/assets/{{ loc }}/row-comparison-2.gif"/>
 
 The above animation is showing that a Hadamard gate on bit 2 gets us  closer to our goal. We want each input frequency to end up as a single output, and after the H gate they're in four states instead of eight. Half way there!
 
 It's tempting to try to apply the same trick to bit 1, but it doesn't quite work:
 
-![Hadamard Almost Factoring](http://i.imgur.com/bCe7yme.gif)
+<img style="max-width:100%;" alt="Hadamard almost factoring" src="/assets/{{ loc }}/row-comparison-3.gif"/>
 
 Do you see the problem? Although the top four rows have the 'opposite or equal' property (but spaced by $2$ instead of $4$), the bottom four rows don't. The bottom two rows are off by 90°.
 
@@ -67,13 +69,13 @@ The bottom two rows are at offsets 6 and 7, which is 110 and 111 in binary. They
 
 With the 90° fix-up in place, putting a Hadamard gate on bit 1 will factor out another half the junk:
 
-![Hadamard Factoring with Adjust](http://i.imgur.com/xIKdw5l.gif)
+<img style="max-width:100%;" alt="Hadamard Factoring with Adjust" src="/assets/{{ loc }}/row-comparison-4.gif"/>
 
 And now the pattern is clear for what needs to be done for the last bit. We'll use phase shift gates to ensure the two remaining non-empty states in each column have equal or opposite amplitudes, then Hadamard it. As a result, each frequency input ends up in a single unique output state.
 
 Great!... except they're the *wrong* states:
 
-![QFT reverses bits](http://i.imgur.com/UgLXklY.png)
+<img style="max-width:100%;" alt="QFT reverses bits" src="/assets/{{ loc }}/row-comparison-5.png"/>
 
 We want a nice diagonal line, but right now things look more like a circle.
 
@@ -81,11 +83,11 @@ The problem is that doing a QFT has a tendency to reverse our bits. Sometimes yo
 
 The resulting circuit is a QFT over three bits:
 
-![QFT circuit](http://i.imgur.com/2UuwIPI.png)
+<img style="max-width:100%;" alt="QFT circuit" src="/assets/{{ loc }}/row-comparison-6.png"/>
 
 Of course that's not the *only* solution. For example, you could also swap the bits beforehand. A slight re-arrangement of the gates, and you get the circuit I used for the QFT animation from last time:
 
-<a href="http://i.imgur.com/KRybZYE.gif"><img src="http://i.imgur.com/KRybZYE.gif" alt="QFT animation" style="width: 100%;"/></a>
+<img style="max-width:100%;" alt="QFT animation" src="/assets/{{ loc }}/qft-animation.gif"/>
 
 You might worry that our QFT circuit won't work on combinations of frequencies, because we only tested single frequencies. Fortunately, quantum circuits always implement linear operations. That means scaling an input will scale the output, and adding inputs will add outputs. Handling combinations of inputs is free built-in functionality.
 
