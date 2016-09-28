@@ -5,17 +5,19 @@ date: 2014-03-27 20:00:00
 categories: visualization
 ---
 
+{% assign loc = page.path | remove_first: '_posts/' | remove: '.markdown' %}
+
 Every now and then someone posts a table showing what values are equivalent according to javascript's `==` operator, like [this recent example](http://dorey.github.io/JavaScript-Equality-Table/). Then they point out how disorganized the table is.
 
 These posts are fundamentally right about `==` being poorly designed... but they make things *look* worse by failing to organize the table. For example, here's the table from the linked post:
 
-![Disorganized Javascript Equality Table](http://i.imgur.com/yBaLYao.png)
+<img style="max-width:100%;" alt="Disorganized Javascript Equality Table" src="/assets/{{ loc }}/bad-table.png"/>
 
 What a mess! But most of the mess is because of the *order of values in the table*.
 
 By grouping equal values together, you get something more sensible:
 
-![Grouped Javascript Equality Table](http://i.imgur.com/MIX9Uy5.png)
+<img style="max-width:100%;" alt="Grouped Javascript Equality Table" src="/assets/{{ loc }}/grouped-table.png"/>
 
 That looks a lot better. Now you can see where things make sense, where reference equality is clashing with value equality, where there's a lot of reaching going on to consider different things equal, and where transitivity is violated.
 
@@ -115,7 +117,7 @@ JavaScript's `==` operator is intransitive and loose, flaws that absolutely just
 
 It's a lot harder to make the `<` operator's truth table make sense ([js fiddle here](http://jsfiddle.net/G943v/16/)):
 
-![Truth table for JS less-than](http://i.imgur.com/VZ0ztaB.png)
+<img style="max-width:100%;" alt="Truth table for JS less-than" src="/assets/{{ loc }}/less-than-table.png"/>
 
 A comparison operator's truth table should look like a triangle, or stair case, when put in the right order. JS's has several holes and flecks, because of how coercion varies based on the context.
 
