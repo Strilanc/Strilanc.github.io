@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Post-selection is cheating</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Post-selection is cheating</h1>
+<p class="meta">27 Sep 2016</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Recently, two demonstrations of quantum teleportation were published in Nature:</p>
+
+<ul>
+<li><a href="http://www.nature.com/nphoton/journal/v10/n10/full/nphoton.2016.179.html">&#39;Quantum teleportation with independent sources and prior entanglement distribution over a network&#39; by Qi-Chao Sun et al</a> (<a href="http://arxiv.org/abs/1602.07081">arXiv preprint</a>)</li>
+<li><a href="http://www.nature.com/nphoton/journal/vaop/ncurrent/full/nphoton.2016.180.html">&#39;Quantum teleportation across a metropolitan fibre network&#39; by Valivarthi et al</a> (<a href="https://arxiv.org/abs/1605.08814">arXiv preprint</a>)</li>
+</ul>
+
+<p>I want to talk about a difference between the two.</p>
+
+<p>In the Valivarthi et al paper, they describe the last steps of their teleportation like this:</p>
+
+<blockquote>
+<p>Bob [..] creates pairs of photons [..] in the maximally time-bin entangled state $\ket{\psi^+} = 2^{-1/2} (\ket{e,e} + \ket{l,l})$.
+He [sends the photons] to Charlie, where they are projected jointly with the photons from Alice onto the maximally entangled state $\ket{\psi^-} = 2^{-1/2} (\ket{e,l} - \ket{l,e})$.</p>
+</blockquote>
+
+<p>Whereas here&#39;s how Qi-Chao Sun et al desribe the teleportation process in their paper:</p>
+
+<blockquote>
+<p>Charlie then sends the idler photon to Bob and holds the signal photon by propagating it in a 15 km coiled optical fibre.
+Bob holds the idler photon similarly after he receives it.
+The temporary storages allow us to perform [the Bell State Measurement] after entanglement distribution and implement the feed-forward operation in real time.</p>
+</blockquote>
+
+<p>Notice that Valivarthi et al are talking about <em>projecting</em> while Qi-Chao et al are talking about <em>performing operations</em>.</p>
+
+<p>Let me make the difference more concrete by focusing on some quantum circuits that are analogous to the two papers&#39; respective protocols.
+Here is a circuit animation corresponding to (a simplification of) what Qi-Chao Sun et al implemented:</p>
+
+<p><img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-09-27-postselection-is-cheating/teleportation-full.gif"/></p>
+
+<p>As you can see in the animation, the circuit moves the top qubit&#39;s state to the bottom qubit as you go from left to right.
+The circuit creates a pre-shared EPR pair, uses an arbitrary gate to choose a qubit for Alice to send, does a Bell-basis measurement for Alice, then tells Bob the measurement result and applies some conditional fixup operations.
+It&#39;s a typical quantum teleportation circuit.</p>
+
+<p>Now here&#39;s the circuit corresponding to (a simplification of) what Valivarthi et al did:</p>
+
+<p><img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-09-27-postselection-is-cheating/teleportation-filter.gif"/></p>
+
+<p>The state still moves from top to bottom, but without Bob applying any fixup operations.
+Instead, any runs where those fixup operations would have been applied are discarded and we focus our analysis on what&#39;s left.</p>
+
+<p>Putting it blunlty (and <strong>really</strong> unfairly): Qi-Chao Sun et al performed quantum teleportation. Valivarthi et al skipped the hardest part of teleportation, cherry-picked the 25% of runs that weren&#39;t ruined as a result, and showed that if they <em>hadn&#39;t</em> skipped the hard part then they <em>would</em> have performed quantum teleportation.</p>
+
+<p>I mean... Valivarthi et al didn&#39;t even have Bob hold his qubits long enough for Alice to do her measurement!</p>
+
+<blockquote>
+<p>We point out that the 795 nm photons are measured prior to the [Bell state measurement], thus realizing a scenario where teleportation is achieved a-posteriori</p>
+</blockquote>
+
+<p>So it would be more accurate to describe their experiment as <em>Bob</em> predicting things about <em>Alice&#39;s</em> measurement results, not Alice heralding whether Bob received the qubit or not.
+(Don&#39;t get me started on people who somehow forget about the cherry-picking and then say the information <em>actually</em> went into the past.)</p>
+
+<p>Valivarthi et al&#39;s paper still represents an achievement.
+If you&#39;re in some context where you can retry until the process works, their protocol would work fine.
+For example, one of the recent &#39;loophole-free&#39; Bell inequality experiments <a href="http://www.scottaaronson.com/blog/?p=2464">used an analogous post-selected entanglement swapping process</a>.</p>
+
+<p>It&#39;s just that, to me, leaving off the hardest part of quantum teleportation but still calling it quantum teleportation, without any qualifiers, feels like cheating.
+So I strongly preferred Qi-Chao Sun et al&#39;s paper.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1622">&laquo; A Resource State won't get you out of Clifford Jail</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

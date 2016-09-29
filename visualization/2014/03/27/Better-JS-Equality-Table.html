@@ -78,13 +78,13 @@
 
 <p>These posts are fundamentally right about <code>==</code> being poorly designed... but they make things <em>look</em> worse by failing to organize the table. For example, here&#39;s the table from the linked post:</p>
 
-<p><img src="http://i.imgur.com/yBaLYao.png" alt="Disorganized Javascript Equality Table"></p>
+<p><img style="max-width:100%;" alt="Disorganized Javascript Equality Table" src="/assets/2014-03-27-Better-JS-Equality-Table/bad-table.png"/></p>
 
 <p>What a mess! But most of the mess is because of the <em>order of values in the table</em>.</p>
 
 <p>By grouping equal values together, you get something more sensible:</p>
 
-<p><img src="http://i.imgur.com/MIX9Uy5.png" alt="Grouped Javascript Equality Table"></p>
+<p><img style="max-width:100%;" alt="Grouped Javascript Equality Table" src="/assets/2014-03-27-Better-JS-Equality-Table/grouped-table.png"/></p>
 
 <p>That looks a lot better. Now you can see where things make sense, where reference equality is clashing with value equality, where there&#39;s a lot of reaching going on to consider different things equal, and where transitivity is violated.</p>
 
@@ -178,7 +178,7 @@
 
 <p>It&#39;s a lot harder to make the <code>&lt;</code> operator&#39;s truth table make sense (<a href="http://jsfiddle.net/G943v/16/">js fiddle here</a>):</p>
 
-<p><img src="http://i.imgur.com/VZ0ztaB.png" alt="Truth table for JS less-than"></p>
+<p><img style="max-width:100%;" alt="Truth table for JS less-than" src="/assets/2014-03-27-Better-JS-Equality-Table/less-than-table.png"/></p>
 
 <p>A comparison operator&#39;s truth table should look like a triangle, or stair case, when put in the right order. JS&#39;s has several holes and flecks, because of how coercion varies based on the context.</p>
 
