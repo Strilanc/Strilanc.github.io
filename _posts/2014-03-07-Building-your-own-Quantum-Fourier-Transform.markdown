@@ -29,7 +29,7 @@ Below is an interactive quantum circuit inspector, with some puzzles. The rest o
 {% include /jQuery.dep %}
 
 <canvas id="drawCanvas" width="800" height="550" style="border:1px solid #000000;"/>
-<script src="/assets/QuantumCircuitInspector.js"></script>
+<script src="/assets/{{ loc }}/QuantumCircuitInspector.js"></script>
 
 If you want to submit your own puzzles, feel free to send a pull request to the [quantum circuit inspector's github repo](https://github.com/Strilanc/Quantum-Circuit-Inspector). (There's also a lot of other things that could be improved, like the UX and general code cleanliness. You can try things out in [the jsFiddle](http://jsfiddle.net/xkCLq/24/).)
 
