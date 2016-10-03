@@ -5,6 +5,8 @@ date: 2014-04-13 11:30:00 EST
 categories: puzzle quantum
 ---
 
+{% assign loc = page.path | remove_first: '_posts/' | remove: '.markdown' %}
+
 Today I read the paper [An Invitation to Quantum Game Theory](http://arxiv.org/pdf/quant-ph/0211191v1.pdf). It's not very long, but it has a nice example of a situation where "going quantum" gives an unexpected advantage.
 
 **Quantum Q**
@@ -43,7 +45,7 @@ Q can win 100% of the time by applying the [Hadamard operation](http://en.wikipe
 
 Here's an animation showing a circuit of what's going on. Picard choosing to flip the coin is represented by the presence or absence of an [X gate](http://en.wikipedia.org/wiki/Quantum_gate#Pauli-X_gate) (the quantum version of a NOT gate). But instead of flipping the coin like he expects, he ends up doing an operation that spins the phase of the "head" component of the state:
 
-![HH and HXH circuits don't flip the output](http://i.imgur.com/cLVne3P.gif)
+<img style="max-width:100%;" alt="HH and HXH circuits don't flip the output" src="/assets/{{ loc }}/circuit.gif"/>
 
 I'm guessing that, for a lot of readers, the above animation didn't convey why the solution works. Maybe something more geometric?
 
@@ -53,25 +55,25 @@ A nice way to visualize the state of a qubit is the [Block Sphere](http://en.wik
 
 Here's a diagram, modified from the one on Wikipedia, showing the state our system starts in:
 
-![Block sphere with current state being tails / up](http://i.imgur.com/gLHOuKD.png)
+<img style="max-width:100%;" alt="Block sphere with current state being tails / up" src="/assets/{{ loc }}/tails-at-top.png"/>
 
 The green blob shows the starting state: at the very top, 100% tails. Other points on the surface of the sphere correspond to other quantum states the coin can be in.
 
 Flipping the coin corresponds to rotating by 180 degrees around the X axis. From the starting state, flipping the coin would move us to the very bottom at 100% heads. Like this:
 
-![Flipping the coin](http://i.imgur.com/Lzf4UKP.png)
+<img style="max-width:100%;" alt="Flipping the coin" src="/assets/{{ loc }}/spin-to-bottom.png"/>
 
 But what Q has done is first rotate the state by 180 degrees around the diagonal axis X+Z. Starting from the tails state, this rotation moves the coin's state to the front of the sphere directly along the X axis:
 
-![Hadamarding the coin](http://i.imgur.com/TlHztwN.png)
+<img style="max-width:100%;" alt="Hadamarding the coin" src="/assets/{{ loc }}/spin-to-side.png"/>
 
 Now if Picard goes to flip the coin by rotating around the X axis, nothing will happen:
 
-![Pointless flipping](http://i.imgur.com/fRaY0Tv.png)
+<img style="max-width:100%;" alt="Pointless flipping" src="/assets/{{ loc }}/spin-at-side.png"/>
 
 And Q can restore the tails state by rotating around the X+Z axis by another 180 degrees:
 
-![Unhadamarding the coin](http://i.imgur.com/REcCHEL.png)
+<img style="max-width:100%;" alt="Unhadamarding the coin" src="/assets/{{ loc }}/back-to-top.png"/>
 
 And so Q wins.
 
