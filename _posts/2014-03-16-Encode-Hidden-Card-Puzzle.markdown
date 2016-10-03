@@ -5,6 +5,8 @@ date: 2014-03-16 21:30:00
 categories: puzzle
 ---
 
+{% assign loc = page.path | remove_first: '_posts/' | remove: '.markdown' %}
+
 In this post: the solution to the puzzle I mentioned at the end of [Ordering Cyclic Sequence Numbers](http://strilanc.com/math/2014/03/11/Ordering-Cyclic-Sequence-Numbers.html).
 
 **Puzzle**
@@ -103,7 +105,7 @@ The cards dealt to the player, taken from what is entered in the table above, ar
 
 <canvas id="drawCanvas124" width="420" height="420"></canvas>
 
-<script src="/assets/FitchCheneyCardTrick.js"></script>
+<script src="/assets/{{ loc }}/FitchCheneyCardTrick.js"></script>
 
 **Summary**
 
