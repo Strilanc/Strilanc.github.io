@@ -7,6 +7,13 @@
         <atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>The Quantum Version of the One-Time Pad is Teleportation</title>
+                <description>&lt;p&gt;For whatever reason, one of the topics I keep coming back to on this blog is &amp;quot;ways to think about quantum teleportation&amp;quot;. I&amp;#39;ve talked about how teleportation is &lt;a href=&quot;/quantum/2014/05/11/Storing-Bandwidth-with-Quantum-Teleportation.html&quot;&gt;like storing bandwidth&lt;/a&gt;, how if it was any more efficient you could &lt;a href=&quot;/2016/05/29/ultra-dense-coding-allows-ftl.html&quot;&gt;send unbounded amounts of data without sending a...</description>
+                <pubDate>Mon, 03 Oct 2016 01:10:10 -0400</pubDate>
+                <link>http://algorithmicassertions.com/post/1624</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/post/1624</guid>
+            </item>
+            <item>
                 <title>Post-selection is cheating</title>
                 <description>&lt;p&gt;Recently, two demonstrations of quantum teleportation were published in Nature:&lt;/p&gt; &lt;ul&gt; &lt;li&gt;&lt;a href=&quot;http://www.nature.com/nphoton/journal/v10/n10/full/nphoton.2016.179.html&quot;&gt;&amp;#39;Quantum teleportation with independent sources and prior entanglement distribution over a network&amp;#39; by Qi-Chao Sun et al&lt;/a&gt; (&lt;a href=&quot;http://arxiv.org/abs/1602.07081&quot;&gt;arXiv preprint&lt;/a&gt;)&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;http://www.nature.com/nphoton/journal/vaop/ncurrent/full/nphoton.2016.180.html&quot;&gt;&amp;#39;Quantum teleportation across a metropolitan fibre network&amp;#39; by Valivarthi et al&lt;/a&gt; (&lt;a href=&quot;https://arxiv.org/abs/1605.08814&quot;&gt;arXiv preprint&lt;/a&gt;)&lt;/li&gt; &lt;/ul&gt; &lt;p&gt;I want...</description>
                 <pubDate>Tue, 27 Sep 2016 13:10:10 -0400</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sun, 05 Jun 2016 13:10:10 -0400</pubDate>
                 <link>http://algorithmicassertions.com/2016/06/05/erasure-is-postselection.html</link>
                 <guid isPermaLink="true">http://algorithmicassertions.com/2016/06/05/erasure-is-postselection.html</guid>
-            </item>
-            <item>
-                <title>Ultradense Coding would allow FTL Signalling</title>
-                <description>&lt;p&gt;The title spoils the question, but I&amp;#39;ll ask it anyways: how do we know that there&amp;#39;s no clever way to pack more than 2 bits into a transmitted qubit?&lt;/p&gt; &lt;p&gt;Initially, people assumed that &lt;a href=&quot;https://en.wikipedia.org/wiki/Holevo&amp;#x27;s_theorem&quot;&gt;Holevo&amp;#39;s theorem&lt;/a&gt; implied the bit-per-sent-qubit limit was 1. (Roughly speaking, the theorem says that you can...</description>
-                <pubDate>Sun, 29 May 2016 01:10:10 -0400</pubDate>
-                <link>http://algorithmicassertions.com/2016/05/29/ultra-dense-coding-allows-ftl.html</link>
-                <guid isPermaLink="true">http://algorithmicassertions.com/2016/05/29/ultra-dense-coding-allows-ftl.html</guid>
             </item>
     </channel>
 </rss>
