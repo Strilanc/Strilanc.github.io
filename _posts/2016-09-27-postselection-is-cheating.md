@@ -3,6 +3,7 @@ layout: post
 title: "Post-selection is cheating"
 date: 2016-09-27 12:10:10 pm EST
 permalink: post/1623
+comments: true
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
