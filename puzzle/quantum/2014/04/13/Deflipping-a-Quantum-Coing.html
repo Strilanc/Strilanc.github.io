@@ -112,7 +112,7 @@
 
 <p>Here&#39;s an animation showing a circuit of what&#39;s going on. Picard choosing to flip the coin is represented by the presence or absence of an <a href="http://en.wikipedia.org/wiki/Quantum_gate#Pauli-X_gate">X gate</a> (the quantum version of a NOT gate). But instead of flipping the coin like he expects, he ends up doing an operation that spins the phase of the &quot;head&quot; component of the state:</p>
 
-<p><img src="http://i.imgur.com/cLVne3P.gif" alt="HH and HXH circuits don&#39;t flip the output"></p>
+<p><img style="max-width:100%;" alt="HH and HXH circuits don't flip the output" src="/assets/2014-04-13-Deflipping-a-Quantum-Coing/circuit.gif"/></p>
 
 <p>I&#39;m guessing that, for a lot of readers, the above animation didn&#39;t convey why the solution works. Maybe something more geometric?</p>
 
@@ -122,25 +122,25 @@
 
 <p>Here&#39;s a diagram, modified from the one on Wikipedia, showing the state our system starts in:</p>
 
-<p><img src="http://i.imgur.com/gLHOuKD.png" alt="Block sphere with current state being tails / up"></p>
+<p><img style="max-width:100%;" alt="Block sphere with current state being tails / up" src="/assets/2014-04-13-Deflipping-a-Quantum-Coing/tails-at-top.png"/></p>
 
 <p>The green blob shows the starting state: at the very top, 100% tails. Other points on the surface of the sphere correspond to other quantum states the coin can be in.</p>
 
 <p>Flipping the coin corresponds to rotating by 180 degrees around the X axis. From the starting state, flipping the coin would move us to the very bottom at 100% heads. Like this:</p>
 
-<p><img src="http://i.imgur.com/Lzf4UKP.png" alt="Flipping the coin"></p>
+<p><img style="max-width:100%;" alt="Flipping the coin" src="/assets/2014-04-13-Deflipping-a-Quantum-Coing/spin-to-bottom.png"/></p>
 
 <p>But what Q has done is first rotate the state by 180 degrees around the diagonal axis X+Z. Starting from the tails state, this rotation moves the coin&#39;s state to the front of the sphere directly along the X axis:</p>
 
-<p><img src="http://i.imgur.com/TlHztwN.png" alt="Hadamarding the coin"></p>
+<p><img style="max-width:100%;" alt="Hadamarding the coin" src="/assets/2014-04-13-Deflipping-a-Quantum-Coing/spin-to-side.png"/></p>
 
 <p>Now if Picard goes to flip the coin by rotating around the X axis, nothing will happen:</p>
 
-<p><img src="http://i.imgur.com/fRaY0Tv.png" alt="Pointless flipping"></p>
+<p><img style="max-width:100%;" alt="Pointless flipping" src="/assets/2014-04-13-Deflipping-a-Quantum-Coing/spin-at-side.png"/></p>
 
 <p>And Q can restore the tails state by rotating around the X+Z axis by another 180 degrees:</p>
 
-<p><img src="http://i.imgur.com/REcCHEL.png" alt="Unhadamarding the coin"></p>
+<p><img style="max-width:100%;" alt="Unhadamarding the coin" src="/assets/2014-04-13-Deflipping-a-Quantum-Coing/back-to-top.png"/></p>
 
 <p>And so Q wins.</p>
 
