@@ -74,7 +74,7 @@
     </noscript>
 
 <div class="post">
-<p>I&#39;ve been doing work to get <a href="/2016/05/22/quirk.html">Quirk</a> working smoothly on phones.
+<p>This month, I&#39;ve been doing work to get <a href="/2016/05/22/quirk.html">Quirk</a> running smoothly on phones.
 The big problem is floating-point textures: Quirk&#39;s intermediate state has lots of floating point values stored in textures, but WebGL doesn&#39;t guarantee that you can render to, read out, or even create floating point textures.</p>
 
 <p>Actually, according to <a href="http://webglstats.com/">webglstats.com</a>, the support for rendering to float textures is a lot worse than I thought:</p>
@@ -125,6 +125,8 @@ Like this:</p>
     <span class="nx">assertThat</span><span class="p">(</span><span class="nx">outFloats</span><span class="p">).</span><span class="nx">isEqualTo</span><span class="p">(</span><span class="nx">inFloats</span><span class="p">);</span>
 <span class="p">});</span>
 </code></pre></div>
+<p><em>(Note: the WglShader class adds &#39;highp&#39; declarations to the top of the shader. Floats are 32-bit single precision.)</em></p>
+
 <p>It&#39;s a bit awkward, compared to using uniforms, but not the <em>worst</em> idea.
 And soon enough the test did stumble over a float that wasn&#39;t packed correctly:</p>
 
