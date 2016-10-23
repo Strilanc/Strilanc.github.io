@@ -14,6 +14,8 @@ Actually, according to [webglstats.com](http://webglstats.com/), the support for
 
 <img style="max-width:100%;" src="/assets/{{ loc }}/web-gl-float-support-charts.png"/>
 
+**Update**: *[Apparently these support numbers are misleading](https://twitter.com/alteredq/status/790224145015603200)! Browsers support rendering to float textures without supporting `WEBGL_color_buffet_float`. I will update with a better graph when I find a proper source for that number.*
+
 So apparently it's pretty important to have a workaround for when float texture support isn't present.
 
 The standard workaround for lack of float texture support is to just use byte textures, pack your floats into bytes at the end of every shader, and unpack them at the start of every shader.
