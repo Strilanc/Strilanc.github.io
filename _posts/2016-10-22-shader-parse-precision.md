@@ -7,7 +7,7 @@ permalink: post/1625
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
 
-I've been doing work to get [Quirk](/2016/05/22/quirk.html) working smoothly on phones.
+This month, I've been doing work to get [Quirk](/2016/05/22/quirk.html) running smoothly on phones.
 The big problem is floating-point textures: Quirk's intermediate state has lots of floating point values stored in textures, but WebGL doesn't guarantee that you can render to, read out, or even create floating point textures.
 
 Actually, according to [webglstats.com](http://webglstats.com/), the support for rendering to float textures is a lot worse than I thought:
@@ -60,6 +60,8 @@ suite.testUsingWebGL('encodeEmbeddedFloats', () => {
     assertThat(outFloats).isEqualTo(inFloats);
 });
 ```
+
+*(Note: the WglShader class adds 'highp' declarations to the top of the shader. Floats are 32-bit single precision.)*
 
 It's a bit awkward, compared to using uniforms, but not the *worst* idea.
 And soon enough the test did stumble over a float that wasn't packed correctly:
