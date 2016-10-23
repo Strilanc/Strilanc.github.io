@@ -196,6 +196,8 @@ Given what I know about the structure of the code, that sudden appearance of err
 More experimentation is required.
 No doubt it'll be a head slapper.
 
+**Update**: *Solved it. Apparently some GPUs/drivers/whatever just throw away __13__ (!!!) bits of precision on coordinate arithmetic, unless you trick them into not doing it [by hiding values behind a uniform](https://github.com/Strilanc/Quirk/commit/da6a361bb04ddac573a696e2d0084af5bd07a03d)... Not so much a head-slapper as an F-bomb dropper. This is not an okay thing to have to workaround.*
+
 Hopefully it'll all be done and tested before Halloween, since I'll be travelling to visit the Santa Barbara office and would rather not have it in the back of my mind the whole time.
 
 # Summary
