@@ -81,6 +81,8 @@ The big problem is floating-point textures: Quirk&#39;s intermediate state has l
 
 <p><img style="max-width:100%;" src="/assets/2016-10-22-shader-parse-precision/web-gl-float-support-charts.png"/></p>
 
+<p><strong>Update</strong>: <em><a href="https://twitter.com/alteredq/status/790224145015603200">Apparently these support numbers are misleading</a>! Browsers support rendering to float textures without supporting <code>WEBGL_color_buffet_float</code>. I will update with a better graph when I find a proper source for that number.</em></p>
+
 <p>So apparently it&#39;s pretty important to have a workaround for when float texture support isn&#39;t present.</p>
 
 <p>The standard workaround for lack of float texture support is to just use byte textures, pack your floats into bytes at the end of every shader, and unpack them at the start of every shader.
