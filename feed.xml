@@ -8,7 +8,7 @@
         
             <item>
                 <title>Unfathomable Bugs #9: Lossy Shader Packing</title>
-                <description>&lt;p&gt;I&amp;#39;ve been doing work to get &lt;a href=&quot;/2016/05/22/quirk.html&quot;&gt;Quirk&lt;/a&gt; working smoothly on phones. The big problem is floating-point textures: Quirk&amp;#39;s intermediate state has lots of floating point values stored in textures, but WebGL doesn&amp;#39;t guarantee that you can render to, read out, or even create floating point textures.&lt;/p&gt; &lt;p&gt;Actually, according to...</description>
+                <description>&lt;p&gt;This month, I&amp;#39;ve been doing work to get &lt;a href=&quot;/2016/05/22/quirk.html&quot;&gt;Quirk&lt;/a&gt; running smoothly on phones. The big problem is floating-point textures: Quirk&amp;#39;s intermediate state has lots of floating point values stored in textures, but WebGL doesn&amp;#39;t guarantee that you can render to, read out, or even create floating point textures.&lt;/p&gt; &lt;p&gt;Actually,...</description>
                 <pubDate>Sat, 22 Oct 2016 01:10:10 -0400</pubDate>
                 <link>http://algorithmicassertions.com/post/1625</link>
                 <guid isPermaLink="true">http://algorithmicassertions.com/post/1625</guid>
