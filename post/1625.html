@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Unfathomable Bugs #9: Lossy Shader Packing</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Unfathomable Bugs #9: Lossy Shader Packing</h1>
+<p class="meta">22 Oct 2016</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>I&#39;ve been doing work to get <a href="/2016/05/22/quirk.html">Quirk</a> working smoothly on phones.
+The big problem is floating-point textures: Quirk&#39;s intermediate state has lots of floating point values stored in textures, but WebGL doesn&#39;t guarantee that you can render to, read out, or even create floating point textures.</p>
+
+<p>Actually, according to <a href="http://webglstats.com/">webglstats.com</a>, the support for rendering to float textures is a lot worse than I thought:</p>
+
+<p><img style="max-width:100%;" src="/assets/2016-10-22-shader-parse-precision/web-gl-float-support-charts.png"/></p>
+
+<p>So apparently it&#39;s pretty important to have a workaround for when float texture support isn&#39;t present.</p>
+
+<p>The standard workaround for lack of float texture support is to just use byte textures, pack your floats into bytes at the end of every shader, and unpack them at the start of every shader.
+So that&#39;s what I did.
+And that&#39;s how the nightmare started.</p>
+
+<p><em>(Side note: see <a href="http://computergraphics.stackexchange.com/questions/4151/webgl-packing-unpacking-functions-that-can-roundtrip-all-typical-32-bit-floats">this graphics.stackexchange question</a> for the packing/unpacking code, which is still not perfect.)</em></p>
+
+<h1>Symptoms</h1>
+
+<p>To be honest, it almost feels like cheating to use WebGL as the topic of an &quot;unfathomable bug&quot; post.
+WebGL combines <em>browsers</em>, known for having varied features and incompatible behaviors barely held together by standards, with <em>GPUs</em>, also known for having varied features and incompatible behaviors barely held together by standards, into an eldritch clusterstorm of inconsistency and uncertainty.</p>
+
+<p><em>(Example: Chrome/Firefox/IE assign WebGL constants directly to <code>WebGLRenderingContext</code>, but Safari only puts the constants on <strong>instances</strong> of <code>WebGLRenderingContext</code>.)</em></p>
+
+<p><em>(Example: I still can&#39;t figure out if the endianness of <code>vec4</code> byte outputs is guaranteed to match the endianness of <code>Float32Array</code>.)</em></p>
+
+<p>Knowing about all that inconsistency and uncertainty, I wrote a lot of tests for the float-into-byte-into-float behavior.
+Actually, I tried to test the float-into-byte behavior separately from the byte-into-float behavior, since otherwise it&#39;s hard to know which is causing a fault.
+However, to test the float-into-byte behavior on the devices I cared about, I needed a way besides float textures to get test floats into a shader.</p>
+
+<p>The <em>correct</em> way to get floats into a shader is uniforms.
+But the idea I went with was to just directly embed the floats within the generated source of a shader.
+Like this:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">suite</span><span class="p">.</span><span class="nx">testUsingWebGL</span><span class="p">(</span><span class="s1">&#39;encodeEmbeddedFloats&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">inFloats</span> <span class="o">=</span> <span class="nx">randomFloats</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span>
+
+    <span class="kd">let</span> <span class="nx">shader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WglShader</span><span class="p">(</span>
+        <span class="nx">PACK_FLOAT_INTO_BYTES_CODE</span> <span class="o">+</span> <span class="err">`</span>
+        <span class="k">void</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">vec2</span> <span class="nx">xy</span> <span class="o">=</span> <span class="nx">gl_FragCoord</span><span class="p">.</span><span class="nx">xy</span> <span class="o">-</span> <span class="nx">vec2</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">);</span>
+            <span class="kr">float</span> <span class="nx">k</span> <span class="o">=</span> <span class="nx">xy</span><span class="p">.</span><span class="nx">y</span> <span class="o">*</span> <span class="mf">4.0</span> <span class="o">+</span> <span class="nx">xy</span><span class="p">.</span><span class="nx">x</span><span class="p">;</span>
+            <span class="kr">float</span> <span class="nx">f</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+            <span class="nx">$</span><span class="p">{</span><span class="nx">seq</span><span class="p">(</span><span class="nx">inFloats</span><span class="p">).</span>
+                <span class="nx">mapWithIndex</span><span class="p">((</span><span class="nx">e</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="err">`</span><span class="k">if</span> <span class="p">(</span><span class="nx">k</span> <span class="o">==</span> <span class="nx">$</span><span class="p">{</span><span class="nx">i</span><span class="p">}.</span><span class="mi">0</span><span class="p">)</span> <span class="nx">f</span> <span class="o">=</span> <span class="kr">float</span><span class="p">(</span><span class="nx">$</span><span class="p">{</span><span class="nx">e</span><span class="p">});</span><span class="err">`</span><span class="p">).</span>
+                <span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n            &#39;</span><span class="p">)}</span>
+            <span class="nx">gl_FragColor</span> <span class="o">=</span> <span class="nx">packFloatIntoBytes</span><span class="p">(</span><span class="nx">f</span><span class="p">);</span>
+        <span class="p">}</span><span class="err">`</span><span class="p">);</span>
+
+    <span class="kd">let</span> <span class="nx">outBytes</span> <span class="o">=</span> <span class="nx">shader</span><span class="p">.</span><span class="nx">withArgs</span><span class="p">().</span><span class="nx">readRawByteOutputs</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span> <span class="c1">//2^4 = 16 pixel outputs</span>
+    <span class="kd">let</span> <span class="nx">outFloats</span> <span class="o">=</span> <span class="nx">bytesAsFloats</span><span class="p">(</span><span class="nx">outBytes</span><span class="p">);</span> <span class="c1">// Just creates a Float32Array view over the bytes</span>
+    <span class="nx">assertThat</span><span class="p">(</span><span class="nx">outFloats</span><span class="p">).</span><span class="nx">isEqualTo</span><span class="p">(</span><span class="nx">inFloats</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>It&#39;s a bit awkward, compared to using uniforms, but not the <em>worst</em> idea.
+And soon enough the test did stumble over a float that wasn&#39;t packed correctly:</p>
+
+<pre><span style="color: red;">Error: Got &lt;
+    Float32Array[16211.896484375, [...]
+&gt; but expected it to equal &lt;
+    Float32Array[16211.8955078125, [...]
+&gt;. (assertThat #1)
+</span></pre>
+
+<p>Encoding the input <code>16211.8955078125</code> increased it by one ulp to <code>16211.896484375</code>.
+Exactly the kind of bug I was hoping to catch.</p>
+
+<p>So I started fiddling with the encoding code, trying to fix or at least affect the bug, but to no avail.
+No matter what I did, I couldn&#39;t get the right output.
+Eventually, as I was starting to suspect that maybe gremlins were a real thing, I made a desperate move: special-case the two involved values.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="k">if</span> <span class="p">(</span><span class="nx">val</span> <span class="o">==</span> <span class="mf">16211.896484375</span><span class="p">)</span> <span class="k">return</span> <span class="nx">vec4</span><span class="p">(</span><span class="mf">150.0</span><span class="p">,</span> <span class="mf">79.0</span><span class="p">,</span> <span class="mf">125.0</span><span class="p">,</span> <span class="mf">70.0</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">val</span> <span class="o">==</span> <span class="mf">16211.8955078125</span><span class="p">)</span> <span class="k">return</span> <span class="nx">vec4</span><span class="p">(</span><span class="mf">149.0</span><span class="p">,</span> <span class="mf">79.0</span><span class="p">,</span> <span class="mf">125.0</span><span class="p">,</span> <span class="mf">70.0</span><span class="p">);</span>
+</code></pre></div>
+<p><strong>This still didn&#39;t work.</strong>
+Despite <em>literally hard-coding the answer</em>, <code>16211.8955078125</code> was still being bumped up by an ulp.</p>
+
+<p>... until I switched the order of the two <code>if</code> statements.</p>
+
+<p><code>val</code> was comparing as equal to both of the floats I was testing against!
+This is very strange, because the two values really are distinct floats.
+A fact you can confirm very easily:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">bool</span> <span class="nx">alwaysTrue</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="mf">16211.896484375</span> <span class="o">!=</span> <span class="mf">16211.8955078125</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The above function really does return true.
+Even in GLSL.
+Even on the machine affected by the bug we&#39;ve been discussing.</p>
+
+<p>So... clearly something seems to be inconsistent here.
+We have one value equal to two unequal values.
+Our next step is clear: turn it into a dead simple test case that can&#39;t possibly fail.
+Here it is:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">suite</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">&quot;mySanity&quot;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">shader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WglShader</span><span class="p">(</span><span class="err">`</span>
+        <span class="nx">bool</span> <span class="nx">neverTrue</span><span class="p">(</span><span class="kr">float</span> <span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mf">16211.8955</span> <span class="o">==</span> <span class="nx">val</span> <span class="o">&amp;&amp;</span>
+                   <span class="mf">16211.8955</span> <span class="o">!=</span> <span class="mf">16211.896</span> <span class="o">&amp;&amp;</span>
+                          <span class="nx">val</span> <span class="o">==</span> <span class="mf">16211.896</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">void</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+            <span class="kr">float</span> <span class="nx">a</span> <span class="o">=</span> <span class="kr">float</span><span class="p">(</span><span class="nx">neverTrue</span><span class="p">(</span><span class="mf">16211.8955</span><span class="p">));</span>
+            <span class="nx">gl_FragColor</span> <span class="o">=</span> <span class="nx">vec4</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">a</span><span class="p">);</span>
+        <span class="p">}</span><span class="err">`</span><span class="p">);</span>
+    <span class="kd">let</span> <span class="nx">out</span> <span class="o">=</span> <span class="nx">shader</span><span class="p">.</span><span class="nx">withArgs</span><span class="p">().</span><span class="nx">readRawByteOutputs</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// 2^0 pixels, 4 vals</span>
+    <span class="nx">assertThat</span><span class="p">(</span><span class="nx">out</span><span class="p">).</span><span class="nx">isEqualTo</span><span class="p">(</span><span class="k">new</span> <span class="nx">Uint8Array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]));</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>Basically the above code checks that equality is transitive.
+It can&#39;t possibly fail.</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>Yeah, it fails:</p>
+
+<pre><span style="color: red;">[...] mySanity FAILED
+    Error: Got &lt;
+        Uint8Array[255, 255, 255, 255]
+    &gt; but expected it to equal &lt;
+        Uint8Array[0, 0, 0, 0]
+    &gt;. (assertThat #1)
+</span></pre>
+
+<p>This kind of problem would be typical of floats <em>if we were doing any arithmetic</em>.
+But we&#39;re just comparing against constants!</p>
+
+<p>Still, this was a promising lead and so I kept experimenting.
+I found that the inconsistency goes away if you store the constants into variables before comparing them.
+I also found that the inconsistency goes away if you use a uniform or a texture to input the test float, instead of embedding it directly into the source code.
+Finally, and most strikingly, I found that a uniform set to <code>16211.8955</code> was not equal to the constant literal <code>16211.8955</code>.</p>
+
+<p>With that information, I finally figured it out.</p>
+
+<h1>Cause</h1>
+
+<p>My explanation uses two mechanisms to cause all the weird I&#39;ve been describing:</p>
+
+<ol>
+<li>A constant-folding pass with correct precision.</li>
+<li>A float parser with a precision-loss bug.</li>
+</ol>
+
+<p>I think that, when the browser or the drivers or the GPU or <em>whatever</em> on my machine sees the comparison <code>16211.8955 != 16211.896</code> it does a special-case constant-folding optimization that correctly replaces the comparison with just <code>false</code>.
+But, for comparisons that aren&#39;t between two constants, the literals survive until a later stage where they are parsed into binary data usable by the GPU.
+I think this final parsing stage has a precision bug that rounds <code>16211.8955</code> into <code>16211.896</code> (apparently the constant-folding process uses a different parser).</p>
+
+<p>To test this idea, I did the obvious thing: just use the two constant literals as outputs (thankfully, the machine this was all happening on supports float textures).
+If it&#39;s a parsing bug, the output should have two <code>16211.896</code>s instead of a <code>16211.8955</code> and a <code>16211.896</code>.</p>
+
+<p>And that&#39;s exactly what happens:</p>
+
+<p><img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-10-22-shader-parse-precision/repro.png"/></p>
+
+<p>As you can see in the test output near the bottom of the screenshot, the <code>16211.8955</code> output has been rounded up to <code>16211.896</code>.</p>
+
+<p>My workaround for this problem is simple: avoid the parser.
+Pass the floats in as uniforms instead of embedding them directly into the GLSL code.</p>
+
+<h1>Further Work</h1>
+
+<p>This parsing precision issue isn&#39;t the only cross-machine WebGL oddity I&#39;ve been running into.
+There&#39;s like three more weird things to figure out before doing the October release of Quirk.
+For example, the Nexus tablet on my desk is still adding ulps all over the place compared to the HP laptop and the iPhone.
+More seriously, on both the Nexus tablet and the iPhone, something wacky happens when applying a Hadamard gate to all 16 qubits of a circuit:</p>
+
+<p><img style="max-height: 250px; max-width:100%; border: 1px solid gray;" src="/assets/2016-10-22-shader-parse-precision/iphone-bad-qubits.png"/></p>
+
+<p>... Okay... those indicators should never ever be reaching outside of their spheres.
+And the probabilities should be 50%, not 33%.
+Moreover, the difference between 50% and 33% is <em>huge</em> and yet appears very suddenly: Hadamard transforming 15 qubits doesn&#39;t cause the issue.
+Given what I know about the structure of the code, that sudden appearance of error just seems <em>impossible</em>.
+More experimentation is required.
+No doubt it&#39;ll be a head slapper.</p>
+
+<p>Hopefully it&#39;ll all be done and tested before Halloween, since I&#39;ll be travelling to visit the Santa Barbara office and would rather not have it in the back of my mind the whole time.</p>
+
+<h1>Summary</h1>
+
+<p>Intel HD Graphics 5500s may lose a bit of precision when parsing floating point literals.</p>
+
+<p>WebGL feeds my nightmares.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1624">&laquo; The Quantum Version of the One-Time Pad is Teleportation</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
