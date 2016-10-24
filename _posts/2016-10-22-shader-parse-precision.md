@@ -7,12 +7,14 @@ permalink: post/1625
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
 
-I've been doing work to get [Quirk](/2016/05/22/quirk.html) working smoothly on phones.
+This month, I've been doing work to get [Quirk](/2016/05/22/quirk.html) running smoothly on phones.
 The big problem is floating-point textures: Quirk's intermediate state has lots of floating point values stored in textures, but WebGL doesn't guarantee that you can render to, read out, or even create floating point textures.
 
 Actually, according to [webglstats.com](http://webglstats.com/), the support for rendering to float textures is a lot worse than I thought:
 
 <img style="max-width:100%;" src="/assets/{{ loc }}/web-gl-float-support-charts.png"/>
+
+**Update**: *[Apparently these support numbers are misleading](https://twitter.com/alteredq/status/790224145015603200)! Browsers support rendering to float textures without supporting `WEBGL_color_buffet_float`. I will update with a better graph when I find a proper source for that number.*
 
 So apparently it's pretty important to have a workaround for when float texture support isn't present.
 
@@ -60,6 +62,8 @@ suite.testUsingWebGL('encodeEmbeddedFloats', () => {
     assertThat(outFloats).isEqualTo(inFloats);
 });
 ```
+
+*(Note: the WglShader class adds 'highp' declarations to the top of the shader. Floats are 32-bit single precision.)*
 
 It's a bit awkward, compared to using uniforms, but not the *worst* idea.
 And soon enough the test did stumble over a float that wasn't packed correctly:
@@ -191,6 +195,8 @@ Moreover, the difference between 50% and 33% is *huge* and yet appears very sudd
 Given what I know about the structure of the code, that sudden appearance of error just seems *impossible*.
 More experimentation is required.
 No doubt it'll be a head slapper.
+
+**Update**: *Solved it. Apparently some GPUs/drivers/whatever just throw away __13__ (!!!) bits of precision on coordinate arithmetic, unless you trick them into not doing it [by hiding values behind a uniform](https://github.com/Strilanc/Quirk/commit/da6a361bb04ddac573a696e2d0084af5bd07a03d)... Not so much a head-slapper as an F-bomb dropper. This is not an okay thing to have to workaround.*
 
 Hopefully it'll all be done and tested before Halloween, since I'll be travelling to visit the Santa Barbara office and would rather not have it in the back of my mind the whole time.
 
