@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Quirk's Performance History</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Quirk's Performance History</h1>
+<p class="meta">07 Nov 2016</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p><a href="/quirk">My quantum circuit simulator Quirk</a> is one of those projects that I keep coming back to.
+For years, I only touched it intermittently.
+Then, over the past few months, the work kinda took off and I&#39;ve been stuck in a cycle of &quot;Okay, with that release I think I can set it down now.&quot; followed by literally opening 10 issues the next day.</p>
+
+<p>Last month, and this month I suppose, one of those issues was &quot;performance&quot;.
+So I thought it would be interesting to go back and see how Quirk&#39;s performance has changed over time, since the beginning.
+There&#39;s probably some lessons to be had (... not <em>original</em> lessons, but lessons nonetheless).</p>
+
+<h1>What I&#39;m Measuring</h1>
+
+<p>Quirk doesn&#39;t do any <a href="https://arxiv.org/abs/quant-ph/0406196">fancy algorithmic tricks for computing particular circuits faster</a>.
+The circuits that people put together with a drag-and-drop GUI just aren&#39;t large enough to justify that kind of thing.
+This makes Quirk&#39;s performance essentially circuit-agnostic: the <em>types</em> of gates you use doesn&#39;t affect performance much.
+What matters is <em>how many</em> gates you use, and of course how many wires are present (that&#39;s where the exponential costs are).</p>
+
+<p>Circuit agnosticism is great for the purposes of this post, because it makes comparing versions easier.
+Profiling performance against a single straightforward circuit will tell us basically the whole story.</p>
+
+<p>The choice of circuit to use is mostly arbitrary, but there are a few constraints.
+The circuit can&#39;t be too small, because the interesting question is what blows up as circuits get larger.
+We don&#39;t want to measure the constant-time noise that swamps out the cost of smaller circuits.
+The circuit also can&#39;t be too big, because that would cause unmeasurably bad performance and even OOM errors in the really old versions.
+Finally, we&#39;ll avoid putting inline displays in the circuit, despite that being one of Quirk&#39;s most important features, because the non-trivial displays were only added recently.</p>
+
+<p>With those constraints in mind, I decided to go with a 10-qubit quantum fourier transform without the bit reversal step.
+It has enough gates and wires to be interesting, but not so many that I expect to break the older versions.
+Here&#39;s a diagram of the circuit:</p>
+
+<p><img style="max-width:100%; max-height:256px; border: 1px solid gray;" src="/assets/2016-11-07-quirk-perf-history/10bit-qft-circuit.png"/></p>
+
+<p>Note that I want to learn about the performance in <em>general</em> on circuits of this size.
+So I won&#39;t be using the specialized QFT or phase gradient gates available in later versions, even though those gates would speed up this <em>particular</em> circuit.</p>
+
+<p>All of my testing will be done in Chrome v54.
+The machine I&#39;ll be testing with is an HP Spectre x360.
+The CPU is an i7-5500U.
+The GPU is an integrated HD5500.
+Testing in other browsers and with other machines is of course a <em>great</em> idea, but just doing the one was already quite a lot of work.</p>
+
+<p>What I&#39;ll actually be <em>doing</em>, as the profiler runs, is dragging one of the circuit&#39;s gates around.
+This forces Quirk to constantly react, simulate, and draw.
+Then I&#39;ll pick out a representative frame, made up of &quot;react, simulate, draw&quot; parts, show a screenshot, and discuss a bit.</p>
+
+<p>Enough details, let&#39;s travel through time.</p>
+
+<h1>Pre-history</h1>
+
+<p><a href="/assets/2016-11-07-quirk-perf-history/prehistory-appearance.png">
+  <img style="max-width:100%; max-height:256px;" src="/assets/2016-11-07-quirk-perf-history/prehistory-appearance.png"/>
+</a></p>
+
+<p>This is a random widget I included in <a href="http://algorithmicassertions.com/quantum/2014/03/07/Building-your-own-Quantum-Fourier-Transform.html">a post near the start of 2014</a>.
+Quirk grew out of this widget.
+Unfortunately, it can&#39;t do a 10-qubit QFT... I only included it here out of a misguided desire for completeness.</p>
+
+<h1>December 2014</h1>
+
+<p><a href="/assets/2016-11-07-quirk-perf-history/2014-december-appearance.png">
+  <img style="max-width:100%; max-height:256px;" src="/assets/2016-11-07-quirk-perf-history/2014-december-appearance.png"/>
+</a></p>
+
+<p><em>No undo, no bookmarking the state, no build step, no webgl, fuzzy lines because they&#39;re off by a half-pixel, weird gate notation, state display outside of the circuit... yeah, that definitely takes me back.
+(On the other hand, it&#39;s only 2500 lines.)</em></p>
+
+<p>This version doesn&#39;t give the user control over the number of wires, so I had to tweak the code to set the number of wires to 10.
+I immediately regretted that as soon I started building up the circuit.
+The level of slow was unbearable (so much for that &quot;can&#39;t be too big&quot; constraint on the circuit).
+So I dropped the number of wires to 8.</p>
+
+<p>I entered an 8-qubit QFT, started Chrome&#39;s profiler, grabbed one of the gates, dragged it around like crazy, and watched my laptop chug away trying to keep up.</p>
+
+<p><a href="/assets/2016-11-07-quirk-perf-history/2014-december-profile.png">
+  <img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-11-07-quirk-perf-history/2014-december-profile.png"/>
+</a></p>
+
+<p>Frame time: <strong>1.5 seconds</strong> (after adjusting for the 2-qubit handicap)</p>
+
+<p>One look at the flame graph tells me what prevented me from doing a 10-qubit circuit (looking at flame graphs tends to do useful things like that, they&#39;re <em>amazing</em>).</p>
+
+<p>This old version of Quirk is tensoring all of the gates in a column together into a single giant matrix, then smashing that matrix into the state vector.
+That&#39;s <em>simple</em>, but it&#39;s also <em>really really inefficient</em>.
+The matrices defined by single-qubit gates are sparse: you can apply them with a single scan over the state vector, in linear time.
+The big-fucking-matrix approach, on the other hand, does quadratic amounts of work.
+Which is kind of a big deal when $n=2^{10}$; literally a thousand times more expensive.</p>
+
+<p>Also, these were not lightweight highly optimized matrices.
+They were arrays of arrays of instances of a complex number class <em>in javascript</em>.
+We&#39;re talking <em>millions</em> of allocations done to apply each column of gates.
+That poor garbage collector!
+No wonder the performance is so bad.</p>
+
+<h1>December 2015</h1>
+
+<p><a href="/assets/2016-11-07-quirk-perf-history/2015-december-appearance.png">
+  <img style="max-width:100%; max-height:256px; border: 1px solid gray;" src="/assets/2016-11-07-quirk-perf-history/2015-december-appearance.png"/>
+</a></p>
+
+<p><em>Apparently I hated color in 2015.
+Could the screenshot BE more drab?</em></p>
+
+<p>(Keep in mind that, although the version context screenshots I&#39;m showing have Quirk containing 4-qubit circuits, that&#39;s only for screenshot-size reasons.
+I&#39;ll always be profiling the 10-qubit circuit unless noted otherwise.)</p>
+
+<p>Intermittently over the course of 2015, I modified Quirk to do its simulation with webgl instead of in javascript.
+I also rewrote it to use ES6, translated down to ES5 by <a href="https://github.com/google/traceur-compiler">Traceur</a>.
+The matrix functions are still horrendously inefficient, but they&#39;re not used much anymore.
+The improvement is quite noticeable:</p>
+
+<p><a href="/assets/2016-11-07-quirk-perf-history/2015-december-profile.png">
+  <img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-11-07-quirk-perf-history/2015-december-profile.png"/>
+</a></p>
+
+<p>Frame time: <strong>92ms</strong>.</p>
+
+<p>An order of magnitude better than the previous version (accounting for the handicap).
+GPUs are amazing.</p>
+
+<p>The big performance offender now is these deep spikes of anonymous functions.
+The root problem is that I like to write code that&#39;s very <a href="https://msdn.microsoft.com/en-us/library/bb308959.aspx">LINQ</a>-y: layering lots of transformations, filters, grouping, and aggregation over iterables.
+I like it so much that I wrote lots of generator-heavy methods just for that purpose.
+But Traceur doesn&#39;t do a good job of translating generators into efficient ES5 code, and so here we are.</p>
+
+<p>Another big problem here, exacerbated by the generator issue, is the &#39;pipeline&#39; system the simulation code is using.
+Instead of just applying shaders, I was building up a graph of which shaders needed which outputs then interpreting over the graph.
+Sometimes that approach to a computation is useful, but for Quirk it was just actively unhelpful and costly.
+It&#39;s definitely a mistake I wish I could take back.</p>
+
+<h1>March 2016</h1>
+
+<p><a href="/assets/2016-11-07-quirk-perf-history/2016-march-appearance.png">
+  <img style="max-width:100%; max-height:256px; border: 1px solid gray;" src="/assets/2016-11-07-quirk-perf-history/2016-march-appearance.png"/>
+</a></p>
+
+<p><em>Glorious color! We jumped from total desaturation to basically what Quirk looks like nowadays. There&#39;s lots of minor details missing (e.g. no shadows under the toolbox gates, no details when hovering over displays, always-present &#39;deferring measurement&#39; label), but it&#39;s recognizably Quirk. Very appropriate, since before this point I hadn&#39;t named it.</em></p>
+
+<p>Amongst many other changes, the pipeline code has been taken out and shot.
+Profiler says... good decision!</p>
+
+<p><a href="/assets/2016-11-07-quirk-perf-history/2016-march-profile.png">
+  <img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-11-07-quirk-perf-history/2016-march-profile.png"/>
+</a></p>
+
+<p>Frame time: <strong>41ms</strong>.</p>
+
+<p>We halved the frame time.
+Interestingly, the drawing cost <em>also</em> dropped significantly.
+I think this might be from switching how I made text fit in the gate boxes: instead of searching for a font-size that resulted in the text not poking out, I used the initial text-width measurement to choose a scale factor to apply to the canvas drawing context before printing.</p>
+
+<p>It&#39;s also interesting that the edit time of the circuit has shot up.
+Something to do with the JSON serialization, done as part of creating a bookmarkable URL for the circuit.</p>
+
+<p>The costly generator code is still rearing its head (I outlined some of it in red), but unfortunately that&#39;s not going to be fixed anytime soon.
+Actually, we&#39;re going to be heading the wrong way performance-wise for a bit.</p>
+
+<h1>April 2016</h1>
+
+<p><a href="/assets/2016-11-07-quirk-perf-history/2016-april-appearance.png">
+  <img style="max-width:100%; max-height:256px; border: 1px solid gray;" src="/assets/2016-11-07-quirk-perf-history/2016-april-appearance.png"/>
+</a></p>
+
+<p><em>Multi-wire gates in the toolbox!
+But I had trouble thinking of a discoverable-on-mobile way for users to resize gates, so instead of having single resizable gates the toolbox is exploding with size variants.</em></p>
+
+<p>April was an &quot;add a feature&quot; month, with no big changes that should have affected performance.
+There were some optimizations of the matrix code, but only for keeping the <em>tests</em> running quickly when comparing shader effects against a matrix.
+The matrix code isn&#39;t used much during simulation or drawing, so you wouldn&#39;t see any gains at runtime.</p>
+
+<p><a href="/assets/2016-11-07-quirk-perf-history/2016-april-profile.png">
+  <img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-11-07-quirk-perf-history/2016-april-profile.png"/>
+</a></p>
+
+<p>Frame time: <strong>53ms</strong>.</p>
+
+<p>Hahaha, did you laugh, when I said the changes shouldn&#39;t affect performance, without any justification?
+That&#39;s just not how performance works.
+Performance gets worse by default.
+You have to actively put work into keeping it good.
+10ms penalty.</p>
+
+<h1>May 2016</h1>
+
+<p><a href="/assets/2016-11-07-quirk-perf-history/2016-may-appearance.png">
+  <img style="max-width:100%; max-height:256px; border: 1px solid gray;" src="/assets/2016-11-07-quirk-perf-history/2016-may-appearance.png"/>
+</a></p>
+
+<p><em>The month of four releases.
+A <strong>lot</strong> of stuff was added: three new displays, Fourier and arithmetic gates, the ability to resize gates... that&#39;s way more than a month&#39;s work for an intermittent weekend project.
+This is the first version I called attention to by putting it on social media.</em></p>
+
+<p>Lots of new features, but no focus on measuring or improving performance. So...</p>
+
+<p><a href="/assets/2016-11-07-quirk-perf-history/2016-may-profile.png">
+  <img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-11-07-quirk-perf-history/2016-may-profile.png"/>
+</a></p>
+
+<p>Frame time: <strong>75ms</strong>.</p>
+
+<p>The performance regression continues.
+For context, note that in the game industry anything over 16 milliseconds gets laughed out of the room.
+60fps or bust.
+At 75ms per frame, Quirk can&#39;t even hit 15fps.</p>
+
+<p>(Weirdly, the flame graph looks quite similar to the previous month&#39;s, just with everything taking a bit longer.
+At first I thought my laptop had been busy or something and spoiled the run, but re-running it later gave similar results.)</p>
+
+<h1>June 2016</h1>
+
+<p><a href="/assets/2016-11-07-quirk-perf-history/2016-june-appearance.png">
+  <img style="max-width:100%; max-height:256px; border: 1px solid gray;" src="/assets/2016-11-07-quirk-perf-history/2016-june-appearance.png"/>
+</a></p>
+
+<p><em>Second toolbox has arrived, with plenty of gates in tow.
+Also, export/undo/redo buttons.</em></p>
+
+<p>Another feature month, and you know what that means.</p>
+
+<p><a href="/assets/2016-11-07-quirk-perf-history/2016-june-profile.png">
+  <img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-11-07-quirk-perf-history/2016-june-profile.png"/>
+</a></p>
+
+<p>Frame time: <strong>53ms</strong>.</p>
+
+<p>Wait, what?
+It got better?
+Even though the edit cost hit slow generators and went up 50%?
+<em>Wat?</em></p>
+
+<p>After some investigation, I think the simulation cost going back to 15ms is because of code to compute the density matrices of pairs of qubits. It was added in May, but not really used by anything, and dropped in June.</p>
+
+<p>As for the same performance-loss-and-recovery happening in the draw code... I think this was the month where I started batching stroke/fill calls to the canvas API.</p>
+
+<h1>September 2016</h1>
+
+<p><a href="/assets/2016-11-07-quirk-perf-history/2016-september-appearance.png">
+  <img style="max-width:100%; max-height:256px; border: 1px solid gray;" src="/assets/2016-11-07-quirk-perf-history/2016-september-appearance.png"/>
+</a></p>
+
+<p><em>Dynamic gates with yellow highlight.
+Arithmetic gates with independent inputs.
+One fewer default output display.
+But, most importantly, a &#39;Make Gate&#39; button.
+Custom gates at last!</em></p>
+
+<p>September&#39;s changes touched a lot of the circuit definition/simulation code.
+Gates that use an input need to be paired up with the corresponding input gate, amongst other things.
+Big risk of performance regressions.</p>
+
+<p><a href="/assets/2016-11-07-quirk-perf-history/2016-september-profile.png">
+  <img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-11-07-quirk-perf-history/2016-september-profile.png"/>
+</a></p>
+
+<p>Frame time: <strong>87ms</strong>.</p>
+
+<p>Ouch, that&#39;s a big hit.
+Apparently I severely hurt the code computing circuit properties like &quot;does this gate have a problem requiring that it be disabled?&quot;.
+The cost from generators is really getting out of hand.</p>
+
+<h1>October 2016</h1>
+
+<p><a href="/assets/2016-11-07-quirk-perf-history/2016-october-appearance.png">
+  <img style="max-width:100%; max-height:256px; border: 1px solid gray;" src="/assets/2016-11-07-quirk-perf-history/2016-october-appearance.png"/>
+</a></p>
+
+<p><em>Looks the same.
+All the changes were under the hood.
+iPhone compatibility required working with byte textures, which caused huge shader rewrites.</em></p>
+
+<p>October touched a <em>lot</em> of shader code, which is performance-sensitive.
+But the regression from the previous month was bad enough that I had actually noticed it by eye (and I have a <em>terrible</em> eye for frame rate issues).
+So the <em>other</em> big change in October was a focus on improving performance.</p>
+
+<p>Meaning...</p>
+
+<p><a href="/assets/2016-11-07-quirk-perf-history/2016-october-profile.png">
+  <img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-11-07-quirk-perf-history/2016-october-profile.png"/>
+</a></p>
+
+<p>Frame time: <strong>26ms</strong>.</p>
+
+<p>This is what happens when you let things regress for awhile, then open up a profiler and get serious.
+Immediate massive improvement.
+(26 is nothing to brag about, but at least it&#39;s not frickin <em>87</em>.)</p>
+
+<p>The profiler told me the generators were slow, and where they were slowest.
+I switched to <code>for</code> loops where appropriate.
+The profiler told me that drawing the toolboxes was taking 10 milliseconds.
+I switched to drawing them once and caching the image data.
+The profiler told me a lot of useful things.
+The profiler is <em>still</em> telling me a lot of useful things.</p>
+
+<h1>Future</h1>
+
+<p>I added perf tests as a way to prevent future regressions in performance.
+But that&#39;s not enough.</p>
+
+<p>(Does anyone know how to get travis-ci, or another free continuous integration service, to run WebGL code? <a href="http://stackoverflow.com/questions/36207692/running-webgl-shaders-on-travis-ci/39760267#39760267">Add an answer to this stackoverflow question</a>.)</p>
+
+<p>Even without regressions, editing 16 qubit circuits (the maximum size that Quirk permits) feels slow and clunky.
+It always has.
+Another month of performance gains is required.
+Based on profiling a <strong>16-qubit circuit</strong>, the big problem is the drawing code:</p>
+
+<p><a href="/assets/2016-11-07-quirk-perf-history/2016-october-profile-16qubit.png">
+  <img style="max-width:100%; border: 1px solid gray;" src="/assets/2016-11-07-quirk-perf-history/2016-october-profile-16qubit.png"/>
+</a></p>
+
+<p>If I want to get under 30ms per frame for 16-qubit circuits, I can&#39;t draw the huge amplitude displays with canvas commands anymore.
+I have to do it with the GPU.
+Also I need to do more caching of repeated visual elements.</p>
+
+<p>More long term, if I want to even think about getting below 16ms per frame, I need to avoid the cost of syncing up with the GPU.
+That would require quite a lot of re-architecting, because it means I can&#39;t call <code>readPixels</code> and <em>all</em> displays would have to be drawn GPU-side (including their text-heavy tooltips).
+Also I&#39;d need to learn how to properly profile and optimize shaders.</p>
+
+<p>It&#39;s a lot of work to do for a toy quantum circuit simulator.
+But, somehow, it&#39;s the toy projects that are the most engaging.
+So who knows.</p>
+
+<h1>Summary</h1>
+
+<ul>
+<li>Don&#39;t write horribly inefficient matrix code that does millions of allocations.</li>
+<li>Don&#39;t use ES6-to-ES5 generators on hot paths.</li>
+<li>Don&#39;t forget to track performance when adding features.</li>
+<li>Do use the GPU.</li>
+<li>Do use Chrome&#39;s profiler.</li>
+<li>Do cache image data of elements always drawn the same way.</li>
+<li>There&#39;s still a long way to go.</li>
+</ul>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1625">&laquo; Unfathomable Bugs #9: Lossy Shader Packing</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
