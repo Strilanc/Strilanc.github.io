@@ -3,7 +3,10 @@ layout: post
 title: "Storing Bandwidth with Superdense Coding"
 date: 2014-05-03 11:30:00 EST
 categories: quantum
+permalink: quantum/2014/05/03/Storing-Bandwidth-with-Superdense-Coding.html
 ---
+
+{% assign loc = page.path | remove_first: '_posts/' | remove: '.markdown' %}
 
 One of the things I have a hard time intuiting, in quantum computing, is the interplay between classical bits and quantum bits. A good example of this is [superdense coding](http://en.wikipedia.org/wiki/Superdense_coding). Superdense coding encodes two classical bits into a single transmitted qubit, by taking advantage of a previously shared qubit.
 
@@ -23,7 +26,7 @@ In order to do superdense coding you need three things:
 
 The actual protocol is not too complicated, although understanding why it works can be. Here is a quantum circuit diagram showing what happens, which I will explain below:
 
-![Superdense coding circuit](http://i.imgur.com/mXHpdbB.png)
+<img style="max-width:100%;" alt="Superdense coding circuit" src="/assets/{{ loc }}/superdense-coding-circuit.png"/>
 
 Imagine that Alice is the one who wants to send information, and Bob is the one who will receive it. Alice roughly corresponds to the top of the diagram, and Bob to the bottom. The sequence of events, from left to right, is as follows.
 
