@@ -7,6 +7,13 @@
         <atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Half-Baked Thoughts for a Quantum Scripting Language</title>
+                <description>&lt;p&gt;When it comes to toying with quantum computing, I think &lt;a href=&quot;/quirk&quot;&gt;Quirk&lt;/a&gt; has pushed the &amp;quot;drag blocks around on a circuit diagram&amp;quot; concept about as far as I want to go. It&amp;#39;s great for small problems, but becomes horribly tedious and error-prone as things get more complicated. This is a...</description>
+                <pubDate>Sun, 13 Nov 2016 00:10:10 -0500</pubDate>
+                <link>http://algorithmicassertions.com/post/1627</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/post/1627</guid>
+            </item>
+            <item>
                 <title>Quirk&#39;s Performance History</title>
                 <description>&lt;p&gt;&lt;a href=&quot;/quirk&quot;&gt;My quantum circuit simulator Quirk&lt;/a&gt; is one of those projects that I keep coming back to. For years, I only touched it intermittently. Then, over the past few months, the work kinda took off and I&amp;#39;ve been stuck in a cycle of &amp;quot;Okay, with that release I think I...</description>
                 <pubDate>Mon, 07 Nov 2016 00:10:10 -0500</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sun, 26 Jun 2016 13:10:10 -0400</pubDate>
                 <link>http://algorithmicassertions.com/post/1618</link>
                 <guid isPermaLink="true">http://algorithmicassertions.com/post/1618</guid>
-            </item>
-            <item>
-                <title>Quantum vs NP #2-B: Simulating &#39;A linear time quantum algorithm for 3SAT&#39;</title>
-                <description>&lt;p&gt;This is a followup to &lt;a href=&quot;/quantum/2015/11/01/Walters-Claimed-Quantum-Linear-3SAT.html&quot;&gt;a post from last year&lt;/a&gt;, about the pre-print &lt;a href=&quot;http://arxiv.org/abs/1510.00409&quot;&gt;&amp;#39;A linear time quantum algorithm for 3SAT&amp;#39; by Zachary B. Walters&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;In that post, I argued that the algorithm doesn&amp;#39;t do any quantum work. In the comments, Walters and I went back-and-forth. Since then, Walters...</description>
-                <pubDate>Sun, 19 Jun 2016 13:10:10 -0400</pubDate>
-                <link>http://algorithmicassertions.com/post/1617</link>
-                <guid isPermaLink="true">http://algorithmicassertions.com/post/1617</guid>
             </item>
     </channel>
 </rss>
