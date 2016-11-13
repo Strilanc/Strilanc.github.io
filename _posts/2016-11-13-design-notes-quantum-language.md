@@ -305,7 +305,7 @@ Another thing, that initially seemed reasonable to me, was allowing the compiler
 But those extra ancilla may not commute with the action of the `if` statement, and so we need to be very careful about keeping them around.
 The user can't reasonably be expected to guess whether the compiler will happen to cache information that doesn't commute with the stated action.
 
-Finally, note that this condition-must-commute-with-action stuff means no quantumized `while` loops can't work.
+Finally, note that this condition-must-commute-with-action stuff means quantumized `while` loops can't work.
 There's just no way to do the uncomputation correctly, because our exit condition implies our "uncomputation dun broke" criteria.
 (Also, because I want a classical program counter, and the condition controls the program counter for an indefinite amount of time, it's somewhat inconvenient to keep the condition coherent.
 You'd need to apply a fixed number of iterations.)
@@ -335,7 +335,14 @@ That lets us write this shorter code:
 ```python
 def controlled_phase_gradient(control_qubit, target_qubits):
     if control_qubit:
-        phaseby int(target_qubits) * pi / 2**len(target_qubits)
+        phaseby qint(target_qubits) * pi / 2**len(target_qubits)
+```
+
+Or even:
+
+```python
+def controlled_phase_gradient(control_qubit, target_qubits):
+    phaseby qint(control_qubit) * qint(target_qubits) * pi / 2**len(target_qubits)
 ```
 
 Because the angle expression includes qubits, it ends up phasing by different amounts in different parts of the superposition.
