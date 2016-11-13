@@ -333,7 +333,7 @@ The second example will cause decoherence that&#39;s not present in the first ex
 But those extra ancilla may not commute with the action of the <code>if</code> statement, and so we need to be very careful about keeping them around.
 The user can&#39;t reasonably be expected to guess whether the compiler will happen to cache information that doesn&#39;t commute with the stated action.</p>
 
-<p>Finally, note that this condition-must-commute-with-action stuff means no quantumized <code>while</code> loops can&#39;t work.
+<p>Finally, note that this condition-must-commute-with-action stuff means quantumized <code>while</code> loops can&#39;t work.
 There&#39;s just no way to do the uncomputation correctly, because our exit condition implies our &quot;uncomputation dun broke&quot; criteria.
 (Also, because I want a classical program counter, and the condition controls the program counter for an indefinite amount of time, it&#39;s somewhat inconvenient to keep the condition coherent.
 You&#39;d need to apply a fixed number of iterations.)</p>
@@ -358,7 +358,11 @@ Contrast it with the Cooley-Tukey FFT algorithm&#39;s twiddle angles, which incr
 That lets us write this shorter code:</p>
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">controlled_phase_gradient</span><span class="p">(</span><span class="n">control_qubit</span><span class="p">,</span> <span class="n">target_qubits</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">control_qubit</span><span class="p">:</span>
-        <span class="n">phaseby</span> <span class="nb">int</span><span class="p">(</span><span class="n">target_qubits</span><span class="p">)</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="o">**</span><span class="nb">len</span><span class="p">(</span><span class="n">target_qubits</span><span class="p">)</span>
+        <span class="n">phaseby</span> <span class="n">qint</span><span class="p">(</span><span class="n">target_qubits</span><span class="p">)</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="o">**</span><span class="nb">len</span><span class="p">(</span><span class="n">target_qubits</span><span class="p">)</span>
+</code></pre></div>
+<p>Or even:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">controlled_phase_gradient</span><span class="p">(</span><span class="n">control_qubit</span><span class="p">,</span> <span class="n">target_qubits</span><span class="p">):</span>
+    <span class="n">phaseby</span> <span class="n">qint</span><span class="p">(</span><span class="n">control_qubit</span><span class="p">)</span> <span class="o">*</span> <span class="n">qint</span><span class="p">(</span><span class="n">target_qubits</span><span class="p">)</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="o">**</span><span class="nb">len</span><span class="p">(</span><span class="n">target_qubits</span><span class="p">)</span>
 </code></pre></div>
 <p>Because the angle expression includes qubits, it ends up phasing by different amounts in different parts of the superposition.</p>
 
