@@ -83,26 +83,26 @@ Also, we'll switch to a more Pythonesque style:
 def diffusion(qubits):
     n = len(qubits)
     
-    // Hadamard transform the input qubits
+    # Hadamard transform the input qubits
     for q in qubits:
         Hadamard q
 
-    // AND all the controls together, using ancilla qubits
+    # AND all the controls together, using ancilla qubits
     ancillas = qalloc(n)
     CNOT qubits[0], ancillas[0]
     for i = 1; i < n; i++:
         Toffoli qubits[i], ancillas[i-1], ancillas[i]
 
-    // Apply the conditional phase factor
+    # Apply the conditional phase factor
     Z ancilla[n-1]
 
-    // Uncompute the 'AND all the controls together'
+    # Uncompute the 'AND all the controls together'
     for i = n-1; i >= 1; i--:
         Toffoli qubits[i], ancillas[i-1], ancillas[i]
     CNOT qubits[0], ancillas[0]
     qfree ancillas
 
-    // Un-Hadamard transform the input qubits
+    # Un-Hadamard transform the input qubits
     for q in qubits:
         Hadamard q
 ```
@@ -116,14 +116,14 @@ That means two utility methods instead of one:
 
 ```python
 def diffusion(qubits):
-    // Hadamard transform the input qubits
+    # Hadamard transform the input qubits
     Hadamard qubits
 
     ancilla_qubit = compute_all(qubits)
     Z ancilla_qubit
     uncompute_all(qubits, ancilla_qubit)
 
-    // Un-Hadamard transform the input qubits
+    # Un-Hadamard transform the input qubits
     Hadamard qubits
 ```
 
@@ -135,13 +135,13 @@ A `with` block does seem to help:
 
 ```python
 def diffusion(qubits):
-    // Hadamard transform the input qubits
+    # Hadamard transform the input qubits
     Hadamard qubits
 
     with ancilla_qubit = compute_all(qubits):
         Z ancilla_qubit
 
-    // Un-Hadamard transform the input qubits
+    # Un-Hadamard transform the input qubits
     Hadamard qubits
 ```
 
@@ -153,13 +153,13 @@ Instead of a `with` containing a `Z`, let's try having an `if` leading to a phas
 
 ```python
 def diffusion(qubits):
-    // Hadamard transform the input qubits
+    # Hadamard transform the input qubits
     Hadamard qubits
 
     if all(qubits):
         phaseby pi
 
-    // Un-Hadamard transform the input qubits
+    # Un-Hadamard transform the input qubits
     Hadamard qubits
 ```
 
@@ -196,8 +196,8 @@ def grover_search(bit_count, predicate):
     apply X to qubits
     apply H to qubits
     for _ < pi/4 * 2**(bit_count/2):
-        phase_flip_if(all(x_axis(qubits)))
         phase_flip_if(predicate(qubits))
+        phase_flip_if(all(x_axis(qubits)))
     return measure qubits
 ```
 
