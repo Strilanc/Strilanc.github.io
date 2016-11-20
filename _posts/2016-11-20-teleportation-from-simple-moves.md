@@ -27,7 +27,7 @@ Note that the circuit diagrams are taller than necessary.
 It's just to make the move from top to bottom look like more of a journey.
 I've also included Bloch sphere state indicators as a visual hint that the circuit is in fact moving the qubit.
 
-The first thing we need to do is break the swap gate apart into pieces we can work with.
+The first thing we need to do is break the swap gate into pieces we can work with.
 To do that, we're going to use a classical bit-twiddling trick: [XOR swapping](https://en.wikipedia.org/wiki/XOR_swap_algorithm). XOR-swapping swaps two variables by XOR-ing them into each other three times:
 
 ```C
@@ -53,7 +53,8 @@ I often find myself calling this back-and-forth CNOT pair a "move".
 It's like a swap, but only goes in one direction (and requires that the target qubit be zero'd).
 
 At this point there's a huge number of routes we could take and it's not really clear what to do.
-That's why I consider these next two steps to be the key ones, because they send us down an easy path.
+That's why I consider these next two steps to be the key ones.
+They send us down an easy path.
 
 Note that we can do whatever we want to uninvolved wires.
 It won't affect the "move" part of our circuit.
@@ -65,7 +66,7 @@ That didn't really accomplish much, but it'll be useful after this next step.
 
 Imagine for a moment that we weren't allowed to jump all the way from the top qubit to the bottom qubit in one step.
 Instead, the top and bottom wires had to affect each other indirectly via the second wire.
-And, to make things even harder, suppose we didn't even know what state the second wire is in.
+And, to make things even harder, suppose we didn't even know what state the second wire was in.
 Can we still toggle the bottom wire in a way controlled by the top wire?
 
 Yes!
@@ -74,7 +75,7 @@ We just do a classical trick I call "toggle forwarding":
 <img style="max-width:100%;" src="/assets/{{ loc }}/cnot-via-intermediate.png"/>
 
 We can't guarantee that the middle wire is ON or OFF, but we can force it to temporarily toggle.
-Then we do CNOTs controlled by the toggled and un-toggled states.
+Then we do CNOTs onto the bottom wire controlled by the toggled and un-toggled middle wire.
 
 When the top wire doesn't toggle the middle wire, the two bottom CNOTs cancel each other out.
 When the top wire is ON, then the middle wire does get toggled and exactly one of the bottom CNOTs will fire.
@@ -85,7 +86,7 @@ Even when the middle qubit is entangled or in a state normally unaffected by NOT
 No, really!
 Try it!)
 
-Applying this CNOT-via-intermediate construction to our qubit-moving circuit produces this result:
+Applying this CNOT-via-intermediate construction to the downward part of our qubit-moving circuit produces this result:
 
 <img style="max-width:100%; border:1px solid black;" src="/assets/{{ loc }}/step4-borrow.png"/>
 
@@ -153,20 +154,21 @@ But actually there's no contradiction, just a slight difference in meaning.
 When I say that measuring one qubit can't affect another, I'm talking about the expected outcomes of the circuit.
 I'm thinking in terms of what you know about the circuit's function *ahead of time*, when you *don't condition on the measurement results*.
 
-When the trope says that measuring one qubit might affect another, it is describing the fact that measuring a qubit *can give you new information* about the state of another qubit.
+When the spooky-action trope says that measuring one qubit might affect another, it is describing the fact that measuring a qubit *can give you new information* about the state of another qubit.
 The information you can learn just happens to be flexible in such a counter-intuitive way that people resort to describing the situation as one qubit instantaneously affecting another.
 Even though that's known to be a misleading analogy.
 
-I hope that was convincing, because we're about to make things worse by sliding the measurements leftward until they hop over the controls:
+I hope that clarification was convincing, because we're about to make things worse by sliding the measurements leftward until they hop over the controls:
 
 <img style="max-width:100%; border:1px solid black;" src="/assets/{{ loc }}/step12-undefer-measurement.png"/>
 
 This step also doesn't affect the ahead-of-time-expected function of the circuit.
-A fact which is surprising enough that it has a name: the [deferred measurement principle](https://en.wikipedia.org/wiki/Deferred_Measurement_Principle).
+Classical and quantum controls are equivalent.
+That fact is surprising enough that it has a name: the [deferred measurement principle](https://en.wikipedia.org/wiki/Deferred_Measurement_Principle).
 
 (I'd explain why this doesn't contradict delayed choice experiments, but I'd just be repeating the "spooky-action" explanation with different words.)
 
-We only have one thing left to do: set up entanglement between the top and bottom *before* the input is known, instead of after.
+We only have one thing left to do: setup entanglement between the top and bottom *before* the input is known, instead of after.
 To do that we just slide the initial H gate and CNOT gate all the way to the left:
 
 <img style="max-width:100%; border:1px solid black;" src="/assets/{{ loc }}/step13-entangle-beforehand.png"/>
