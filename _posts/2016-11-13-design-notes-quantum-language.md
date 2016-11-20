@@ -83,26 +83,26 @@ Also, we'll switch to a more Pythonesque style:
 def diffusion(qubits):
     n = len(qubits)
     
-    // Hadamard transform the input qubits
+    # Hadamard transform the input qubits
     for q in qubits:
         Hadamard q
 
-    // AND all the controls together, using ancilla qubits
+    # AND all the controls together, using ancilla qubits
     ancillas = qalloc(n)
     CNOT qubits[0], ancillas[0]
     for i = 1; i < n; i++:
         Toffoli qubits[i], ancillas[i-1], ancillas[i]
 
-    // Apply the conditional phase factor
+    # Apply the conditional phase factor
     Z ancilla[n-1]
 
-    // Uncompute the 'AND all the controls together'
+    # Uncompute the 'AND all the controls together'
     for i = n-1; i >= 1; i--:
         Toffoli qubits[i], ancillas[i-1], ancillas[i]
     CNOT qubits[0], ancillas[0]
     qfree ancillas
 
-    // Un-Hadamard transform the input qubits
+    # Un-Hadamard transform the input qubits
     for q in qubits:
         Hadamard q
 ```
@@ -116,14 +116,14 @@ That means two utility methods instead of one:
 
 ```python
 def diffusion(qubits):
-    // Hadamard transform the input qubits
+    # Hadamard transform the input qubits
     Hadamard qubits
 
     ancilla_qubit = compute_all(qubits)
     Z ancilla_qubit
     uncompute_all(qubits, ancilla_qubit)
 
-    // Un-Hadamard transform the input qubits
+    # Un-Hadamard transform the input qubits
     Hadamard qubits
 ```
 
@@ -135,13 +135,13 @@ A `with` block does seem to help:
 
 ```python
 def diffusion(qubits):
-    // Hadamard transform the input qubits
+    # Hadamard transform the input qubits
     Hadamard qubits
 
     with ancilla_qubit = compute_all(qubits):
         Z ancilla_qubit
 
-    // Un-Hadamard transform the input qubits
+    # Un-Hadamard transform the input qubits
     Hadamard qubits
 ```
 
@@ -153,13 +153,13 @@ Instead of a `with` containing a `Z`, let's try having an `if` leading to a phas
 
 ```python
 def diffusion(qubits):
-    // Hadamard transform the input qubits
+    # Hadamard transform the input qubits
     Hadamard qubits
 
     if all(qubits):
         phaseby pi
 
-    // Un-Hadamard transform the input qubits
+    # Un-Hadamard transform the input qubits
     Hadamard qubits
 ```
 
@@ -196,8 +196,8 @@ def grover_search(bit_count, predicate):
     apply X to qubits
     apply H to qubits
     for _ < pi/4 * 2**(bit_count/2):
-        phase_flip_if(all(x_axis(qubits)))
         phase_flip_if(predicate(qubits))
+        phase_flip_if(all(x_axis(qubits)))
     return measure qubits
 ```
 
@@ -305,7 +305,7 @@ Another thing, that initially seemed reasonable to me, was allowing the compiler
 But those extra ancilla may not commute with the action of the `if` statement, and so we need to be very careful about keeping them around.
 The user can't reasonably be expected to guess whether the compiler will happen to cache information that doesn't commute with the stated action.
 
-Finally, note that this condition-must-commute-with-action stuff means no quantumized `while` loops can't work.
+Finally, note that this condition-must-commute-with-action stuff means quantumized `while` loops can't work.
 There's just no way to do the uncomputation correctly, because our exit condition implies our "uncomputation dun broke" criteria.
 (Also, because I want a classical program counter, and the condition controls the program counter for an indefinite amount of time, it's somewhat inconvenient to keep the condition coherent.
 You'd need to apply a fixed number of iterations.)
@@ -335,7 +335,14 @@ That lets us write this shorter code:
 ```python
 def controlled_phase_gradient(control_qubit, target_qubits):
     if control_qubit:
-        phaseby int(target_qubits) * pi / 2**len(target_qubits)
+        phaseby qint(target_qubits) * pi / 2**len(target_qubits)
+```
+
+Or even:
+
+```python
+def controlled_phase_gradient(control_qubit, target_qubits):
+    phaseby qint(control_qubit) * qint(target_qubits) * pi / 2**len(target_qubits)
 ```
 
 Because the angle expression includes qubits, it ends up phasing by different amounts in different parts of the superposition.
