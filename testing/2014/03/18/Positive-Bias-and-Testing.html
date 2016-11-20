@@ -85,7 +85,7 @@
 <p><strong>Equality</strong></p>
 
 <p>Suppose I make a custom case-insensitive string type for C#, that works exactly like a normal string, except all comparison operations ignore upper/lower casing. I ask you to test the equality operators. You write some tests:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">assert((CaselessString)&quot;&quot; == (CaselessString)&quot;&quot;);
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>assert((CaselessString)&quot;&quot; == (CaselessString)&quot;&quot;);
 assert((CaselessString)&quot;&quot; != (CaselessString)&quot;a&quot;);
 assert((CaselessString)&quot;A&quot; == (CaselessString)&quot;A&quot;);
 assert((CaselessString)&quot;A&quot; == (CaselessString)&quot;a&quot;);
@@ -94,7 +94,7 @@ assert((CaselessString)&quot;a&quot; != (CaselessString)&quot;b&quot;);
 ...
 </code></pre></div>
 <p>The tests all pass. But then you notice some compiler warnings and take a look at the code:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public static bool operator==(CaselessString s1, CaselessString s2) {
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>public static bool operator==(CaselessString s1, CaselessString s2) {
     return s1._innerText.ToUpper() == s1._innerText.ToUpper();
 }
 public static bool operator!=(CaselessString s1, CaselessString s2) {
@@ -108,12 +108,12 @@ public static bool operator!=(CaselessString s1, CaselessString s2) {
 <p><strong>Authentication</strong></p>
 
 <p>Let&#39;s look at another example: authenticating packets. Suppose you write some code to compute the <a href="http://en.wikipedia.org/wiki/Hash-based_message_authentication_code">HMAC</a> of a packet&#39;s payload, and compare it against the HMAC included in the packet:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">bool Packet::isAuthentic() {
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>bool Packet::isAuthentic() {
     return memcmp(hmac(contents.payload, secretKey), contents.hmac, 16/8) == 0;
 }
 </code></pre></div>
 <p>You also write some tests:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">assert(Packet(somePayload, someCorrectHmac).isAuthentic());
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>assert(Packet(somePayload, someCorrectHmac).isAuthentic());
 assert(!Packet(somePayload, allZeroes).isAuthentic());
 assert(Packet(someOtherPayload, someOtherCorrectHmac).isAuthentic());
 ...

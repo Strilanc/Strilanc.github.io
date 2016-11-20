@@ -99,7 +99,7 @@ For example, instead of saying &quot;rotate qubit $t$ around the Y axis, conditi
 <p>That&#39;s a fine definition, and I wrote some <a href="https://gist.github.com/Strilanc/230c486dee03af917708">code computing the operation&#39;s matrix</a> to be sure I was correctly understanding the intent, but I really would have preferred <a href="http://www2.warwick.ac.uk/fac/sci/physics/research/cfsa/people/pastmembers/charemzam/pastprojects/mcharemza_quant_circ.pdf">quantum circuit diagrams</a>.</p>
 
 <p>Anyways, the algorithm described by the paper essentially comes down to this pseudo-code:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">initialize assignment qubits to a uniform superposition
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>initialize assignment qubits to a uniform superposition
 repeat enough times:
   foreach clause (m1,m2,m3):
     introduce a scratch qubit S initialized to be False
@@ -251,7 +251,7 @@ Let&#39;s move on to how this mistake impacts the algorithm.</p>
 <h1>The Consequences</h1>
 
 <p>Recall the paper&#39;s algorithm&#39;s inner loop:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">introduce a scratch qubit S initialized to be False
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>introduce a scratch qubit S initialized to be False
 toggle S from False to True if the clause is not satisfied
 perform conditional rotation of the clause bits, with S as the control
 erase S by measuring it along the X axis (perpendicular to the computational basis)

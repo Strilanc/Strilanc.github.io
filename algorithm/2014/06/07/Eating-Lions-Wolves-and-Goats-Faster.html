@@ -105,7 +105,7 @@
 <p>We only have two constraints on the system. First, the delta operations can only be applied a non-negative integer number of times. We don&#39;t want lions throwing up goats or half-transforming into wolves. Second, the final population must have only one type of animal. This is the only way to guarantee nothing can eat anything else anymore, keeping things stable.</p>
 
 <p>The stable population constraint requires a <a href="https://en.wikipedia.org/wiki/Special_ordered_set">special ordered set</a>, but otherwise this integer program is trivial to write:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">// output maximum stable population
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>// output maximum stable population
 max: finalPopulation;
 finalPopulation = x1 + x2 + x3 - d1 - d2 - d3;
 
@@ -145,7 +145,7 @@ int d1, d2, d3;
 <p><strong>Efficiency</strong></p>
 
 <p>How fast is the above integer program, compared to the brute force approach used in the post I linked to? Well:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Goats   Wolves  Lions   Brute(C++)  LPSolve
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>Goats   Wolves  Lions   Brute(C++)  LPSolve
 17      55      6       0.01s       0.050s
 117     155     106     0.05s       0.047s
 217     255     206     0.35s       0.015s
@@ -169,31 +169,31 @@ int d1, d2, d3;
 <p>Because integer programming is based on solving linear systems, the solvers use floating point numbers internally. When inputs get large enough to cause rounding errors, you&#39;ll get the wrong answer. This is where the trade-off between the convenience of using a solver, and the exactness of hard-coding how it will solve your system comes into play. To finish off this post, let&#39;s figure out an exact solution.</p>
 
 <p>If we assume the largest stable population is all lions, then the linear system reduces to:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">maximize x1 + x2 + x3 - d1 - d2 - d3
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>maximize x1 + x2 + x3 - d1 - d2 - d3
 
 x1 + x2 + x3 - d1 - d2 - d3 = x1 + d1 - d2 - d3
 0 = x2 - d1 + d2 - d3
 0 = x3 - d1 - d2 + d3
 </code></pre></div>
 <p>Solving for <code>d1</code> in the first constraint gives:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">maximize x1 + x2 + x3 - d1 - d2 - d3
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>maximize x1 + x2 + x3 - d1 - d2 - d3
 
 d1 = (x2 + x3)/2
 0 = x2 - d1 + d2 - d3
 0 = x3 - d1 - d2 + d3
 </code></pre></div>
 <p>Then substituting <code>d1</code> into the other two and solving for <code>d3</code> or <code>d2</code> gives:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">maximize x1 + x2 + x3 - d1 - d2 - d3
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>maximize x1 + x2 + x3 - d1 - d2 - d3
 
 d1 = (x2 + x3)/2
 d2 = (x3 - x2)/2 + d3
 d3 = (x2 - x3)/2 + d2
 </code></pre></div>
 <p>Now we substitute <code>d1</code> and one of <code>d2</code> or <code>d3</code> into the maximized expression. Whether we use <code>d2</code> or <code>d3</code> depends on which of <code>x2</code> and <code>x3</code> is larger:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">maximize x1 + x2 + x3 - (x2 + x3)/2 - d2 - ((x2 - x3)/2 + d2)
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>maximize x1 + x2 + x3 - (x2 + x3)/2 - d2 - ((x2 - x3)/2 + d2)
 </code></pre></div>
 <p>Then we simplify:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">maximize x1 + x3 - 2 d2
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>maximize x1 + x3 - 2 d2
 </code></pre></div>
 <p>Which is maximized when <code>d2 = 0</code>. Along the way we implicitly assumed that assigning <code>d3 = (x2 - x3)/2</code> would give a whole and non-negative result, meaning that this solution only works when <code>x2</code> and <code>x3</code> have the same parity (i.e. they are both odd or both even) and also <code>x2 &gt;= x3</code>. If the opposite ordering constraint worked, so <code>x3 &gt;= x2</code>, then the solution would be <code>x1 + x2</code> instead of <code>x1 + x3</code>. To cover both cases we can just say the solution is <code>x1 + min(x2, x3)</code>.</p>
 

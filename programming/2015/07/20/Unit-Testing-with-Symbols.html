@@ -76,7 +76,7 @@
 <div class="post">
 <p>Recently, I tried out <a href="http://sympy.org">SymPy</a>, a symbolic math library for python.
 SymPy can do (among other things) algebra:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&gt;&gt;&gt; import sympy
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>&gt;&gt;&gt; import sympy
 &gt;&gt;&gt; x, y = sympy.symbols([&#39;x&#39;, &#39;y&#39;])
 &gt;&gt;&gt; print sympy.expand((x + 2)*(x + y))
 x**2 + x*y + 2*x + 2*y
@@ -88,7 +88,7 @@ x**2 + x*y + 2*x + 2*y
 <p>Suppose you&#39;ve written a space-efficient single-pass function to compute the population variance of a collection.
 You want to test this method.
 You <em>could</em> check lots of cases for specific inputs... or you could use symbols to cover <em>every</em> input (of a fixed length) with a single test:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">def population_variance(u):
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>def population_variance(u):
     &quot;&quot;&quot;
     &gt;&gt;&gt; import sympy
     &gt;&gt;&gt; sympy.expand(population_variance(sympy.symbols([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;])))

@@ -107,20 +107,20 @@ However, to test the float-into-byte behavior on the devices I cared about, I ne
 <p>The <em>correct</em> way to get floats into a shader is uniforms.
 But the idea I went with was to just directly embed the floats within the generated source of a shader.
 Like this:</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">suite</span><span class="p">.</span><span class="nx">testUsingWebGL</span><span class="p">(</span><span class="s1">&#39;encodeEmbeddedFloats&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="nx">suite</span><span class="p">.</span><span class="nx">testUsingWebGL</span><span class="p">(</span><span class="s1">&#39;encodeEmbeddedFloats&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="kd">let</span> <span class="nx">inFloats</span> <span class="o">=</span> <span class="nx">randomFloats</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span>
 
     <span class="kd">let</span> <span class="nx">shader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WglShader</span><span class="p">(</span>
-        <span class="nx">PACK_FLOAT_INTO_BYTES_CODE</span> <span class="o">+</span> <span class="err">`</span>
-        <span class="k">void</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
-            <span class="nx">vec2</span> <span class="nx">xy</span> <span class="o">=</span> <span class="nx">gl_FragCoord</span><span class="p">.</span><span class="nx">xy</span> <span class="o">-</span> <span class="nx">vec2</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">);</span>
-            <span class="kr">float</span> <span class="nx">k</span> <span class="o">=</span> <span class="nx">xy</span><span class="p">.</span><span class="nx">y</span> <span class="o">*</span> <span class="mf">4.0</span> <span class="o">+</span> <span class="nx">xy</span><span class="p">.</span><span class="nx">x</span><span class="p">;</span>
-            <span class="kr">float</span> <span class="nx">f</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-            <span class="nx">$</span><span class="p">{</span><span class="nx">seq</span><span class="p">(</span><span class="nx">inFloats</span><span class="p">).</span>
-                <span class="nx">mapWithIndex</span><span class="p">((</span><span class="nx">e</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="err">`</span><span class="k">if</span> <span class="p">(</span><span class="nx">k</span> <span class="o">==</span> <span class="nx">$</span><span class="p">{</span><span class="nx">i</span><span class="p">}.</span><span class="mi">0</span><span class="p">)</span> <span class="nx">f</span> <span class="o">=</span> <span class="kr">float</span><span class="p">(</span><span class="nx">$</span><span class="p">{</span><span class="nx">e</span><span class="p">});</span><span class="err">`</span><span class="p">).</span>
-                <span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n            &#39;</span><span class="p">)}</span>
-            <span class="nx">gl_FragColor</span> <span class="o">=</span> <span class="nx">packFloatIntoBytes</span><span class="p">(</span><span class="nx">f</span><span class="p">);</span>
-        <span class="p">}</span><span class="err">`</span><span class="p">);</span>
+        <span class="nx">PACK_FLOAT_INTO_BYTES_CODE</span> <span class="o">+</span> <span class="sb">`</span>
+<span class="sb">        void main() {</span>
+<span class="sb">            vec2 xy = gl_FragCoord.xy - vec2(0.5, 0.5);</span>
+<span class="sb">            float k = xy.y * 4.0 + xy.x;</span>
+<span class="sb">            float f = 0.0;</span>
+<span class="sb">            </span><span class="si">${</span><span class="nx">seq</span><span class="p">(</span><span class="nx">inFloats</span><span class="p">).</span>
+                <span class="nx">mapWithIndex</span><span class="p">((</span><span class="nx">e</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="sb">`if (k == </span><span class="si">${</span><span class="nx">i</span><span class="si">}</span><span class="sb">.0) f = float(</span><span class="si">${</span><span class="nx">e</span><span class="si">}</span><span class="sb">);`</span><span class="p">).</span>
+                <span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n            &#39;</span><span class="p">)</span><span class="si">}</span><span class="sb"></span>
+<span class="sb">            gl_FragColor = packFloatIntoBytes(f);</span>
+<span class="sb">        }`</span><span class="p">);</span>
 
     <span class="kd">let</span> <span class="nx">outBytes</span> <span class="o">=</span> <span class="nx">shader</span><span class="p">.</span><span class="nx">withArgs</span><span class="p">().</span><span class="nx">readRawByteOutputs</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span> <span class="c1">//2^4 = 16 pixel outputs</span>
     <span class="kd">let</span> <span class="nx">outFloats</span> <span class="o">=</span> <span class="nx">bytesAsFloats</span><span class="p">(</span><span class="nx">outBytes</span><span class="p">);</span> <span class="c1">// Just creates a Float32Array view over the bytes</span>
@@ -145,7 +145,7 @@ Exactly the kind of bug I was hoping to catch.</p>
 <p>So I started fiddling with the encoding code, trying to fix or at least affect the bug, but to no avail.
 No matter what I did, I couldn&#39;t get the right output.
 Eventually, as I was starting to suspect that maybe gremlins were a real thing, I made a desperate move: special-case the two involved values.</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="k">if</span> <span class="p">(</span><span class="nx">val</span> <span class="o">==</span> <span class="mf">16211.896484375</span><span class="p">)</span> <span class="k">return</span> <span class="nx">vec4</span><span class="p">(</span><span class="mf">150.0</span><span class="p">,</span> <span class="mf">79.0</span><span class="p">,</span> <span class="mf">125.0</span><span class="p">,</span> <span class="mf">70.0</span><span class="p">);</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="k">if</span> <span class="p">(</span><span class="nx">val</span> <span class="o">==</span> <span class="mf">16211.896484375</span><span class="p">)</span> <span class="k">return</span> <span class="nx">vec4</span><span class="p">(</span><span class="mf">150.0</span><span class="p">,</span> <span class="mf">79.0</span><span class="p">,</span> <span class="mf">125.0</span><span class="p">,</span> <span class="mf">70.0</span><span class="p">);</span>
 <span class="k">if</span> <span class="p">(</span><span class="nx">val</span> <span class="o">==</span> <span class="mf">16211.8955078125</span><span class="p">)</span> <span class="k">return</span> <span class="nx">vec4</span><span class="p">(</span><span class="mf">149.0</span><span class="p">,</span> <span class="mf">79.0</span><span class="p">,</span> <span class="mf">125.0</span><span class="p">,</span> <span class="mf">70.0</span><span class="p">);</span>
 </code></pre></div>
 <p><strong>This still didn&#39;t work.</strong>
@@ -156,7 +156,7 @@ Despite <em>literally hard-coding the answer</em>, <code>16211.8955078125</code>
 <p><code>val</code> was comparing as equal to both of the floats I was testing against!
 This is very strange, because the two values really are distinct floats.
 A fact you can confirm very easily:</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">bool</span> <span class="nx">alwaysTrue</span><span class="p">()</span> <span class="p">{</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="nx">bool</span> <span class="nx">alwaysTrue</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">return</span> <span class="mf">16211.896484375</span> <span class="o">!=</span> <span class="mf">16211.8955078125</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -168,17 +168,17 @@ Even on the machine affected by the bug we&#39;ve been discussing.</p>
 We have one value equal to two unequal values.
 Our next step is clear: turn it into a dead simple test case that can&#39;t possibly fail.
 Here it is:</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">suite</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">&quot;mySanity&quot;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="kd">let</span> <span class="nx">shader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WglShader</span><span class="p">(</span><span class="err">`</span>
-        <span class="nx">bool</span> <span class="nx">neverTrue</span><span class="p">(</span><span class="kr">float</span> <span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="mf">16211.8955</span> <span class="o">==</span> <span class="nx">val</span> <span class="o">&amp;&amp;</span>
-                   <span class="mf">16211.8955</span> <span class="o">!=</span> <span class="mf">16211.896</span> <span class="o">&amp;&amp;</span>
-                          <span class="nx">val</span> <span class="o">==</span> <span class="mf">16211.896</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">void</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
-            <span class="kr">float</span> <span class="nx">a</span> <span class="o">=</span> <span class="kr">float</span><span class="p">(</span><span class="nx">neverTrue</span><span class="p">(</span><span class="mf">16211.8955</span><span class="p">));</span>
-            <span class="nx">gl_FragColor</span> <span class="o">=</span> <span class="nx">vec4</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">a</span><span class="p">);</span>
-        <span class="p">}</span><span class="err">`</span><span class="p">);</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="nx">suite</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">&quot;mySanity&quot;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">shader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WglShader</span><span class="p">(</span><span class="sb">`</span>
+<span class="sb">        bool neverTrue(float val) {</span>
+<span class="sb">            return 16211.8955 == val &amp;&amp;</span>
+<span class="sb">                   16211.8955 != 16211.896 &amp;&amp;</span>
+<span class="sb">                          val == 16211.896;</span>
+<span class="sb">        }</span>
+<span class="sb">        void main() {</span>
+<span class="sb">            float a = float(neverTrue(16211.8955));</span>
+<span class="sb">            gl_FragColor = vec4(a, a, a, a);</span>
+<span class="sb">        }`</span><span class="p">);</span>
     <span class="kd">let</span> <span class="nx">out</span> <span class="o">=</span> <span class="nx">shader</span><span class="p">.</span><span class="nx">withArgs</span><span class="p">().</span><span class="nx">readRawByteOutputs</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// 2^0 pixels, 4 vals</span>
     <span class="nx">assertThat</span><span class="p">(</span><span class="nx">out</span><span class="p">).</span><span class="nx">isEqualTo</span><span class="p">(</span><span class="k">new</span> <span class="nx">Uint8Array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]));</span>
 <span class="p">});</span>

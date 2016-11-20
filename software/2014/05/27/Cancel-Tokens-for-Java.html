@@ -83,7 +83,7 @@
 <p><strong>Basic Token</strong></p>
 
 <p>A basic cancel token, that only supports adding callbacks, is really simple to write. Have an object that stores a list of callbacks, give it a cancel method that runs and discards all those callbacks, and also give it a &quot;when-cancelled&quot; method that adds a callback to the list (or runs it right away, if cancellation already happened). Here&#39;s a basic token, written in three minutes:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// WARNING: not dealing with thread safety or re-entrancy</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span></span><span class="c1">// WARNING: not dealing with thread safety or re-entrancy</span>
 <span class="kd">class</span> <span class="nc">CancelToken</span> <span class="o">{</span>
   <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Runnable</span><span class="o">&gt;</span> <span class="n">callbacks</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Runnable</span><span class="o">&gt;();</span>
   <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isCancelled</span><span class="o">()</span> <span class="o">{</span>
@@ -106,7 +106,7 @@
 <span class="o">}</span>
 </code></pre></div>
 <p>and people would use the token like so:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">token</span><span class="o">.</span><span class="na">whenCancelled</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span></span><span class="n">token</span><span class="o">.</span><span class="na">whenCancelled</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span>
   <span class="n">cleanup</span><span class="o">();</span>
 <span class="o">});</span>
 
@@ -120,12 +120,12 @@
 <p><strong>Conditional Callback</strong></p>
 
 <p>Instead of a &quot;remove callback&quot; method, we&#39;re going to support adding callbacks conditioned on another token. If that other token is cancelled first, the callback is discarded without being run. Here&#39;s the signature of the method we want to write:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">void</span> <span class="nf">whenCancelledBefore</span><span class="o">(</span><span class="n">Runnable</span> <span class="n">callback</span><span class="o">,</span> <span class="n">CancelToken</span> <span class="n">condition</span><span class="o">)</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span></span><span class="kt">void</span> <span class="nf">whenCancelledBefore</span><span class="o">(</span><span class="n">Runnable</span> <span class="n">callback</span><span class="o">,</span> <span class="n">CancelToken</span> <span class="n">condition</span><span class="o">)</span>
 </code></pre></div>
 <p>Seems pretty simple, but it&#39;s tricky to implement.</p>
 
 <p>Let&#39;s start with the obvious (and wrong) implementation:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">whenCancelledBefore</span><span class="o">(</span><span class="n">Runnable</span> <span class="n">callback</span><span class="o">,</span> <span class="n">CancelToken</span> <span class="n">condition</span><span class="o">)</span> <span class="o">{</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span></span>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">whenCancelledBefore</span><span class="o">(</span><span class="n">Runnable</span> <span class="n">callback</span><span class="o">,</span> <span class="n">CancelToken</span> <span class="n">condition</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">if</span> <span class="o">(</span><span class="n">isCancelled</span><span class="o">())</span> <span class="o">{</span>
       <span class="k">if</span> <span class="o">(</span><span class="n">condition</span><span class="o">.</span><span class="na">isCancelled</span><span class="o">())</span> <span class="k">return</span><span class="o">;</span>
       <span class="n">callback</span><span class="o">.</span><span class="na">run</span><span class="o">();</span>
@@ -138,7 +138,7 @@
 <p>Do you see the problem (besides concurrency and re-entrancy issues)? Now the <em>condition</em> token is accumulating unremovable cruft, that becomes unnecessary if the original token is cancelled first. Clearly we need to condition the condition on the action being conditioned.</p>
 
 <p>Since we&#39;re writing a method that conditions callbacks, exactly what we need to do to finish said method, you might think we can just use recursion. That... doesn&#39;t go so well:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">whenCancelledBefore</span><span class="o">(</span><span class="n">Runnable</span> <span class="n">callback</span><span class="o">,</span> <span class="n">CancelToken</span> <span class="n">condition</span><span class="o">)</span> <span class="o">{</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span></span><span class="kd">public</span> <span class="kt">void</span> <span class="nf">whenCancelledBefore</span><span class="o">(</span><span class="n">Runnable</span> <span class="n">callback</span><span class="o">,</span> <span class="n">CancelToken</span> <span class="n">condition</span><span class="o">)</span> <span class="o">{</span>
   <span class="k">if</span> <span class="o">(</span><span class="n">isCancelled</span><span class="o">())</span> <span class="o">{</span>
     <span class="k">if</span> <span class="o">(</span><span class="n">condition</span><span class="o">.</span><span class="na">isCancelled</span><span class="o">())</span> <span class="k">return</span><span class="o">;</span>
     <span class="n">callback</span><span class="o">.</span><span class="na">run</span><span class="o">();</span>
@@ -153,11 +153,11 @@
 <p>Instead of making an infinitely tall ladder of callbacks removing the callback below them, we need to make a cycle where two callbacks remove each other. This is tricky for a few reasons. First, you might not have the information needed to remove a callback until after it&#39;s been added. Meaning you don&#39;t know how to remove the second callback when registering the first callback. Second, the first callback might run immediately and try to remove second callback before it&#39;s even been added (and so bad things happen). Third, tokens may be concurrently cancelled as the method progresses.</p>
 
 <p>The way I avoid those issues is to make the first callback only do something the second time it is called, and do nothing the first time it is called. Then, after the second callback has been added, I call the first one once. Essentially, this ensures the first callback can&#39;t run until after the second callback has been added (and so can be removed). Here&#39;s what it looks like, assuming we have an add callback method that returns a remove-the-callback-you-just-added function:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// condition remover can&#39;t be initialized yet, but this is where it will end up</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span></span><span class="c1">// condition remover can&#39;t be initialized yet, but this is where it will end up</span>
 <span class="n">Runnable</span><span class="o">[]</span> <span class="n">conditionRemoverRef</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Runnable</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
 
 <span class="c1">// only remove the condition (and do the actual useful work) on the *second* call</span>
-<span class="n">AtomicBoolean</span> <span class="n">prepared</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">AtomicBoolean</span><span class="o">();</span>
+<span class="n">AtomicBoolean</span> <span class="n">prepared</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AtomicBoolean</span><span class="o">();</span>
 <span class="n">Runnable</span> <span class="n">prepareElseRun</span> <span class="o">=</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="o">{</span>
   <span class="k">if</span> <span class="o">(</span><span class="n">prepared</span><span class="o">.</span><span class="na">compareAndSet</span><span class="o">(</span><span class="kc">false</span><span class="o">,</span> <span class="kc">true</span><span class="o">))</span> <span class="k">return</span><span class="o">;</span>
 
@@ -182,9 +182,9 @@
 <p>A better data structure for this use case is a cyclical doubly linked list. When we add a callback, by creating a node referencing the callback and placing the node into the list, we can keep a reference to the node around. When it comes time to remove the callback, we don&#39;t need to search for it because we already know the node, and can do the removal in constant time.</p>
 
 <p>Here&#39;s what the &quot;add callback and return remover&quot; function looks like, when you&#39;re using a circular doubly-linked list:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Runnable</span> <span class="nf">addCallbackReturnRemover</span><span class="o">(</span><span class="n">Runnable</span> <span class="n">callback</span><span class="o">)</span> <span class="o">{</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span></span><span class="n">Runnable</span> <span class="nf">addCallbackReturnRemover</span><span class="o">(</span><span class="n">Runnable</span> <span class="n">callback</span><span class="o">)</span> <span class="o">{</span>
   <span class="c1">// create node for callback</span>
-  <span class="n">Node</span> <span class="n">n</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Node</span><span class="o">(</span><span class="n">callback</span><span class="o">);</span>
+  <span class="n">Node</span> <span class="n">n</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="o">(</span><span class="n">callback</span><span class="o">);</span>
 
   <span class="c1">// insert into list</span>
   <span class="n">n</span><span class="o">.</span><span class="na">prev</span> <span class="o">=</span> <span class="n">rootNode</span><span class="o">;</span>

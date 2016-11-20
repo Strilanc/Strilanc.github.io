@@ -100,10 +100,10 @@ More importantly, it&#39;s difficult to abstract away the fact that results are 
 The code has to collect all of those textures, concatenate them into a single array, run that array through the merged-read process, then carefully slice out the individual results.</p>
 
 <p>Basically the code ended up looking like this:</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// === PRODUCE ===</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="c1">// === PRODUCE ===</span>
 <span class="kd">let</span> <span class="nx">textures</span> <span class="o">=</span> <span class="p">[];</span>
 <span class="kd">let</span> <span class="nx">state</span> <span class="o">=</span> <span class="p">...</span>
-<span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">col</span> <span class="nx">of</span> <span class="nx">circuit</span><span class="p">.</span><span class="nx">cols</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">col</span> <span class="k">of</span> <span class="nx">circuit</span><span class="p">.</span><span class="nx">cols</span><span class="p">)</span> <span class="p">{</span>
     <span class="p">...</span>
     <span class="nx">textures</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">state</span><span class="p">.</span><span class="nx">wireProbabilities</span><span class="p">());</span> <span class="c1">// Intermediate wire probabilities.</span>
 <span class="p">}</span>
@@ -153,13 +153,13 @@ For simplicity, we&#39;ll limit <code>decomp</code>&#39;s exploration of the obj
 
 <p>Here&#39;s some code for <code>decomp</code>, in ES6 javascript.
 We just iterate over the keys, and the items of array fields, while appending values into the result:</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">decomp</span><span class="p">(</span><span class="nx">object</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">function</span> <span class="nx">decomp</span><span class="p">(</span><span class="nx">object</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">let</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">[];</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">key</span> <span class="nx">of</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">object</span><span class="p">).</span><span class="nx">sort</span><span class="p">())</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">key</span> <span class="k">of</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">object</span><span class="p">).</span><span class="nx">sort</span><span class="p">())</span> <span class="p">{</span>
         <span class="kd">let</span> <span class="nx">val</span> <span class="o">=</span> <span class="nx">object</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
         <span class="k">if</span> <span class="p">(</span><span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">val</span><span class="p">))</span> <span class="p">{</span>
             <span class="c1">// Array fields represent batches of work.</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">item</span> <span class="nx">of</span> <span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">item</span> <span class="k">of</span> <span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
@@ -173,14 +173,14 @@ We just iterate over the keys, and the items of array fields, while appending va
 I called this method <code>recomp</code>.
 It takes the original object, to guarantee the same field-index mapping happens, and the array of updated values.
 It then creates a modified version of the object, with field keys defined by the given object and field values defined by the given array:</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">recomp</span><span class="p">(</span><span class="nx">originalObject</span><span class="p">,</span> <span class="nx">updatedValsArray</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">function</span> <span class="nx">recomp</span><span class="p">(</span><span class="nx">originalObject</span><span class="p">,</span> <span class="nx">updatedValsArray</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">let</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">{};</span>
     <span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">key</span> <span class="nx">of</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">originalObject</span><span class="p">).</span><span class="nx">sort</span><span class="p">())</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">key</span> <span class="k">of</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">originalObject</span><span class="p">).</span><span class="nx">sort</span><span class="p">())</span> <span class="p">{</span>
         <span class="kd">let</span> <span class="nx">originalVal</span> <span class="o">=</span> <span class="nx">originalObject</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
         <span class="k">if</span> <span class="p">(</span><span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">originalVal</span><span class="p">))</span> <span class="p">{</span>
             <span class="kd">let</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[];</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">item</span> <span class="nx">of</span> <span class="nx">originalVal</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">item</span> <span class="k">of</span> <span class="nx">originalVal</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">arr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">updatedValsArray</span><span class="p">[</span><span class="nx">i</span><span class="o">++</span><span class="p">]);</span>
             <span class="p">}</span>
             <span class="nx">result</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">;</span>
@@ -192,13 +192,13 @@ It then creates a modified version of the object, with field keys defined by the
 <span class="p">}</span>
 </code></pre></div>
 <p>Finally, we want a convenience method for wrapping <code>decomp</code> and <code>recomp</code> around arbitrary batched functions:</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">structure</span><span class="p">(</span><span class="nx">batchedFunc</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">function</span> <span class="nx">structure</span><span class="p">(</span><span class="nx">batchedFunc</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nx">obj</span> <span class="o">=&gt;</span> <span class="nx">recomp</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">batchedFunc</span><span class="p">(</span><span class="nx">decomp</span><span class="p">(</span><span class="nx">obj</span><span class="p">)));</span>
 <span class="p">}</span>
 </code></pre></div>
 <p>That&#39;s it!
 Code that looked like this:</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">let</span> <span class="nx">in_a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">let</span> <span class="nx">in_a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">];</span>
 <span class="kd">let</span> <span class="nx">in_b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">];</span>
 <span class="kd">let</span> <span class="nx">in_c</span> <span class="o">=</span> <span class="p">[</span><span class="mi">22</span><span class="p">];</span>
 
@@ -208,7 +208,7 @@ Code that looked like this:</p>
 <span class="kd">let</span> <span class="nx">out_c</span> <span class="o">=</span> <span class="nx">out</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span> <span class="c1">// BLERGH</span>
 </code></pre></div>
 <p>Can now look like this:</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">let</span> <span class="nx">inputs</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">let</span> <span class="nx">inputs</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">a</span><span class="o">:</span> <span class="mi">3</span><span class="p">,</span>
   <span class="nx">b</span><span class="o">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
   <span class="nx">c</span><span class="o">:</span> <span class="mi">22</span>

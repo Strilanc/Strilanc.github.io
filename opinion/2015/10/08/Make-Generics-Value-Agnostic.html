@@ -101,7 +101,7 @@ This makes using them in glue code and utility code problematic, because the cod
 
 <p>The best example of this problem, I think, is Java&#39;s <code>Optional&lt;T&gt;</code>.
 Consider the following method:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Optional&lt;T&gt; first(Iterable&lt;T&gt; sequence) {
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>Optional&lt;T&gt; first(Iterable&lt;T&gt; sequence) {
     for (T item : sequence) {
         return Optional.of(item);
     }
