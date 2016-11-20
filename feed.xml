@@ -7,6 +7,13 @@
         <atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>From Swapping to Teleporting with Simple Circuit Moves</title>
+                <description>&lt;p&gt;There are many ways to prove that a quantum circuit does what you say it does. In this post, we&amp;#39;re going to do that kind of proof in a somewhat unusual way.&lt;/p&gt; &lt;p&gt;We&amp;#39;re going to prove that quantum teleportation works. Not by carefully considering how it affects input states, but...</description>
+                <pubDate>Sun, 20 Nov 2016 00:10:10 -0500</pubDate>
+                <link>http://algorithmicassertions.com/post/1628</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/post/1628</guid>
+            </item>
+            <item>
                 <title>Half-Baked Thoughts for a Quantum Scripting Language</title>
                 <description>&lt;p&gt;When it comes to toying with quantum computing, I think &lt;a href=&quot;/quirk&quot;&gt;Quirk&lt;/a&gt; has pushed the &amp;quot;drag blocks around on a circuit diagram&amp;quot; concept about as far as I want to go. It&amp;#39;s great for small problems, but becomes horribly tedious and error-prone as things get more complicated. This is a...</description>
                 <pubDate>Sun, 13 Nov 2016 00:10:10 -0500</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Tue, 05 Jul 2016 13:10:10 -0400</pubDate>
                 <link>http://algorithmicassertions.com/post/1619</link>
                 <guid isPermaLink="true">http://algorithmicassertions.com/post/1619</guid>
-            </item>
-            <item>
-                <title>[Un]popular Qubits #4: Affecting Atoms by Looking at Emitted Light</title>
-                <description>&lt;p&gt;In April, &lt;a href=&quot;http://www.nature.com/ncomms/2016/160511/ncomms11527/full/ncomms11527.html&quot;&gt;&amp;quot;Mapping quantum state dynamics in spontaneous emission&amp;quot; by M. Naghiloo et al&lt;/a&gt; was published in Nature Communications. The paper didn&amp;#39;t get much &lt;a href=&quot;http://thescienceexplorer.com/universe/quantum-entanglement-could-be-used-control-atoms-emit-light&quot;&gt;coverage&lt;/a&gt;, but the authors released a &lt;a href=&quot;https://www.youtube.com/watch?v=mTxbHiAPSlA&quot;&gt;YouTube video about the paper, titled &amp;quot;How we look at light can affect the atom that emits...</description>
-                <pubDate>Sun, 26 Jun 2016 13:10:10 -0400</pubDate>
-                <link>http://algorithmicassertions.com/post/1618</link>
-                <guid isPermaLink="true">http://algorithmicassertions.com/post/1618</guid>
             </item>
     </channel>
 </rss>

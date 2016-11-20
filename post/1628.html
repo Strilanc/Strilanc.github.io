@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>From Swapping to Teleporting with Simple Circuit Moves</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">From Swapping to Teleporting with Simple Circuit Moves</h1>
+<p class="meta">20 Nov 2016</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>There are many ways to prove that a quantum circuit does what you say it does.
+In this post, we&#39;re going to do that kind of proof in a somewhat unusual way.</p>
+
+<p>We&#39;re going to prove that quantum teleportation works.
+Not by carefully considering how it affects input states, but by starting with a circuit that <em>obviously</em> moves a qubit from one place to another and then applying simple obviously-correct transformations until we end up with the quantum teleportation circuit.</p>
+
+<h1>Begin</h1>
+
+<p>We want to start with a trivial qubit-moving circuit.
+The simpler the better.</p>
+
+<p>The simplest possible thing I can imagine for this task is to just use a <a href="https://en.wikipedia.org/wiki/Quantum_gate#Swap_gate">swap gate</a>.
+So that&#39;s what we&#39;ll do:</p>
+
+<p><img style="max-width:100%; border:1px solid black;" src="/assets/2016-11-20-teleportation-from-simple-moves/step0-swap.png"/></p>
+
+<p>Note that the circuit diagrams are taller than necessary.
+It&#39;s just to make the move from top to bottom look like more of a journey.
+I&#39;ve also included Bloch sphere state indicators as a visual hint that the circuit is in fact moving the qubit.</p>
+
+<p>The first thing we need to do is break the swap gate apart into pieces we can work with.
+To do that, we&#39;re going to use a classical bit-twiddling trick: <a href="https://en.wikipedia.org/wiki/XOR_swap_algorithm">XOR swapping</a>. XOR-swapping swaps two variables by XOR-ing them into each other three times:</p>
+<div class="highlight"><pre><code class="language-C" data-lang="C"><span></span><span class="cp">#define SWAP(a, b) \</span>
+<span class="cp">    a^=b; \</span>
+<span class="cp">    b^=a; \</span>
+<span class="cp">    a^=b;</span>
+</code></pre></div>
+<p>The CNOT gate is exactly a XOR-assignment (<code>^=</code>), and XOR-swapping works on qubits just as well as it does on bits, so we can replace our swap gate with three back-and-forth CNOTs:</p>
+
+<p><img style="max-width:100%; border:1px solid black;" src="/assets/2016-11-20-teleportation-from-simple-moves/step1-xor-swap.png"/></p>
+
+<p>Now we have some structure to work with.</p>
+
+<p>Notice that the control of the first CNOT is on a wire that&#39;s OFF.
+That guarantees the CNOT will never fire.
+We can remove it:</p>
+
+<p><img style="max-width:100%; border:1px solid black;" src="/assets/2016-11-20-teleportation-from-simple-moves/step2-move.png"/></p>
+
+<p>I often find myself calling this back-and-forth CNOT pair a &quot;move&quot;.
+It&#39;s like a swap, but only goes in one direction (and requires that the target qubit be zero&#39;d).</p>
+
+<p>At this point there&#39;s a huge number of routes we could take and it&#39;s not really clear what to do.
+That&#39;s why I consider these next two steps to be the key ones, because they send us down an easy path.</p>
+
+<p>Note that we can do whatever we want to uninvolved wires.
+It won&#39;t affect the &quot;move&quot; part of our circuit.
+So, with a bit of foresight, let&#39;s add a Hadamard operation to the second wire:</p>
+
+<p><img style="max-width:100%; border:1px solid black;" src="/assets/2016-11-20-teleportation-from-simple-moves/step3-add-hadamard.png"/></p>
+
+<p>That didn&#39;t really accomplish much, but it&#39;ll be useful after this next step.</p>
+
+<p>Imagine for a moment that we weren&#39;t allowed to jump all the way from the top qubit to the bottom qubit in one step.
+Instead, the top and bottom wires had to affect each other indirectly via the second wire.
+And, to make things even harder, suppose we didn&#39;t even know what state the second wire is in.
+Can we still toggle the bottom wire in a way controlled by the top wire?</p>
+
+<p>Yes!
+We just do a classical trick I call &quot;toggle forwarding&quot;:</p>
+
+<p><img style="max-width:100%;" src="/assets/2016-11-20-teleportation-from-simple-moves/cnot-via-intermediate.png"/></p>
+
+<p>We can&#39;t guarantee that the middle wire is ON or OFF, but we can force it to temporarily toggle.
+Then we do CNOTs controlled by the toggled and un-toggled states.</p>
+
+<p>When the top wire doesn&#39;t toggle the middle wire, the two bottom CNOTs cancel each other out.
+When the top wire is ON, then the middle wire does get toggled and exactly one of the bottom CNOTs will fire.
+That&#39;s how we get the top wire being ON to toggle the bottom wire, when forced to go through an unknown middle wire.</p>
+
+<p>(Yes, this even works on qubits.
+Even when the middle qubit is entangled or in a state normally unaffected by NOT gates.
+No, really!
+Try it!)</p>
+
+<p>Applying this CNOT-via-intermediate construction to our qubit-moving circuit produces this result:</p>
+
+<p><img style="max-width:100%; border:1px solid black;" src="/assets/2016-11-20-teleportation-from-simple-moves/step4-borrow.png"/></p>
+
+<p>That Hadamard we introduced is now on a wire that actually matters.</p>
+
+<p>Here&#39;s our new short-term goal: get rid of that first CNOT.
+To that end, we slide the Hadamard gate rightward until it actually hops over said CNOT.</p>
+
+<p>When a Hadamard hops over an <code>X</code> gate (a NOT), the <code>X</code> gets turned into a <code>Z</code>:</p>
+
+<p><img style="max-width:100%; border:1px solid black;" src="/assets/2016-11-20-teleportation-from-simple-moves/step5-hop-hadamard.png"/></p>
+
+<p>The controlled-NOT turned into a controlled-<code>Z</code>.</p>
+
+<p>One of the useful things to know about controlled-<code>Z</code> gates is that it doesn&#39;t matter which wire is the control and which is the target.
+<code>Z</code> gates don&#39;t do anything to qubits that are OFF, so you&#39;re conditioning on the target just as much as you are on the control.
+Flipping the controlled-<code>Z</code> doesn&#39;t affect the function of the circuit:</p>
+
+<p><img style="max-width:100%; border:1px solid black;" src="/assets/2016-11-20-teleportation-from-simple-moves/step6-flip-cz.png"/></p>
+
+<p>Notice that the control is now the first thing second wire, and that the second wire starts out OFF.</p>
+
+<p>Right, the control is never satisfied.
+So the controlled-<code>Z</code> gate has no effect at all.
+We can toss it:</p>
+
+<p><img style="max-width:100%; border:1px solid black;" src="/assets/2016-11-20-teleportation-from-simple-moves/step7-drop-cz.png"/></p>
+
+<p>Now we need to do some work on the right side of the circuit.</p>
+
+<p>Keep in mind that we only care about the state of the bottom qubit.
+We don&#39;t care if the other qubits get totally trashed; we can do <em>whatever we want</em> to them.
+As long as what we do doesn&#39;t affect the bottom qubit.</p>
+
+<p>One way to guarantee we don&#39;t accidentally affect the bottom qubit is to only add operations on other wires, and only past the current end of the circuit.
+For example, we can add a Hadamard gate to the end of the top wire:</p>
+
+<p><img style="max-width:100%; border:1px solid black;" src="/assets/2016-11-20-teleportation-from-simple-moves/step8-undiscard-hadamard.png"/></p>
+
+<p>This Hadamard gate is going to be useful for nearly the same reason that the other one was.</p>
+
+<p>We slide the new Hadamard gate leftward.
+The only obstacle in its way is the controlled-NOT gate, but we easily hop over it and create a controlled-<code>Z</code> in the process:</p>
+
+<p><img style="max-width:100%; border:1px solid black;" src="/assets/2016-11-20-teleportation-from-simple-moves/step9-hop-hadamard.png"/></p>
+
+<p>Once again we flip the controlled-<code>Z</code> around:</p>
+
+<p><img style="max-width:100%; border:1px solid black;" src="/assets/2016-11-20-teleportation-from-simple-moves/step10-flip-cz.png"/></p>
+
+<p>Notice that, with our latest circuit, the last two gates touch the top two wires but <em>only for controls</em>.
+This is a very big hint on what to do next: introduce measurements.</p>
+
+<p>To guarantee these measurements don&#39;t affect the circuit, we add them after the end of the circuit on qubits that we don&#39;t care about:</p>
+
+<p><img style="max-width:100%; border:1px solid black;" src="/assets/2016-11-20-teleportation-from-simple-moves/step11-undiscard-measurements.png"/></p>
+
+<p>Before we move on, I need to address the elephant in the room: spooky action at a distance.
+After all, when I mentioned this step to a person who engineers quantum computing hardware for a living, their reaction was &quot;Wait, is that actually safe?&quot;.</p>
+
+<p>A common trope in quantum mechanics is &quot;When A and B are entangled, measuring A instantly affects B.&quot;.
+This spooky-action trope seems to contradict my assertion that measuring the top two wires can&#39;t affect the bottom wire.
+But actually there&#39;s no contradiction, just a slight difference in meaning.</p>
+
+<p>When I say that measuring one qubit can&#39;t affect another, I&#39;m talking about the expected outcomes of the circuit.
+I&#39;m thinking in terms of what you know about the circuit&#39;s function <em>ahead of time</em>, when you <em>don&#39;t condition on the measurement results</em>.</p>
+
+<p>When the trope says that measuring one qubit might affect another, it is describing the fact that measuring a qubit <em>can give you new information</em> about the state of another qubit.
+The information you can learn just happens to be flexible in such a counter-intuitive way that people resort to describing the situation as one qubit instantaneously affecting another.
+Even though that&#39;s known to be a misleading analogy.</p>
+
+<p>I hope that was convincing, because we&#39;re about to make things worse by sliding the measurements leftward until they hop over the controls:</p>
+
+<p><img style="max-width:100%; border:1px solid black;" src="/assets/2016-11-20-teleportation-from-simple-moves/step12-undefer-measurement.png"/></p>
+
+<p>This step also doesn&#39;t affect the ahead-of-time-expected function of the circuit.
+A fact which is surprising enough that it has a name: the <a href="https://en.wikipedia.org/wiki/Deferred_Measurement_Principle">deferred measurement principle</a>.</p>
+
+<p>(I&#39;d explain why this doesn&#39;t contradict delayed choice experiments, but I&#39;d just be repeating the &quot;spooky-action&quot; explanation with different words.)</p>
+
+<p>We only have one thing left to do: set up entanglement between the top and bottom <em>before</em> the input is known, instead of after.
+To do that we just slide the initial H gate and CNOT gate all the way to the left:</p>
+
+<p><img style="max-width:100%; border:1px solid black;" src="/assets/2016-11-20-teleportation-from-simple-moves/step13-entangle-beforehand.png"/></p>
+
+<p>And that&#39;s it!
+Alice and Bob create an EPR pair, Alice picks a qubit to send, she does a Bell-basis measurement on that qubit and her EPR qubit, then she tells Bob the measurement results so he can apply appropriate corrective gates.
+The qubit is thereby communicated from Alice to Bob.
+Quantum teleportation.</p>
+
+<h1>Summary</h1>
+
+<p>You can turn a trivial qubit-swapping circuit into a quantum teleportation circuit by using a few classical xor tricks, doing whatever you want to wires that don&#39;t matter, hopping some Hadamards over NOTs, flipping a couple controlled-<code>Z</code>s, and knowing the deferred measurement principle.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1627">&laquo; Half-Baked Thoughts for a Quantum Scripting Language</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
