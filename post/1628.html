@@ -94,7 +94,7 @@ So that&#39;s what we&#39;ll do:</p>
 It&#39;s just to make the move from top to bottom look like more of a journey.
 I&#39;ve also included Bloch sphere state indicators as a visual hint that the circuit is in fact moving the qubit.</p>
 
-<p>The first thing we need to do is break the swap gate apart into pieces we can work with.
+<p>The first thing we need to do is break the swap gate into pieces we can work with.
 To do that, we&#39;re going to use a classical bit-twiddling trick: <a href="https://en.wikipedia.org/wiki/XOR_swap_algorithm">XOR swapping</a>. XOR-swapping swaps two variables by XOR-ing them into each other three times:</p>
 <div class="highlight"><pre><code class="language-C" data-lang="C"><span></span><span class="cp">#define SWAP(a, b) \</span>
 <span class="cp">    a^=b; \</span>
@@ -117,7 +117,8 @@ We can remove it:</p>
 It&#39;s like a swap, but only goes in one direction (and requires that the target qubit be zero&#39;d).</p>
 
 <p>At this point there&#39;s a huge number of routes we could take and it&#39;s not really clear what to do.
-That&#39;s why I consider these next two steps to be the key ones, because they send us down an easy path.</p>
+That&#39;s why I consider these next two steps to be the key ones.
+They send us down an easy path.</p>
 
 <p>Note that we can do whatever we want to uninvolved wires.
 It won&#39;t affect the &quot;move&quot; part of our circuit.
@@ -129,7 +130,7 @@ So, with a bit of foresight, let&#39;s add a Hadamard operation to the second wi
 
 <p>Imagine for a moment that we weren&#39;t allowed to jump all the way from the top qubit to the bottom qubit in one step.
 Instead, the top and bottom wires had to affect each other indirectly via the second wire.
-And, to make things even harder, suppose we didn&#39;t even know what state the second wire is in.
+And, to make things even harder, suppose we didn&#39;t even know what state the second wire was in.
 Can we still toggle the bottom wire in a way controlled by the top wire?</p>
 
 <p>Yes!
@@ -138,7 +139,7 @@ We just do a classical trick I call &quot;toggle forwarding&quot;:</p>
 <p><img style="max-width:100%;" src="/assets/2016-11-20-teleportation-from-simple-moves/cnot-via-intermediate.png"/></p>
 
 <p>We can&#39;t guarantee that the middle wire is ON or OFF, but we can force it to temporarily toggle.
-Then we do CNOTs controlled by the toggled and un-toggled states.</p>
+Then we do CNOTs onto the bottom wire controlled by the toggled and un-toggled middle wire.</p>
 
 <p>When the top wire doesn&#39;t toggle the middle wire, the two bottom CNOTs cancel each other out.
 When the top wire is ON, then the middle wire does get toggled and exactly one of the bottom CNOTs will fire.
@@ -149,7 +150,7 @@ Even when the middle qubit is entangled or in a state normally unaffected by NOT
 No, really!
 Try it!)</p>
 
-<p>Applying this CNOT-via-intermediate construction to our qubit-moving circuit produces this result:</p>
+<p>Applying this CNOT-via-intermediate construction to the downward part of our qubit-moving circuit produces this result:</p>
 
 <p><img style="max-width:100%; border:1px solid black;" src="/assets/2016-11-20-teleportation-from-simple-moves/step4-borrow.png"/></p>
 
@@ -217,20 +218,21 @@ But actually there&#39;s no contradiction, just a slight difference in meaning.<
 <p>When I say that measuring one qubit can&#39;t affect another, I&#39;m talking about the expected outcomes of the circuit.
 I&#39;m thinking in terms of what you know about the circuit&#39;s function <em>ahead of time</em>, when you <em>don&#39;t condition on the measurement results</em>.</p>
 
-<p>When the trope says that measuring one qubit might affect another, it is describing the fact that measuring a qubit <em>can give you new information</em> about the state of another qubit.
+<p>When the spooky-action trope says that measuring one qubit might affect another, it is describing the fact that measuring a qubit <em>can give you new information</em> about the state of another qubit.
 The information you can learn just happens to be flexible in such a counter-intuitive way that people resort to describing the situation as one qubit instantaneously affecting another.
 Even though that&#39;s known to be a misleading analogy.</p>
 
-<p>I hope that was convincing, because we&#39;re about to make things worse by sliding the measurements leftward until they hop over the controls:</p>
+<p>I hope that clarification was convincing, because we&#39;re about to make things worse by sliding the measurements leftward until they hop over the controls:</p>
 
 <p><img style="max-width:100%; border:1px solid black;" src="/assets/2016-11-20-teleportation-from-simple-moves/step12-undefer-measurement.png"/></p>
 
 <p>This step also doesn&#39;t affect the ahead-of-time-expected function of the circuit.
-A fact which is surprising enough that it has a name: the <a href="https://en.wikipedia.org/wiki/Deferred_Measurement_Principle">deferred measurement principle</a>.</p>
+Classical and quantum controls are equivalent.
+That fact is surprising enough that it has a name: the <a href="https://en.wikipedia.org/wiki/Deferred_Measurement_Principle">deferred measurement principle</a>.</p>
 
 <p>(I&#39;d explain why this doesn&#39;t contradict delayed choice experiments, but I&#39;d just be repeating the &quot;spooky-action&quot; explanation with different words.)</p>
 
-<p>We only have one thing left to do: set up entanglement between the top and bottom <em>before</em> the input is known, instead of after.
+<p>We only have one thing left to do: setup entanglement between the top and bottom <em>before</em> the input is known, instead of after.
 To do that we just slide the initial H gate and CNOT gate all the way to the left:</p>
 
 <p><img style="max-width:100%; border:1px solid black;" src="/assets/2016-11-20-teleportation-from-simple-moves/step13-entangle-beforehand.png"/></p>
