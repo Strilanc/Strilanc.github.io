@@ -93,7 +93,7 @@
 <p>Also, you can return blocks from methods. Including getters.</p>
 
 <p>Yeah... we can expose a Java-esque invoke syntax by having a getter that returns a block. Instead of giving the arguments to the getter, they&#39;ll be given to the block. It looks like this:</p>
-<div class="highlight"><pre><code class="language-objective-c" data-lang="objective-c"><span class="c1">// [inside a category on NSString]</span>
+<div class="highlight"><pre><code class="language-objective-c" data-lang="objective-c"><span></span><span class="c1">// [inside a category on NSString]</span>
 <span class="p">-(</span><span class="bp">NSString</span><span class="o">*</span><span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="bp">NSString</span><span class="o">*</span><span class="p">))</span><span class="nf">concat</span> <span class="p">{</span>
     <span class="k">return</span> <span class="o">^</span><span class="p">(</span><span class="bp">NSString</span><span class="o">*</span> <span class="n">second</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">this</span> <span class="nl">stringByAppendingString</span><span class="p">:</span><span class="n">second</span><span class="p">];</span>

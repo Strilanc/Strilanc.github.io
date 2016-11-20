@@ -87,7 +87,7 @@ Here&#39;s a specific case where an operation is blocked (because it would recoh
 Clear requirement.
 A good candidate for a unit test.
 Let&#39;s write it up:</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">let</span> <span class="nx">circuitDef</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CircuitDefinition</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">let</span> <span class="nx">circuitDef</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CircuitDefinition</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span>
     <span class="k">new</span> <span class="nx">GateColumn</span><span class="p">([</span><span class="nx">Gates</span><span class="p">.</span><span class="nx">HalfTurns</span><span class="p">.</span><span class="nx">H</span><span class="p">,</span> <span class="nx">Gates</span><span class="p">.</span><span class="nx">Special</span><span class="p">.</span><span class="nx">Measure</span><span class="p">]),</span>
     <span class="k">new</span> <span class="nx">GateColumn</span><span class="p">([</span><span class="nx">Gates</span><span class="p">.</span><span class="nx">Special</span><span class="p">.</span><span class="nx">Control</span><span class="p">,</span> <span class="nx">Gates</span><span class="p">.</span><span class="nx">HalfTurns</span><span class="p">.</span><span class="nx">X</span><span class="p">])</span>
 <span class="p">]);</span>
@@ -120,11 +120,11 @@ So, I figured, why not just do that?
 I wrote some code to parse simple ascii diagrams of circuits into <code>CircuitDefinition</code> instances, and started inlining diagrams into the tests.</p>
 
 <p>Now assertions look like this:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">assertThat(circuit(`-H-•-
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>assertThat(circuit(`-H-•-
                     -M=X=`).disabledReasonAt(3, 1)).isNotEqualTo(undefined);
 </code></pre></div>
 <p>or this:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">let c = circuit(`-M=•=
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>let c = circuit(`-M=•=
                  -M=◦=
                  ---•-
                  ---◦-

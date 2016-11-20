@@ -262,7 +262,7 @@ There are probably solutions with better constant factors.</p>
 
 <p>To make sure that the described construction actually works, I wrote some <a href="https://gist.github.com/Strilanc/1768464eb8cbca0981cd">hacky python code to test it</a>.
 Using that code to generate the 5-bit increment circuit, then crunching it down a little by hand so the thing fits on the page, gives:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">a ────•─•─•••X•───────•X──•X•───────•X─••──•─•─•◦•X•───────•X──•X•───────•X─•◦X─X••───────••X─X••───────••XX─ a+1
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>a ────•─•─•••X•───────•X──•X•───────•X─••──•─•─•◦•X•───────•X──•X•───────•X─•◦X─X••───────••X─X••───────••XX─ a+1
       │ │ │││││       ││  │││       ││ ││  │ │ │││││       ││  │││       ││ │││ │││       │││ │││       ││││ 
 b ────•─•X┼┼┼•X•X•─•X─X••X┼•X•X•─•X─X••┼┼──•─•X┼┼┼•X•X•─•X─X••X┼•X•X•─•X─X••┼┼┼X┼┼┼X••─••X┼┼┼─┼┼┼X••─••X┼┼┼┼X b+a
       │ │ ││││││││ ││ │││ ││││││ ││ │││││  │ │ ││││││││ ││ │││ ││││││ ││ │││││││││││││ ││││││ ││││││ ││││││││

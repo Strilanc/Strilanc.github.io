@@ -85,7 +85,7 @@ Also, combining independent operations that apply to different wires becomes str
 
 <p>Intuitively, the Kronecker product $A \otimes B$ works by tiling $B$ inside of $A$, then scaling each tile by the coefficient it was paired with.
 For example, suppose you want to apply a <a href="http://en.wikipedia.org/wiki/Quantum_gate#Hadamard_gate">Hadamard gate</a> $H$ to one wire and a <a href="http://en.wikipedia.org/wiki/Quantum_gate#Pauli-X_gate">NOT gate</a> $X$ to the other wire, like this:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">──H──
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>──H──
 ──X──
 </code></pre></div>
 <p>The circuit&#39;s overall matrix is computed like this:</p>
@@ -113,13 +113,13 @@ For example, suppose you want to apply a <a href="http://en.wikipedia.org/wiki/Q
 
 <p>Controlled operations are operations conditioned to only occur if a designated control wire is ON.
 In diagrams, the control wire is indicated by covering it with a small black circle and connecting it to the other operation with a line:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">──•──
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>──•──
   │
 ──X──
 </code></pre></div>
 <p>Sometimes, when making quick ASCII circuit diagrams, I omit the connecting line.
 A side effect of this is that the control ends up looking like an independent operation:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">──•──
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>──•──
 ──X──
 </code></pre></div>
 <p>When I look at the above diagram, my first uninformed instinct is &quot;What&#39;s the matrix for that weird • operation?&quot;.</p>
@@ -136,7 +136,7 @@ When I wrote my toy quantum circuit simulator, that&#39;s exactly what I did.</p
 <p>The hack I used was to introduce a special value, which I&#39;ll call $\mu$ in this post.
 In the code, $\mu$ was just an instance of the <code>Complex</code> class.
 It had real part 1, and imaginary part 0, so it would act just like a normal 1 everywhere. That is, except in the code for the Kronecker product which explicitly special cased it:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">def kronecker_product(m1, m2):
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>def kronecker_product(m1, m2):
     w1, h1 = len(m1), len(m1[0])
     w2, h2 = len(m2), len(m2[0])
     return [[
@@ -266,7 +266,7 @@ Let&#39;s get back to operations on circuits.</p>
 <h1>Merging Operations Into Controls</h1>
 
 <p>When we have a circuit like this:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">──H─X─H──
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>──H─X─H──
     │
 ──H─•─H──
 </code></pre></div>
@@ -316,7 +316,7 @@ Carefully put it all together and you&#39;ll find:</p>
 \end{bmatrix}$</p>
 
 <p>We&#39;re almost done! Our circuit looks like this:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">    ┌─┐
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>    ┌─┐
 ──H─┤?├─H──
     │?│
 ────┤?├────
@@ -355,7 +355,7 @@ Carefully put it all together and you&#39;ll find:</p>
 \end{bmatrix}$</p>
 
 <p>Which is this circuit:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">──•──
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>──•──
   │
 ──X──
 </code></pre></div>
@@ -369,7 +369,7 @@ For example, because the Hadamard gate swaps between the X basis and Z basis, me
 <h1>Multiple Controls</h1>
 
 <p>Do things continue to work when there&#39;s multiple controls? Let&#39;s consider a Toffoli gate:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">──X──
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>──X──
   │
 ──•──
   │
@@ -432,7 +432,7 @@ Let&#39;s try merging larger operations into larger controls, and see if that wo
 <p>A task you&#39;re likely to run into a lot when computing is <em>incrementing</em>.
 Fortunately, circuits that increment are quite simple to make out of controlled-NOTs.
 Here&#39;s one that increments three bits (with wraparound on overflow):</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">──•─•─X──
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>──•─•─X──
   │ │
 ──•─X────
   │

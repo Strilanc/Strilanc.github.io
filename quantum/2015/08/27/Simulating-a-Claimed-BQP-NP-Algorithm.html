@@ -108,7 +108,7 @@ We need programmatic representations of all three levels (classical, pure, and m
 <p>A <em>classical state</em> is just a bunch of bits.
 A very convenient way to store a bunch of bit values is as an integer <a href="https://en.wikipedia.org/wiki/Mask_%28computing%29">bitmask</a>, so that&#39;s what I did in my implementation.
 The <a href="https://github.com/Strilanc/qbp_np_younes_test/blob/master/classical_state.py">ClassicalState class</a> is nothing more than a handful of convenience methods wrapped around an integer value:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&gt;&gt;&gt; print(ClassicalState(5))
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>&gt;&gt;&gt; print(ClassicalState(5))
 |00000101〉
 &gt;&gt;&gt; print(ClassicalState(5).bit(2))
 True
@@ -117,7 +117,7 @@ True
 The weight associated with each state is called an &quot;amplitude&quot;, and is basically the square root of a probability.
 If you square the magnitudes of all the amplitudes, and add up those squares, you should get a total of 100% (otherwise it&#39;s not a valid superposition).
 The <a href="https://github.com/Strilanc/qbp_np_younes_test/blob/master/pure_state.py">PureState class</a> uses a dictionary to store the pure state: the keys are the classical states, and the values are the amplitudes.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&gt;&gt;&gt; print(PureState({
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>&gt;&gt;&gt; print(PureState({
         ClassicalState(2): -0.8,
         ClassicalState(7): 0.6j
     }))
@@ -125,7 +125,7 @@ The <a href="https://github.com/Strilanc/qbp_np_younes_test/blob/master/pure_sta
 </code></pre></div>
 <p>A <em>mixed state</em> is also a weighted combination of states, but this time it&#39;s pure states instead of classical states and the weights are probabilities instead of amplitudes.
 The <a href="https://github.com/Strilanc/qbp_np_younes_test/blob/master/mixed_state.py">MixedState class</a> uses a dictionary to store the mixed state: the keys are the pure states, and the values are the probabilities.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&gt;&gt;&gt; print(MixedState({
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>&gt;&gt;&gt; print(MixedState({
         PureState({ClassicalState(4): -1}): 0.25,
         PureState({ClassicalState(5): math.sqrt(0.5), ClassicalState(6): -math.sqrt(0.5)}): 0.75
     }))
@@ -149,7 +149,7 @@ See <a href="https://github.com/Strilanc/qbp_np_younes_test/blob/master/pure_sta
 (There&#39;s no flattening or interference steps necessary at the mixed state level.)</p>
 
 <p>Here&#39;s an example of a unitary operation being applied to a mixed state:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&gt;&gt;&gt; op_hadamard_on_first_bit = lambda c: PureState({
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>&gt;&gt;&gt; op_hadamard_on_first_bit = lambda c: PureState({
         c.with_bit(0, False): math.sqrt(0.5),
         c.with_bit(0, True): -math.sqrt(0.5) if c.bit(0) else +math.sqrt(0.5)
     })
@@ -169,7 +169,7 @@ See <a href="https://github.com/Strilanc/qbp_np_younes_test/blob/master/pure_sta
 Don&#39;t worry about it.)
 The resulting pieces&#39; probabilities are determined by the sum of the squared amplitudes of the states within that piece.
 Each piece then becomes a separate branch at the mixed state level:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&gt;&gt;&gt; value_of_first_bit = lambda c: c.bit(0)
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>&gt;&gt;&gt; value_of_first_bit = lambda c: c.bit(0)
 &gt;&gt;&gt; input = MixedState({
         PureState({ClassicalState(4): -1}): 0.25,
         PureState({ClassicalState(5): math.sqrt(0.5), ClassicalState(6): -math.sqrt(0.5)}): 0.75
@@ -182,7 +182,7 @@ Each piece then becomes a separate branch at the mixed state level:</p>
 <p>The code <a href="https://github.com/Strilanc/qbp_np_younes_test/blob/master/pure_state.py#L34">also supports</a> <a href="https://en.wikipedia.org/wiki/Postselection">post-selecting</a>, where you do a measurement but assert what the result will be.
 In practice this would involve running an experiment again and again, until you get the result you want.
 The code returns both the resulting renormalized state, and the probability of success:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&gt;&gt;&gt; value_of_first_bit = lambda c: c.bit(0)
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>&gt;&gt;&gt; value_of_first_bit = lambda c: c.bit(0)
 &gt;&gt;&gt; print(input.post_select(value_of_first_bit))
 (0.3750000000000001, MixedState({PureState({ClassicalState(5): (1+0j)}): 1.0}))
 </code></pre></div>
@@ -193,7 +193,7 @@ The code returns both the resulting renormalized state, and the probability of s
 <p>My implementation of Younes et al&#39;s algorithm is in the <a href="https://github.com/Strilanc/qbp_np_younes_test/blob/master/younes_test.py">younes_test.py file</a>.</p>
 
 <p>The code sets up useful values:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">def simulate_younes_algo(anti_clauses):
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>def simulate_younes_algo(anti_clauses):
     n = max(max(used_variables) for used_variables in anti_clauses) + 1
     m = len(anti_clauses)
     var_bits = range(n)
@@ -203,7 +203,7 @@ The code returns both the resulting renormalized state, and the probability of s
     state = MixedState({PureState({ClassicalState(0): 1}): 1})
 </code></pre></div>
 <p>Superposes the variable-assignment bits and initializes the entangled is-clause-satisfied bits:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">    for i in var_bits:
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>    for i in var_bits:
         state = state.unitary_transform(hadamard_op(i))
     for j in range(m):
         state = state.unitary_transform(not_op(n + j))
@@ -211,7 +211,7 @@ The code returns both the resulting renormalized state, and the probability of s
             controlled_by(not_op(n + j), anti_clauses[j]))
 </code></pre></div>
 <p>And performs the iterated rejection testing based on the number of satisfied clauses:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">    while True:
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>    while True:
         [... track and output debug info ...]
 
         for j in clause_bits:
@@ -223,7 +223,7 @@ The code returns both the resulting renormalized state, and the probability of s
         state = state.unitary_transform(not_op(ancilla_bit))
 </code></pre></div>
 <p>The 3-SAT instance I chose to use for testing is a trivial one, where the only solution is assigning True to all of 11 variables:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">simulate_younes_algo(anti_clauses=[
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>simulate_younes_algo(anti_clauses=[
     # Force 0 true
     {0: False, 1: False, 2: False},
     {0: False, 1: True, 2: False},
@@ -263,7 +263,7 @@ It has to do so <em>faster</em> than <code>p_survived</code> trends downward, be
 <h1>Results</h1>
 
 <p>When I run the simulation code, I get these results:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">iter 0;      p_survived: 100.0000%;  p_correct: 0.0488%;     p_correct*p_survived: 0.0488%
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>iter 0;      p_survived: 100.0000%;  p_correct: 0.0488%;     p_correct*p_survived: 0.0488%
 iter 10;     p_survived: 71.6915%;   p_correct: 0.0681%;     p_correct*p_survived: 0.0488%
 iter 100;    p_survived: 25.2162%;   p_correct: 0.1936%;     p_correct*p_survived: 0.0488%
 iter 200;    p_survived: 8.4309%;    p_correct: 0.5792%;     p_correct*p_survived: 0.0488%

@@ -171,21 +171,21 @@ i \cos{\theta} \begin{bmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{bmatrix}
 <p>To remove the phase factor $e^{\phi i}$ from the values we extracted, we use the fact that it should be the only contributor of complex values. We can pick any one of the four quaternion components we extracted (as long as it&#39;s not zero), and pick a phase factor that will make our chosen component real. Because we&#39;re guaranteed that the given matrix is unitary, this same phase factor should make all the other quaternion components real.</p>
 
 <p>Here&#39;s some python code that does the described factoring:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">math</span>
 
 <span class="k">def</span> <span class="nf">unitary_breakdown</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Breaks a 2x2 unitary matrix into quaternion and phase components.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c"># Extract rotation components</span>
+    <span class="c1"># Extract rotation components</span>
     <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
     <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">d</span><span class="p">)</span><span class="o">/</span><span class="mi">2j</span>
     <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
     <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span><span class="o">/-</span><span class="mi">2j</span>
     <span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
 
-    <span class="c"># Extract common phase factor</span>
+    <span class="c1"># Extract common phase factor</span>
     <span class="n">p</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
     <span class="n">p</span> <span class="o">/=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
     <span class="n">pt</span><span class="p">,</span> <span class="n">px</span><span class="p">,</span> <span class="n">py</span><span class="p">,</span> <span class="n">pz</span> <span class="o">=</span> <span class="n">t</span><span class="o">/</span><span class="n">p</span><span class="p">,</span> <span class="n">x</span><span class="o">/</span><span class="n">p</span><span class="p">,</span> <span class="n">y</span><span class="o">/</span><span class="n">p</span><span class="p">,</span> <span class="n">z</span><span class="o">/</span><span class="n">p</span>
@@ -200,18 +200,18 @@ i \cos{\theta} \begin{bmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{bmatrix}
 <p>$\text{Slerp}(p_0, p_1, t) = \frac{\sin(\theta (1-t))}{\sin(\theta)} p_0 + \frac{\sin(\theta t)}{\sin(\theta)} p_1$</p>
 
 <p>One obstacle here is the division by zero when $\theta$ is zero. Fortunately, because the numerator approaches zero in basically the same way as the denominator, this is a case where the resulting value does not diverge. We can define a function that computes $\frac{\sin(x f)}{\sin(x)}$, but switches to an approximation that doesn&#39;t divide by zero or magnify floating point errors when near zero:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">sin_scale_ratio</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">factor</span><span class="p">):</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">sin_scale_ratio</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">factor</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns sin(theta * factor) / sin(theta), with care around the origin to avoid dividing by zero.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c"># Near zero, switch to a Taylor series based approximation to avoid floating point error blowup.</span>
+    <span class="c1"># Near zero, switch to a Taylor series based approximation to avoid floating point error blowup.</span>
     <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.0001</span><span class="p">:</span>
-        <span class="c"># sin(x) = x - x^3/3! + ...</span>
-        <span class="c"># sin(f x) / sin(x)</span>
-        <span class="c"># = ((fx) - (fx)^3/3! + ...) / (x - x^3/3! + ...)</span>
-        <span class="c"># ~= ((fx) - (fx)^3/3!) / (x - x^3/3!)</span>
-        <span class="c"># = (f - f(fx)^2/3!) / (1 - x^2/3!)</span>
-        <span class="c"># = f (1 - f^2 x^2/6) / (1 - x^2/6)</span>
+        <span class="c1"># sin(x) = x - x^3/3! + ...</span>
+        <span class="c1"># sin(f x) / sin(x)</span>
+        <span class="c1"># = ((fx) - (fx)^3/3! + ...) / (x - x^3/3! + ...)</span>
+        <span class="c1"># ~= ((fx) - (fx)^3/3!) / (x - x^3/3!)</span>
+        <span class="c1"># = (f - f(fx)^2/3!) / (1 - x^2/3!)</span>
+        <span class="c1"># = f (1 - f^2 x^2/6) / (1 - x^2/6)</span>
         <span class="n">d</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">*</span> <span class="n">theta</span> <span class="o">/</span> <span class="mi">6</span>
         <span class="k">return</span> <span class="n">factor</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">d</span> <span class="o">*</span> <span class="n">factor</span> <span class="o">*</span> <span class="n">factor</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span> <span class="o">*</span> <span class="n">factor</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
@@ -221,18 +221,18 @@ i \cos{\theta} \begin{bmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{bmatrix}
 <p>To do the angular interpolation, we do the obvious: figure out the difference between the two angles, watch out for going the long way around, and then do what is effectively a linear interpolation. Getting the sign of the difference correct is tricky, but I&#39;ve <a href="http://strilanc.com/math/2014/03/11/Ordering-Cyclic-Sequence-Numbers.html">previously explained how do it</a> so we&#39;ll just assume it&#39;s easy.</p>
 
 <p>Putting it all together, we get:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">unitary_lerp</span><span class="p">(</span><span class="n">u1</span><span class="p">,</span> <span class="n">u2</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">unitary_lerp</span><span class="p">(</span><span class="n">u1</span><span class="p">,</span> <span class="n">u2</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Interpolates between two 2x2 unitary numpy matrices.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c"># Split into rotation and phase parts</span>
+    <span class="c1"># Split into rotation and phase parts</span>
     <span class="n">q1</span><span class="p">,</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">unitary_breakdown</span><span class="p">(</span><span class="n">u1</span><span class="p">)</span>
     <span class="n">q2</span><span class="p">,</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">unitary_breakdown</span><span class="p">(</span><span class="n">u2</span><span class="p">)</span>
 
-    <span class="c"># Spherical interpolation of rotation</span>
+    <span class="c1"># Spherical interpolation of rotation</span>
     <span class="n">dot</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">v1</span><span class="o">*</span><span class="n">v2</span> <span class="k">for</span> <span class="n">v1</span><span class="p">,</span><span class="n">v2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">dot</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="c"># Don&#39;t go the long way around...</span>
+        <span class="c1"># Don&#39;t go the long way around...</span>
         <span class="n">q2</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="n">p2</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="n">dot</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
@@ -241,10 +241,10 @@ i \cos{\theta} \begin{bmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{bmatrix}
     <span class="n">c2</span> <span class="o">=</span> <span class="n">sin_scale_ratio</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
     <span class="n">u3</span> <span class="o">=</span> <span class="p">(</span><span class="n">u1</span> <span class="o">*</span> <span class="n">c1</span> <span class="o">/</span> <span class="n">p1</span> <span class="o">+</span> <span class="n">u2</span> <span class="o">*</span> <span class="n">c2</span> <span class="o">/</span> <span class="n">p2</span><span class="p">)</span>
 
-    <span class="c"># Angular interpolation of phase</span>
+    <span class="c1"># Angular interpolation of phase</span>
     <span class="n">a1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span>
     <span class="n">a2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span>
-    <span class="n">da</span> <span class="o">=</span> <span class="p">(</span><span class="n">a2</span> <span class="o">-</span> <span class="n">a1</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span>  <span class="c"># smallest signed angle distance (mod 2pi)</span>
+    <span class="n">da</span> <span class="o">=</span> <span class="p">(</span><span class="n">a2</span> <span class="o">-</span> <span class="n">a1</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span>  <span class="c1"># smallest signed angle distance (mod 2pi)</span>
     <span class="n">a3</span> <span class="o">=</span> <span class="n">a1</span> <span class="o">+</span> <span class="n">da</span> <span class="o">*</span> <span class="n">t</span>
     <span class="n">p3</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">a3</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a3</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">u3</span> <span class="o">*</span> <span class="n">p3</span>

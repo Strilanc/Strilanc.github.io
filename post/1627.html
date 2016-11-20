@@ -96,7 +96,7 @@ In circuit form it looks like this:</p>
 <p>It&#39;s quite simple, as far as quantum operations go.</p>
 
 <p>Here is the sample code for this operation <a href="http://www.quantumplayground.net/#/playground/5185026253651968">from the Quantum Computing Playground</a> (slightly edited):</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">proc Diffusion
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>proc Diffusion
     // Hadamard transform the input qubits
     for i = 0; i &lt; regwidth; i++
         Hadamard i
@@ -142,29 +142,29 @@ Also, we&#39;ll switch to a more Pythonesque style:</p>
     overflow-y: auto;
   }
 </style>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">diffusion</span><span class="p">(</span><span class="n">qubits</span><span class="p">):</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">diffusion</span><span class="p">(</span><span class="n">qubits</span><span class="p">):</span>
     <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">qubits</span><span class="p">)</span>
 
-    <span class="c"># Hadamard transform the input qubits</span>
+    <span class="o">//</span> <span class="n">Hadamard</span> <span class="n">transform</span> <span class="n">the</span> <span class="nb">input</span> <span class="n">qubits</span>
     <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">qubits</span><span class="p">:</span>
         <span class="n">Hadamard</span> <span class="n">q</span>
 
-    <span class="c"># AND all the controls together, using ancilla qubits</span>
+    <span class="o">//</span> <span class="n">AND</span> <span class="nb">all</span> <span class="n">the</span> <span class="n">controls</span> <span class="n">together</span><span class="p">,</span> <span class="n">using</span> <span class="n">ancilla</span> <span class="n">qubits</span>
     <span class="n">ancillas</span> <span class="o">=</span> <span class="n">qalloc</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
     <span class="n">CNOT</span> <span class="n">qubits</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ancillas</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">:</span>
         <span class="n">Toffoli</span> <span class="n">qubits</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ancillas</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">ancillas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
-    <span class="c"># Apply the conditional phase factor</span>
+    <span class="o">//</span> <span class="n">Apply</span> <span class="n">the</span> <span class="n">conditional</span> <span class="n">phase</span> <span class="n">factor</span>
     <span class="n">Z</span> <span class="n">ancilla</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-    <span class="c"># Uncompute the &#39;AND all the controls together&#39;</span>
+    <span class="o">//</span> <span class="n">Uncompute</span> <span class="n">the</span> <span class="s1">&#39;AND all the controls together&#39;</span>
     <span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">:</span>
         <span class="n">Toffoli</span> <span class="n">qubits</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ancillas</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">ancillas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
     <span class="n">CNOT</span> <span class="n">qubits</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ancillas</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">qfree</span> <span class="n">ancillas</span>
 
-    <span class="c"># Un-Hadamard transform the input qubits</span>
+    <span class="o">//</span> <span class="n">Un</span><span class="o">-</span><span class="n">Hadamard</span> <span class="n">transform</span> <span class="n">the</span> <span class="nb">input</span> <span class="n">qubits</span>
     <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">qubits</span><span class="p">:</span>
         <span class="n">Hadamard</span> <span class="n">q</span>
 </code></pre></div>
@@ -174,15 +174,15 @@ The &#39;and all&#39; logic is a clear candidate for that, as is applying the Ha
 <p>We immediately run into a problem when extracting the <code>all</code> function: it needs two parts!
 One part to return an ancilla qubit containing the result, and another part to uncompute and free that ancilla.
 That means two utility methods instead of one:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">diffusion</span><span class="p">(</span><span class="n">qubits</span><span class="p">):</span>
-    <span class="c"># Hadamard transform the input qubits</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">diffusion</span><span class="p">(</span><span class="n">qubits</span><span class="p">):</span>
+    <span class="o">//</span> <span class="n">Hadamard</span> <span class="n">transform</span> <span class="n">the</span> <span class="nb">input</span> <span class="n">qubits</span>
     <span class="n">Hadamard</span> <span class="n">qubits</span>
 
     <span class="n">ancilla_qubit</span> <span class="o">=</span> <span class="n">compute_all</span><span class="p">(</span><span class="n">qubits</span><span class="p">)</span>
     <span class="n">Z</span> <span class="n">ancilla_qubit</span>
     <span class="n">uncompute_all</span><span class="p">(</span><span class="n">qubits</span><span class="p">,</span> <span class="n">ancilla_qubit</span><span class="p">)</span>
 
-    <span class="c"># Un-Hadamard transform the input qubits</span>
+    <span class="o">//</span> <span class="n">Un</span><span class="o">-</span><span class="n">Hadamard</span> <span class="n">transform</span> <span class="n">the</span> <span class="nb">input</span> <span class="n">qubits</span>
     <span class="n">Hadamard</span> <span class="n">qubits</span>
 </code></pre></div>
 <p>If you&#39;re a C++ programmer, this &quot;create and cleanup&quot; pattern is very familiar.
@@ -190,14 +190,14 @@ This is exactly what <a href="https://en.wikipedia.org/wiki/Resource_acquisition
 Other languages have analogous constructs for scoped cleanup, such as python&#39;s <code>with</code> block.</p>
 
 <p>A <code>with</code> block does seem to help:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">diffusion</span><span class="p">(</span><span class="n">qubits</span><span class="p">):</span>
-    <span class="c"># Hadamard transform the input qubits</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">diffusion</span><span class="p">(</span><span class="n">qubits</span><span class="p">):</span>
+    <span class="o">//</span> <span class="n">Hadamard</span> <span class="n">transform</span> <span class="n">the</span> <span class="nb">input</span> <span class="n">qubits</span>
     <span class="n">Hadamard</span> <span class="n">qubits</span>
 
     <span class="k">with</span> <span class="n">ancilla_qubit</span> <span class="o">=</span> <span class="n">compute_all</span><span class="p">(</span><span class="n">qubits</span><span class="p">):</span>
         <span class="n">Z</span> <span class="n">ancilla_qubit</span>
 
-    <span class="c"># Un-Hadamard transform the input qubits</span>
+    <span class="o">//</span> <span class="n">Un</span><span class="o">-</span><span class="n">Hadamard</span> <span class="n">transform</span> <span class="n">the</span> <span class="nb">input</span> <span class="n">qubits</span>
     <span class="n">Hadamard</span> <span class="n">qubits</span>
 </code></pre></div>
 <p>But I don&#39;t think <code>with</code> goes far enough.
@@ -205,14 +205,14 @@ I think this pattern of &quot;make an ancilla and apply operations that have no 
 So much so that it makes sense to fold the pattern deeply into the language, as a standard part of the <code>if</code> statement.</p>
 
 <p>Instead of a <code>with</code> containing a <code>Z</code>, let&#39;s try having an <code>if</code> leading to a phase factor:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">diffusion</span><span class="p">(</span><span class="n">qubits</span><span class="p">):</span>
-    <span class="c"># Hadamard transform the input qubits</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">diffusion</span><span class="p">(</span><span class="n">qubits</span><span class="p">):</span>
+    <span class="o">//</span> <span class="n">Hadamard</span> <span class="n">transform</span> <span class="n">the</span> <span class="nb">input</span> <span class="n">qubits</span>
     <span class="n">Hadamard</span> <span class="n">qubits</span>
 
     <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">qubits</span><span class="p">):</span>
         <span class="n">phaseby</span> <span class="n">pi</span>
 
-    <span class="c"># Un-Hadamard transform the input qubits</span>
+    <span class="o">//</span> <span class="n">Un</span><span class="o">-</span><span class="n">Hadamard</span> <span class="n">transform</span> <span class="n">the</span> <span class="nb">input</span> <span class="n">qubits</span>
     <span class="n">Hadamard</span> <span class="n">qubits</span>
 </code></pre></div>
 <p>The <code>if</code> block is more complicated than it looks.
@@ -220,14 +220,14 @@ There&#39;s an ancilla qubit coming into existence at the start of the <code>if<
 
 <p>Come to think of it, the Hadamard transforms at the start and end of the function fit this exact compute/uncompute pattern we&#39;re trying to handle.
 Let&#39;s add an <code>x_axis</code> function that applies the Hadamard transform, and tells the scoping mechanism to apply another Hadamard transform when uncomputing:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">diffusion</span><span class="p">(</span><span class="n">qubits</span><span class="p">):</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">diffusion</span><span class="p">(</span><span class="n">qubits</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">x_axis</span><span class="p">(</span><span class="n">qubits</span><span class="p">)):</span>
         <span class="n">phaseby</span> <span class="n">pi</span>
 </code></pre></div>
 <p>Ah, <em>much</em> nicer!</p>
 
 <p>We can even throw in a <code>phase_flip_if</code> function, if we&#39;re feeling particularly bike-shed-ish;</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">diffusion</span><span class="p">(</span><span class="n">qubits</span><span class="p">):</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">diffusion</span><span class="p">(</span><span class="n">qubits</span><span class="p">):</span>
     <span class="n">phase_flip_if</span><span class="p">(</span><span class="nb">all</span><span class="p">(</span><span class="n">x_axis</span><span class="p">(</span><span class="n">qubits</span><span class="p">)))</span>
 </code></pre></div>
 <p>I don&#39;t think we&#39;re going to get any more succinct than that.</p>
@@ -235,13 +235,13 @@ Let&#39;s add an <code>x_axis</code> function that applies the Hadamard transfor
 <p>Notice that we started with a confusing 13-line function, applied a few abstractions (allocating qubits, extracting common methods, RAII-style uncomputing), and ended up basically the description I gave at the start of this section: negate the part of the superposition where all the qubits are pointing rightward.</p>
 
 <p>It also works well in the context of the whole algorithm:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">grover_search</span><span class="p">(</span><span class="n">bit_count</span><span class="p">,</span> <span class="n">predicate</span><span class="p">):</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">grover_search</span><span class="p">(</span><span class="n">bit_count</span><span class="p">,</span> <span class="n">predicate</span><span class="p">):</span>
     <span class="n">qubits</span> <span class="o">=</span> <span class="n">qalloc</span><span class="p">(</span><span class="n">bit_count</span><span class="p">)</span>
     <span class="nb">apply</span> <span class="n">X</span> <span class="n">to</span> <span class="n">qubits</span>
     <span class="nb">apply</span> <span class="n">H</span> <span class="n">to</span> <span class="n">qubits</span>
     <span class="k">for</span> <span class="n">_</span> <span class="o">&lt;</span> <span class="n">pi</span><span class="o">/</span><span class="mi">4</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">bit_count</span><span class="o">/</span><span class="mi">2</span><span class="p">):</span>
-        <span class="n">phase_flip_if</span><span class="p">(</span><span class="n">predicate</span><span class="p">(</span><span class="n">qubits</span><span class="p">))</span>
         <span class="n">phase_flip_if</span><span class="p">(</span><span class="nb">all</span><span class="p">(</span><span class="n">x_axis</span><span class="p">(</span><span class="n">qubits</span><span class="p">)))</span>
+        <span class="n">phase_flip_if</span><span class="p">(</span><span class="n">predicate</span><span class="p">(</span><span class="n">qubits</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">measure</span> <span class="n">qubits</span>
 </code></pre></div>
 <p>But there are dark corners to this implicit uncomputation thing.
@@ -253,20 +253,20 @@ And the magic ends up being somewhat <em>fragile</em>.</p>
 <p>Recall that the quantum-ized <code>if</code> statement uses the condition expression to compute and uncompute an ancilla qubit used to condition actions.
 Consider: what if the action changes the condition?
 For example, suppose you write this:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">if</span> <span class="n">x_axis</span><span class="p">(</span><span class="n">qubit</span><span class="p">):</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">if</span> <span class="n">x_axis</span><span class="p">(</span><span class="n">qubit</span><span class="p">):</span>
     <span class="nb">apply</span> <span class="n">H</span> <span class="n">to</span> <span class="n">qubit</span>
 </code></pre></div>
 <p>Which would be compiled down into a sequence of basic operations like this:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Compute condition for IF</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># Compute condition for IF</span>
 <span class="n">ancilla</span> <span class="o">=</span> <span class="n">qalloc</span><span class="p">()</span>
 <span class="nb">apply</span> <span class="n">H</span> <span class="n">to</span> <span class="n">qubit</span>
 <span class="nb">apply</span> <span class="n">CNOT</span> <span class="n">to</span> <span class="n">qubit</span><span class="p">,</span> <span class="n">ancilla</span>
 <span class="nb">apply</span> <span class="n">H</span> <span class="n">to</span> <span class="n">qubit</span>
 
-<span class="c"># Body of IF</span>
+<span class="c1"># Body of IF</span>
 <span class="nb">apply</span> <span class="n">CH</span> <span class="n">to</span> <span class="n">ancilla</span><span class="p">,</span> <span class="n">qubit</span>
 
-<span class="c"># Uncompute condition for IF</span>
+<span class="c1"># Uncompute condition for IF</span>
 <span class="nb">apply</span> <span class="n">H</span> <span class="n">to</span> <span class="n">qubit</span>
 <span class="nb">apply</span> <span class="n">CNOT</span> <span class="n">to</span> <span class="n">qubit</span><span class="p">,</span> <span class="n">ancilla</span>
 <span class="nb">apply</span> <span class="n">H</span> <span class="n">to</span> <span class="n">qubit</span>
@@ -287,7 +287,7 @@ It forces the system to decohere.</p>
 <p>I&#39;m a bit worried that this accidental decoherence issue will end up being a huge problem for usability.
 It&#39;s kind of hard to tell whether or not this action-affects-condition problem is present in code.
 For example, consider this code:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">if</span> <span class="n">x_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">)</span> <span class="o">!=</span> <span class="n">z_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">):</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">if</span> <span class="n">x_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">)</span> <span class="o">!=</span> <span class="n">z_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">):</span>
     <span class="nb">apply</span> <span class="n">Y</span> <span class="n">to</span> <span class="n">q1</span>
 </code></pre></div>
 <p>Notice that the code is operating on a qubit (<code>q1</code>) while conditioned on that same qubit.
@@ -316,11 +316,11 @@ An analyzer that could unambiguously tell you if arbitrarily complicated conditi
 <h1>More Accidental Decoherence</h1>
 
 <p>Recall the x-parity-vs-z-parity example from the previous section:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">if</span> <span class="n">x_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">)</span> <span class="o">!=</span> <span class="n">z_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">):</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">if</span> <span class="n">x_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">)</span> <span class="o">!=</span> <span class="n">z_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">):</span>
     <span class="nb">apply</span> <span class="n">Y</span> <span class="n">to</span> <span class="n">q1</span>
 </code></pre></div>
 <p>I think it&#39;s pretty reasonable for a person to expect the following code to be equivalent to the preceding code:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">if</span> <span class="ow">not</span> <span class="n">x_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">)</span> <span class="ow">and</span> <span class="n">z_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">):</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">x_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">)</span> <span class="ow">and</span> <span class="n">z_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">):</span>
     <span class="nb">apply</span> <span class="n">Y</span> <span class="n">to</span> <span class="n">q1</span>
 <span class="k">elif</span> <span class="n">x_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">z_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">):</span>
     <span class="nb">apply</span> <span class="n">Y</span> <span class="n">to</span> <span class="n">q1</span>
@@ -333,7 +333,7 @@ The second example will cause decoherence that&#39;s not present in the first ex
 But those extra ancilla may not commute with the action of the <code>if</code> statement, and so we need to be very careful about keeping them around.
 The user can&#39;t reasonably be expected to guess whether the compiler will happen to cache information that doesn&#39;t commute with the stated action.</p>
 
-<p>Finally, note that this condition-must-commute-with-action stuff means quantumized <code>while</code> loops can&#39;t work.
+<p>Finally, note that this condition-must-commute-with-action stuff means no quantumized <code>while</code> loops can&#39;t work.
 There&#39;s just no way to do the uncomputation correctly, because our exit condition implies our &quot;uncomputation dun broke&quot; criteria.
 (Also, because I want a classical program counter, and the condition controls the program counter for an indefinite amount of time, it&#39;s somewhat inconvenient to keep the condition coherent.
 You&#39;d need to apply a fixed number of iterations.)</p>
@@ -345,7 +345,7 @@ Implicit uncomputation is also going to heavily impact how functions are declare
 
 <p>One of the building-blocks of the quantum Fourier transform is a conditional phase gradient.
 Here&#39;s what the implementation of that might look like, using the ideas so far:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">controlled_phase_gradient</span><span class="p">(</span><span class="n">control_qubit</span><span class="p">,</span> <span class="n">target_qubits</span><span class="p">):</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">controlled_phase_gradient</span><span class="p">(</span><span class="n">control_qubit</span><span class="p">,</span> <span class="n">target_qubits</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">control_qubit</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">target_qubits</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
@@ -356,13 +356,9 @@ Contrast it with the Cooley-Tukey FFT algorithm&#39;s twiddle angles, which incr
 
 <p>I think we should be using the linear indices thing, and rely on the compiler to turn it into the nice column of gates.
 That lets us write this shorter code:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">controlled_phase_gradient</span><span class="p">(</span><span class="n">control_qubit</span><span class="p">,</span> <span class="n">target_qubits</span><span class="p">):</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">controlled_phase_gradient</span><span class="p">(</span><span class="n">control_qubit</span><span class="p">,</span> <span class="n">target_qubits</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">control_qubit</span><span class="p">:</span>
-        <span class="n">phaseby</span> <span class="n">qint</span><span class="p">(</span><span class="n">target_qubits</span><span class="p">)</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="o">**</span><span class="nb">len</span><span class="p">(</span><span class="n">target_qubits</span><span class="p">)</span>
-</code></pre></div>
-<p>Or even:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">controlled_phase_gradient</span><span class="p">(</span><span class="n">control_qubit</span><span class="p">,</span> <span class="n">target_qubits</span><span class="p">):</span>
-    <span class="n">phaseby</span> <span class="n">qint</span><span class="p">(</span><span class="n">control_qubit</span><span class="p">)</span> <span class="o">*</span> <span class="n">qint</span><span class="p">(</span><span class="n">target_qubits</span><span class="p">)</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="o">**</span><span class="nb">len</span><span class="p">(</span><span class="n">target_qubits</span><span class="p">)</span>
+        <span class="n">phaseby</span> <span class="nb">int</span><span class="p">(</span><span class="n">target_qubits</span><span class="p">)</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="o">**</span><span class="nb">len</span><span class="p">(</span><span class="n">target_qubits</span><span class="p">)</span>
 </code></pre></div>
 <p>Because the angle expression includes qubits, it ends up phasing by different amounts in different parts of the superposition.</p>
 
@@ -430,7 +426,7 @@ The implicit uncomputation thing seems really interesting, but also like it coul
           <a href="/post/1626">&laquo; Quirk's Performance History</a>
         </td>
         <td align="right">
-          
+          <a href="/post/1628">From Swapping to Teleporting with Simple Circuit Moves &raquo;</a>
         </td>
       </tr>
     </table>

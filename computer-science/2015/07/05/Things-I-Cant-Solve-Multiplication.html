@@ -215,7 +215,7 @@ These new constraints let the sweet spot drop all the way to $k \approx \frac{n}
 
 <p>If you have $n/\log(n)$ squarings of size $\log{n}$ to perform, you can perform them all in $O(n \log n)$ time.
 The trick to doing this is to sort the inputs into ascending order (but keep track of the original order) and to then literally stream out every possible square number while iterating through the inputs:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">def stream_square(inputs):
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>def stream_square(inputs):
     &quot;&quot;&quot;
     Squares n inputs of size w in O(w n log(n) + w 2^w) time.
     &quot;&quot;&quot;
