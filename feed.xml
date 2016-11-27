@@ -7,6 +7,13 @@
         <atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Bra-Ket Notation Trivializes Matrix Multiplication</title>
+                <description>&lt;p&gt;One of the first things you notice, when learning quantum things, is people surrounding all their symbols with a strange angular notation. Instead of writing &amp;quot;let $a$ be the state&amp;quot;, they keep writing &amp;quot;let $|a\rangle$ be the state&amp;quot;. And the natural reaction is: &amp;quot;Why do they do that? It seems...</description>
+                <pubDate>Sun, 27 Nov 2016 00:10:10 -0500</pubDate>
+                <link>http://algorithmicassertions.com/post/1629</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/post/1629</guid>
+            </item>
+            <item>
                 <title>From Swapping to Teleporting with Simple Circuit Moves</title>
                 <description>&lt;p&gt;There are many ways to prove that a quantum circuit does what you say it does. In this post, we&amp;#39;re going to do that kind of proof in a somewhat unusual way.&lt;/p&gt; &lt;p&gt;We&amp;#39;re going to prove that quantum teleportation works. Not by carefully considering how it affects input states, but...</description>
                 <pubDate>Sun, 20 Nov 2016 00:10:10 -0500</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sun, 31 Jul 2016 13:10:10 -0400</pubDate>
                 <link>http://algorithmicassertions.com/post/1620</link>
                 <guid isPermaLink="true">http://algorithmicassertions.com/post/1620</guid>
-            </item>
-            <item>
-                <title>Wait, What?: Genetic Algorithms for Digital Quantum Simulations</title>
-                <description>&lt;p&gt;Last week, the paper &lt;a href=&quot;https://arxiv.org/abs/1512.00674&quot;&gt;&amp;#39;Genetic Algorithms for Digital Quantum Simulations&amp;#39; by U. Las Heras et al.&lt;/a&gt; was published &lt;a href=&quot;http://journals.aps.org/prl/abstract/10.1103/PhysRevLett.116.230504&quot;&gt;in Physical Review Letters&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;I was reading through the pre-print, when I saw figure 4 and did a double-take:&lt;/p&gt; &lt;blockquote&gt; &lt;p&gt;&lt;img style=&quot;max-width:100%; border: 1px solid gray;&quot; src=&quot;/assets/2016-07-05-wait-what-genetic-resilient-cnot/original_diagram.png&quot;/&gt;&lt;/p&gt; &lt;/blockquote&gt; &lt;p&gt;&lt;em&gt;(Note: Yes,...</description>
-                <pubDate>Tue, 05 Jul 2016 13:10:10 -0400</pubDate>
-                <link>http://algorithmicassertions.com/post/1619</link>
-                <guid isPermaLink="true">http://algorithmicassertions.com/post/1619</guid>
             </item>
     </channel>
 </rss>
