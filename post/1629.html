@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Bra-Ket Notation Trivializes Matrix Multiplication</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Bra-Ket Notation Trivializes Matrix Multiplication</h1>
+<p class="meta">27 Nov 2016</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>One of the first things you notice, when learning quantum things, is people surrounding all their symbols with a strange angular notation.
+Instead of writing &quot;let $a$ be the state&quot;, they keep writing &quot;let $|a\rangle$ be the state&quot;.
+And the natural reaction is: &quot;Why do they do that? It seems completely superfluous!&quot;.</p>
+
+<p>In this post, I&#39;ll quickly describe <a href="https://en.wikipedia.org/wiki/Bra%E2%80%93ket_notation">bra-ket notation</a>.
+Then I&#39;ll explain why I like it.
+Namely, because bra-ket notation took something I always considered horribly finnicky and turned it into something trivial.</p>
+
+<h1>Bras and Kets</h1>
+
+<p>I think of bra-ket notation as being made up of four key concepts from linear algebra:</p>
+
+<ul>
+<li><p>The ket $|a\rangle$ is a <strong>column vector</strong>.</p></li>
+<li><p>The bra $\langle a|$ is a <strong>row vector</strong>.</p></li>
+<li><p>The bra-ket $\langle a| b \rangle$ is a <strong>comparison</strong>.</p></li>
+<li><p>The ket-bra $| a \rangle\langle b|$ is a <strong>transformation</strong>.</p></li>
+</ul>
+
+<p>Fundamentally, the brackets are nothing more than a reminder for &quot;that&#39;s a row vector&quot; vs &quot;that&#39;s a column vector&quot;.
+If the angle bracket is pointing left, like $\langle a|$, then it&#39;s a bra; a row vector.
+If the angle bracket is pointing right, like $| a \rangle$, then it&#39;s a ket; a column vector.
+You can also think of the brackets as a mnemonic tool for tracking if you&#39;re working with a vector or its <a href="https://en.wikipedia.org/wiki/Conjugate_transpose">conjugate transpose</a>, since $| a \rangle = \langle a |^\dagger$.</p>
+
+<p>But this mere mnemonic is more useful than it seems.
+In particular, by creating a clear visual difference between inner and outer products, it adds surprising clarity when <em>combining</em> vectors.</p>
+
+<p>When you multiply a bra $\langle a |$ by a ket $|b\rangle$, with the bra on the left as in $\langle a | b \rangle$, you&#39;re computing an <a href="https://en.wikipedia.org/wiki/Dot_product">inner product</a>.
+You&#39;re asking for a single number that describes how much $a$ and $b$ align with each other.
+If $a$ is perpendicular to $b$, then $\langle a | b \rangle$ is zero.
+If $a$ is parallel to $b$, and both are unit vectors, then $\langle a | b \rangle$&#39;s magnitude is one.
+For the in-between cases, you get something in-between.</p>
+
+<p>When you flip the order and multiply a ket $| a \rangle$ by a bra $\langle b |$, with the ket on the left as in $| a \rangle\langle b |$, you&#39;re computing an <a href="https://en.wikipedia.org/wiki/Outer_product"><em>outer</em> product</a>.
+$|a\rangle\langle b|$ isn&#39;t a single number, it&#39;s a whole matrix!
+A matrix that converts between $a$ and $b$, to be specific.
+If you left-multiply $|a\rangle\langle b|$ by $\langle a |$, you end up with $\langle b |$.
+If you right-multiply $|a\rangle\langle b|$ by $|b\rangle$, you end up with $|a\rangle$.
+Why?
+Because of associativity: $|a\rangle\langle b| \cdot |b \rangle = |a\rangle \cdot \langle b|b \rangle = |a\rangle \cdot 1 = |a\rangle$.
+(Note: assuming $a$ and $b$ are unit vectors.)</p>
+
+<p>You can think of a single ket-bra like $| a \rangle \langle b|$ as a <em>matrix building block</em>.
+To make a big complicated matrix, you just add together a bunch of blocks.
+You want a matrix $M$ that turns $a$ into $b$ <strong>and</strong> turns $c$ into $d$?
+Easy!
+Just add them together!
+As long as $a$ is perpendicular to $c$, then $M = |a\rangle \langle b| + |c\rangle \langle d|$ will do exactly what you want.
+(If $a$ isn&#39;t perpendicular to $c$, you need to add a corrective term... depending on exactly what you want to happen.
+Keep in mind that vectors with components parallel to $a$ are partially transformed by $|a\rangle \langle b|$ due to linearity.)</p>
+
+<p>This means that, instead of writing a matrix as a big block of numbers:</p>
+
+<p>$$A = \begin{bmatrix}
+A_{0,0} &amp; A_{0,1} &amp; A_{0,2} &amp; A_{0,3} \\
+A_{1,0} &amp; A_{1,1} &amp; A_{1,2} &amp; A_{1,3} \\
+A_{2,0} &amp; A_{2,1} &amp; A_{2,2} &amp; A_{2,3} \\
+A_{3,0} &amp; A_{3,1} &amp; A_{3,2} &amp; A_{3,3}
+\end{bmatrix}$$</p>
+
+<p>We can write the matrix as a sum over two indices, by defining &quot;$|k\rangle$&quot; to be the vector with zeroes everywhere except for a one in the $k$&#39;th entry:</p>
+
+<p>$$A = \sum_{i} \sum_{j} A_{i,j} |i\rangle\langle j|$$</p>
+
+<p>This summation form is naturally more amenable to algebraic manipulation.</p>
+
+<h1>Automatic Matrix Multiplication</h1>
+
+<p>I&#39;ve always had trouble multiplying matrices.
+I can <em>do</em> it, it&#39;s just... I really easily make tranposition mistakes.
+I&#39;ll zip the columns of the left matrix against the rows of the right matrix instead of vice versa, or I&#39;ll second guess zipping the rows against the columns, or I&#39;ll forget if I decided that the first index should be the row or the column, or...
+Suffice it to say it&#39;s always been a frustrating mess.</p>
+
+<p>... Until I learned bra-ket notation.</p>
+
+<p>Recall that we can break a matrix into parts like so:</p>
+
+<p>$$A = \sum_{i} \sum_{j} A_{i,j} |i\rangle\langle j|$$</p>
+
+<p>$$B = \sum_{i} \sum_{j} B_{i,j} |i\rangle\langle j|$$</p>
+
+<p>So if we&#39;re faced with a matrix multiplication:</p>
+
+<p>$$P = A \cdot B$$</p>
+
+<p>We can just... do a normal multiplication with standard series manipulations.
+Really.</p>
+
+<p>Start by expanding the definitions of the matrices:</p>
+
+<p>$$P =
+\left( \sum_{i} \sum_{j} A_{i,j} |i\rangle\langle j| \right)
+\cdot
+\left( \sum_{k} \sum_{l} B_{k,l} |k\rangle\langle l| \right)
+$$</p>
+
+<p>Suddenly there&#39;s all this <em>structure</em> to work with.
+For example, because multiplication distributes over addition, we can move the summations around.
+Let&#39;s move them all to the left:</p>
+
+<p>$$
+P =
+\sum_{i} \sum_{j} \sum_{k} \sum_{l} A_{i,j}  |i\rangle\langle j| B_{k,l} |k\rangle\langle l|
+$$</p>
+
+<p>Matrix multiplication isn&#39;t commutative, but $A_{i, j}$ and $B_{k, l}$ are scalar factors.
+We can at least move those around safely.
+Let&#39;s get them out of the way, by pushing them to the right:</p>
+
+<p>$$
+P =
+\sum_{i} \sum_{j} \sum_{k} \sum_{l} |i\rangle\langle j| |k\rangle\langle l| A_{i,j}  B_{k,l}
+$$</p>
+
+<p>Notice that the comparison $\langle j|k\rangle$ just appeared in the middle of the summand.
+The result of a comparison is a scalar, and scalars can be moved around freely, so let&#39;s put the comparison with the other scalars on the right:</p>
+
+<p>$$
+P =
+\sum_{i} \sum_{j} \sum_{k} \sum_{l} |i\rangle\langle l| \cdot \langle j|k\rangle A_{i,j} B_{k,l}
+$$</p>
+
+<p>Now it&#39;s clear that the sums over $i$ and $l$ are the ones building up the overall structure of the matrix, while the $j$ and $k$ sums work on the individual entries.
+Let&#39;s re-order the sums to match that structure and pull $|i\rangle\langle l|$, the outer product term, uh, outward:</p>
+
+<p>$$
+P =
+\sum_{i} \sum_{l} |i\rangle\langle l| \sum_{j} \sum_{k} \langle j|k\rangle A_{i,j} B_{k,l}
+$$</p>
+
+<p>There&#39;s one last important thing to notice: the comparison $\langle j | k \rangle$ is almost always zero.
+Anytime $j$ differs from $k$, $\langle j | k \rangle$ is comparing totally orthogonal basis vectors.
+That means that, in the sum over $k$, the only summand that matters is the one where $j=k$.
+We don&#39;t <em>need</em> to sum over $k$, we can just re-use $j$!</p>
+
+<p>$$
+P =
+\sum_{i} \sum_{l} |i\rangle\langle l| \sum_{j} \langle j|j\rangle A_{i,j} B_{j,l}
+$$</p>
+
+<p>$\langle j | j \rangle$ is 1, because $|j\rangle$ is a unit vector, so we simply drop the $\langle j | j \rangle$ term.
+That leaves:</p>
+
+<p>$$
+P =
+\sum_{i} \sum_{l} |i\rangle\langle l| \sum_{j} A_{i,j} B_{j,l}
+$$</p>
+
+<p>Or, written another way:</p>
+
+<p>$$(A \cdot B)_{i, l} = \sum_{j} A_{i,j} B_{j,l}$$</p>
+
+<p>Which is the definition of matrix multiplication that I was taught in school.</p>
+
+<p>I really want to emphasize how <em>different</em> this approach to matrix multiplication feels, to me.
+There was no worrying about rows-vs-columns, or about the order of indices.
+I just plugged in the sums, turned the crank, and out popped the first matrix multiplication I ever did without second-guessing every step.</p>
+
+<h1>Other Niceties</h1>
+
+<p>Thinking with bras and kets makes many trivial problems actually trivial (at least for me).
+For example, I always had a hard time remembering if $X \cdot Z$ would negate the Off or On state of an input.
+With bra-kets I just think &quot;Okay $X$ is $|0\rangle\langle 1| + |1\rangle\langle 0|$ and $Z$ is $|0\rangle \langle 0| - |1\rangle \langle 1|$, so $X \cdot Z$ is..., right, duh, it negates $\langle 0 |$s coming from the left and $| 1 \rangle$s coming from the right.&quot;.</p>
+
+<p>Another thing I find useful, when working with kets and bras, is that you don&#39;t need to think about the size of a matrix.
+$|0\rangle \langle 1|$ acts the same regardless of whether you logically group it with other transformations into a 2x2 matrix, a 3x3 matrix, or a 100x2 matrix.
+All notions of multiplications having &quot;matching sizes&quot; are made irrelevant by unmatched inputs or outputs automatically being zero&#39;d away.</p>
+
+<p>Bra-ket notation is also flexible enough to describe linear transformations on infinite spaces, including continuous spaces.
+The continuous Fourier transform?
+That&#39;s just the &#39;matrix&#39; $F = \int \int |x\rangle \langle y | \cdot e^{x y \tau i} \,dx \,dy$:</p>
+
+<p><img style="max-width:100%; max-height: 196px;" src="/assets/2016-11-27-bra-ket-notation/fourier-transform-plot.png"/></p>
+
+<p>We&#39;re not done yet!
+Ever wonder why eigendecomposing a matrix is so useful?
+So did I, until I saw how easy it is to manipulate terms like $\sum_k \lambda_k |\lambda_k\rangle \langle \lambda_k|$.
+<em>Especially</em> if the $|\lambda_k\rangle$&#39;s are orthogonal.</p>
+
+<p>Finally, bra-ket notation enables other useful shorthands.
+For example, $\langle A \rangle$ is short for &quot;the expected value of the observable $A$&quot; (literally $\langle v | A | v\rangle$ for some implied $v$).
+This makes defining the standard deviation trivial, for example: $\text{stddev}(X) = \sqrt{\langle X^2 \rangle - \langle X \rangle^2}$.
+I also find myself creating constructs like $\sum_k \ket{n \atop k} \bra{n \atop k}$, which succinctly defines the projector for the symmetric subspace of $n$ qubits without straying too far into new notation.</p>
+
+<p>So the benefits go beyond simple matrix multiplication.</p>
+
+<h1>Summary</h1>
+
+<p>Bra-ket notation lets you split matrices into sums of useful building blocks.
+Turns out this is a pretty good idea.
+Good enough that I think it should be taught to everyone, not just physicists, as part of the standard linear algebra curriculum.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1628">&laquo; From Swapping to Teleporting with Simple Circuit Moves</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
