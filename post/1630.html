@@ -124,7 +124,7 @@ P_1(\sigma)
 <p>Note that we didn&#39;t normalize.
 That&#39;s because we can&#39;t.
 This is still a malformed distribution.
-The numerator of $P_1$ converges to 1, but then denominator makes the expression act like $1/\sigma$.
+The numerator of $P_1$ converges to 1, but the denominator makes the expression act like $1/\sigma$.
 So the overall the cumulative distribution will diverge like $\Theta(\lg \sigma)$.</p>
 
 <p>Things are still broken after one observation, but they&#39;re not <em>as</em> broken.
@@ -146,12 +146,12 @@ P_2(\sigma)
 
 <p>Now that the denominator is squared, the cumulative distribution converges to a finite number:</p>
 
-<p>$$\int_0^\infty \frac{\exp\left( -30^2/ \sigma^2 \right)}{\sigma^2 \tau} d\sigma = \frac{1}{120 \sqrt{\pi}} \approx 0.0047$$</p>
+<p>$$\int_0^\infty \frac{\exp\left(-30^2/ \sigma^2 \right)}{\sigma^2 \tau} d\sigma = \frac{1}{120 \sqrt{\pi}} \approx 0.0047$$</p>
 
 <p>And we can get a proper posterior <em>probability</em> distribution by using this cumulative total to renormalize:</p>
 
 <p>$$
-P_2(\sigma) =\frac{\exp\left( -30^2/ \sigma^2 \right)}{240 \sigma^2\pi^{3/2}}
+P_2(\sigma) =\frac{60 \exp\left(-30^2/ \sigma^2 \right)}{\sigma^2 \sqrt{\pi}}
 $$</p>
 
 <p><img style="max-width:100%;" src="/assets/2016-12-04-malformed-priors/stdev-posterior-2.png"/></p>
