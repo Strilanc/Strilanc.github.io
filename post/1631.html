@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Turning Detection into Correction with Quantum Teleportation </title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Turning Detection into Correction with Quantum Teleportation </h1>
+<p class="meta">12 Dec 2016</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Suppose we were in a world with good quantum computers, but not-so-good quantum networks.
+Where qubits lived long malleable lives in the cool safety of dilution refrigerators, interspersed with torrid journeys through noisy fiber optic cable.</p>
+
+<p>In that world, what kinds of strategies would be used to make sending qubits more reliable?
+An obvious answer is <a href="https://en.wikipedia.org/wiki/Quantum_error_correction">quantum error correcting codes</a>, but I want to discuss a slight twist on that concept.
+One based on the fungibility of EPR pairs and the ubiquity of classical communication.</p>
+
+<h1>The Setup</h1>
+
+<p>Imagine Alice has sixteen qubits of important quantum information.
+She wants to move these qubits to Bob.
+However, the two are separated by eight lossy networks hops:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>A ~&gt; 1 ~&gt; 2 ~&gt; 3 ~&gt; 4 ~&gt; 5 ~&gt; 6 ~&gt; 7 ~&gt; B
+</code></pre></div>
+<p>Each hop will detect when a loss occurs, but losses occur a <em>lot</em>.
+Each qubit sent over a hop has a <strong>10%</strong> chance of being ruined.
+That means the odds of a qubit surviving all eight hops is roughly 40%, and the entire message surviving the trip would be a one in a million miracle.</p>
+
+<p>Our goal is to come up with a strategy to fix this reliability problem.
+We want to be able to get the qubits across the network with near certainty, instead of failing with near certainty.</p>
+
+<p>If we were sending a classical message, this problem would be trivial.
+We&#39;re told when part of the message doesn&#39;t arrive, so we can just resend resend resend.
+<em>Eventually</em> we&#39;d succeed.
+But quantum information <a href="https://en.wikipedia.org/wiki/No-cloning_theorem">can&#39;t be copied</a>, so we can&#39;t have backups copies for retrying.
+If we send the message and it&#39;s lost, it&#39;s <em>really lost</em>.</p>
+
+<p>If we want to be able to send-and-retry, we need some kind of loophole in the no-cloning theorem.
+For example, if the qubits-to-be-cloned are  the result of a computation, then we can produce a copy by simply performing the computation again.
+The no-cloning theorem only applies when we don&#39;t know <em>anything</em> about the qubits, including details like &quot;it was produced by computation X&quot;.
+Another example of a reproducible state, and the one we&#39;ll be using, is fresh EPR halves.</p>
+
+<p>An EPR half is a qubit that&#39;s part of an <a href="https://en.wikipedia.org/wiki/Bell_state">EPR pair</a>.
+An EPR pair is two qubits in the entangled state $\frac{1}{\sqrt 2} |00\rangle + \frac{1}{\sqrt 2}|11\rangle$.
+EPR pairs are easy to make: take two qubits in the $|0\rangle$ state, hit one of them with a <a href="https://en.wikipedia.org/wiki/Quantum_gate#Hadamard_gate">Hadamard</a>, then <a href="https://en.wikipedia.org/wiki/Controlled_NOT_gate">CNOT</a> that qubit onto the other one.
+EPR pairs are also <em>fungible</em>, like money.
+If you send me a dollar in the mail, and the letter gets lost, you can just try again and mail another dollar.
+It doesn&#39;t matter to me <em>which</em> dollar you send.
+Analogously, if you send me an EPR half (1 bit of entanglement) and it gets lost, you can just send another EPR half.
+We end up with a bit of entanglement either way.</p>
+
+<p>What this all means is that Alice can reliably build up entanglement with Bob, even over the lossy network.
+She just keeps producing EPR pairs and sending one of the EPR halves to Bob.
+If one of the halves is lost is transit, she tosses her local corresponding half and tries again.</p>
+
+<p>Once Alice and Bob are entangled, the game is over.
+We can burn the entanglement to convert classical bandwidth (from the internet) into quantum bandwidth.
+That is to say, we can <a href="https://en.wikipedia.org/wiki/Quantum_teleportation">quantum-teleport</a> qubits from Alice to Bob.</p>
+
+<h1>A Solution</h1>
+
+<p>Instead of directly sending the 16-qubit message across the lossy quantum network, Alice uses the quantum network to send sixteen EPR halves to Bob.
+Whenever an EPR half is lost in transit (which we assumed the network could and would report) she sends a replacement.
+Once Alice and Bob share 16 bits of entanglement, they use them to quantum-teleport the message over the classical internet.</p>
+
+<p>This solution can be improved upon in two ways.</p>
+
+<p>First, because the quantum network is so lossy, it&#39;s a bad idea for Alice to send EPR halves all the way to Bob.
+Instead, we should build up entanglement at the link level, between each pair of nodes, then teleport the message across each hop.
+This improves our throughput from $\Theta((1-L)^N)$ to $\Theta(1-L)$, where $N$ is the number of hops and $L$ is the proportion of lost messages.</p>
+
+<p>Second, we can use <a href="https://en.wikipedia.org/wiki/Quantum_teleportation#Entanglement_swapping">entanglement swapping</a> (i.e. teleporting EPR halves) to spread the link-level entanglement across longer and longer distances.
+In the end Alice ends up entangled with Bob, but without the exponential losses incurred by trying to directly send the entanglement.
+This improves the latency from $\Omega(R N)$ to $\Omega(R \lg N)$, where $R$ is a round-trip across the classical internet and $N$ is the number of hops.
+(Note that the entanglement can be built-up ahead of time, in which case the latency would improve from $\Omega(R N)$ to $\Omega(R)$.)</p>
+
+<p>Here&#39;s how things play out, with the two improvements applied.
+We start with an 8-hop network with 10% loss per hop:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>A ~&gt; 1 ~&gt; 2 ~&gt; 3 ~&gt; 4 ~&gt; 5 ~&gt; 6 ~&gt; 7 ~&gt; B [10% loss per hop]
+</code></pre></div>
+<p>Instead of risking the message, we instead send fungible EPR halves.
+We do this locally across each hop, in parallel, so that adjacent nodes become entangled.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>A ≈≈ 1 ≈≈ 2 ≈≈ 3 ≈≈ 4 ≈≈ 5 ≈≈ 6 ≈≈ 7 ≈≈ B
+</code></pre></div>
+<p>Now we remove intermediate hops via entanglement swapping.
+We repeat this process, in a hierarchical fashion, until A and B are entangled:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>A ≈≈ 1 ≈≈ 2 ≈≈ 3 ≈≈ 4 ≈≈ 5 ≈≈ 6 ≈≈ 7 ≈≈ B
+     ⇄         ⇄         ⇄         ⇄
+A ≈≈≈≈≈≈≈ 2 ≈≈≈≈≈≈≈ 4 ≈≈≈≈≈≈≈ 6 ≈≈≈≈≈≈≈ B
+          ⇄                   ⇄
+A ≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈ 4 ≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈ B
+                    ⇄
+A ≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈ B
+</code></pre></div>
+<p>Finally, we use the entanglement between A and B to quantum-teleport a qubit of the message.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>A --------&gt; B
+</code></pre></div>
+<p>This approach gives ideal throughput and latency, but relies heavily on the classical internet and assumes we can detect losses.</p>
+
+<h1>Summary</h1>
+
+<p>Instead of sending messages over an unreliable quantum network, use the network to build up entanglement.
+Then use that entanglement to fuel quantum teleportation over the classical internet.
+This allows you to use a meer error detecting code over the quantum network, instead of a full error correcting code.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1630">&laquo; Improper Priors</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

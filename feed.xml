@@ -7,6 +7,13 @@
         <atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Turning Detection into Correction with Quantum Teleportation </title>
+                <description>&lt;p&gt;Suppose we were in a world with good quantum computers, but not-so-good quantum networks. Where qubits lived long malleable lives in the cool safety of dilution refrigerators, interspersed with torrid journeys through noisy fiber optic cable.&lt;/p&gt; &lt;p&gt;In that world, what kinds of strategies would be used to make sending qubits...</description>
+                <pubDate>Mon, 12 Dec 2016 00:10:10 -0500</pubDate>
+                <link>http://algorithmicassertions.com/post/1631</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/post/1631</guid>
+            </item>
+            <item>
                 <title>Improper Priors</title>
                 <description>&lt;p&gt;Here is the basic process for Bayesian reasoning:&lt;/p&gt; &lt;ol&gt; &lt;li&gt;&lt;p&gt;Start with a &lt;a href=&quot;https://en.wikipedia.org/wiki/Prior_probability&quot;&gt;prior&lt;/a&gt;. A probability distribution over hypothesis space that represents your starting beliefs.&lt;/p&gt;&lt;/li&gt; &lt;li&gt;&lt;p&gt;Make an observation $B$.&lt;/p&gt;&lt;/li&gt; &lt;li&gt;&lt;p&gt;Scale the prior pointwise by each hypothesis&amp;#39; predicted probability of $B$.&lt;/p&gt;&lt;/li&gt; &lt;li&gt;&lt;p&gt;Normalize the prior so it adds up to 100%. This...</description>
                 <pubDate>Sun, 04 Dec 2016 00:10:10 -0500</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Tue, 20 Sep 2016 13:10:10 -0400</pubDate>
                 <link>http://algorithmicassertions.com/post/1622</link>
                 <guid isPermaLink="true">http://algorithmicassertions.com/post/1622</guid>
-            </item>
-            <item>
-                <title>Java should Autobox Arrays, or maybe not</title>
-                <description>&lt;p&gt;I remember, the first time I used C#, being pleasantly surprised that &lt;code&gt;1.ToString()&lt;/code&gt; worked. For a seasoned C# programmer, that might seem a bit silly: why &lt;em&gt;wouldn&amp;#39;t&lt;/em&gt; it work? &lt;code&gt;ToString&lt;/code&gt; works on every other value, except null, so why wouldn&amp;#39;t I expect it work on a simple value like the...</description>
-                <pubDate>Sat, 10 Sep 2016 13:10:10 -0400</pubDate>
-                <link>http://algorithmicassertions.com/post/1621</link>
-                <guid isPermaLink="true">http://algorithmicassertions.com/post/1621</guid>
             </item>
     </channel>
 </rss>
