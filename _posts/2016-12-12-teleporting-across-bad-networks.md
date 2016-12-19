@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Turning Detection into Correction with Quantum Teleportation "
+title: "Turning Detection into Correction with Quantum Teleportation"
 date: 2016-12-12 12:10:10 am EST
 permalink: post/1631
 ---
