@@ -7,7 +7,14 @@
         <atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
-                <title>Turning Detection into Correction with Quantum Teleportation </title>
+                <title>Quantum Data Locking vs Recognizable Data</title>
+                <description>&lt;p&gt;Quantum information theory differs from classical information theory in many interesting ways. The ability to perform &amp;quot;data locking&amp;quot;, where the amount of classical information that you have access to can go up dramatically as you receive clarifying information, is one of those differences.&lt;/p&gt; &lt;p&gt;The &lt;a href=&quot;https://arxiv.org/abs/quant-ph/0303088&quot;&gt;original quantum data locking paper,...</description>
+                <pubDate>Sun, 18 Dec 2016 00:10:10 -0500</pubDate>
+                <link>http://algorithmicassertions.com/post/1632</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/post/1632</guid>
+            </item>
+            <item>
+                <title>Turning Detection into Correction with Quantum Teleportation</title>
                 <description>&lt;p&gt;Suppose we were in a world with good quantum computers, but not-so-good quantum networks. Where qubits lived long malleable lives in the cool safety of dilution refrigerators, interspersed with torrid journeys through noisy fiber optic cable.&lt;/p&gt; &lt;p&gt;In that world, what kinds of strategies would be used to make sending qubits...</description>
                 <pubDate>Mon, 12 Dec 2016 00:10:10 -0500</pubDate>
                 <link>http://algorithmicassertions.com/post/1631</link>
@@ -68,13 +75,6 @@
                 <pubDate>Tue, 27 Sep 2016 13:10:10 -0400</pubDate>
                 <link>http://algorithmicassertions.com/post/1623</link>
                 <guid isPermaLink="true">http://algorithmicassertions.com/post/1623</guid>
-            </item>
-            <item>
-                <title>A Resource State won&#39;t get you out of Clifford Jail</title>
-                <description>&lt;p&gt;I noticed something interesting, while writing the post about &lt;a href=&quot;/post/1620&quot;&gt;implementing the QFT using addition into gradients&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;Suppose you want to construct a lot of precise power-of-2 phase gates $Z^{2^{-k}}$. You&amp;#39;re limited to Hadamard gates, controlled-NOTs, a resource state of your choosing, and the half-as-precise-as-what-you-need $Z^{2^{-k+1}}$ gate. Can you do...</description>
-                <pubDate>Tue, 20 Sep 2016 13:10:10 -0400</pubDate>
-                <link>http://algorithmicassertions.com/post/1622</link>
-                <guid isPermaLink="true">http://algorithmicassertions.com/post/1622</guid>
             </item>
     </channel>
 </rss>
