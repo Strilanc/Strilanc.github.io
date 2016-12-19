@@ -62,7 +62,7 @@ That means we can expect the X-axis measurements to have been essentially unchan
 So Bob wins in both the Z-axis and X-axis cases (with high probability).
 And clearly this approach of performing the verification under superposition is going to work on any quantum data locking protocol.
 If Bob has *any* way to say "Yup, that data looks right!", then quantum-data-locking that data is not secure in the information-theoretic sense.
-So beware.
+And if you're not going to get information-theoretic security, you might as well just use AES and "unlock" the data by revealing the key.
 
 # Summary
 
