@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Quantum Bomb Detector Detectors</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Quantum Bomb Detector Detectors</h1>
+<p class="meta">11 Feb 2017</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>The <a href="https://en.wikipedia.org/wiki/Elitzur%E2%80%93Vaidman_bomb_tester">Elitzur-Vaidman bomb tester</a> is one of the funnest quantum devices to teach people about.
+It uses the <a href="https://en.wikipedia.org/wiki/Quantum_Zeno_effect">quantum Zeno effect</a> to safely separate dud bombs from live bombs, even when the only way to &quot;test&quot; a bomb is by triggering it!
+The main caveat is that the dud bombs have to broken in a specific way: instead of being triggered by a single passing photon, they must fail to interact with the photon at all.</p>
+
+<p>For clarity, let&#39;s translate the bombs into quantum circuits.
+The circuit element corresponding to a live bomb is a CNOT gate onto a fresh ancilla, followed by a measurement to check if the bomb should explode.
+The dud bomb&#39;s circuit element is the same as the live bomb&#39;s, but with the NOT gate removed:</p>
+
+<p><img style="max-width:100%;" src="/assets/2017-02-11-bomb-detector-detectors/live-and-dud-bombs.png"/></p>
+
+<p>The goal of the Elitzur-Vaidmain bomb tester is to distinguish between the above two circuits.
+<em>Without</em> causing a kaboom.
+You can run as many qubits as you want through the bomb-or-dud black box, but if the internal wire <em>ever</em> goes high then the bomb explodes and you lose.
+You win if there&#39;s no explosion and your circuit outputs an OFF qubit for live bombs and an ON qubit for dud bombs.</p>
+
+<p>If you&#39;ve never seen this problem before, I recommend stopping here and trying to solve it for yourself because I&#39;m about to spoil it.</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>You&#39;re sure?</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>Alright, here comes the spoilers.</p>
+
+<h1>The Bomb Tester</h1>
+
+<p>The trick to telling if a bomb is live or a dud, without setting the bomb off, is to run a single qubit through the bomb again and again while very slowly rotating the qubit from OFF to ON.</p>
+
+<p>If the bomb is a dud, the rotations add together until the qubit has rotated all the way to ON.
+We stop after the appropriate number of passes, measure the qubit, get an ON result, and see that yes indeed this is a dud bomb.</p>
+
+<p>If the bomb is live, then after each rotation there&#39;s a chance the bomb will explode.
+If we&#39;re rotating by $\theta$ radians, that chance equals $\cos^2 \theta$.
+But the bomb exploding or not <em>is a measurement of the qubit</em>.
+When the bomb doesn&#39;t explode <em>we&#39;ve collapsed the qubit back into the OFF state</em>.
+This means the rotations <em>don&#39;t add up</em> like they do in the dud case.
+As long as the bomb doesn&#39;t explode, we keep ending up back in the OFF state.
+So we&#39;ll get an OFF result when measuring the qubit at the end of the circuit, and conclude the bomb is live... if we survived.</p>
+
+<p>How likely is it that we survive all of the passes when dealing with a live bomb?
+Assuming we do $n$ passes, having to rotate by the correct amount in the dud case forces a per-pass rotation of $\theta = \pi/(2n)$.
+Given $n$ and the corresponding $\theta$ we can compute the overall chance of surviving every pass.
+It&#39;s $p_n = (\cos \frac{\pi}{2n})^{2 n}$.
+Note that $\lim_{n \rightarrow \infty} p_n = 0$.
+That&#39;s the Zeno effect in action: constant measurements overpower sufficiently tiny rotations.
+By increasing $n$, we can, with probability arbitrarily close to 1, keep the state OFF without exploding any bombs.</p>
+
+<p>This is all somewhat counter-intuitive, so let&#39;s go over the numbers with $n=8$.
+Given a live bomb, there&#39;s a $p_8 = (\cos \frac{\pi}{16})^{16} \approx 73.3\%$ chance it will survive.
+If it survives, there&#39;s a 100% chance we measure OFF and conclude it&#39;s live.
+Given a dud bomb, there&#39;s a 100% chance we measure ON and conclude it&#39;s a dud.
+We can confirm these numbers by simulating the bomb circuits in Quirk.</p>
+
+<p><a href="http://algorithmicassertions.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22X%5E%E2%85%9B%22%5D%2C%5B%22%E2%80%A2%22%2C%22inc4%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22Chance4%22%5D%2C%5B%22%E2%80%A2%22%2C%22inc4%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22Chance4%22%5D%2C%5B%22%E2%80%A2%22%2C%22inc4%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22Chance4%22%5D%2C%5B%22%E2%80%A2%22%2C%22inc4%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22Chance4%22%5D%2C%5B%22%E2%80%A2%22%2C%22inc4%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22Chance4%22%5D%2C%5B%22%E2%80%A2%22%2C%22inc4%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22Chance4%22%5D%2C%5B%22%E2%80%A2%22%2C%22inc4%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22Chance4%22%5D%2C%5B%22%E2%80%A2%22%2C%22inc4%22%5D%2C%5B1%2C%22%E2%97%A6%22%2C%22%E2%97%A6%22%2C%22%E2%97%A6%22%2C%22%E2%97%A6%22%2C%22X%22%5D%2C%5B1%2C1%2C1%2C1%2C1%2C%22Chance%22%5D%2C%5B%22Chance%22%2C1%2C1%2C1%2C1%2C%22%E2%80%A2%22%5D%5D%7D">About a quarter of the live bombs explode, but the rest output OFF</a>:</p>
+
+<p><img style="max-width:100%;" src="/assets/2017-02-11-bomb-detector-detectors/live-bomb-circuit.png"/></p>
+
+<p>Note that, because Quirk doesn&#39;t let you recohere qubits, I represented the live bombs with increment gates instead of CNOTs to save space.
+Otherwise I would have had to use a new qubit for each CNOT.
+<a href="http://algorithmicassertions.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22X%5E%E2%85%9B%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22Chance%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%5D%7D">An even more compact alternative, which I&#39;ll be using elsewhere in this post, is post-selection gates</a>:</p>
+
+<p><img style="max-width:100%;" src="/assets/2017-02-11-bomb-detector-detectors/live-bomb-circuit-postselection.png"/></p>
+
+<p><a href="http://algorithmicassertions.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22X%5E%E2%85%9B%22%5D%2C%5B%22%E2%80%A2%22%2C%22%7En89m%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22Chance4%22%5D%2C%5B%22%E2%80%A2%22%2C%22%7En89m%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22Chance4%22%5D%2C%5B%22%E2%80%A2%22%2C%22%7En89m%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22Chance4%22%5D%2C%5B%22%E2%80%A2%22%2C%22%7En89m%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22Chance4%22%5D%2C%5B%22%E2%80%A2%22%2C%22%7En89m%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22Chance4%22%5D%2C%5B%22%E2%80%A2%22%2C%22%7En89m%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22Chance4%22%5D%2C%5B%22%E2%80%A2%22%2C%22%7En89m%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22Chance4%22%5D%2C%5B%22%E2%80%A2%22%2C%22%7En89m%22%5D%2C%5B1%2C%22%E2%97%A6%22%2C%22%E2%97%A6%22%2C%22%E2%97%A6%22%2C%22%E2%97%A6%22%2C%22X%22%5D%2C%5B1%2C1%2C1%2C1%2C1%2C%22Chance%22%5D%2C%5B%22Chance%22%2C1%2C1%2C1%2C1%2C%22%E2%80%A2%22%5D%5D%2C%22gates%22%3A%5B%7B%22id%22%3A%22%7En89m%22%2C%22name%22%3A%22dud%22%2C%22circuit%22%3A%7B%22cols%22%3A%5B%5B%22%E2%80%A6%22%2C%22%E2%80%A6%22%2C%22%E2%80%A6%22%2C%22%E2%80%A6%22%5D%5D%7D%7D%5D%7D">Dud bombs, which do nothing, output ON and don&#39;t explode</a>:</p>
+
+<p><img style="max-width:100%;" src="/assets/2017-02-11-bomb-detector-detectors/dud-bomb-circuit.png"/></p>
+
+<p>If we increase from $n=8$ to $n=100$, the live bomb loses decrease from $26.7 \%$ to $2.4 \%$.
+And at $n=1000$ the loses are a mere $0.5 \%$, with the trend continuing downwards towards 0 hyperbolically as $n$ increases (i.e. $p_n$ is asymptotically equal to $1/n$).</p>
+
+<p>Now that you understand the bomb tester, let&#39;s consider a hypothetical practical application.</p>
+
+<h1>Hidden Beam Alarms</h1>
+
+<p>In heist movies, a common trope is the &#39;<a href="http://tvtropes.org/pmwiki/discussion.php?id=kzqd8x3fn16t4vu2x54c3o0x">laser hallway</a>&#39;:</p>
+
+<blockquote>
+<p>There, at the far end of the room, sitting on a pedestal, is the target: the famous Maltese MacGuffin.
+But there&#39;s one little problem.
+Between here and there is an array of highly visible laser beams, and crossing one will set off the alarm system.
+Time for a highly improbable series of backflips, cartwheels, and similar moves. </p>
+</blockquote>
+
+<p>Of course, in real life, beam alarms aren&#39;t as flashy as they are in the movies.
+For starters, they use infrared light so you can&#39;t see the beams.
+Even if the room is foggy or dusty.</p>
+
+<p>That being said, infrared beams are still detectable with the right equipment.
+The ideal beam detector would be <em>truly</em> undetectable.
+That&#39;s where the Elitzur-Vaidman bomb tester and the Zeno effect suggest interesting possibilities.</p>
+
+<p>Consider: what if we made a beam alarm that worked like the bomb tester?
+Instead of just sending a photon across a hallway, we put its path into a superposition of travelling across the hallway and through a fiber optic line below the hallway.
+Initially the photon is only travelling along the line below the hallway, but as we bounce the photon back and forth we use beam splitters to apply small rotations to the path superposition.</p>
+
+<p>If there&#39;s nothing in the hallway beam path then these rotations will add up and the photon will gradually transition to being entirely on the hallway path.
+But if there <em>is</em> something in the hallway, then the Zeno effect will pin the photon to the fiber optic path.
+Because the Zeno effect is keeping the photon from taking the hallway path, <strong>no photon-detector in the hallway beam path will be set off</strong>.
+After $n$ bounces we measure which path the photon is on and VOILA!, we&#39;ve checked if something is in the hallway in an apparently undetectable way.</p>
+
+<p>(<em>Side note. I should mention that, in practice, there would be complications to this system.
+For example, air could scatter the photons.
+Or someone could step into the beam only at the end of the path-rotating process.
+But, putting those and other caveats aside, this does appear at first glance to be an undetectable way to check if someone is in the hallway.</em>)</p>
+
+<p>In fact, if we limit the hallway denizens to classical detectors, then this Zeno-effect beam alarm really <em>is</em> undetectable in the limit.
+Modulo practical issues.
+But consider: the alarm is telling us information about what&#39;s in the hall.
+It must be doing <em>some</em> kind of measurement to do that.
+And quantum systems are perturbed by measurements...</p>
+
+<h1>Zeno Detector Detectors</h1>
+
+<p>So far I&#39;ve mentioned two types of bombs.
+Dud bombs, which do nothing, and live bombs, which do a controlled operation.
+To detect the quantum bomb tester we need a third type of bomb: the superposed bomb.</p>
+
+<p>Superposed bombs have an internal qubit that determines whether the bomb acts like a dud bomb or like a live bomb.
+But the internal qubit isn&#39;t kept ON or kept OFF, it&#39;s kept in superposition.
+It&#39;s initialized to the state $|+\rangle = \frac{1}{\sqrt 2}|0\rangle + \frac{1}{\sqrt 2}|1\rangle$.
+The bomb then periodically checks whether the control qubit is still in the state $|+\rangle$ by doing an $X$-axis measurement (i.e. a $|+\rangle$ vs $|-\rangle$ measurement).
+If the internal qubit is in the wrong state... KABOOM!</p>
+
+<p><img style="max-width:100%;" src="/assets/2017-02-11-bomb-detector-detectors/superposed-bomb.png"/></p>
+
+<p>The trick here is that, since the internal qubit determines whether this bomb acts like a dud bomb or like a live bomb, any detector that distinguishes between the two <em>must have measured whether the internal qubit is ON or OFF</em>.
+But if the internal qubit was measured then it has ended up OFF, or ON, and in either case an $X$-axis measurement will have a random result.
+Basically, if you run this thing through an Elitzur-Vaidman bomb tester instead of leaving it alone, <a href="http://algorithmicassertions.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22X%5E%E2%85%9B%22%2C1%2C%22H%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%2C%22%E2%80%A2%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%2C%22%E2%80%A2%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%2C%22%E2%80%A2%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%2C%22%E2%80%A2%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%2C%22%E2%80%A2%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%2C%22%E2%80%A2%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%2C%22%E2%80%A2%22%5D%2C%5B%22X%5E%E2%85%9B%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%2C%22%E2%80%A2%22%5D%2C%5B%22Chance%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%2C%22%7C%2B%E2%9F%A9%E2%9F%A8%2B%7C%22%5D%5D%7D">there&#39;s at least a 50% chance it&#39;ll blow up in your face</a>:</p>
+
+<p><img style="max-width:100%;" src="/assets/2017-02-11-bomb-detector-detectors/internal-check-bomb-circuit.png"/></p>
+
+<p>Note that the superposed bomb is still technically vulnerable to the Zeno effect, but the detector isn&#39;t in control of how often the state is measured anymore.
+The bomb decides how often to check, and the period could be set appropriately based on the situation.</p>
+
+<p>Further note that similar detector detection effects can be achieved even without the internal control.
+Almost any mechanism that breaks the Zeno effect will do.
+For example, instead of checking the &quot;bomb triggered&quot; information constantly, <a href="http://algorithmicassertions.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22X%5E%E2%85%9B%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22X%5E%E2%85%9B%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22X%5E%E2%85%9B%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22X%5E%E2%85%9B%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22X%5E%E2%85%9B%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22X%5E%E2%85%9B%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22X%5E%E2%85%9B%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22X%5E%E2%85%9B%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22Chance%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%5D%7D">just keep it coherent for awhile</a>:</p>
+
+<p><img style="max-width:100%;" src="/assets/2017-02-11-bomb-detector-detectors/periodic-check-bomb-circuit.png"/></p>
+
+<p>What this all means is that our hypothetical zeno-effect beam alarm works on some hallway obstacles, but not <em>all</em> obstacles.
+Obstacles capable of doing quantum computation on the beam photons have a chance of detecting the beam, decreasing the chance of being detected, and <a href="https://en.wikipedia.org/wiki/Metamaterial_cloaking">even slipping by undetected</a>.</p>
+
+<p>At this point it should be clear that this whole business of detector detection is more complicated than it seems.
+We&#39;re trying to do process tomography on systems with internal states that are out of our control, without affecting those internal states.
+The fact that we can tell live bombs from dud bombs under these constraints is fascinating, but this is a power with limits.
+There are some systems that a given detector just won&#39;t be able to reliably tell apart without causing side effects.</p>
+
+<p>Instead of ending the arms race between detectors and detector-detectors, quantum computation just complicates the problem even more.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1632">&laquo; Quantum Data Locking vs Recognizable Data</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

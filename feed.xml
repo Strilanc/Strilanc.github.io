@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>Algorithmic Assertions - Craig Gidney&#39;s Computer Science Blog</title>
+        <title>Algorithmic Assertions - Craig Gidney's Computer Science Blog</title>
         <description>A blog about computer science, software engineering, quantum computing, mathematical puzzles, and so forth.</description>
         <link>http://algorithmicassertions.com</link>
         <atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
         
+            <item>
+                <title>Quantum Bomb Detector Detectors</title>
+                <description>&lt;p&gt;The &lt;a href=&quot;https://en.wikipedia.org/wiki/Elitzur%E2%80%93Vaidman_bomb_tester&quot;&gt;Elitzur-Vaidman bomb tester&lt;/a&gt; is one of the funnest quantum devices to teach people about. It uses the &lt;a href=&quot;https://en.wikipedia.org/wiki/Quantum_Zeno_effect&quot;&gt;quantum Zeno effect&lt;/a&gt; to safely separate dud bombs from live bombs, even when the only way to &amp;quot;test&amp;quot; a bomb is by triggering it! The main caveat is that the...</description>
+                <pubDate>Sat, 11 Feb 2017 00:10:10 -0500</pubDate>
+                <link>http://algorithmicassertions.com/post/1700</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/post/1700</guid>
+            </item>
             <item>
                 <title>Quantum Data Locking vs Recognizable Data</title>
                 <description>&lt;p&gt;Quantum information theory differs from classical information theory in many interesting ways. The ability to perform &amp;quot;data locking&amp;quot;, where the amount of classical information that you have access to can go up dramatically as you receive clarifying information, is one of those differences.&lt;/p&gt; &lt;p&gt;The &lt;a href=&quot;https://arxiv.org/abs/quant-ph/0303088&quot;&gt;original quantum data locking paper,...</description>
@@ -49,7 +56,7 @@
                 <guid isPermaLink="true">http://algorithmicassertions.com/post/1627</guid>
             </item>
             <item>
-                <title>Quirk&#39;s Performance History</title>
+                <title>Quirk's Performance History</title>
                 <description>&lt;p&gt;&lt;a href=&quot;/quirk&quot;&gt;My quantum circuit simulator Quirk&lt;/a&gt; is one of those projects that I keep coming back to. For years, I only touched it intermittently. Then, over the past few months, the work kinda took off and I&amp;#39;ve been stuck in a cycle of &amp;quot;Okay, with that release I think I...</description>
                 <pubDate>Mon, 07 Nov 2016 00:10:10 -0500</pubDate>
                 <link>http://algorithmicassertions.com/post/1626</link>
@@ -68,13 +75,6 @@
                 <pubDate>Mon, 03 Oct 2016 01:10:10 -0400</pubDate>
                 <link>http://algorithmicassertions.com/post/1624</link>
                 <guid isPermaLink="true">http://algorithmicassertions.com/post/1624</guid>
-            </item>
-            <item>
-                <title>Post-selection is cheating</title>
-                <description>&lt;p&gt;Recently, two demonstrations of quantum teleportation were published in Nature:&lt;/p&gt; &lt;ul&gt; &lt;li&gt;&lt;a href=&quot;http://www.nature.com/nphoton/journal/v10/n10/full/nphoton.2016.179.html&quot;&gt;&amp;#39;Quantum teleportation with independent sources and prior entanglement distribution over a network&amp;#39; by Qi-Chao Sun et al&lt;/a&gt; (&lt;a href=&quot;http://arxiv.org/abs/1602.07081&quot;&gt;arXiv preprint&lt;/a&gt;)&lt;/li&gt; &lt;li&gt;&lt;a href=&quot;http://www.nature.com/nphoton/journal/vaop/ncurrent/full/nphoton.2016.180.html&quot;&gt;&amp;#39;Quantum teleportation across a metropolitan fibre network&amp;#39; by Valivarthi et al&lt;/a&gt; (&lt;a href=&quot;https://arxiv.org/abs/1605.08814&quot;&gt;arXiv preprint&lt;/a&gt;)&lt;/li&gt; &lt;/ul&gt; &lt;p&gt;I want...</description>
-                <pubDate>Tue, 27 Sep 2016 13:10:10 -0400</pubDate>
-                <link>http://algorithmicassertions.com/post/1623</link>
-                <guid isPermaLink="true">http://algorithmicassertions.com/post/1623</guid>
             </item>
     </channel>
 </rss>
