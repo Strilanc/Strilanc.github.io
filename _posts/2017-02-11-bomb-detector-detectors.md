@@ -87,8 +87,8 @@ Otherwise I would have had to use a new qubit for each CNOT.
 
 <img style="max-width:100%;" src="/assets/{{ loc }}/dud-bomb-circuit.png"/>
 
-If we increase from $n=8$ to $n=100$, the live bomb loses decrease from $26.7 \%$ to $2.4 \%$.
-And at $n=1000$ the loses are a mere $0.5 \%$, with the trend continuing downwards towards 0 hyperbolically as $n$ increases (i.e. $p\_n$ is asymptotically equal to $1/n$).
+If we increase from $n=8$ to $n=100$, the live bomb losses decrease from $26.7 \%$ to $2.4 \%$.
+And at $n=1000$ the losses are a mere $0.5 \%$, with the trend continuing downwards towards 0 hyperbolically as $n$ increases (i.e. $p\_n$ is asymptotically equal to $1/n$).
 
 Now that you understand the bomb tester, let's consider a hypothetical practical application.
 
@@ -103,7 +103,7 @@ In heist movies, a common trope is the '[laser hallway](http://tvtropes.org/pmwi
 
 Of course, in real life, beam alarms aren't as flashy as they are in the movies.
 For starters, they use infrared light so you can't see the beams.
-Even if the room is foggy or dusty.
+Even if the air is foggy or dusty.
 
 That being said, infrared beams are still detectable with the right equipment.
 The ideal beam detector would be *truly* undetectable.
@@ -116,12 +116,12 @@ Initially the photon is only travelling along the line below the hallway, but as
 If there's nothing in the hallway beam path then these rotations will add up and the photon will gradually transition to being entirely on the hallway path.
 But if there *is* something in the hallway, then the Zeno effect will pin the photon to the fiber optic path.
 Because the Zeno effect is keeping the photon from taking the hallway path, **no photon-detector in the hallway beam path will be set off**.
-After $n$ bounces we measure which path the photon is on and VOILA!, we've checked if something is in the hallway in an apparently undetectable way.
+After $n$ bounces we can measure which path the photon is on and VOILA!, we've checked if something is in the hallway in an apparently undetectable way.
 
-(*Side note. I should mention that, in practice, there would be complications to this system.
+(*Side note. I should mention that, in practice, there would be complications.
 For example, air could scatter the photons.
 Or someone could step into the beam only at the end of the path-rotating process.
-But, putting those and other caveats aside, this does appear at first glance to be an undetectable way to check if someone is in the hallway.*)
+But, putting those and other caveats aside, this does appear at first glance to be an undetectable way to check if someone is standing in the hallway.*)
 
 In fact, if we limit the hallway denizens to classical detectors, then this Zeno-effect beam alarm really *is* undetectable in the limit.
 Modulo practical issues.
