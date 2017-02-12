@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>Algorithmic Assertions - Craig Gidney&#39;s Computer Science Blog</title>
+        <title>Algorithmic Assertions - Craig Gidney's Computer Science Blog</title>
         <description>A blog about computer science, software engineering, quantum computing, mathematical puzzles, and so forth.</description>
         <link>http://algorithmicassertions.com</link>
         <atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
@@ -49,7 +49,7 @@
                 <guid isPermaLink="true">http://algorithmicassertions.com/post/1627</guid>
             </item>
             <item>
-                <title>Quirk&#39;s Performance History</title>
+                <title>Quirk's Performance History</title>
                 <description>&lt;p&gt;&lt;a href=&quot;/quirk&quot;&gt;My quantum circuit simulator Quirk&lt;/a&gt; is one of those projects that I keep coming back to. For years, I only touched it intermittently. Then, over the past few months, the work kinda took off and I&amp;#39;ve been stuck in a cycle of &amp;quot;Okay, with that release I think I...</description>
                 <pubDate>Mon, 07 Nov 2016 00:10:10 -0500</pubDate>
                 <link>http://algorithmicassertions.com/post/1626</link>
