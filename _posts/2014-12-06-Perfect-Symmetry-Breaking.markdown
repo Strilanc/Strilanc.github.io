@@ -2,7 +2,7 @@
 layout: post
 title: "Perfect Symmetry Breaking with Quantum Computers"
 date: 2014-12-06 11:30:00 EST
-categories: quantum
+permalink: quantum/2014/12/06/Perfect-Symmetry-Breaking-with-Quantum-Computers.html
 ---
 
 **Symmetry Breaking**

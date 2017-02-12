@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Turning Detection into Correction with Quantum Teleportation "
+title: "Turning Detection into Correction with Quantum Teleportation"
 date: 2016-12-12 12:10:10 am EST
 permalink: post/1631
 ---
@@ -103,4 +103,4 @@ This approach gives ideal throughput and latency, but relies heavily on the clas
 
 Instead of sending messages over an unreliable quantum network, use the network to build up entanglement.
 Then use that entanglement to fuel quantum teleportation over the classical internet.
-This allows you to use a meer error detecting code over the quantum network, instead of a full error correcting code.
+This allows you to use a mere error detecting code over the quantum network, instead of a full error correcting code.
