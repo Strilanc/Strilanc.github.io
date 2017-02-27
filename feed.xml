@@ -7,6 +7,13 @@
         <atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Trouble Adding Constants into Qubit Registers</title>
+                <description>&lt;p&gt;I had a bit of a surprise this week. Despite never publishing a paper, I&amp;#39;ve been cited in one! The preprint &lt;a href=&quot;https://arxiv.org/abs/1611.07995&quot;&gt;&amp;quot;Factoring using 2n+2 qubits with Toffoli based modular multiplication&amp;quot;&lt;/a&gt;, by Häner et al., cited &lt;a href=&quot;http://cs.stackexchange.com/a/44292/535&quot;&gt;this answer on cs.stackexchange&lt;/a&gt;. The answer is me summarizing a few of the...</description>
+                <pubDate>Sun, 26 Feb 2017 00:10:10 -0500</pubDate>
+                <link>http://algorithmicassertions.com/post/1701</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/post/1701</guid>
+            </item>
+            <item>
                 <title>Quantum Bomb Detector Detectors</title>
                 <description>&lt;p&gt;The &lt;a href=&quot;https://en.wikipedia.org/wiki/Elitzur%E2%80%93Vaidman_bomb_tester&quot;&gt;Elitzur-Vaidman bomb tester&lt;/a&gt; is one of the funnest quantum devices to teach people about. It uses the &lt;a href=&quot;https://en.wikipedia.org/wiki/Quantum_Zeno_effect&quot;&gt;quantum Zeno effect&lt;/a&gt; to safely separate dud bombs from live bombs, even when the only way to &amp;quot;test&amp;quot; a bomb is by triggering it! The main caveat is that the...</description>
                 <pubDate>Sat, 11 Feb 2017 00:10:10 -0500</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sat, 22 Oct 2016 01:10:10 -0400</pubDate>
                 <link>http://algorithmicassertions.com/post/1625</link>
                 <guid isPermaLink="true">http://algorithmicassertions.com/post/1625</guid>
-            </item>
-            <item>
-                <title>The Quantum Version of the One-Time Pad is Teleportation</title>
-                <description>&lt;p&gt;For whatever reason, one of the topics I keep coming back to on this blog is &amp;quot;ways to think about quantum teleportation&amp;quot;. I&amp;#39;ve talked about how teleportation is &lt;a href=&quot;/quantum/2014/05/11/Storing-Bandwidth-with-Quantum-Teleportation.html&quot;&gt;like storing bandwidth&lt;/a&gt;, how if it was any more efficient you could &lt;a href=&quot;/2016/05/29/ultra-dense-coding-allows-ftl.html&quot;&gt;send unbounded amounts of data without sending a...</description>
-                <pubDate>Mon, 03 Oct 2016 01:10:10 -0400</pubDate>
-                <link>http://algorithmicassertions.com/post/1624</link>
-                <guid isPermaLink="true">http://algorithmicassertions.com/post/1624</guid>
             </item>
     </channel>
 </rss>
