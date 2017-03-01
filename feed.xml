@@ -7,6 +7,13 @@
         <atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>[Meta] Joining Google's Quantum AI Team</title>
+                <description>&lt;p&gt;I have really exciting news. This month I&amp;#39;m moving from New York to Santa Barbara, to become part of the &lt;a href=&quot;https://research.google.com/pubs/QuantumAI.html&quot;&gt;quantum ai team at Google&lt;/a&gt;!&lt;/p&gt; &lt;p&gt;If you&amp;#39;ve been following news or &lt;a href=&quot;https://www.youtube.com/watch?v=kgMWommXxU8&quot;&gt;talks&lt;/a&gt; about quantum stuff at Google, then you already know why I&amp;#39;m excited. I don&amp;#39;t know if...</description>
+                <pubDate>Wed, 01 Mar 2017 00:10:10 -0500</pubDate>
+                <link>http://algorithmicassertions.com/post/1702</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/post/1702</guid>
+            </item>
+            <item>
                 <title>Trouble Adding Constants into Qubit Registers</title>
                 <description>&lt;p&gt;I had a bit of a surprise this week. Despite never publishing a paper, I&amp;#39;ve been cited in one! The preprint &lt;a href=&quot;https://arxiv.org/abs/1611.07995&quot;&gt;&amp;quot;Factoring using 2n+2 qubits with Toffoli based modular multiplication&amp;quot;&lt;/a&gt;, by Häner et al., cited &lt;a href=&quot;http://cs.stackexchange.com/a/44292/535&quot;&gt;this answer on cs.stackexchange&lt;/a&gt;. The answer is me summarizing a few of the...</description>
                 <pubDate>Sun, 26 Feb 2017 00:10:10 -0500</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Mon, 07 Nov 2016 00:10:10 -0500</pubDate>
                 <link>http://algorithmicassertions.com/post/1626</link>
                 <guid isPermaLink="true">http://algorithmicassertions.com/post/1626</guid>
-            </item>
-            <item>
-                <title>Unfathomable Bugs #9: Lossy Shader Packing</title>
-                <description>&lt;p&gt;This month, I&amp;#39;ve been doing work to get &lt;a href=&quot;/2016/05/22/quirk.html&quot;&gt;Quirk&lt;/a&gt; running smoothly on phones. The big problem is floating-point textures: Quirk&amp;#39;s intermediate state has lots of floating point values stored in textures, but WebGL doesn&amp;#39;t guarantee that you can render to, read out, or even create floating point textures.&lt;/p&gt; &lt;p&gt;Actually,...</description>
-                <pubDate>Sat, 22 Oct 2016 01:10:10 -0400</pubDate>
-                <link>http://algorithmicassertions.com/post/1625</link>
-                <guid isPermaLink="true">http://algorithmicassertions.com/post/1625</guid>
             </item>
     </channel>
 </rss>
