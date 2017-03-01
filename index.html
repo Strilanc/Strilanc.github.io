@@ -25,10 +25,15 @@ title: "Algorithmic Assertions - Craig Gidney's Computer Science Blog"
   <ul class="posts">
     {% assign prevYear = 'now' | date: "%Y" %}
     {% for post in site.posts %}
+      {% if post.url == "/post/1702" %}
+        <h2>Classical Google</h2>
+      {% endif %}
+
       {% assign curYear = post.date | date: "%Y" %}
       {% if curYear != prevYear %}
         <h2>{{ curYear }}</h2>
       {% endif %}
+
       {% assign prevYear = curYear %}
       <li><table><col width="96px" /><tr><td><span>{{ post.date | date_to_string }}</span> &raquo;</td><td><a href="{{ post.url }}">
         {% if post.highlight_in_list %}<strong>{% endif %}{{ post.title }}{% if post.highlight_in_list %}</strong>{% endif %}
