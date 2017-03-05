@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Bugs from the Future: Hadamard Coins and Implicit Measurement</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Bugs from the Future: Hadamard Coins and Implicit Measurement</h1>
+<p class="meta">04 Mar 2017</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Suppose it&#39;s fifty years from now, and everyone considers manipulating quantum information to be routine.
+You&#39;re new to the quantum programming profession, still trying stuff out, and you&#39;ve come up with (well, rediscovered) a <em>clever idea</em> for generating random data.</p>
+
+<p>You call it the Hadamard coin.
+You&#39;ll use the fact that the X axis and Z axis of a qubit don&#39;t commute.
+Alternate between measuring one, then the other, and you should get results guaranteed to be random by the very laws of physics themselves!</p>
+
+<p><em>(Uh oh, sounds like someone <a href="http://security.stackexchange.com/a/18198/10676">is rolling their own crypto</a>...)</em></p>
+
+<p>You try generating a list of random head/tail flips with the Hadamard coin:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">hadamard_coin_list</span><span class="p">():</span>
+    <span class="n">qubit</span> <span class="o">=</span> <span class="n">qalloc</span><span class="p">()</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">):</span>
+        <span class="nb">apply</span> <span class="n">Hadamard</span> <span class="n">to</span> <span class="n">qubit</span>
+        <span class="k">if</span> <span class="n">qubit</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Heads&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Tails&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+</code></pre></div>
+<p>To be a bit more concrete about how this code is supposed to work, note that each measurement of a qubit will collapse it onto the ON or OFF state.
+The Hadamard operation then rotates the qubit into either the state $\frac{1}{\sqrt 2}|\text{On}\rangle + \frac{1}{\sqrt 2}|\text{Off}\rangle$ or the state $\frac{1}{\sqrt 2}|\text{On}\rangle - \frac{1}{\sqrt 2}|\text{Off}\rangle$ (depending on if the qubit was ON or OFF).
+Measuring either of those states then gives a 50/50 random ON/OFF result, and the cycle repeats.</p>
+
+<p>So far so good.
+You try every <a href="https://en.wikipedia.org/wiki/Randomness_tests">statistical test of randomness</a> that you can find, and the generated lists pass with flying colors.</p>
+
+<p>Later, you happen to write a method to <em>count</em> the number of Heads instead of putting the results into a list:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">hadamard_coin_flip</span><span class="p">():</span>
+    <span class="n">qubit</span> <span class="o">=</span> <span class="n">qalloc</span><span class="p">()</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">):</span>
+        <span class="nb">apply</span> <span class="n">Hadamard</span> <span class="n">to</span> <span class="n">qubit</span>
+        <span class="k">if</span> <span class="n">qubit</span><span class="p">:</span>
+            <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">counter</span>
+</code></pre></div>
+<p>When you run this method many times and build up a histogram of counts, you expect to see a binomial distribution like this:</p>
+
+<p><img style="max-width:100%;" src="/assets/2017-03-04-hadamard-coin-counting/expected-distribution.png"/></p>
+
+<p>After all, the alternating measurements are producing results that follow a Bernoulli distribution.
+When you sum up many outcomes of a Bernoulli distribution, the total follows a binomial distribution.
+That&#39;s basic statistics.</p>
+
+<p>So you run the method, and watch the histogram build up.</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>The histogram starts to take shape.</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>That... doesn&#39;t look quite right...</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>It&#39;s got... ripples?</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>And it&#39;s peaking towards the sides instead of towards the center!</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>Yeah, this doesn&#39;t look anywhere <em>close</em> to correct:</p>
+
+<p><img style="max-width:100%;" src="/assets/2017-03-04-hadamard-coin-counting/actual-distribution.png"/></p>
+
+<p>What the heck is going on?
+The Hadamard coin passed every statistical test you threw at it, but falls apart when <em>counted</em>?!
+Something is seriously wrong.</p>
+
+<h1>Implicit Measurements</h1>
+
+<p>The problem here is that, in quantum languages, there&#39;s an ambiguity in what it means to condition on a qubit with an <code>if</code> statement.
+There&#39;s two different &quot;obvious&quot; things it could mean.</p>
+
+<p>Putting a qubit in the condition of an <code>if</code> block could mean &quot;measure the qubit, and if the measurement result is ON then execute the following lines&quot;.
+That&#39;s the meaning you used when guessing that the output would look like a binomial distribution.
+Let&#39;s call that &quot;de-jure measurement&quot;, because there is a rule that measurement must happen.</p>
+
+<p>I think de-jure measurement is a very &quot;classical&quot;-ish way of thinking about if statements.
+In a program that handles quantum information, maintaining coherence is key.
+Rules that cause measurements would be a problem.
+Which brings us to the second possible meaning.</p>
+
+<p>Putting a qubit in the condition of an <code>if</code> block could mean &quot;in the generated quantum circuit, use this qubit as a control on every operation generated by this block&quot;.
+Whether or not this will cause a measurement depends entirely on what the operations inside the block do.
+Any operation that happens to cause effects that lead to outcomes that reveal the value of the condition mean that the condition was de-facto measured.
+But if no such operation occurs, the condition stays pure.
+(There are also intermediate cases that sorta-kinda-partially measure the condition.)
+Let&#39;s call this approach &quot;de-facto measurement&quot;, because whether or not a measurement happens depends on what is actually done.</p>
+
+<p>Your counting bug is due to expecting de-jure style measurement, but using a de-facto measurement language.
+When compiling the <code>if</code> block from the counting code, de-jure measurement outputs this circuit:</p>
+
+<p><img style="max-width:100%;" src="/assets/2017-03-04-hadamard-coin-counting/hadamard-measure-increment.png"/></p>
+
+<p>But with de-facto measurement, you get this circuit instead:</p>
+
+<p><img style="max-width:100%;" src="/assets/2017-03-04-hadamard-coin-counting/hadamard-increment.png"/></p>
+
+<p>Without that measurement gate in the circuit, things get interesting.
+(You can see that iterating the de-facto measurement circuit 500 times matches the weird ripply distribution <a href="http://algorithmicassertions.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%5D%2C%5B%22%E2%80%A2%22%2C%22inc9%22%5D%2C%5B%22%7Es0ae%22%5D%2C%5B1%2C%22Chance9%22%5D%5D%2C%22gates%22%3A%5B%7B%22id%22%3A%22%7Em9ah%22%2C%22name%22%3A%22x2%22%2C%22circuit%22%3A%7B%22cols%22%3A%5B%5B%22H%22%5D%2C%5B%22%E2%80%A2%22%2C%22inc9%22%5D%2C%5B%22H%22%5D%2C%5B%22%E2%80%A2%22%2C%22inc9%22%5D%5D%7D%7D%2C%7B%22id%22%3A%22%7E34ha%22%2C%22name%22%3A%22x8%22%2C%22circuit%22%3A%7B%22cols%22%3A%5B%5B%22%7Em9ah%22%5D%2C%5B%22%7Em9ah%22%5D%2C%5B%22%7Em9ah%22%5D%2C%5B%22%7Em9ah%22%5D%5D%7D%7D%2C%7B%22id%22%3A%22%7Egii%22%2C%22name%22%3A%22x32%22%2C%22circuit%22%3A%7B%22cols%22%3A%5B%5B%22%7E34ha%22%5D%2C%5B%22%7E34ha%22%5D%2C%5B%22%7E34ha%22%5D%2C%5B%22%7E34ha%22%5D%5D%7D%7D%2C%7B%22id%22%3A%22%7Ep9lg%22%2C%22name%22%3A%22x128%22%2C%22circuit%22%3A%7B%22cols%22%3A%5B%5B%22%7Egii%22%5D%2C%5B%22%7Egii%22%5D%2C%5B%22%7Egii%22%5D%2C%5B%22%7Egii%22%5D%5D%7D%7D%2C%7B%22id%22%3A%22%7Ehblb%22%2C%22name%22%3A%22x256%22%2C%22circuit%22%3A%7B%22cols%22%3A%5B%5B%22%7Ep9lg%22%5D%2C%5B%22%7Ep9lg%22%5D%5D%7D%7D%2C%7B%22id%22%3A%22%7E7m3k%22%2C%22name%22%3A%22x64%22%2C%22circuit%22%3A%7B%22cols%22%3A%5B%5B%22%7Egii%22%5D%2C%5B%22%7Egii%22%5D%5D%7D%7D%2C%7B%22id%22%3A%22%7Es0ae%22%2C%22name%22%3A%22x499%22%2C%22circuit%22%3A%7B%22cols%22%3A%5B%5B%22H%22%5D%2C%5B%22%E2%80%A2%22%2C%22inc9%22%5D%2C%5B%22%7Em9ah%22%5D%2C%5B%22%7E34ha%22%5D%2C%5B%22%7E34ha%22%5D%2C%5B%22%7Egii%22%5D%2C%5B%22%7E7m3k%22%5D%2C%5B%22%7Ep9lg%22%5D%2C%5B%22%7Ehblb%22%5D%5D%7D%7D%5D%7D">by simulating the circuit in Quirk</a>. Sorry it&#39;s laggy with so many large operations being simulated per frame.)</p>
+
+<p>When you wrote the method that stored the results in a list, the conditions were uniquely distinguished by the returned list entries.
+Creating and keeping the list of results caused de-facto measurement of the Hadamard coin flips.</p>
+
+<p>But when you only kept track of <em>how many</em> flips were heads, the conditions <em>weren&#39;t</em> uniquely distinguished by the result.
+For example, there&#39;s about $10^{107}$ ways to flip a coin 500 times and get 100 heads.
+Since the returned total is the only distinguishing information left at the end of the method, all $10^{107}$ ways of getting 100 heads end up interfering with each other.
+And the reason that the graph dips towards the center is that, even though there&#39;s more ways get 250 heads than 100 heads out of 500 flips, those paths are somehow more &quot;balanced&quot;.
+The negative and positive amplitude contributions cancel out more closely, and the destructive interference overpowers the path count advantage.</p>
+
+<p>In other words, forgetting to measure turned your classical random walk into a <a href="https://en.wikipedia.org/wiki/Quantum_walk">quantum random walk</a>.
+So the code didn&#39;t do what you wanted... but it did vividly demonstrate that quantum random walks spread out faster than classical random walks!
+(It also demonstrated why de-facto measurement can be useful: it makes quantum random walks easy to write.)</p>
+
+<h1>Lessons</h1>
+
+<p>Given reasonable hypothetical quantum language features, forgetting to measure is a serious mistake that&#39;s easy to make.</p>
+
+<p>Imagine if you hadn&#39;t spotted the fact that your RNG had a lack-of-measurement bug, and you plugged it into the middle of a quantum program with hundreds of thousands of lines.
+The symptoms would only show up under special conditions, in the statistical distribution of measurements that happen billions of instructions later...
+You might never even notice that something is seriously wrong.</p>
+
+<p>The fact that this mistake is so easy to make, and so tricky to catch, reminds me of buffer overflows.
+It&#39;s worrying.
+Debugging big quantum programs is going to be <em>hard</em>.</p>
+
+<h1>Appendix</h1>
+
+<p>Code I used to generate the quantum random walk distribution plot:</p>
+
+<style scoped>
+  .highlight {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+</style>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">amps</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">hadamard</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">amps</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">amps</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="p">]</span>
+        <span class="n">amps</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">amps</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="o">-</span><span class="n">b</span>
+
+<span class="k">def</span> <span class="nf">probs</span><span class="p">():</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="n">amps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">amps</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="c1"># Up until now everything has been using big-int arithmetic.</span>
+    <span class="c1"># We need to cut them down to reasonable sizes before converting to floats.</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">e</span> <span class="o">*</span> <span class="mi">10</span><span class="o">**</span><span class="mi">10</span> <span class="o">/</span> <span class="n">t</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="o">**</span><span class="mi">10</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">p</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">inc</span><span class="p">():</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">amps</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span> <span class="n">amps</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">amps</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="p">]</span>
+    <span class="n">amps</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">hadamard</span><span class="p">()</span>
+    <span class="n">inc</span><span class="p">()</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">probs</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)),</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">where</span><span class="o">=</span><span class="n">data</span><span class="o">&gt;=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">),</span>
+    <span class="n">interpolate</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+<p>Changing <code>a-b</code> to <code>a+b</code>, and dropping the <code>**2</code>&#39;s in the <code>probs</code> function, will give you a binomial distribution instead.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1702">&laquo; [Meta] Joining Google's Quantum AI Team</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
