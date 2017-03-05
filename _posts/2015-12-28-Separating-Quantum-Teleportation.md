@@ -44,7 +44,7 @@ Here is a circuit diagram of the quantum copy-teleportation process (note that i
 <img src="/assets/{{ loc }}/quantum-copy-teleportation-circuit.png" title="Quantum Teleportation Circuit" style="max-width: 100%;"/>
 
 Personally, seeing the above circuit diagram for the first time gave me insight into the essence of what quantum teleportation is doing.
-**It's using the [EPR pair]([EPR pair](https://en.wikipedia.org/wiki/Bell_state)) as a [one-time pad](https://en.wikipedia.org/wiki/One-time_pad)!**
+**It's using the [EPR pair](https://en.wikipedia.org/wiki/Bell_state) as a [one-time pad](https://en.wikipedia.org/wiki/One-time_pad)!**
 Alice wants to transmit a message bit $a$ to Bob, but Eve (Nature) is listening in on the line.
 Fortunately, Alice and Bob have a shared "really-truly" random secret bit $s$.
 So Alice sends $m = a \oplus s$, masking the message with the pad, and Bob receives the message by computing $m \oplus s = (a \oplus s) \oplus s = a$.

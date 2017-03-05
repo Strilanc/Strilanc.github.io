@@ -154,7 +154,7 @@ We end up using $F(N) = 2 F(N/2) + O(N) = O(N \lg N)$ basic gates.
 Not as good as $O(N)$, but reasonable.
 
 *(Side note: the path from single large gate to just basic gates, has many __many__ opportunities for optimizations.
-For example, when doing the carry-overflow within the constant-add-halver, if you borrow bits that aren't the ones being overflowed into then you can use the second call to uncompute the first instead of uncomputing within each one.)
+For example, when doing the carry-overflow within the constant-add-halver, if you borrow bits that aren't the ones being overflowed into then you can use the second call to uncompute the first instead of uncomputing within each one.)*
 
 # Summary
 

@@ -25,7 +25,7 @@ Not just as [something to carefully consider when doing security proofs](http://
 I was thinking that you could quantum-data-lock a document and then reveal it at a later time, and get a kind of information-theoretic encryption.
 But, eventually, I realized that things were not quite so easy (even ignoring the fact that no one is going to use an encryption scheme that's defeated half of the time by random guessing).
 
-First, notice that if I gave you a long document made up of English text, quantum-data-locked by the using the X-or-Z scheme, you would have an easy time unlocking most of it.
+First, notice that if I gave you a long document made up of English text, quantum-data-locked using the X-or-Z scheme, you would have an easy time unlocking most of it.
 Just measure the qubits corresponding to the first thirty characters along the Z axis, and see if what comes out looks like English or like noise.
 That reveals whether the Z axis is the right choice or not, allowing you to measure the correct axis on the rest of the document.
 
@@ -40,13 +40,15 @@ Maybe this AES+X-or-Z scheme is good enough?...
 
 Ha!
 Fat chance!
-It falls to the easiest of all quantum attacks, which I call "Just do it under superposition, dummy!".
-(Okay, it's not so much an "attack" as it is a reminder about the basic capabilities of quantum computers.)
+It falls to the easiest of all quantum attacks: the **"Just do it under superposition, dummy!"** attack.
+Okay, it's not so much an "attack" as it is a reminder about the basic capabilities of quantum computers.
+But, historically speaking, the ability to simply not measure intermediate data was often overlooked.
+For example, see any of the old proposed quantum protocols for oblivious transfer or precommitment.
 
 To break the AES+X-or-Z method, Bob starts by writing an `is_valid_document` function.
 The function takes the *unlocked* data, performs the AES decryption, and applies a simple statistical test to see if the result looks like English.
 Bob then compiles `is_valid_document` into a quantum circuit that does the whole computation under superposition, runs his key+document qubits through this circuit, and measures the function's result.
-Note that uncomputation is used, so there are no ancilla left behind except for the result.
+Note that uncomputation is used, so there are no ancilla left behind except for the "did it work?" result.
 
 If the document was encoded in the computation basis, i.e. onto the Z axis, then he gets a "Yup! Valid! Use the Z axis!" result.
 Based on that, he measures everything on the Z axis, decrypts, and wins.
@@ -70,4 +72,3 @@ Quantum data locking is interesting, but dangerous in situations that involve co
 This limitation makes it hard to imagine quantum data locking as a useful cryptographic primitive.
 
 Quantum computing adds a whole new dimension to "Don't roll your own crypto!".
-
