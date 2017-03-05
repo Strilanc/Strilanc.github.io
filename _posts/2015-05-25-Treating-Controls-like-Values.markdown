@@ -184,7 +184,7 @@ This means we can use $I$ and $M$, and linear combinations thereof, to *represen
 We can translate the number $a + \mu b$ into the matrix $\bimat{a}{0}{0}{a+b}$, then translate facts about that kind of matrix back into facts about tainted numbers.
 For example, we can explain why functions are generalizing in the same way.
 
-(You can use the same represent-the-values-as-a-matrix trick [for complex numbers](http://en.wikipedia.org/wiki/Complex_number#Matrix_representation_of_complex_numbers), [for dual numbers](en.wikipedia.org/wiki/Dual_number#Linear_representation), for [combinations thereof](http://en.wikipedia.org/wiki/Hypercomplex_number), and for lots of other algebras.
+(You can use the same represent-the-values-as-a-matrix trick [for complex numbers](http://en.wikipedia.org/wiki/Complex_number#Matrix_representation_of_complex_numbers), [for dual numbers](http://en.wikipedia.org/wiki/Dual_number#Linear_representation), for [combinations thereof](http://en.wikipedia.org/wiki/Hypercomplex_number), and for lots of other algebras.
 Unfortunately I don't know the term for this general technique.
 I thought it was called "representing X as a matrix algebra", but there's no Wikipedia article for "matrix algebra".)
 
