@@ -7,6 +7,13 @@
         <atom:link href="http://algorithmicassertions.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Bugs from the Future: Hadamard Coins and Implicit Measurement</title>
+                <description>&lt;p&gt;Suppose it&amp;#39;s fifty years from now, and everyone considers manipulating quantum information to be routine. You&amp;#39;re new to the quantum programming profession, still trying stuff out, and you&amp;#39;ve come up with (well, rediscovered) a &lt;em&gt;clever idea&lt;/em&gt; for generating random data.&lt;/p&gt; &lt;p&gt;You call it the Hadamard coin. You&amp;#39;ll use the fact...</description>
+                <pubDate>Sat, 04 Mar 2017 00:10:10 -0500</pubDate>
+                <link>http://algorithmicassertions.com/post/1703</link>
+                <guid isPermaLink="true">http://algorithmicassertions.com/post/1703</guid>
+            </item>
+            <item>
                 <title>[Meta] Joining Google's Quantum AI Team</title>
                 <description>&lt;p&gt;I have really exciting news. This month I&amp;#39;m moving from New York to Santa Barbara, to become part of the &lt;a href=&quot;https://research.google.com/pubs/QuantumAI.html&quot;&gt;quantum ai team at Google&lt;/a&gt;!&lt;/p&gt; &lt;p&gt;If you&amp;#39;ve been following news or &lt;a href=&quot;https://www.youtube.com/watch?v=kgMWommXxU8&quot;&gt;talks&lt;/a&gt; about quantum stuff at Google, then you already know why I&amp;#39;m excited. I don&amp;#39;t know if...</description>
                 <pubDate>Wed, 01 Mar 2017 00:10:10 -0500</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sun, 13 Nov 2016 00:10:10 -0500</pubDate>
                 <link>http://algorithmicassertions.com/post/1627</link>
                 <guid isPermaLink="true">http://algorithmicassertions.com/post/1627</guid>
-            </item>
-            <item>
-                <title>Quirk's Performance History</title>
-                <description>&lt;p&gt;&lt;a href=&quot;/quirk&quot;&gt;My quantum circuit simulator Quirk&lt;/a&gt; is one of those projects that I keep coming back to. For years, I only touched it intermittently. Then, over the past few months, the work kinda took off and I&amp;#39;ve been stuck in a cycle of &amp;quot;Okay, with that release I think I...</description>
-                <pubDate>Mon, 07 Nov 2016 00:10:10 -0500</pubDate>
-                <link>http://algorithmicassertions.com/post/1626</link>
-                <guid isPermaLink="true">http://algorithmicassertions.com/post/1626</guid>
             </item>
     </channel>
 </rss>

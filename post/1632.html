@@ -94,7 +94,7 @@ Not just as <a href="http://journals.aps.org/prl/abstract/10.1103/PhysRevLett.98
 I was thinking that you could quantum-data-lock a document and then reveal it at a later time, and get a kind of information-theoretic encryption.
 But, eventually, I realized that things were not quite so easy (even ignoring the fact that no one is going to use an encryption scheme that&#39;s defeated half of the time by random guessing).</p>
 
-<p>First, notice that if I gave you a long document made up of English text, quantum-data-locked by the using the X-or-Z scheme, you would have an easy time unlocking most of it.
+<p>First, notice that if I gave you a long document made up of English text, quantum-data-locked using the X-or-Z scheme, you would have an easy time unlocking most of it.
 Just measure the qubits corresponding to the first thirty characters along the Z axis, and see if what comes out looks like English or like noise.
 That reveals whether the Z axis is the right choice or not, allowing you to measure the correct axis on the rest of the document.</p>
 
@@ -109,13 +109,15 @@ Maybe this AES+X-or-Z scheme is good enough?...</p>
 
 <p>Ha!
 Fat chance!
-It falls to the easiest of all quantum attacks, which I call &quot;Just do it under superposition, dummy!&quot;.
-(Okay, it&#39;s not so much an &quot;attack&quot; as it is a reminder about the basic capabilities of quantum computers.)</p>
+It falls to the easiest of all quantum attacks: the <strong>&quot;Just do it under superposition, dummy!&quot;</strong> attack.
+Okay, it&#39;s not so much an &quot;attack&quot; as it is a reminder about the basic capabilities of quantum computers.
+But, historically speaking, the ability to simply not measure intermediate data was often overlooked.
+For example, see any of the old proposed quantum protocols for oblivious transfer or precommitment.</p>
 
 <p>To break the AES+X-or-Z method, Bob starts by writing an <code>is_valid_document</code> function.
 The function takes the <em>unlocked</em> data, performs the AES decryption, and applies a simple statistical test to see if the result looks like English.
 Bob then compiles <code>is_valid_document</code> into a quantum circuit that does the whole computation under superposition, runs his key+document qubits through this circuit, and measures the function&#39;s result.
-Note that uncomputation is used, so there are no ancilla left behind except for the result.</p>
+Note that uncomputation is used, so there are no ancilla left behind except for the &quot;did it work?&quot; result.</p>
 
 <p>If the document was encoded in the computation basis, i.e. onto the Z axis, then he gets a &quot;Yup! Valid! Use the Z axis!&quot; result.
 Based on that, he measures everything on the Z axis, decrypts, and wins.</p>
