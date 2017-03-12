@@ -3,7 +3,6 @@ layout: post
 title: "Partially Erasing Entanglement: Measuring a GHZ Triplet into a Bell Pair"
 date: 2015-09-02 11:30:00 EST
 categories: quantum
-comments: true
 ---
 
 Recently, while trying grok [delayed choice quantum erasers](https://en.wikipedia.org/wiki/Delayed_choice_quantum_eraser) by simplifying/adjusting/toying-around-with the problem, I stumbled onto an improvement for my solution to the [quantum network flow puzzle I posted months ago](/quantum/2015/05/01/Quantum-Network-Flow-Puzzle.html).

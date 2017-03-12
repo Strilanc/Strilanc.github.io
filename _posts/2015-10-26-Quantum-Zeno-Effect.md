@@ -3,7 +3,6 @@ layout: post
 title: "[Un]popular Qubits #2: The Quantum Zeno Effect"
 date: 2015-10-26 11:30:00 EST
 categories: quantum
-comments: true
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}

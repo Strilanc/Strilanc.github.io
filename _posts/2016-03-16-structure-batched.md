@@ -3,7 +3,6 @@ layout: post
 title: "Wrapping Structure Around Batched Methods"
 date: 2016-03-16 10:10:10 EST
 categories: programming
-comments: true
 ---
 
 In this post: working around WebGL's slow `readPixels` method by using batching, and a simple trick for avoiding error-prone concatenation and slicing by wrapping some structure around the resulting batched method.

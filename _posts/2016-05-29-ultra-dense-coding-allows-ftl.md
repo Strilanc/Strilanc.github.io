@@ -2,7 +2,6 @@
 layout: post
 title: "Ultradense Coding would allow FTL Signalling"
 date: 2016-05-29 12:10:10 am EST
-comments: true
 ---
 
 The title spoils the question, but I'll ask it anyways:

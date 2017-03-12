@@ -1,9 +1,8 @@
 ---
 layout: post
-title: "Quantum Teleportation's Two Functions"
+title: "Quantum Teleportation's Two Subroutines"
 date: 2015-12-28 11:30:00 EST
 categories: quantum
-comments: true
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}

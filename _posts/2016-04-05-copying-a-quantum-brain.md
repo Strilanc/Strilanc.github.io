@@ -2,7 +2,6 @@
 layout: post
 title: "Gradually Copying a Quantum Brain"
 date: 2016-04-05 3:10:10 EST
-comments: true
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
