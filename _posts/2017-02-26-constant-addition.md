@@ -16,7 +16,7 @@ So I figured I'd spend a post discussing one of the problems addressed by the pa
 
 # Adding Constants vs Adding Variables
 
-Surprisingly, adding a constant into a register is *harder* than adding a register with an unknown value into another register.
+Surprisingly, reversibly adding a constant into a register is *harder* than adding a register with an unknown value into another register.
 
 For example, in the post [Constructing Large Increment Gates](http://algorithmicassertions.com/circuits/2015/06/12/Constructing-Large-Increment-Gates.html) I cited the [VanRantergem adder](http://ftp.qucis.queensu.ca/home/akl/cisc879/papers/PAPERS_FROM_UNCONVENTIONAL_COMPUTING/VOLUME_1_Issue_4/RENTERGEM.pdf) and its ability to add one register into another with a linear number of gates using only one OFF ancilla.
 Since then, I found a way to avoid the ancilla:
@@ -162,4 +162,4 @@ When ancilla are banned, adding one qubit register into another takes $\Theta(n)
 Despite that, we don't know how to do better than $O(n \lg n)$ gates when adding a compile-time constant into a qubit register.
 It's an open problem if it can be done with $\Theta(n)$ gates.
 
-My citations-per-paper ratio is infinite, but my h-index is still 0.
+My h-index might be 0, but my citations-per-paper ratio is infinite.
