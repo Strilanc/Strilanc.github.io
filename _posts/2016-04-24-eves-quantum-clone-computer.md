@@ -2,7 +2,6 @@
 layout: post
 title: "Eve's Quantum Clone Computer"
 date: 2016-04-24 3:10:10 EST
-comments: true
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}

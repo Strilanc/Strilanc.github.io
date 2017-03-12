@@ -3,7 +3,6 @@ layout: post
 title: "Unit Testing with Symbols"
 date: 2015-07-20 11:30:00 EST
 categories: programming
-comments: true
 ---
 
 Recently, I tried out [SymPy](http://sympy.org), a symbolic math library for python.

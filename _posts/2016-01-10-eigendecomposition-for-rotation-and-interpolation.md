@@ -3,7 +3,6 @@ layout: post
 title: "Using Eigendecomposition to Convert Rotations and Interpolate Operations"
 date: 2016-01-10 11:30:00 EST
 categories: quantum
-comments: true
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}

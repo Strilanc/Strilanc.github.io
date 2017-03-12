@@ -3,7 +3,6 @@ layout: post
 title: "My Misconceptions: The Quantum Latch"
 date: 2015-11-08 11:30:00 EST
 categories: misconception
-comments: true
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}

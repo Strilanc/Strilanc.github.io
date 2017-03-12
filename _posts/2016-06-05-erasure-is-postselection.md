@@ -2,7 +2,6 @@
 layout: post
 title: "Erasure is Post-Selection"
 date: 2016-06-05 12:10:10 pm EST
-comments: true
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}

@@ -3,7 +3,6 @@ layout: post
 title: "Protecting Control Flow with Nested Evals"
 date: 2016-03-27 10:10:10 EST
 categories: programming
-comments: true
 ---
 
 Javascript's [eval](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval) function has a bad reputation, mostly (but not entirely) because of its tendency to create [code injection attacks](https://en.wikipedia.org/wiki/Code_injection).

@@ -3,7 +3,6 @@ layout: post
 title: "[Un]popular Qubits #3: The Quantum Pigeonhole Principle"
 date: 2016-01-30 11:30:00 EST
 categories: quantum
-comments: true
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}

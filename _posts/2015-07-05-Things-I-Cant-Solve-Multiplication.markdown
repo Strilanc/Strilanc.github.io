@@ -3,7 +3,6 @@ layout: post
 title: "Things I Can't Solve: Multiplication"
 date: 2015-07-05 11:30:00 EST
 categories: computer-science
-comments: true
 highlight_in_list: true
 ---
 

@@ -3,7 +3,6 @@ layout: post
 title: "Quantum Teleportation's Two Functions"
 date: 2015-12-28 11:30:00 EST
 categories: quantum
-comments: true
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
