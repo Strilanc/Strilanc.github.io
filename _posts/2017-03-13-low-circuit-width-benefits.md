@@ -40,7 +40,7 @@ Also, it's a bit misleading to look at a 5-bit adder since the quadratic costs h
 
 Now suppose that these adders were a small part of a larger computation, and elsewhere in the global circuit there were a lot of other operations that would benefit from borrowing dirty ancilla.
 The ripple-carry adder has a lot more space where qubits aren't touched for a proportionally long time.
-And, if the processes borrowing the ancilla *also* have a sweeping-up-and-down kind of shape so the ancilla they borrow can be subletted to yet more circuits then things fit together *particularly* nicely.
+And, if the processes borrowing the ancilla *also* have a sweeping-up-and-down kind of shape so the ancilla they borrow can be subleased to yet more circuits then things fit together *particularly* nicely.
 
 This is a lot clearer if you re-arrange the ripple-carry circuit so that the input and output bits are interleaved instead of grouped:
 
@@ -49,7 +49,7 @@ This is a lot clearer if you re-arrange the ripple-carry circuit so that the inp
 The above diagram shows the large number of "sweep tracks" available when using the ripple-carry adder.
 
 Now, to be fair, I don't know whether "borrowability" optimizations will end up mattering.
-And the QFT-adder isn't a particular great example, since it does have space available for borrowing.
+And the QFT-adder isn't a particulary great example, since it does have space available for borrowing.
 Clearly the benefits are going to vary from case to case.
 Still, if we're in a situation where ancilla are in high demand and our part of the circuit isn't the "long poll", then using low-width constructions might be a big win.
 
@@ -79,7 +79,7 @@ Circuit constructions that are more amenable to localization will have a huge ad
 
 Quantum circuit simulators tend not to run operations on separate qubits in parallel.
 They do one operation after another.
-That's because, from the perspective of the amplitude vector, an individual operation is *already* an embarassingly parallel task that can keep all your CPUs and GPUs busy.
+That's because, from the perspective of the amplitude vector, an individual operation is *already* an embarrassingly parallel task that can keep all your CPUs and GPUs busy.
 There's nothing left over for doing inter-operation parallelization.
 
 So, from the perspective of classical simulation, size matters far more than depth.
