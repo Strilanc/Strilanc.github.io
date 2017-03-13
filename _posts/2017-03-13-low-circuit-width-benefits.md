@@ -49,7 +49,8 @@ This is a lot clearer if you re-arrange the ripple-carry circuit so that the inp
 The above diagram shows the large number of "sweep tracks" available when using the ripple-carry adder.
 
 Now, to be fair, I don't know whether "borrowability" optimizations will end up mattering.
-At the very least its benefits will vary from case to case.
+And the QFT-adder isn't a particular great example, since it does have space available for borrowing.
+Clearly the benefits are going to vary from case to case.
 Still, if we're in a situation where ancilla are in high demand and our part of the circuit isn't the "long poll", then using low-width constructions might be a big win.
 
 # Locality
