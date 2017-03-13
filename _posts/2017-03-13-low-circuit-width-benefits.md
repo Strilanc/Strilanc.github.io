@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Why care about circuit width?"
-date: 2017-03-04 12:10:10 am EST
+date: 2017-03-13 12:10:10 am EST
 permalink: post/1704
 ---
 
