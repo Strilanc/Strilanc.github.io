@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Why care about circuit width?</title>
+                <description>&lt;p&gt;I&amp;#39;ve been thinking about circuit constructions lately, and the question occurred to me: if circuit $A$ uses $O(N)$ gates and circuit $B$ uses $O(N^2)$ gates, but in parallel and with a better constant factor so that $B$&amp;#39;s depth is a bit better than $A$&amp;#39;s, would you ever use $A$ instead...</description>
+                <pubDate>Sat, 04 Mar 2017 00:10:10 -0500</pubDate>
+                <link>http://algassert.com/post/1704</link>
+                <guid isPermaLink="true">http://algassert.com/post/1704</guid>
+            </item>
+            <item>
                 <title>Bugs from the Future: Hadamard Coins and Implicit Measurement</title>
                 <description>&lt;p&gt;Suppose it&amp;#39;s fifty years from now, and everyone considers manipulating quantum information to be routine. You&amp;#39;re new to the quantum programming profession, still trying stuff out, and you&amp;#39;ve come up with (well, rediscovered) a &lt;em&gt;clever idea&lt;/em&gt; for generating random data.&lt;/p&gt; &lt;p&gt;You call it the Hadamard coin. You&amp;#39;ll use the fact...</description>
                 <pubDate>Sat, 04 Mar 2017 00:10:10 -0500</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sun, 20 Nov 2016 00:10:10 -0500</pubDate>
                 <link>http://algassert.com/post/1628</link>
                 <guid isPermaLink="true">http://algassert.com/post/1628</guid>
-            </item>
-            <item>
-                <title>Half-Baked Thoughts for a Quantum Scripting Language</title>
-                <description>&lt;p&gt;When it comes to toying with quantum computing, I think &lt;a href=&quot;/quirk&quot;&gt;Quirk&lt;/a&gt; has pushed the &amp;quot;drag blocks around on a circuit diagram&amp;quot; concept about as far as I want to go. It&amp;#39;s great for small problems, but becomes horribly tedious and error-prone as things get more complicated. This is a...</description>
-                <pubDate>Sun, 13 Nov 2016 00:10:10 -0500</pubDate>
-                <link>http://algassert.com/post/1627</link>
-                <guid isPermaLink="true">http://algassert.com/post/1627</guid>
             </item>
     </channel>
 </rss>
