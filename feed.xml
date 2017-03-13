@@ -9,7 +9,7 @@
             <item>
                 <title>Why care about circuit width?</title>
                 <description>&lt;p&gt;I&amp;#39;ve been thinking about circuit constructions lately, and the question occurred to me: if circuit $A$ uses $O(N)$ gates and circuit $B$ uses $O(N^2)$ gates, but in parallel and with a better constant factor so that $B$&amp;#39;s depth is a bit better than $A$&amp;#39;s, would you ever use $A$ instead...</description>
-                <pubDate>Sat, 04 Mar 2017 00:10:10 -0500</pubDate>
+                <pubDate>Mon, 13 Mar 2017 01:10:10 -0400</pubDate>
                 <link>http://algassert.com/post/1704</link>
                 <guid isPermaLink="true">http://algassert.com/post/1704</guid>
             </item>
