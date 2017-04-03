@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unfathomable Bugs #9: Lossy Shader Packing"
-date: 2016-10-22 12:10:10 am EST
+date: 2016-10-22 12:10:10 pm EST
 permalink: post/1625
 ---
 

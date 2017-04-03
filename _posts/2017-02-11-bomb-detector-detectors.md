@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Quantum Bomb Detector Detectors"
-date: 2017-02-11 12:10:10 am EST
+date: 2017-02-11 12:10:10 pm EST
 permalink: post/1700
 ---
 

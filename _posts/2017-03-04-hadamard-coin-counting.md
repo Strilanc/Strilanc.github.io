@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Bugs from the Future: Hadamard Coins and Implicit Measurement"
-date: 2017-03-04 12:10:10 am EST
+date: 2017-03-04 12:10:10 pm EST
 permalink: post/1703
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Improper Priors"
-date: 2016-12-04 12:10:10 am EST
+date: 2016-12-04 12:10:10 pm EST
 permalink: post/1630
 ---
 

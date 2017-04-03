@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "From Swapping to Teleporting with Simple Circuit Moves"
-date: 2016-11-20 12:10:10 am EST
+date: 2016-11-20 12:10:10 pm EST
 permalink: post/1628
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "The Quantum Version of the One-Time Pad is Teleportation"
-date: 2016-10-03 12:10:10 am EST
+date: 2016-10-03 12:10:10 pm EST
 permalink: post/1624
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Bra-Ket Notation Trivializes Matrix Multiplication"
-date: 2016-11-27 12:10:10 am EST
+date: 2016-11-27 12:10:10 pm EST
 permalink: post/1629
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Using Multiplication to Cut Gates from the QFT"
-date: 2016-06-14 12:10:10 am EST
+date: 2016-06-14 12:10:10 pm EST
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
