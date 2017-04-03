@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Quantum Data Locking vs Recognizable Data"
-date: 2016-12-18 12:10:10 am EST
+date: 2016-12-18 12:10:10 pm EST
 permalink: post/1632
 ---
 

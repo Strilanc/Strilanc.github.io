@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Half-Baked Thoughts for a Quantum Scripting Language"
-date: 2016-11-13 12:10:10 am EST
+date: 2016-11-13 12:10:10 pm EST
 permalink: post/1627
 ---
 

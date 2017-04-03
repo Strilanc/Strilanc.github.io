@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Quirk's Performance History"
-date: 2016-11-07 12:10:10 am EST
+date: 2016-11-07 12:10:10 pm EST
 permalink: post/1626
 ---
 

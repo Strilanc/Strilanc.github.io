@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "[Meta] Joining Google's Quantum AI Team"
-date: 2017-03-01 12:10:10 am EST
+date: 2017-03-01 12:10:10 pm EST
 permalink: post/1702
 ---
 

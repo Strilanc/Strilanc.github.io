@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Trouble Adding Constants into Qubit Registers"
-date: 2017-02-26 12:10:10 am EST
+date: 2017-02-26 12:10:10 pm EST
 permalink: post/1701
 ---
 
