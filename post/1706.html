@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Thinking of Operations as Controls</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Thinking of Operations as Controls</h1>
+<p class="meta">09 Apr 2017</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Controlled operations are a core part of quantum computation.
+Not <em>strictly</em> necessary, since any two-qubit gate tends to be sufficient for universal quantum computation, but certainly common.</p>
+
+<p>For example, the core of both Grover&#39;s and Shor&#39;s algorithms are defined by controlled operations.
+Shor&#39;s algorithm uses controlled multiplication operations as part of estimating the period of multiplying-by-a-constant-mod-$R$.
+And in the case of Grover&#39;s algorithm, there&#39;s a giant controlled-controlled-...-controlled-Z right in the middle of every step.</p>
+
+<p>As a segway into the meat of this post, I want to point out something common to both these examples: their controls are bracketed by Hadamard gates.
+The bracketing is blatant in Grover&#39;s algorithm, though you may have not noticed it before in Shor&#39;s algorithm since the closing Hadamards are typically hidden inside the QFT operation:</p>
+
+<p><img style="max-width:100%; border:1px solid gray;" src="/assets/2017-04-09-operations-as-controls/grover-brackets-controls.png"/></p>
+
+<p><img style="max-width:100%; border:1px solid gray;" src="/assets/2017-04-09-operations-as-controls/shor-brackets-controls.png"/></p>
+
+<p>This pattern of control-surrounded-by-Hs is common enough that it&#39;s worth packaging it into a single logical thing.
+I call that thing an &quot;X-axis control&quot;.
+In this post I&#39;ll be representing X-axis controls, in diagrams, with a little circled plus:</p>
+
+<p><img style="max-width:100%; border:1px solid gray;" src="/assets/2017-04-09-operations-as-controls/x-axis-control.png"/></p>
+
+<p>The reason I call this H-Control-H thing an &quot;X-axis control&quot; is that, instead of conditioning operations on the control qubit being in the state $|1\rangle$, X-axis controls condition operations on the control qubit being in the state $H |1\rangle = \frac{1}{\sqrt 2} |0\rangle - \frac{1}{\sqrt 2} |1\rangle$ and that state is on the X axis of the Bloch sphere.
+This makes sense: the Hadamard operation basically swaps the X and Z axes, so bracketing a Z axis control with Hadamards turns it into an X control (and vice versa).
+Also, as we&#39;ll see in a minute, the X-axis control is associated with the X gate in the same way that a normal control is associated with the Z gate.</p>
+
+<p>Now, you may be thinking &quot;Hold on, don&#39;t we already use a circled plus to represent X gates? Why are we using the same symbol again? Isn&#39;t that confusing?&quot;.
+That&#39;s a fair complaint.
+But actually it makes a lot of sense to use the same symbol for both, because X-axis controls are often interchangeable with X gates.
+If you have an X gate controlled by an X-axis control, you can swap them without changing the applied operation:</p>
+
+<p><img style="max-width:100%; border:1px solid gray;" src="/assets/2017-04-09-operations-as-controls/cxnot-swap-no-effect.png"/></p>
+
+<p><em>(Side note: Because I didn&#39;t know the fact diagramed above when I added X-axis controls to Quirk, I picked the wrong symbol for them.
+Since the matching state has a minus in it, I figured using a circled <strong>minus</strong> was most natural (and a plus for the <strong>inverse</strong> control).
+But the interchangeability with NOT is much more important, so the next version of Quirk will switch conventions and I may go back and fix it in older posts.)</em></p>
+
+<p>Taking this switch-operation-and-control concept a bit further, note that a controlled-NOT is equivalent to a Z-controlled-by-X:</p>
+
+<p><img style="max-width:100%; border:1px solid gray;" src="/assets/2017-04-09-operations-as-controls/czx-equals-zcx.png"/></p>
+
+<p>I hope you&#39;re starting to get the sense that operations and controls are awfully similar to each other (as long as they have the same axis).
+In fact, that&#39;s correct.
+In the same way that every rotation has an axis, every single-qubit operation has a corresponding control.
+We can freely change which qubit is &quot;the target&quot; of an operation, without actually changing that operation, as long as we keep the axes consistent:</p>
+
+<p><img style="max-width:100%; border:1px solid gray;" src="/assets/2017-04-09-operations-as-controls/target-does-not-matter.png"/></p>
+
+<p>This equivalence between operations and controls even works for <em>partial</em> rotations:</p>
+
+<p><img style="max-width:100%; border:1px solid gray;" src="/assets/2017-04-09-operations-as-controls/target-does-not-matter-partial.png"/></p>
+
+<p>I would go so far as to say that the fact that we distinguish between &quot;operation&quot; and &quot;control&quot;, at least in the cases diagramed above, is just a historical accident.
+A vestigial spandrel inherited from classical computing.</p>
+
+<p>In the context of <em>quantum</em> computing, it often doesn&#39;t make to sense to call out <em>any</em> of the wires as &quot;the target&quot; of an operation.
+Diagrammatically, taking a hint from a common notation for CZs, we drop the whole &quot;target&quot; thing and just use a bunch of linked controls:</p>
+
+<p><img style="max-width:100%; border:1px solid gray;" src="/assets/2017-04-09-operations-as-controls/no-target-notation.png"/></p>
+
+<p>For partial rotations, we can use an outside indicator to show how much to phase:</p>
+
+<p><img style="max-width:100%; border:1px solid gray;" src="/assets/2017-04-09-operations-as-controls/no-target-notation-partial.png"/></p>
+
+<p>Basically, what we are doing in the above diagrams is describing operations in terms of the eigenvector they affect.
+Instead of thinking in terms of a specific qubit being turned conditionally, we&#39;re thinking in terms of a direction in Hilbert space being negated (or phased).
+We&#39;re thinking in terms of the whole system, instead of in terms of its parts.</p>
+
+<p>This perspective, of controlled operations as direct specifications of how to phase hilbert space, is of course a very useful tool-for-intuition when thinking about quantum circuits.
+For example, the &quot;controls only&quot; approach makes Grover&#39;s algorithm simpler in two ways.
+First, it pushes you to think in terms of overlap between the solution vector and the diffusion vector, which leads to the elegant <a href="https://en.wikipedia.org/wiki/Grover%27s_algorithm#Geometric_proof_of_correctness">&quot;rotating towards solution&quot; interpretation</a> of what Grover&#39;s algorithm is doing.
+Second, it makes the circuit a whole lot more compact:</p>
+
+<p><img style="max-width:100%; border:1px solid gray;" src="/assets/2017-04-09-operations-as-controls/grover-x-axis.png"/></p>
+
+<p>With all that praise of just-think-in-controls done, let&#39;s backtrack and go over some reasons calling out individual wires as &quot;the target&quot; is also useful.</p>
+
+<p>First, whenever we mix classical computation into our quantum computation, it doesn&#39;t make a lot of sense to consider the classical bit as anything except a control.
+You can say &quot;If this bit is ON, then hit that qubit with an X gate.&quot;, but it&#39;s really weird to say &quot;To the extent that this qubit is in the ON+OFF state, hit that classical bit with a Z gate.&quot;.
+The latter description makes it sound like you&#39;d need to measure the qubit, and that would break the equivalence:</p>
+
+<p><img style="max-width:100%; border:1px solid gray;" src="/assets/2017-04-09-operations-as-controls/classical-cnot-flip.png"/></p>
+
+<p>Second, when you have several partially-overlapping operations to apply, marking several wires as a target can be a compact way to represent the set of operations:</p>
+
+<p><img style="max-width:100%; border:1px solid gray;" src="/assets/2017-04-09-operations-as-controls/targets-as-repetition.png"/></p>
+
+<p>Third, we may be controlling larger multi-qubit operations, where the intuitive gains aren&#39;t as good.</p>
+
+<p>Note that there <em>is</em> a way to generalize the operation-as-control concept to large operations.
+Basically, if $|\alpha\rangle$ is an eigenvector of $A$ that gets phased by $x$ degrees, and $|\beta\rangle$ is an eigenvector of $B$ that gets phased by $y$ degrees, then the combined operation $C = \text{Control}(A, B)$ should phase $|\alpha\rangle \otimes |\beta\rangle$ by the product $\frac{x \cdot y}{180^\circ}$.</p>
+
+<p>The product-of-angles approach matches the behavior of controls in three respects: the global phase of an operation matters, eigenvalues of +1 block effects, and eigenvalues of -1 allow effects.
+If $A$ doesn&#39;t affect $|\alpha\rangle$ (i.e. scales it by 1), then $C$ won&#39;t affect $|\alpha\rangle \otimes |v\rangle$ for any $|v\rangle$.
+If $A$ negates $|\alpha\rangle$, then $C$&#39;s effect on $|\alpha\rangle \otimes |v\rangle$ will match $B$&#39;s effect on $|v\rangle$.</p>
+
+<p>Mathematically, we can define the effect of $\text{Control}$ by using logarithms (always remember to try logarithms):</p>
+
+<p>$$A = \sum_a e^{i \alpha_a} |\alpha_a\rangle \langle \alpha_a |$$</p>
+
+<p>$$B = \sum_b e^{i \beta_b} |\beta_b\rangle \langle \beta_b |$$</p>
+
+<p>$$
+\begin{align}
+C
+&amp;=
+\text{Control}(A, B)
+\\
+&amp;=
+\exp \left( -\frac{i}{\pi} \ln(A) \otimes \ln(B) \right)
+\\
+&amp;=
+\exp \left( -\frac{i}{\pi} \sum_{a} \left(i \alpha_a |\alpha_a\rangle \langle \alpha_a | \right) \otimes \sum_{b} \left( i \beta_b |\beta_b\rangle \langle \beta_b | \right) \right)
+\\
+&amp;=
+\exp \left( \sum_{a,b} \frac{i}{\pi} \alpha_a \beta_b |\alpha_a,\beta_b\rangle \langle \alpha_a,\beta_b | \right)
+\\
+&amp;=
+\sum_{a,b} \exp\left(\frac{i}{\pi} \alpha_a \beta_b \right) |\alpha_a, \beta_b\rangle \langle \alpha_a, \beta_b |
+\end{align}
+$$</p>
+
+<p>But I digress, since I haven&#39;t found a thing for which the above idea adds clarity.</p>
+
+<p>The core point here is that, when doing quantum computation, it&#39;s intuitively useful to see operations and controls as basically interchangeable.
+Every operation defines a control, and every control defines an operation.
+There&#39;s no reason to stick with the conventions of classical computing, where these concepts are unambiguously distinct.</p>
+
+<p>For example, from the view of single-qubit-operations-as-controls, it&#39;s trivial to define what classical computation is.
+Classical computation is what you get if you can combine Z-axis controls with <strong>exactly one X-axis control</strong>. (The X-axis control is the NOT in the CC...CNOT.)</p>
+
+<p>Meaning quantum computation is more powerful than classical computation... because quantum computation can apply multiple X-axis controls.
+<em>(Challenge: based on the fact that <a href="https://arxiv.org/abs/quant-ph/0301040">Toffoli+Hadamard is universal for quantum computation</a>, prove that support for at-most-two X-axis controls is sufficient.
+No partial rotations.)</em></p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1705">&laquo; Difficulty of Classical Control</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

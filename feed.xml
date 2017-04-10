@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Thinking of Operations as Controls</title>
+                <description>&lt;p&gt;Controlled operations are a core part of quantum computation. Not &lt;em&gt;strictly&lt;/em&gt; necessary, since any two-qubit gate tends to be sufficient for universal quantum computation, but certainly common.&lt;/p&gt; &lt;p&gt;For example, the core of both Grover&amp;#39;s and Shor&amp;#39;s algorithms are defined by controlled operations. Shor&amp;#39;s algorithm uses controlled multiplication operations as part...</description>
+                <pubDate>Sun, 09 Apr 2017 13:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/1706</link>
+                <guid isPermaLink="true">http://algassert.com/post/1706</guid>
+            </item>
+            <item>
                 <title>Difficulty of Classical Control</title>
                 <description>&lt;p&gt;Historically speaking, I think it&amp;#39;s fair to say that quantum computing papers have often assumed that, when it comes to conditionally applying an operation, it&amp;#39;s better for the conditionion to be classical. It makes intuitive sense, after all. Instead of having to do some complicated multi-qubit interaction, you just either...</description>
                 <pubDate>Sun, 02 Apr 2017 13:10:10 -0700</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sun, 04 Dec 2016 09:10:10 -0800</pubDate>
                 <link>http://algassert.com/post/1630</link>
                 <guid isPermaLink="true">http://algassert.com/post/1630</guid>
-            </item>
-            <item>
-                <title>Bra-Ket Notation Trivializes Matrix Multiplication</title>
-                <description>&lt;p&gt;One of the first things you notice, when learning quantum things, is people surrounding all their symbols with a strange angular notation. Instead of writing &amp;quot;let $a$ be the state&amp;quot;, they keep writing &amp;quot;let $|a\rangle$ be the state&amp;quot;. And the natural reaction is: &amp;quot;Why do they do that? It seems...</description>
-                <pubDate>Sun, 27 Nov 2016 09:10:10 -0800</pubDate>
-                <link>http://algassert.com/post/1629</link>
-                <guid isPermaLink="true">http://algassert.com/post/1629</guid>
             </item>
     </channel>
 </rss>
