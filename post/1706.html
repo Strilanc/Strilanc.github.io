@@ -140,7 +140,7 @@ Diagrammatically, taking a hint from a common notation for CZs, we drop the whol
 Instead of thinking in terms of a specific qubit being turned conditionally, we&#39;re thinking in terms of a direction in Hilbert space being negated (or phased).
 We&#39;re thinking in terms of the whole system, instead of in terms of its parts.</p>
 
-<p>This perspective, of controlled operations as direct specifications of how to phase hilbert space, is of course a very useful tool-for-intuition when thinking about quantum circuits.
+<p>This perspective, of controlled operations as direct specifications of how to phase Hilbert space, is of course a very useful tool-for-intuition when thinking about quantum circuits.
 For example, the &quot;controls only&quot; approach makes Grover&#39;s algorithm simpler in two ways.
 First, it pushes you to think in terms of overlap between the solution vector and the diffusion vector, which leads to the elegant <a href="https://en.wikipedia.org/wiki/Grover%27s_algorithm#Geometric_proof_of_correctness">&quot;rotating towards solution&quot; interpretation</a> of what Grover&#39;s algorithm is doing.
 Second, it makes the circuit a whole lot more compact:</p>
@@ -198,7 +198,7 @@ $$</p>
 
 <p>The core point here is that, when doing quantum computation, it&#39;s intuitively useful to see operations and controls as basically interchangeable.
 Every operation defines a control, and every control defines an operation.
-There&#39;s no reason to stick with the conventions of classical computing, where these concepts are unambiguously distinct.</p>
+There&#39;s no inherent reason to stick with the conventions of classical computing, where these concepts are unambiguously distinct.</p>
 
 <p>For example, from the view of single-qubit-operations-as-controls, it&#39;s trivial to define what classical computation is.
 Classical computation is what you get if you can combine Z-axis controls with <strong>exactly one X-axis control</strong>. (The X-axis control is the NOT in the CC...CNOT.)</p>
