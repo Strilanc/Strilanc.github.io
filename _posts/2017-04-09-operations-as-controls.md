@@ -73,7 +73,7 @@ Basically, what we are doing in the above diagrams is describing operations in t
 Instead of thinking in terms of a specific qubit being turned conditionally, we're thinking in terms of a direction in Hilbert space being negated (or phased).
 We're thinking in terms of the whole system, instead of in terms of its parts.
 
-This perspective, of controlled operations as direct specifications of how to phase hilbert space, is of course a very useful tool-for-intuition when thinking about quantum circuits.
+This perspective, of controlled operations as direct specifications of how to phase Hilbert space, is of course a very useful tool-for-intuition when thinking about quantum circuits.
 For example, the "controls only" approach makes Grover's algorithm simpler in two ways.
 First, it pushes you to think in terms of overlap between the solution vector and the diffusion vector, which leads to the elegant ["rotating towards solution" interpretation](https://en.wikipedia.org/wiki/Grover%27s_algorithm#Geometric_proof_of_correctness) of what Grover's algorithm is doing.
 Second, it makes the circuit a whole lot more compact:
@@ -131,7 +131,7 @@ But I digress, since I haven't found a thing for which the above idea adds clari
 
 The core point here is that, when doing quantum computation, it's intuitively useful to see operations and controls as basically interchangeable.
 Every operation defines a control, and every control defines an operation.
-There's no reason to stick with the conventions of classical computing, where these concepts are unambiguously distinct.
+There's no inherent reason to stick with the conventions of classical computing, where these concepts are unambiguously distinct.
 
 For example, from the view of single-qubit-operations-as-controls, it's trivial to define what classical computation is.
 Classical computation is what you get if you can combine Z-axis controls with **exactly one X-axis control**. (The X-axis control is the NOT in the CC...CNOT.)
