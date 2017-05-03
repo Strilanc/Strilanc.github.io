@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Quirk v2.0 - Bowing to Convention</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Quirk v2.0 - Bowing to Convention</h1>
+<p class="meta">02 May 2017</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Last week I released version 2.0 of my <a href="https://github.com/Strilanc/Quirk">open-source</a> drag-and-drop <a href="/quirk">quantum circuit simulator Quirk</a>.</p>
+
+<p><a href="/quirk"><img style="max-width:100%;" src="/assets/2017-05-02-quirk-v2/empty-circuit-full-ui.png"/></a></p>
+
+<p>In this post, in addition to the breaking changes that prompted bumping the major version, I want to talk about events and improvements in the year since the <a href="/2016/05/22/quirk.html">previous post</a>.</p>
+
+<h1>Recognition</h1>
+
+<p>I really do think that, at least within the niche of &quot;<a href="http://worrydream.com/LearnableProgramming/">learning by interacting</a>&quot;, Quirk wipes the floor with anything else out there right now.
+But... I would be exagerating if I said Quirk has reached a significant number of the people who could actually make use of it.</p>
+
+<p>A handful of professors and &quot;code camp&quot; runners have contacted me about plans to use Quirk for teaching, but only a handful.
+So if you&#39;re interested in using Quirk for teaching, or know someone who would be, or are using it and have noticed something problematic for students, please let me know.</p>
+
+<p>I <em>have</em> heard some nice remarks about Quirk from quantum computing researchers.
+Michael Nielsen called Quirk &quot;<a href="https://twitter.com/michael_nielsen/status/734923961138597888">great fun</a>&quot;.
+Dave Bacon refered to Quirk as &quot;the most beautiful quantum circuit simulator ever&quot;.
+And Scott Aaronson noted that Quirk &quot;looks fantastic!!&quot;.
+(These are off the cuff remarks, not endorsements.)</p>
+
+<p>On a more personal level, the fact that I wrote Quirk got me contacted by two separate quantum computing startups.
+It opened a lot of doors.
+I also used Quirk in finding an ever-so-slightly-more-compact construction for Shor&#39;s algorithm, which I intend to turn into a paper.</p>
+
+<p>Okay, enough of this blatant self-aggrandizing stuff.
+On to the actual changes.</p>
+
+<h1>Breaking Changes</h1>
+
+<p>Unusually for software, none of the breaking changes I made affect how circuits behave.
+Any circuits you&#39;ve bookmarked will still load and give the same results.
+What&#39;s different is how the results are <em>displayed</em>.</p>
+
+<h4>Spherical Coordinate Changes</h4>
+
+<p>When I was first designing Quirk, I made a lot of arbitrary decisions.
+In particular, in the Bloch sphere display, qubits that are On have to point along <em>some</em> direction.
+What should that direction be?</p>
+
+<p><img style="max-width:100%;" src="/assets/2017-05-02-quirk-v2/on-question-mark.png"/></p>
+
+<p>I figured that the natural direction for &quot;onward&quot; was upward, with offward correspondingly downward.
+Secondarily, I decided that the $X$-axis states (i.e. $|0\rangle+|1\rangle$ and $|0\rangle - |1\rangle$) should point leftward/rightward, since why would you ever <em>not</em> have an $X$-axis going left to right?
+That left the $Y$-axis going foward/backward, the most awkward draw direction, which was fine by me since quantum information theorists have some kind of vendetta against $Y$.
+They use $X \cdot Z$ instead.
+So, until last week, Z-up X-right Y-back with Off=-1 and On=+1 was the convention Quirk used.</p>
+
+<p>The problem, of course, is that the quantum information and physics communities don&#39;t follow what I thought of as the &quot;obvious&quot; convention.
+Their convention disagrees with basically all of my choices (except for right-handedness).
+Physicists like to point Off upward (...what) and to point the X axis towards the user (...what?!).</p>
+
+<p>Another source of disagreement was the latitude $\phi$.
+Me, mathematicians, and globe-makers range $\phi$ from $-90^\circ$ to $+90^\circ$ with zero at the XY equator.
+Physicists instead range $\phi$ from $0^\circ$ to $180^\circ$ with $0$ at the top pole.</p>
+
+<p>I can&#39;t really say I <em>agree</em> with the physicists&#39; conventions, but...
+Well, Quirk&#39;s raison d&#39;être is to be a useful learning tool.
+And I&#39;ve received emails from professors who want to use Quirk in their courses, except the difference in conventions w.r.t. textbooks is a problem for them.
+How can I say no to that?</p>
+
+<p>I&#39;d rather agree with the other material students have than force them to do error-prone coordinate conversions.
+So &quot;Offward and upward!&quot; I say, with only a slight gritting of teeth.
+Quirk&#39;s bloch spheres are now oriented the same as the one on Wikipedia: Z-up X-front Y-right with Off=+1 and On=-1.</p>
+
+<p><a href="https://en.wikipedia.org/wiki/Bloch_sphere#/media/File:Bloch_Sphere.svg"><img style="max-width:100%;" src="/assets/2017-05-02-quirk-v2/bloch-sphere-wikipedia.svg"/></a></p>
+
+<p>It bothers me that this convention makes it harder to gauge what Hadamard gates are doing, but the consistency is worth it.
+And I do like that now On states are negative and Off states positive because, given $s=0$ for Off and $s=1$ for On, the rule &quot;head towards $(-1)^s$&quot; feels right.</p>
+
+<h4>Control Symbol Changes</h4>
+
+<p>The second big breaking change for v2 is how $X$-axis and $Y$-axis controls are drawn.</p>
+
+<p>Originally, I picked the symbols for the $X$-axis controls based on the state they affected.
+I used a circled-plus $\oplus$ for the one that matched the &quot;$X$-Off&quot; state $|0\rangle + |1\rangle$, and a circled-minus $\ominus$ for the one that matched the &quot;$X$-On&quot; state $|0\rangle - |1\rangle$.
+Plus for the state with a plus and minus for the state with a minus.</p>
+
+<p>The problem with that choice of notation is that, as I mentioned in <a href="/post/1706">Thinking of Operations as Controls</a>, an $X$-gate is like a control that matches the $X$-On state.
+When you have an $X$-gate controlled by an $X$-On control, you can exchange the gate for the control without affecting behavior.
+But the $X$-gate is drawn as a circled-plus, not a circled-minus, so the $X$-gate used to look like the control it <em>couldn&#39;t</em> exchange with.
+That&#39;s a notation disaster!</p>
+
+<p>So I switched the symbols.
+Now I use $\oplus$ for the control that matches the $X$-On state $|0\rangle - |1\rangle$, and $\ominus$ for its partner.
+Additionally, since &quot;two lines&quot; means On for $X$ now, and &quot;agree on lines-vs-on&quot; is how I picked which $Y$-axis control got $\otimes$ vs $\oslash$, preserving the rule means a switch of the $X$ symbols forces a switch of the $Y$ symbols.
+So I now use $\otimes$ for the $Y$-On control (matches $|0\rangle + i|1\rangle$) and $\oslash$ for the $Y$-Off control.</p>
+
+<p>... To be honest, I&#39;m a bit worried this will end up being a bad decision.
+The symbol switch forced a corresponding change in the notation on my post-selection gates.
+Now the gate $|+\rangle \langle + |$ keeps the state matched by the $\oplus$ control, namely $|0\rangle - |1\rangle$.
+But <em>in papers</em> the symbol $|+\rangle$ is often used as a shorthand for the state $|0\rangle + |1\rangle$.
+Urgh.</p>
+
+<p>Maybe a year from now I&#39;ll have changed the control symbols to something completely different, or never draw X gates as big circled pluses, just to avoid the issue entirely.
+But for now, we&#39;re going with what it is.</p>
+
+<h4>Endianness Changes</h4>
+
+<p>The final change prompting a version bump is the endianness of kets.
+(Well... actually, I switched this in the jump from v1.8 to v1.9. Whoops. So much for proper semantic versioning.)</p>
+
+<p>When you sweep your mouse over displays that enumerate states, i.e. the chance, amplitude, and density displays, the states now count like $|00..00\rangle$, $|00..01\rangle$, $|00..10\rangle$, $|00..11\rangle$, etc.
+They used to count like $|00..00\rangle$, $|10..00\rangle$, etc.
+Same states, different labels.</p>
+
+<p>In other words, kets are now big-endian.
+They have the &#39;big bit&#39; first, analogous to how decimal notation puts the &#39;big digit&#39; first (15 is fifteen, not fifty one).
+Big-endian is what people naturally expect.</p>
+
+<h1>Improvements</h1>
+
+<p>If I listed <em>all</em> the improvements since last year&#39;s post (i.e. since v1.4), this post would turn into a very long very boring list.
+So I&#39;ll try to focus on just the big stuff.</p>
+
+<p>The most relevant-to-users change is that there&#39;s a lot more arithmetic gates.
+Addition, multiplication, comparison, modular exponentation, and various other goodies that are tedious to build out of basic gates are now included out of the box.
+Also, arithmetic gates started off very clunky because I was packaging the input and output sections into the same gate.
+Arithmetic is a lot more convenient now that &quot;Input Gates&quot; have been factored out into their own thing.</p>
+
+<p>As an example, the modular arithmetic gates make <a href="/quirk#circuit=%7B%22cols%22%3A%5B%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%7Emdaf%22%2C1%2C1%2C1%2C%22%7Eh1nm%22%5D%2C%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%7B%22id%22%3A%22setR%22%2C%22arg%22%3A221%7D%2C1%2C1%2C1%2C%7B%22id%22%3A%22setB%22%2C%22arg%22%3A16%7D%5D%2C%5B%5D%2C%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22X%22%5D%2C%5B%22inputA8%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22*BToAmodR8%22%5D%2C%5B%22QFT%E2%80%A08%22%5D%2C%5B%22Chance8%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22Chance8%22%5D%5D%2C%22gates%22%3A%5B%7B%22id%22%3A%22%7Eh1nm%22%2C%22name%22%3A%22guess%3A%22%2C%22matrix%22%3A%22%7B%7B1%2C0%2C0%2C0%7D%2C%7B0%2C1%2C0%2C0%7D%2C%7B0%2C0%2C1%2C0%7D%2C%7B0%2C0%2C0%2C1%7D%7D%22%7D%2C%7B%22id%22%3A%22%7Emdaf%22%2C%22name%22%3A%22input%3A%22%2C%22matrix%22%3A%22%7B%7B1%2C0%2C0%2C0%7D%2C%7B0%2C1%2C0%2C0%7D%2C%7B0%2C0%2C1%2C0%7D%2C%7B0%2C0%2C0%2C1%7D%7D%22%7D%2C%7B%22id%22%3A%22%7Ea6uq%22%2C%22name%22%3A%22samples%3A%22%2C%22matrix%22%3A%22%7B%7B1%2C0%2C0%2C0%7D%2C%7B0%2C1%2C0%2C0%7D%2C%7B0%2C0%2C1%2C0%7D%2C%7B0%2C0%2C0%2C1%7D%7D%22%7D%2C%7B%22id%22%3A%22%7Emjoi%22%2C%22name%22%3A%22state%3A%22%2C%22matrix%22%3A%22%7B%7B1%2C0%2C0%2C0%7D%2C%7B0%2C1%2C0%2C0%7D%2C%7B0%2C0%2C1%2C0%7D%2C%7B0%2C0%2C0%2C1%7D%7D%22%7D%5D%7D">simulating Shor&#39;s algorithm very compact</a> (in width, not height; the qubit limit hurts here):</p>
+
+<p><img style="max-width:100%;" src="/assets/2017-05-02-quirk-v2/shor-circuit.png"/></p>
+
+<p>Other new gates include the X/Y axis controls and post-selection gates, wire-rearranging gates like left-rotate and interleave, and the parametrized X/Y/Z gates.
+Great for making circuits more compact and elegant.</p>
+
+<p>Another big change that happened over the last year was the introduction of custom gates.
+Click the &quot;<em>make gate</em>&quot; button, and you can define a gate in terms of a specified rotation, matrix, or section of the current circuit.
+In fact, because custom gates can contain arithmetic gates and the inputs to those arithmetic gates can come from the external circuit, custom gates can be <em>parametrized</em>; they&#39;re functions!</p>
+
+<p>A more minor change is the addition of an intro menu.
+New users aren&#39;t dumped into the middle of the program with no context on what the heck just happened anymore.
+The menu has links to example circuits, the source code, and a tutorial video (which is currently out of date, and the first video I&#39;ve ever made, so not particularly great).</p>
+
+<p>Something users might notice, unconsciously, is that Quirk&#39;s performance has improved since last year.
+The size of Quirk&#39;s minified code has more than doubled (bleh), but the time it takes to simulate and draw a short 16 qubit circuit has been cut from ~150ms to ~50ms (on my machine, in Chrome).
+Game programmers will laugh out loud at 20fps, but it&#39;s a nice step up from 7fps.
+(Of course performance is much better with fewer quits. On circuits with 10 qubits the redraws take ~16ms.)</p>
+
+<p>The last thing I&#39;ll mention is that lots of little visual details have been added.
+Some were minor, like adding shadows under toolbox gates so they &quot;pop out&quot; more, shading dynamic gates yellow, and squishing their rotation-indicators to look like rotations around the appropriate axis.
+Others were major, like adding a dashed vertical line to non-local operations such as post-selection, showing per-column and whole-circuit survival rates, and having amplitude gates switch to a &quot;fixed phase&quot; mode when the local phases became ambiguous.
+And some visual changes were in between, like cutting single-qubit density matrix displays out of the default displays at the end of every circuit (because they were less informative and less readable than the bloch sphere displays).</p>
+
+<p>If you want way more details, read <a href="https://github.com/Strilanc/Quirk/releases">the releases tab on github</a>.</p>
+
+<h1>Dev Improvements</h1>
+
+<p>Quirk didn&#39;t just add user features, it also add features for me, the developer.</p>
+
+<p>Case in point, I used to write every gate shader in full by hand.
+Each shader did its own special thing to handle controls and the tensor/bitwise structure of gates&#39; effects.
+Nowadays the bulk of the shaders is all generated by code, and only the important details are specified by hand.
+This was a crucial part of getting Quirk to work on iPhones without sacrificing speed on desktops, but it&#39;s also damn convenient.</p>
+
+<p>For example, the shader for the increment and decrement gates used to be 20 finnicky lines long; now it&#39;s nearly a one-liner:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">let</span> <span class="nx">offsetShader</span> <span class="o">=</span> <span class="nx">ketShaderPermute</span><span class="p">(</span>
+    <span class="s1">&#39;uniform float amount;&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;return mod(out_id - amount + span, span);&#39;</span><span class="p">);</span>
+</code></pre></div>
+<p>Another big improvement is testing.
+It&#39;s hard for me to communicate how much nicer Quirk&#39;s testing story has gotten.
+There used to be dozens and dozens of lines of boilerplate around gate tests, carefully setting up input pixel data to feed into a shader, circuits defined by giant transposed arrays of long gate names, ecclectic comparisons of the results against redundant computation performed using matrices, and on and on.
+Now that&#39;s all done automatically to every single gate with a single test.</p>
+
+<p>Part of building a gate is specifying the matrix or permutation its shader is supposed to be implementing, and the test just iterates over every known gate comparing the shader&#39;s behavior against the specified behavior using random test vectors.
+In effect, what used to be boilerplate test code is now hidden inside stuff I was specifying anyways:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="nx">ModularAdditionGates</span><span class="p">.</span><span class="nx">PlusAModRFamily</span> <span class="o">=</span> <span class="nx">Gate</span><span class="p">.</span><span class="nx">buildFamily</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="p">(</span><span class="nx">span</span><span class="p">,</span> <span class="nx">builder</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">builder</span><span class="p">.</span>
+    <span class="nx">setSerializedId</span><span class="p">(</span><span class="s2">&quot;+AmodR&quot;</span> <span class="o">+</span> <span class="nx">span</span><span class="p">).</span>
+    <span class="p">[...]</span>
+    <span class="c1">/////// THIS NEXT LINE DOUBLES AS TEST CODE ///////</span>
+    <span class="nx">setKnownEffectToParametrizedPermutation</span><span class="p">((</span><span class="nx">t</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">t</span> <span class="o">&lt;</span> <span class="nx">r</span> <span class="o">?</span> <span class="p">(</span><span class="nx">t</span> <span class="o">+</span> <span class="nx">a</span><span class="p">)</span> <span class="o">%</span> <span class="nx">r</span> <span class="o">:</span> <span class="nx">t</span><span class="p">));</span>
+</code></pre></div>
+<p>The build-up of testing utility methods for specifying and evaluating circuits has also made more focused tests easier to write.
+For example, when I found a circuit that triggered a precision bug in large multiplications, the repro test ended up as basically just the circuit in text form:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span>    <span class="kd">let</span> <span class="nx">circuit</span> <span class="o">=</span> <span class="nx">CircuitDefinition</span><span class="p">.</span><span class="nx">fromTextDiagram</span><span class="p">(</span><span class="k">new</span> <span class="nx">Map</span><span class="p">([</span>
+        <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="nx">Gates</span><span class="p">.</span><span class="nx">InputGates</span><span class="p">.</span><span class="nx">SetA</span><span class="p">.</span><span class="nx">withParam</span><span class="p">(</span><span class="mi">16385</span><span class="p">)],</span>
+        <span class="p">[</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="nx">Gates</span><span class="p">.</span><span class="nx">MultiplicationGates</span><span class="p">.</span><span class="nx">TimesAFamily</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="nx">Gates</span><span class="p">.</span><span class="nx">HalfTurns</span><span class="p">.</span><span class="nx">X</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="kc">null</span><span class="p">]]),</span>
+        <span class="sb">`-a-X-*-</span>
+<span class="sb">         -----/-</span>
+<span class="sb">         -----/-</span>
+<span class="sb">         -----/-</span>
+<span class="sb">         -----/-</span>
+<span class="sb">         -----/-</span>
+<span class="sb">         -----/-</span>
+<span class="sb">         -----/-</span>
+<span class="sb">         -----/-</span>
+<span class="sb">         -----/-</span>
+<span class="sb">         -----/-</span>
+<span class="sb">         -----/-</span>
+<span class="sb">         -----/-</span>
+<span class="sb">         ---X-/-</span>
+<span class="sb">         -----/-</span>
+<span class="sb">         -----/-`</span><span class="p">);</span>
+    <span class="nx">assertThatCircuitOutputsBasisKet</span><span class="p">(</span><span class="nx">circuit</span><span class="p">,</span> <span class="mi">24577</span><span class="p">);</span>
+</code></pre></div>
+<p>There is still some boilerplate, but the majority of the test is actually important details.</p>
+
+<p>I&#39;ve also adopted functional reactive programming to drive the UI elements, added support for performance tests, introduced focused mutability to improve speed, used draw caching to improve speed, replaced generators with raw for loops on hot paths to improve speed, etc, etc, etc.
+Listing minor dev changes is even more boring than listing minor user changes, so I&#39;ll stop here.</p>
+
+<h1>Summary</h1>
+
+<p>Quirk has improved over the last year.
+The display conventions for bloch spheres, controls, and kets changed, prompting a major version bump.
+More people should use Quirk as a resource when teaching quantum computation.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1706">&laquo; Thinking of Operations as Controls</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
