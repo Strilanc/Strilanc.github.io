@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Quirk v2.0 - Bowing to Convention</title>
+                <description>&lt;p&gt;Last week I released version 2.0 of my &lt;a href=&quot;https://github.com/Strilanc/Quirk&quot;&gt;open-source&lt;/a&gt; drag-and-drop &lt;a href=&quot;/quirk&quot;&gt;quantum circuit simulator Quirk&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;&lt;a href=&quot;/quirk&quot;&gt;&lt;img style=&quot;max-width:100%;&quot; src=&quot;/assets/2017-05-02-quirk-v2/empty-circuit-full-ui.png&quot;/&gt;&lt;/a&gt;&lt;/p&gt; &lt;p&gt;In this post, in addition to the breaking changes that prompted bumping the major version, I want to talk about events and improvements in the year since the &lt;a href=&quot;/2016/05/22/quirk.html&quot;&gt;previous...</description>
+                <pubDate>Tue, 02 May 2017 13:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/1707</link>
+                <guid isPermaLink="true">http://algassert.com/post/1707</guid>
+            </item>
+            <item>
                 <title>Thinking of Operations as Controls</title>
                 <description>&lt;p&gt;Controlled operations are a core part of quantum computation. Not &lt;em&gt;strictly&lt;/em&gt; necessary, since any two-qubit gate tends to be sufficient for universal quantum computation, but certainly common.&lt;/p&gt; &lt;p&gt;For example, the core of both Grover&amp;#39;s and Shor&amp;#39;s algorithms are defined by controlled operations. Shor&amp;#39;s algorithm uses controlled multiplication operations as part...</description>
                 <pubDate>Sun, 09 Apr 2017 13:10:10 -0700</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Mon, 12 Dec 2016 09:10:10 -0800</pubDate>
                 <link>http://algassert.com/post/1631</link>
                 <guid isPermaLink="true">http://algassert.com/post/1631</guid>
-            </item>
-            <item>
-                <title>Improper Priors</title>
-                <description>&lt;p&gt;Here is the basic process for Bayesian reasoning:&lt;/p&gt; &lt;ol&gt; &lt;li&gt;&lt;p&gt;Start with a &lt;a href=&quot;https://en.wikipedia.org/wiki/Prior_probability&quot;&gt;prior&lt;/a&gt;. A probability distribution over hypothesis space that represents your starting beliefs.&lt;/p&gt;&lt;/li&gt; &lt;li&gt;&lt;p&gt;Make an observation $B$.&lt;/p&gt;&lt;/li&gt; &lt;li&gt;&lt;p&gt;Scale the prior pointwise by each hypothesis&amp;#39; predicted probability of $B$.&lt;/p&gt;&lt;/li&gt; &lt;li&gt;&lt;p&gt;Normalize the prior so it adds up to 100%. This...</description>
-                <pubDate>Sun, 04 Dec 2016 09:10:10 -0800</pubDate>
-                <link>http://algassert.com/post/1630</link>
-                <guid isPermaLink="true">http://algassert.com/post/1630</guid>
             </item>
     </channel>
 </rss>
