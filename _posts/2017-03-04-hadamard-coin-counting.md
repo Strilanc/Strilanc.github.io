@@ -3,6 +3,7 @@ layout: post
 title: "Bugs from the Future: Hadamard Coins and Implicit Measurement"
 date: 2017-03-04 12:10:10 pm EST
 permalink: post/1703
+highlight_in_list: true
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
