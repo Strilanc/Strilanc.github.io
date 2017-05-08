@@ -231,19 +231,19 @@
 
 <p>The first diagram covers what happens when the condition token is cancelled before the triggering token settles. The four nodes added by the conditional callback are removed, without running the callback:</p>
 
-<p><img src="http://i.imgur.com/kAPu97r.gif" alt="Condition cancelled"></p>
+<p><img style="max-width:100%;" alt="Condition cancelled" src="/assets/2014-05-24-Cancel-Tokens-for-Java/condition-cancelled.gif"/></p>
 
 <p>The next diagram covers what happens when the triggering token is cancelled before the condition token settles. The callback is run, and by the end the four nodes associated with the conditional callback have been removed:</p>
 
-<p><img src="http://i.imgur.com/m1faEgw.gif" alt="Trigger cancelled"></p>
+<p><img style="max-width:100%;" alt="Trigger cancelled" src="/assets/2014-05-24-Cancel-Tokens-for-Java/trigger-cancelled.gif"/></p>
 
 <p>I also considered what happens when the tokens become immortal. The following diagram covers what happens when the triggering token is immortalized before the condition token settles. As with the condition being cancelled first, the callback is not run and all four conditional-callback-related nodes end up removed:</p>
 
-<p><img src="http://i.imgur.com/DSnduvF.gif" alt="Trigger immortal"></p>
+<p><img style="max-width:100%;" alt="Trigger immortal" src="/assets/2014-05-24-Cancel-Tokens-for-Java/trigger-immortal.gif"/></p>
 
 <p>The final case, which I think is the most interesting, is what happens when the condition token is immortalized before the triggering token settles. Now only three of the four nodes are removed, resulting in the callback being unconditional:</p>
 
-<p><img src="http://i.imgur.com/RyxrZ8x.gif" alt="Condition immortal"></p>
+<p><img style="max-width:100%;" alt="Condition immortal" src="/assets/2014-05-24-Cancel-Tokens-for-Java/condition-immortal.gif"/></p>
 
 <p>I&#39;m not sure how much the above diagrams help with understanding what&#39;s going on, but I found them really helpful as a reference.</p>
 
