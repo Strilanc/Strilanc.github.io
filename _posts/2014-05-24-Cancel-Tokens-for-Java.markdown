@@ -3,7 +3,10 @@ layout: post
 title: "Cancelling Cancellation"
 date: 2014-05-27 11:30:00 EST
 categories: software
+permalink: software/2014/05/27/Cancel-Tokens-for-Java.html
 ---
+
+{% assign loc = page.path | remove_first: '_posts/' | remove: '.markdown' %}
 
 A cancel token accepts cleanup methods, and runs those methods when/if the token is cancelled. They make cleanup easier, especially in asynchronous cases, but I don't think they're very well known or applied as widely as they should be. So I'll talk about them, and see if they catch on eventually.
 
@@ -183,19 +186,19 @@ As part of making sure I understood what happens when conditional cancellation i
 
 The first diagram covers what happens when the condition token is cancelled before the triggering token settles. The four nodes added by the conditional callback are removed, without running the callback:
 
-![Condition cancelled](http://i.imgur.com/kAPu97r.gif)
+<img style="max-width:100%;" alt="Condition cancelled" src="/assets/{{ loc }}/condition-cancelled.gif"/>
 
 The next diagram covers what happens when the triggering token is cancelled before the condition token settles. The callback is run, and by the end the four nodes associated with the conditional callback have been removed:
 
-![Trigger cancelled](http://i.imgur.com/m1faEgw.gif)
+<img style="max-width:100%;" alt="Trigger cancelled" src="/assets/{{ loc }}/trigger-cancelled.gif"/>
 
 I also considered what happens when the tokens become immortal. The following diagram covers what happens when the triggering token is immortalized before the condition token settles. As with the condition being cancelled first, the callback is not run and all four conditional-callback-related nodes end up removed:
 
-![Trigger immortal](http://i.imgur.com/DSnduvF.gif)
+<img style="max-width:100%;" alt="Trigger immortal" src="/assets/{{ loc }}/trigger-immortal.gif"/>
 
 The final case, which I think is the most interesting, is what happens when the condition token is immortalized before the triggering token settles. Now only three of the four nodes are removed, resulting in the callback being unconditional:
 
-![Condition immortal](http://i.imgur.com/RyxrZ8x.gif)
+<img style="max-width:100%;" alt="Condition immortal" src="/assets/{{ loc }}/condition-immortal.gif"/>
 
 I'm not sure how much the above diagrams help with understanding what's going on, but I found them really helpful as a reference.
 
