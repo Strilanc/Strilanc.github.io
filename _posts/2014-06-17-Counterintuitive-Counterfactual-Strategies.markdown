@@ -3,7 +3,10 @@ layout: post
 title: "Counter-intuitive Counterfactual Strategies"
 date: 2014-06-17 11:30:00 EST
 categories: game-theory
+permalink: game-theory/2014/06/17/Counterintuitive-Counterfactual-Strategies.html
 ---
+
+{% assign loc = page.path | remove_first: '_posts/' | remove: '.markdown' %}
 
 One of the interesting things about games where players have hidden information, like poker or crib, is how hard it is to solve them. Ultimately this comes down to the fact that counterfactuals, things that could have happened but didn't, affect the optimal strategies. Unlike games of perfect information, such as chess and backgammon, you can't find the optimal strategy by just recursing down the game tree the way [minimax](http://en.wikipedia.org/wiki/Minimax) and [expectiminimax](http://en.wikipedia.org/wiki/Expectiminimax_tree) do. The sub-trees interact.
 
@@ -21,7 +24,7 @@ The defender's alternative to fighting is running away, but that leaves the city
 
 Here's the game tree, for reference:
 
-![Stormy fate game tree](http://i.imgur.com/EgKr0Dh.png)
+<img style="max-width:100%;" alt="Stormy fate game tree" src="/assets/{{ loc }}/game-tree.png"/>
 
 We want to find an optimally resilient strategy for the attacker. The one hardest for a defender to exploit.
 
@@ -103,7 +106,7 @@ Translated back in terms of the word problem, these numbers mean that the attack
 
 A slightly easier way to find the maximum is to just [plug the problem into wolfram alpha](http://www.wolframalpha.com/input/?i=maximum+of+10p+-+15q+-+6+-+5+Max[-p+-+q%2C+0]+-+5+Max[3p+-+q+-+2%2C+0]%2C+0+%3C%3D+p+%3C%3D+1%2C+0+%3C%3D+q+%3C%3D+1):
 
-![Solution and plots of minimum point from Wolfram-Alpha](http://i.imgur.com/6nOlZBS.png)
+<img style="max-width:100%;" alt="Solution and plots of minimum point from Wolfram-Alpha" src="/assets/{{ loc }}/cost-plot.png"/>
 
 (Note: I made non-negligible edits to the above screenshot to make it clearer.)
 
