@@ -153,25 +153,31 @@ You should only be null-hostile when null really can&#39;t satisfy the code&#39;
 <p>Null-hostililty is great for cleaning nulls out of your code base, but makes interop with null-friendly code hard and exposes value-dependent behavior in code that intuitively shouldn&#39;t depend on specific values.
 Generic code that treats all values the same is <a href="http://ttic.uchicago.edu/%7Edreyer/course/papers/wadler.pdf">easier to reason about</a>.</p>
 
+<h1>Comments</h1>
+
+<div style="background-color: #EEE; border: 1px solid black; padding: 5px; font-size: 12px;">
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>Leo G.</strong> - Oct 12, 2015
+    <br/>
+
+    You do not have to "roll a custom null-friendly Optional". You just have to check the Javadoc and see that Optional has an ofNullable(T value) method.
+    <br/>
+    <br/>
+
+    see: https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html#ofNullable-T-
+
+    <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+      <strong>Craig Gidney</strong> - Oct 12, 2015
+      <br/>
+
+      That method does something different than what we want for `first`. We want `first` to return an optional that contains null when the first item is null, but `Optional.ofNullable` will return an absent optional instead. It doesn't wrap nulls as values, it converts them into absence.
+    </div>
+  </div>
+</div>
+
 </div>
 
 <!-- IntenseDebate comments -->
-
-  <script>
-  var idcomments_acct = '7d0006bd6a016f9a2892cc2ecc64de01';
-  var idcomments_post_id = '/opinion/2015/10/08/Make-Generics-Value-Agnostic.html';
-  var idcomments_post_url = 'http://algorithmicassertions.com/opinion/2015/10/08/Make-Generics-Value-Agnostic.html';
-  </script>
-  <span id="IDCommentsPostTitle" style="display:none"></span>
-  <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
-  <noscript>
-    <hr>
-    <font color=red>
-      Comments script blocked. Comments won't work.
-    </font>
-    <br/>
-    Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>intensedebate.com</strong> to fix.
-  </noscript>
 
 
 
