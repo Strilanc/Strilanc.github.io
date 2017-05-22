@@ -3,7 +3,6 @@ layout: post
 title: "YOU versus Bell Tests and the No Communication Theorem"
 date: 2015-10-11 11:30:00 EST
 categories: quantum
-comments: true
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
@@ -421,3 +420,75 @@ But communication is not one of the coordination games quantum strategies are be
 This is counter-intuitive.
 
 <script src="/assets/{{ loc }}/bell_test_widget.js"></script>
+
+
+# Comments
+
+<div style="background-color: #EEE; border: 1px solid black; padding: 5px; font-size: 12px;">
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>hasen</strong> - Dec 13, 2015
+    <br/>
+
+    This post needs a discussion of how "measure" is implemented, and what it does to the shared qubit.
+
+    <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+      <strong>Craig Gidney</strong> - Dec 13, 2015
+      <br/>
+
+      I do call out in the post that I'm arbitrarily declaring the specifics of the quantum operations to be out of scope. It takes a lot of words to explain properly. And sometimes the best strategy is just to throw out a thing to fiddle with, instead of explaining in detail how it works.
+      <br/>
+      <br/>
+
+      That being said, I really should have linked the source code ( https://github.com/Strilanc/Bell-Tester ). The measuring code is in src/engine/Superposition.js . It weighs the states where the qubit is On to get a probability, flips a biased coin, discards the states that don't match the result, and renormalizes. (The measuring function is embedded into a string because it's used, along with the user code, to generate the code executed by the web workers doing the sandboxed heavy lifting.)
+    </div>
+  </div>
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>edguy99</strong> - Jan 30, 2016
+    <br/>
+
+    I have had fun playing with the animation, thank you. The key to understanding is the measure function. I have copied it below, but could you talk about it in words to help an understanding of it?
+    <br/>
+    <br/>
+
+    <pre>
+    var MEASURE_FUNC_STRING = "
+    (function(amps, target_bit_index) {
+      var n = amps.length / 2;
+      // Weigh.
+      var p = 0;
+      for (var i = 0; i < n; i++) {
+        if ((i & (1 << target_bit_index)) !== 0) {
+          var vr = amps[i*2];
+          var vi = amps[i*2+1];
+          p += vr*vr + vi*vi;
+        }
+      }
+
+      // Collapse.
+      var outcome = Math.random() < p;
+
+      // Renormalize.
+      var w = Math.sqrt(outcome ? p : 1-p);
+      for (var i = 0; i < n; i++) {
+        var b = (i & (1 << target_bit_index)) !== 0;
+        if (b === outcome) {
+          amps[i*2] /= w;
+          amps[i*2+1] /= w;
+        } else {
+          amps[i*2] = 0;
+          amps[i*2+1] = 0;
+        }
+      }
+
+      return outcome;
+    })";
+    </pre>
+
+    <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+      <strong>Craig Gidney</strong> - Jan 30, 2016
+      <br/>
+
+      It's just an implementation of measurement as defined by the postulates of QM. Group states based on what the measurement outcome would be, add up the squared amplitudes within each group to get their respective probabilities, randomly pick a group based on those probabilities, throw away the others, rescale the weights so probabilities still add up to 1 after, and that's it.
+    </div>
+  </div>
+</div>
