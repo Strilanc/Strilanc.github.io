@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Efficient Controlled Phase Gradients</title>
+                <description>&lt;p&gt;The phase gradient is a useful, but under-appreciated, quantum operation. When you apply a phase gradient to a register, each computational basis state $|k\rangle$ is phased by an amount proportional to $k$:&lt;/p&gt; &lt;p&gt;$$\text{Grad}^t = \sum_{k=0}^{N-1} |k\rangle \langle k| \exp(i \tau t k / N)$$&lt;/p&gt; &lt;p&gt;Phase gradients are the frequency-space equivalent...</description>
+                <pubDate>Wed, 24 May 2017 10:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/1708</link>
+                <guid isPermaLink="true">http://algassert.com/post/1708</guid>
+            </item>
+            <item>
                 <title>Quirk v2.0 - Bowing to Convention</title>
                 <description>&lt;p&gt;Last week I released version 2.0 of my &lt;a href=&quot;https://github.com/Strilanc/Quirk&quot;&gt;open-source&lt;/a&gt; drag-and-drop &lt;a href=&quot;/quirk&quot;&gt;quantum circuit simulator Quirk&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;&lt;a href=&quot;/quirk&quot;&gt;&lt;img style=&quot;max-width:100%;&quot; src=&quot;/assets/2017-05-02-quirk-v2/empty-circuit-full-ui.png&quot;/&gt;&lt;/a&gt;&lt;/p&gt; &lt;p&gt;In this post, in addition to the breaking changes that prompted bumping the major version, I want to talk about events and improvements in the year since the &lt;a href=&quot;/2016/05/22/quirk.html&quot;&gt;previous...</description>
                 <pubDate>Tue, 02 May 2017 13:10:10 -0700</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sun, 18 Dec 2016 09:10:10 -0800</pubDate>
                 <link>http://algassert.com/post/1632</link>
                 <guid isPermaLink="true">http://algassert.com/post/1632</guid>
-            </item>
-            <item>
-                <title>Turning Detection into Correction with Quantum Teleportation</title>
-                <description>&lt;p&gt;Suppose we were in a world with good quantum computers, but not-so-good quantum networks. Where qubits lived long malleable lives in the cool safety of dilution refrigerators, interspersed with torrid journeys through noisy fiber optic cable.&lt;/p&gt; &lt;p&gt;In that world, what kinds of strategies would be used to make sending qubits...</description>
-                <pubDate>Mon, 12 Dec 2016 09:10:10 -0800</pubDate>
-                <link>http://algassert.com/post/1631</link>
-                <guid isPermaLink="true">http://algassert.com/post/1631</guid>
             </item>
     </channel>
 </rss>
