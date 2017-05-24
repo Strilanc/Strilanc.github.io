@@ -128,3 +128,5 @@ This isn't anything revolutionary, there are *far* better QFT constructions, but
 When trying to control an operation in a way that scales, without using workspace, look for pre/post operations that make the target operation do the opposite thing and a way to cut the operation's effect in half.
 
 A controlled $n$-bit phase gradient can be performed in $O(\lg n)$ depth with $O(n)$ gates.
+
+[Discuss on r/algassert](https://www.reddit.com/r/algassert/comments/6d4ny6/comment_thread_efficient_controlled_phase/)
