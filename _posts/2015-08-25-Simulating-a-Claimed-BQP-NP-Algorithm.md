@@ -3,7 +3,6 @@ layout: post
 title: "Quantum vs NP #1-B: Simulating a Claimed NP=BQP Algorithm"
 date: 2015-08-27 11:30:00 EST
 categories: quantum
-comments: true
 ---
 
 [In my last post](/quantum/2015/08/01/Checking-a-Claimed-BQP-NP-Algorithm.html), I argued that [this paper](http://arxiv.org/abs/1507.05061)'s claimed quantum polynomial-time 3-SAT algorithm actually took exponential time. I pointed out that the algorithm must be equivalent to random guessing because the final measurements could be done before any hard work happened.
@@ -235,3 +234,25 @@ Younes et al's algorithm is an obfsucated post-selection algorithm.
 All of the optimization power comes from restarting when things don't go perfectly, instead of from interference or entanglement or deduction or something else that works in practice.
 
 It would be a great algorithm if post-selection was free, but unfotunately we appear to be stuck in a BQP reality.
+
+
+
+
+
+# Comments
+
+<div style="background-color: #EEE; border: 1px solid black; padding: 5px; font-size: 12px;">
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>Jon Rowe</strong> - Jan 6, 2016
+    <br/>
+
+    Thanks for the comments. Since we last posted, we also found the problem - while the algorithm solves MAX-SAT, it can take exponential time in some cases to amplify the probability. We have withdrawn the paper from the journal we submitted to and will start over....
+
+    <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+      <strong>Craig Gidney</strong> - Jan 6, 2016
+      <br/>
+
+      Thank you for the notification.
+    </div>
+  </div>
+</div>

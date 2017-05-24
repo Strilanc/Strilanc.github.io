@@ -3,7 +3,6 @@ layout: post
 title: "Quantum vs NP #1: Checking a Claimed BQP=NP Algorithm"
 date: 2015-08-01 11:30:00 EST
 categories: quantum
-comments: true
 ---
 
 Two weeks ago, there was [a post on Hacker News](https://news.ycombinator.com/item?id=9928657) about [a paper by Younes et al.](http://arxiv.org/abs/1507.05061).
@@ -73,4 +72,50 @@ Quantum suicide is never the answer.
 
 # Update
 
-In response to the author's comments below, I made [a followup post](/quantum/2015/08/27/Simulating-a-Claimed-BQP-NP-Algorithm.html) that supports my conclusion by simulating the algorithm.
+In response to the paper authors' comments below, I made [a followup post](/quantum/2015/08/27/Simulating-a-Claimed-BQP-NP-Algorithm.html) that supports my conclusion by simulating the algorithm.
+
+# Comments
+
+<div style="background-color: #EEE; border: 1px solid black; padding: 5px; font-size: 12px;">
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>Marvin</strong> - Aug 3, 2015
+    <br/>
+
+    This is a really accessible critique of a difficult subject. Kudos.
+  </div>
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>Ahmed Younes</strong> - Aug 7, 2015
+    <br/>
+
+    We would like to thank you for taking time to read our paper and provide the above comments. However, we do believe that your analysis is mistaken in some important ways, as follows:
+    <br/>
+    <br/>
+
+    1. The system comprises four sub-systems (variables|A_x>, clauses|C_x>, temporary qubits|mu_max>,target qubit |ax>) which get entangled with each other. It is not then true to say that "nothing is happening to the qubits storing the superposition of variable assignments". The entanglement means that affected one part of the system affects the whole.
+    <br/>
+    <br/>
+
+    2. In particular, it is not correct to say that the measurements of the variable assignments can be brought forward to the start of the algorithm. The manipulation of the entangled target qubit involves measurements, and not purely control -and so this part of the algorithm will not commute with the measurement of the variable assignments. This would only work if the variable subsystem were independent of the rest, which it is not.
+    <br/>
+    <br/>
+
+    3. You leave out from your analysis the addition of the extra temporary qubits |mu_max> which allows us to amplify the probability of success in the reading of the target qubit. We show that with the addition of these extra qubits we can reduce the number of restarts to a polynomial.
+    <br/>
+    <br/>
+
+    With best regards
+    <br/>
+
+    Ahmed Younes & Jonathan Rowe
+    <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+      <strong>Craig Gidney</strong> - Aug 7, 2015
+      <br/>
+
+      Thanks for your comment. I will look at the paper again and justify/realize-the-error-of my points at a more basic level.
+      <br/>
+      <br/>
+
+      I'm pretty sure that the operations on the clause and introduced ancilla bits can't affect the expected value of measuring the variable bits, because doing so would allow you to violate the no signalling theorem and perform FTL communication. But that's a bit too high level of a justification when low level issues like whether or not a given measurement can affect a given part of the state is being debated.
+    </div>
+  </div>
+</div>

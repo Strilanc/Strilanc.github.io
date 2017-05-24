@@ -3,7 +3,6 @@ layout: post
 title: "Wait, What?: Genetic Algorithms for Digital Quantum Simulations"
 date: 2016-07-05 12:10:10 pm EST
 permalink: post/1619
-comments: true
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}

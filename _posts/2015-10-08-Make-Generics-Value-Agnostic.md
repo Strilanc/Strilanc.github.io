@@ -3,7 +3,6 @@ layout: post
 title: "Rule of Thumb: Make Generic Code Value-Agnostic instead of Null-Hostile"
 date: 2015-10-08 11:30:00 EST
 categories: opinion
-comments: true
 ---
 
 Nulls are a big source of headaches, to [put it mildly](http://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare).
@@ -85,3 +84,26 @@ You should only be null-hostile when null really can't satisfy the code's needs 
 
 Null-hostililty is great for cleaning nulls out of your code base, but makes interop with null-friendly code hard and exposes value-dependent behavior in code that intuitively shouldn't depend on specific values.
 Generic code that treats all values the same is [easier to reason about](http://ttic.uchicago.edu/~dreyer/course/papers/wadler.pdf).
+
+
+# Comments
+
+<div style="background-color: #EEE; border: 1px solid black; padding: 5px; font-size: 12px;">
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>Leo G.</strong> - Oct 12, 2015
+    <br/>
+
+    You do not have to "roll a custom null-friendly Optional". You just have to check the Javadoc and see that Optional has an ofNullable(T value) method.
+    <br/>
+    <br/>
+
+    see: https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html#ofNullable-T-
+
+    <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+      <strong>Craig Gidney</strong> - Oct 12, 2015
+      <br/>
+
+      That method does something different than what we want for `first`. We want `first` to return an optional that contains null when the first item is null, but `Optional.ofNullable` will return an absent optional instead. It doesn't wrap nulls as values, it converts them into absence.
+    </div>
+  </div>
+</div>

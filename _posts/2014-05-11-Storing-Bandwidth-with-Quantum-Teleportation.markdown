@@ -3,7 +3,10 @@ layout: post
 title: "Storing Bandwidth with Quantum Teleportation"
 date: 2014-05-11 11:30:00 EST
 categories: quantum
+permalink: quantum/2014/05/11/Storing-Bandwidth-with-Quantum-Teleportation.html
 ---
+
+{% assign loc = page.path | remove_first: '_posts/' | remove: '.markdown' %}
 
 [Quantum teleportation](http://en.wikipedia.org/wiki/Quantum_teleportation) is the inverse of superdense coding ([which I talked about last week](http://strilanc.com/quantum/2014/05/03/Storing-Bandwidth-with-Superdense-Coding.html)). Instead of consuming a previously shared qubit to encode two classical bits into a single quantum bit, quantum teleportation consumes a previously shared qubit to encode a desired qubit into two classical bits.
 
@@ -15,9 +18,9 @@ In this post I'll go over the quantum teleportation process, and outline a few p
 
 In case I can't explain things, [here's a video explanation of quantum teleportation by someone else](https://www.youtube.com/watch?v=3wZ35c3oYUE&list=PL1826E60FD05B44E4&index=18). You may have to watch the whole series of videos it's part of before things click, though.
 
-My circuit diagram for quantum teleportation is a lot like [the one for superdense coding](http://i.imgur.com/mXHpdbB.png), except the encoding and decoding steps are swapped:
+My circuit diagram for quantum teleportation is a lot like [the one for superdense coding](/quantum/2014/05/03/Storing-Bandwidth-with-Superdense-Coding.html), except the encoding and decoding steps are swapped:
 
-![Superdense coding circuit](http://i.imgur.com/zAQ2SFi.png)
+<img style="max-width:100%;" alt="Teleportation circuit" src="/assets/{{ loc }}/teleportation-circuit.png"/>
 
 Like last time, the top of the diagram corresponds to "Alice", who wants to send a quantum bit to "Bob" (the bottom). Let's look at how the state of the system changes as time passes, and operations are applied, going from left to right.
 
