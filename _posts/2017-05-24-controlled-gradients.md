@@ -58,9 +58,9 @@ You can spread a single bit over a whole register in logarithmic depth, so this 
 <img style="max-width:100%; border:1px solid gray;" src="/assets/{{ loc }}/spread-cnot.png"/>
 
 Still, in order to be able to apply all the controls in parallel we would still need those $n$ extra qubits, and qubits are *expensive*.
-If we double the number of qubits required to perform an operation (i.e. needed $n$ extra qubits to perform a QFT), and we widly speculate that quantum computers will gain capacity in a Moore's-law-esque fashion, then we just added an *extra year* to how long we have to wait before a problem fits onto an available quantum computer.
+If we double the number of qubits required to perform an operation (i.e. needed $n$ extra qubits to perform a QFT), and we wildy speculate that quantum computers will gain capacity in a Moore's-law-esque fashion, then we just added an *extra year* to how long we have to wait before a problem fits onto an available quantum computer.
 
-What we want is an efficient way to do a controlled phase gradients *inline*, without any extra qubits.
+What we want is an efficient way to do controlled phase gradients *inline*, without any extra qubits.
 
 
 # Reverse Control
