@@ -94,3 +94,6 @@ Turns out this inverts the multiplication!
 Formally: $QFT \circ (\times K) \circ QFT^\dagger = \times K^{-1}$.
 Of course it's much more efficient to just reverse the $\times K$ circuit.
 But, as I mentioned last post, knowing a framing operation that inverts effects makes for cheap controls.*)
+
+
+[Discuss on r/algassert](https://www.reddit.com/r/algassert/comments/6fsez6/comment_thread_simple_algorithm_for/)
