@@ -3,7 +3,7 @@ layout: post
 title: "Paper as Problem: 'Non-local measurements via quantum erasure'"
 date: 2016-03-01 11:30:00 EST
 categories: quantum
-comments: true
+permalink: quantum/2016/03/01/paper-as-problem-nonlocal-measurements-via-quantum-erasure.html
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
@@ -135,3 +135,45 @@ The losses get exponentially worse as the number of involved qubits increases: a
 You can measure non-local observables by using pre-existing entanglement and post-selection to temporarily teleport entangled copies of qubits.
 
 [The paper](http://arxiv.org/abs/1409.1575) goes into plenty of details not covered in this post, such as explaining how to parameterize the strength of the non-local measurement.
+
+
+# Comments
+
+<div style="background-color: #EEE; border: 1px solid black; padding: 5px; font-size: 12px;">
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>brodutch</strong> - Apr 1, 2016
+
+    <p>
+    Nice post.
+	</p>
+
+    <p>
+    Note that the special case of a strong $\sigma_z \otimes \sigma_z$ can be done deterministically without communications (this is in the appendix). The more general case (which is essentially covered by your diagram with only one minor tweak.) cannot be done deterministically.
+	</p>
+
+    <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+      <strong>Craig Gidney</strong> - Apr 1, 2016
+
+      <p>
+      Argh, I completely missed that! I was still in the mindset of "we need the measurement result now so we can condition on it" as opposed to "we need the measurement result eventually for statistical purposes". If you don't need the result right away, it's so easy!
+      </p>
+
+      Alice and Bob both CNOT their part of Ψ onto their part of the Bell pair, then locally measure the Bell pair (along Z). The CNOT-int toggles the Bell pair's Z-parity, but controlled by Ψ's Z-parity, without affecting the X-parity. They get the result LATER, when they compare their measurements. 
+      <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+        <strong>brodutch</strong> - Apr 2, 2016
+
+        <p>
+        Yes, :)
+        </p>
+
+        <p>
+        I will just add that this was unknown for a very long time. Up until the 1980s the very few researchers who were interested in non-locality were under the impression that non-local measurements (of the type described) are impossible. The protocol for measuring a product of Pauli operators was a major breakthrough. Of course they did not have the tools of quantum information at the time.
+        </p>
+
+        <p>
+        By the way, a local version of this protocol is used in the implementation of syndrome measurements for quantum error correction.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
