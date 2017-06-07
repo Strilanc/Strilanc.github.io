@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Simple Algorithm for Multiplicative Inverses mod 2ⁿ</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Simple Algorithm for Multiplicative Inverses mod 2ⁿ</h1>
+<p class="meta">06 Jun 2017</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Lately, as part of writing a paper, I&#39;ve been thinking about quantum circuits for doing multiplication while using very little workspace.
+Surprisingly, this stumbled me into a nice way to compute multiplicative-inverses.</p>
+
+<p>Consider that multiplying by 3 is equivalent to adding a register into itself, left-shifted:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">times_3</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="n">value</span> <span class="o">+=</span> <span class="n">value</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">value</span>
+</code></pre></div>
+<p>The above code is simple, and looks like it&#39;s being computed inline, but doesn&#39;t translate directly into a no-workspace quantum circuit.
+The problem is that the same bits would need to act as both inputs and outputs.
+Fixing this requires splitting the addition into parts where the bits being added-from are distinct from the bits being added-into.</p>
+
+<p>The fix isn&#39;t too hard.
+Incrementing a low bit of a register can carry into the high bits, but incrementing high bits never causes carries into low bits (when working modulo a power of 2).
+So, as long as we work from high to low, we can do the shifted addition bit by bit:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">times_3</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">register_size</span><span class="p">):</span>
+    <span class="n">register_mask</span> <span class="o">=</span> <span class="o">~</span><span class="p">(</span><span class="o">~</span><span class="mi">0</span> <span class="o">&lt;&lt;</span> <span class="n">register_size</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">register_size</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">&lt;&lt;</span> <span class="n">i</span>  <span class="c1"># only affects bits above i</span>
+            <span class="n">value</span> <span class="o">&amp;=</span> <span class="n">register_mask</span>
+    <span class="k">return</span> <span class="n">value</span>
+</code></pre></div>
+<p>The above algorithm looks even simpler in the form of a circuit diagram:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-06-06-simple-mult-inverse/times-3.png"/></p>
+
+<p>As soon as I saw the above circuit, I realized that this shifted-addition approach generalizes to any odd scaling factor $K$.
+Just change the amount being added from $1$ to <code>K &gt;&gt; 1</code>, or equivalently $\lfloor K/2 \rfloor$:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-06-06-simple-mult-inverse/times-k.png"/></p>
+
+<p>Continuing the train of thought, as soon as I saw <em>that</em> circuit I realized that running it backwards must multiply by $K^{-1} \pmod{2^n}$.
+After all, every quantum circuit is reversible and the reverse of multiplying by $K$ is multiplying by $K^{-1}$.</p>
+
+<p>To create a $\times K^{-1}$ circuit, all we have to do is take the $\times K$ circuit, invert the additions into subtractions, and reverse the order of operations:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-06-06-simple-mult-inverse/times-k-rev.png"/></p>
+
+<p>This is kind of neat, because the construction only uses $K$ but the effect is in terms of $K^{-1}$.
+In fact, we can use this to <em>compute</em> $K^{-1}$.
+Just consider what must happen when the inverse-multiplication circuit is applied to a register storing $|1\rangle$.
+The output would be the multiplicative inverse, because $|1 \cdot K^{-1}\rangle = |K^{-1}\rangle$.</p>
+
+<p>Keep in mind that, although I&#39;ve been talking in terms of &quot;quantum&quot; circuits, all the operations in the discussed circuits have been classical.
+We&#39;re still in the regime of classical computing.
+We can translate the diagram back into python code.</p>
+
+<p>The result is a nice and simple multiplicative inverse method.
+It only works for powers of 2, but it&#39;s much easier to remember than the usual <a href="https://en.wikipedia.org/wiki/Modular_multiplicative_inverse#Extended_Euclidean_algorithm">extended-gcd algorithm</a>.
+Here&#39;s the code:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">multiplicative_inverse_mod_power_of_2</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span> <span class="n">bit_count</span><span class="p">):</span>
+    <span class="n">rest</span> <span class="o">=</span> <span class="n">factor</span> <span class="o">&amp;</span> <span class="o">~</span><span class="mi">1</span>
+    <span class="n">acc</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">bit_count</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">acc</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="p">):</span>
+            <span class="n">acc</span> <span class="o">-=</span> <span class="n">rest</span> <span class="o">&lt;&lt;</span> <span class="n">i</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="o">~</span><span class="p">(</span><span class="o">~</span><span class="mi">0</span> <span class="o">&lt;&lt;</span> <span class="n">bit_count</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">acc</span> <span class="o">&amp;</span> <span class="n">mask</span>
+</code></pre></div>
+<p>Not bad!</p>
+
+<p>I tried to extend this idea to computing multiplicative inverses when the modulus isn&#39;t a power of 2.
+Unfortunately, all the modular multiplication circuits that I know need the multiplicative inverse as part of constructing the circuit.
+For example, here&#39;s a modular multiplication circuit from a paper I&#39;m writing:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-06-06-simple-mult-inverse/bimult.png"/></p>
+
+<p>Notice that one of the operations is subtracting the bottom register times $K^{-1}$ out of the top register.
+Constructing this operation requires knowing $K^{-1}$, so it would be paradoxical to use the operation to find $K^{-1}$.
+(You might think that reversing the $+AK$ circuits would create $-AK^{-1}$, but actually it creates $-AK$.)
+Maybe this is a hint that, in order to find an efficient inline modular multiplication circuit, we need to fix the fact that the current ones don&#39;t look at all like the computation of a multiplicative inverse.</p>
+
+<p>(<em>Bonus: While playing around with this problem, I tried framing a multiplication gate with a quantum fourier transform.
+Turns out this inverts the multiplication!
+Formally: $QFT \circ (\times K) \circ QFT^\dagger = \times K^{-1}$.
+Of course it&#39;s much more efficient to just reverse the $\times K$ circuit.
+But, as I mentioned last post, knowing a framing operation that inverts effects makes for cheap controls.</em>)</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1708">&laquo; Efficient Controlled Phase Gradients</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
