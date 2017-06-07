@@ -138,7 +138,8 @@ Here&#39;s the code:</p>
 
 <p>I tried to extend this idea to computing multiplicative inverses when the modulus isn&#39;t a power of 2.
 Unfortunately, all the modular multiplication circuits that I know need the multiplicative inverse as part of constructing the circuit.
-For example, here&#39;s a modular multiplication circuit from a paper I&#39;m writing:</p>
+Also, because modular arithmetic breaks the &quot;high bits don&#39;t carry into low bits&quot; property, the circuits aren&#39;t inline.
+For example, here&#39;s a modular multiplication circuit from the paper:</p>
 
 <p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-06-06-simple-mult-inverse/bimult.png"/></p>
 
