@@ -3,7 +3,6 @@ layout: post
 title: "Don't Use Github Pages' Jekyll Support"
 date: 2016-02-25 11:30:00 EST
 categories: meta
-comments: true
 ---
 
 A few weeks ago, GitHub announced ["GitHub Pages now faster and simpler with Jekyll 3.0"](https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0).
@@ -57,3 +56,21 @@ If you're reading this, then it worked!
 # Summary
 
 If you don't enjoy periodically fixing years of content, don't use GitHub Pages + Jekyll.
+
+
+# Comments
+
+<div style="background-color: #EEE; border: 1px solid black; padding: 5px; font-size: 12px;">
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>Knarf</strong> - Feb 26, 2016
+    <br/>
+
+    I guess you could setup Travis CI to auto build your pages for you and keep the Jekyll version consistent?
+  </div>
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>Andrej</strong> - Feb 23, 2016
+    <br/>
+
+    Had the same annoyance. I had to manually go through all my past posts and edit them so that Mathjax works properly. My syntax highlighting also needed fixing. Several hours of work, was not too happy.
+  </div>
+</div>
