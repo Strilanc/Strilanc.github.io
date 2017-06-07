@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Simple Algorithm for Multiplicative Inverses mod 2ⁿ</title>
+                <description>&lt;p&gt;Lately, as part of writing a paper, I&amp;#39;ve been thinking about quantum circuits for doing multiplication while using very little workspace. Surprisingly, this stumbled me into a nice way to compute multiplicative-inverses.&lt;/p&gt; &lt;p&gt;Consider that multiplying by 3 is equivalent to adding a register into itself, left-shifted:&lt;/p&gt; &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span...</description>
+                <pubDate>Tue, 06 Jun 2017 10:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/1709</link>
+                <guid isPermaLink="true">http://algassert.com/post/1709</guid>
+            </item>
+            <item>
                 <title>Efficient Controlled Phase Gradients</title>
                 <description>&lt;p&gt;The phase gradient is a useful, but under-appreciated, quantum operation. When you apply a phase gradient to a register, each computational basis state $|k\rangle$ is phased by an amount proportional to $k$:&lt;/p&gt; &lt;p&gt;$$\text{Grad}^t = \sum_{k=0}^{N-1} |k\rangle \langle k| \exp(i \tau t k / N)$$&lt;/p&gt; &lt;p&gt;Phase gradients are the frequency-space equivalent...</description>
                 <pubDate>Wed, 24 May 2017 10:10:10 -0700</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sat, 11 Feb 2017 09:10:10 -0800</pubDate>
                 <link>http://algassert.com/post/1700</link>
                 <guid isPermaLink="true">http://algassert.com/post/1700</guid>
-            </item>
-            <item>
-                <title>Quantum Data Locking vs Recognizable Data</title>
-                <description>&lt;p&gt;Quantum information theory differs from classical information theory in many interesting ways. The ability to perform &amp;quot;data locking&amp;quot;, where the amount of classical information that you have access to can go up dramatically as you receive clarifying information, is one of those differences.&lt;/p&gt; &lt;p&gt;The &lt;a href=&quot;https://arxiv.org/abs/quant-ph/0303088&quot;&gt;original quantum data locking paper,...</description>
-                <pubDate>Sun, 18 Dec 2016 09:10:10 -0800</pubDate>
-                <link>http://algassert.com/post/1632</link>
-                <guid isPermaLink="true">http://algassert.com/post/1632</guid>
             </item>
     </channel>
 </rss>
