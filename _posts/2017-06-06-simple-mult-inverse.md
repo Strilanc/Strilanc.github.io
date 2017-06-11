@@ -80,7 +80,8 @@ Not bad!
 
 I tried to extend this idea to computing multiplicative inverses when the modulus isn't a power of 2.
 Unfortunately, all the modular multiplication circuits that I know need the multiplicative inverse as part of constructing the circuit.
-For example, here's a modular multiplication circuit from a paper I'm writing:
+Also, because modular arithmetic breaks the "high bits don't carry into low bits" property, the circuits aren't inline.
+For example, here's a modular multiplication circuit from the paper:
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/bimult.png"/>
 
@@ -94,3 +95,6 @@ Turns out this inverts the multiplication!
 Formally: $QFT \circ (\times K) \circ QFT^\dagger = \times K^{-1}$.
 Of course it's much more efficient to just reverse the $\times K$ circuit.
 But, as I mentioned last post, knowing a framing operation that inverts effects makes for cheap controls.*)
+
+
+[Discuss on r/algassert](https://www.reddit.com/r/algassert/comments/6fsez6/comment_thread_simple_algorithm_for/)
