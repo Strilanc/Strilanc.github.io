@@ -200,3 +200,5 @@ I did try to pick a natural choice for how to sweep the phase factors, but I hav
 
 All those caveats aside, I think the presented algorithm makes a good example of quantum algorithms informing the construction of classical algorithms.
 Knowing the quantum phase estimation trick produced an $O(N \lg N)$ classical fractional FFT in an afternoon, instead of over a series of papers spanning years.
+
+[Discuss on reddit](https://www.reddit.com/r/algassert/comments/6gnbin/comment_thread_computing_fractional_fourier/)
