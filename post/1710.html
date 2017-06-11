@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Computing Fractional Fourier Transforms</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Computing Fractional Fourier Transforms</h1>
+<p class="meta">11 Jun 2017</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Recently, I was side-tracked by a stumble into the <a href="https://en.wikipedia.org/wiki/Fractional_Fourier_transform">Wikipedia article on fractional Fourier transforms</a>.
+I found it interesting, because normally I think of the Fourier transform as an all-or-nothing proposition.
+I&#39;m either thinking in the frequency domain or in the time domain, not some combination both.
+What would it even <em>mean</em> to be in a combination of both domains?</p>
+
+<p>Of course there must be <em>some</em> meaning here.
+The Fourier transform can be represented as a unitary matrix $F$, and unitary matrices have well-defined square roots and cube roots and so forth.
+For any fractional parameter $s$, there must be some actual matrix $M$ that is a solution to $F^s = M$ .
+(Actually, we can find an uncountable infinity of such solutions! But we&#39;ll be focusing on a &quot;natural&quot; one.)</p>
+
+<p>Now $F^s$ may be a complicated matrix, or maybe not, I don&#39;t know.
+But I started wondering about how expensive it would be, given $s$, to apply this strange $F^s$ operation.
+As is typical for a function-of-a-matrix question of this kind, the answer is all about the eigenvalues and eigenvectors.
+In particular, as I was surprised to learn from the wiki article, the Fourier transform&#39;s matrix has <em>very convenient</em> eigenvalues.</p>
+
+<p>If you Fourier transform a vector twice, the result is the same vector but with all of the elements (except the first element) in reverse order.
+Apply the Fourier transform two more times, so a second reversal undoes the first, and you&#39;re back to the original vector.
+This means that $F^4 = I$, i.e. applying the Fourier transform four times is equivalent to doing nothing.
+Which means that each eigenvalue $\lambda$ of $F$ must satisfy $\lambda^4 = 1$.
+There are only four solutions to that equation: $\lambda \in \{1, i, -1, -i\}$.
+So those are the only four eigenvalues of $F$.</p>
+
+<p>The eigenvalue set $\{1, i, -1, -i\}$ is convenient for several reasons.
+First, it&#39;s small.
+There&#39;s only four possibilities.
+Second, it&#39;s closed under multiplication.
+In other words, the eigenvalues are evenly spaced around the complex unit circle.
+Third, the set&#39;s size is a power of 2.
+These all happen to be useful when it comes to constructing a short quantum circuit.</p>
+
+<h1>The Fractional Quantum Fourier Transform</h1>
+
+<p>If you asked me two days ago how gross it would be to make a quantum circuit that applies the square root of a Fourier transform, I would have answered &quot;probably pretty gross&quot;.
+Big complicated operations aren&#39;t guaranteed to have nice circuits that apply their square root, so why would you expect there to be a nice circuit for some specific operation?
+You&#39;d need the operation to just happen to follow some kind of nice pattern... like having an extremely convenient set of eigenvalues.</p>
+
+<p>A small evenly-spaced set of eigenvalues is great because it means <a href="https://en.wikipedia.org/wiki/Quantum_phase_estimation_algorithm">phase estimation</a> can pull apart the parts of the vector corresponding to each eigenvalue.
+This gives you a way to index into each part, and phase them independently, before putting them back together.
+The eigenvalue set $\{1, i, -1, -i\}$ is <em>perfect</em> for phase estimation, because it&#39;s exactly the set of eigenvalues that a 2-qubit phase estimation will pull out without error.</p>
+
+<p>Apply a 2-qubit phase estimation to the QFT, and you get this circuit:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-06-11-fractional-fourier-transform/phase-estimation-qft-naive.png"/></p>
+
+<p>The above circuit is correct, but unnecessarily expensive.
+We know that two applications of the QFT to a register is equivalent to negating the register&#39;s value (i.e. reversing the order of all states except $|0\rangle$).
+Instead of using two QFTs, we can use the fact that $\lnot x + 1 = -x-1 + 1 = -x$.
+It&#39;s much cheaper to NOT-and-increment than it is to apply two QFTs:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-06-11-fractional-fourier-transform/phase-estimation-qft.png"/></p>
+
+<p>So what does this circuit do?
+Well, if the target register (the one we&#39;re hitting with a QFT, NOT, and increment) is storing an eigenvector of the Fourier transform, then the controls, Hadamards, and inverse-QFT will cause that eigenvector&#39;s eigenvalue to &quot;kick back&quot; into the phase estimation register.
+In effect we have performed a temporary measurement (namely &quot;which eigenspace is the target register in?&quot;).
+The result of that &quot;measurement&quot; is being held in the phase estimation register.
+Of course we don&#39;t want to <em>actually</em> measure.
+In practice the input will be a superposition of multiple eigenvectors, and so the phase estimation register will end up storing an entangled superposition of values.
+We don&#39;t our fractional QFT causing decoherence, so we don&#39;t want to collapse that superposition.</p>
+
+<p>As an example, suppose $|v\rangle$ is an eigenvector of the QFT with eigenvalue $-i$, and $|w\rangle$ is an eigenvector with eigenvalue $-1$.
+Applying the phase estimation circuit to the state $|00\rangle \otimes (|v\rangle + |w\rangle)$ will produce the entangled state $|11\rangle \otimes |v\rangle$ + $|10\rangle \otimes |w\rangle$.
+Notice that, if we then apply a controlled-Z operation to the phase estimation register, it will negate the $|11\rangle$ part of the state but leave the $|10\rangle$ part alone.
+But since the $|11\rangle$ part is entangled with the $|v\rangle$ part and the $|10\rangle$ part is entangled with the $|w\rangle$ part, we can instead think of this CZ operation as negating the $|v\rangle$ part while leaving the $|w\rangle$ part alone.
+The phase estimation register gives us a way to independently phase each eigenvalue&#39;s eigenspace!</p>
+
+<p>The amount we want to phase each part by is determined by our goal: to perform a fractional QFT.
+If we want to perform $QFT^S$, and the normal QFT phases an eigenvector by $p$, then our fractional QFT will phase that eigenvector by $p^s$.
+Note that $p^s$ often has several solutions.
+For example, $1+i$ and $-1-i$ are both perfectly valid squares roots of $2i$.
+We break this ambiguity by arbitrarily representing $p$ as $e^{i \theta}$ with $\theta \in [0, 2 \pi)$, and declaring that $p^s = (e^{i \theta})^s = e^{i s \theta}$.</p>
+
+<p>Because the phase estimation register ends up indexing the eigenvectors as $+1 \rightarrow 00$, $i \rightarrow 01$, $-1 \rightarrow 10$, and $-i \rightarrow 11$, phasing by the correct amount is trivial.
+We simply apply a phase gradient to the register: hit the low bit with $Z^{s/2}$ and the high bit with $Z^{s}$.
+This phases $|00\rangle$ by nothing, $|01\rangle$ by $(-1)^{s/2}$, $|10\rangle$ by $(-1)^s$, and $|11\rangle$ by $(-1)^{3s/2}$.
+The usual QFT is at $s=1$, and the inverse QFT is at $s=-1$.</p>
+
+<p>After we have phased the eigenvectors by the correct amount, we have to put them back together.
+That is to say, we need to disentangle the phase estimation register from the target register by uncomputing the phase estimation.
+This gives us the final circuit:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-06-11-fractional-fourier-transform/fractional-fourier-transform-circuit.png"/></p>
+
+<p>So it turns out that two applications of the raw QFT, with some ancillae phasing in between, is enough to apply any fractional power of the QFT!
+(I&#39;m not counting the QFTs on the phase estimation register because they don&#39;t scale with the number of target register qubits, and 2-qubit QFTs are trivial.)</p>
+
+<p>I created <a href="/quirk#circuit=%7B%22cols%22%3A%5B%5B1%2C1%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B1%2C1%2C%22inputA4%22%2C1%2C1%2C1%2C%22%2B%3DA4%22%5D%2C%5B1%2C1%2C%22%E2%80%A6%22%5D%2C%5B1%2C1%2C%22%E2%80%A6%22%5D%2C%5B%22H%22%2C%22H%22%5D%2C%5B%22%E2%80%A2%22%2C1%2C%22QFT4%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C%22X%22%2C%22X%22%2C%22X%22%2C%22X%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C%22inc4%22%5D%2C%5B%22QFT%E2%80%A02%22%5D%2C%5B%22Z%5Et%22%2C%22Z%5Et%22%5D%2C%5B1%2C%22Z%5Et%22%5D%2C%5B%22QFT2%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C%22dec4%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C%22X%22%2C%22X%22%2C%22X%22%2C%22X%22%5D%2C%5B%22%E2%80%A2%22%2C1%2C%22QFT%E2%80%A04%22%5D%2C%5B%22H%22%2C%22H%22%5D%2C%5B1%2C1%2C%22%E2%80%A6%22%5D%2C%5B1%2C1%2C%22%E2%80%A6%22%5D%2C%5B%22%E2%97%A6%22%2C%22%E2%97%A6%22%2C%22Amps8%22%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B1%2C%22%3E%3E9%22%5D%2C%5B%22%3E%3E5%22%5D%5D%2C%22gates%22%3A%5B%7B%22id%22%3A%22%7Er6oh%22%2C%22name%22%3A%22Z%5ES%2F2%22%2C%22matrix%22%3A%22%7B%7B%E2%88%9A%C2%BD%2C%E2%88%9A%C2%BDi%7D%2C%7B%E2%88%9A%C2%BDi%2C%E2%88%9A%C2%BD%7D%7D%22%7D%2C%7B%22id%22%3A%22%7Ev8d8%22%2C%22name%22%3A%22Z%5ES%22%2C%22matrix%22%3A%22%7B%7B%E2%88%9A%C2%BD%2C%E2%88%9A%C2%BDi%7D%2C%7B%E2%88%9A%C2%BDi%2C%E2%88%9A%C2%BD%7D%7D%22%7D%2C%7B%22id%22%3A%22%7Er133%22%2C%22name%22%3A%22QFT%5Et%22%2C%22matrix%22%3A%22%7B%7B1%2C0%2C0%2C0%2C0%2C0%2C0%2C0%7D%2C%7B0%2C1%2C0%2C0%2C0%2C0%2C0%2C0%7D%2C%7B0%2C0%2C1%2C0%2C0%2C0%2C0%2C0%7D%2C%7B0%2C0%2C0%2C1%2C0%2C0%2C0%2C0%7D%2C%7B0%2C0%2C0%2C0%2C1%2C0%2C0%2C0%7D%2C%7B0%2C0%2C0%2C0%2C0%2C1%2C0%2C0%7D%2C%7B0%2C0%2C0%2C0%2C0%2C0%2C1%2C0%7D%2C%7B0%2C0%2C0%2C0%2C0%2C0%2C0%2C1%7D%7D%22%7D%2C%7B%22id%22%3A%22%7Enm5n%22%2C%22name%22%3A%22QFT%5Et%22%2C%22matrix%22%3A%22%7B%7B1%2C0%2C0%2C0%2C0%2C0%2C0%2C0%7D%2C%7B0%2Ci%2C0%2C0%2C0%2C0%2C0%2C0%7D%2C%7B0%2C0%2C1%2C0%2C0%2C0%2C0%2C0%7D%2C%7B0%2C0%2C0%2C1%2C0%2C0%2C0%2C0%7D%2C%7B0%2C0%2C0%2C0%2C1%2C0%2C0%2C0%7D%2C%7B0%2C0%2C0%2C0%2C0%2C1%2C0%2C0%7D%2C%7B0%2C0%2C0%2C0%2C0%2C0%2C1%2C0%7D%2C%7B0%2C0%2C0%2C0%2C0%2C0%2C0%2C1%7D%7D%22%7D%2C%7B%22id%22%3A%22%7E7kg9%22%2C%22name%22%3A%22QFT%5ES%22%2C%22matrix%22%3A%22%7B%7B%E2%88%9A%C2%BD%2C%E2%88%9A%C2%BDi%7D%2C%7B-%E2%88%9A%C2%BD%2C%E2%88%9A%C2%BDi%7D%7D%22%7D%5D%7D">an example fQFT circuit in my simulator Quirk</a>.
+It also includes some framing that causes an amplitude display to basically show the operation&#39;s matrix cycling through $I$, the FFT, the negation-permutation, and the inverse FFT.</p>
+
+<p>This apply-fractional-power-by-phasing-the-phase-estimation trick is very general.
+It works on any operation amenable to phase estimation.
+The trick worked on the QFT because the QFT has a nice small evenly-spaced set of eigenvalues, but it also works if you have some way to apply large integer powers of an operation (and a non-zero tolerance for errors).
+It is very much a tool worth keeping in your toolbox.</p>
+
+<h1>A Classical Fast Fractional Fourier Transform</h1>
+
+<p>I&#39;ve mentioned in the past that the simplest QFT circuit is just a direct translation of Cooley-Tukey FFT algorithm into the language of quantum circuits.
+The translation works the other way, too: given the simple QFT circuit, you can mechanically produce classical code equivalent to the Cooley-Tukey algorithm.
+The same is true of the fractional QFT circuit we&#39;ve derived: we can translate it into a fast classical algorithm for fractional Fourier transforms.</p>
+
+<p>Reading our fQFT circuit roughly from left to right, each operation tells us some classical code to add:</p>
+
+<ol>
+<li><p><strong>$H$ on $|0\rangle$</strong>:</p>
+
+<p>Make a copy of the input vector.</p></li>
+<li><p><strong>Controlled QFT</strong>:</p>
+
+<p>Fourier-transform the copy we just made.
+Note that we want the <em>unitary</em> Fourier transform; the one that preserves the 2-norm.
+In numpy, you get this by adding <code>norm=&#39;ortho&#39;</code> to the fft call.
+Otherwise the result will be scaled up by a factor of $\sqrt{N}$ compared to what we want.</p></li>
+<li><p><strong>$H$ on another $|0\rangle$</strong>:</p>
+
+<p>Make a copy of each of the two vectors we have (the input and its Fourier transform).</p></li>
+<li><p><strong>Controlled negation</strong>:</p>
+
+<p>Apply the reverse-except-0 permutation to the two copies we just made.</p></li>
+<li><p><strong>inv-QFT on phase estimation register</strong>:</p>
+
+<p>Replace the vectors we have ($a$ and $b$ and $c$ and $d$) with some simple linear combinations thereof ($a+b+c+d$ and $a+ib-c-id$ and $a-b+c-d$ and $a-ib-c+id$).</p></li>
+<li><p><strong>Phase gradient</strong>:</p>
+
+<p>Scale each of our four vectors by an appropriate phase factor.</p></li>
+<li><p><strong>QFT on phase estimation register</strong>:</p>
+
+<p>Replace the vectors we have with some simple linear combinations thereof.</p></li>
+<li><p><strong>Uncomputation stuff</strong>:</p>
+
+<p>Return the first vector.
+Discard the other three.</p></li>
+</ol>
+
+<p>With a bit of cleanup, and some after-the-fact interpretation of what the operations mean, I produced the following python code:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">fast_fractional_fourier_transform</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">exponent</span><span class="p">):</span>
+    <span class="c1"># Compute Fourier transform powers of vec.</span>
+    <span class="n">f0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+    <span class="n">f1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">f0</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;ortho&#39;</span><span class="p">)</span>
+    <span class="n">f2</span> <span class="o">=</span> <span class="n">negate_permutation</span><span class="p">(</span><span class="n">f0</span><span class="p">)</span>
+    <span class="n">f3</span> <span class="o">=</span> <span class="n">negate_permutation</span><span class="p">(</span><span class="n">f1</span><span class="p">)</span>
+
+    <span class="c1"># Derive eigenbasis vectors from vec&#39;s Fourier transform powers.</span>
+    <span class="n">b0</span> <span class="o">=</span> <span class="n">f0</span> <span class="o">+</span> <span class="n">f1</span> <span class="o">+</span> <span class="n">f2</span> <span class="o">+</span> <span class="n">f3</span>
+    <span class="n">b1</span> <span class="o">=</span> <span class="n">f0</span> <span class="o">+</span> <span class="mi">1j</span><span class="o">*</span><span class="n">f1</span> <span class="o">-</span> <span class="n">f2</span> <span class="o">-</span> <span class="mi">1j</span><span class="o">*</span><span class="n">f3</span>
+    <span class="n">b2</span> <span class="o">=</span> <span class="n">f0</span> <span class="o">-</span> <span class="n">f1</span> <span class="o">+</span> <span class="n">f2</span> <span class="o">-</span> <span class="n">f3</span>
+    <span class="n">b3</span> <span class="o">=</span> <span class="n">f0</span> <span class="o">-</span> <span class="mi">1j</span><span class="o">*</span><span class="n">f1</span> <span class="o">-</span> <span class="n">f2</span> <span class="o">+</span> <span class="mi">1j</span><span class="o">*</span><span class="n">f3</span>
+    <span class="c1"># Note: vec == (b0 + b1 + b2 + b3) / 4</span>
+
+    <span class="c1"># Phase eigenbasis vectors by their eigenvalues raised to the exponent.</span>
+    <span class="n">b1</span> <span class="o">*=</span> <span class="mi">1j</span><span class="o">**</span><span class="n">exponent</span>
+    <span class="n">b2</span> <span class="o">*=</span> <span class="mi">1j</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">exponent</span><span class="p">)</span>
+    <span class="n">b3</span> <span class="o">*=</span> <span class="mi">1j</span><span class="o">**</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">exponent</span><span class="p">)</span>
+
+    <span class="c1"># Recombine transformed basis vectors to get transformed vec.</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">b0</span> <span class="o">+</span> <span class="n">b1</span> <span class="o">+</span> <span class="n">b2</span> <span class="o">+</span> <span class="n">b3</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span>
+
+
+<span class="k">def</span> <span class="nf">negate_permutation</span><span class="p">(</span><span class="n">vec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns the result of applying an FFT to the given vector twice.&quot;&quot;&quot;</span>
+    <span class="n">head</span><span class="p">,</span> <span class="n">tail</span> <span class="o">=</span> <span class="n">vec</span><span class="p">[:</span><span class="mi">1</span><span class="p">],</span> <span class="n">vec</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">head</span><span class="p">,</span> <span class="n">tail</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+</code></pre></div>
+<p>The amazing thing about this code is that the most expensive step is <code>f1 = np.fft.fft(f0, norm=&#39;ortho&#39;)</code>, which delegates to the normal fast fourier transform.
+We&#39;re computing a fractional FFT using <em>just one</em> normal FFT, three vector-scalar multiplications, and a handful of vector-vector additions!
+(I&#39;m not counting multiplying by $i$, negating, or dividing by $4$ as vector-scalar multiplications; they can be done with addition.)</p>
+
+<p>As with the fractional QFT circuit, I&#39;m struck by how simple things ended up being.
+I would have expected a classical fast fractional Fourier transform to be way more complicated than this.</p>
+
+<h1>Closing Remarks</h1>
+
+<p>Although I did find the presented classical fractional FFT algorithm on my own, it isn&#39;t novel.
+An $O(N \lg N)$ algorithm was published in the year 2000 paper <a href="https://scholar.google.com/scholar?q=Closed-Form+Discrete+Fractional+and+Affine+Fourier+Transforms+Soo-Chang+Pei+Jian-Jiun+Ding+2000">&quot;Closed-Form Discrete Fractional and Affine Fourier Transforms&quot; by Soo-Chang Pei and Jian-Jiun Ding</a>.</p>
+
+<p>The FFT has degenerate eigenvalues, and as a result there&#39;s a continuous infinity of possible fractional FFTs.
+For example, it is perfectly valid to define a fractional FFT that phases orthogonal parts of the same eigenspace in different directions (as long as the phases still sync up when $s$ is an integer).
+The presented algorithm can be tweaked to use other phase sweeps, but it can&#39;t handle the case where vectors that agree on FFT eigenvalue disagree on fractional FFT eigenvalue.
+In a sense, this means that the algorithm is unable to perform almost all of the possible fractional Fourier transforms!
+I did try to pick a natural choice for how to sweep the phase factors, but I haven&#39;t read enough to know if it&#39;s the standard choice or even a good choice.</p>
+
+<p>All those caveats aside, I think the presented algorithm makes a good example of quantum algorithms informing the construction of classical algorithms.
+Knowing the quantum phase estimation trick produced an $O(N \lg N)$ classical fractional FFT in an afternoon, instead of over a series of papers spanning years.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1709">&laquo; Simple Algorithm for Multiplicative Inverses mod 2ⁿ</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

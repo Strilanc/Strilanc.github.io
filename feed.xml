@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Computing Fractional Fourier Transforms</title>
+                <description>&lt;p&gt;Recently, I was side-tracked by a stumble into the &lt;a href=&quot;https://en.wikipedia.org/wiki/Fractional_Fourier_transform&quot;&gt;Wikipedia article on fractional Fourier transforms&lt;/a&gt;. I found it interesting, because normally I think of the Fourier transform as an all-or-nothing proposition. I&amp;#39;m either thinking in the frequency domain or in the time domain, not some combination both. What would...</description>
+                <pubDate>Sun, 11 Jun 2017 12:11:11 -0700</pubDate>
+                <link>http://algassert.com/post/1710</link>
+                <guid isPermaLink="true">http://algassert.com/post/1710</guid>
+            </item>
+            <item>
                 <title>Simple Algorithm for Multiplicative Inverses mod 2ⁿ</title>
                 <description>&lt;p&gt;Lately, as part of writing a paper, I&amp;#39;ve been thinking about quantum circuits for doing multiplication while using very little workspace. Surprisingly, this stumbled me into a nice way to compute multiplicative-inverses.&lt;/p&gt; &lt;p&gt;Consider that multiplying by 3 is equivalent to adding a register into itself, left-shifted:&lt;/p&gt; &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span...</description>
                 <pubDate>Tue, 06 Jun 2017 10:10:10 -0700</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sun, 26 Feb 2017 09:10:10 -0800</pubDate>
                 <link>http://algassert.com/post/1701</link>
                 <guid isPermaLink="true">http://algassert.com/post/1701</guid>
-            </item>
-            <item>
-                <title>Quantum Bomb Detector Detectors</title>
-                <description>&lt;p&gt;The &lt;a href=&quot;https://en.wikipedia.org/wiki/Elitzur%E2%80%93Vaidman_bomb_tester&quot;&gt;Elitzur-Vaidman bomb tester&lt;/a&gt; is one of the funnest quantum devices to teach people about. It uses the &lt;a href=&quot;https://en.wikipedia.org/wiki/Quantum_Zeno_effect&quot;&gt;quantum Zeno effect&lt;/a&gt; to safely separate dud bombs from live bombs, even when the only way to &amp;quot;test&amp;quot; a bomb is by triggering it! The main caveat is that the...</description>
-                <pubDate>Sat, 11 Feb 2017 09:10:10 -0800</pubDate>
-                <link>http://algassert.com/post/1700</link>
-                <guid isPermaLink="true">http://algassert.com/post/1700</guid>
             </item>
     </channel>
 </rss>
