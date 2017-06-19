@@ -28,3 +28,5 @@ And when someone made a version that I thought was better, I worked off of their
 
 I admit to finding this whole ownership-of-Quirk thing ridiculous.
 But it's hard to be mad about something that has no consequences.
+
+[Discuss on reddit](https://www.reddit.com/r/algassert/comments/6i55ea/comment_thread_news_about_quirk/)
