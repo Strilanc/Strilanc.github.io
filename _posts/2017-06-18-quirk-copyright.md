@@ -9,11 +9,11 @@ When I first started making Quirk, the toy drag-and-drop quantum circuit simulat
 After I joined the quantum computing team, that separation wasn't so obvious.
 So I decided it was worth going through the internal process to get Quirk declared as an independent hoppy project.
 
-What I'm trying to say is that Google now owns Quirk.
+... What I'm trying to say is that Google now owns Quirk.
 
 Pragmatically speaking, this doesn't really change anything.
 I added a CONTRIBUTING file, I added license headers to every source file, and that's about it.
-The license is still Apache 2.0, the repository is still at [github.com/Strilanc/Quirk](http://github.com/Strilanc/Quirk), and there's still a live instance at [algassert.com/quirk](http://algassert.com/quirk).
+The license is still Apache 2.0, the repository is still at [github.com/Strilanc/Quirk](http://github.com/Strilanc/Quirk), it's still a project I only work in my spare time, and there's still a live instance at [algassert.com/quirk](http://algassert.com/quirk).
 
 As for how I feel about this development... meh.
 As long as I can add features and fix bugs, and no URLs get broken, who cares?
