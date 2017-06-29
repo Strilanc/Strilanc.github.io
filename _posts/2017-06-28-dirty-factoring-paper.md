@@ -36,7 +36,7 @@ For example, they said their constant-adder circuit needed n/2 dirty ancilla whe
 I contacted the authors to ask if they knew about this, and a few other improvements I had explained years ago in the blog posts.
 After some back and forth with the authors, I realized that there was a way to cut the *total* number of qubits used by their circuits from 2n+2 to 2n+1.
 I pointed that out, and they said... why not write a paper about it?
-So I did!
+So, with some helpful co-workers to lean on for advice, I did!
 
 On Monday, the preprint of my paper ["Factoring with n+2 clean qubits and n-1 dirty qubits"](https://arxiv.org/abs/1706.07884) went up on the arXiv.
 Basically all I do in the paper is explain constructions that work when their ancilla are dirty (in an unknown state that must be restored), some techniques for finding these constructions, and how they fit together with Shor's algorithm to save a qubit and allow several more to be dirty.
@@ -51,3 +51,5 @@ Keep in mind that reducing the total number of qubits needed to perform Shor's a
 Obviously.
 But I do think the way I did it is interesting, and that those concepts are useful for making other actually-practical circuits.
 So, if that sounds interesting to you, [give the paper a read](https://arxiv.org/abs/1706.07884).
+
+[Discuss on reddit](https://www.reddit.com/r/algassert/comments/6k9csj/comment_thread_dirty_period_finding_my_first_paper/)

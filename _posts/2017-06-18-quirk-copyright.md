@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "[Meta] News about Quirk"
+title: "[Meta] Who Owns Quirk?"
 date: 2017-06-18 12:10:10 pm PST
 permalink: post/1711
 ---
@@ -9,7 +9,7 @@ When I first started making Quirk, the toy drag-and-drop quantum circuit simulat
 After I joined the quantum computing team, that separation wasn't so obvious.
 So I decided it was worth going through the internal process to get Quirk declared as an independent hoppy project.
 
-... What I'm trying to say is that Google now owns Quirk.
+... What I'm trying to say is that Google now owns Quirk. [insert vaguely annoyed face here]
 
 Pragmatically speaking, this doesn't really change anything.
 I added a CONTRIBUTING file, I added license headers to every source file, and that's about it.
