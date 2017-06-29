@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Dirty Period Finding: My First Paper</title>
+                <description>&lt;p&gt;A couple years ago, I was stuck on a question from &lt;a href=&quot;https://www.amazon.com/Quantum-Computation-Information-10th-Anniversary/dp/1107002176&quot;&gt;Mike &amp;amp; Ike&lt;/a&gt;. This was partially because I knew nothing about how to make circuits, and partially because as soon as I had the question figured out I made it harder:&lt;/p&gt; &lt;p&gt;&lt;img style=&quot;max-width:100%; border:1px solid gray; padding: 5px;&quot;...</description>
+                <pubDate>Wed, 28 Jun 2017 13:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/1712</link>
+                <guid isPermaLink="true">http://algassert.com/post/1712</guid>
+            </item>
+            <item>
                 <title>[Meta] News about Quirk</title>
                 <description>&lt;p&gt;When I first started making Quirk, the toy drag-and-drop quantum circuit simulator at &lt;a href=&quot;http://algassert.com/quirk&quot;&gt;algassert.com/quirk&lt;/a&gt;, it was clearly separate from my day job at Google. After I joined the quantum computing team, that separation wasn&amp;#39;t so obvious. So I decided it was worth going through the internal process to get...</description>
                 <pubDate>Sun, 18 Jun 2017 13:10:10 -0700</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sat, 04 Mar 2017 09:10:10 -0800</pubDate>
                 <link>http://algassert.com/post/1703</link>
                 <guid isPermaLink="true">http://algassert.com/post/1703</guid>
-            </item>
-            <item>
-                <title>[Meta] Joining Google's Quantum AI Team</title>
-                <description>&lt;p&gt;I have really exciting news. This month I&amp;#39;m moving from New York to Santa Barbara, to become part of the &lt;a href=&quot;https://research.google.com/pubs/QuantumAI.html&quot;&gt;quantum ai team at Google&lt;/a&gt;!&lt;/p&gt; &lt;p&gt;If you&amp;#39;ve been following news or &lt;a href=&quot;https://www.youtube.com/watch?v=kgMWommXxU8&quot;&gt;talks&lt;/a&gt; about quantum stuff at Google, then you already know why I&amp;#39;m excited. I don&amp;#39;t know if...</description>
-                <pubDate>Wed, 01 Mar 2017 09:10:10 -0800</pubDate>
-                <link>http://algassert.com/post/1702</link>
-                <guid isPermaLink="true">http://algassert.com/post/1702</guid>
             </item>
     </channel>
 </rss>

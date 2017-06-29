@@ -6,7 +6,7 @@
     <meta name="author" content="Craig Gidney">
     <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
     <meta name="description" content="Craig Gidney's computer science blog">
-    <title>[Meta] News about Quirk</title>
+    <title>Dirty Period Finding: My First Paper</title>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <meta name="viewport" content="width=device-width">
 
@@ -40,8 +40,8 @@
     </div>
     <div class="site">
 
-      <h1 class="post_title">[Meta] News about Quirk</h1>
-<p class="meta">18 Jun 2017</p>
+      <h1 class="post_title">Dirty Period Finding: My First Paper</h1>
+<p class="meta">28 Jun 2017</p>
 
     <!-- MathJax latest -->
     <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
@@ -74,31 +74,50 @@
     </noscript>
 
 <div class="post">
-<p>When I first started making Quirk, the toy drag-and-drop quantum circuit simulator at <a href="http://algassert.com/quirk">algassert.com/quirk</a>, it was clearly separate from my day job at Google.
-After I joined the quantum computing team, that separation wasn&#39;t so obvious.
-So I decided it was worth going through the internal process to get Quirk declared as an independent hoppy project.</p>
+<p>A couple years ago, I was stuck on a question from <a href="https://www.amazon.com/Quantum-Computation-Information-10th-Anniversary/dp/1107002176">Mike &amp; Ike</a>.
+This was partially because I knew nothing about how to make circuits, and partially because as soon as I had the question figured out I made it harder:</p>
 
-<p>... What I&#39;m trying to say is that Google now owns Quirk.</p>
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-06-28-dirty-factoring-paper/stuck-problem.png"/></p>
 
-<p>Pragmatically speaking, this doesn&#39;t really change anything.
-I added a CONTRIBUTING file, I added license headers to every source file, and that&#39;s about it.
-The license is still Apache 2.0, the repository is still at <a href="http://github.com/Strilanc/Quirk">github.com/Strilanc/Quirk</a>, it&#39;s still a project I only work in my spare time, and there&#39;s still a live instance at <a href="http://algassert.com/quirk">algassert.com/quirk</a>.</p>
+<p>I was stuck on the initial problem long enough that I asked about it <a href="https://cs.stackexchange.com/questions/40933/creating-bigger-controlled-nots-from-single-qubit-toffoli-and-cnot-gates-with">on the computer science stack exchange</a>.
+No one answered, I kept thinking about the problem, realized several things about breaking down CNOTs and incrementers, found a solution, and <a href="/circuits/2015/06/05/Constructing-Large-Controlled-Nots.html">wrote</a> <a href="/circuits/2015/06/12/Constructing-Large-Increment-Gates.html">some</a> <a href="/circuits/2015/06/22/Using-Quantum-Gates-instead-of-Ancilla-Bits.html">posts</a> about it.
+I also answered my own stack exchange question.</p>
 
-<p>As for how I feel about this development... meh.
-As long as I can add features and fix bugs, and no URLs get broken, who cares?
-I open-source code using permissive licenses because I really don&#39;t care that much about control over the things I make.
-Partly this is because I grew up making starcraft and warcraft 3 maps, where it was common for people to take an existing map, make changes to it, and slap their name on it.
-Blatant plagiarism bothers me, but people changing the stuff you make, trying to make it better?
-That&#39;s not bad, that&#39;s awesome!
-Some map-makers reacted to people changing their creations by going defensive and trying to lock everything down.
-I went in the other direction, and embraced confusing ephemeral ad-hoc authorship.
-For example, when I made Storm the Fort, I put an &quot;Author Chain&quot; field instead of an &quot;Author&quot; field.
-And when someone made a version that I thought was better, I worked off of theirs instead of mine.</p>
+<p>Fast-forward to a few months ago.
+One of my co-workers was at a conference and contacted me to let me know I&#39;d been <a href="/assets/2017-06-28-dirty-factoring-paper/martin-slides.pdf">cited by one of the presentations</a>.
+I&#39;ve never published a paper, so this was pretty surprising news.
+Turns out they&#39;d cited my stackexchange post!</p>
 
-<p>I admit to finding this whole ownership-of-Quirk thing ridiculous.
-But it&#39;s hard to be mad about something that has no consequences.</p>
+<p>The specific thing they cited was an incrementer, and a few related facts, that I had come up with as part of solving the textbook problem.
+Previous incrementers either had a super-linear numbers of operations, or a linear number of ancilla.
+My incrementer was linear-sized and used a single ancilla.
+The ancilla didn&#39;t even need to be in a known state.</p>
 
-<p><a href="https://www.reddit.com/r/algassert/comments/6i55ea/comment_thread_news_about_quirk/">Discuss on reddit</a></p>
+<p>Usually the stuff I stumble onto on my own is decades old.
+If my life was scripted, that would be one of the running jokes: Craig gets excited about something, bangs his head against it, figures out how to solve it, then finds out Dijkstra did it better back in the 1970s.
+So I was pretty happy about having finally found something novel, and went to read the paper that cited me.</p>
+
+<p>The paper associated with the presentation is <a href="https://arxiv.org/abs/1611.07995">&quot;Factoring using 2n+2 qubits with Toffoli based modular multiplication&quot; by Häner et al.</a>.
+After reading it, I had a few nits.
+For example, they said their constant-adder circuit needed n/2 dirty ancilla when really it only needed 1.
+I contacted the authors to ask if they knew about this, and a few other improvements I had explained years ago in the blog posts.
+After some back and forth with the authors, I realized that there was a way to cut the <em>total</em> number of qubits used by their circuits from 2n+2 to 2n+1.
+I pointed that out, and they said... why not write a paper about it?
+So I did!</p>
+
+<p>On Monday, the preprint of my paper <a href="https://arxiv.org/abs/1706.07884">&quot;Factoring with n+2 clean qubits and n-1 dirty qubits&quot;</a> went up on the arXiv.
+Basically all I do in the paper is explain constructions that work when their ancilla are dirty (in an unknown state that must be restored), some techniques for finding these constructions, and how they fit together with Shor&#39;s algorithm to save a qubit and allow several more to be dirty.
+Because I like to explain circuits visually, the paper is easily 30% diagrams.
+There&#39;s even a meta-diagram describing all the diagrams.</p>
+
+<p>I used <a href="/quirk">Quirk</a> pretty extensively as an exploratory tool for coming up with and verifying constructions from the paper.
+But Quirk is not really suited to gigantic circuits so, in order to test the whole thing from top to bottom, I created <a href="https://github.com/Strilanc/PaperImpl-2017-DirtyPeriodFinding">a github repository with code that implements and tests the constructions using ProjectQ</a>.
+There were some hiccups using ProjectQ (e.g. they register atexit handlers that drown your test failures in a sea of useless text) but, with the power of excessive eggregious monkey-patching, I managed to work around most of the things that annoyed me.</p>
+
+<p>Keep in mind that reducing the total number of qubits needed to perform Shor&#39;s algorithm from 2n+2 to 2n+1 is not the most important thing in the world.
+Obviously.
+But I do think the way I did it is interesting, and that those concepts are useful for making other actually-practical circuits.
+So, if that sounds interesting to you, <a href="https://arxiv.org/abs/1706.07884">give the paper a read</a>.</p>
 
 </div>
 
@@ -112,10 +131,10 @@ But it&#39;s hard to be mad about something that has no consequences.</p>
     <table style="width: 100%;">
       <tr>
         <td align="left">
-          <a href="/post/1710">&laquo; Computing Fractional Fourier Transforms</a>
+          <a href="/post/1711">&laquo; [Meta] News about Quirk</a>
         </td>
         <td align="right">
-          <a href="/post/1712">Dirty Period Finding: My First Paper &raquo;</a>
+          
         </td>
       </tr>
     </table>
