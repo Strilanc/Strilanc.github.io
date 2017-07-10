@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Impractical Experiments #4: High Powered Phase Estimation</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Impractical Experiments #4: High Powered Phase Estimation</h1>
+<p class="meta">09 Jul 2017</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>In <a href="/post/1710">a previous post</a>, I explained how using quantum phase estimation on an operation can provide a mechanism for applying fractional powers of that operation.
+The basic idea being that the register containing the phase estimation acts as an index into the eigenspaces of the operation, allowing you phase those spaces by appropriate amounts.</p>
+
+<p>A few days ago I was thinking in the shower and an idea occurred to me: what would happen if I used that same trick, but in the opposite direction?
+Instead of using phase estimation to apply tiny powers of an operation, let&#39;s try to use it to apply <em>big</em> powers of operations.
+Apply the operation $x$ times to compute the phase estimation, then use the phase estimation to apply the operation $t \gg x$ times.</p>
+
+<p>Will it work?
+Probably not.
+But there&#39;s only one way to find out.</p>
+
+<h1>Experiment</h1>
+
+<p>When you have an idea, it pays to just try it.
+Do a quick experiment to see how things actually behave, before bothering with too much mathematical analysis.
+So, with that principle in mind, I opened up Quirk.</p>
+
+<p>To keep things simple, I decided to try my idea on the increment operation.
+I arbitrarily decided to use 4 qubits for the phase estimation register, and 6 for the target register.
+I prepared the phase estimation register into a uniform superposition, used it to control how many increments happen (up to 16), and applied the inverse Fourier transform to get the phase estimates:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-07-09-extended-phase-estimation/phase-estimation-naive-1.png"/></p>
+
+<p>In the general case, the amount of repetition of the target operation shown in the above diagram is likely necessary.
+But it certainly isn&#39;t necessary for incrementing.</p>
+
+<p>When you apply an increment twice to the same register, that&#39;s equivalent to doing a single shifted incremented.
+Iteratively merging doubled-up increments makes the circuit a lot more compact:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-07-09-extended-phase-estimation/phase-estimation-naive-2.png"/></p>
+
+<p>Actually, the above circuit is still kinda dumb.
+We&#39;re going over each bit of the input, and if it&#39;s set then we&#39;re adding 1 at that bit position into the target.
+Another name for this operation is &quot;addition&quot;.
+Let&#39;s just do that:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-07-09-extended-phase-estimation/phase-estimation-naive-3.png"/></p>
+
+<p>With the phase estimation part of the circuit done, I applied a time-varying phase gradient to the phase register, uncomputed the phase estimation by mirroring the circuit, and added a display to see how well things were working.</p>
+
+<p>The result was... underwhelming.
+We want to see the state smoothly sweep across the output display, but instead this is what happens:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-07-09-extended-phase-estimation/phase-estimation-circuit.gif"/></p>
+
+<p>The &quot;pumping&quot; up and down is typical of what happens when you change incrementing into a continuous operation via its eigenvalues.
+But the gradual decay and leaking from the low part into the high part is not good at all.
+We want a strong peak smoothly pumping its way across the space, not a peak that dies out before even getting to the halfway mark.</p>
+
+<p>To get a bit more insight into what was going on, I did three things to the circuit.</p>
+
+<p>First, I noticed that the QFT+Gradient+QFT chunk at the center of the circuit could be simplified into a subtraction.
+That&#39;s because <a href="/post/1620">Fourier transforms translate between phase-gradients and additions</a>, and for this particular problem we only care about integer powers.
+Making this change removes that visually distracting pumping motion from the output display.</p>
+
+<p>Second, I looked more closely at how the individual qubits were being changed by the operation (not shown in the diagram above).
+There was a noticeable difference between how the bottom four bits and the top two bits were bouncing around, so I added separate displays for each of those ranges.</p>
+
+<p>Third, I added a display for the phase estimation register.
+At first this wasn&#39;t showing anything interesting, but that&#39;s only because all the bad stuff was affecting only the phases of the state.
+I prefixed the display with a Fourier transform to fix that.</p>
+
+<p>After those changes, the circuit cycled like this:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-07-09-extended-phase-estimation/phase-estimation-circuit-with-helpful-displays.gif"/></p>
+
+<p>Basically what&#39;s happening here is that the operation works okay within the range we actually explored while doing the phase estimation, but it is failing at emulating the higher order changes.
+The low bits are behaving perfectly, but the high bits are merely rotating and leaking into the phase estimation register.</p>
+
+<p>I should point out that, with the circuit simplified in this way, it&#39;s really obvious that this idea couldn&#39;t possibly work.
+The phase estimation register is smaller than the target register; we&#39;re trying to cycle through $2^6$ states by cycling through $2^4$ states, which makes no sense.
+Honestly it&#39;s impressive that the high bits are doing anything even slightly sensible.</p>
+
+<p>For more insight into why this idea isn&#39;t working, we should do some error analysis.</p>
+
+<h1>Theory</h1>
+
+<p>We have a unitary operation $U$ with an eigendecomposition $U = \sum_{k} |\lambda_k\rangle\langle\lambda_k| \cdot e^{i \theta_k}$.
+We want to apply $U$ to a state $|v\rangle$.
+The state $|v\rangle$ can be decomposed into $U$&#39;s eigenbasis as $|v\rangle = \sum_{k} |\lambda_k\rangle \cdot v_k$.</p>
+
+<p>We want to apply $U$ to $|v\rangle$ a total of $t$ times.
+So, algebraically, our desired output state is:</p>
+
+<p>$$
+\begin{align}
+|\psi_{\text{desired}}\rangle
+&amp;= U^t \cdot |v\rangle
+\\&amp;= \left( \sum_{k} |\lambda_k\rangle\langle\lambda_k| \cdot e^{i \theta_k} \right)^t \cdot \left( \sum_{k} |\lambda_k\rangle \cdot v_k \right)
+\\&amp;= \left( \sum_{k} |\lambda_k\rangle\langle\lambda_k| \cdot e^{i t \theta_k} \right) \cdot \left( \sum_{k} |\lambda_k\rangle \cdot v_k \right)
+\\&amp;= \sum_{k} |\lambda_k\rangle \cdot e^{i t \theta_k} \cdot v_k
+\end{align}
+$$</p>
+
+<p>Instead of applying $U$ directly, we&#39;re using the phase estimation procedure to estimate the various eigenvalues $|v\rangle$ is being decomposed into, and then phasing by those amounts.
+This introduces errors $\epsilon_k$ into the phases of the eigenvalues we&#39;re using.
+So the state we&#39;re <em>actually</em> computing is:</p>
+
+<p>$$
+\begin{align}
+|\psi_{\text{actual}}\rangle
+&amp;=\text{PhaseEstimate}(U)^t \cdot |v\rangle
+\\&amp;= \left( \sum_{k} |\lambda_k\rangle\langle\lambda_k| \cdot e^{i (\theta_k + \epsilon_k)} \right)^t \cdot |v\rangle
+\\&amp;= \sum_{k} |\lambda_k\rangle \cdot e^{i t (\theta_k + \epsilon_k)} \cdot v_k
+\\&amp;= \sum_{k} |\lambda_k\rangle \cdot e^{i t \theta_k} \cdot v_k \cdot e^{i t \epsilon_k}
+\end{align}
+$$</p>
+
+<p>In order to determine how well the actual state approximates the desired state, we compute the <a href="https://en.wikipedia.org/wiki/Trace_distance">trace distance</a> between them.
+This will tell us how easy it is for an adversary to distinguish between the two states.</p>
+
+<p>To start, we unpack the definition of the trace distance and simplify:</p>
+
+<p>$$
+\begin{align}
+\text{TraceDistance}(|\psi_{\text{desired}}\rangle, |\psi_{\text{actual}}\rangle)
+&amp;= \frac{1}{2} \text{Tr} \; \text{abs}( |\psi_{\text{desired}}\rangle \langle\psi_{\text{desired}}| - |\psi_{\text{actual}}\rangle \langle\psi_{\text{actual}}| )
+\\&amp;= \frac{1}{2} \text{Tr} \; \text{abs}\left( \sum_{k} |\lambda_k\rangle\langle \lambda_k | \cdot e^{i t \theta_k} \cdot v_k - \sum_{k} |\lambda_k\rangle \cdot e^{i t \theta_k} \cdot v_k \cdot e^{i t \epsilon_k} \right)
+\\&amp;= \frac{1}{2} \text{Tr} \; \text{abs}\left( \sum_{k} |\lambda_k\rangle\langle \lambda_k | \cdot (e^{i t \theta_k} \cdot v_k - e^{i t \theta_k} \cdot v_k \cdot e^{i t \epsilon_k}) \right)
+\\&amp;= \frac{1}{2} \sum_{k} \text{abs}(e^{i t \theta_k} \cdot v_k - e^{i t \theta_k} \cdot v_k \cdot e^{i t \epsilon_k})
+\\&amp;= \frac{1}{2} \sum_{k} \text{abs}(e^{i t \theta_k} \cdot v_k \cdot (1 - e^{i t \epsilon_k}))
+\\&amp;= \frac{1}{2} \sum_{k} |v_k| \cdot |1 - e^{i t \epsilon_k}|
+\end{align}
+$$</p>
+
+<p>Then we assume that $\epsilon_k$ is small enough that a few approximations apply:</p>
+
+<p>$$
+\begin{align}
+\text{TraceDistance}(|\psi_{\text{desired}}\rangle, |\psi_{\text{actual}}\rangle)
+&amp;= \frac{1}{2} \sum_{k} |v_k| \cdot |1 - e^{i t \epsilon_k}|
+\\&amp;\approx \frac{1}{2} \sum_{k} |v_k| \cdot |\sin t \epsilon_k|
+\\&amp;\approx \frac{1}{2} \sum_{k} |v_k| \cdot |t \epsilon_k|
+\\&amp;= \frac{1}{2} t \sum_{k} |\epsilon_k| |v_k|
+\end{align}
+$$</p>
+
+<p>Next, to bound the approximated distance, we assume that the magnitude of each error $\epsilon_k$ is below some fixed maximum error $\epsilon$:</p>
+
+<p>$$
+\begin{align}
+\text{TraceDistance}(|\psi_{\text{desired}}\rangle, |\psi_{\text{actual}}\rangle)
+&amp;\approx \frac{1}{2} t \sum_{k} |\epsilon_k| |v_k|
+\\&amp;\leq \frac{1}{2} t \sum_{k} \epsilon |v_k|
+\\&amp;= \frac{1}{2} t \epsilon \sum_{k} |v_k|
+\end{align}
+$$</p>
+
+<p>Finally, to get a bound that doesn&#39;t depend on $|v\rangle$, we look at the worst-case scenario for that sum.
+The worst case scenario is when $|v\rangle$ is exactly diagonal to the eigenbasis, meaning for $n$ qubits there will be $N = 2^n$ values of $|v_k|$, each with amplitude equal to $\frac{1}{\sqrt N}$.
+That gives us a worst case bound of:</p>
+
+<p>$$\text{TraceDistance}(|\psi_{\text{desired}}\rangle, |\psi_{\text{actual}}\rangle) \lessapprox \frac{1}{2} t \epsilon 2^{n/2}$$</p>
+
+<p>The above equations tells us that, if we want to use this phase estimation technique to apply an operation $t$ times with an overall error of at most $\delta$, our phase estimation error $\epsilon$ will need to be bounded below $\frac{2 \delta}{t 2^{n/2}}$.
+If we do a $p$-bit phase estimation, we bound $\epsilon$ below $2^{-p}$.
+That means $p$ must be at least $-\lg \frac{2 \delta}{t 2^{n/2}}$ or, more simply, $p \geq n/2 - 1 + \lg t + \lg \frac{1}{\delta}$.</p>
+
+<p>See the problem?
+We need $p$ to be at least $\lg t$, but that means we need to apply the operation $U$ at least $2^{\lg t} = t$ times.
+Then we need to apply $U$ a whole lot more times to account for the other terms in the bound.
+Our &quot;fast way to apply $U$ many times&quot; has <em>increased</em> the number of times we need to evaluate $U$!
+We&#39;re better off just applying $U$ directly $t$ times.
+Ouch.</p>
+
+<p>The only way this phase estimation idea is going to work is if there&#39;s something about $U$ that makes the phase estimation cheaper.
+For example, $U$ might be a permutation made up of cycles that have many low power-of-2 periods.
+But then it&#39;s not clear why we&#39;d use the phase estimation trick instead of some better trick tailored to the specific useful structure of $U$.
+There might be some interesting case out there where this idea makes sense, but I couldn&#39;t think of one.</p>
+
+<h1>Summary</h1>
+
+<p>Phase estimation works fine for extending an operation to small powers, but terribly for extending to higher powers of an operation.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1712">&laquo; My First Paper: Dirty Period Finding</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

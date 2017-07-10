@@ -7,7 +7,14 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
-                <title>Dirty Period Finding: My First Paper</title>
+                <title>Impractical Experiments #4: High Powered Phase Estimation</title>
+                <description>&lt;p&gt;In &lt;a href=&quot;/post/1710&quot;&gt;a previous post&lt;/a&gt;, I explained how using quantum phase estimation on an operation can provide a mechanism for applying fractional powers of that operation. The basic idea being that the register containing the phase estimation acts as an index into the eigenspaces of the operation, allowing you phase...</description>
+                <pubDate>Sun, 09 Jul 2017 13:10:20 -0700</pubDate>
+                <link>http://algassert.com/post/1713</link>
+                <guid isPermaLink="true">http://algassert.com/post/1713</guid>
+            </item>
+            <item>
+                <title>My First Paper: Dirty Period Finding</title>
                 <description>&lt;p&gt;A couple years ago, I was stuck on a question from &lt;a href=&quot;https://www.amazon.com/Quantum-Computation-Information-10th-Anniversary/dp/1107002176&quot;&gt;Mike &amp;amp; Ike&lt;/a&gt;. This was partially because I knew nothing about how to make circuits, and partially because as soon as I had the question figured out I made it harder:&lt;/p&gt; &lt;p&gt;&lt;img style=&quot;max-width:100%; border:1px solid gray; padding: 5px;&quot;...</description>
                 <pubDate>Wed, 28 Jun 2017 13:10:10 -0700</pubDate>
                 <link>http://algassert.com/post/1712</link>
@@ -68,13 +75,6 @@
                 <pubDate>Mon, 13 Mar 2017 10:10:10 -0700</pubDate>
                 <link>http://algassert.com/post/1704</link>
                 <guid isPermaLink="true">http://algassert.com/post/1704</guid>
-            </item>
-            <item>
-                <title>Bugs from the Future: Hadamard Coins and Implicit Measurement</title>
-                <description>&lt;p&gt;Suppose it&amp;#39;s fifty years from now, and everyone considers manipulating quantum information to be routine. You&amp;#39;re new to the quantum programming profession, still trying stuff out, and you&amp;#39;ve come up with (well, rediscovered) a &lt;em&gt;clever idea&lt;/em&gt; for generating random data.&lt;/p&gt; &lt;p&gt;You call it the Hadamard coin. You&amp;#39;ll use the fact...</description>
-                <pubDate>Sat, 04 Mar 2017 09:10:10 -0800</pubDate>
-                <link>http://algassert.com/post/1703</link>
-                <guid isPermaLink="true">http://algassert.com/post/1703</guid>
             </item>
     </channel>
 </rss>
