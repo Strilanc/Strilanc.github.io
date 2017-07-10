@@ -183,3 +183,5 @@ There might be some interesting case out there where this idea makes sense, but 
 # Summary
 
 Phase estimation works fine for extending an operation to small powers, but terribly for extending to higher powers of an operation.
+
+[Discuss on reddit](https://www.reddit.com/r/algassert/comments/6mbtt5/comment_thread_impractical_experiments_4_high/)
