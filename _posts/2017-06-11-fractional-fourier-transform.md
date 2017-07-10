@@ -65,7 +65,7 @@ In effect we have performed a temporary measurement (namely "which eigenspace is
 The result of that "measurement" is being held in the phase estimation register.
 Of course we don't want to *actually* measure.
 In practice the input will be a superposition of multiple eigenvectors, and so the phase estimation register will end up storing an entangled superposition of values.
-We don't our fractional QFT causing decoherence, so we don't want to collapse that superposition.
+We don't want our fractional QFT causing decoherence, so we don't want to collapse that superposition.
 
 As an example, suppose $|v\rangle$ is an eigenvector of the QFT with eigenvalue $-i$, and $|w\rangle$ is an eigenvector with eigenvalue $-1$.
 Applying the phase estimation circuit to the state $|00\rangle \otimes (|v\rangle + |w\rangle)$ will produce the entangled state $|11\rangle \otimes |v\rangle$ + $|10\rangle \otimes |w\rangle$.
