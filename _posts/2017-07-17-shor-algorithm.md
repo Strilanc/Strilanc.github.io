@@ -7,96 +7,100 @@ permalink: post/1714
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
 
-A few years ago, when I was just learning about quantum computing, I wrote a post on [how Grover's quantum search algorithm works](http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm).
-I've heard from many that it was the first time they "got" anything about quantum computing.
+A few years ago, I wrote a post on [how Grover's quantum search algorithm works](http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm).
+I think it went over quite well; I've heard from several people that it was the first time they "got" anything about quantum computing.
+Today I want to do the same thing, but with [Shor's quantum factoring algorithm](https://en.wikipedia.org/wiki/Shor%27s_algorithm).
 
-Part of the reason that post ended up being relatively clear is *because* I was just learning.
+My guess is that there are two reasons that certain people found my post on Grover search helpful.
+First, the post ended up being relatively clear is because I was just learning all this stuff.
 I didn't have to guess at what people would find confusing, I was experiencing it first hand.
-Nowadays I would have a lot more trouble writing that post.
-There's too many little details about quantum that now feel like "common sense"... despite the objective fact that they are totally counter-intuitive to beginners.
-
-But even more important than that, I think, is the kind of explanation I gave.
+The second reason I think certain people found that post useful has more to do with the kind of explanation I gave, namely *actually grappling with the problem*.
 I didn't try to explain Grover search with [terrible analogies](https://scifundchallenge.org/firesidescience/2014/03/16/dont-blink-the-quantum-zeno-effect-and-the-weeping-angels/).
 I didn't just state some [ridiculous overhyped nonsense](http://www.dailymail.co.uk/sciencetech/article-3409392/Forget-Schrodingers-cat-researchers-reveal-quantum-pigeonhole-principle-say-tests-basic-notion-physics.html),
-And, most important of all, I didn't use endless empty sentences so oversimplified that they're literally wrong and couldn't possibly communicate anything but confusion (e.g. "0 and 1 at the same time" or "does every computation simultaneously").
-If you want to explain something, if you want to understand something, you have to actually grapple with the problem.
+And I didn't use oversimplified factoids (e.g. "0 and 1 at the same time" or "does every computation simultaneously") that couldn't possibly communicate anything but confusion.
 
-In this post, I want to explain Shor's algorithm.
-I want readers to come away thinking "THAT's how it works?!", instead of being left with nothing but a general sense of confusion.
-I won't go into everything; it would far too boring to write out another explanation of complex numbers and amplitudes and matrices and on and on.
-But whatever I don't explain I will link away.
+I may not be able to write an explanation from the perspective of a first-time-learner anymore, but I can still help readers actually grapple with the problem to be understood.
+And that's what I intend to do in this post.
+I want to explain Shor's algorithm, and I want to do it in a way where at least readers who know a bit about coding come away thinking "THAT's how it works?!", instead of being left with nothing but a general sense of confusion.
 
-I'll do my best to keep things simple and approachable, but ultimately this is a mathematical algorithm.
-Without talking  about math, you really just can't explain it.
-Though I must admit [Scott Aaronson does an excellent attempt at that in "Shor, I'll do it" post](http://www.scottaaronson.com/blog/?p=208).
-I won't be thorough, but I will go over all the basic ideas and the story that links them together.
+I'll do my best to keep things simple and approachable, but I will be digging into the mathematical details.
+[Scott Aaronson made an excellent attempt at explaining Shor's algorithm without math in "Shor, I'll do it"](http://www.scottaaronson.com/blog/?p=208)...
+but I think you'll agree that although that explanation is easy to follow, it really doesn't give any concrete sense of what's going on.
+Sometimes understanding requires knowing the details.
 
 
 # The Plan
 
-To understand Shor's quantum factoring algorithm, you have to understand several smaller things and how they fit together into a story that cuts numbers into pieces.
+To understand Shor's quantum factoring algorithm, you must first understand several smaller things.
+Then it's just matter of seeing how they fit together into a story that cuts numbers into pieces.
 Each of those smaller things takes some work to understand, but I'll do my best to get the core ideas across.
 
-Basically, my explanation is going to break down into four parts:
+Here are the parts, or rather the questions, that I'll be breaking my explanation into:
 
 1. Why is sampling the frequencies of a signal useful for finding its period?
 2. How does a quantum computer make a periodic signal, relevant to factoring a number $R$, and them sample from its frequencies?
-3. Why can knowing how many times I have to modular-muliply by some $b$ before getting back to 1 help find a "strange square roots of unity" $u$, meaning $u^2 = 1$ but $u \neq 1$ and $u \neq -1$?
+3. Why can knowing how many times I have to modular-muliply by some number $b$, before returning a total product of 1, help find a "strange square roots of unity" $u$ (i.e. a $u$ such that $u^2 = 1$ but $u \neq 1$ and $u \neq -1$)?
 4. How does knowing a strange square root of unity modulo $R$ reveal factors of $R$?
 
-But, before I can start talking about all that, we probably need to get a bit more familiar with what a frequency even is.
+I realize that these questions used a bunch of terms and concepts I haven't explained yet.
+For example, what the heck are the "frequencies of a signal"?
+Well, I guess that's a good a place as any to start.
 
 
 # Warm up: Speakers, Frequencies, and Spectrograms
 
 For a long time, sound was a bit of a mystery.
-You strike a bell, and it rings, but what exactly is going on?
+People knew that striking a bell would make a ringing noise, but they didn't really have a solid idea of what was going on physically.
 A lot of work and thought went into figuring out the underlying mechanism and how that relates back to what we actually experience.
 
-The *mechanism* is just a single variable (vibrations in the air / pressure in your ear) going up and down over time.
+The *mechanism* of sound is just a single variable (vibrations in the air / pressure in your ear) going up and down over time.
 For example, loudspeakers produce sound by moving a diaphragm back and forth very quickly.
 The specific pattern of the back-and-forth movement determines what sound is being produced.
 In this sense, everything you've ever heard can be reduced to a series of speaker diaphragm positions.
 In fact, that's exactly how early audio formats such as WAV files stored music: a raw uncompressed list of numbers telling the speaker where to be from moment to moment.
 
-But the way we experience sound doesn't seem at all like a single-dimensional variable changing over time.
-We hear a whole spectrum of frequencies, all coming and going independently.
-Our experience is not the raw up-and-down signal, it's the [Fourier transform](https://en.wikipedia.org/wiki/Fourier_transform) of small chunks of that signal.
+Sound may be a single varying variable, but the way we experience sound doesn't seem at all like that.
+We hear a whole *spectrum* of frequencies, all coming and going independently.
+I think of this as one of the big mysteries of sound: how does a single up-and-down signal translate into a rich spectrum of many variables going up and down?
+Of course, this is one of those mysteries that we actually know the answer to.
+Specifically: if you take raw audio, chunk it into pieces, and [Fourier transform](https://en.wikipedia.org/wiki/Fourier_transform) each of the pieces, what comes out is (much closer to) what we hear; a spectrum of frequencies coming and going.
 
-For example, when using sound editing software such as Audacity, the default view of the audio is like a plot of the speaker diaphragm positions over time:
+For example, when using sound editing software such as Audacity, the default view of the audio is essentially a plot of the speaker diaphragm positions over time:
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/code-monkey-time.png"/>
 
-This view is nice and simple, and makes it easy to see loudness.
-But it's definitely hard to tell *what* is loud.
-
+This view is nice and simple, and makes it easy to see where there's silence and where something loud is happening.
+But this view is not very informative when you're trying to figure out *what* is loud.
 To pick out fine details, you want something closer to our experience of sound: a [spectrogram](https://en.wikipedia.org/wiki/Spectrogram).
-The spectrogram shows frequency information over time:
+
+Spectrograms show frequency information over time.
+In the following diagram the vertical axis is frequency, the horizontal axis is time, and the brightness of each pixel represents how strong a particular frequency is at a particular point in time:
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/code-monkey-spectrogram.png"/>
 
 [With some practice reading spectrograms](http://home.cc.umanitoba.ca/~robh/howto.html), you can recognize notes, instruments, and even words.
-And, Interestingly, you can think of modern musical notation as basically just an extremely simplified spectrogram:
+Interestingly, you can think of modern musical notation as basically just an extremely simplified spectrogram:
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/code-monkey-notes.png"/>
 
-Anyways, the general point I want to get across here is that a) we know how to turn a raw signal into frequencies, and b) even though frequency information is technically redundant with the raw signal, it can be easier to work with.
-Now we'll go into a specific relevant case where information that's spread out in a raw signal is concentrated in a useful way in frequency space.
+Anyways, the general point I want to get across here is a) what a frequency is, b) that we know how to turn a raw signal into frequencies, and c) even though frequency information is technically redundant with the raw signal, it can be easier to work with.
+If you want to learn more about sound and frequency, you can start with the Wikipedia page on [digital signal processing](https://en.wikipedia.org/wiki/Digital_signal_processing).
+
+Now that we're a bit more familiar with frequencies, let's get into a specific relevant case where information that's spread out in a raw signal is concentrated in a useful way in frequency space.
 
 
 # The Weird Frequencies of Repeating Blips
 
 Suppose I make a "song" where the list of speaker-diaphragm positions is almost entirely "stay as far back as possible", but every tenth entry is "as far forward as possible".
-That is to say, I make a song with periodic blips; a wav file with the data [0, 0, 0, 0, 0, 0, 0, 0, 0, 255] repeated over and over again.
+That is to say, I make a song with periodic blips: a wav file with the data [0, 0, 0, 0, 0, 0, 0, 0, 0, 255] repeated over and over again.
 What will the "song"'s spectrogram look like?
 
 If you're familiar with signal processing, the above question probably sounds... not even wrong?
 In order to talk about frequencies, you need more information.
 For example, what's the sample rate? and the bandwidth? and the windowing function?
-But the fun thing about periodic signals is that the spectrum *basically looks the same regardless of all these options*.
+But the fun thing about periodic blip signals is that the spectrum *basically looks the same regardless of all these options*.
 
-To demonstrate, I wrote some python code to generate wav files storing the periodic signal I described.
-I used a few different sample rates:
+To demonstrate, I wrote some python code to generate wav files storing the periodic signal I described, with a few different sample rates:
 
 ```python
 import wave
@@ -110,7 +114,7 @@ for sample_rate in [8000, 16000, 44100, 192000]:
         f.writeframes(cycle * num_cycles_10sec)
 ```
 
-After running the code, I opened the files in Audacity and switched to the spectrogram view.
+After running the code to produce the files, I opened the files in Audacity and switched to the spectrogram view.
 Here are the spectrograms for each file (with adjusted contrast for clarity):
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/wav-spectrograms.png"/>
@@ -129,33 +133,32 @@ Now let's switch from periodic audio signals to periodic states on a quantum com
 
 # Periodic States and their Frequencies
 
-If you have 5 classical bits, there are 32 possible states they can be in.
+If you have a computer that can store 5 classical bits, there are 32 possible states that your computer can be in.
 There's `00000`, `00001`, `00010`, `00011`, `00100`, and so forth up to `11111`.
 One state for each way you can assign a 0 or a 1 to each bit.
 
-The state of a quantum computer is a weighted combination of the classical states.
-Given 5 qubits, you can add together various proportions of the 32 classical states achievable with 5 bits.
-THe main constraint is that the squared magnitudes of the weights must add up to 1.
+The thing that separates a quantum computer from a classical computer is that a quantum computer's state can be in a weighted combination of the classical states (called a "[superposition](https://en.wikipedia.org/wiki/Quantum_superposition)").
+You can create possible states of a 5-qubit quantum computer by adding together various proportions of the 32 classical states achievable with 5 bits, as long as the squared magnitudes of the weights add up to 1.
 So a 5 qubit quantum computer could be in the state $|00000\rangle$, or in the state $\frac{1}{\sqrt{2}}|00000\rangle + \frac{1}{\sqrt{2}}|11111\rangle$, or in the state $\frac{3}{5}|00000\rangle - \frac{4}{5}|10101\rangle$, or in the state $\frac{1}{\sqrt{3}}|00001\rangle - \frac{1}{\sqrt{3}}|00100\rangle + \frac{1}{\sqrt{5}}|10000\rangle$, or all kinds of other fun combinations.
 
-In this post when I say "periodic state", I mean a state where the states that have non-zero weight are spaced out in a uniform periodic way.
-For example, the state $\frac{1}{\sqrt{7}} \sum\_{k=0}^{6}|5k\rangle = \frac{1}{\sqrt{7}} |00000\rangle + \frac{1}{\sqrt{7}} |00101\rangle + \frac{1}{\sqrt{7}} |01010\rangle + \frac{1}{\sqrt{7}} |01111\rangle + \frac{1}{\sqrt{7}} |10100\rangle + \frac{1}{\sqrt{5}}|11001\rangle + \frac{1}{\sqrt{5}}|11110\rangle$ is a periodic state with period 5.
+In this post when I say "periodic state", I mean a quantum computer state where the weights assigned to the underlying classical states are mostly zero, except for some non-zero ones spaced in a periodic way.
+For example, the state $\frac{1}{\sqrt{7}} \sum\_{k=0}^{6}|5k\rangle = \frac{1}{\sqrt{7}} |00000\rangle + \frac{1}{\sqrt{7}} |00101\rangle + \frac{1}{\sqrt{7}} |01010\rangle + \frac{1}{\sqrt{7}} |01111\rangle + \frac{1}{\sqrt{7}} |10100\rangle + \frac{1}{\sqrt{5}}|11001\rangle + \frac{1}{\sqrt{5}}|11110\rangle$ is a periodic state (with period five).
 The state $\frac{1}{\sqrt{7}} \sum\_{k=0}^{6}|5k+1\rangle$ is another, different, periodic state with period 5.
 
-At this point a lot of readers are probably thinking "How is a periodic quantum state any different from a periodic probability distribution? How do we know the quantum computer isn't just secretly in one of those states with non-zero-weight?".
+At this point a lot of readers are probably thinking something along the lines "How do we know the quantum computer isn't just secretly in one of those states with non-zero-weight but we don't know which? How is this any different from a probability distribution?".
 The answer to that question is: because we can switch to frequency space.
 If the quantum computer was really in one state, instead of in a weighted combination of states, we'd be able to tell by sampling from its frequency spectrum.
 
-The frequency spectrum of a single state is just a sine wave, smoothly oscillating up and down.
+The frequency spectrum of a single state is just a [sine wave](https://en.wikipedia.org/wiki/Sine_wave), smoothly oscillating up and down.
 By contrast, the frequency spectrum of a periodic signal is not smooth.
 It has sharp evenly-spaced peaks.
 Furthermore, the number of peaks is equal to the spacing between states (instead of a property of some individual state).
-The two cases behave completely differently.
+If the quantum computer was really in just one of the classical states, how is a property about the *spacing __between__ the possible states* getting into the output?
+The frequency spectrums tell a very clear story about what's really going on.
 
-I think this ability to switch to the frequency really gets to the heart of how quantum computers are different from classical computers.
-This really is *the* difference between quantum superpositions and classical probability distributions: the ability to interfere the weights.
-
-For example, if I prepare a periodic state in my quantum circuit simulator Quirk, and switch to frequency space by applying a quantum Fourier transform operation, this is the result:
+As an example, I prepared a periodic quantum state in my quantum circuit simulator Quirk.
+Then I used a [Quantum fourier transform operation](https://en.wikipedia.org/wiki/Quantum_Fourier_transform) to switch the state into its own frequency space.
+This is the result:
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/quirk-spectrogram-10.png"/>
 
@@ -163,31 +166,50 @@ The green rectangle on the left is showing a view of the input state.
 Each horizontal bar represents the weight assigned to one of the classical states.
 You can tell the state is periodic because the bars are evenly spaced.
 
-The white box in the middle that says $\text{QFT}^\dagger$ is an inverse quantum Fourier transform operation.
-I'm not going to go into exactly how that's implemented; for the purposes of this post, all that matters is that it can be done.
+The white box in the middle that says $\text{QFT}^\dagger$ is the (inverse) quantum Fourier transform operation.
+I'm not going to go into exactly how the QFT is implemented.
+For the purposes of this post, all that matters is that it can be done.
+If you want more information, see [the Wikipedia article](https://en.wikipedia.org/wiki/Quantum_Fourier_transform).
 
 The green rectangle on the right is showing a view of the output state.
-It has 10 evenly-spaced peaks.
-Why 10?
-Because the input state's period is 10.
+It has ten evenly-spaced peaks.
+Why ten?
+Because the number of frequency peaks is behaving just like it did with the periodic blip songs.
+The input state's period is ten, so the frequency space output has ten peaks.
 
-If we reduce the input state's period from 10 to 5, we get half as many peaks:
+Just to check that this is actually working, let's reduce the input state's period from ten to five.
+We should get half as many peaks:
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/quirk-spectrogram-5.png"/>
 
-Now here comes the *really useful property* that will make it worth our while to deal with frequency space.
-When you shift the input signal around, *nothing happens to the frequency magnitudes*.
-The peaks stay in exactly the same place:
+Yup, the output has a number of peaks equal to the period of the input.
+
+Now I want to address why we're bothering with frequency space at all.
+In particular, why don't we look at the input signal and see how far apart the blips are and why can't we figure out the period by samping the input signal and noticing "Gee, there sure are a lot of multiples of 5 in here."?
+
+The reason we can't just look at how far apart blips in the input signal are is because, in the problem we care about (i.e. factoring), the blips are going to be *really damn far apart*.
+Like "the sun has plenty of time to burn down while you vanely go from slot to slot, hoping that maybe this next one will finally have the second blip in it" levels of far apart.
+
+And the reason we can't simply compute the common divisor of all the blips is that the first blip might not be in the first state.
+The signal might be offset.
+Actually, it's even worse than that: *every time we sample there will be a different hidden offset*.
+
+The unknown offset is the reason we care about frequency space.
+*Frequency peaks aren't affected by offsets.*
+To demonstrate that, I made yet another circuit in Quirk.
+This time I'm using an operation that adds larger and larger offsets into the target register, with Quirk simulating what happens for each offset, creating an animation.
+
+Notice that the input state is cycling, but the output peaks are staying perfectly still:
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/quirk-spectrogram-5-moving.gif"/>
 
-The phases of the output (not shown) are changing all over the place, but the magnitudes are staying the same.
-And the magnitudes are what matters in the end; they determine the probability of measuring each state.
+The phases of the output (not shown) are changing, but the magnitudes are staying the same.
+And, when doing a quantum computation, the magnitudes are what matter at the end, because they determine the probability of measuring each state.
+The phases matter if you're going to do more follow-up operations... but we aren't.
 
-(I should also mention that the peaks are resilient to little imperfections, like that little kink where the spacing is 3 instead of 5.
-The kink can't be avoided because the number of states $2^7 = 128$ is not a multiple of five.)
-
-[[[mention how we still need to worry about sampling from these peaks]]]
+Another thing you should notice in the above diagram is that the frequency peaks are resilient to little imperfections.
+Because the number of states ($2^7 = 128$) is not a multiple of the period (5), there's a little kink where the spacing between blips is 3 instead of 5.
+Despite that kink, the peaks are extremely close to 0/5'ths, 1/5'ths, 2/5'ths, 3/5'ths, and 4/5'ths of the way down the output space.
 
 
 # Preparing Periodic Quantum States
@@ -196,10 +218,146 @@ I've explained that, if we had a periodic quantum state with unknown period, we 
 But how do we prepare that periodic state in the first place?
 
 First, an easy case.
-If the period we want is a power of 2, let's say $2^k$, then preparing a periodic state is as easy preparing $k$ qubits in the $|0\rangle$ state and the rest of the qubits in the $\frac{1}{\sqrt{2}} |0\rangle + \frac{1}{\sqrt{2}} |1\rangle$ state.
-In Quirk, I can do that with Hadamard gates:
+If the period we want is a power of 2, let's say $2^3$, then preparing a periodic state is simple.
+Start with an $n$-qubit quantum register initializer to 0, do nothing to the first 3 qubits, and hit the rest of the qubits with a Hadamard gate.
+Each qubit you hit with the Hadamard gate will transition from the $|0\rangle$ state to the $\frac{1}{\sqrt{2}} |0\rangle + \frac{1}{\sqrt{2}} |1\rangle$ state, putting the overall qureg into the state $\frac{1}{\sqrt{2^{n-3}}\sum\_{k=0}^{2^{n-3}} |k\rangle$.
 
-[[[[diagram]]]]
+We can simulate this preparation in Quirk:
+
+<img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/simple-prepare-period-8.png"/>
+
+An alternative way to create a quantum state that has period 8 is to hit every qubit with a Hadamard gate, add the register we want to prepare into a register of size 3, then measure the other register and try again if the result isn't 0.
+[Here's how that looks](http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22Chance7%22%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2B%3DA3%22%5D%2C%5B%22Chance7%22%5D%2C%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22Chance7%22%5D%5D%7D):
+
+<img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/prepare-period-8-postselect.png"/>
+
+Note that this is a case where the chance display I've been using so far in circuits in this post is a bit misleading.
+It looks like the addition didn't change to the state of the register we're preparing.
+Actually, its state was affected in a very important way.
+
+One way to make the change caused by the addition more apparant is to [use Quirk's density matrix display](http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22Density7%22%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2B%3DA3%22%5D%2C%5B%22Density7%22%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22Density7%22%5D%5D%7D):
+
+<img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/prepare-period-8-postdensity.png"/>
+
+I don't expect readers to know how to read density matrices.
+The important thing to notice is that the addition turned the evenly-black box into a diagonal-lines box.
+The diagonal lines are actually made up of a bunch of copes of the thing shown on the right, but offset.
+Each of those parts is a part of the superposition that can no longer interact with the other parts.
+By copying the input register's value into the second register, modulo 8, we separated its superposition into parts; one for the values whose remainder is 0, one for remainder 1, one for remainder 2, and so forth up to the part for remainder 7.
+
+A key thing to understand here is that the second register is acting like a partial measurement of the first register.
+This is what is preventing the parts from interacting.
+Regardless of the value we get after measuring the second register, the input register will contain a quantum state with period 8.
+The various cases just have different offsets...
+
+Hey, remember when I mentioned that the frequency peaks don't move when you offset the input signal.
+And notice how we have an input signal with an unknown offset?
+[That means... if we apply a Fourier transform...](http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2B%3DA3%22%5D%2C%5B%22Density7%22%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%22QFT%E2%80%A07%22%5D%2C%5B%22Chance7%22%5D%5D%7D)
+
+<img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/prepare-period-8-qft.png"/>
+
+Yeah, we get an output that has 8 peaks in it.
+(The peaks are perfectly sharp because both the period and the size of the QFT are powers of 2.)
+
+This is another example of the difference between a superposition and a probability distribution.
+We have a probability distribution of different offsets, and a superposition of a given period for each offset.
+
+Instead of doing addition modulo 8, we can do addition modulo some other number.
+This allows us to prepare a periodic quantum state with any period we want.
+The state we prepare will have an unknown offset, but that's okay: the frequency peaks don't care.
+
+For example, [here is a circuit in Quirk that prepares a periodic quantum state with period 7, then applies a Fourier transform to check that there are 7 peaks in the output state](http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%7B%22id%22%3A%22setR%22%2C%22arg%22%3A7%7D%5D%2C%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2BAmodR3%22%5D%2C%5B%22QFT%E2%80%A07%22%5D%2C%5B%22Chance7%22%5D%5D%7D):
+
+<img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/prepare-period-7.png"/>
+
+Yup, 7 peaks.
+
+
+# Figuring out Periods from Frequency Samples
+
+Here's a bit of a puzzle for you.
+I'm going to show you a circuit that prepares a periodic state using a modular addition like in the last section, but I'm going to hide which modulus I'm using.
+Your job is to figure out the secret modulus.
+
+Here's the circuit:
+
+<img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/prepare-secret-period.png"/>
+
+Do you know what $R$ has been set to?
+
+It should be obvious: there's three peaks, so $R=3$.
+
+But so far we've been overlooking a very important detail: when running an actual computation, *we don't get to see the whole output state*.
+We only get to see one measurement outcome at a time.
+If we ran the circuit enough times, we would get some rough idea of the number of peaks... but the amount of times we would have to run the circuit would scale with the number of peaks.
+If there were $P$ peaks, we'd need to do $O(\sqrt{P})$ runs before we had a reasonable idea of what $P$ was.
+This is a problem, because the input states we will be dealing with when factoring numbers will have *huge* periods.
+We need a faster way to do this, that works with fewer samples.
+
+Suppose we were sampling from a frequency space of size $N=1024$, and that we didn't know the period of the input signal, but we got a frequency sample $s=340$.
+What do you think the secret period might be?
+
+...
+
+...
+
+What if I told you the period was less than 6?
+
+...
+
+Okay, let me give you a hand by going over each case.
+If the period was 2, there should be two frequency peaks: one at 0, and one half-way across the space near 512.
+If the period was 3, there should be three frequency peaks: one at 0, one a third of the way across the space near 343, and another two thirds of the way across near 687.
+If the period was 4, there should be peaks near 0, 256, 512, and 768.
+If the period was 5, there'd be peaks near 0, 205, 410, 614, 819.
+
+Did you see it?
+__Only one of the periods has a frequency peak near our sampled frequency.__
+If the period was 3 then there's a peak around 343.
+Our sampled value of $s=340$ is near 343.
+This means the input state's period was almost definitely equal to 3.
+
+When the range of possible periods is huge, we can't simply go over all of the cases like we did here and see what's closest.
+We need a more clever strategy to find fractions near the point we sampled.
+This clever-er strategy comes in the form of a [[[continued fractions algorithm]]].
+
+I would explain exactly how that algorithm works, but python conveniently has it built-in to the `fractions` module:
+
+```python
+from fractions import Fraction
+print(Fraction(340, 1024).limit_denominator(6))
+# prints '1/3'
+```
+
+So it's very easy to write a "sampled frequency to period" function:
+
+```python
+from fractions import Fraction
+def sampled_freq_to_period(sampled_freq, num_freqs, max_period):
+    return Fraction(sampled_freq, num_freqs).limit_denominator(max_period).denominator
+```
+
+One pain point here is that our sample might be from the peak near 0.
+In that case we learn nothing, because every period has a peak near 0.
+It tells us nothing.
+That's fine, this is really really unlikely for states that have a large period (which is the case we care about).
+And if we get really unlucky... well, we can just try again.
+And if we never getting values near 0, then I guess we win a Nobel prize because we found a repeatable experiement demonstrating that quantum mechanics is wrong.
+
+The other thing to keep in mind, for quantum states that have potentially huge periods, is that the possible fractions start getting quite close together.
+If our maximum period is $p$, then the closest fractions are a distance of $\frac{1}{p^{-2}}$ apart.
+So we need to make sure the frequency space we are sampling from is large enough to tell those fractions apart.
+That means we need at least $\lg p^{2} = 2 \lg p$ qubits.
+Actually, because the peaks get proportionally sharper as you increase the size of the space, it's probably good to through in some extras.
+But we can get sufficiently accurate with $O(p)$ qubits.
+
+
+# Preparing States with an Unknown Period
+
+
+
+The thing to
+
 
 For periods that don't perfectly line up with a qubit boundary like that, it's a bit trickier to prepare the periodic state.
 Basically what we want to do is prepare a uniform superposition, quantum-compute the remainder of dividing that input by the period. then measure the remainder.
