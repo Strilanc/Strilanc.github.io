@@ -60,7 +60,7 @@ But the cost still isn't *zero*, and many computational tasks involve a lot of i
 I can't speak to reversible computers, but quantum computers (or at least early quantum computers) don't stand on their own.
 They need a lot of supporting hardware.
 
-You need a dilution refridgerator to keep the qubits cold enough that noise isn't leaking in faster than it can be pumped back out.
+You need a dilution refrigerator to keep the qubits cold enough that noise isn't leaking in faster than it can be pumped back out.
 You need a powerful classical computer to run the error correcting code that's pumping noise out of the system.
 You also need the classical computer to instruct the quantum computer about which operations to apply.
 You need microwave generators to produce the signals that control the qubits (this is specific to superconducting qubits, but other types of qubits have their own equivalents e.g. lasers for trapped ions).
@@ -72,3 +72,5 @@ Even if the quantum computer proper wasn't consuming energy, all this side stuff
 # Summary
 
 Unless your reversible computer is perfectly isolated from the world, doesn't produce results, and doesn't need any supporting hardware... it's going to require energy to run.
+
+[Discuss on reddit](https://www.reddit.com/r/algassert/comments/6p6p6u/comment_thread_reversible_computation_isnt_free/)
