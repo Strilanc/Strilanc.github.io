@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Reversible Computation isn't Free</title>
+                <description>&lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Landauer%27s_principle&quot;&gt;Landauer&amp;#39;s principle&lt;/a&gt; puts a lower limit on the cost of irreversible computations. Basically: clearing a bit requires a minimum amount of energy (that depends on the ambient temperature), so a computation must consume an amount of energy proportional to how many bits it clears. (The energy efficiency of current...</description>
+                <pubDate>Sun, 23 Jul 2017 13:10:20 -0700</pubDate>
+                <link>http://algassert.com/post/1714</link>
+                <guid isPermaLink="true">http://algassert.com/post/1714</guid>
+            </item>
+            <item>
                 <title>Impractical Experiments #4: High Powered Phase Estimation</title>
                 <description>&lt;p&gt;In &lt;a href=&quot;/post/1710&quot;&gt;a previous post&lt;/a&gt;, I explained how using quantum phase estimation on an operation can provide a mechanism for applying fractional powers of that operation. The basic idea being that the register containing the phase estimation acts as an index into the eigenspaces of the operation, allowing you phase...</description>
                 <pubDate>Sun, 09 Jul 2017 13:10:20 -0700</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sun, 02 Apr 2017 13:10:10 -0700</pubDate>
                 <link>http://algassert.com/post/1705</link>
                 <guid isPermaLink="true">http://algassert.com/post/1705</guid>
-            </item>
-            <item>
-                <title>Why care about circuit width?</title>
-                <description>&lt;p&gt;I&amp;#39;ve been thinking about circuit constructions lately, and the question occurred to me: if circuit $A$ uses $O(N)$ gates and circuit $B$ uses $O(N^2)$ gates, but in parallel and with a better constant factor so that $B$&amp;#39;s depth is a bit better than $A$&amp;#39;s, would you ever use $A$ instead...</description>
-                <pubDate>Mon, 13 Mar 2017 10:10:10 -0700</pubDate>
-                <link>http://algassert.com/post/1704</link>
-                <guid isPermaLink="true">http://algassert.com/post/1704</guid>
             </item>
     </channel>
 </rss>
