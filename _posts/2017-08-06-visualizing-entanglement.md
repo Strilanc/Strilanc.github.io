@@ -49,6 +49,8 @@ Because 2x2 unitary matrices are like rotations (i.e. [SU(2)][1] is isomorphic t
 It's one of the big reasons that the Bloch sphere works so well to represent a single qubit: single-qubit operations are 2x2 unitary matrices corresponding to rotations around the Bloch sphere.
 
 Since 2-qubit entangled states are like 2x2 unitary matrices, and 2x2 unitary matrices are like rotations... 2-qubit entangled states are like rotations!
+(The thing that's being rotated is the axis $R(A)$ of qubit #1 that you learn about by measuring axis $A$ of qubit #2.
+For example, if the two qubits are entangled in a way that means qubit #1's X axis measurement will always agree with qubit #2's X axis measurement, then rotating qubit #1 by 90 degrees around the Z axis means that now qubit #1's Y axis measurement will alwaus agree with qubit #2's X axis measurement.)
 If we have a nice way to draw a rotation, then we have a nice way to draw the entangled state.
 
 A simple way to draw a rotation is to just show its effects on the X, Y, and Z axes.
