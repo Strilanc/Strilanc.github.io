@@ -79,7 +79,7 @@ We do have a great way to draw the state of one qubit, i.e. the <a href="https:/
 This makes the Bloch sphere a double-edged sword: it provides a useful tool for thinking about a single qubit, but then hinders understanding of multiple qubits.
 It creates confusions leading to questions analogous to &quot;but the electron&#39;s spin has to point in <em>some</em> specific direction when it&#39;s entangled, right?&quot;.</p>
 
-<p>Entanglement always involves two or more qubits, and the Bloch sphere is correspondingly terrible at representating entanglement.
+<p>Entanglement always involves two or more qubits, and the Bloch sphere is correspondingly terrible at representing entanglement.
 For example, looking at the Bloch sphere representation of two qubits throughout a Bell test is not very informative.
 All the interesting stuff is happening in the relationship between the two qubits, and the Bloch sphere fails at showing the relevant details of that relationship.</p>
 
@@ -107,7 +107,7 @@ Let&#39;s try something else.</p>
 <p>When I was brainstorming ideas, one of the things I remembered is that <a href="/quantum/2015/04/25/Entangled-States-are-like-Unitary-Matrices.html">entangled states are like unitary matrices</a>.
 If you arrange the amplitudes of the $|00\rangle$, $|01\rangle$, $|10\rangle$, and $|11\rangle$ states into a 2x2 grid and pretend that grid is actually a matrix, then that matrix is (proportional to) a unitary matrix if and only if the state was maximally entangled.
 Separable states, on the other hand, will be equal to the matrix $\bimat{1}{0}{0}{0}$ times some unitaries.
-By performing a singular value decomposition, you can split any pure 2-qubit state into a combination of the seperable case and the entangled case.</p>
+By performing a singular value decomposition, you can split any pure 2-qubit state into a combination of the separable case and the entangled case.</p>
 
 <p>Why is it interesting that 2-qubit entanglement is like a 2x2 unitary matrix?
 Because 2x2 unitary matrices are like rotations (i.e. <a href="https://en.wikipedia.org/wiki/Special_unitary_group#n_.3D_2">SU(2)</a> is isomorphic to <a href="https://en.wikipedia.org/wiki/Rotation_group_SO(3))">SO(3)</a>.
@@ -121,7 +121,7 @@ For each axis, apply the rotation to that axis then draw an indicator showing wh
 Additionally, we&#39;ll scale the axis indicator positions in order to show the strength of the entanglement.</p>
 
 <p>The SVD we use to extract the unitary matrix corresponding to the entanglement of the system will also tell us the strength of the separable case, and the state of each individual qubit within that case.
-This information also characterizes the 2-qubit state, and can be represented as points on the Bloch sphere scaled by the strength of the seperable case.
+This information also characterizes the 2-qubit state, and can be represented as points on the Bloch sphere scaled by the strength of the separable case.
 We&#39;re already drawing the entanglement indicators on a sphere, so we might as well throw in some indicators for the separable part.</p>
 
 <p>Put all that together, and you get this:</p>
@@ -134,26 +134,26 @@ We&#39;re already drawing the entanglement indicators on a sphere, so we might a
 <span class="kd">let</span> <span class="p">{</span><span class="nx">U</span><span class="p">,</span> <span class="nx">S</span><span class="p">,</span> <span class="nx">V</span><span class="p">}</span> <span class="o">=</span> <span class="nx">amps_matrix</span><span class="p">.</span><span class="nx">singularValueDecomposition</span><span class="p">();</span>
 <span class="kd">let</span> <span class="p">[</span><span class="nx">s0</span><span class="p">,</span> <span class="nx">s1</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">S</span><span class="p">.</span><span class="nx">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">).</span><span class="nx">real</span><span class="p">,</span> <span class="nx">S</span><span class="p">.</span><span class="nx">cell</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span><span class="nx">real</span><span class="p">];</span>
 
-<span class="kd">let</span> <span class="nx">weight_seperable</span> <span class="o">=</span> <span class="nx">s0</span><span class="o">*</span><span class="nx">s0</span> <span class="o">-</span> <span class="nx">s1</span><span class="o">*</span><span class="nx">s1</span><span class="p">;</span>
-<span class="kd">let</span> <span class="nx">seperable_state_1</span> <span class="o">=</span> <span class="nx">Matrix</span><span class="p">.</span><span class="nx">row</span><span class="p">(</span><span class="nx">U</span><span class="p">.</span><span class="nx">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="nx">U</span><span class="p">.</span><span class="nx">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)).</span><span class="nx">adjoint</span><span class="p">();</span>
-<span class="kd">let</span> <span class="nx">seperable_state_2</span> <span class="o">=</span> <span class="nx">Matrix</span><span class="p">.</span><span class="nx">row</span><span class="p">(</span><span class="nx">V</span><span class="p">.</span><span class="nx">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="nx">V</span><span class="p">.</span><span class="nx">cell</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)).</span><span class="nx">adjoint</span><span class="p">();</span>
+<span class="kd">let</span> <span class="nx">weight_separable</span> <span class="o">=</span> <span class="nx">s0</span><span class="o">*</span><span class="nx">s0</span> <span class="o">-</span> <span class="nx">s1</span><span class="o">*</span><span class="nx">s1</span><span class="p">;</span>
+<span class="kd">let</span> <span class="nx">separable_state_1</span> <span class="o">=</span> <span class="nx">Matrix</span><span class="p">.</span><span class="nx">row</span><span class="p">(</span><span class="nx">U</span><span class="p">.</span><span class="nx">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="nx">U</span><span class="p">.</span><span class="nx">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)).</span><span class="nx">adjoint</span><span class="p">();</span>
+<span class="kd">let</span> <span class="nx">separable_state_2</span> <span class="o">=</span> <span class="nx">Matrix</span><span class="p">.</span><span class="nx">row</span><span class="p">(</span><span class="nx">V</span><span class="p">.</span><span class="nx">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="nx">V</span><span class="p">.</span><span class="nx">cell</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)).</span><span class="nx">adjoint</span><span class="p">();</span>
 
 <span class="kd">let</span> <span class="nx">weight_entangled</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="nx">s1</span><span class="o">*</span><span class="nx">s1</span><span class="p">;</span>
 <span class="kd">let</span> <span class="nx">entangled_state_as_unitary_matrix</span> <span class="o">=</span> <span class="nx">U</span><span class="p">.</span><span class="nx">times</span><span class="p">(</span><span class="nx">V</span><span class="p">);</span>
 <span class="kd">let</span> <span class="nx">entangled_state_as_rotation</span> <span class="o">=</span> <span class="nx">U2_to_SO3</span><span class="p">(</span><span class="nx">U</span><span class="p">.</span><span class="nx">times</span><span class="p">(</span><span class="nx">V</span><span class="p">));</span>
 
-<span class="nx">draw_indicator</span><span class="p">(</span><span class="nx">vec_to_bloch</span><span class="p">(</span><span class="nx">separable_state_1</span><span class="p">)</span> <span class="o">*</span> <span class="nx">weight_seperable</span><span class="p">,</span> <span class="s1">&#39;white&#39;</span><span class="p">)</span>
-<span class="nx">draw_indicator</span><span class="p">(</span><span class="nx">vec_to_bloch</span><span class="p">(</span><span class="nx">separable_state_2</span><span class="p">)</span> <span class="o">*</span> <span class="nx">weight_seperable</span><span class="p">,</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="nx">draw_indicator</span><span class="p">(</span><span class="nx">vec_to_bloch</span><span class="p">(</span><span class="nx">separable_state_1</span><span class="p">)</span> <span class="o">*</span> <span class="nx">weight_separable</span><span class="p">,</span> <span class="s1">&#39;white&#39;</span><span class="p">)</span>
+<span class="nx">draw_indicator</span><span class="p">(</span><span class="nx">vec_to_bloch</span><span class="p">(</span><span class="nx">separable_state_2</span><span class="p">)</span> <span class="o">*</span> <span class="nx">weight_separable</span><span class="p">,</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span>
 <span class="nx">draw_indicator</span><span class="p">(</span><span class="nx">entangled_state_as_rotation</span><span class="p">.</span><span class="nx">rotate</span><span class="p">(</span><span class="nx">point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">*</span> <span class="nx">weight_entangled</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span>
 <span class="nx">draw_indicator</span><span class="p">(</span><span class="nx">entangled_state_as_rotation</span><span class="p">.</span><span class="nx">rotate</span><span class="p">(</span><span class="nx">point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">*</span> <span class="nx">weight_entangled</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span>
 <span class="nx">draw_indicator</span><span class="p">(</span><span class="nx">entangled_state_as_rotation</span><span class="p">.</span><span class="nx">rotate</span><span class="p">(</span><span class="nx">point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="nx">weight_entangled</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">)</span>
 </code></pre></div>
 <p>I think it&#39;s fair to say that this visualization is not very good.</p>
 
-<p>First of all, the seperable-state indicators are really distracting.
+<p>First of all, the separable-state indicators are really distracting.
 The two types of indicators aren&#39;t moving in similar ways.
 Putting both types in one display interferes with understanding, instead of reinforcing understanding.
-When I try to focus on the rotation/entanglement-case indicators, my eyes keep being drawn away by the seperable-case indicators swooping by.</p>
+When I try to focus on the rotation/entanglement-case indicators, my eyes keep being drawn away by the separable-case indicators swooping by.</p>
 
 <p>Second, I have a hard time telling which indicator is which.
 The color coding isn&#39;t enough to keep them straight in my head.
@@ -168,7 +168,7 @@ The definition needs to be generalized to work on mixed states.</p>
 
 <p>For my second attempt at representing two-qubit states, I tried to address the three problems with the first idea.</p>
 
-<p>First, I dropped the seperable-state indicators.
+<p>First, I dropped the separable-state indicators.
 They were totally redundant with the Bloch sphere representation of the individual qubits anyways.
 If you want to see the individual qubit Bloch vectors, Quirk already has a Bloch sphere display for that.</p>
 
@@ -184,7 +184,7 @@ Then I literally just averaged each axis&#39; output position across the cases, 
 <p>The reasoning behind averaging the axis positions is that, if the various cases agree on where the X axis should end up, then great we should draw the axis there.
 And if the cases completely disagree about where the Y axis should end up, then the Y axis indicator will get pulled towards the center.
 This should give a nice way to distinguish between separable qubits, correlated qubits, and entangled qubits.
-If the qubits are seperable then all the axis indicators should end up at the center, if they&#39;re entangled then all the axes should be away from the center, and if they&#39;re correlated then some axes should be pulled towards the center while others aren&#39;t.</p>
+If the qubits are separable then all the axis indicators should end up at the center, if they&#39;re entangled then all the axes should be away from the center, and if they&#39;re correlated then some axes should be pulled towards the center while others aren&#39;t.</p>
 
 <p>Here&#39;s what this ended up looking like:</p>
 
@@ -258,18 +258,18 @@ The way points slide around the outside and get drawn into the poles... in hinds
 The visualization <em>taught me something</em>.
 Very good sign.</p>
 
-<p>Another nice property about this display is that it has a very clear distinction between seperable states, correlated states, and entangled states.
+<p>Another nice property about this display is that it has a very clear distinction between separable states, correlated states, and entangled states.
 Separable states look like points, correlated states look like lines, and entangled states look like balls.
 There&#39;s also a nice continuum between the three.</p>
 
 <p>Still, there&#39;s three things I&#39;m not too happy about with this iteration.</p>
 
 <p>First, it&#39;s not symmetric.
-When the qubits are seperable, the display is degenerating to the Bloch vector of qubit #1 and ignoring qubit #2.
+When the qubits are separable, the display is degenerating to the Bloch vector of qubit #1 and ignoring qubit #2.
 I&#39;d prefer it if my two-qubit display wasn&#39;t playing favorites like that.</p>
 
 <p>Second, it&#39;s not cheap to draw.
-I have to sample a lot of points, and the shape they make gets stretched and distorted in non-linear ways.</p>
+I have to sample a lot of points, and the shape they make gets stretched and distorted in nonlinear ways.</p>
 
 <p>Third, the points all kinda look like each other.
 Each point corresponds to projecting the second qubit onto some specific state, but I can&#39;t tell which point corresponds to which state.
@@ -280,7 +280,7 @@ I can&#39;t tell.</p>
 
 <p>In an attempt to make the visualization more symmetric, and to reduce the amount of distortion, I took a shot in the dark.
 I took the output points from the previous display, and simply scaled each by how likely its corresponding projection was to succeed.
-I also shifted every point over by the Bloch vector of the first qubit; I figured that would make the seperable case would be drawn as a point at the center of the sphere instead of favoring one qubit over the other.</p>
+I also shifted every point over by the Bloch vector of the first qubit; I figured that would make the separable case would be drawn as a point at the center of the sphere instead of favoring one qubit over the other.</p>
 
 <p>Here&#39;s what that looked like:</p>
 
@@ -294,7 +294,7 @@ I also shifted every point over by the Bloch vector of the first qubit; I figure
     <span class="k">return</span> <span class="nx">v_post</span> <span class="o">*</span> <span class="nx">prob</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="nx">v_pre</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>The point cloud is no longer distorting in non-linear ways.
+<p>The point cloud is no longer distorting in nonlinear ways.
 That&#39;s nice.
 But the separable states aren&#39;t doing what I expected: they&#39;re making a line across the center.
 I can&#39;t tell them apart from correlated states anymore.</p>
@@ -348,7 +348,7 @@ In particular, I made the points corresponding to the states along the X/Y/Z axe
 
 <p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-06-visualizing-entanglement/entanglement-display-iter6.gif"/></p>
 
-<p>Seperable states, correlated states, and entangled states are all easy to tell apart.
+<p>Separable states, correlated states, and entangled states are all easy to tell apart.
 When the system is fully entangled, the labelled axes act like the original rotation idea.
 When the system is in some weird intermediate state, the shape of the cloud gives at least some idea of what&#39;s going on.
 With a bit more polish, I could see actually adding this to Quirk.</p>
