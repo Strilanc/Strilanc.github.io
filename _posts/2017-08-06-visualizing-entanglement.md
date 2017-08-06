@@ -45,7 +45,7 @@ Separable states, on the other hand, will be equal to the matrix $\bimat{1}{0}{0
 By performing a singular value decomposition, you can split any pure 2-qubit state into a combination of the separable case and the entangled case.
 
 Why is it interesting that 2-qubit entanglement is like a 2x2 unitary matrix?
-Because 2x2 unitary matrices are like rotations (i.e. [SU(2)](https://en.wikipedia.org/wiki/Special_unitary_group#n_.3D_2) is isomorphic to [SO(3)](https://en.wikipedia.org/wiki/Rotation_group_SO(3\))).
+Because 2x2 unitary matrices are like rotations (i.e. [SU(2)][1] is isomorphic to [SO(3)][2]).
 It's one of the big reasons that the Bloch sphere works so well to represent a single qubit: single-qubit operations are 2x2 unitary matrices corresponding to rotations around the Bloch sphere.
 
 Since 2-qubit entangled states are like 2x2 unitary matrices, and 2x2 unitary matrices are like rotations... 2-qubit entangled states are like rotations!
@@ -177,6 +177,7 @@ Operations on a single qubit never change the amount of entanglement between qub
 
 Because the axes appeared to be missing important information, I started wondering if sampling more directions would give a clearer result.
 That lead to more ideas, and eventually...
+
 
 # Iteration 3
 
@@ -330,3 +331,6 @@ I didn't find any properly symmetric ways to represent entanglement.
 You can play with these displays by fetching and building [the dev-entanglement-display branch from Quirk's repo](https://github.com/Strilanc/Quirk/tree/dev-entanglement-display).
 
 [Discuss on reddit](https://www.reddit.com/r/algassert/comments/6s1piz/comment_thread_visualizing_2qubit_entanglement/)
+
+[1]: https://en.wikipedia.org/wiki/Special_unitary_group#n_.3D_2
+[2]: https://en.wikipedia.org/wiki/Rotation_group_SO(3)
