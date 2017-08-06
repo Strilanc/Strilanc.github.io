@@ -7,6 +7,20 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Visualizing 2-Qubit Entanglement</title>
+                <description>&lt;p&gt;One of the annoying things about quantum computing is that it&amp;#39;s not very amenable to visualization. We do have a great way to draw the state of one qubit, i.e. the &lt;a href=&quot;https://en.wikipedia.org/wiki/Bloch_sphere&quot;&gt;Bloch sphere&lt;/a&gt;, but it doesn&amp;#39;t work very well for more qubits. This makes the Bloch sphere a double-edged...</description>
+                <pubDate>Sun, 06 Aug 2017 13:10:20 -0700</pubDate>
+                <link>http://algassert.com/post/1716</link>
+                <guid isPermaLink="true">http://algassert.com/post/1716</guid>
+            </item>
+            <item>
+                <title>My Second Paper: A Slightly Smaller Surface Code S Gate</title>
+                <description>&lt;p&gt;Recently, I was trying to learn more about the surface code by reading through the 2012 paper &amp;quot;&lt;a href=&quot;https://arxiv.org/abs/1208.0928&quot;&gt;Surface codes: Towards practical large-scale quantum computation&lt;/a&gt;&amp;quot; by Austin Fowler et al. The paper is great; it uses lots of concepts and ways of thinking about quantum states that I&amp;#39;m not used...</description>
+                <pubDate>Mon, 31 Jul 2017 20:10:20 -0700</pubDate>
+                <link>http://algassert.com/post/1715</link>
+                <guid isPermaLink="true">http://algassert.com/post/1715</guid>
+            </item>
+            <item>
                 <title>Reversible Computation isn't Free</title>
                 <description>&lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Landauer%27s_principle&quot;&gt;Landauer&amp;#39;s principle&lt;/a&gt; puts a lower limit on the cost of irreversible computations. Basically: clearing a bit requires a minimum amount of energy (that depends on the ambient temperature), so a computation must consume an amount of energy proportional to how many bits it clears. (The energy efficiency of current...</description>
                 <pubDate>Sun, 23 Jul 2017 13:10:20 -0700</pubDate>
@@ -61,20 +75,6 @@
                 <pubDate>Tue, 02 May 2017 13:10:10 -0700</pubDate>
                 <link>http://algassert.com/post/1707</link>
                 <guid isPermaLink="true">http://algassert.com/post/1707</guid>
-            </item>
-            <item>
-                <title>Thinking of Operations as Controls</title>
-                <description>&lt;p&gt;Controlled operations are a core part of quantum computation. Not &lt;em&gt;strictly&lt;/em&gt; necessary, since any two-qubit gate tends to be sufficient for universal quantum computation, but certainly common.&lt;/p&gt; &lt;p&gt;For example, the core of both Grover&amp;#39;s and Shor&amp;#39;s algorithms are defined by controlled operations. Shor&amp;#39;s algorithm uses controlled multiplication operations as part...</description>
-                <pubDate>Sun, 09 Apr 2017 13:10:10 -0700</pubDate>
-                <link>http://algassert.com/post/1706</link>
-                <guid isPermaLink="true">http://algassert.com/post/1706</guid>
-            </item>
-            <item>
-                <title>Difficulty of Classical Control</title>
-                <description>&lt;p&gt;Historically speaking, I think it&amp;#39;s fair to say that quantum computing papers have often assumed that, when it comes to conditionally applying an operation, it&amp;#39;s better for the conditionion to be classical. It makes intuitive sense, after all. Instead of having to do some complicated multi-qubit interaction, you just either...</description>
-                <pubDate>Sun, 02 Apr 2017 13:10:10 -0700</pubDate>
-                <link>http://algassert.com/post/1705</link>
-                <guid isPermaLink="true">http://algassert.com/post/1705</guid>
             </item>
     </channel>
 </rss>

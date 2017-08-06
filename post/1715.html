@@ -6,7 +6,7 @@
     <meta name="author" content="Craig Gidney">
     <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
     <meta name="description" content="Craig Gidney's computer science blog">
-    <title>Reversible Computation isn't Free</title>
+    <title>My Second Paper: A Slightly Smaller Surface Code S Gate</title>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <meta name="viewport" content="width=device-width">
 
@@ -40,8 +40,8 @@
     </div>
     <div class="site">
 
-      <h1 class="post_title">Reversible Computation isn't Free</h1>
-<p class="meta">23 Jul 2017</p>
+      <h1 class="post_title">My Second Paper: A Slightly Smaller Surface Code S Gate</h1>
+<p class="meta">31 Jul 2017</p>
 
     <!-- MathJax latest -->
     <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
@@ -74,75 +74,55 @@
     </noscript>
 
 <div class="post">
-<p><a href="https://en.wikipedia.org/wiki/Landauer%27s_principle">Landauer&#39;s principle</a> puts a lower limit on the cost of irreversible computations.
-Basically: clearing a bit requires a minimum amount of energy (that depends on the ambient temperature), so a computation must consume an amount of energy proportional to how many bits it clears.
-(The energy efficiency of current computers is many orders of magnitude away from this limit.)</p>
+<p>Recently, I was trying to learn more about the surface code by reading through the 2012 paper &quot;<a href="https://arxiv.org/abs/1208.0928">Surface codes: Towards practical large-scale quantum computation</a>&quot; by Austin Fowler et al.
+The paper is great; it uses lots of concepts and ways of thinking about quantum states that I&#39;m not used to.
+However, there was one notable exception to that pattern: the S gate construction.</p>
 
-<p>But now suppose we did computation <em>without</em> clearing bits.
-<a href="https://en.wikipedia.org/wiki/Reversible_computing">Reversible computation</a> only ever toggles bits, and is in principle just as powerful as irreversible computation.
-Quantum computation also involves (mostly) reversible operations.
-So maybe reversible computation doesn&#39;t require energy?</p>
+<p>In Fowler et al&#39;s paper, the &quot;native&quot; operations available to the surface code are CNOT, H, X, Y, and Z.
+There is a significant difference between the Pauli gates (X, Y, and Z) and the H and CNOT gates.
+Namely, the Pauli gates can be performed within the control software, without actually doing anything extra to the qubits.
+The Pauli gates don&#39;t use up any &quot;volume&quot;; they&#39;re effectively free.
+This difference in cost will be important.</p>
 
-<p>There are certainly people and sites on the internet who claim that reversible computation can be done without consuming energy.
-Even the <a href="https://en.wikipedia.org/wiki/Landauer%27s_principle">Wikipedia article on Landauer&#39;s principle</a> makes a note of this:</p>
+<p>Non-native gates are performed with combinations of the native gates, often aided by specially prepared ancilla states.
+For example, in order to perform the S gate, Austin et al. keep re-using the ancilla state $|Y\rangle = \frac{1}{\sqrt{2}}|0\rangle + \frac{1}{\sqrt{2}} i |1\rangle$.</p>
 
-<blockquote>
-<p>If no information is erased, computation may in principle be achieved which is thermodynamically reversible, and require no release of heat.
-This has led to considerable interest in the study of reversible computing.</p>
-</blockquote>
+<p>I&#39;ve thought about this kind of gate-from-re-usable-ancilla construction in the past.
+In fact, I came up <a href="/post/1622">with the exact same S-gate-via-ancilla circuit as the one used in the paper</a>:</p>
 
-<p>However, this is actually not true.
-I mean, okay, the above quote isn&#39;t <em>technically</em> wrong.
-But only because the first sentence has a get-out-of-jail-free &quot;in principle&quot; right in the middle.</p>
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-07-31-paper-smaller-surface-s-gate/old-s-gate.png"/></p>
 
-<p>Bypassing one limit doesn&#39;t mean you bypassed all limits.
-In practice there&#39;s several reasons that reversible computers and quantum computers must consume energy.
-Let&#39;s go over three.</p>
+<p>As soon as I saw the above circuit in the context of the paper, i.e. knowing that Pauli gates are cheaper than CNOT or H gates, I had to try optimizing it in Quirk.
+And it worked!
+It turns out that the outside Hadamard gate is simply fixing a phase flip of the ancilla state; you can use a Z gate instead:</p>
 
-<h1>Error Correction</h1>
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-07-31-paper-smaller-surface-s-gate/new-s-gate.png"/></p>
 
-<p>Unless you build a computer that is literally perfect, and totally isolated from the environment, noise is going to leak into the physical system making up your computer.
-The nature of computation will then tend to mix that noise all over the computer&#39;s state, until the whole system is off-track.</p>
+<p>Actually, within the context of the surface code, Pauli gates are so cheap that it feels misleading to draw a whole box with a Z inside it.
+A more cost-representative way to draw the circuit is like this:</p>
 
-<p>Keeping the computer on track requires pumping the noise leaking into the system back out into the environment.
-And &quot;pumping out noise&quot; is just another way of saying &quot;clearing bits&quot;.
-So Landauer&#39;s principle actually <em>does</em> apply to reversible computers.
-It&#39;s just that the bound ends up being proportional to the amount of noise leaking in, rather than to the number of times the computation performs a particular operation.</p>
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-07-31-paper-smaller-surface-s-gate/new-s-gate-compact.png"/></p>
 
-<h1>Input / Output</h1>
+<p>Note that this is basically the same circuit that we started with, but with the outside Hadamard removed.
+It&#39;s not very often that you make a circuit better by simply dropping an operation!
+(Sorta.)</p>
 
-<p>In order to be useful, your quantum computer or reversible computer has to interface with the rest of the world.
-You have to be able to put raw information in, and get processed information out.
-But both those things require energy.</p>
+<p>Austin Fowler is one of my co-workers, so I sent him an email noting this silly little optimization.
+It would be unfair to say that Austin was excited, but anything that makes the surface code even slightly closer to practical tends to make his day.
+So that was good.</p>
 
-<p>When entering information into the computer, you&#39;re replacing the existing state with a specific desired state.
-You&#39;re clearing the old state&#39;s bits.
-Landauer&#39;s principle applies.
-Conversely, extracting information from the computer requires amplifying bits or qubits into states large enough that they&#39;re convenient for you to work with.
-Amplification involves overwriting bits in the environment, so it also requires energy.</p>
+<p>Austin and I also happen to be fans of the idea of publishing these little discoveries by themselves.
+Globbing something like this into the background of a larger paper just makes it harder to find.
+Sure it won&#39;t meet the significance criteria of a journal, but it&#39;s still worth putting out there.</p>
 
-<p>For long computations the cost of input work and output work being irreversible processes is negligible (compared to the hypothetical cost of the whole computation being irreversible).
-But the cost still isn&#39;t <em>zero</em>, and many computational tasks involve a lot of input/output work.</p>
+<p>So, with that in mind, I set out to write the shortest paper I possibly could.
+It had an abstract, the abstract said to look at figure 1, and figure 1 was the old circuit followed by the new circuit.
+Also there was a reference.
+It took all of half of a page.</p>
 
-<h1>Supporting Hardware</h1>
-
-<p>I can&#39;t speak to reversible computers, but quantum computers (or at least early quantum computers) don&#39;t stand on their own.
-They need a lot of supporting hardware.</p>
-
-<p>You need a dilution refrigerator to keep the qubits cold enough that noise isn&#39;t leaking in faster than it can be pumped back out.
-You need a powerful classical computer to run the error correcting code that&#39;s pumping noise out of the system.
-You also need the classical computer to instruct the quantum computer about which operations to apply.
-You need microwave generators to produce the signals that control the qubits (this is specific to superconducting qubits, but other types of qubits have their own equivalents e.g. lasers for trapped ions).
-You need coffee machines to power the humans responsible for maintenance.
-You just generally need a lot of <em>other stuff</em>.</p>
-
-<p>Even if the quantum computer proper wasn&#39;t consuming energy, all this side stuff needed to keep the computer running would be consuming energy.</p>
-
-<h1>Summary</h1>
-
-<p>Unless your reversible computer is perfectly isolated from the world, doesn&#39;t produce results, and doesn&#39;t need any supporting hardware... it&#39;s going to require energy to run.</p>
-
-<p><a href="https://www.reddit.com/r/algassert/comments/6p6p6u/comment_thread_reversible_computation_isnt_free/">Discuss on reddit</a></p>
+<p>Austin didn&#39;t find the extreme brevity as funny as I did, unfortunately.
+He fleshed out the paper with some justification, a more appropriate set of references, and some follow-up diagrams.
+The result is now on the arXiv as: <a href="https://arxiv.org/abs/1708.00054">&quot;A slightly smaller surface code S gate&quot;</a>.</p>
 
 </div>
 
@@ -156,10 +136,10 @@ You just generally need a lot of <em>other stuff</em>.</p>
     <table style="width: 100%;">
       <tr>
         <td align="left">
-          <a href="/post/1713">&laquo; Impractical Experiments #4: High Powered Phase Estimation</a>
+          <a href="/post/1714">&laquo; Reversible Computation isn't Free</a>
         </td>
         <td align="right">
-          <a href="/post/1715">My Second Paper: A Slightly Smaller Surface Code S Gate &raquo;</a>
+          <a href="/post/1716">Visualizing 2-Qubit Entanglement &raquo;</a>
         </td>
       </tr>
     </table>
