@@ -12,7 +12,7 @@ We do have a great way to draw the state of one qubit, i.e. the [Bloch sphere](h
 This makes the Bloch sphere a double-edged sword: it provides a useful tool for thinking about a single qubit, but then hinders understanding of multiple qubits.
 It creates confusions leading to questions analogous to "but the electron's spin has to point in *some* specific direction when it's entangled, right?".
 
-Entanglement always involves two or more qubits, and the Bloch sphere is correspondingly terrible at representating entanglement.
+Entanglement always involves two or more qubits, and the Bloch sphere is correspondingly terrible at representing entanglement.
 For example, looking at the Bloch sphere representation of two qubits throughout a Bell test is not very informative.
 All the interesting stuff is happening in the relationship between the two qubits, and the Bloch sphere fails at showing the relevant details of that relationship.
 
@@ -42,7 +42,7 @@ Let's try something else.
 When I was brainstorming ideas, one of the things I remembered is that [entangled states are like unitary matrices](/quantum/2015/04/25/Entangled-States-are-like-Unitary-Matrices.html).
 If you arrange the amplitudes of the $|00\rangle$, $|01\rangle$, $|10\rangle$, and $|11\rangle$ states into a 2x2 grid and pretend that grid is actually a matrix, then that matrix is (proportional to) a unitary matrix if and only if the state was maximally entangled.
 Separable states, on the other hand, will be equal to the matrix $\bimat{1}{0}{0}{0}$ times some unitaries.
-By performing a singular value decomposition, you can split any pure 2-qubit state into a combination of the seperable case and the entangled case.
+By performing a singular value decomposition, you can split any pure 2-qubit state into a combination of the separable case and the entangled case.
 
 Why is it interesting that 2-qubit entanglement is like a 2x2 unitary matrix?
 Because 2x2 unitary matrices are like rotations (i.e. [SU(2)](https://en.wikipedia.org/wiki/Special_unitary_group#n_.3D_2) is isomorphic to [SO(3)](https://en.wikipedia.org/wiki/Rotation_group_SO(3\))).
@@ -56,7 +56,7 @@ For each axis, apply the rotation to that axis then draw an indicator showing wh
 Additionally, we'll scale the axis indicator positions in order to show the strength of the entanglement.
 
 The SVD we use to extract the unitary matrix corresponding to the entanglement of the system will also tell us the strength of the separable case, and the state of each individual qubit within that case.
-This information also characterizes the 2-qubit state, and can be represented as points on the Bloch sphere scaled by the strength of the seperable case.
+This information also characterizes the 2-qubit state, and can be represented as points on the Bloch sphere scaled by the strength of the separable case.
 We're already drawing the entanglement indicators on a sphere, so we might as well throw in some indicators for the separable part.
 
 Put all that together, and you get this:
@@ -71,16 +71,16 @@ let amps_matrix = Matrix.square(amp00, amp01,
 let {U, S, V} = amps_matrix.singularValueDecomposition();
 let [s0, s1] = [S.cell(0, 0).real, S.cell(1, 1).real];
 
-let weight_seperable = s0*s0 - s1*s1;
-let seperable_state_1 = Matrix.row(U.cell(0, 0), U.cell(0, 1)).adjoint();
-let seperable_state_2 = Matrix.row(V.cell(0, 0), V.cell(1, 0)).adjoint();
+let weight_separable = s0*s0 - s1*s1;
+let separable_state_1 = Matrix.row(U.cell(0, 0), U.cell(0, 1)).adjoint();
+let separable_state_2 = Matrix.row(V.cell(0, 0), V.cell(1, 0)).adjoint();
 
 let weight_entangled = 2*s1*s1;
 let entangled_state_as_unitary_matrix = U.times(V);
 let entangled_state_as_rotation = U2_to_SO3(U.times(V));
 
-draw_indicator(vec_to_bloch(separable_state_1) * weight_seperable, 'white')
-draw_indicator(vec_to_bloch(separable_state_2) * weight_seperable, 'black')
+draw_indicator(vec_to_bloch(separable_state_1) * weight_separable, 'white')
+draw_indicator(vec_to_bloch(separable_state_2) * weight_separable, 'black')
 draw_indicator(entangled_state_as_rotation.rotate(point(1, 0, 0)) * weight_entangled, 'red')
 draw_indicator(entangled_state_as_rotation.rotate(point(0, 1, 0)) * weight_entangled, 'blue')
 draw_indicator(entangled_state_as_rotation.rotate(point(0, 0, 1)) * weight_entangled, 'green')
@@ -88,10 +88,10 @@ draw_indicator(entangled_state_as_rotation.rotate(point(0, 0, 1)) * weight_entan
 
 I think it's fair to say that this visualization is not very good.
 
-First of all, the seperable-state indicators are really distracting.
+First of all, the separable-state indicators are really distracting.
 The two types of indicators aren't moving in similar ways.
 Putting both types in one display interferes with understanding, instead of reinforcing understanding.
-When I try to focus on the rotation/entanglement-case indicators, my eyes keep being drawn away by the seperable-case indicators swooping by.
+When I try to focus on the rotation/entanglement-case indicators, my eyes keep being drawn away by the separable-case indicators swooping by.
 
 Second, I have a hard time telling which indicator is which.
 The color coding isn't enough to keep them straight in my head.
@@ -106,7 +106,7 @@ The definition needs to be generalized to work on mixed states.
 
 For my second attempt at representing two-qubit states, I tried to address the three problems with the first idea.
 
-First, I dropped the seperable-state indicators.
+First, I dropped the separable-state indicators.
 They were totally redundant with the Bloch sphere representation of the individual qubits anyways.
 If you want to see the individual qubit Bloch vectors, Quirk already has a Bloch sphere display for that.
 
@@ -122,7 +122,7 @@ Then I literally just averaged each axis' output position across the cases, but 
 The reasoning behind averaging the axis positions is that, if the various cases agree on where the X axis should end up, then great we should draw the axis there.
 And if the cases completely disagree about where the Y axis should end up, then the Y axis indicator will get pulled towards the center.
 This should give a nice way to distinguish between separable qubits, correlated qubits, and entangled qubits.
-If the qubits are seperable then all the axis indicators should end up at the center, if they're entangled then all the axes should be away from the center, and if they're correlated then some axes should be pulled towards the center while others aren't.
+If the qubits are separable then all the axis indicators should end up at the center, if they're entangled then all the axes should be away from the center, and if they're correlated then some axes should be pulled towards the center while others aren't.
 
 Here's what this ended up looking like:
 
@@ -199,18 +199,18 @@ Did you catch what just happened?
 The visualization *taught me something*.
 Very good sign.
 
-Another nice property about this display is that it has a very clear distinction between seperable states, correlated states, and entangled states.
+Another nice property about this display is that it has a very clear distinction between separable states, correlated states, and entangled states.
 Separable states look like points, correlated states look like lines, and entangled states look like balls.
 There's also a nice continuum between the three.
 
 Still, there's three things I'm not too happy about with this iteration.
 
 First, it's not symmetric.
-When the qubits are seperable, the display is degenerating to the Bloch vector of qubit #1 and ignoring qubit #2.
+When the qubits are separable, the display is degenerating to the Bloch vector of qubit #1 and ignoring qubit #2.
 I'd prefer it if my two-qubit display wasn't playing favorites like that.
 
 Second, it's not cheap to draw.
-I have to sample a lot of points, and the shape they make gets stretched and distorted in non-linear ways.
+I have to sample a lot of points, and the shape they make gets stretched and distorted in nonlinear ways.
 
 Third, the points all kinda look like each other.
 Each point corresponds to projecting the second qubit onto some specific state, but I can't tell which point corresponds to which state.
@@ -222,7 +222,7 @@ I can't tell.
 
 In an attempt to make the visualization more symmetric, and to reduce the amount of distortion, I took a shot in the dark.
 I took the output points from the previous display, and simply scaled each by how likely its corresponding projection was to succeed.
-I also shifted every point over by the Bloch vector of the first qubit; I figured that would make the seperable case would be drawn as a point at the center of the sphere instead of favoring one qubit over the other.
+I also shifted every point over by the Bloch vector of the first qubit; I figured that would make the separable case would be drawn as a point at the center of the sphere instead of favoring one qubit over the other.
 
 Here's what that looked like:
 
@@ -239,7 +239,7 @@ function second_qubit_point_given_first_trace_scaled(two_qubit_density, required
 }
 ```
 
-The point cloud is no longer distorting in non-linear ways.
+The point cloud is no longer distorting in nonlinear ways.
 That's nice.
 But the separable states aren't doing what I expected: they're making a line across the center.
 I can't tell them apart from correlated states anymore.
@@ -298,7 +298,7 @@ I think the result looks pretty good:
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/entanglement-display-iter6.gif"/>
 
-Seperable states, correlated states, and entangled states are all easy to tell apart.
+Separable states, correlated states, and entangled states are all easy to tell apart.
 When the system is fully entangled, the labelled axes act like the original rotation idea.
 When the system is in some weird intermediate state, the shape of the cloud gives at least some idea of what's going on.
 With a bit more polish, I could see actually adding this to Quirk.
