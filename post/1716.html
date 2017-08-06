@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Visualizing 2-Qubit Entanglement</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Visualizing 2-Qubit Entanglement</h1>
+<p class="meta">06 Aug 2017</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>One of the annoying things about quantum computing is that it&#39;s not very amenable to visualization.
+We do have a great way to draw the state of one qubit, i.e. the <a href="https://en.wikipedia.org/wiki/Bloch_sphere">Bloch sphere</a>, but it doesn&#39;t work very well for more qubits.
+This makes the Bloch sphere a double-edged sword: it provides a useful tool for thinking about a single qubit, but then hinders understanding of multiple qubits.
+It creates confusions leading to questions analogous to &quot;but the electron&#39;s spin has to point in <em>some</em> specific direction when it&#39;s entangled, right?&quot;.</p>
+
+<p>Entanglement always involves two or more qubits, and the Bloch sphere is correspondingly terrible at representating entanglement.
+For example, looking at the Bloch sphere representation of two qubits throughout a Bell test is not very informative.
+All the interesting stuff is happening in the relationship between the two qubits, and the Bloch sphere fails at showing the relevant details of that relationship.</p>
+
+<p>I like messing around with visualizations, so I thought I would take a crack at fixing this problem of how to visualize entanglement.
+This post is an after-the-fact record of the ideas I tried, what worked, what didn&#39;t, and the various little insights that iterative experimentation tends to generate.</p>
+
+<h1>Iteration 0</h1>
+
+<p>Let&#39;s start with the 2-qubit visualization that was already included in my quantum circuit simulator Quirk: the <a href="https://en.wikipedia.org/wiki/Density_matrix">density matrix</a>.</p>
+
+<p>When it comes to doing algebra, density matrices are a great tool.
+When it comes to visualizing... eeehhhhhh...</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-06-visualizing-entanglement/entanglement-display-iter0.gif"/></p>
+
+<p>With practice you can learn to eyeball information from these density matrix displays, like &quot;if it&#39;s spread out along the main diagonal and the off-diagonal terms go away, the system is not coherent&quot;.
+But, in general, this is tricky to do.
+For example, it&#39;s hard to tell at a glance how strongly the two qubits are entangled.</p>
+
+<p>We want to use concepts rooted in geometry rather than algebra.
+Let&#39;s try something else.</p>
+
+<h1>Iteration 1</h1>
+
+<p>When I was brainstorming ideas, one of the things I remembered is that <a href="/quantum/2015/04/25/Entangled-States-are-like-Unitary-Matrices.html">entangled states are like unitary matrices</a>.
+If you arrange the amplitudes of the $|00\rangle$, $|01\rangle$, $|10\rangle$, and $|11\rangle$ states into a 2x2 grid and pretend that grid is actually a matrix, then that matrix is (proportional to) a unitary matrix if and only if the state was maximally entangled.
+Separable states, on the other hand, will be equal to the matrix $\bimat{1}{0}{0}{0}$ times some unitaries.
+By performing a singular value decomposition, you can split any pure 2-qubit state into a combination of the seperable case and the entangled case.</p>
+
+<p>Why is it interesting that 2-qubit entanglement is like a 2x2 unitary matrix?
+Because 2x2 unitary matrices are like rotations (i.e. <a href="https://en.wikipedia.org/wiki/Special_unitary_group#n_.3D_2">SU(2)</a> is isomorphic to <a href="https://en.wikipedia.org/wiki/Rotation_group_SO(3))">SO(3)</a>.
+It&#39;s one of the big reasons that the Bloch sphere works so well to represent a single qubit: single-qubit operations are 2x2 unitary matrices corresponding to rotations around the Bloch sphere.</p>
+
+<p>Since 2-qubit entangled states are like 2x2 unitary matrices, and 2x2 unitary matrices are like rotations... 2-qubit entangled states are like rotations!
+If we have a nice way to draw a rotation, then we have a nice way to draw the entangled state.</p>
+
+<p>A simple way to draw a rotation is to just show its effects on the X, Y, and Z axes.
+For each axis, apply the rotation to that axis then draw an indicator showing where the axis ended up.
+Additionally, we&#39;ll scale the axis indicator positions in order to show the strength of the entanglement.</p>
+
+<p>The SVD we use to extract the unitary matrix corresponding to the entanglement of the system will also tell us the strength of the separable case, and the state of each individual qubit within that case.
+This information also characterizes the 2-qubit state, and can be represented as points on the Bloch sphere scaled by the strength of the seperable case.
+We&#39;re already drawing the entanglement indicators on a sphere, so we might as well throw in some indicators for the separable part.</p>
+
+<p>Put all that together, and you get this:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-06-visualizing-entanglement/entanglement-display-iter1.gif"/></p>
+
+<p>Here&#39;s pseudo-code describing the visualization in more detail:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">let</span> <span class="nx">amps_matrix</span> <span class="o">=</span> <span class="nx">Matrix</span><span class="p">.</span><span class="nx">square</span><span class="p">(</span><span class="nx">amp00</span><span class="p">,</span> <span class="nx">amp01</span><span class="p">,</span>
+                                <span class="nx">amp10</span><span class="p">,</span> <span class="nx">amp11</span><span class="p">);</span>
+<span class="kd">let</span> <span class="p">{</span><span class="nx">U</span><span class="p">,</span> <span class="nx">S</span><span class="p">,</span> <span class="nx">V</span><span class="p">}</span> <span class="o">=</span> <span class="nx">amps_matrix</span><span class="p">.</span><span class="nx">singularValueDecomposition</span><span class="p">();</span>
+<span class="kd">let</span> <span class="p">[</span><span class="nx">s0</span><span class="p">,</span> <span class="nx">s1</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">S</span><span class="p">.</span><span class="nx">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">).</span><span class="nx">real</span><span class="p">,</span> <span class="nx">S</span><span class="p">.</span><span class="nx">cell</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span><span class="nx">real</span><span class="p">];</span>
+
+<span class="kd">let</span> <span class="nx">weight_seperable</span> <span class="o">=</span> <span class="nx">s0</span><span class="o">*</span><span class="nx">s0</span> <span class="o">-</span> <span class="nx">s1</span><span class="o">*</span><span class="nx">s1</span><span class="p">;</span>
+<span class="kd">let</span> <span class="nx">seperable_state_1</span> <span class="o">=</span> <span class="nx">Matrix</span><span class="p">.</span><span class="nx">row</span><span class="p">(</span><span class="nx">U</span><span class="p">.</span><span class="nx">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="nx">U</span><span class="p">.</span><span class="nx">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)).</span><span class="nx">adjoint</span><span class="p">();</span>
+<span class="kd">let</span> <span class="nx">seperable_state_2</span> <span class="o">=</span> <span class="nx">Matrix</span><span class="p">.</span><span class="nx">row</span><span class="p">(</span><span class="nx">V</span><span class="p">.</span><span class="nx">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="nx">V</span><span class="p">.</span><span class="nx">cell</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)).</span><span class="nx">adjoint</span><span class="p">();</span>
+
+<span class="kd">let</span> <span class="nx">weight_entangled</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="nx">s1</span><span class="o">*</span><span class="nx">s1</span><span class="p">;</span>
+<span class="kd">let</span> <span class="nx">entangled_state_as_unitary_matrix</span> <span class="o">=</span> <span class="nx">U</span><span class="p">.</span><span class="nx">times</span><span class="p">(</span><span class="nx">V</span><span class="p">);</span>
+<span class="kd">let</span> <span class="nx">entangled_state_as_rotation</span> <span class="o">=</span> <span class="nx">U2_to_SO3</span><span class="p">(</span><span class="nx">U</span><span class="p">.</span><span class="nx">times</span><span class="p">(</span><span class="nx">V</span><span class="p">));</span>
+
+<span class="nx">draw_indicator</span><span class="p">(</span><span class="nx">vec_to_bloch</span><span class="p">(</span><span class="nx">separable_state_1</span><span class="p">)</span> <span class="o">*</span> <span class="nx">weight_seperable</span><span class="p">,</span> <span class="s1">&#39;white&#39;</span><span class="p">)</span>
+<span class="nx">draw_indicator</span><span class="p">(</span><span class="nx">vec_to_bloch</span><span class="p">(</span><span class="nx">separable_state_2</span><span class="p">)</span> <span class="o">*</span> <span class="nx">weight_seperable</span><span class="p">,</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="nx">draw_indicator</span><span class="p">(</span><span class="nx">entangled_state_as_rotation</span><span class="p">.</span><span class="nx">rotate</span><span class="p">(</span><span class="nx">point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">*</span> <span class="nx">weight_entangled</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="nx">draw_indicator</span><span class="p">(</span><span class="nx">entangled_state_as_rotation</span><span class="p">.</span><span class="nx">rotate</span><span class="p">(</span><span class="nx">point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">*</span> <span class="nx">weight_entangled</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+<span class="nx">draw_indicator</span><span class="p">(</span><span class="nx">entangled_state_as_rotation</span><span class="p">.</span><span class="nx">rotate</span><span class="p">(</span><span class="nx">point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="nx">weight_entangled</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">)</span>
+</code></pre></div>
+<p>I think it&#39;s fair to say that this visualization is not very good.</p>
+
+<p>First of all, the seperable-state indicators are really distracting.
+The two types of indicators aren&#39;t moving in similar ways.
+Putting both types in one display interferes with understanding, instead of reinforcing understanding.
+When I try to focus on the rotation/entanglement-case indicators, my eyes keep being drawn away by the seperable-case indicators swooping by.</p>
+
+<p>Second, I have a hard time telling which indicator is which.
+The color coding isn&#39;t enough to keep them straight in my head.
+If the author can&#39;t keep these things straight, a user <em>definitely</em> won&#39;t be able to keep them straight.</p>
+
+<p>Third, given how I defined this display, it only works on pure 2-qubit states.
+I assumed that the input was a 1x4 vector with an entry for the 00, 01, 10, and 11 amplitudes.
+But in practice the two qubits might be entangled with other qubits, or decohered due to a measurement, so the input will be a 4x4 density matrix.
+The definition needs to be generalized to work on mixed states.</p>
+
+<h1>Iteration 2</h1>
+
+<p>For my second attempt at representing two-qubit states, I tried to address the three problems with the first idea.</p>
+
+<p>First, I dropped the seperable-state indicators.
+They were totally redundant with the Bloch sphere representation of the individual qubits anyways.
+If you want to see the individual qubit Bloch vectors, Quirk already has a Bloch sphere display for that.</p>
+
+<p>Second, I did a bit of polishing on the visuals.
+I made the axis-indicating circles larger, and gave them X/Y/Z labels.
+I also made them gradually scale down to nothing as they approached the origin.</p>
+
+<p>Third, I generalized the math to work on mixed states.
+I performed an eigendecomposition of the density matrix defining the two-qubit state, which gave me a weighted combination of possible pure states.
+Then I separately considered the rotation defined by each case, and where that rotation would place the X/Y/Z axes.
+Then I literally just averaged each axis&#39; output position across the cases, but weighted by how likely that case was.</p>
+
+<p>The reasoning behind averaging the axis positions is that, if the various cases agree on where the X axis should end up, then great we should draw the axis there.
+And if the cases completely disagree about where the Y axis should end up, then the Y axis indicator will get pulled towards the center.
+This should give a nice way to distinguish between separable qubits, correlated qubits, and entangled qubits.
+If the qubits are seperable then all the axis indicators should end up at the center, if they&#39;re entangled then all the axes should be away from the center, and if they&#39;re correlated then some axes should be pulled towards the center while others aren&#39;t.</p>
+
+<p>Here&#39;s what this ended up looking like:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-06-visualizing-entanglement/entanglement-display-iter2.gif"/></p>
+
+<p>And here&#39;s some pseudocode describing the thing in more detail:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">let</span> <span class="nx">vx</span> <span class="o">=</span> <span class="nx">Matrix</span><span class="p">.</span><span class="nx">col</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="kd">let</span> <span class="nx">vy</span> <span class="o">=</span> <span class="nx">Matrix</span><span class="p">.</span><span class="nx">col</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="kd">let</span> <span class="nx">vz</span> <span class="o">=</span> <span class="nx">Matrix</span><span class="p">.</span><span class="nx">col</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">eigen</span> <span class="k">of</span> <span class="nx">eigenDecompose</span><span class="p">(</span><span class="nx">density</span><span class="p">))</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">M</span> <span class="o">=</span> <span class="nx">Matrix</span><span class="p">.</span><span class="nx">square</span><span class="p">(</span><span class="nx">eigen</span><span class="p">.</span><span class="nx">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">eigen</span><span class="p">.</span><span class="nx">vec</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                          <span class="nx">eigen</span><span class="p">.</span><span class="nx">vec</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="nx">eigen</span><span class="p">.</span><span class="nx">vec</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
+    <span class="kd">let</span> <span class="p">{</span><span class="nx">U</span><span class="p">,</span> <span class="nx">S</span><span class="p">,</span> <span class="nx">V</span><span class="p">}</span> <span class="o">=</span> <span class="nx">M</span><span class="p">.</span><span class="nx">singularValueDecomposition</span><span class="p">();</span>
+    <span class="kd">let</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">S</span><span class="p">.</span><span class="nx">cell</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span><span class="nx">real</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">weight</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="nx">s</span><span class="o">*</span><span class="nx">s</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">E</span> <span class="o">=</span> <span class="nx">U</span><span class="p">.</span><span class="nx">times</span><span class="p">(</span><span class="nx">V</span><span class="p">);</span>
+    <span class="kd">let</span> <span class="nx">state_to_contribution</span> <span class="o">=</span> <span class="p">(...</span><span class="nx">vec_raw</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">vec</span> <span class="o">=</span> <span class="nx">Matrix</span><span class="p">.</span><span class="nx">col</span><span class="p">(...</span><span class="nx">vec_raw</span><span class="p">);</span>
+        <span class="nx">vec</span> <span class="o">/=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">vec</span><span class="p">.</span><span class="nx">norm2</span><span class="p">());</span>
+        <span class="nx">vec</span> <span class="o">=</span> <span class="nx">E</span> <span class="o">*</span> <span class="nx">vec</span><span class="p">;</span>
+        <span class="nx">vec</span> <span class="o">*=</span> <span class="nx">vec</span><span class="p">.</span><span class="nx">adjoint</span><span class="p">();</span>
+        <span class="k">return</span> <span class="nx">qubitDensityMatrixToBlochVector</span><span class="p">(</span><span class="nx">vec</span><span class="p">)</span> <span class="o">*</span> <span class="nx">weight</span> <span class="o">*</span> <span class="nx">eigen</span><span class="p">.</span><span class="nx">val</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="nx">vx</span> <span class="o">+=</span> <span class="nx">state_to_contribution</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="nx">vy</span> <span class="o">+=</span> <span class="nx">state_to_contribution</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
+    <span class="nx">vz</span> <span class="o">+=</span> <span class="nx">state_to_contribution</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">draw_indicator</span><span class="p">(</span><span class="nx">vx</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">);</span>
+<span class="nx">draw_indicator</span><span class="p">(</span><span class="nx">vy</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">);</span>
+<span class="nx">draw_indicator</span><span class="p">(</span><span class="nx">vz</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">);</span>
+</code></pre></div>
+<p>I was really happy with this visualization, except for two major flaws.</p>
+
+<p>First, there&#39;s a numerical instability.
+See how the middle display in the above diagram has a Z indicator that&#39;s jittering up and down despite the state being constant?
+That&#39;s happening because there&#39;s a degeneracy in the eigendecomposition, and the specific way that degeneracy is resolved determines whether or not the Z-axis correlation is shown or hidden.</p>
+
+<p>The second flaw isn&#39;t apparent in the diagram above, but was in other cases I tried.
+Basically, there are cases where the axes move in weird ways that hint &quot;extra stuff&quot; is going on.
+Like, there are cases where rotating one qubit will slightly pull the axes towards the center.
+But, given that &quot;distance of axes from center&quot; is supposed to be telling us how entangled the system is, that should never happen.
+Operations on a single qubit never change the amount of entanglement between qubits.</p>
+
+<p>Because the axes appeared to be missing important information, I started wondering if sampling more directions would give a clearer result.
+That lead to more ideas, and eventually...</p>
+
+<h1>Iteration 3</h1>
+
+<p>Instead of pulling apart the density matrix, then applying the separated pieces to each axis, then putting the axes back together... why not just directly apply the density matrix to each axis?
+What if we simply consider how the possible states of one qubit informs us about the state of the other qubit?
+That is to say: iterate over possible states of qubit #2, project the two-qubit density matrix onto that qubit #2 state, then draw a Bloch sphere point wherever qubit #1&#39;s state ended up.</p>
+
+<p>Instead of thinking about entanglement as a rotation, we&#39;ve switched to thinking about entanglement as mutual information.
+We&#39;re asking &quot;What are all the things that qubit A can tell me about qubit B?&quot;.
+The richer and more varied those things are, the more entangled the two qubits must be.</p>
+
+<p>I coded up the idea, and this is what it looked like:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-06-visualizing-entanglement/entanglement-display-iter3.gif"/></p>
+
+<p>I also tried some other cases:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-06-visualizing-entanglement/entanglement-display-iter3-b.gif"/></p>
+
+<p>I found the above diagrams surprising.
+The way points slide around the outside and get drawn into the poles... in hindsight it&#39;s obvious why this happens, but I really didn&#39;t expect it ahead of time.</p>
+
+<p>Did you catch what just happened?
+The visualization <em>taught me something</em>.
+Very good sign.</p>
+
+<p>Another nice property about this display is that it has a very clear distinction between seperable states, correlated states, and entangled states.
+Separable states look like points, correlated states look like lines, and entangled states look like balls.
+There&#39;s also a nice continuum between the three.</p>
+
+<p>Still, there&#39;s three things I&#39;m not too happy about with this iteration.</p>
+
+<p>First, it&#39;s not symmetric.
+When the qubits are seperable, the display is degenerating to the Bloch vector of qubit #1 and ignoring qubit #2.
+I&#39;d prefer it if my two-qubit display wasn&#39;t playing favorites like that.</p>
+
+<p>Second, it&#39;s not cheap to draw.
+I have to sample a lot of points, and the shape they make gets stretched and distorted in non-linear ways.</p>
+
+<p>Third, the points all kinda look like each other.
+Each point corresponds to projecting the second qubit onto some specific state, but I can&#39;t tell which point corresponds to which state.
+Which point is the one that corresponds to qubit #2 being in the $|0\rangle + |1\rangle$ state?
+I can&#39;t tell.</p>
+
+<h1>Iteration 4</h1>
+
+<p>In an attempt to make the visualization more symmetric, and to reduce the amount of distortion, I took a shot in the dark.
+I took the output points from the previous display, and simply scaled each by how likely its corresponding projection was to succeed.
+I also shifted every point over by the Bloch vector of the first qubit; I figured that would make the seperable case would be drawn as a point at the center of the sphere instead of favoring one qubit over the other.</p>
+
+<p>Here&#39;s what that looked like:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-06-visualizing-entanglement/entanglement-display-iter4.gif"/></p>
+
+<p>And pseudo-code for rescaling the points:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">function</span> <span class="nx">second_qubit_point_given_first_trace_scaled</span><span class="p">(</span><span class="nx">two_qubit_density</span><span class="p">,</span> <span class="nx">required_1st_qubit_amps</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">v_pre</span> <span class="o">=</span> <span class="nx">bloch_vector_of_2nd_qubit</span><span class="p">(</span><span class="nx">two_qubit_density</span><span class="p">);</span>
+    <span class="kd">let</span> <span class="p">{</span><span class="nx">prob</span><span class="p">,</span> <span class="nx">density</span><span class="p">}</span> <span class="o">=</span> <span class="nx">density_given_1st_qubit</span><span class="p">(</span><span class="nx">two_qubit_density</span><span class="p">,</span> <span class="nx">required_1st_qubit_amps</span><span class="p">);</span>
+    <span class="kd">let</span> <span class="nx">v_post</span> <span class="o">=</span> <span class="nx">bloch_vector_of_2nd_qubit</span><span class="p">(</span><span class="nx">density</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">v_post</span> <span class="o">*</span> <span class="nx">prob</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="nx">v_pre</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The point cloud is no longer distorting in non-linear ways.
+That&#39;s nice.
+But the separable states aren&#39;t doing what I expected: they&#39;re making a line across the center.
+I can&#39;t tell them apart from correlated states anymore.</p>
+
+<p>So much for that idea, let&#39;s trying something else.</p>
+
+<h1>Iteration 5</h1>
+
+<p>One of the defining features of entanglement is that, when you learn something about one involved qubit, your best guess at the state of the other qubit moves towards the surface of the Bloch sphere.
+The state gets purer.
+The larger the increase in purity is, the more entangled the two qubits were.</p>
+
+<p>So I figured, why not take Iteration 3 and scale each point by the associated increase in purity?</p>
+
+<p>Here&#39;s what that looked like:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-06-visualizing-entanglement/entanglement-display-iter5.gif"/></p>
+
+<p>And pseudo-code:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">function</span> <span class="nx">second_qubit_point_given_first_purity_scaled</span><span class="p">(</span><span class="nx">two_qubit_density</span><span class="p">,</span> <span class="nx">required_1st_qubit_amps</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">projected_density</span> <span class="o">=</span> <span class="nx">density_given_1st_qubit</span><span class="p">(</span><span class="nx">two_qubit_density</span><span class="p">,</span> <span class="nx">required_1st_qubit_amps</span><span class="p">).</span><span class="nx">density</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">v_pre</span> <span class="o">=</span> <span class="nx">bloch_vector_of_2nd_qubit</span><span class="p">(</span><span class="nx">two_qubit_density</span><span class="p">);</span>
+    <span class="kd">let</span> <span class="nx">v_post</span> <span class="o">=</span> <span class="nx">bloch_vector_of_2nd_qubit</span><span class="p">(</span><span class="nx">projected_density</span><span class="p">);</span>
+
+    <span class="kd">let</span> <span class="nx">purity_pre</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">v_pre</span><span class="p">.</span><span class="nx">norm2</span><span class="p">());</span>
+    <span class="kd">let</span> <span class="nx">purity_post</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">v_post</span><span class="p">.</span><span class="nx">norm2</span><span class="p">());</span>
+    <span class="kd">let</span> <span class="nx">purity_increase</span> <span class="o">=</span> <span class="nx">purity_post</span> <span class="o">-</span> <span class="nx">purity_pre</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="nx">v_post</span> <span class="o">*</span> <span class="nx">purity_increase</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Separable states are points again; that&#39;s good.
+But now there&#39;s even more weird distortions of the point cloud.
+I have no idea what&#39;s going on with the right-most display in the above diagram as its contents approach the center.</p>
+
+<p>Maybe it&#39;s time to go back to iteration 3.</p>
+
+<h1>Iteration 6</h1>
+
+<p>Iterations 4 and 5 convinced me that my attempts to make the display more symmetric were misguided.
+Instead of sacrificing useful visual stuff at the altar of symmetry, I decided to embrace the asymmetry.</p>
+
+<p>We&#39;re iterating over possible states of qubit #2 to see how they affect qubit #1.
+This is very much like qubit #2 is controlling the display of qubit #1.
+Let&#39;s take that analogy seriously: instead of drawing a big sphere covering both wires, draw the sphere only over qubit #1 and connect it to a &quot;for all control&quot; on qubit #2.</p>
+
+<p>I also did some more polishing of the display.
+In particular, I made the points corresponding to the states along the X/Y/Z axes stand out by coloring and labelling them and connecting them to the center with a line.</p>
+
+<p>I think the result looks pretty good:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-06-visualizing-entanglement/entanglement-display-iter6.gif"/></p>
+
+<p>Seperable states, correlated states, and entangled states are all easy to tell apart.
+When the system is fully entangled, the labelled axes act like the original rotation idea.
+When the system is in some weird intermediate state, the shape of the cloud gives at least some idea of what&#39;s going on.
+With a bit more polish, I could see actually adding this to Quirk.</p>
+
+<p>Of course there are still problems.
+For example, because the display only covers one wire now, I had to scale down the size of the sphere.
+There&#39;s really not enough space for the amount of detail being drawn.</p>
+
+<p>The computational cost of the display is also problematic.
+The dev version of Quirk I hacked this into starts to chug pretty hard if I add ten of these displays to a circuit.
+I would need do the computations, and maybe the drawing, on the GPU before I considered really adding this display to Quirk.</p>
+
+<p>Finally, it&#39;s bad UX to introduce the concept of a &quot;for-all&quot; control when it only combines with the Bloch sphere display.
+I would want the for-all control to do useful things with other gates as well.</p>
+
+<h1>Closing Remarks</h1>
+
+<p>Pure 2-qubit entangled states are like rotations, and can be represented reasonably well as such.</p>
+
+<p>Mixed 2-qubit states are harder to represent, but a point cloud corresponding to the various things one qubit can tell you about the other looks pretty cool.</p>
+
+<p>I didn&#39;t find any properly symmetric ways to represent entanglement.</p>
+
+<p>You can play with these displays by fetching and building <a href="https://github.com/Strilanc/Quirk/tree/dev-entanglement-display">the dev-entanglement-display branch from Quirk&#39;s repo</a>.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1715">&laquo; My Second Paper: A Slightly Smaller Surface Code S Gate</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
