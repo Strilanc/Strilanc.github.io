@@ -324,3 +324,5 @@ Mixed 2-qubit states are harder to represent, but a point cloud corresponding to
 I didn't find any properly symmetric ways to represent entanglement.
 
 You can play with these displays by fetching and building [the dev-entanglement-display branch from Quirk's repo](https://github.com/Strilanc/Quirk/tree/dev-entanglement-display).
+
+[Discuss on reddit](https://www.reddit.com/r/algassert/comments/6s1piz/comment_thread_visualizing_2qubit_entanglement/)

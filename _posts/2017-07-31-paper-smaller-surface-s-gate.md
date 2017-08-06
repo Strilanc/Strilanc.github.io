@@ -56,3 +56,5 @@ It took all of half of a page.
 Austin didn't find the extreme brevity as funny as I did, unfortunately.
 He fleshed out the paper with some justification, a more appropriate set of references, and some follow-up diagrams.
 The result is now on the arXiv as: ["A slightly smaller surface code S gate"](https://arxiv.org/abs/1708.00054).
+
+[Discuss on reddit](https://www.reddit.com/r/algassert/comments/6s1pcs/comment_thread_my_second_paper_a_slightly_smaller/)
