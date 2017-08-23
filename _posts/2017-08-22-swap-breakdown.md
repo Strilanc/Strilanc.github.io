@@ -148,7 +148,10 @@ I'll be referring to the operation performed by the tilde operator as the "contr
 
 To be mathematically precise, I define the control-product of two commuting unitary operations $A$ and $B$ to be $A \sim B = \exp(-\frac{i}{\pi} \ln(A) \cdot \ln(B))$.
 (*Side note for physicists: Yes, I'm just multiplying the Hamiltonians together.*)
-We can sanity-check this abstract definition by verifying that the CNOT operation's matrix is in fact the control-product of phase-flipping the control and toggling the target:
+Interestingly, even though we started with an asymmetric concept (one operation controlling another), the math ended up symmetric (i.e. associative).
+You can think of either operation as being "the control" of the other.
+
+We can sanity-check the control-product definition by verifying that the CNOT operation's matrix is in fact the control-product of phase-flipping the control and toggling the target:
 
 ```python
 from scipy.linalg import expm, logm
@@ -176,10 +179,6 @@ print(CNOT.round().astype(int))
 ```
 
 Yup, that's the matrix of a CNOT!
-
-(*Side note: The control-product may be abstract, i.e. it doesn't give us a concrete circuit to perform the operation with, but it's a big step up from hand-wavy wording like "combines the way controls do".
-For example, it gives a very compact way to specify phase estimation.
-An $n$-qubit phase estimation applied to the operation $M$ is the operation $(\text{Increment}\_n \sim M)^{2^n}$.*)
 
 Now let's write our xor-swapping algorithm down, but in the language of the control product.
 It's pretty simple: the operations that xor-swapping applies are $Z\_1 \sim X\_2$ then $X\_1 \sim Z\_2$ then $Z\_1 \sim X\_2$.
@@ -255,7 +254,7 @@ But we're not done generalizing yet!
 
 What happens if we apply axis-swapping, but don't use the same axes for each qubit?
 For example, suppose we use the $X$ and $Z$ axes on qubit 1 but use the $Z$ and $Y$ axes on qubit 2?
-That is to say: we apply $X\_1 \sim Y\_2$ then $Z\_2 \sim Z\_2$ then $X\_1 \sim Y\_2$.
+That is to say: we apply $X\_1 \sim Y\_2$ then $Z\_1 \sim Z\_2$ then $X\_1 \sim Y\_2$.
 What happens?
 
 What happens is that the two qubits get swapped, but they also get rotated.
@@ -323,10 +322,10 @@ Anytime our parameters leave the $[-\frac{1}{2}, \frac{1}{2}]$ range, we can mak
 
 If we want to perform a swap based on the non-local decomposition, we need to know how to implement operations like $(Z\_1 Z\_2)^z$.
 What the $(Z\_1 Z\_2)^z$ operation does is leave the $|00\rangle$ and $|11\rangle$ states alone, but phase the amplitudes of the $|01\rangle$ and $|10\rangle$ states by $(-1)^z$.
-That's why I call it a Z-parity-phasing operation.
 When the two qubits agree on Z-value, nothing happens.
 When they disagree, that part of the superposition gets phased.
 It's the agreement-vs-disagreement of the two qubits, i.e. their parity, that controls the phasing.
+That's why I call it a Z-parity-phasing operation.
 
 A simple way to compute this effect is to use a CNOT to compute the parity, apply a $Z^z$ operation to the qubit storing the parity, then uncompute the parity.
 Another way to compute the effect is to apply a $Z^{z}$ operation to each qubit, then correct the fact that we phased the $|11\rangle$ state by $Z^{2z}$ with a controlled operation in the opposite direction.
@@ -334,7 +333,7 @@ Both are equivalent to the desired operation:
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/zz-op.png"/>
 
-By creating analogous circuits for the XX and YY interactions, then chaining all three axis-parity effects together, we get a swapping circuit that looks qualitatively different from xor-swapping:
+By creating analogous circuits for the XX and YY interactions, then chaining all three axis-parity effects together, we get a swapping circuit that at least *looks* qualitatively different from xor-swapping:
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/xyz-swap.png"/>
 
@@ -357,14 +356,14 @@ Z-axis interactions still move to the other wire when the Z part of an XYZ swap 
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/yz-z-swap.png"/>
 
-However, moving an X-axis interaction across a swap with only its XY part *doesn't* work.
+However, moving an **X-axis** interaction across a swap with only its XY part *doesn't* work.
 For that to work, we need the Y part and the Z part; the X part doesn't matter to X axis interactions.
 
 In other words, as far as *moving operations* is concerned, we can specialize an XYZ swap to a specific axis by dropping the part of the XYZ swap corresponding to that axis.
 Operations along that axis will still get moved to the other wire when you pass them through the reduced swap.
 
 There's another interesting specialization that occurs when we drop even more of the swap.
-If we drop one of the axis interactions, and then drop all of the single-qubit gates, we're left with something like $X\_1 \tilde X\_2$ then $Z\_1 \tilde Z\_2$:
+If we drop one of the axis interactions, and then drop all of the single-qubit gates, we end up with an operation like $Z\_1 \sim Z\_2$ then $X\_1 \sim X\_2$:
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/one-way-axis-swap.png"/>
 
@@ -380,7 +379,7 @@ But now I'm in danger of retreading information on xor-swapping, so I'll leave f
 
 What if the two qubits you want to swap aren't next to each other?
 
-Well, if there's a path between them then you can swap one towards the other until they're adjacent, do the important swap, then move the other one back.
+Well, if there's a path of connected qubits between them then you can swap one towards the other until they're adjacent, do the important swap, then return to the starting position.
 Break the swap chain down into CNOTs, and you get this:
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/path-swap.png"/>
