@@ -29,6 +29,14 @@ When it comes to visualizing... eeehhhhhh...
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/entanglement-display-iter0.gif"/>
 
+The left-most display is showing the density matrix for the $|00\rangle$ state.
+The next display is showing the $|+0\rangle$ state.
+The third display is showing an entangled state that's been (temporarily) decohered; it's observationally equivalent to a 50% chance of the $|00\rangle$ state plus a 50% chance of the $|11\rangle$ state.
+The state is recohered for the fourth display, which is showing the entangled state $\frac{1}{\sqrt{2}} (|00\rangle + |11\rangle)$.
+Next we have a dynamic gate that is constantly changing what it does, so we can see what the display would show for various amounts of rotation of the first qubit around the X axis.
+Finally, we have some more dynamic operations.
+This time they're controlled, and gradually disentangle and decohere (then re-entangle and recohere) the state so we can see what that transition looks like.
+
 With practice you can learn to eyeball information from these density matrix displays, like "if it's spread out along the main diagonal and the off-diagonal terms go away, the system is not coherent".
 But, in general, this is tricky to do.
 For example, it's hard to tell at a glance how strongly the two qubits are entangled.
