@@ -187,7 +187,7 @@ That's it.
 
 To be safe, we should check that multiplying those operations together returns the correct matrix:
 
-```
+```python
 Z1 = kron(Z, I)
 Z2 = kron(I, Z)
 X1 = kron(X, I)
@@ -214,7 +214,7 @@ The underlying math is independent of our naming conventions, so this alternatin
 
 Just to be sure, we can test in python if using X and Y instead of Z and X works:
 
-```
+```python
 Y = mat([[0, -1j],
          [1j, 0]])
 Y1 = kron(Y, I)
@@ -404,8 +404,8 @@ Here's what [the circuit to do that looks like](http://algassert.com/quirk#circu
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/tele-swap.png"/>
 
-I would go into detail about how this works, but honestly this post is already way too long.
-I've said everything I want to say.
+I would go into detail about how this works, but honestly it's just two quantum teleportations shoved together and this post is already way too long.
+I think I've said enough for today.
 
 
 # Summary
