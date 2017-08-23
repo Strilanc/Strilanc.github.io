@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Breaking Down the Quantum Swap</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Breaking Down the Quantum Swap</h1>
+<p class="meta">22 Aug 2017</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Suppose you have two qubits.
+For evocative purposes, suppose you&#39;re literally holding them as <a href="https://en.wikipedia.org/wiki/Bloch_sphere">balls</a> in your hands: one in the left hand, and one in the right hand.
+Your goal is to swap the qubits, so that your right hand ends up holding a qubit storing the state of the qubit currently in your left hand (and vice versa).
+How do you do it?</p>
+
+<p><img style="max-width:100%;" src="/assets/2017-08-22-swap-breakdown/hand-qubits.jpg"/></p>
+
+<p>Okay okay, that&#39;s not very hard.
+Obviously you can just physically move the qubits between your hands.
+Put one qubit down, pass the other qubit to the opposite hand, then pick up the qubit you put down.</p>
+
+<p>But what if they were glued to your hands?</p>
+
+<p>That sounds funny, but it&#39;s not intended as a joke.
+In practice, it&#39;s not always possible to physically move qubits.
+For example, your qubits might be etched onto a circuit board hidden away inside a dilution refrigerator.
+You&#39;re going to have a bit of trouble moving those around.</p>
+
+<p>Even if you can&#39;t literally physically swap the two qubits, it&#39;s still possible to swap their states.
+As long as you have the right operations available.
+For example, if I allow you to apply Hadamard gates (a single-qubit operation that rotates 180 degrees around the diagonal X+Z axis, transitioning the $|0\rangle$ state to the state $\frac{1}{\sqrt{2}}|0\rangle + \frac{1}{\sqrt{2}}|1\rangle$ and the $|1\rangle$ state to the state $\frac{1}{\sqrt{2}}|0\rangle - \frac{1}{\sqrt{2}}|1\rangle$) and Controlled-Z gates (a two-qubit interaction that negates the amplitude of the $|11\rangle$ state), then there is a series of operations you can do to swap the states of the qubits.</p>
+
+<p>We&#39;ll get to that specific case in a bit.
+The point is that, in this post, we&#39;re talking about swaps.
+We&#39;ll cover a few ways to do swaps, how to generalize swaps, and how to specialize swaps.</p>
+
+<h1>Bit Twiddling and Xor-Swapping</h1>
+
+<p>One of my favorite websites is <a href="https://graphics.stanford.edu/%7Eseander/bithacks.html">Bit Twiddling Hacks</a>.
+It&#39;s a bunch of low-level programming tricks for computing simple functions in few operations, and it&#39;s <em>fantastic</em>.
+For example, do you need to count the number of one-bits in a 32 bit register?
+It&#39;s possible to do so in 12 ops, and that site will show you how.</p>
+
+<p>One of the bit twiddling tasks on the site is &quot;swap two variables without using any extra space for a temporary variable&quot;.
+That is to say, rewrite the following code so that it operates only on <code>a</code> and <code>b</code> without using a temporary <code>t</code>:</p>
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span></span><span class="cp"># swap a, b using temporary t</span>
+<span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+</code></pre></div>
+<p>(No, using a language that lets you write <code>a, b = b, a</code> doesn&#39;t count as a solution.)</p>
+
+<p>One solution to this problem, covered by the Bit Twiddling Hacks site, is called <a href="https://en.wikipedia.org/wiki/XOR_swap_algorithm">&quot;xor-swapping&quot;</a>.
+You just xor-assign the two variables back and forth and back, and they end up swapped:</p>
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span></span><span class="cp"># swap a, b</span>
+<span class="n">a</span> <span class="o">^=</span> <span class="n">b</span>
+<span class="n">b</span> <span class="o">^=</span> <span class="n">a</span>
+<span class="n">a</span> <span class="o">^=</span> <span class="n">b</span>
+</code></pre></div>
+<p>To really see why this works, I recommend doing a few examples by hand.
+For our purposes here in this post, the interesting thing about xor-swapping is that it only uses reversible operations.
+Which means it will work on qubits.</p>
+
+<p>The statement <code>a ^= b</code> means &quot;for each bit position, if the bit at that position in <code>b</code> is on then toggle that bit in <code>a</code>&quot;.
+There is a quantum equivalent of this &quot;if <code>b</code> then toggle <code>a</code>&quot; operation: the <a href="https://en.wikipedia.org/wiki/Controlled_NOT_gate">Controlled-Not</a> (&quot;CNOT&quot;) gate.
+Thanks to the CNOT, we can implement a xor-swap on a quantum computer.
+All we need to do is chain three CNOTs back and forth:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-22-swap-breakdown/xor-swap.png"/></p>
+
+<p>Let&#39;s go through the four basis cases to see why this works:</p>
+
+<ul>
+<li>$|00\rangle$: Desired output is $|00\rangle$.
+
+<ol>
+<li>The first CNOT&#39;s control is <strong>not</strong> satisfied. We stay in the state $|00\rangle$.</li>
+<li>The middle CNOT&#39;s control is <strong>not</strong> satisfied. We stay in the state $|00\rangle$.</li>
+<li>The final CNOT&#39;s control is <strong>not</strong> satisfied. We stay in the state $|00\rangle$.
+Correct.</li>
+</ol></li>
+<li>$|01\rangle$: Desired output is $|10\rangle$.
+
+<ol>
+<li>The first CNOT&#39;s control is <strong>not</strong> satisfied. We stay in the state $|10\rangle$.</li>
+<li>The middle CNOT&#39;s control is satisfied. The bottom qubit gets toggled. We transition to the state $|11\rangle$.</li>
+<li>The final CNOT&#39;s control is satisfied. The top qubit gets toggled. We transition to the state $|10\rangle$.
+Correct.</li>
+</ol></li>
+<li>$|10\rangle$: Desired output is $|01\rangle$.
+
+<ol>
+<li>The first CNOT&#39;s control is satisfied. The top qubit gets toggled. We transition to the state $|11\rangle$.</li>
+<li>The middle CNOT&#39;s control is satisfied. The bottom qubit gets toggled. We transition to the state $|01\rangle$.</li>
+<li>The final CNOT&#39;s control is <strong>not</strong> satisfied. We stay in the state $|01\rangle$.
+Correct.</li>
+</ol></li>
+<li>$|11\rangle$: Desired output is $|11\rangle$.
+
+<ol>
+<li>The first CNOT&#39;s control is satisfied. The top qubit gets toggled. We transition to the state $|10\rangle$.</li>
+<li>The middle CNOT&#39;s control is <strong>not</strong> satisfied. We stay in the state $|10\rangle$.</li>
+<li>The final CNOT&#39;s control is satisfied. The first qubit gets toggled. We return to the state $|11\rangle$.
+Correct.</li>
+</ol></li>
+</ul>
+
+<p>So all four classical cases work.
+But what about the quantum cases?
+The qubits could be in superposition, entangled with other qubits, entangled with each other, etc.
+For example, the state $\frac{1}{\sqrt{2}}|0\rangle + \frac{1}{\sqrt{2}}|1\rangle$ is unaffected by NOT gates.
+Couldn&#39;t initializing the bottom qubit to that state prevent the first CNOT from achieving its purpose, thereby ruining the swap?</p>
+
+<p>The short answer to this worry is a rule of thumb: quantum mechanics is <em>linear</em>, so if it works for the basis states then it works for every state.
+There are exceptions to this rule, but only for circuits involving extra work qubits (e.g. the <a href="https://www.quora.com/What-is-phase-kickback-and-how-does-it-occur">phase kickback</a> used in Shor&#39;s algorithm).
+Our circuit has no extra qubits, so we&#39;re fine.</p>
+
+<h1>Xor-Swapping with Hadamards and CZs</h1>
+
+<p>We now know how to swap two qubits by applying CNOT gates to them.
+If we don&#39;t have CNOTs available as a basic gate, we can still use this strategy.
+We just need to build the CNOTs out of our available gates.
+For example, the gate set I mentioned at the start of this post (CZ+H) doesn&#39;t include a CNOT, but it&#39;s still possible to build a circuit equivalent to a CNOT.</p>
+
+<p>Take a CZ gate, and apply a Hadamard before/after the gate on one of the qubits.
+The net effect is a CNOT, with the Hadamard-framed qubit as the target:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-22-swap-breakdown/h-cz-swap.png"/></p>
+
+<p>Why does this work?
+It has to do with the reason that, in quantum computing, we call the NOT gate &quot;X&quot; and the phase-flip gate &quot;Z&quot;.</p>
+
+<p>The Hadamard operation is a 180 degree rotation around the X+Z axis of the Bloch sphere.
+If you have a state along the X-axis of the Bloch sphere (e.g. $|X^{\text{on}}\rangle = \frac{1}{\sqrt{2}}|0\rangle - \frac{1}{\sqrt{2}}|1\rangle$), the Hadamard operation will rotate that state to a state along the Z axis (i.e. $|Z^{\text{on}}\rangle = |1\rangle$).
+Analogously, the Hadamard will rotate Z-axis states onto the X-axis.
+For this reason, framing an operation with Hadamards converts any interactions along the Z-axis into interactions along the X-axis, and vice versa.
+The NOT gate is an X-axis interaction, the phase-flip gate is a Z-axis interaction, and so Hadamard operations turn one into the other.</p>
+
+<p>For more discussion of this &quot;NOT as X-interaction&quot; stuff see the post <a href="/post/1706">&quot;Thinking of Operations as Controls&quot;</a>, but I&#39;ll cover a bit here.
+Basically, a CZ gate can be thought of as meaning &quot;when qubit $C$ is Z-on, negate the amplitude of the Z-on state of qubit $T$&quot;.
+In that same language, a CNOT gate means &quot;when qubit $C$ is Z-on, negate the amplitude of the X-on state of qubit $T$&quot;.
+Or, by speaking at the level of the whole system, we can say that the CZ gate means &quot;negate the amplitude of the $|Z_1^{\text{on}} Z_2^{\text{on}}\rangle = |11\rangle$ state&quot; whereas the CNOT gate means &quot;negate the amplitude of the $|Z_1^{\text{on}} X_2^{\text{on}}\rangle = \frac{1}{\sqrt{2}}|10\rangle - \frac{1}{\sqrt{2}}|11\rangle$ state&quot;.
+That&#39;s why framing one qubit of a CZ with Hadamards turns the CZ into a CNOT.</p>
+
+<p>Now let&#39;s think about axes besides X and Z.</p>
+
+<h1>Generalizing Xor-Swapping into Axis-Swapping</h1>
+
+<p>The CNOT operation negates the amplitude of the state $|Z_1^{\text{on}} X_2^{\text{on}}\rangle$, and leaves perpendicular states alone.
+As a suggestive shorthand, I&#39;m going to write the CNOT operation as the expression $\text{CNOT}_{1 \rightarrow 2} = Z_1 \sim X_2$.
+The tilde is notation I just made up for this post; it means &quot;combined in the way that makes one control the other&quot;.
+I&#39;ll be referring to the operation performed by the tilde operator as the &quot;control-product&quot;.</p>
+
+<p>To be mathematically precise, I define the control-product of two commuting unitary operations $A$ and $B$ to be $A \sim B = \exp(-\frac{i}{\pi} \ln(A) \cdot \ln(B))$.
+(<em>Side note for physicists: Yes, I&#39;m just multiplying the Hamiltonians together.</em>)
+Interestingly, even though we started with an asymmetric concept (one operation controlling another), the math ended up symmetric (i.e. associative).
+You can think of either operation as being &quot;the control&quot; of the other.</p>
+
+<p>We can sanity-check the control-product definition by verifying that the CNOT operation&#39;s matrix is in fact the control-product of phase-flipping the control and toggling the target:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">expm</span><span class="p">,</span> <span class="n">logm</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">mat</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">kron</span><span class="p">,</span> <span class="n">eye</span>
+
+<span class="k">def</span> <span class="nf">control_product</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
+    <span class="c1"># Note: A and B must commute.</span>
+    <span class="k">return</span> <span class="n">expm</span><span class="p">(</span><span class="mi">1j</span><span class="o">/</span><span class="n">pi</span> <span class="o">*</span> <span class="n">logm</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">logm</span><span class="p">(</span><span class="n">B</span><span class="p">)))</span>
+
+<span class="n">I</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">mat</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+         <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">mat</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+         <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+
+<span class="n">Z1</span> <span class="o">=</span> <span class="n">kron</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">I</span><span class="p">)</span>
+<span class="n">X2</span> <span class="o">=</span> <span class="n">kron</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+<span class="n">CNOT</span> <span class="o">=</span> <span class="n">control_product</span><span class="p">(</span><span class="n">Z1</span><span class="p">,</span> <span class="n">X2</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">CNOT</span><span class="o">.</span><span class="n">round</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+<span class="c1"># [[1 0 0 0]</span>
+<span class="c1">#  [0 1 0 0]</span>
+<span class="c1">#  [0 0 0 1]</span>
+<span class="c1">#  [0 0 1 0]]</span>
+</code></pre></div>
+<p>Yup, that&#39;s the matrix of a CNOT!</p>
+
+<p>Now let&#39;s write our xor-swapping algorithm down, but in the language of the control product.
+It&#39;s pretty simple: the operations that xor-swapping applies are $Z_1 \sim X_2$ then $X_1 \sim Z_2$ then $Z_1 \sim X_2$.
+(Notice the alternating back-and-forth pattern.)
+That&#39;s it.</p>
+
+<p>To be safe, we should check that multiplying those operations together returns the correct matrix:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>Z1 = kron(Z, I)
+Z2 = kron(I, Z)
+X1 = kron(X, I)
+X2 = kron(I, X)
+Swap = control_product(Z1, X2).dot(
+    control_product(X1, Z2)).dot(
+    control_product(Z1, X2))
+
+print(Swap.round().astype(int))
+# [[1 0 0 0]
+#  [0 0 1 0]
+#  [0 1 0 0]
+#  [0 0 0 1]]
+</code></pre></div>
+<p>Yup, that&#39;s the swap matrix.</p>
+
+<p>A natural question to ask here is: what happens if we use this alternating pattern on other axes of the qubit?
+Is xor-swapping specific to the X and Z axes, or does it work more generally?</p>
+
+<p>Well... clearly it can&#39;t be specific to those two axes.
+The fact that we call one particular axis the Z axis (or &quot;the computational basis&quot;) is just an arbitrary convention; a coordinate system.
+The underlying math is independent of our naming conventions, so this alternating technique must work in some sense no matter which axis we use.</p>
+
+<p>Just to be sure, we can test in python if using X and Y instead of Z and X works:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>Y = mat([[0, -1j],
+         [1j, 0]])
+Y1 = kron(Y, I)
+Y2 = kron(I, Y)
+
+SwapXY = control_product(X1, Y2).dot(
+    control_product(Y1, X2)).dot(
+    control_product(X1, Y2))
+
+print(SwapXY.round().astype(int))
+# [[1 0 0 0]
+#  [0 0 1 0]
+#  [0 1 0 0]
+#  [0 0 0 1]]
+</code></pre></div>
+<p>Yup.</p>
+
+<p>We can also test this in Quirk, <a href="http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22X%5Et%22%5D%2C%5B%22Bloch%22%2C%22Bloch%22%5D%2C%5B%22Y%22%2C%22%E2%8A%96%22%5D%2C%5B%22%E2%8A%96%22%2C%22Y%22%5D%2C%5B%22Y%22%2C%22%E2%8A%96%22%5D%2C%5B%22Bloch%22%2C%22Bloch%22%5D%5D%7D">which has support for X-axis and Y-axis controls</a>:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-22-swap-breakdown/axis-swap.png"/></p>
+
+<p>Based on these quick tests, it would be reasonable to conclude that the alternating-control-product-interactions trick will perform a swap regardless of which axis pair we pick.
+However, there are some exceptions.
+In particular, if we pick two axes that aren&#39;t perpendicular to each other (e.g. X and the diagonal X+Z), then the swap doesn&#39;t work correctly.</p>
+
+<p>The reason we need to use perpendicular axes comes down to the fact that the observables for those axes anti-commute.
+In some fundamental sense that I&#39;m not going to try to explain, pairing the $X$ axis with the $Z$ axis works because their axis-flip operations $X=\bimat{0}{1}{1}{0}$ and $Z=\bimat{1}{0}{0}{-1}$ have an anti-commutator $\{X, Z\}$ that satisfies $\{X, Z\} = XZ + ZX = 0$ (i.e. we have $XZ = -ZX$).</p>
+
+<p>Generally speaking, if the axis-flip operations $A$ and $B$ satisfy ${A, B} = 0$, then the operation $\text{AXIS_SWAP}^{A, B}_{i, j} = (A_i \sim B_j) \cdot (B_i \sim A_j) \cdot (A_i \sim B_j)$ is a swap operation between qubit $i$ and qubit $j$.</p>
+
+<p>We&#39;ve generalized from Xor-Swapping with CNOTs to a construction that can swap two qubits by back-and-forth interacting two qubits along any perpendicular pair of axes.
+But we&#39;re not done generalizing yet!</p>
+
+<h1>Generalizing Axis-Swapping into Observable-Swapping</h1>
+
+<p>What happens if we apply axis-swapping, but don&#39;t use the same axes for each qubit?
+For example, suppose we use the $X$ and $Z$ axes on qubit 1 but use the $Z$ and $Y$ axes on qubit 2?
+That is to say: we apply $X_1 \sim Y_2$ then $Z_1 \sim Z_2$ then $X_1 \sim Y_2$.
+What happens?</p>
+
+<p>What happens is that the two qubits get swapped, but they also get rotated.
+If the first qubit had a state pointing along the $X$ axis, then once that state arrives on the second qubit it will be pointing along the $Z$ axis.
+Correspondingly, a $Z$-state on the second qubit will become an $X$-state on the first qubit.
+Instead of swapping $X_1$ for $X_2$, we&#39;re swapping $X_1$ for $Z_2$!
+(Also, we&#39;re swapping $Z_1$ for $Y_2$).</p>
+
+<p>This suggests a way to define a more general swap operation.
+Given two pairs of observables, $(A_1, A_2)$ and $(B_1, B_2)$, if each pair anti-commutes (i.e. $\{ A_1, A_2 \} = 0$ and $\{ B_1, B_2 \} = 0$) and is independent of the other pair (i.e. their commutator $[A_k, B_k] = A_k B_k + B_k A_k$ satisfies $[A_k, B_k] = 0$), then:</p>
+
+<p>$$\text{SWAP}^{A_1, A_2}_{B_1, B_2} = (A_1 \sim B_2) \cdot (A_2 \sim B_1) \cdot (A_1 \sim B_2)$$</p>
+
+<p>is an operation that exchanges states along $A_1$ for states along $B_1$, and states along $A_2$ for states along $B_2$.</p>
+
+<p>The amazing thing about this generalized definition is that it works for <em>any</em> observables.
+We can apply it to qubit axes, but we can also apply it to complicated multi-qubit properties.
+As long as $A_1$, $A_2$, $B_1$, and $B_2$ satisfy the correct commutation and anti-commutation relations, it&#39;ll work.</p>
+
+<p>To demonstrate what that means, let&#39;s do an example.
+For $A_1$ and $A_2$ we will use the $Z$ and $X$ axes of qubit #1.
+But, for $B_1$ and $B_2$, we will use observables involving many qubits.
+Specifically, $B_1$ will be the $Z$-axis parity of qubits #2, #3, #4, and #5.
+(You measure this observable by preparing a target qubit in the $|0\rangle$ state, CNOT-ing each of the qubits into the target, then measuring the target.)
+$B_2$ will also be defined as the parity of several qubits, but it will be an X-axis parity and it will not use the same set of qubits.
+$B_2$ will be the X-axis parity of qubits #2, #4, #5, #6, and #7.</p>
+
+<p>If you know how, you should check that the observables $A_1 = Z_1$ and $A_2 = X_1$ and $B_1 = Z_2 \cdot Z_3 \cdot Z_4 \cdot Z_5$ and $B_2 = X_2 \cdot X_4 \cdot X_5 \cdot X_6 \cdot X_7$ have the correct commutation and anti-commutation relationships.
+Based on that being correct, we can implement the $\text{SWAP}^{Z_1, \; X_1}_{Z_2 \cdot Z_3 \cdot Z_4 \cdot Z_5, \; X_2 \cdot X_4 \cdot X_5 \cdot X_6 \cdot X_7}$ operation like this:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-22-swap-breakdown/obs-swap.png"/></p>
+
+<p>We can check that this is actually working by moving a qubit into the big parity observables, then retrieving it.
+This should work even if we put all kinds of junk into the qubits used to define the parities.
+Here&#39;s what that looks like when simulated in Quirk:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-22-swap-breakdown/obs-move-through-noise.gif"/></p>
+
+<p>Notice how the Bloch sphere display in the bottom right matches the display in the top left as it rotates around?
+That&#39;s because the qubit state from the top is being  swapped into the middle and then into the bottom.
+(Even though the middle we passed it through is going kinda nuts.
+Actually, if you look closely, you can see at the end that we left some holes behind in the middle.)</p>
+
+<p>This is pretty neat!
+We started with a single simple qubit, then moved its value into some big complicated observables amongst a bunch of junk, then managed to retrieve the value!
+This demonstrates a very important lesson: <em>any pair of anticommuting observables can store a qubit</em>.
+This fact is key to understanding many error correcting codes, which spread a single logical qubit over many physical qubits.
+And we can use the definition of our generalized swap operation to move qubits into, between, and out of these big complicated anticommuting observables.</p>
+
+<p>Whew, I think we&#39;ve generalized xor-swapping enough for one day!
+Let&#39;s look at a totally different approach to swapping.</p>
+
+<h1>XYZ Swapping</h1>
+
+<p>It is a fact that any two-qubit operation can be decomposed into local single-qubit parts and one non-local operation of the form $\exp(i \pi (x X_1 X_2 + y Y_1 Y_2 + z Z_1 Z_2))$.
+Equivalently, we can split the non-local part of the operation into three commuting parts: an X-parity-phasing part $(X_1 X_2)^x$, a Y-parity-phasing part $(Y_1 Y_2)^y$, and a Z-parity-phasing part $(Z_1 Z_2)^z$.
+The size of the numbers $x$, $y$, and $z$ gives a measure for &quot;how non-local&quot; an operation is.</p>
+
+<p>For the swap operation, the non-local parameters are $x=y=z=\frac{1}{2}$.
+Interestingly, this is the most non-local an operation can get.
+If we follow-up the swap with another operation, the &quot;size&quot; of the parameters can only get smaller.
+That&#39;s because, for example, once $z$ goes past the half-way mark it starts getting closer to the operation $(Z_1 Z_2)^1 = Z_1 Z_2$ (which is local).
+Anytime our parameters leave the $[-\frac{1}{2}, \frac{1}{2}]$ range, we can make their magnitude smaller by applying a $\pm 1$ offset to them with local operations.</p>
+
+<p>If we want to perform a swap based on the non-local decomposition, we need to know how to implement operations like $(Z_1 Z_2)^z$.
+What the $(Z_1 Z_2)^z$ operation does is leave the $|00\rangle$ and $|11\rangle$ states alone, but phase the amplitudes of the $|01\rangle$ and $|10\rangle$ states by $(-1)^z$.
+When the two qubits agree on Z-value, nothing happens.
+When they disagree, that part of the superposition gets phased.
+It&#39;s the agreement-vs-disagreement of the two qubits, i.e. their parity, that controls the phasing.
+That&#39;s why I call it a Z-parity-phasing operation.</p>
+
+<p>A simple way to compute this effect is to use a CNOT to compute the parity, apply a $Z^z$ operation to the qubit storing the parity, then uncompute the parity.
+Another way to compute the effect is to apply a $Z^{z}$ operation to each qubit, then correct the fact that we phased the $|11\rangle$ state by $Z^{2z}$ with a controlled operation in the opposite direction.
+Both are equivalent to the desired operation:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-22-swap-breakdown/zz-op.png"/></p>
+
+<p>By creating analogous circuits for the XX and YY interactions, then chaining all three axis-parity effects together, we get a swapping circuit that at least <em>looks</em> qualitatively different from xor-swapping:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-22-swap-breakdown/xyz-swap.png"/></p>
+
+<p>The X, Y, and Z parts can be placed in any order.
+As long as the single-qubit gates are adjacent to the 2-qubit gate with a corresponding axis, it&#39;ll work.</p>
+
+<p>Note that the XYZ construction above is correct up to global phase (the RHS of the above diagram has an addition global phase factor of $i$).
+If you want to apply a controlled-swap, this causes phase kickback that has to be corrected (e.g. with an $S^\dagger$ gate on the control).</p>
+
+<h1>Specializing the XYZ Swap</h1>
+
+<p>Consider that Z-axis interactions commute with the Z-parity part of the XYZ swap construction:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-22-swap-breakdown/xyz-z-commute.png"/></p>
+
+<p>This means that the thing that moves the Z-axis interaction from one wire to the other must be just the XY part.
+So, if we happen to be in a situation where we only have the XY part of an XYZ swap, it&#39;s still possible to move Z-axis operations across.
+Z-axis interactions still move to the other wire when the Z part of an XYZ swap is missing:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-22-swap-breakdown/yz-z-swap.png"/></p>
+
+<p>However, moving an <strong>X-axis</strong> interaction across a swap with only its XY part <em>doesn&#39;t</em> work.
+For that to work, we need the Y part and the Z part; the X part doesn&#39;t matter to X axis interactions.</p>
+
+<p>In other words, as far as <em>moving operations</em> is concerned, we can specialize an XYZ swap to a specific axis by dropping the part of the XYZ swap corresponding to that axis.
+Operations along that axis will still get moved to the other wire when you pass them through the reduced swap.</p>
+
+<p>There&#39;s another interesting specialization that occurs when we drop even more of the swap.
+If we drop one of the axis interactions, and then drop all of the single-qubit gates, we end up with an operation like $Z_1 \sim Z_2$ then $X_1 \sim X_2$:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-22-swap-breakdown/one-way-axis-swap.png"/></p>
+
+<p>The interesting thing about this circuit is that an X axis interaction on one wire after the circuit is equivalent to a Z axis interaction on the other wire before the circuit.
+But the same is not true in reverse.
+You can move Z-axis interactions from left to right over the circuit in a nice way (just swap the wire and switch an X axis interaction), but when you go from right to left complicated stuff happens instead.</p>
+
+<p>This one-way-okay phenomenon is analogous to the fact that removing the first CNOT of a xor-swap will cause the swap to only work properly in one direction.
+But now I&#39;m in danger of retreading information on xor-swapping, so I&#39;ll leave figuring out how the two relate as an exercise for the reader and move on.</p>
+
+<h1>Far-Swap</h1>
+
+<p>What if the two qubits you want to swap aren&#39;t next to each other?</p>
+
+<p>Well, if there&#39;s a path of connected qubits between them then you can swap one towards the other until they&#39;re adjacent, do the important swap, then return to the starting position.
+Break the swap chain down into CNOTs, and you get this:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-22-swap-breakdown/path-swap.png"/></p>
+
+<p>The above construction is not very efficient.
+It has depth $6D + O(1)$, where $D$ is the distance between the two qubits you want to swap.
+We can do much better than that!
+We can cut a factor of 2 by meeting in the middle, and a factor of three by pipelining the intermediate xor-swaps in a clever way.
+The result is a distance-$D$ swap with depth $D + O(1)$:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-22-swap-breakdown/path-swap-pipeline.png"/></p>
+
+<p>Much better.</p>
+
+<p>Although... we are still assuming there&#39;s a path between the two qubits.
+What if that&#39;s not the case?</p>
+
+<p>...Well then you&#39;re pretty well stuck, unless you have some source of shared entanglement.</p>
+
+<p>If you have some mechanism for building up entanglement in your two disconnected components, then you can use that entanglement to swap the two qubits with quantum teleportation.
+Here&#39;s what <a href="http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B1%2C%22H%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22H%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22X%22%5D%2C%5B1%2C1%2C%22X%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%E2%80%A2%22%5D%2C%5B%22X%5Et%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22Y%5Et%22%5D%2C%5B%22Bloch%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22Bloch%22%5D%2C%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22Swap%22%2C%22Swap%22%5D%2C%5B%22Swap%22%2C%22Swap%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22X%22%2C%22%E2%80%A2%22%5D%2C%5B1%2C%22H%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22H%22%5D%2C%5B1%2C%22Measure%22%2C%22Measure%22%2C1%2C1%2C1%2C1%2C1%2C%22Measure%22%2C%22Measure%22%5D%2C%5B1%2C1%2C%22%E2%80%A2%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22X%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22Z%22%5D%2C%5B%22X%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%E2%80%A2%22%5D%2C%5B%22Z%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%E2%80%A2%22%5D%2C%5B%22Bloch%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22Bloch%22%5D%5D%7D">the circuit to do that looks like</a>:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-22-swap-breakdown/tele-swap.png"/></p>
+
+<p>I would go into detail about how this works, but honestly this post is already way too long.
+I&#39;ve said everything I want to say.</p>
+
+<h1>Summary</h1>
+
+<p>There&#39;s more than one way to break down a swap.</p>
+
+<p>Any pair of anti-commuting observables can store a qubit of information.
+You can use observable swapping to store/retrieve that information.</p>
+
+<p>When you remove pieces of a swap, some axis interactions may still switch wires when moving across the swap.</p>
+
+<p>Even qubits isolated into different machines can be swapped, if you can build up entanglement between the two locations.</p>
+
+<p>There&#39;s an awful lot to say about such a basic operation.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1716">&laquo; Visualizing 2-Qubit Entanglement</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
