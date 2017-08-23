@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Breaking Down the Quantum Swap</title>
+                <description>&lt;p&gt;Suppose you have two qubits. For evocative purposes, suppose you&amp;#39;re literally holding them as &lt;a href=&quot;https://en.wikipedia.org/wiki/Bloch_sphere&quot;&gt;balls&lt;/a&gt; in your hands: one in the left hand, and one in the right hand. Your goal is to swap the qubits, so that your right hand ends up holding a qubit storing the state...</description>
+                <pubDate>Tue, 22 Aug 2017 13:10:20 -0700</pubDate>
+                <link>http://algassert.com/post/1717</link>
+                <guid isPermaLink="true">http://algassert.com/post/1717</guid>
+            </item>
+            <item>
                 <title>Visualizing 2-Qubit Entanglement</title>
                 <description>&lt;p&gt;One of the annoying things about quantum computing is that it&amp;#39;s not very amenable to visualization. We do have a great way to draw the state of one qubit, i.e. the &lt;a href=&quot;https://en.wikipedia.org/wiki/Bloch_sphere&quot;&gt;Bloch sphere&lt;/a&gt;, but it doesn&amp;#39;t work very well for more qubits. This makes the Bloch sphere a double-edged...</description>
                 <pubDate>Sun, 06 Aug 2017 13:10:20 -0700</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Wed, 24 May 2017 10:10:10 -0700</pubDate>
                 <link>http://algassert.com/post/1708</link>
                 <guid isPermaLink="true">http://algassert.com/post/1708</guid>
-            </item>
-            <item>
-                <title>Quirk v2.0 - Bowing to Convention</title>
-                <description>&lt;p&gt;Last week I released version 2.0 of my &lt;a href=&quot;https://github.com/Strilanc/Quirk&quot;&gt;open-source&lt;/a&gt; drag-and-drop &lt;a href=&quot;/quirk&quot;&gt;quantum circuit simulator Quirk&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;&lt;a href=&quot;/quirk&quot;&gt;&lt;img style=&quot;max-width:100%;&quot; src=&quot;/assets/2017-05-02-quirk-v2/empty-circuit-full-ui.png&quot;/&gt;&lt;/a&gt;&lt;/p&gt; &lt;p&gt;In this post, in addition to the breaking changes that prompted bumping the major version, I want to talk about events and improvements in the year since the &lt;a href=&quot;/2016/05/22/quirk.html&quot;&gt;previous...</description>
-                <pubDate>Tue, 02 May 2017 13:10:10 -0700</pubDate>
-                <link>http://algassert.com/post/1707</link>
-                <guid isPermaLink="true">http://algassert.com/post/1707</guid>
             </item>
     </channel>
 </rss>
