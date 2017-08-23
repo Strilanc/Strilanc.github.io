@@ -29,6 +29,14 @@ When it comes to visualizing... eeehhhhhh...
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/entanglement-display-iter0.gif"/>
 
+The left-most display is showing the density matrix for the $|00\rangle$ state.
+The next display is showing the $|+0\rangle$ state.
+The third display is showing an entangled state that's been (temporarily) decohered; it's observationally equivalent to a 50% chance of the $|00\rangle$ state plus a 50% chance of the $|11\rangle$ state.
+The state is recohered for the fourth display, which is showing the entangled state $\frac{1}{\sqrt{2}} (|00\rangle + |11\rangle)$.
+Next we have a dynamic gate that is constantly changing what it does, so we can see what the display would show for various amounts of rotation of the first qubit around the X axis.
+Finally, we have some more dynamic operations.
+This time they're controlled, and gradually disentangle and decohere (then re-entangle and recohere) the state so we can see what that transition looks like.
+
 With practice you can learn to eyeball information from these density matrix displays, like "if it's spread out along the main diagonal and the off-diagonal terms go away, the system is not coherent".
 But, in general, this is tricky to do.
 For example, it's hard to tell at a glance how strongly the two qubits are entangled.
@@ -45,11 +53,14 @@ Separable states, on the other hand, will be equal to the matrix $\bimat{1}{0}{0
 By performing a singular value decomposition, you can split any pure 2-qubit state into a combination of the separable case and the entangled case.
 
 Why is it interesting that 2-qubit entanglement is like a 2x2 unitary matrix?
-Because 2x2 unitary matrices are like rotations (i.e. [SU(2)](https://en.wikipedia.org/wiki/Special_unitary_group#n_.3D_2) is isomorphic to [SO(3)](https://en.wikipedia.org/wiki/Rotation_group_SO(3\))).
+Because 2x2 unitary matrices are like rotations (i.e. [SU(2)][1] is isomorphic to [SO(3)][2]).
 It's one of the big reasons that the Bloch sphere works so well to represent a single qubit: single-qubit operations are 2x2 unitary matrices corresponding to rotations around the Bloch sphere.
 
 Since 2-qubit entangled states are like 2x2 unitary matrices, and 2x2 unitary matrices are like rotations... 2-qubit entangled states are like rotations!
 If we have a nice way to draw a rotation, then we have a nice way to draw the entangled state.
+(The "thing that's being rotated" is the axis $R(A)$ of qubit #1 that you learn about by measuring axis $A$ of qubit #2.
+For example, if two qubits are entangled such that qubit #1's X axis measurement will always agree with qubit #2's X axis measurement, then rotating qubit #1 by 90 degrees around the Z axis means that now qubit #1's Y axis measurement will always agree with qubit #2's X axis measurement.
+The rotation tells us how to translate between information about qubit #1 and information about qubit #2.)
 
 A simple way to draw a rotation is to just show its effects on the X, Y, and Z axes.
 For each axis, apply the rotation to that axis then draw an indicator showing where the axis ended up.
@@ -101,6 +112,10 @@ Third, given how I defined this display, it only works on pure 2-qubit states.
 I assumed that the input was a 1x4 vector with an entry for the 00, 01, 10, and 11 amplitudes.
 But in practice the two qubits might be entangled with other qubits, or decohered due to a measurement, so the input will be a 4x4 density matrix.
 The definition needs to be generalized to work on mixed states.
+
+I did learn something from experimenting with this display, at least.
+Rotating the first qubit rotates the representation in world space (i.e. relative to the X/Y/Z axes of the fixed surrounding sphere) whereas rotating the second qubit rotates the representation in model space (i.e. relative to the current X/Y/Z indicators).
+That's an interesting way to think about why operations on one qubit commute with operations on the other, when they're entangled.
 
 # Iteration 2
 
@@ -173,6 +188,7 @@ Operations on a single qubit never change the amount of entanglement between qub
 
 Because the axes appeared to be missing important information, I started wondering if sampling more directions would give a clearer result.
 That lead to more ideas, and eventually...
+
 
 # Iteration 3
 
@@ -326,3 +342,6 @@ I didn't find any properly symmetric ways to represent entanglement.
 You can play with these displays by fetching and building [the dev-entanglement-display branch from Quirk's repo](https://github.com/Strilanc/Quirk/tree/dev-entanglement-display).
 
 [Discuss on reddit](https://www.reddit.com/r/algassert/comments/6s1piz/comment_thread_visualizing_2qubit_entanglement/)
+
+[1]: https://en.wikipedia.org/wiki/Special_unitary_group#n_.3D_2
+[2]: https://en.wikipedia.org/wiki/Rotation_group_SO(3)
