@@ -420,3 +420,5 @@ When you remove pieces of a swap, some axis interactions may still switch wires 
 Even qubits isolated into different machines can be swapped, if you can build up entanglement between the two locations.
 
 There's an awful lot to say about such a basic operation.
+
+[Discuss on reddit](https://www.reddit.com/r/algassert/comments/6vkqj4/comment_thread_breaking_down_the_quantum_swap/)
