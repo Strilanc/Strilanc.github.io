@@ -1,8 +1,8 @@
 ---
 layout: post
 title: "Shor's Quantum Factoring Algorithm"
-date: 2017-07-16 12:10:20 pm PST
-permalink: post/1714
+date: 2017-08-25 12:10:20 pm PST
+permalink: post/1718
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
