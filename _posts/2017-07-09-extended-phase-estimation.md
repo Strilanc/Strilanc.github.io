@@ -104,14 +104,32 @@ $$
 $$
 
 Instead of applying $U$ directly, we're using the phase estimation procedure to estimate the various eigenvalues $|v\rangle$ is being decomposed into, and then phasing by those amounts.
-This introduces errors $\epsilon\_k$ into the phases of the eigenvalues we're using.
-So the state we're *actually* computing is:
+This introduces two kinds of errors into the phases of the eigenvalues we're using: spreading and rounding.
+
+By "rounding" I just mean that the estimated eigenvalue angles are always a multiple of $2^{-p}$, where $p$ is the bit precision of our phase estimation.
+We're forcing a continuous spectrum into a discrete bunch of buckets.
+
+By "spreading", I mean that the estimated eigenvalues will have a non-zero standard deviation.
+Most of the estimated value will concentrate near the true value, but there will be (negligible) components arbitrarily far away.
+For example, consider the following circuit:
+
+<img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/phase-estimation-spread.png"/>
+
+The $+A \pmod{3}$ operation has eigenvalue angles of $\theta\_0 = 0$, $\theta\_1 = \frac{\tau}{3}$, and $\theta\_2 = \frac{2 \tau}{3}$:
+The value $2^n/3$ is not an integer, so the eigenvalue angle $\frac{\tau}{3}$ doesn't correspond to a single bucket in the phase estimation register, and so ends up both rounded and smeared.
+The amplitudes of the estimate are concentrated around the true eigenvalues, but the distribution that the phase estimation register's state corresponds to has a non-zero standard deviation.
+
+To keep the math simple, I am going to completely ignore spreading and focus entirely on rounding error.
+I will assume that the phase estimation is magically off by exactly $\epsilon\_k$ for the $k$'th eigenvalue, instead of a superposition of various offsets.
+This will give us a reasonable lower bound on how bad the estimated operation performes.
+
+Given the no-spreading simplication, the state we'd actually be computing would be:
 
 $$
 \begin{align}
 |\psi\_{\text{actual}}\rangle
 &=\text{PhaseEstimate}(U)^t \cdot |v\rangle
-\\\\&= \left( \sum\_{k} |\lambda\_k\rangle\langle\lambda\_k| \cdot e^{i (\theta\_k + \epsilon\_k)} \right)^t \cdot |v\rangle
+\\\\&\approx \left( \sum\_{k} |\lambda\_k\rangle\langle\lambda\_k| \cdot e^{i (\theta\_k + \epsilon\_k)} \right)^t \cdot |v\rangle
 \\\\&= \sum\_{k} |\lambda\_k\rangle \cdot e^{i t (\theta\_k + \epsilon\_k)} \cdot v\_k
 \\\\&= \sum\_{k} |\lambda\_k\rangle \cdot e^{i t \theta\_k} \cdot v\_k \cdot e^{i t \epsilon\_k}
 \end{align}
@@ -126,7 +144,7 @@ $$
 \begin{align}
 \text{TraceDistance}(|\psi\_{\text{desired}}\rangle, |\psi\_{\text{actual}}\rangle)
 &= \frac{1}{2} \text{Tr} \; \text{abs}( |\psi\_{\text{desired}}\rangle \langle\psi\_{\text{desired}}| - |\psi\_{\text{actual}}\rangle \langle\psi\_{\text{actual}}| )
-\\\\&= \frac{1}{2} \text{Tr} \; \text{abs}\left( \sum\_{k} |\lambda\_k\rangle\langle \lambda\_k | \cdot e^{i t \theta\_k} \cdot v\_k - \sum\_{k} |\lambda\_k\rangle \cdot e^{i t \theta\_k} \cdot v\_k \cdot e^{i t \epsilon\_k} \right)
+\\\\&\approx \frac{1}{2} \text{Tr} \; \text{abs}\left( \sum\_{k} |\lambda\_k\rangle\langle \lambda\_k | \cdot e^{i t \theta\_k} \cdot v\_k - \sum\_{k} |\lambda\_k\rangle \cdot e^{i t \theta\_k} \cdot v\_k \cdot e^{i t \epsilon\_k} \right)
 \\\\&= \frac{1}{2} \text{Tr} \; \text{abs}\left( \sum\_{k} |\lambda\_k\rangle\langle \lambda\_k | \cdot (e^{i t \theta\_k} \cdot v\_k - e^{i t \theta\_k} \cdot v\_k \cdot e^{i t \epsilon\_k}) \right)
 \\\\&= \frac{1}{2} \sum\_{k} \text{abs}(e^{i t \theta\_k} \cdot v\_k - e^{i t \theta\_k} \cdot v\_k \cdot e^{i t \epsilon\_k})
 \\\\&= \frac{1}{2} \sum\_{k} \text{abs}(e^{i t \theta\_k} \cdot v\_k \cdot (1 - e^{i t \epsilon\_k}))
@@ -139,7 +157,7 @@ Then we assume that $\epsilon\_k$ is small enough that a few approximations appl
 $$
 \begin{align}
 \text{TraceDistance}(|\psi\_{\text{desired}}\rangle, |\psi\_{\text{actual}}\rangle)
-&= \frac{1}{2} \sum\_{k} |v\_k| \cdot |1 - e^{i t \epsilon\_k}|
+&\approx \frac{1}{2} \sum\_{k} |v\_k| \cdot |1 - e^{i t \epsilon\_k}|
 \\\\&\approx \frac{1}{2} \sum\_{k} |v\_k| \cdot |\sin t \epsilon\_k|
 \\\\&\approx \frac{1}{2} \sum\_{k} |v\_k| \cdot |t \epsilon\_k|
 \\\\&= \frac{1}{2} t \sum\_{k} |\epsilon\_k| |v\_k|
@@ -183,5 +201,8 @@ There might be some interesting case out there where this idea makes sense, but 
 # Summary
 
 Phase estimation works fine for extending an operation to small powers, but terribly for extending to higher powers of an operation.
+
+**Update (July 23)**: The original version of this post forgot to note that the phase estimation process can "spread" eigenvalues.
+The post now acknowledges this fact and explicitely says that it is being ignored for simplicity.
 
 [Discuss on reddit](https://www.reddit.com/r/algassert/comments/6mbtt5/comment_thread_impractical_experiments_4_high/)
