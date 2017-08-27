@@ -25,7 +25,7 @@ And that's what I intend to do in this post.
 I want to explain Shor's algorithm, and I want to do it in a way where at least readers who know a bit about coding come away thinking "THAT's how it works?!", instead of being left with nothing but a general sense of confusion.
 
 I'll do my best to keep things simple and approachable, but I *will* be digging into the mathematical details.
-I admit there have been [valiant attempts at explaining Shor without much math](http://www.scottaaronson.com/blog/?p=208)... but I think real understanding requires knowing the details.
+I admit there have been [valiant attempts at explaining Shor without much math](http://www.scottaaronson.com/blog/?p=208)... but I think real understanding requires knowing more details than Scott covered in that post.
 
 
 # Overview
@@ -83,14 +83,14 @@ In the following diagram the vertical axis is frequency, the horizontal axis is 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/code-monkey-spectrogram.png"/>
 
 [With some practice reading spectrograms](http://home.cc.umanitoba.ca/~robh/howto.html), you can recognize notes, instruments, and even words.
-Interestingly, you can think of modern musical notation as basically just an extremely simplified spectrogram:
+Interestingly, you can think of modern musical notation as an extremely simplified spectrogram:
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/code-monkey-notes.png"/>
 
 Anyways, the general point I want to get across here is a) that we know how to turn a raw signal into frequency information, and b) even though frequency information is technically redundant with the raw signal, it can be easier to work with.
 If you want to learn more about sound and frequency, you can start with the Wikipedia page on [digital signal processing](https://en.wikipedia.org/wiki/Digital_signal_processing).
 
-Now that we're a bit more familiar with frequencies, let's get into a specific relevant case where information that's spread out in a raw signal is concentrated in a useful way in frequency space.
+Now that we're a teensy bit more familiar with frequencies, let's get into a specific relevant case where information that's spread out in a raw signal is concentrated in a useful way in frequency space.
 
 
 # The Weird Frequencies of Repeating Blips
@@ -144,7 +144,7 @@ There's `00000`, `00001`, `00010`, `00011`, `00100`, and so forth up to `11111`.
 One state for each way you can assign a 0 or a 1 to each bit.
 
 The thing that separates a quantum computer from a classical computer is that a quantum computer can rotate its state into weighted combinations of the classical states (called a "[superposition](https://en.wikipedia.org/wiki/Quantum_superposition)").
-You can create possible states of a 5-qubit quantum computer by adding together various proportions of the 32 classical states achievable with 5 bits, as long as the squared magnitudes of the weights add up to 1.
+You can write down possible states of a 5-qubit quantum computer by adding together various proportions of the 32 classical states achievable with 5 bits, as long as the squared magnitudes of the weights add up to 1.
 So a 5 qubit quantum computer could be in the state $|00000\rangle$, or in the state $\frac{1}{\sqrt{2}}|00000\rangle + \frac{1}{\sqrt{2}}|11111\rangle$, or in the state $\frac{3}{5}|00000\rangle - \frac{4}{5}|10101\rangle$, or in the state $\frac{1}{\sqrt{3}}|00001\rangle - \frac{1}{\sqrt{3}}|00100\rangle + \frac{1}{\sqrt{5}}|10000\rangle$, or all kinds of other fun combinations.
 
 In this post when I say "periodic state", I mean a quantum computer state where the weights assigned to the underlying classical states are mostly zero, except for some non-zero ones spaced in a periodic way.
@@ -154,6 +154,7 @@ The state $\frac{1}{\sqrt{7}} \sum\_{k=0}^{6}|5k+1\rangle$ is another, different
 At this point a certain subset readers are probably thinking something along the lines "Superposition? Bah! How do we know the quantum computer isn't just secretly in one of those states with non-zero-weight but we don't know which? How is this any different from a probability distribution?".
 
 The answer to the "how know superpositions real?" question is: because we can operate on the states, and the outcomes of those operations differ depending on whether or not you started in a superposition of states or a single state (or in a probability distribution of states).
+
 The specific quantum operation we care about in this post is quantum computers' ability to switch their own state into the frequency domain.
 (I hope that just blew your mind a little bit. It definitely blew mine the first time I learned about it.)
 After applying this operation, sampling the quantum computer's state can tell us what the dominant frequencies of the state were (if any).
@@ -164,7 +165,7 @@ Like the spectrograms from earlier, the frequency spectrums of periodic signals 
 Furthermore, the number of frequency peaks isn't a property of some individual state.
 The number of peaks is equal to the spacing between states.
 
-(If the quantum computer was really in just one of the classical states, how would a property about the *spacing __between__ the possible states* getting into the output?
+(If the quantum computer was really in just one of the classical states, how could a property about the spacing __between__ the possible states be getting into the output?
 The frequency spectrums tell a very clear story about what's really going on.)
 
 As a concrete example, I used my quantum circuit simulator Quirk to prepare a periodic quantum state.
@@ -217,13 +218,13 @@ The random offsets are what make working in frequency space useful, because *fre
 When you shift a signal, you may apply a phase a factor to each frequency, but the magnitudes of those frequencies all stay the same.
 
 To demonstrate this, I made yet another circuit in Quirk.
-This time I'm using an operation that adds larger and larger offsets into the target register, with Quirk simulating what happens for each offset.
-Notice that, throughout the animation, the input state is cycling yet the output peaks are staying perfectly still:
+This time I'm using an operation that adds larger and larger offsets into the input register before the QFT happens, with Quirk simulating what happens for each offset.
+Notice that, throughout the resulting animation, the input state is cycling yet the output peaks are staying perfectly still:
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/quirk-spectrogram-5-moving.gif"/>
 
 The phases of the output (not shown) are changing, but the magnitudes are staying the same.
-And, when ending a quantum computation, the magnitudes are what matter at the end.
+And, when ending a quantum computation, the magnitudes are what matter.
 The magnitudes determine the probability of measuring each state.
 (The phases matter if you're going to do more follow-up operations... but we aren't.)
 
@@ -266,7 +267,7 @@ The diagonal lines are actually made up of a bunch of offset copies of more spac
 Each of those offset copies represents a part of the superposition that can no longer interact with the other parts.
 
 Let's call the top seven qubits the "input register" and the bottom three qubits the "ancilla register".
-By copying the input register's value into the second register, modulo 8, we separated its superposition into parts.
+By copying the input register's value into the second register, modulo 8, we separated its superposition into 8 parts.
 There's one part for the values whose remainder is 0, one part for values whose remainder is 1, one for remainder 2, and so forth up to the part for remainder 7.
 
 In effect, the ancilla register is acting like a partial measurement of the input register.
@@ -289,13 +290,13 @@ If we find out which one by measuring the ancilla register, the input register w
 The frequency spectrum will still have 8 peaks in it.
 But if we measured the input register before performing the QFT, collapsing whatever periodic superposition is in there to a single state, the frequency spectrum would switch to a raw sine wave.
 
-We can prepare states with other periods.
+Now lets prepare states with other periods.
 
 Instead of doing a three-bit addition, i.e. an addition modulo 8, we can do addition modulo some other number.
 This allows us to prepare a periodic quantum state with any period we want.
 The state we prepare will still have an unknown offset, but that's okay: the frequency peaks don't care.
 
-For example, here is a [circuit in Quirk](http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%7B%22id%22%3A%22setR%22%2C%22arg%22%3A7%7D%5D%2C%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2BAmodR3%22%5D%2C%5B%22QFT%E2%80%A07%22%5D%2C%5B%22Chance7%22%5D%5D%7D): that prepares a periodic quantum state with period 7, then applies a Fourier transform to check that there are 7 peaks in the output state
+For example, here is a [circuit in Quirk](http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%7B%22id%22%3A%22setR%22%2C%22arg%22%3A7%7D%5D%2C%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2BAmodR3%22%5D%2C%5B%22QFT%E2%80%A07%22%5D%2C%5B%22Chance7%22%5D%5D%7D) that prepares a periodic quantum state with period 7, then applies a Fourier transform to show that there are 7 peaks in the output state
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/prepare-period-7.png"/>
 
@@ -399,7 +400,7 @@ In order to do something interesting, we have to be able to make a periodic-stat
 
 It turns out that this is not very hard to do.
 We can use any periodic function $f$ to produce a periodic state, and there's no shortage of functions where figuring out the period is hard even if you know $f$.
-As long as $f(x) = f(x + p)$, and we can make a circuit that computes $f$, we can produce a periodic state that we can then sample in order to figure out $p$.
+As long as $f(x)$ equals $f(x + p)$ regardless of $x$ for some $p$, and we can make a circuit that computes $f$, we can produce a periodic state that we can then sample in order to figure out $p$.
 The key point to internalize is that *knowing $f$ doesn't mean you know $p$*.
 
 For example, suppose we use $f(x) = 2^x \pmod{23}$.
@@ -415,7 +416,7 @@ Open Quirk, create a uniform superposition for $x$, initialize the ancilla regis
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/quirk-prepare-period-11-mul.png"/>
 
-Eleven peaks!
+Eleven peaks! And we didn't have to double eleven times to figure that out.
 
 Okay okay, let's try something a bit harder.
 This time we're going to be multiplying by 7 modulo 58, and I'm not going to show you the impossible-in-reality probability display.
@@ -496,14 +497,14 @@ But here's the thing: the partners to the prime factors in $R$ *have to be sprea
 If all of $R$'s prime factor partners were in $a$, then $a$ would be a multiple of $R$.
 Which would mean $u-1$ was zero the whole time (modulo $R$).
 Which would violate our assertion that $u$ isn't congruent to 1.
-(The same logic applies to $b$.)
+The same logic applies to $b$.
 
 So we know $a = u-1$ has some factors in common with $R$.
 That's great, but $a$ might also have factors in common with $k$.
 We need to filter those out.
 Fortunately, this is easy: we just compute the [greatest common divisor](https://en.wikipedia.org/wiki/Euclidean_algorithm) of $R$ and $a$.
 
-What we're left with is a number $r = gcd(u+1, R)$ that has prime factors in common with $R$, but can't have all the prime factors in $R$.
+What we're left with is a number $r = gcd(u-1, R)$ that has prime factors in common with $R$, but can't have all the prime factors in $R$.
 Therefore $r$ is a factor of $R$.
 
 
@@ -593,6 +594,75 @@ It would also check several fractions and periods near to the sampled value, in 
 It would deal with special cases like "Oops, I'm an extremely lucky person and the base I chose at random isn't co-prime to the modulus.".
 It would check for various classically-easy cases like small factors, square numbers, etc.
 And so on and so on.
+
+
+# End to End Example
+
+We have all the pieces we need, let's apply them.
+
+I went to [a list of all the primes up to a million](http://www.mathematical.com/primes0to1000k.html), picked two at random, and multiplied them together.
+The result was:
+
+$R = 75945260669$
+
+We're going to factor this number using Shor's algorithm.
+Unfortunately we can't use a quantum computer to do it.
+But the numbers are small enough that we can brute-force the period finding classically:
+
+```python
+def brute_force_find_period(B, R):
+    n = 1
+    t = B
+    while t != 1:
+        t *= B
+        t %= R
+        n += 1
+    return n
+```
+
+Just... be prepared to wait a few minutes for that method to run, okay?
+
+We start Shor's algorithm by picking a random base $B$.
+I ran `B = random.randint(0, R)` in python and got:
+
+$B = 58469529322$
+
+Now we want to know the period of $f(x) = B^x \pmod{R}$, so we run `brute_force_find_period(B, R)`.
+This is the slow step classically, and it takes a couple minutes for the naive brute force search we're using to finish.
+Using the classical method means we don't get to practice the period-from-closest-fraction's-denominator thing.
+You'll have to do that on your own.
+Anyways, eventually we get our answer:
+
+$P = 327347592$
+
+The period is even, which is good because we need that.
+Otherwise we'd have needed to retry.
+However, we'll also need to retry if $B^{P/2}$ is congruent to $R-1$.
+I ran `u = pow(B, p // 2, R)` and... we got lucky!
+The result wasn't $R-1$; we found an extra square root:
+
+$u = 23766570031$
+
+(You can check that `u**2 % R` spits out `1`, as it should.)
+
+Now we know that $(u-1) \cdot (u+1) = 23766570030 \cdot 23766570032 = k \cdot R$ for some unknown integer $k$.
+All we need to do is use gcd to filter the unknown $k$'s prime factors out of $u-1$ or $u+1$, and we're home free.
+We run `r1 = fractions.gcd(u-1, R)` and get our first factor:
+
+$r\_1 = 450893$
+
+We can get the second factor by dividing $R$ by $r\_1$ or by running `fractions.gcd(u+1, R)`.
+Either way we find that:
+
+$r\_2 = 168433$
+
+We then check our answer with `print(r1 * r2 == R)`:
+
+`True`
+
+We did it!
+$r\_1$ and $r\_2$ are in fact the two primes I picked.
+$75945260669$ factors into $168433 \cdot 450893$.
 
 
 # Conclusion
