@@ -16,7 +16,7 @@ First, I was just learning all this quantum computing stuff.
 I didn't have to guess at what people would find confusing, I was experiencing it first hand.
 Secondly, I *actually grappled with the problem*.
 I didn't try to explain Grover search with [terrible analogies](https://scifundchallenge.org/firesidescience/2014/03/16/dont-blink-the-quantum-zeno-effect-and-the-weeping-angels/).
-I didn't just state some [ridiculous overhyped nonsense](http://www.dailymail.co.uk/sciencetech/article-3409392/Forget-Schrodingers-cat-researchers-reveal-quantum-pigeonhole-principle-say-tests-basic-notion-physics.html),
+I didn't just state some [ridiculous overhyped nonsense](http://www.dailymail.co.uk/sciencetech/article-3409392/Forget-Schrodingers-cat-researchers-reveal-quantum-pigeonhole-principle-say-tests-basic-notion-physics.html).
 And I didn't use oversimplified factoids (e.g. "0 and 1 at the same time" or "does every computation simultaneously") that couldn't possibly communicate anything but confusion.
 I started from the basics, explained the pieces, put them together, and kept doing that until a search algorithm emerged.
 
@@ -25,12 +25,12 @@ And that's what I intend to do in this post.
 I want to explain Shor's algorithm, and I want to do it in a way where at least readers who know a bit about coding come away thinking "THAT's how it works?!", instead of being left with nothing but a general sense of confusion.
 
 I'll do my best to keep things simple and approachable, but I *will* be digging into the mathematical details.
-There have been [valiant attempts at explaining Shor without math](http://www.scottaaronson.com/blog/?p=208) (though frankly Scott does use quite a bit of math in that post), but I think real understanding requires knowing the details.
+I admit there have been [valiant attempts at explaining Shor without much math](http://www.scottaaronson.com/blog/?p=208)... but I think real understanding requires knowing the details.
 
 
 # Overview
 
-To understand Shor's quantum factoring algorithm, we'll work on first understand several smaller things.
+To understand Shor's quantum factoring algorithm, we'll work on first understanding several smaller things.
 Then it's just matter of seeing how they fit together into a story that cuts numbers into pieces.
 Each of those smaller things takes some work to understand, but I'll do my best to get the core ideas across.
 
@@ -42,8 +42,8 @@ And here are the rough parts, or rather the questions, that I'll be breaking my 
 
 1. Why is sampling the frequencies of a signal useful for finding its period?
 2. How does a quantum computer make a periodic signal, relevant to factoring a number $R$, and then sample from its frequencies?
-3. How does finding the period of a modular-multiplication operation tell us extra square roots modulo $R$?
-4. Why does knowing an extra square root reveal factors of $R$?
+3. How can finding the period of a modular-multiplication operation reveal extra square roots?
+4. Why does knowing an extra square root tell us factors of $R$?
 
 I realize that these questions used a bunch of terms and concepts I haven't explained yet.
 For example, what the heck are the "frequencies of a signal"?
@@ -65,7 +65,8 @@ In fact, that's exactly how early audio formats such as WAV files stored music: 
 Sound may be a single varying variable, but the way we experience sound doesn't seem at all like that.
 We hear a spectrum of many frequencies, all coming and going independently.
 I think of this as one of the big mysteries of sound: how does a single up-and-down signal translate into a rich spectrum of many variables going up and down?
-Of course, this is one of those mysteries that we actually know the answer to.
+
+Fortunately, this is one of those mysteries that we actually know the answer to.
 If you take raw audio, chunk it into pieces, and [Fourier transform](https://en.wikipedia.org/wiki/Fourier_transform) each of the pieces, what comes out is (much closer to) what we hear: a spectrum of frequencies coming and going.
 
 For example, when using sound editing software such as Audacity, the default view of the audio is essentially a plot of the speaker diaphragm positions over time:
@@ -86,7 +87,7 @@ Interestingly, you can think of modern musical notation as basically just an ext
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/code-monkey-notes.png"/>
 
-Anyways, the general point I want to get across here is a) what a frequency is, b) that we know how to turn a raw signal into frequencies, and c) even though frequency information is technically redundant with the raw signal, it can be easier to work with.
+Anyways, the general point I want to get across here is a) that we know how to turn a raw signal into frequency information, and b) even though frequency information is technically redundant with the raw signal, it can be easier to work with.
 If you want to learn more about sound and frequency, you can start with the Wikipedia page on [digital signal processing](https://en.wikipedia.org/wiki/Digital_signal_processing).
 
 Now that we're a bit more familiar with frequencies, let's get into a specific relevant case where information that's spread out in a raw signal is concentrated in a useful way in frequency space.
@@ -96,7 +97,7 @@ Now that we're a bit more familiar with frequencies, let's get into a specific r
 
 Suppose I make a "song" where the list of speaker-diaphragm positions is almost entirely "stay as far back as possible", but every tenth entry is "as far forward as possible".
 That is to say, I make a song with periodic blips: a wav file with the data [0, 0, 0, 0, 0, 0, 0, 0, 0, 255] repeated over and over again.
-What will the "song"'s spectrogram look like?
+What will the song's spectrogram look like?
 
 If you're familiar with signal processing, the above question probably sounds... not even wrong?
 In order to talk about frequencies, you need more information.
@@ -142,7 +143,7 @@ If you have a computer that can store 5 classical bits, there are 32 possible st
 There's `00000`, `00001`, `00010`, `00011`, `00100`, and so forth up to `11111`.
 One state for each way you can assign a 0 or a 1 to each bit.
 
-The thing that separates a quantum computer from a classical computer is that a quantum computer can rotate its state into weighted combination of the classical states (called a "[superposition](https://en.wikipedia.org/wiki/Quantum_superposition)").
+The thing that separates a quantum computer from a classical computer is that a quantum computer can rotate its state into weighted combinations of the classical states (called a "[superposition](https://en.wikipedia.org/wiki/Quantum_superposition)").
 You can create possible states of a 5-qubit quantum computer by adding together various proportions of the 32 classical states achievable with 5 bits, as long as the squared magnitudes of the weights add up to 1.
 So a 5 qubit quantum computer could be in the state $|00000\rangle$, or in the state $\frac{1}{\sqrt{2}}|00000\rangle + \frac{1}{\sqrt{2}}|11111\rangle$, or in the state $\frac{3}{5}|00000\rangle - \frac{4}{5}|10101\rangle$, or in the state $\frac{1}{\sqrt{3}}|00001\rangle - \frac{1}{\sqrt{3}}|00100\rangle + \frac{1}{\sqrt{5}}|10000\rangle$, or all kinds of other fun combinations.
 
@@ -150,19 +151,23 @@ In this post when I say "periodic state", I mean a quantum computer state where 
 For example, the state $\frac{1}{\sqrt{7}} \sum\_{k=0}^{6}|5k\rangle = \frac{1}{\sqrt{7}} |00000\rangle + \frac{1}{\sqrt{7}} |00101\rangle + \frac{1}{\sqrt{7}} |01010\rangle + \frac{1}{\sqrt{7}} |01111\rangle + \frac{1}{\sqrt{7}} |10100\rangle + \frac{1}{\sqrt{5}}|11001\rangle + \frac{1}{\sqrt{5}}|11110\rangle$ is a periodic state (with period five).
 The state $\frac{1}{\sqrt{7}} \sum\_{k=0}^{6}|5k+1\rangle$ is another, different, periodic state with period 5.
 
-At this point a lot of readers are probably thinking something along the lines "How do we know the quantum computer isn't just secretly in one of those states with non-zero-weight but we don't know which? How is this any different from a probability distribution?".
-The answer to that question is: because we can operate on the states, and you get different answers depending on whether or not you were in a superposition or a probability distribution of states.
-The particular operation we care about for this post is quantum computers' ability to switch their own state into the frequency domain.
-We can then sample the quantum computer's state and find out what the dominant frequencies are (if any).
+At this point a certain subset readers are probably thinking something along the lines "Superposition? Bah! How do we know the quantum computer isn't just secretly in one of those states with non-zero-weight but we don't know which? How is this any different from a probability distribution?".
+
+The answer to the "how know superpositions real?" question is: because we can operate on the states, and the outcomes of those operations differ depending on whether or not you started in a superposition of states or a single state (or in a probability distribution of states).
+The specific quantum operation we care about in this post is quantum computers' ability to switch their own state into the frequency domain.
+(I hope that just blew your mind a little bit. It definitely blew mine the first time I learned about it.)
+After applying this operation, sampling the quantum computer's state can tell us what the dominant frequencies of the state were (if any).
 
 The frequency spectrum of a single state is just a [sine wave](https://en.wikipedia.org/wiki/Sine_wave), smoothly oscillating up and down.
 By contrast, the frequency spectrum of a periodic signal is not smooth.
-Like the spectrograms from earlier, the frequency spectrum of periodic signals have sharp evenly-spaced peaks.
-Furthermore, the number of frequency peaks isn't a property of some individual state: it's equal to the spacing between states.
-If the quantum computer was really in just one of the classical states, how would a property about the *spacing __between__ the possible states* getting into the output?
-The frequency spectrums tell a very clear story about what's really going on.
+Like the spectrograms from earlier, the frequency spectrums of periodic signals have sharp evenly-spaced peaks.
+Furthermore, the number of frequency peaks isn't a property of some individual state.
+The number of peaks is equal to the spacing between states.
 
-As an example, I prepared a periodic quantum state in my quantum circuit simulator Quirk.
+(If the quantum computer was really in just one of the classical states, how would a property about the *spacing __between__ the possible states* getting into the output?
+The frequency spectrums tell a very clear story about what's really going on.)
+
+As a concrete example, I used my quantum circuit simulator Quirk to prepare a periodic quantum state.
 Then I used a [Quantum fourier transform operation](https://en.wikipedia.org/wiki/Quantum_Fourier_transform) to switch the state into its own frequency space.
 This is the result:
 
@@ -171,7 +176,7 @@ This is the result:
 The green rectangle on the left is a chance display.
 It's showing information about the input state.
 Each horizontal spike represents the weight assigned to one of the classical states.
-You can tell the state is periodic because the bars are evenly spaced.
+You can tell the state is periodic because the spikes are evenly spaced.
 
 The white box in the middle that says $\text{QFT}^\dagger$ is the (inverse) quantum Fourier transform operation.
 It switches the input state  into its own frequency domain.
@@ -199,11 +204,11 @@ Keep in mind that the green displays in the diagrams are not available in real l
 We don't get to see the distribution, we only get to sample from it.
 Sampling can tell us *where* a peak is (if it's tall enough), but not how many peaks there are.
 
-Still, why don't we just look at the initial signal and see how far apart the blips are?
+Still, why don't we just sample the initial signal several times and see how far apart the blips are?
 Why can't we figure out the period by sampling the input signal and noticing "Gee, there sure are a lot of multiples of 5 in here."?
 
 The problem with noticing that a certain multiple keeps happening again and again is that, as you will see later, in the problem we care about the signal we're sampling from is going to have a random offset.
-If we sample the number 213, that could be "50*4" with an offset of 13 or "10*21" with an offset of 3 or any other combination of offset and multiple.
+If we sample the number 213, that could be $50 \cdot 4$ with an offset of $13$ or $10 \cdot 21$ with an offset of $3$ or any other combination of offset and multiple.
 *Every time we sample, there will be a different unknown offset.*
 This prevents us from figuring out the underlying pattern.
 Sampling from input states with random offsets will look exactly like random noise.
@@ -218,7 +223,7 @@ Notice that, throughout the animation, the input state is cycling yet the output
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/quirk-spectrogram-5-moving.gif"/>
 
 The phases of the output (not shown) are changing, but the magnitudes are staying the same.
-And, when doing a quantum computation, the magnitudes are what matter at the end.
+And, when ending a quantum computation, the magnitudes are what matter at the end.
 The magnitudes determine the probability of measuring each state.
 (The phases matter if you're going to do more follow-up operations... but we aren't.)
 
@@ -256,11 +261,11 @@ One way to make the change caused by the addition more apparent is to [use Quirk
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/prepare-period-8-postdensity.png"/>
 
 I don't expect readers to know how to read density matrices.
-The important thing to notice is that the addition turned the grid pattern in the left display into a bunch of diagonal lines in the middle display.
+The important thing to notice is that the addition turned the fine-grained grid pattern in the left display into a bunch of diagonal lines in the middle display.
 The diagonal lines are actually made up of a bunch of offset copies of more spaced out grids, like the one shown in the display on the right.
 Each of those offset copies represents a part of the superposition that can no longer interact with the other parts.
 
-Let's call the top 7 qubits the "input register" and the bottom three qubits the "ancilla register".
+Let's call the top seven qubits the "input register" and the bottom three qubits the "ancilla register".
 By copying the input register's value into the second register, modulo 8, we separated its superposition into parts.
 There's one part for the values whose remainder is 0, one part for values whose remainder is 1, one for remainder 2, and so forth up to the part for remainder 7.
 
@@ -278,7 +283,7 @@ And notice how we have an input signal with an unknown offset?
 We get an output that has 8 peaks in it!
 (The peaks are perfectly sharp spikes because both the period and the size of the QFT are powers of 2.)
 
-I hope this really drives home how superpositions and a probability distributions are different from each other, and combine in interesting ways.
+I hope this really drives home how superpositions and probability distributions are different from each other.
 The input register contains a superposition with period 8, but we don't know which one.
 If we find out which one by measuring the ancilla register, the input register will still contain a superposition with period 8.
 The frequency spectrum will still have 8 peaks in it.
@@ -378,27 +383,30 @@ The other thing to keep in mind, for quantum states that have potentially huge p
 If our maximum period is $p$, then the closest fractions are a distance of $1/p^2$ apart.
 So we need to make sure the frequency space we are sampling from is large enough to tell those fractions apart.
 Practically speaking, that means our input register must have at least $\lg p^{2} = 2 \lg p$ qubits.
-Actually, because the peaks get proportionally sharper as you increase the size of the space, it's probably good to make the register a teensy bit larger.
-The point is that we can get sufficiently accurate with $O(p)$ qubits.
+
+When factoring a number $R$ with $N$ bits, the maximum period will be $2^N$ and we'll need $O(\lg 2^N) = O(N)$ qubits.
+Which is reasonable.
 
 
 # Preparing States with an Unknown Period
 
 Modular addition isn't the only way to prepare periodic states.
 I mean, if it was, the ability to figure out the modulus by sampling the frequency space of the state would be an esoteric but ultimately pointless bit of trivia.
-Whoever put together the circuit obviously knew the modulus; they could have just *told it to you* instead of wasting time making you sample frequencies.
+Whoever put together the circuit obviously knew the modulus.
+They could have just *told it to you* instead of wasting time making you sample frequencies.
+
 In order to do something interesting, we have to be able to make a periodic-state-producing circuit from start to finish *and still not know what period its state will have*.
 
 It turns out that this is not very hard to do.
-We can use any periodic function $f$ to produce a periodic state, and there are function where figuring out the period is hard even if you know $f$.
-As long as $f(x) = f(x + p)$ and we can make a circuit that computes $f$, we can produce a periodic state that we can then sample in order to figure out $p$.
-The key point here is that *knowing $f$ doesn't mean you know $p$*.
+We can use any periodic function $f$ to produce a periodic state, and there's no shortage of functions where figuring out the period is hard even if you know $f$.
+As long as $f(x) = f(x + p)$, and we can make a circuit that computes $f$, we can produce a periodic state that we can then sample in order to figure out $p$.
+The key point to internalize is that *knowing $f$ doesn't mean you know $p$*.
 
 For example, suppose we use $f(x) = 2^x \pmod{23}$.
 What's the period of this function?
 In other words, if you start at 1 and begin multiplying by 2 again and again, how long will it be until you reach another number that's 1 more than a multiple of 23?
 
-Let's try: 1, 2, 4, 8, 16, 32→9, 18, 36→13, 26→3, 6, 12, 24→1; there it is!
+Let's try: 1 times 2 is 2, then 2 times 2 is 4, then 8, 16, 32→9, 18, 36→13, 26→3, 6, 12, 24→1; there it is!
 It took us... 11 doublings to get back to 1.
 So the period of $2^x \pmod{23}$ is 11.
 
@@ -476,7 +484,8 @@ Similarly, if $u$ was -1, then $(u-1)(u+1) = (-1-1)(-1+1) = -2 \cdot 0$ vanishin
 That's why we need an *extra* square root: to make the equation $(u+1)(u-1) = 0$ actually interesting.
 
 If we're working modulo $R$, then knowing $(u-1)(u+1) = 0$ tells us that $(u-1)(u+1)$ is a multiple of $R$.
-In other words, we know two non-zero values $a$ and a $b$ such that $a \cdot b = k \cdot R$ for some integer $k$.
+In other words, we know two non-zero values, $a = u-1$ and $b = u+1$, such that $a \cdot b = k \cdot R$ for some integer $k$.
+
 Suppose we factorized $a$, $b$, $k$, and $R$ into their prime factors.
 Then our equation becomes:
 
@@ -484,7 +493,7 @@ $$(a\_1 \cdot a\_2 \cdot ... \cdot a\_{n\_a}) \cdot (b\_1 \cdot ... \cdot b\_{n\
 
 Every prime factor that appears on the right hand side of that equation must have partner on the left hand side.
 But here's the thing: the partners to the prime factors in $R$ *have to be spread over both $a$ and $b$*.
-If all of $R$'s prime factors were in $a$, then $a$ would be a multiple of $R$.
+If all of $R$'s prime factor partners were in $a$, then $a$ would be a multiple of $R$.
 Which would mean $u-1$ was zero the whole time (modulo $R$).
 Which would violate our assertion that $u$ isn't congruent to 1.
 (The same logic applies to $b$.)
@@ -506,15 +515,15 @@ How do we put these two pieces together?
 
 Well... the period $p$ is the smallest solution to the equation $B^p = 1 \pmod{R}$.
 The key idea is that, if we raise $B$ to *half* of the period, then the result will be a square root of $1$.
-After all, $B^{p/2} * B^{p/2} = B^p$ and we already know that $B^p = 1 \pmod{R}$.
+After all, $B^{p/2} \cdot B^{p/2} = B^p$ and we already know that $B^p = 1 \pmod{R}$.
 
 Sometimes the square root we get will be -1, instead of an extra square root.
 Sometimes the period will be odd, so we won't be able to divide it by half.
-But, sometimes, the period will be even and $B^{p/2}$ won't be congruent to -1.
+But, not infrequently, the period will be even and $B^{p/2}$ won't be congruent to -1.
 Then we win.
 
-The good case is not rare, by the way.
-As far as I know, it's like winning two coin flips.
+The good case isn't rare, by the way.
+As far as I know, it's akin to winning two coin flips.
 We might have to try a few random $B$'s before landing on one that works, but when we do... bingo.
 
 
@@ -533,18 +542,17 @@ from math import log2
 from fractions import Fraction, gcd
 
 def factor_attempt(n):
-
     base = random.randint(2, n-2)
     period = sample_period(base, n)
     
 	# Try to extract an extra square root.
 	half_period = period // 2
-    y = pow(base, half_period, modulus)
-    if y == 1 or y == n-1 or y**2 % n != 1:
+    u = pow(base, half_period, modulus)
+    if u == 1 or u == n-1 or u**2 % n != 1:
         return None  # Failed attempt.
 	
-	# Use strange square root to pull out a factor.
-	return gcd(y + 1, n)
+	# Use extra square root to pull out a factor.
+	return gcd(u + 1, n)
 
 	
 def sample_period(base, modulus):
@@ -582,12 +590,12 @@ The above code is really just a more detailed version of the flowchart from earl
 Still, even with the extra details, I'm simplifying quite a lot.
 A real algorithm would break down the exponentiation into basic quantum gates.
 It would also check several fractions and periods near to the sampled value, in case the sampled result was close instead of exact.
-It would deal with special cases like "Oops, I'm an extremely lucky person and the base I chose at random is not co-prime to the modulus.".
+It would deal with special cases like "Oops, I'm an extremely lucky person and the base I chose at random isn't co-prime to the modulus.".
 It would check for various classically-easy cases like small factors, square numbers, etc.
 And so on and so on.
 
 
-# Summary
+# Conclusion
 
 Shor's algorithm is difficult to understand because it mixes together ideas from quantum physics, signal processing, number theory, and computer science.
-There are still more details that I didn't cover, but I hope I got across the basic ideas needed to understand the pieces and how they fit into a coherent algorithm for factoring numbers.
+I didn't cover all of the details, but I hope I got across the basic ideas needed to understand the pieces and how they fit into a coherent algorithm for factoring numbers.
