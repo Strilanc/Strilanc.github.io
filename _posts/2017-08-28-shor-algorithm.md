@@ -168,8 +168,8 @@ What the QFT does is... it's like it takes the weights of the states, pretends t
 (A good predictor for whether you even slightly understood that last sentence is whether or not your mind just got blown *hard*.)
 The point is: after applying the QFT, sampling the quantum computer's state can tell us what the dominant frequencies of the input state were (if any).
 
-The frequency spectrum of a single state is just a [sine wave](https://en.wikipedia.org/wiki/Sine_wave), smoothly oscillating up and down.
-By contrast, the frequency spectrum of a periodic signal is not smooth.
+If you start with a classical state and apply the QFT operation, the resulting frequency spectrum looks completely flat (all the action is in the phases, not the magnitudes).
+By contrast, the frequency spectrum of a periodic signal is definitely not flat.
 Like the spectrograms from earlier, the frequency spectrums of periodic signals have sharp peaks.
 Furthermore, the number of frequency peaks isn't a property of some individual state.
 The number of peaks is equal to the spacing between states.
@@ -311,8 +311,15 @@ The output frequency spectrum will still have 8 peaks in it.
 
 Contrast this with what would happen if we measured the input register (before performing the QFT).
 The input register's state would collapse to some specific state $|k\rangle$.
-The frequency spectrum of a single state is a pure sine wave, so instead of seeing frequency peaks we'd see output weights that were smoothly varying up and down.
-There'd still be peaks, but they'd be smooth peaks and the number of peaks wouldn't be related to the period of the input state.
+The frequency spectrum of a single state looks flat, so instead of seeing a number of peaks related to the period of the input state we'd see... flat.
+
+In this animation, I use Quirk to sweep through the classical states and show their QFT outputs:
+
+<img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/qft-spinners.gif"/>
+
+Notice that the output chance display is in fact staying flat.
+There's still plenty of fun stuff happening, but it's all going into rotating the phases of the amplitudes.
+(That's what's being shown in the cells of the pale blue rectangle.)
 
 Measure the probability part, and nothing significant changes.
 Measure the superposition part, and you get a totally different style of output.
