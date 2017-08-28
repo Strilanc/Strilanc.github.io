@@ -230,8 +230,8 @@ What the QFT does is... it&#39;s like it takes the weights of the states, preten
 (A good predictor for whether you even slightly understood that last sentence is whether or not your mind just got blown <em>hard</em>.)
 The point is: after applying the QFT, sampling the quantum computer&#39;s state can tell us what the dominant frequencies of the input state were (if any).</p>
 
-<p>The frequency spectrum of a single state is just a <a href="https://en.wikipedia.org/wiki/Sine_wave">sine wave</a>, smoothly oscillating up and down.
-By contrast, the frequency spectrum of a periodic signal is not smooth.
+<p>If you start with a classical state and apply the QFT operation, the resulting frequency spectrum looks completely flat (all the action is in the phases, not the magnitudes).
+By contrast, the frequency spectrum of a periodic signal is definitely not flat.
 Like the spectrograms from earlier, the frequency spectrums of periodic signals have sharp peaks.
 Furthermore, the number of frequency peaks isn&#39;t a property of some individual state.
 The number of peaks is equal to the spacing between states.</p>
@@ -372,8 +372,15 @@ The output frequency spectrum will still have 8 peaks in it.</p>
 
 <p>Contrast this with what would happen if we measured the input register (before performing the QFT).
 The input register&#39;s state would collapse to some specific state $|k\rangle$.
-The frequency spectrum of a single state is a pure sine wave, so instead of seeing frequency peaks we&#39;d see output weights that were smoothly varying up and down.
-There&#39;d still be peaks, but they&#39;d be smooth peaks and the number of peaks wouldn&#39;t be related to the period of the input state.</p>
+The frequency spectrum of a single state looks flat, so instead of seeing a number of peaks related to the period of the input state we&#39;d see... flat.</p>
+
+<p>In this animation, I use Quirk to sweep through the classical states and show their QFT outputs:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/qft-spinners.gif"/></p>
+
+<p>Notice that the output chance display is in fact staying flat.
+There&#39;s still plenty of fun stuff happening, but it&#39;s all going into rotating the phases of the amplitudes.
+(That&#39;s what&#39;s being shown in the cells of the pale blue rectangle.)</p>
 
 <p>Measure the probability part, and nothing significant changes.
 Measure the superposition part, and you get a totally different style of output.</p>
