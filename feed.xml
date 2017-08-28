@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Shor's Quantum Factoring Algorithm</title>
+                <description>&lt;p&gt;A few years ago, I wrote a post on &lt;a href=&quot;http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm&quot;&gt;how Grover&amp;#39;s quantum search algorithm works&lt;/a&gt;. I think it went over quite well. I&amp;#39;ve heard from several people that it was the first time they &amp;quot;got&amp;quot; anything about quantum computing. Today I want to do the same thing, but with...</description>
+                <pubDate>Mon, 28 Aug 2017 06:10:20 -0700</pubDate>
+                <link>http://algassert.com/post/1718</link>
+                <guid isPermaLink="true">http://algassert.com/post/1718</guid>
+            </item>
+            <item>
                 <title>Breaking Down the Quantum Swap</title>
                 <description>&lt;p&gt;Suppose you have two qubits. For evocative purposes, suppose you&amp;#39;re literally holding them as &lt;a href=&quot;https://en.wikipedia.org/wiki/Bloch_sphere&quot;&gt;balls&lt;/a&gt; in your hands: one in the left hand, and one in the right hand. Your goal is to swap the qubits, so that your right hand ends up holding a qubit storing the state...</description>
                 <pubDate>Tue, 22 Aug 2017 13:10:20 -0700</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Tue, 06 Jun 2017 10:10:10 -0700</pubDate>
                 <link>http://algassert.com/post/1709</link>
                 <guid isPermaLink="true">http://algassert.com/post/1709</guid>
-            </item>
-            <item>
-                <title>Efficient Controlled Phase Gradients</title>
-                <description>&lt;p&gt;The phase gradient is a useful, but under-appreciated, quantum operation. When you apply a phase gradient to a register, each computational basis state $|k\rangle$ is phased by an amount proportional to $k$:&lt;/p&gt; &lt;p&gt;$$\text{Grad}^t = \sum_{k=0}^{N-1} |k\rangle \langle k| \exp(i \tau t k / N)$$&lt;/p&gt; &lt;p&gt;Phase gradients are the frequency-space equivalent...</description>
-                <pubDate>Wed, 24 May 2017 10:10:10 -0700</pubDate>
-                <link>http://algassert.com/post/1708</link>
-                <guid isPermaLink="true">http://algassert.com/post/1708</guid>
             </item>
     </channel>
 </rss>

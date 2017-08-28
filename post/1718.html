@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Shor's Quantum Factoring Algorithm</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Shor's Quantum Factoring Algorithm</h1>
+<p class="meta">28 Aug 2017</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>A few years ago, I wrote a post on <a href="http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm">how Grover&#39;s quantum search algorithm works</a>.
+I think it went over quite well.
+I&#39;ve heard from several people that it was the first time they &quot;got&quot; anything about quantum computing.
+Today I want to do the same thing, but with <a href="https://en.wikipedia.org/wiki/Shor%27s_algorithm">Shor&#39;s quantum factoring algorithm</a>.</p>
+
+<p>My guess is that there are two reasons that certain people found my post on Grover search helpful.
+First, I was just learning all this quantum computing stuff.
+I didn&#39;t have to guess at what people would find confusing, I was experiencing it first hand.
+Secondly, I <em>actually grappled with the problem</em>.
+I didn&#39;t try to explain Grover search with <a href="https://scifundchallenge.org/firesidescience/2014/03/16/dont-blink-the-quantum-zeno-effect-and-the-weeping-angels/">terrible analogies</a>.
+I didn&#39;t just state some <a href="http://www.dailymail.co.uk/sciencetech/article-3409392/Forget-Schrodingers-cat-researchers-reveal-quantum-pigeonhole-principle-say-tests-basic-notion-physics.html">ridiculous overhyped nonsense</a>.
+And I didn&#39;t use oversimplified factoids (e.g. &quot;0 and 1 at the same time&quot; or &quot;does every computation simultaneously&quot;) that couldn&#39;t possibly communicate anything but confusion.
+I started from the basics, explained the pieces, put them together, and kept doing that until a search algorithm emerged.</p>
+
+<p>I may not be able to write an explanation from the perspective of a first-time-learner anymore, but I can still help readers actually grapple with the problem to be understood.
+And that&#39;s what I intend to do in this post.
+I want to explain Shor&#39;s algorithm, and I want to do it in a way where at least readers who know a bit about coding come away thinking &quot;THAT&#39;s how it works?!&quot;, instead of being left with nothing but a general sense of confusion.</p>
+
+<p>I&#39;ll do my best to keep things simple and approachable, but I <em>will</em> be digging into the mathematical details.
+I admit there have been <a href="http://www.scottaaronson.com/blog/?p=208">valiant attempts at explaining Shor without much math</a>... but I think real understanding requires knowing more details than Scott covered in that post.</p>
+
+<h1>Overview</h1>
+
+<p>To understand Shor&#39;s quantum factoring algorithm, we&#39;ll work on first understanding several smaller things.
+Then it&#39;s just matter of seeing how they fit together into a story that cuts numbers into pieces.
+Each of those smaller things takes some work to understand, but I&#39;ll do my best to get the core ideas across.</p>
+
+<p>Here&#39;s a flowchart showing an overview of Shor&#39;s algorithm (click for a larger version):</p>
+
+<p><a href="/assets/2017-08-28-shor-algorithm/flowchart.png"><img style="max-width:100%;" src="/assets/2017-08-28-shor-algorithm/flowchart.png"/></a></p>
+
+<p>And here are the rough parts, or rather the questions, that I&#39;ll be covering:</p>
+
+<ol>
+<li>Why is sampling the frequencies of a signal useful for finding its period?</li>
+<li>How does a quantum computer make a periodic signal, relevant to factoring a number $R$, and then sample from its frequencies?</li>
+<li>How can finding the period of a modular-multiplication operation reveal extra square roots?</li>
+<li>Why does knowing an extra square root tell us factors of $R$?</li>
+</ol>
+
+<p>I realize that these questions used a bunch of terms and concepts I haven&#39;t explained yet.
+For example, what the heck are the &quot;frequencies of a signal&quot;?
+...Well, I guess that&#39;s as good a place as any to start.</p>
+
+<h1>Warm up: speakers, frequencies, and spectrograms</h1>
+
+<p>For a long time, historically, sound was a bit of a mystery.
+People knew that striking a bell would make a ringing noise, but they didn&#39;t really have a solid idea of what was going on physically.
+A lot of work and thought went into figuring out the underlying mechanism and how that relates back to what we actually experience.</p>
+
+<p>The <em>mechanism</em> of sound is just a single variable (vibrations in the air / pressure in your ear) going up and down over time.
+For example, loudspeakers produce sound by moving a diaphragm back and forth very quickly.
+The specific pattern of the back-and-forth movement determines what sound is being produced.
+Everything you&#39;ve ever heard can be reduced to a series of speaker diaphragm positions.
+In fact, that&#39;s exactly how early audio formats such as WAV files stored music: a raw uncompressed list of numbers telling the speaker where to be from moment to moment.</p>
+
+<p>Sound may be a single varying variable, but the way we experience sound doesn&#39;t seem at all like that.
+We hear a spectrum of many frequencies, all coming and going independently.
+I think of this as one of the big mysteries of sound: how does a single up-and-down signal translate into a rich spectrum of many variables going up and down?</p>
+
+<p>Fortunately, this is one of those mysteries that we actually know the answer to.
+If you take raw audio, chunk it into pieces, and <a href="https://en.wikipedia.org/wiki/Fourier_transform">Fourier transform</a> each of the pieces, what comes out is (much closer to) what we hear: a spectrum of frequencies coming and going.</p>
+
+<p>For example, when using sound editing software such as Audacity, the default view of the audio is essentially a plot of the speaker diaphragm positions over time:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/code-monkey-time.png"/></p>
+
+<p>This view is nice and simple, and makes it easy to see where there&#39;s silence and where something loud is happening.
+But this view is not very informative when you&#39;re trying to figure out <em>what</em> is being loud.
+To pick out fine details, you want something closer to our experience of sound: a <a href="https://en.wikipedia.org/wiki/Spectrogram">spectrogram</a>.</p>
+
+<p>Spectrograms show frequency information over time.
+In the following diagram the vertical axis is frequency, the horizontal axis is time, and the brightness of each pixel represents how strong a particular frequency is at a particular point in time:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/code-monkey-spectrogram.png"/></p>
+
+<p><a href="http://home.cc.umanitoba.ca/%7Erobh/howto.html">With some practice reading spectrograms</a>, you can recognize notes, instruments, and even words.
+Interestingly, you can think of modern musical notation as an extremely simplified spectrogram:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/code-monkey-notes.png"/></p>
+
+<p>Anyways, the general point I want to get across here is a) that we know how to turn a raw signal into frequency information, and b) even though frequency information is technically redundant with the raw signal, it can be easier to work with.
+If you want to learn more about sound and frequency, you can start with the Wikipedia page on <a href="https://en.wikipedia.org/wiki/Digital_signal_processing">digital signal processing</a>.</p>
+
+<p>Now that we&#39;re a teensy bit more familiar with frequencies, let&#39;s get into a specific relevant case where information that&#39;s spread out in a raw signal is concentrated in a useful way in frequency space.</p>
+
+<h1>The weird frequencies of repeating blips</h1>
+
+<p>Suppose I make a &quot;song&quot; where the list of speaker-diaphragm positions is almost entirely &quot;stay as far back as possible&quot;, but every tenth entry is &quot;as far forward as possible&quot;.
+That is to say, I make a song with periodic blips: a wav file with the data [0, 0, 0, 0, 0, 0, 0, 0, 0, 255] repeated over and over again.
+What will the song&#39;s spectrogram look like?</p>
+
+<p>If you&#39;re familiar with signal processing, the above question probably sounds... not even wrong?
+In order to talk about frequencies, you need more information.
+For example, what&#39;s the sample rate? and the bandwidth? and the windowing function?
+But the fun thing about periodic blip signals is that the spectrum <em>basically looks the same regardless of all these options</em>.</p>
+
+<p>To demonstrate, I wrote some python code to generate wav files storing the periodic signal I described, with a few different sample rates:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="nn">wave</span>
+<span class="n">dat_period</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="k">for</span> <span class="n">sample_rate</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">8000</span><span class="p">,</span> <span class="mi">16000</span><span class="p">,</span> <span class="mi">44100</span><span class="p">,</span> <span class="mi">192000</span><span class="p">]:</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;dit{}dat{}.wav&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dat_period</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">)</span>
+    <span class="n">cycle</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s1">&#39;00&#39;</span> <span class="o">*</span> <span class="p">(</span><span class="n">dat_period</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;FF&#39;</span><span class="p">)</span>
+    <span class="n">num_cycles_10sec</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">sample_rate</span> <span class="o">//</span> <span class="nb">len</span><span class="p">(</span><span class="n">cycle</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">wave</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">setparams</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;NONE&#39;</span><span class="p">,</span> <span class="s1">&#39;not compressed&#39;</span><span class="p">))</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">writeframes</span><span class="p">(</span><span class="n">cycle</span> <span class="o">*</span> <span class="n">num_cycles_10sec</span><span class="p">)</span>
+</code></pre></div>
+<p>After running the code to produce the files, I opened the files in Audacity and switched to the spectrogram view.
+Here are the spectrograms for each file (with adjusted contrast for clarity):</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/wav-spectrograms.png"/></p>
+
+<p>The files have different sample rates, and their spectrograms aren&#39;t <em>exactly</em> identical, but they all look basically the same: four strong and evenly-spaced peaks that stay constant over time.
+Actually, there&#39;s a fifth peak hiding at 0, and Audacity is hiding a <a href="https://dsp.stackexchange.com/questions/4825/why-is-the-fft-mirrored">mirrored half of the frequency spectrum</a>.
+So really there are <em>ten</em> peaks.
+It is <strong>not</strong> a coincidence that the number of implied peaks is equal to the period of our input signal.</p>
+
+<p>Keep in mind that each spectrogram in the above diagram has a different frequency scale.
+Varying the sample rate is having an effect on the frequency peaks: when the sample rate is twice as high, the frequencies are twice as high.
+But <em>proportionally speaking</em> the spectrograms have peaks in the same places, and that&#39;s what we care about.</p>
+
+<p>(If you actually generate and play those audio files, you&#39;ll find that they do in fact sound like a constant tone made up of several frequencies.)</p>
+
+<p>Now let&#39;s switch from periodic audio signals to periodic states on a quantum computer.</p>
+
+<h1>Periodic states and their frequencies</h1>
+
+<p>If you have a computer that can store 5 classical bits, there are 32 possible states that your computer can be in.
+There&#39;s <code>00000</code>, <code>00001</code>, <code>00010</code>, <code>00011</code>, <code>00100</code>, and so forth up to <code>11111</code>.
+One state for each way you can assign a 0 or a 1 to each bit.</p>
+
+<p>The thing that separates a quantum computer from a classical computer is that a quantum computer can rotate its state through particular weighted combinations of the classical states (called &quot;<a href="https://en.wikipedia.org/wiki/Quantum_superposition">superpositions</a>&quot;).
+You can write down possible states of a 5-qubit quantum computer by adding together various proportions of the 32 classical states achievable with 5 bits, as long as the squared magnitudes of the weights add up to 1.
+So a 5 qubit quantum computer could be in the state $|00000\rangle$, or in the state $\frac{1}{\sqrt{2}}|00000\rangle + \frac{1}{\sqrt{2}}|11111\rangle$, or in the state $\frac{3}{5}|00000\rangle - \frac{4}{5}|10101\rangle$, or in the state $\frac{1}{\sqrt{3}}|00001\rangle - \frac{1}{\sqrt{3}}|00100\rangle + \frac{1}{\sqrt{5}}|10000\rangle$, or all kinds of other fun combinations.</p>
+
+<p>In this post when I say &quot;periodic state&quot;, I mean a superposition where the weights of the classical states go like &#39;zero, zero, zero, zero, NOT ZERO, zero, zero, zero, zero, NOT ZERO&#39; and so forth.
+In other words, the classical states that have non-zero weight should be evenly spaced (and they should all have the same non-zero weight).</p>
+
+<p>For example, the state $\frac{1}{\sqrt{7}} |00000\rangle + \frac{1}{\sqrt{7}} |00101\rangle + \frac{1}{\sqrt{7}} |01010\rangle + \frac{1}{\sqrt{7}} |01111\rangle + \frac{1}{\sqrt{7}} |10100\rangle + \frac{1}{\sqrt{7}}|11001\rangle + \frac{1}{\sqrt{7}}|11110\rangle$ is a periodic state.
+It gives $\frac{1}{\sqrt{7}}$ weight to the state 00000, to the state 00101, and so forth up to 11110.
+All the other states aren&#39;t given any weight.
+In decimal, the states with non-zero weight are 0, 5, 10, 15, 20, 25, and 30.
+This is a periodic state with a period of 5.
+A more compact way to write this state is with summation notation, like this: $\frac{1}{\sqrt{7}} \sum_{k=0}^{6}|5k\rangle$.
+The state $\frac{1}{\sqrt{7}} \sum_{k=0}^{6}|5k+1\rangle$ is another, different, periodic state with period 5.</p>
+
+<p>At this point a certain subset readers are probably thinking something along the lines &quot;Superposition? Bah! I bet the quantum computer is just secretly in one of those states with non-zero-weight, but we don&#39;t know which! How is this any different from a probability distribution?&quot;.</p>
+
+<p>The answer to the &quot;how know superpositions real?&quot; question is: because we can operate on the states, and the outcomes of those operations differ depending on whether or not you started in a superposition of states or a single state (or in a probability distribution of states).</p>
+
+<p>The specific quantum operation we care about in this post is the <a href="https://en.wikipedia.org/wiki/Quantum_Fourier_transform">quantum Fourier transform</a> (the QFT).
+What the QFT does is... it&#39;s like it takes the weights of the states, pretends they&#39;re the samples making up an audio file, figures out what the frequencies in that audio are, then uses the strength of each frequency as the new weights defining the state of the computer.
+(A good predictor for whether you even slightly understood that last sentence is whether or not your mind just got blown <em>hard</em>.)
+The point is: after applying the QFT, sampling the quantum computer&#39;s state can tell us what the dominant frequencies of the input state were (if any).</p>
+
+<p>The frequency spectrum of a single state is just a <a href="https://en.wikipedia.org/wiki/Sine_wave">sine wave</a>, smoothly oscillating up and down.
+By contrast, the frequency spectrum of a periodic signal is not smooth.
+Like the spectrograms from earlier, the frequency spectrums of periodic signals have sharp peaks.
+Furthermore, the number of frequency peaks isn&#39;t a property of some individual state.
+The number of peaks is equal to the spacing between states.</p>
+
+<p>(If the quantum computer was really in just one of the classical states, how could a property about the spacing <strong>between</strong> the possible states be getting into the output?
+The frequency spectrums tell a very clear story about what&#39;s really going on.)</p>
+
+<p>As a concrete example, I used my <a href="http://algassert.com/quirk">drag-and-drop quantum circuit simulator Quirk</a> to prepare a periodic quantum state (more on that in a bit).
+Then I used a <a href="https://en.wikipedia.org/wiki/Quantum_Fourier_transform">Quantum fourier transform operation</a> to switch the state into its own frequency space.
+This is the result:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/quirk-spectrogram-10.png"/></p>
+
+<p>The green rectangle on the left is a &quot;chance display&quot;.
+It&#39;s showing, for each classical state from 0000000 to 1111111, the probability that measuring the superposition at that point would return that state.
+You can tell the input state is periodic because the spikes in the chance display (corresponding to states with non-zero weights) are evenly spaced and all the same size.</p>
+
+<p>The white box in the middle that says $\text{QFT}^\dagger$ is the (inverse) quantum Fourier transform operation.
+It switches the input state into its own frequency domain.
+I&#39;m not going to get into exactly how the QFT is implemented under the hood.
+For the purposes of this post, all that matters is that it can be done.
+If you want more information, see <a href="https://en.wikipedia.org/wiki/Quantum_Fourier_transform">the Wikipedia article</a>.</p>
+
+<p>The green rectangle on the right is a chance display showing the probabilities of getting various outcomes when measuring the output state.
+It has ten evenly-spaced peaks.
+Why ten?
+Because the number of frequency peaks is behaving just like it did with the periodic blip songs.
+The input state&#39;s period is ten, so the frequency space output has ten peaks.</p>
+
+<p>Just to check that this is actually working, let&#39;s reduce the input state&#39;s period from ten to five.
+We should get half as many peaks:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/quirk-spectrogram-5.png"/></p>
+
+<p>Yup, the output has a number of peaks equal to the period of the input.</p>
+
+<p>Before we continue I want to address why we&#39;re bothering with frequency space at all.
+If we&#39;re after the period of the signal, why not just get it by looking directly at the input signal?</p>
+
+<p>Keep in mind that the green displays in the diagrams are not available in real life.
+We don&#39;t get to see the distribution, we only get to sample from it.
+Sampling can efficiently tell us <em>where</em> various peak are (if they&#39;re tall enough), but not how many peaks there are.</p>
+
+<p>Still, why don&#39;t we just sample the initial signal several times and watch for patterns?
+Why can&#39;t we figure out the period by sampling the input signal and noticing &quot;Gee, there sure are a lot of multiples of 5 in here.&quot;?</p>
+
+<p>The problem with noticing that a certain multiple keeps happening again and again is that, as you will see later, in the problem we care about, the signal we&#39;re sampling from is going to have a random offset.
+If we sample the number 213, that could be $50 \cdot 4$ with an offset of $13$ or $10 \cdot 21$ with an offset of $3$ or any other combination of offset and multiple.
+<em>Every time we sample, there will be a different unknown offset.</em>
+This prevents us from figuring out the underlying pattern.
+Sampling from input states with random offsets will look exactly like random noise.</p>
+
+<p>The random offsets are what make working in frequency space useful, because <em>frequency peaks aren&#39;t affected by offsets</em>.
+When you shift a signal, you may apply a phase a factor to each frequency, but the magnitudes of those frequencies all stay the same.</p>
+
+<p>To demonstrate this, I made yet another circuit in Quirk.
+This time I&#39;m using an operation that adds larger and larger offsets into the input register before the QFT happens, with Quirk simulating what happens for each offset.
+Notice that, throughout the resulting animation, the input state is cycling yet the output peaks are staying perfectly still:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/quirk-spectrogram-5-moving.gif"/></p>
+
+<p>The phases of the output (not shown) are changing, but the magnitudes are staying the same.
+And, when ending a quantum computation, the magnitudes are what matter.
+The magnitudes determine the probability of measuring each state.
+(The phases matter if you&#39;re going to do more follow-up operations... but we aren&#39;t.)</p>
+
+<p>Another thing you should notice in the above diagram is that the frequency peaks are resilient to little imperfections.
+Because the number of states ($2^7 = 128$) is not a multiple of the period ($5$), there&#39;s a little kink where the spacing between blips is 3 instead of 5.
+Despite that kink, the peaks are extremely close to 0/5&#39;ths, 1/5&#39;ths, 2/5&#39;ths, 3/5&#39;ths, and 4/5&#39;ths of the way down the output space.</p>
+
+<h1>Preparing a periodic quantum state</h1>
+
+<p>I&#39;ve explained that, if we had a periodic quantum state with unknown period, we could sample from the peaks in its frequency space in order to learn something about the period.
+But how do we prepare that periodic state in the first place?</p>
+
+<p>First, an easy case.
+If the period we want is a power of 2, let&#39;s say $2^3$, then preparing a periodic state is simple.
+Start with an $n$-qubit quantum register initialized to 0, do nothing to the first 3 qubits, and hit the rest of the qubits with a Hadamard gate.
+Each qubit you hit with the Hadamard gate will transition from the $|0\rangle$ state to the $\frac{1}{\sqrt{2}} |0\rangle + \frac{1}{\sqrt{2}} |1\rangle$ state, putting the overall qureg into the state $\frac{1}{\sqrt{2^{n-3}}} \sum_{k=0}^{2^{n-3}} |8k\rangle$.
+That&#39;s a periodic state with period $2^3$.</p>
+
+<p>We can simulate this preparation in Quirk:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/simple-prepare-period-8.png"/></p>
+
+<p>An alternative way to create a quantum state that has period 8 is to hit every qubit with a Hadamard gate, add the register we want to prepare into a register of size 3, then measure the other register and try again if the result isn&#39;t 0.
+<a href="http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22Chance7%22%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2B%3DA3%22%5D%2C%5B%22Chance7%22%5D%2C%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22Chance7%22%5D%5D%7D">Here&#39;s how that looks</a>:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/prepare-period-8-postselect.png"/></p>
+
+<p>Beware that this is a case where the middle chance display is misleading.
+It looks like the addition didn&#39;t change to the state of the register we&#39;re preparing.
+Actually, its state was affected in a very important way.</p>
+
+<p>One way to make the change caused by the addition more apparent is to <a href="http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22Density7%22%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2B%3DA3%22%5D%2C%5B%22Density7%22%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22Density7%22%5D%5D%7D">use Quirk&#39;s density matrix display</a>:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/prepare-period-8-postdensity.png"/></p>
+
+<p>I don&#39;t expect readers to know how to read density matrices.
+The important thing to notice is that the addition turned the fine-grained grid pattern in the left display into a bunch of diagonal lines in the middle display.
+The diagonal lines are actually made up of a bunch of offset copies of more spaced out grids, like the one shown in the display on the right.
+Each of those offset copies represents a part of the superposition that can no longer interact with the other parts.</p>
+
+<p>Let&#39;s call the top seven qubits the &quot;input register&quot; and the bottom three qubits the &quot;ancilla register&quot;.
+When we add the input register into the ancilla register, we are basically copying the input register&#39;s value into the ancilla register, modulo 8 (because the ancilla register has 3 qubits and $2^3 = 8$).
+You can think of this as separating the input register&#39;s superposition into 8 parts, one for each remainder modulo 8.
+There&#39;s a part for the classical states whose remainder is 0, one part for values whose remainder is 1, one for remainder 2, and so forth up to the part for remainder 7.</p>
+
+<p>If we were to measure the ancilla register, it would tell us something about the input register.
+Specifically, it would tell us which of the eight parts of the superposition survived.
+But, regardless of that measurement result, the surviving state is always a periodic quantum state with period 8.
+Only the offset of the state changes.</p>
+
+<p>Note that, even if we haven&#39;t measured the ancilla register yet, it&#39;s reasonable for us to say &quot;the input register contains a periodic quantum state with period 8&quot;.
+In fact that&#39;s reasonable to say even if we plan to just chuck the ancilla register away without bothering to measure it.
+It&#39;s the initialization of the ancilla register that split the input register into separate non-interacting pieces.
+The only practical difference between doing a &quot;real&quot; measurement and initializing that ancilla register is that a &quot;real&quot; measurement can&#39;t be undone but the ancilla register could be cleared by subtracting the input register out of it (...but we&#39;re not going to do that).</p>
+
+<p>To convince you that the input register really does contain a periodic state, even if we don&#39;t condition on or measure the second register, let&#39;s make another circuit in Quirk.
+The frequency peaks don&#39;t move when you offset the input signal, so it really shouldn&#39;t matter that there&#39;s an unknown or even unmeasured offset.
+<a href="http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2B%3DA3%22%5D%2C%5B%22Density7%22%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%22QFT%E2%80%A07%22%5D%2C%5B%22Chance7%22%5D%5D%7D">Prepare a uniform superposition in the input register, add into the ancilla register, Fourier-transform the input register, and...</a></p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/prepare-period-8-qft.png"/></p>
+
+<p>The peaks are there!
+We prepared a state with period 8 and, despite an unknown unmeasured offset, there are 8 peaks in its frequency spectrum.
+(The peaks are perfectly sharp spikes because both the period and the size of the QFT are powers of 2.)</p>
+
+<p>I hope this really drives home how superpositions and probability distributions are different from each other.
+The input register effectively contains both types: it&#39;s in a probability distribution over the offsets of a superposition with period 8.
+And the various measurements and operations we can try clearly delineate between the probability part and the superposition part.
+In particular, the expected output changes if we measure the superposition part but not if we measure the probability part.</p>
+
+<p>If we measure the ancilla register, that&#39;s like measuring the probability part.
+It tells us the offset of the periodic state.
+But, regardless of the outcome, the input register will still contain a superposition with period 8.
+The output frequency spectrum will still have 8 peaks in it.</p>
+
+<p>Contrast this with what would happen if we measured the input register (before performing the QFT).
+The input register&#39;s state would collapse to some specific state $|k\rangle$.
+The frequency spectrum of a single state is a pure sine wave, so instead of seeing frequency peaks we&#39;d see output weights that were smoothly varying up and down.
+There&#39;d still be peaks, but they&#39;d be smooth peaks and the number of peaks wouldn&#39;t be related to the period of the input state.</p>
+
+<p>Measure the probability part, and nothing significant changes.
+Measure the superposition part, and you get a totally different style of output.</p>
+
+<p>That&#39;s probably enough harping on the fact that superpositions just really don&#39;t behave like probability distributions.
+Let&#39;s move on to preparing states with other periods.</p>
+
+<h1>Preparing other periodic states</h1>
+
+<p>Instead of doing a three-bit addition, i.e. an addition modulo 8, we can do addition modulo some other number.
+This allows us to prepare a periodic quantum state with any period we want.
+The state we prepare will still have an unknown offset, but that&#39;s okay: the frequency peaks don&#39;t care.</p>
+
+<p>For example, here is a <a href="http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%7B%22id%22%3A%22setR%22%2C%22arg%22%3A7%7D%5D%2C%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2BAmodR3%22%5D%2C%5B%22QFT%E2%80%A07%22%5D%2C%5B%22Chance7%22%5D%5D%7D">circuit in Quirk</a> that prepares a periodic quantum state with period 7, then applies a Fourier transform to show that there are 7 peaks in the output state:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/prepare-period-7.png"/></p>
+
+<p>Yup, 7 peaks.</p>
+
+<p>Now we have a general procedure for making periodic states with any period we want.
+We&#39;ll come back to this theme later, but first I want to explain how knowing the location of just one peak can tell you the period of the input.
+(As opposed to having to count the peaks, which would require quite a lot of sampling.)</p>
+
+<h1>Figuring out periods from frequency samples</h1>
+
+<p>Here&#39;s a bit of a puzzle for you.
+I&#39;m going to show you a circuit that prepares a periodic state using a modular addition like in the last section, but I&#39;m going to hide which modulus I&#39;m using.
+Your job is to figure out the secret modulus.</p>
+
+<p>Here&#39;s the circuit:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/prepare-secret-period.png"/></p>
+
+<p>Do you know what $R$ has been set to?</p>
+
+<p>It should be obvious: there&#39;s three peaks, so $R=3$.</p>
+
+<p>But remember: when running an actual computation, <em>we don&#39;t get to see the whole output state</em>.
+We only get to see one measurement outcome at a time.
+If we ran the circuit enough times, we would get some rough idea of the number of peaks... but the amount of times we would have to run the circuit would scale with the number of peaks.
+If there were $P$ peaks, we&#39;d need to do $O(\sqrt{P})$ runs before we had a reasonable idea of what $P$ was.
+This is a problem, because the input states we will be dealing with when factoring numbers will have <em>huge</em> periods.
+We need a faster way to do this, that works with fewer samples.</p>
+
+<p>Suppose we were sampling from a frequency space of size $N=1024$, and that we didn&#39;t know the period of the input signal, but we got a frequency sample $s=340$.
+What do you think the secret period might be?</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>What if I told you the period was less than 6?</p>
+
+<p>...</p>
+
+<p>Okay, let me give you a hand by going over each case.
+If the period was 2, there should be two frequency peaks: one at 0, and one half-way across the space near 512.
+If the period was 3, there should be three frequency peaks: one at 0, one a third of the way across the space near 343, and another two thirds of the way across near 687.
+If the period was 4, there should be peaks near 0, 256, 512, and 768.
+If the period was 5, there&#39;d be peaks near 0, 205, 410, 614, 819.</p>
+
+<p>Did you see it?
+<strong>Only one of the periods has a frequency peak near our sampled frequency.</strong>
+If the period was 3 then there&#39;s a peak around 343.
+Our sampled value of $s=340$ is near 343.
+This means the input state&#39;s period was almost definitely equal to 3.</p>
+
+<p>When the range of possible periods is huge, we can&#39;t simply go over all of the cases like we did here and see what&#39;s closest.
+We need a more clever strategy to find fractions near the point we sampled.
+This clever-er strategy comes in the form of the <a href="https://en.wikipedia.org/wiki/Continued_fraction#Best_rational_approximations">continued fractions algorithm for the best rational approximation</a>.</p>
+
+<p>I would explain exactly how that algorithm works, but python conveniently has it built into the <code>fractions</code> module.
+We don&#39;t have to know how it works, we can just use it:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">from</span> <span class="nn">fractions</span> <span class="kn">import</span> <span class="n">Fraction</span>
+<span class="k">print</span><span class="p">(</span><span class="n">Fraction</span><span class="p">(</span><span class="mi">340</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)</span><span class="o">.</span><span class="n">limit_denominator</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="c1"># prints &#39;1/3&#39;</span>
+</code></pre></div>
+<p>With <code>limit_denominator</code> in hand, it&#39;s easy to write a &quot;sampled frequency to period&quot; function:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">from</span> <span class="nn">fractions</span> <span class="kn">import</span> <span class="n">Fraction</span>
+<span class="k">def</span> <span class="nf">sampled_freq_to_period</span><span class="p">(</span><span class="n">sampled_freq</span><span class="p">,</span> <span class="n">num_freqs</span><span class="p">,</span> <span class="n">max_period</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">Fraction</span><span class="p">(</span><span class="n">sampled_freq</span><span class="p">,</span> <span class="n">num_freqs</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">limit_denominator</span><span class="p">(</span><span class="n">max_period</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">denominator</span>
+</code></pre></div>
+<p>One pain point here is that our sample might be from the peak near 0.
+In that case we learn nothing, because every period has a peak near 0.
+That&#39;s fine, because getting 0 is really really unlikely for states that have a large period (which is the case we care about).
+And if we do get really unlucky... well, we can just try again.
+And if we keep getting values near 0 again and again and again forever, then I guess we win a Nobel prize because we found a repeatable experiment demonstrating that quantum mechanics is wrong.</p>
+
+<p>The other thing to keep in mind, for quantum states that have potentially huge periods, is that the possible fractions start getting quite close together.
+If our maximum period is $p$, then the closest fractions are a distance of $1/p^2$ apart.
+So we need to make sure the frequency space we are sampling from is large enough to tell those fractions apart.
+Practically speaking, that means our input register must have at least $\lg p^{2} = 2 \lg p$ qubits.</p>
+
+<p>When factoring a number $R$ with $N$ bits, the maximum period will be $2^N$ and we&#39;ll need $O(\lg 2^N) = O(N)$ qubits.
+Which is reasonable.</p>
+
+<h1>Preparing states with unknown periods</h1>
+
+<p>Modular addition isn&#39;t the only way to prepare periodic states.
+I mean, if it was, the ability to figure out the modulus by sampling the frequency space of the state would be an esoteric but ultimately pointless bit of trivia.
+Whoever put together the circuit obviously knew the modulus.
+They could have just <em>told it to you</em> instead of wasting time making you sample frequencies.</p>
+
+<p>In order to do something interesting, we have to be able to make a periodic-state-producing circuit from start to finish <em>and still not know what period its state will have</em>.</p>
+
+<p>It turns out that this is not very hard to do.
+We can use any periodic function $f$ to produce a periodic state, and there&#39;s no shortage of functions where figuring out the period is hard even if you know $f$.
+As long as $f(x)$ equals $f(x + p)$ regardless of $x$ for some $p$, and we can make a circuit that computes $f$, we can produce a periodic state that we can then sample in order to figure out $p$.
+The key point to internalize is that <em>knowing $f$ doesn&#39;t mean you know $p$</em>.</p>
+
+<p>For example, suppose we use $f(x) = 2^x \pmod{23}$.
+What&#39;s the period of this function?
+In other words, if you start at 1 and begin multiplying by 2 again and again, how long will it be until you reach another number that&#39;s 1 more than a multiple of 23?</p>
+
+<p>Let&#39;s try: 1 times 2 is 2, then 2 times 2 is 4, then 8, 16, 32→9, 18, 36→13, 26→3, 6, 12, 24→1; there it is!
+It took us... 11 doublings to get back to 1.
+So the period of $2^x \pmod{23}$ is 11.</p>
+
+<p>Now let&#39;s try a different approach to the problem: preparing a periodic state and looking at its frequency spectrum.
+Open Quirk, create a uniform superposition for $x$, initialize the ancilla register to 1, multiply it by $2^x \pmod{23}$, and...</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/quirk-prepare-period-11-mul.png"/></p>
+
+<p>Eleven peaks! And we didn&#39;t have to double eleven times to figure that out.</p>
+
+<p>Okay okay, let&#39;s try something a bit harder.
+This time we&#39;re going to be multiplying by 7 modulo 58, and I&#39;m not going to show you the impossible-in-reality chance display.
+<a href="http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%7B%22id%22%3A%22setB%22%2C%22arg%22%3A7%7D%2C1%2C%7B%22id%22%3A%22setR%22%2C%22arg%22%3A58%7D%5D%2C%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22X%22%5D%2C%5B%22inputA10%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22*BToAmodR6%22%5D%2C%5B%22QFT%E2%80%A010%22%5D%2C%5B%22Sample10%22%5D%5D%7D">All you get is a sample</a>:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/quirk-secret-mul-period.png"/></p>
+
+<p>I promise I didn&#39;t cherry-pick the output shown in the diagram.
+I took a random sample.
+There were $2^{10} = 1024$ possible frequency samples, we got a sample of 732, and we know the period can&#39;t be more than our modulus of 58.</p>
+
+<p>Given the sample from the diagram, can you figure out the period of $f(x) = 7^x \pmod{58}$ <em>without</em> multiplying by 7 until you get back to 1?</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>Hey, remember that <code>sampled_freq_to_period</code> python function we defined earlier?</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>Let&#39;s try it:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">guess</span> <span class="o">=</span> <span class="n">sampled_freq_to_period</span><span class="p">(</span><span class="n">sampled_freq</span><span class="o">=</span><span class="mi">732</span><span class="p">,</span>
+                               <span class="n">num_freqs</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span>
+                               <span class="n">max_period</span><span class="o">=</span><span class="mi">58</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">guess</span><span class="p">)</span>
+<span class="c1"># prints &#39;7&#39;</span>
+</code></pre></div>
+<p>Pass our parameters into the function, and out pops 7.
+Feel free to check that $7^7 \pmod{58} = 1$.</p>
+
+<p>At this point you should be convinced that, assuming we can actually implement this $\times B^A \pmod{R}$ operation from the diagrams, we can recover its period by sampling from a frequency spectrum and using our handy-dandy python function.
+(Explaining exactly how to efficiently implement a modular exponentiation operation on a quantum computer is way more detail than I want to go into.
+If you&#39;re really interested, <a href="/post/1712">I wrote a whole paper about it</a>.)</p>
+
+<p>The only real missing piece now is... why the heck are we computing this period?!
+What do we even do with it??</p>
+
+<p>Answer: We&#39;re going to use it to find extra square roots.</p>
+
+<p>Follow-up question: What? How does that help us factor numbers? What even is that?! Why are there so many steps! Why is this so hard!? Auuuurrrrgh!!</p>
+
+<p>Answer: Uh... okay. Look, just hold on, we&#39;re getting there. I promise.</p>
+
+<h1>Turning an extra square root into a factor</h1>
+
+<p>An &quot;extra square root&quot; is a number $u$ that squares to give 1 and yet isn&#39;t +1 or -1.
+In the number systems you&#39;re probably used to, this never happens.
+But, in modular arithmetic, it does.
+For example, when working modulo 100, the number 49 is an extra square root.
+49 isn&#39;t 1, and it isn&#39;t 99 (which is -1 mod 100), but $49^2 = 2401 \equiv 1 \pmod{100}$.</p>
+
+<p>The thing about knowing $u^2 = 1$ is that we can rewrite this equation into $u^2 - 1 = 0$.
+That equation <em>factors</em>.
+It&#39;s equivalent to saying that $(u-1)(u+1) = 0$.</p>
+
+<p>Now, if $u$ was 1, the fact that $(u-1)(u+1) = (1-1)(1+1) = 0 \cdot 2$ was zero would not be very surprising.
+Similarly, if $u$ was -1, then $(u-1)(u+1) = (-1-1)(-1+1) = -2 \cdot 0$ vanishing is not very surprising.
+That&#39;s why we need an <em>extra</em> square root: to make the equation $(u+1)(u-1) = 0$ actually interesting.</p>
+
+<p>If we&#39;re working modulo $R$, then knowing $(u-1)(u+1) = 0$ tells us that in the usual integer arithmetic $(u-1)(u+1)$ is a multiple of $R$.
+In other words, we know two non-zero values, $a = u-1$ and $b = u+1$, such that $a \cdot b = k \cdot R$ for some integer $k$.</p>
+
+<p>Suppose we factorized $a$, $b$, $k$, and $R$ into their prime factors.
+Then our equation becomes:</p>
+
+<p>$$(a_1 \cdot a_2 \cdot ... \cdot a_{n_a}) \cdot (b_1 \cdot ... \cdot b_{n_b}) = (k_1 \cdot ... \cdot k_{n_k}) \cdot (R_1 \cdot ... \cdot R_{n_R})$$</p>
+
+<p>Every prime factor that appears on the right hand side of that equation must have partner on the left hand side.
+But here&#39;s the thing: the partners to the prime factors in $R$ <em>have to be spread over both $a$ and $b$</em>.
+If all of $R$&#39;s prime factor partners were in $a$, then $a$ would be a multiple of $R$.
+Which would mean $u-1$ was zero the whole time (modulo $R$).
+Which would violate our assertion that $u$ isn&#39;t congruent to 1.
+The same logic applies to $b$.</p>
+
+<p>So we know $a = u-1$ has some factors in common with $R$.
+That&#39;s great, but $a$ might also have factors in common with $k$.
+We need to filter those out.
+Fortunately, this is easy: we just compute the <a href="https://en.wikipedia.org/wiki/Euclidean_algorithm">greatest common divisor</a> of $R$ and $a$.</p>
+
+<p>What we&#39;re left with is a number $r = \text{gcd}(u-1, R)$ that has prime factors in common with $R$, but can&#39;t have all the prime factors in $R$.
+Therefore $r$ is a factor of $R$.</p>
+
+<p>For example, recalling the $49^2 = 1 \pmod{100}$ example from the start of this section, we find that $\text{gcd}(49-1, 100) = 4$.
+And 100 is in fact divisible by 4.</p>
+
+<h1>Turning a period into an extra square root</h1>
+
+<p>So, we know how to take an extra square root $u$ modulo $R$, and turn that into a factor of $R$.
+We also know how to use a quantum computer to tell us the period of the function $f(x) = B^x \pmod{R}$ for any base $B$ and modulus $R$.
+How do we put these two pieces together?</p>
+
+<p>Well... the period $p$ is the smallest solution to the equation $B^p = 1 \pmod{R}$.
+The key idea is that, if we raise $B$ to <em>half</em> of the period, then the result will be a square root of $1$.
+After all, $B^{p/2} \cdot B^{p/2} = B^p$ and we already know that $B^p = 1 \pmod{R}$.</p>
+
+<p>Sometimes the square root we get will be -1, instead of an extra square root.
+Sometimes the period will be odd, so we won&#39;t be able to divide it in half.
+But, not infrequently, the period will be even and $B^{p/2}$ won&#39;t be congruent to -1.
+Then we win.</p>
+
+<p>The good case isn&#39;t rare, by the way.
+As far as I know, it&#39;s akin to winning two coin flips.
+We might have to try a few random $B$&#39;s before landing on one that works, but when we do... bingo.</p>
+
+<h1>Putting it all together</h1>
+
+<p>We&#39;ve now discussed all the key parts of Shor&#39;s algorithm:</p>
+
+<ol>
+<li>Using a quantum computer and frequency space sampling to perform period finding.</li>
+<li>Using period finding to find extra square roots.</li>
+<li>Using extra square roots to get factors.</li>
+</ol>
+
+<p>With all of this information internalized, we can finally write some pseudo-code to simulate Shor&#39;s algorithm:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">log2</span>
+<span class="kn">from</span> <span class="nn">fractions</span> <span class="kn">import</span> <span class="n">Fraction</span><span class="p">,</span> <span class="n">gcd</span>
+
+<span class="k">def</span> <span class="nf">factor_attempt</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">period</span> <span class="o">=</span> <span class="n">sample_period</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+    <span class="c1"># Try to extract an extra square root.</span>
+    <span class="n">half_period</span> <span class="o">=</span> <span class="n">period</span> <span class="o">//</span> <span class="mi">2</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">half_period</span><span class="p">,</span> <span class="n">modulus</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">u</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">u</span> <span class="o">==</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">u</span><span class="o">**</span><span class="mi">2</span> <span class="o">%</span> <span class="n">n</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>  <span class="c1"># Failed attempt.</span>
+
+    <span class="c1"># Use extra square root to pull out a factor.</span>
+    <span class="k">return</span> <span class="n">gcd</span><span class="p">(</span><span class="n">u</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">sample_period</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">modulus</span><span class="p">):</span>
+    <span class="n">modulus_bit_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="n">log2</span><span class="p">(</span><span class="n">modulus</span><span class="p">)))</span>
+    <span class="n">precision</span> <span class="o">=</span> <span class="n">modulus_bit_count</span> <span class="o">*</span> <span class="mi">2</span>
+
+    <span class="c1"># Prepare a uniform superposition of possible exponents.</span>
+    <span class="n">exponent_qureg</span> <span class="o">=</span> <span class="n">Qureg</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">precision</span><span class="p">,</span> <span class="n">initial_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">exponent_qureg</span><span class="p">:</span>
+        <span class="nb">apply</span> <span class="n">Hadamard</span> <span class="n">to</span> <span class="n">q</span>
+
+    <span class="c1"># Create distinguishing information that separates the exponents</span>
+    <span class="c1"># into equivalence classes modulo the unknown period.</span>
+    <span class="n">ancilla_qureg</span> <span class="o">=</span> <span class="n">Qureg</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">modulus_bit_count</span><span class="p">,</span> <span class="n">initial_value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ancilla_qureg</span> <span class="o">*=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">exponent_qureg</span><span class="p">,</span> <span class="n">modulus</span><span class="p">)</span>
+
+    <span class="c1"># Convert to frequency space.</span>
+    <span class="nb">apply</span> <span class="n">QFTinv</span> <span class="n">to</span> <span class="n">exponent_qureg</span>
+
+    <span class="c1"># Sample from the frequency spectrum.</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">measure</span> <span class="n">exponent_qureg</span>
+
+    <span class="c1"># Figure out the fraction closest to the proportional sample.</span>
+    <span class="n">frac</span> <span class="o">=</span> <span class="n">Fraction</span><span class="p">(</span><span class="n">numerator</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">denominator</span><span class="o">=</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">precision</span><span class="p">)</span>
+    <span class="n">nearby_bounded_frac</span> <span class="o">=</span> <span class="n">frac</span><span class="o">.</span><span class="n">limit_denominator</span><span class="p">(</span><span class="n">modulus</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># The denominator should be the period.</span>
+    <span class="k">return</span> <span class="n">nearby_bounded_frac</span><span class="o">.</span><span class="n">denominator</span>
+</code></pre></div>
+<p>The above code is really just a more detailed version of the flowchart from earlier:</p>
+
+<p><a href="/assets/2017-08-28-shor-algorithm/flowchart.png"><img style="max-width:100%;" src="/assets/2017-08-28-shor-algorithm/flowchart.png"/></a></p>
+
+<p>Still, even with the extra details, I&#39;m simplifying quite a lot.
+A real algorithm would break down the exponentiation into basic quantum gates.
+It would also check several fractions and periods near to the sampled value, in case the sampled result was close instead of exact.
+It would deal with special cases like &quot;Oops, I&#39;m an extremely lucky person and the base I chose at random isn&#39;t co-prime to the modulus.&quot;.
+It would check for various classically-easy cases like small factors and square numbers.
+And so on and so on.</p>
+
+<h1>End to end example</h1>
+
+<p>We have all the pieces we need, let&#39;s apply them.</p>
+
+<p>I went to <a href="http://www.mathematical.com/primes0to1000k.html">a list of all the primes up to a million</a>, picked two at random, and multiplied them together.
+The result was:</p>
+
+<p>$R = 75945260669$</p>
+
+<p>We&#39;re going to factor this number using Shor&#39;s algorithm.
+Unfortunately we can&#39;t use a quantum computer to do it.
+But the numbers are small enough that we can brute-force the period finding classically:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">brute_force_find_period</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">R</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">B</span>
+    <span class="k">while</span> <span class="n">t</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">t</span> <span class="o">*=</span> <span class="n">B</span>
+        <span class="n">t</span> <span class="o">%=</span> <span class="n">R</span>
+        <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">n</span>
+</code></pre></div>
+<p>Just... be prepared to wait a few minutes for that method to run, okay?</p>
+
+<p>We start Shor&#39;s algorithm by picking a random base $B$.
+I ran <code>B = random.randint(0, R)</code> in python and got:</p>
+
+<p>$B = 58469529322$</p>
+
+<p>Now we want to know the period of $f(x) = B^x \pmod{R}$, so we run <code>brute_force_find_period(B, R)</code>.
+This is the slow step classically, and it takes a couple minutes for the naive brute force search we&#39;re using to finish.
+Using the classical method means we don&#39;t get to practice the period-from-closest-fraction&#39;s-denominator thing.
+You&#39;ll have to do that on your own.
+Anyways, eventually we get our answer:</p>
+
+<p>$P = 327347592$</p>
+
+<p>The period is even, which is good because we need that.
+Otherwise we&#39;d have needed to retry.
+However, we&#39;ll also need to retry if $B^{P/2}$ is congruent to $R-1$.
+I ran <code>u = pow(B, p // 2, R)</code> and... we got lucky!
+The result wasn&#39;t $R-1$; we found an extra square root:</p>
+
+<p>$u = 23766570031$</p>
+
+<p>(You can check that <code>u**2 % R</code> spits out <code>1</code>, as it should.)</p>
+
+<p>Now we know that $(u-1) \cdot (u+1) = 23766570030 \cdot 23766570032 = k \cdot R$ for some unknown integer $k$.
+All we need to do is use gcd to filter the unknown $k$&#39;s prime factors out of $u-1$ or $u+1$, and we&#39;re home free.
+We run <code>r1 = fractions.gcd(u-1, R)</code> and get our first factor:</p>
+
+<p>$r_1 = 450893$</p>
+
+<p>We can get the second factor by dividing $R$ by $r_1$ or by running <code>fractions.gcd(u+1, R)</code>.
+Either way we find that:</p>
+
+<p>$r_2 = 168433$</p>
+
+<p>We then check our answer with <code>print(r1 * r2 == R)</code>:</p>
+
+<p><code>True</code></p>
+
+<p>We did it!
+$r_1$ and $r_2$ are in fact the two primes I picked.
+$75945260669$ factors into $168433 \cdot 450893$.</p>
+
+<h1>Conclusion</h1>
+
+<p>Shor&#39;s algorithm is difficult to understand because it mixes together ideas from quantum physics, signal processing, number theory, and computer science.
+I didn&#39;t cover all of the details, but I hope I got across the basic ideas needed to understand the pieces and how they fit into a coherent algorithm for factoring numbers.</p>
+
+<h1>Acknowledgements</h1>
+
+<p>I&#39;d like to thank Bernardo Meurer for proof-reading this post and pointing out several places where the explanations were seriously lacking.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1717">&laquo; Breaking Down the Quantum Swap</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

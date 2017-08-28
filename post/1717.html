@@ -254,19 +254,19 @@ It&#39;s pretty simple: the operations that xor-swapping applies are $Z_1 \sim X
 That&#39;s it.</p>
 
 <p>To be safe, we should check that multiplying those operations together returns the correct matrix:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">Z1</span> <span class="o">=</span> <span class="n">kron</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">I</span><span class="p">)</span>
-<span class="n">Z2</span> <span class="o">=</span> <span class="n">kron</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
-<span class="n">X1</span> <span class="o">=</span> <span class="n">kron</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">I</span><span class="p">)</span>
-<span class="n">X2</span> <span class="o">=</span> <span class="n">kron</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
-<span class="n">Swap</span> <span class="o">=</span> <span class="n">control_product</span><span class="p">(</span><span class="n">Z1</span><span class="p">,</span> <span class="n">X2</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
-    <span class="n">control_product</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">Z2</span><span class="p">))</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
-    <span class="n">control_product</span><span class="p">(</span><span class="n">Z1</span><span class="p">,</span> <span class="n">X2</span><span class="p">))</span>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>Z1 = kron(Z, I)
+Z2 = kron(I, Z)
+X1 = kron(X, I)
+X2 = kron(I, X)
+Swap = control_product(Z1, X2).dot(
+    control_product(X1, Z2)).dot(
+    control_product(Z1, X2))
 
-<span class="k">print</span><span class="p">(</span><span class="n">Swap</span><span class="o">.</span><span class="n">round</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
-<span class="c1"># [[1 0 0 0]</span>
-<span class="c1">#  [0 0 1 0]</span>
-<span class="c1">#  [0 1 0 0]</span>
-<span class="c1">#  [0 0 0 1]]</span>
+print(Swap.round().astype(int))
+# [[1 0 0 0]
+#  [0 0 1 0]
+#  [0 1 0 0]
+#  [0 0 0 1]]
 </code></pre></div>
 <p>Yup, that&#39;s the swap matrix.</p>
 
@@ -278,20 +278,20 @@ The fact that we call one particular axis the Z axis (or &quot;the computational
 The underlying math is independent of our naming conventions, so this alternating technique must work in some sense no matter which axis we use.</p>
 
 <p>Just to be sure, we can test in python if using X and Y instead of Z and X works:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">Y</span> <span class="o">=</span> <span class="n">mat</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1j</span><span class="p">],</span>
-         <span class="p">[</span><span class="mi">1j</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
-<span class="n">Y1</span> <span class="o">=</span> <span class="n">kron</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">I</span><span class="p">)</span>
-<span class="n">Y2</span> <span class="o">=</span> <span class="n">kron</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>Y = mat([[0, -1j],
+         [1j, 0]])
+Y1 = kron(Y, I)
+Y2 = kron(I, Y)
 
-<span class="n">SwapXY</span> <span class="o">=</span> <span class="n">control_product</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">Y2</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
-    <span class="n">control_product</span><span class="p">(</span><span class="n">Y1</span><span class="p">,</span> <span class="n">X2</span><span class="p">))</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
-    <span class="n">control_product</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">Y2</span><span class="p">))</span>
+SwapXY = control_product(X1, Y2).dot(
+    control_product(Y1, X2)).dot(
+    control_product(X1, Y2))
 
-<span class="k">print</span><span class="p">(</span><span class="n">SwapXY</span><span class="o">.</span><span class="n">round</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
-<span class="c1"># [[1 0 0 0]</span>
-<span class="c1">#  [0 0 1 0]</span>
-<span class="c1">#  [0 1 0 0]</span>
-<span class="c1">#  [0 0 0 1]]</span>
+print(SwapXY.round().astype(int))
+# [[1 0 0 0]
+#  [0 0 1 0]
+#  [0 1 0 0]
+#  [0 0 0 1]]
 </code></pre></div>
 <p>Yup.</p>
 
@@ -462,8 +462,8 @@ Here&#39;s what <a href="http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%
 
 <p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-22-swap-breakdown/tele-swap.png"/></p>
 
-<p>I would go into detail about how this works, but honestly it&#39;s just two quantum teleportations shoved together and this post is already way too long.
-I think I&#39;ve said enough for today.</p>
+<p>I would go into detail about how this works, but honestly this post is already way too long.
+I&#39;ve said everything I want to say.</p>
 
 <h1>Summary</h1>
 
@@ -495,7 +495,7 @@ You can use observable swapping to store/retrieve that information.</p>
           <a href="/post/1716">&laquo; Visualizing 2-Qubit Entanglement</a>
         </td>
         <td align="right">
-          
+          <a href="/post/1718">Shor's Quantum Factoring Algorithm &raquo;</a>
         </td>
       </tr>
     </table>
