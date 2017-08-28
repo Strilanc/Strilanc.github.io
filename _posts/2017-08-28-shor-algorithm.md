@@ -707,3 +707,5 @@ I didn't cover all of the details, but I hope I got across the basic ideas neede
 # Acknowledgements
 
 I'd like to thank Bernardo Meurer for proof-reading this post and pointing out several places where the explanations were seriously lacking.
+
+[Discuss on reddit](https://www.reddit.com/r/algassert/comments/6wknvr/comment_thread_shors_quantum_factoring_algorithm/)
