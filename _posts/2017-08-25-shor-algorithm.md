@@ -132,7 +132,7 @@ Keep in mind that each spectrogram in the above diagram has a different frequenc
 Varying the sample rate is having an effect on the frequency peaks: when the sample rate is twice as high, the frequencies are twice as high.
 But *proportionally speaking* the spectrograms have peaks in the same places, and that's what we care about.
 
-(Fun fact: if you actually generate and play those audio files, they sound like *complete awful garbage*. I expected them to sound like something akin to the spectrograms: four (or nine) overlapping tones. This probably says something interesting about how humans perceive sound, or how bad my laptop's speakers are.)
+(If you actually generate and play those audio files, you'll find that they do in fact sound like a constant tone made up of several frequencies.)
 
 Now let's switch from periodic audio signals to periodic states on a quantum computer.
 
@@ -147,17 +147,25 @@ The thing that separates a quantum computer from a classical computer is that a 
 You can write down possible states of a 5-qubit quantum computer by adding together various proportions of the 32 classical states achievable with 5 bits, as long as the squared magnitudes of the weights add up to 1.
 So a 5 qubit quantum computer could be in the state $|00000\rangle$, or in the state $\frac{1}{\sqrt{2}}|00000\rangle + \frac{1}{\sqrt{2}}|11111\rangle$, or in the state $\frac{3}{5}|00000\rangle - \frac{4}{5}|10101\rangle$, or in the state $\frac{1}{\sqrt{3}}|00001\rangle - \frac{1}{\sqrt{3}}|00100\rangle + \frac{1}{\sqrt{5}}|10000\rangle$, or all kinds of other fun combinations.
 
-In this post when I say "periodic state", I mean a quantum computer state where the weights assigned to the underlying classical states are mostly zero, except for some non-zero ones spaced in a periodic way.
-For example, the state $\frac{1}{\sqrt{7}} \sum\_{k=0}^{6}|5k\rangle = \frac{1}{\sqrt{7}} |00000\rangle + \frac{1}{\sqrt{7}} |00101\rangle + \frac{1}{\sqrt{7}} |01010\rangle + \frac{1}{\sqrt{7}} |01111\rangle + \frac{1}{\sqrt{7}} |10100\rangle + \frac{1}{\sqrt{5}}|11001\rangle + \frac{1}{\sqrt{5}}|11110\rangle$ is a periodic state (with period five).
+In this post when I say "periodic state", I mean a superposition where the weights of the classical states go like 'zero, zero, zero, zero, NOT ZERO, zero, zero, zero, zero, NOT ZERO'.
+In other words, the classical states that have non-zero weight should be evenly spaced (and they should all have the same non-zero weight).
+
+For example, the state $\frac{1}{\sqrt{7}} |00000\rangle + \frac{1}{\sqrt{7}} |00101\rangle + \frac{1}{\sqrt{7}} |01010\rangle + \frac{1}{\sqrt{7}} |01111\rangle + \frac{1}{\sqrt{7}} |10100\rangle + \frac{1}{\sqrt{5}}|11001\rangle + \frac{1}{\sqrt{5}}|11110\rangle$ is a periodic state.
+It gives $\frac{1}{\sqrt{7}}$ weight to the state 00000, to the state 00101, and so forth up to 11110.
+All the other states aren't given any weight.
+In decimal, the states with non-zero weight are 0, 5, 10, 15, 20, 25, and 30.
+This is a periodic state with a period of 5.
+A more compact way to write this state is with summation notation, like this: $\frac{1}{\sqrt{7}} \sum\_{k=0}^{6}|5k\rangle$.
 The state $\frac{1}{\sqrt{7}} \sum\_{k=0}^{6}|5k+1\rangle$ is another, different, periodic state with period 5.
 
-At this point a certain subset readers are probably thinking something along the lines "Superposition? Bah! How do we know the quantum computer isn't just secretly in one of those states with non-zero-weight but we don't know which? How is this any different from a probability distribution?".
+At this point a certain subset readers are probably thinking something along the lines "Superposition? Bah! I bet the quantum computer is just secretly in one of those states with non-zero-weight, but we don't know which! How is this any different from a probability distribution?".
 
 The answer to the "how know superpositions real?" question is: because we can operate on the states, and the outcomes of those operations differ depending on whether or not you started in a superposition of states or a single state (or in a probability distribution of states).
 
-The specific quantum operation we care about in this post is quantum computers' ability to switch their own state into the frequency domain.
-(I hope that just blew your mind a little bit. It definitely blew mine the first time I learned about it.)
-After applying this operation, sampling the quantum computer's state can tell us what the dominant frequencies of the state were (if any).
+The specific quantum operation we care about in this post is the [quantum Fourier transform](https://en.wikipedia.org/wiki/Quantum_Fourier_transform) (the QFT).
+What the QFT does is... it's like it takes the weights of the states, pretends they're the samples making up an audio file, figures out what the frequencies in that audio are, then uses the strength of each frequency as the new weights defining the state of the computer.
+(A good predictor for whether you even slightly understood that last sentence is whether or not your mind just got blown *hard*.)
+The point is: after applying the QFT, sampling the quantum computer's state can tell us what the dominant frequencies of the input state were (if any).
 
 The frequency spectrum of a single state is just a [sine wave](https://en.wikipedia.org/wiki/Sine_wave), smoothly oscillating up and down.
 By contrast, the frequency spectrum of a periodic signal is not smooth.
@@ -174,18 +182,17 @@ This is the result:
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/quirk-spectrogram-10.png"/>
 
-The green rectangle on the left is a chance display.
-It's showing information about the input state.
-Each horizontal spike represents the weight assigned to one of the classical states.
-You can tell the state is periodic because the spikes are evenly spaced.
+The green rectangle on the left is a "chance display".
+It's showing, for each classical state from 0000000 to 1111111, the probability that measuring the superposition would return that state.
+You can tell the input state is periodic because the spikes in the chance display (corresponding to states with non-zero weights) are evenly spaced and all the same size.
 
 The white box in the middle that says $\text{QFT}^\dagger$ is the (inverse) quantum Fourier transform operation.
-It switches the input state  into its own frequency domain.
-I'm not going to go into exactly how the QFT is implemented.
+It switches the input state into its own frequency domain.
+I'm not going to get into exactly how the QFT is implemented under the hood.
 For the purposes of this post, all that matters is that it can be done.
 If you want more information, see [the Wikipedia article](https://en.wikipedia.org/wiki/Quantum_Fourier_transform).
 
-The green rectangle on the right is showing a view of the output state.
+The green rectangle on the right is a chance display showing the probabilities of getting various outcomes when measuring the output state.
 It has ten evenly-spaced peaks.
 Why ten?
 Because the number of frequency peaks is behaving just like it did with the periodic blip songs.
@@ -267,28 +274,41 @@ The diagonal lines are actually made up of a bunch of offset copies of more spac
 Each of those offset copies represents a part of the superposition that can no longer interact with the other parts.
 
 Let's call the top seven qubits the "input register" and the bottom three qubits the "ancilla register".
-By copying the input register's value into the second register, modulo 8, we separated its superposition into 8 parts.
-There's one part for the values whose remainder is 0, one part for values whose remainder is 1, one for remainder 2, and so forth up to the part for remainder 7.
+When we add the input register into the ancilla register, we are basically copying the input register's value into the ancilla register, modulo 8 (because the ancilla register has 3 qubits and $2^3 = 8$).
+You can think of this as separating the input register's superposition into 8 parts, one for each remainder modulo 8.
+There's a part for the classical states whose remainder is 0, one part for values whose remainder is 1, one for remainder 2, and so forth up to the part for remainder 7.
 
-In effect, the ancilla register is acting like a partial measurement of the input register.
-This is what is preventing the density-matrix-parts from interacting.
-Regardless of the value we get after measuring the ancilla register, the input register will contain a quantum state with period 8.
-The various cases just have different offsets.
+If we were to measure the ancilla register, it would tell us something about the input register.
+Specifically, it would tell us which of the eight parts of the superposition survived.
+But note that, regardless of that measurement result, the surviving state is always a periodic quantum state with period 8.
+Only the offset of the state changes.
 
+Note that, even if we haven't measured the ancilla register yet, it's reasonable for us to say "the input register contains a periodic quantum state with period 8".
+In fact it's reasonable to say that even if we plan to just chuck the ancilla register away without bothering to measure it.
+It's the initialization of the ancilla register that split the input register into separate non-interacting pieces.
+The only practical difference between initializating the ancilla register, and doing a "real" measurement, is that a "real" measurement can't be undone.
+Initializaing the ancilla register can be undone by subtracting the input register out of it; we're just not going to do that.
+
+To convince you that the input register really does contain a periodic state, even if we don't condition on or measure the second register, let's make another circuit in Quirk.
 Hey, remember when I mentioned that the frequency peaks don't move when you offset the input signal?
 And notice how we have an input signal with an unknown offset?
-[That means... if we apply a Fourier transform...](http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2B%3DA3%22%5D%2C%5B%22Density7%22%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%22QFT%E2%80%A07%22%5D%2C%5B%22Chance7%22%5D%5D%7D)
+[Prepare a uniform superposition in the input register, add into the ancilla register, Fourier-transform the input register, and...](http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2B%3DA3%22%5D%2C%5B%22Density7%22%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%22QFT%E2%80%A07%22%5D%2C%5B%22Chance7%22%5D%5D%7D)
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/prepare-period-8-qft.png"/>
 
-We get an output that has 8 peaks in it!
+The peaks are there.
+We prepared a state with period 8, and there are 8 peaks!
 (The peaks are perfectly sharp spikes because both the period and the size of the QFT are powers of 2.)
 
 I hope this really drives home how superpositions and probability distributions are different from each other.
 The input register contains a superposition with period 8, but we don't know which one.
 If we find out which one by measuring the ancilla register, the input register will still contain a superposition with period 8.
 The frequency spectrum will still have 8 peaks in it.
-But if we measured the input register before performing the QFT, collapsing whatever periodic superposition is in there to a single state, the frequency spectrum would switch to a raw sine wave.
+
+Contrast this with what would happen if we measured the input register before performing the QFT.
+The input register's state would collapse to some specific state $|k\rangle$.
+The frequency spectrum of a single state is a pure sine wave, so instead of seeing peaks we'd see the output weights smoothly changing.
+There'd still be peaks, but they'd be smooth peaks and the number of peaks wouldn't be related to the period of the input state.
 
 Now lets prepare states with other periods.
 
@@ -504,8 +524,11 @@ That's great, but $a$ might also have factors in common with $k$.
 We need to filter those out.
 Fortunately, this is easy: we just compute the [greatest common divisor](https://en.wikipedia.org/wiki/Euclidean_algorithm) of $R$ and $a$.
 
-What we're left with is a number $r = gcd(u-1, R)$ that has prime factors in common with $R$, but can't have all the prime factors in $R$.
+What we're left with is a number $r = \text{gcd}(u-1, R)$ that has prime factors in common with $R$, but can't have all the prime factors in $R$.
 Therefore $r$ is a factor of $R$.
+
+For example, recalling the $49^2 = 1 \pmod{100}$ example from the start of this section, we find that $\text{gcd}(49-1, 100) = 4$.
+And 100 is in fact divisible by 4.
 
 
 # Turning a period into an extra square root
@@ -669,3 +692,7 @@ $75945260669$ factors into $168433 \cdot 450893$.
 
 Shor's algorithm is difficult to understand because it mixes together ideas from quantum physics, signal processing, number theory, and computer science.
 I didn't cover all of the details, but I hope I got across the basic ideas needed to understand the pieces and how they fit into a coherent algorithm for factoring numbers.
+
+# Acknowledgements
+
+I'd like to thank Bernardo Meurer for proof-reading this post and pointing out several places where the explanations were seriously lacking.
