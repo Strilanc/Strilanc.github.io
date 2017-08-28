@@ -50,7 +50,7 @@ For example, what the heck are the "frequencies of a signal"?
 ...Well, I guess that's as good a place as any to start.
 
 
-# Warm up: Speakers, Frequencies, and Spectrograms
+# Warm up: speakers, frequencies, and spectrograms
 
 For a long time, historically, sound was a bit of a mystery.
 People knew that striking a bell would make a ringing noise, but they didn't really have a solid idea of what was going on physically.
@@ -137,20 +137,20 @@ But *proportionally speaking* the spectrograms have peaks in the same places, an
 Now let's switch from periodic audio signals to periodic states on a quantum computer.
 
 
-# Periodic States and their Frequencies
+# Periodic states and their frequencies
 
 If you have a computer that can store 5 classical bits, there are 32 possible states that your computer can be in.
 There's `00000`, `00001`, `00010`, `00011`, `00100`, and so forth up to `11111`.
 One state for each way you can assign a 0 or a 1 to each bit.
 
-The thing that separates a quantum computer from a classical computer is that a quantum computer can rotate its state into weighted combinations of the classical states (called a "[superposition](https://en.wikipedia.org/wiki/Quantum_superposition)").
+The thing that separates a quantum computer from a classical computer is that a quantum computer can rotate its state through particular weighted combinations of the classical states (called a "[superposition](https://en.wikipedia.org/wiki/Quantum_superposition)").
 You can write down possible states of a 5-qubit quantum computer by adding together various proportions of the 32 classical states achievable with 5 bits, as long as the squared magnitudes of the weights add up to 1.
 So a 5 qubit quantum computer could be in the state $|00000\rangle$, or in the state $\frac{1}{\sqrt{2}}|00000\rangle + \frac{1}{\sqrt{2}}|11111\rangle$, or in the state $\frac{3}{5}|00000\rangle - \frac{4}{5}|10101\rangle$, or in the state $\frac{1}{\sqrt{3}}|00001\rangle - \frac{1}{\sqrt{3}}|00100\rangle + \frac{1}{\sqrt{5}}|10000\rangle$, or all kinds of other fun combinations.
 
 In this post when I say "periodic state", I mean a superposition where the weights of the classical states go like 'zero, zero, zero, zero, NOT ZERO, zero, zero, zero, zero, NOT ZERO'.
 In other words, the classical states that have non-zero weight should be evenly spaced (and they should all have the same non-zero weight).
 
-For example, the state $\frac{1}{\sqrt{7}} |00000\rangle + \frac{1}{\sqrt{7}} |00101\rangle + \frac{1}{\sqrt{7}} |01010\rangle + \frac{1}{\sqrt{7}} |01111\rangle + \frac{1}{\sqrt{7}} |10100\rangle + \frac{1}{\sqrt{5}}|11001\rangle + \frac{1}{\sqrt{5}}|11110\rangle$ is a periodic state.
+For example, the state $\frac{1}{\sqrt{7}} |00000\rangle + \frac{1}{\sqrt{7}} |00101\rangle + \frac{1}{\sqrt{7}} |01010\rangle + \frac{1}{\sqrt{7}} |01111\rangle + \frac{1}{\sqrt{7}} |10100\rangle + \frac{1}{\sqrt{7}}|11001\rangle + \frac{1}{\sqrt{7}}|11110\rangle$ is a periodic state.
 It gives $\frac{1}{\sqrt{7}}$ weight to the state 00000, to the state 00101, and so forth up to 11110.
 All the other states aren't given any weight.
 In decimal, the states with non-zero weight are 0, 5, 10, 15, 20, 25, and 30.
@@ -169,14 +169,14 @@ The point is: after applying the QFT, sampling the quantum computer's state can 
 
 The frequency spectrum of a single state is just a [sine wave](https://en.wikipedia.org/wiki/Sine_wave), smoothly oscillating up and down.
 By contrast, the frequency spectrum of a periodic signal is not smooth.
-Like the spectrograms from earlier, the frequency spectrums of periodic signals have sharp evenly-spaced peaks.
+Like the spectrograms from earlier, the frequency spectrums of periodic signals have sharp peaks.
 Furthermore, the number of frequency peaks isn't a property of some individual state.
 The number of peaks is equal to the spacing between states.
 
 (If the quantum computer was really in just one of the classical states, how could a property about the spacing __between__ the possible states be getting into the output?
 The frequency spectrums tell a very clear story about what's really going on.)
 
-As a concrete example, I used my quantum circuit simulator Quirk to prepare a periodic quantum state.
+As a concrete example, I used my [drag-and-drop quantum circuit simulator Quirk](http://algassert.com/quirk) to prepare a periodic quantum state (more on that in a bit).
 Then I used a [Quantum fourier transform operation](https://en.wikipedia.org/wiki/Quantum_Fourier_transform) to switch the state into its own frequency space.
 This is the result:
 
@@ -210,12 +210,12 @@ If we're after the period of the signal, why not just get it by looking directly
 
 Keep in mind that the green displays in the diagrams are not available in real life.
 We don't get to see the distribution, we only get to sample from it.
-Sampling can tell us *where* a peak is (if it's tall enough), but not how many peaks there are.
+Sampling can efficiently tell us *where* various peak are (if they're tall enough), but not how many peaks there are.
 
-Still, why don't we just sample the initial signal several times and see how far apart the blips are?
+Still, why don't we just sample the initial signal several times and watch for patterns?
 Why can't we figure out the period by sampling the input signal and noticing "Gee, there sure are a lot of multiples of 5 in here."?
 
-The problem with noticing that a certain multiple keeps happening again and again is that, as you will see later, in the problem we care about the signal we're sampling from is going to have a random offset.
+The problem with noticing that a certain multiple keeps happening again and again is that, as you will see later, in the problem we care about, the signal we're sampling from is going to have a random offset.
 If we sample the number 213, that could be $50 \cdot 4$ with an offset of $13$ or $10 \cdot 21$ with an offset of $3$ or any other combination of offset and multiple.
 *Every time we sample, there will be a different unknown offset.*
 This prevents us from figuring out the underlying pattern.
@@ -236,11 +236,11 @@ The magnitudes determine the probability of measuring each state.
 (The phases matter if you're going to do more follow-up operations... but we aren't.)
 
 Another thing you should notice in the above diagram is that the frequency peaks are resilient to little imperfections.
-Because the number of states ($2^7 = 128$) is not a multiple of the period (5), there's a little kink where the spacing between blips is 3 instead of 5.
+Because the number of states ($2^7 = 128$) is not a multiple of the period ($5$), there's a little kink where the spacing between blips is 3 instead of 5.
 Despite that kink, the peaks are extremely close to 0/5'ths, 1/5'ths, 2/5'ths, 3/5'ths, and 4/5'ths of the way down the output space.
 
 
-# Preparing Periodic Quantum States
+# Preparing a periodic quantum state
 
 I've explained that, if we had a periodic quantum state with unknown period, we could sample from the peaks in its frequency space in order to learn something about the period.
 But how do we prepare that periodic state in the first place?
@@ -260,7 +260,7 @@ An alternative way to create a quantum state that has period 8 is to hit every q
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/prepare-period-8-postselect.png"/>
 
-Note that this is a case where the green chance display is a bit misleading.
+Beware that this is a case where the middle chance display is misleading.
 It looks like the addition didn't change to the state of the register we're preparing.
 Actually, its state was affected in a very important way.
 
@@ -290,33 +290,44 @@ The only practical difference between initializating the ancilla register, and d
 Initializaing the ancilla register can be undone by subtracting the input register out of it; we're just not going to do that.
 
 To convince you that the input register really does contain a periodic state, even if we don't condition on or measure the second register, let's make another circuit in Quirk.
-Hey, remember when I mentioned that the frequency peaks don't move when you offset the input signal?
-And notice how we have an input signal with an unknown offset?
+The frequency peaks don't move when you offset the input signal, so it really shouldn't matter that there's an unknown or even unmeasured offset.
 [Prepare a uniform superposition in the input register, add into the ancilla register, Fourier-transform the input register, and...](http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2B%3DA3%22%5D%2C%5B%22Density7%22%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%22QFT%E2%80%A07%22%5D%2C%5B%22Chance7%22%5D%5D%7D)
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/prepare-period-8-qft.png"/>
 
-The peaks are there.
-We prepared a state with period 8, and there are 8 peaks!
+The peaks are there!
+We prepared a state with period 8 and, despite an unknown unmeasured offset, there are 8 peaks in its frequency spectrum.
 (The peaks are perfectly sharp spikes because both the period and the size of the QFT are powers of 2.)
 
 I hope this really drives home how superpositions and probability distributions are different from each other.
-The input register contains a superposition with period 8, but we don't know which one.
-If we find out which one by measuring the ancilla register, the input register will still contain a superposition with period 8.
-The frequency spectrum will still have 8 peaks in it.
+The input register effectively contains both types: it's in a probability distribution over the offsets of a superposition with period 8.
+And the various measurements and operations we can try clearly delineate between the probability part and the superposition part.
+In particular, the expected output changes if we measure the superposition part but not if we measure the probability part.
 
-Contrast this with what would happen if we measured the input register before performing the QFT.
+If we measure the ancilla register, that's like measuring the probability part.
+It tells us the offset of the periodic state.
+But, regardless of the outcome, the input register will still contain a superposition with period 8.
+The output frequency spectrum will still have 8 peaks in it.
+
+Contrast this with what would happen if we measured the input register (before performing the QFT).
 The input register's state would collapse to some specific state $|k\rangle$.
-The frequency spectrum of a single state is a pure sine wave, so instead of seeing peaks we'd see the output weights smoothly changing.
+The frequency spectrum of a single state is a pure sine wave, so instead of seeing frequency peaks we'd see output weights that were smoothly varying up and down.
 There'd still be peaks, but they'd be smooth peaks and the number of peaks wouldn't be related to the period of the input state.
 
-Now lets prepare states with other periods.
+Measure the probability part, and nothing significant changes.
+Measure the superposition part, and you get a totally different style of output.
+
+That's probably enough harping on the fact that superpositions just really don't behave like probability distributions.
+Lets move on to preparing states with other periods.
+
+
+# Preparing other periodic states
 
 Instead of doing a three-bit addition, i.e. an addition modulo 8, we can do addition modulo some other number.
 This allows us to prepare a periodic quantum state with any period we want.
 The state we prepare will still have an unknown offset, but that's okay: the frequency peaks don't care.
 
-For example, here is a [circuit in Quirk](http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%7B%22id%22%3A%22setR%22%2C%22arg%22%3A7%7D%5D%2C%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2BAmodR3%22%5D%2C%5B%22QFT%E2%80%A07%22%5D%2C%5B%22Chance7%22%5D%5D%7D) that prepares a periodic quantum state with period 7, then applies a Fourier transform to show that there are 7 peaks in the output state
+For example, here is a [circuit in Quirk](http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%7B%22id%22%3A%22setR%22%2C%22arg%22%3A7%7D%5D%2C%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2BAmodR3%22%5D%2C%5B%22QFT%E2%80%A07%22%5D%2C%5B%22Chance7%22%5D%5D%7D) that prepares a periodic quantum state with period 7, then applies a Fourier transform to show that there are 7 peaks in the output state:
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/prepare-period-7.png"/>
 
@@ -327,7 +338,7 @@ We'll come back to this theme later, but first I want to explain how knowing the
 (As opposed to having to count the peaks, which would require quite a lot of sampling.)
 
 
-# Figuring out Periods from Frequency Samples
+# Figuring out periods from frequency samples
 
 Here's a bit of a puzzle for you.
 I'm going to show you a circuit that prepares a periodic state using a modular addition like in the last section, but I'm going to hide which modulus I'm using.
@@ -380,7 +391,7 @@ We don't have to know how it works, we can just use it:
 
 ```python
 from fractions import Fraction
-print(Fraction(340, 1024).limit_denominator(6))
+print(Fraction(340, 1024).limit_denominator(5))
 # prints '1/3'
 ```
 
@@ -409,7 +420,7 @@ When factoring a number $R$ with $N$ bits, the maximum period will be $2^N$ and 
 Which is reasonable.
 
 
-# Preparing States with an Unknown Period
+# Preparing states with unknown periods
 
 Modular addition isn't the only way to prepare periodic states.
 I mean, if it was, the ability to figure out the modulus by sampling the frequency space of the state would be an esoteric but ultimately pointless bit of trivia.
@@ -504,7 +515,7 @@ Now, if $u$ was 1, the fact that $(u-1)(u+1) = (1-1)(1+1) = 0 \cdot 2$ was zero 
 Similarly, if $u$ was -1, then $(u-1)(u+1) = (-1-1)(-1+1) = -2 \cdot 0$ vanishing is not very surprising.
 That's why we need an *extra* square root: to make the equation $(u+1)(u-1) = 0$ actually interesting.
 
-If we're working modulo $R$, then knowing $(u-1)(u+1) = 0$ tells us that $(u-1)(u+1)$ is a multiple of $R$.
+If we're working modulo $R$, then knowing $(u-1)(u+1) = 0$ tells us that in the usual integer arithmetic $(u-1)(u+1)$ is a multiple of $R$.
 In other words, we know two non-zero values, $a = u-1$ and $b = u+1$, such that $a \cdot b = k \cdot R$ for some integer $k$.
 
 Suppose we factorized $a$, $b$, $k$, and $R$ into their prime factors.
@@ -542,7 +553,7 @@ The key idea is that, if we raise $B$ to *half* of the period, then the result w
 After all, $B^{p/2} \cdot B^{p/2} = B^p$ and we already know that $B^p = 1 \pmod{R}$.
 
 Sometimes the square root we get will be -1, instead of an extra square root.
-Sometimes the period will be odd, so we won't be able to divide it by half.
+Sometimes the period will be odd, so we won't be able to divide it in half.
 But, not infrequently, the period will be even and $B^{p/2}$ won't be congruent to -1.
 Then we win.
 
@@ -615,11 +626,11 @@ Still, even with the extra details, I'm simplifying quite a lot.
 A real algorithm would break down the exponentiation into basic quantum gates.
 It would also check several fractions and periods near to the sampled value, in case the sampled result was close instead of exact.
 It would deal with special cases like "Oops, I'm an extremely lucky person and the base I chose at random isn't co-prime to the modulus.".
-It would check for various classically-easy cases like small factors, square numbers, etc.
+It would check for various classically-easy cases like small factors and square numbers.
 And so on and so on.
 
 
-# End to End Example
+# End to end example
 
 We have all the pieces we need, let's apply them.
 
