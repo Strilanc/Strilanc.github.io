@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Shor's Quantum Factoring Algorithm"
-date: 2017-08-25 12:10:20 pm PST
+date: 2017-08-28 5:10:20 am PST
 permalink: post/1718
 ---
 
