@@ -8,7 +8,8 @@ permalink: post/1718
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
 
 A few years ago, I wrote a post on [how Grover's quantum search algorithm works](http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm).
-I think it went over quite well; I've heard from several people that it was the first time they "got" anything about quantum computing.
+I think it went over quite well.
+I've heard from several people that it was the first time they "got" anything about quantum computing.
 Today I want to do the same thing, but with [Shor's quantum factoring algorithm](https://en.wikipedia.org/wiki/Shor%27s_algorithm).
 
 My guess is that there are two reasons that certain people found my post on Grover search helpful.
@@ -38,7 +39,7 @@ Here's a flowchart showing an overview of Shor's algorithm (click for a larger v
 
 <a href="/assets/{{ loc }}/flowchart.png"><img style="max-width:100%;" src="/assets/{{ loc }}/flowchart.png"/></a>
 
-And here are the rough parts, or rather the questions, that I'll be breaking my explanation into:
+And here are the rough parts, or rather the questions, that I'll be covering:
 
 1. Why is sampling the frequencies of a signal useful for finding its period?
 2. How does a quantum computer make a periodic signal, relevant to factoring a number $R$, and then sample from its frequencies?
@@ -74,7 +75,7 @@ For example, when using sound editing software such as Audacity, the default vie
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/code-monkey-time.png"/>
 
 This view is nice and simple, and makes it easy to see where there's silence and where something loud is happening.
-But this view is not very informative when you're trying to figure out *what* is loud.
+But this view is not very informative when you're trying to figure out *what* is being loud.
 To pick out fine details, you want something closer to our experience of sound: a [spectrogram](https://en.wikipedia.org/wiki/Spectrogram).
 
 Spectrograms show frequency information over time.
@@ -93,7 +94,7 @@ If you want to learn more about sound and frequency, you can start with the Wiki
 Now that we're a teensy bit more familiar with frequencies, let's get into a specific relevant case where information that's spread out in a raw signal is concentrated in a useful way in frequency space.
 
 
-# The Weird Frequencies of Repeating Blips
+# The weird frequencies of repeating blips
 
 Suppose I make a "song" where the list of speaker-diaphragm positions is almost entirely "stay as far back as possible", but every tenth entry is "as far forward as possible".
 That is to say, I make a song with periodic blips: a wav file with the data [0, 0, 0, 0, 0, 0, 0, 0, 0, 255] repeated over and over again.
@@ -143,11 +144,11 @@ If you have a computer that can store 5 classical bits, there are 32 possible st
 There's `00000`, `00001`, `00010`, `00011`, `00100`, and so forth up to `11111`.
 One state for each way you can assign a 0 or a 1 to each bit.
 
-The thing that separates a quantum computer from a classical computer is that a quantum computer can rotate its state through particular weighted combinations of the classical states (called a "[superposition](https://en.wikipedia.org/wiki/Quantum_superposition)").
+The thing that separates a quantum computer from a classical computer is that a quantum computer can rotate its state through particular weighted combinations of the classical states (called "[superpositions](https://en.wikipedia.org/wiki/Quantum_superposition)").
 You can write down possible states of a 5-qubit quantum computer by adding together various proportions of the 32 classical states achievable with 5 bits, as long as the squared magnitudes of the weights add up to 1.
 So a 5 qubit quantum computer could be in the state $|00000\rangle$, or in the state $\frac{1}{\sqrt{2}}|00000\rangle + \frac{1}{\sqrt{2}}|11111\rangle$, or in the state $\frac{3}{5}|00000\rangle - \frac{4}{5}|10101\rangle$, or in the state $\frac{1}{\sqrt{3}}|00001\rangle - \frac{1}{\sqrt{3}}|00100\rangle + \frac{1}{\sqrt{5}}|10000\rangle$, or all kinds of other fun combinations.
 
-In this post when I say "periodic state", I mean a superposition where the weights of the classical states go like 'zero, zero, zero, zero, NOT ZERO, zero, zero, zero, zero, NOT ZERO'.
+In this post when I say "periodic state", I mean a superposition where the weights of the classical states go like 'zero, zero, zero, zero, NOT ZERO, zero, zero, zero, zero, NOT ZERO' and so forth.
 In other words, the classical states that have non-zero weight should be evenly spaced (and they should all have the same non-zero weight).
 
 For example, the state $\frac{1}{\sqrt{7}} |00000\rangle + \frac{1}{\sqrt{7}} |00101\rangle + \frac{1}{\sqrt{7}} |01010\rangle + \frac{1}{\sqrt{7}} |01111\rangle + \frac{1}{\sqrt{7}} |10100\rangle + \frac{1}{\sqrt{7}}|11001\rangle + \frac{1}{\sqrt{7}}|11110\rangle$ is a periodic state.
@@ -183,7 +184,7 @@ This is the result:
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/quirk-spectrogram-10.png"/>
 
 The green rectangle on the left is a "chance display".
-It's showing, for each classical state from 0000000 to 1111111, the probability that measuring the superposition would return that state.
+It's showing, for each classical state from 0000000 to 1111111, the probability that measuring the superposition at that point would return that state.
 You can tell the input state is periodic because the spikes in the chance display (corresponding to states with non-zero weights) are evenly spaced and all the same size.
 
 The white box in the middle that says $\text{QFT}^\dagger$ is the (inverse) quantum Fourier transform operation.
@@ -280,14 +281,13 @@ There's a part for the classical states whose remainder is 0, one part for value
 
 If we were to measure the ancilla register, it would tell us something about the input register.
 Specifically, it would tell us which of the eight parts of the superposition survived.
-But note that, regardless of that measurement result, the surviving state is always a periodic quantum state with period 8.
+But, regardless of that measurement result, the surviving state is always a periodic quantum state with period 8.
 Only the offset of the state changes.
 
 Note that, even if we haven't measured the ancilla register yet, it's reasonable for us to say "the input register contains a periodic quantum state with period 8".
-In fact it's reasonable to say that even if we plan to just chuck the ancilla register away without bothering to measure it.
+In fact that's reasonable to say even if we plan to just chuck the ancilla register away without bothering to measure it.
 It's the initialization of the ancilla register that split the input register into separate non-interacting pieces.
-The only practical difference between initializating the ancilla register, and doing a "real" measurement, is that a "real" measurement can't be undone.
-Initializaing the ancilla register can be undone by subtracting the input register out of it; we're just not going to do that.
+The only practical difference between doing a "real" measurement and initializing that ancilla register is that a "real" measurement can't be undone but the ancilla register could be cleared by subtracting the input register out of it (...but we're not going to do that).
 
 To convince you that the input register really does contain a periodic state, even if we don't condition on or measure the second register, let's make another circuit in Quirk.
 The frequency peaks don't move when you offset the input signal, so it really shouldn't matter that there's an unknown or even unmeasured offset.
@@ -318,7 +318,7 @@ Measure the probability part, and nothing significant changes.
 Measure the superposition part, and you get a totally different style of output.
 
 That's probably enough harping on the fact that superpositions just really don't behave like probability distributions.
-Lets move on to preparing states with other periods.
+Let's move on to preparing states with other periods.
 
 
 # Preparing other periodic states
@@ -450,7 +450,7 @@ Open Quirk, create a uniform superposition for $x$, initialize the ancilla regis
 Eleven peaks! And we didn't have to double eleven times to figure that out.
 
 Okay okay, let's try something a bit harder.
-This time we're going to be multiplying by 7 modulo 58, and I'm not going to show you the impossible-in-reality probability display.
+This time we're going to be multiplying by 7 modulo 58, and I'm not going to show you the impossible-in-reality chance display.
 [All you get is a sample](http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%7B%22id%22%3A%22setB%22%2C%22arg%22%3A7%7D%2C1%2C%7B%22id%22%3A%22setR%22%2C%22arg%22%3A58%7D%5D%2C%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22X%22%5D%2C%5B%22inputA10%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22*BToAmodR6%22%5D%2C%5B%22QFT%E2%80%A010%22%5D%2C%5B%22Sample10%22%5D%5D%7D):
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/quirk-secret-mul-period.png"/>
@@ -486,7 +486,7 @@ Pass our parameters into the function, and out pops 7.
 Feel free to check that $7^7 \pmod{58} = 1$.
 
 At this point you should be convinced that, assuming we can actually implement this $\times B^A \pmod{R}$ operation from the diagrams, we can recover its period by sampling from a frequency spectrum and using our handy-dandy python function.
-(Explaining exactly how to efficiently implement a modular exponentiation operation on a quantum computer is way more detail than I want to go.
+(Explaining exactly how to efficiently implement a modular exponentiation operation on a quantum computer is way more detail than I want to go into.
 If you're really interested, [I wrote a whole paper about it](/post/1712).)
 
 The only real missing piece now is... why the heck are we computing this period?!
@@ -511,7 +511,7 @@ The thing about knowing $u^2 = 1$ is that we can rewrite this equation into $u^2
 That equation *factors*.
 It's equivalent to saying that $(u-1)(u+1) = 0$.
 
-Now, if $u$ was 1, the fact that $(u-1)(u+1) = (1-1)(1+1) = 0 \cdot 2$ was zero would not be very suprising.
+Now, if $u$ was 1, the fact that $(u-1)(u+1) = (1-1)(1+1) = 0 \cdot 2$ was zero would not be very surprising.
 Similarly, if $u$ was -1, then $(u-1)(u+1) = (-1-1)(-1+1) = -2 \cdot 0$ vanishing is not very surprising.
 That's why we need an *extra* square root: to make the equation $(u+1)(u-1) = 0$ actually interesting.
 
