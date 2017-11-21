@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Proxy Phasing and Computed Phasing</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Proxy Phasing and Computed Phasing</h1>
+<p class="meta">21 Nov 2017</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>In this post, I&#39;m going to explain a trick for phasing quantum states in a convenient and flexible way.
+Basically, the trick involves preparing ancilla qubits to act as proxies for the states you want to target, then phasing those ancilla.
+Thus the name &quot;proxy phasing&quot;.</p>
+
+<p>We&#39;ll start simple, but by the end of the post we&#39;ll be phasing each state by an arbitrary computable function of that state.</p>
+
+<h1>Proxy-phasing one qubit</h1>
+
+<p>As promised, let&#39;s start with something simple; maybe even trivial.
+Instead of phasing a qubit directly, we can temporarily CNOT it onto a clean ancilla and phase the ancilla:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-11-21-proxy-phasing/cnot-z-cnot-phasing.png"/></p>
+
+<p>If you pay attention to the bit values that define the computational basis states, and understand that a Z gate on a qubit phases any states where the corresponding bit is 1, it&#39;s clear why phasing the ancilla is phasing the original qubit.
+Here&#39;s what happens:</p>
+
+<ol>
+<li>The system starts in the state $a |0\rangle + b |1\rangle$.</li>
+<li>We introduce the ancilla, producing the state $(a |0\rangle + b |1\rangle) \otimes |0\rangle$, or equivalently $a |00\rangle + b |10\rangle$.</li>
+<li>We apply the first CNOT, transitioning to the state $a |00\rangle + b |11\rangle$. Notice that the first bit always agrees with the second bit.</li>
+<li>We apply the Z gate.
+This applies a phase factor to states where the qubit is 1.
+If we apply the Z gate to the first qubit, it phases the $|11\rangle$ component because the first bit of that component is 1.
+If we apply the Z gate to the second qubit, it phases the $|11\rangle$ component because the second bit of that component is 1.
+Neither of the two locations would phase the $|00\rangle$ component, because that component&#39;s bits aren&#39;t 1.
+The location of the Z gate does affect whether the $|01\rangle$ and $|10\rangle$ components would be phased, but those components aren&#39;t present in the state we&#39;re operating on.
+The two possible Z operations have the same effect on the components that are present, therefore they are equivalent.
+Whether we target the original qubit or the ancilla qubit, we find ourselves in the state $a |00\rangle + (-1)^t b |11\rangle$.</li>
+<li>We uncompute the ancilla by applying the second CNOT.
+This leaves us in the state $a |0\rangle + (-1)^t b |1\rangle$, which is what we wanted.</li>
+</ol>
+
+<p>In general, if two qubits are guaranteed to agree, then you can move a Z gate from one to the other without changing the function of a circuit.
+(&quot;Guaranteed to agree&quot; is a bit vague.
+What I mean is that, if you were to do a computational basis measurement of the two qubits at the relevant time, there is no chance the measurement results would disagree.
+CNOT-ing a qubit onto a clean ancilla is the simplest way to create such a state.)</p>
+
+<p>Note that we can uncompute the ancilla qubit with <a href="/quantum/2015/09/02/Partially-Erasing-Entanglement-with-Measurement.html">entanglement erasure</a> instead of with a second CNOT:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-11-21-proxy-phasing/cnot-z-erase-phasing.png"/></p>
+
+<p>The above equivalence is a key part of <a href="https://arxiv.org/abs/quant-ph/0403025">magic state distillation</a>.
+For example, the <a href="https://arxiv.org/abs/1208.0928">surface code</a> is a quantum error correcting code that&#39;s not normally able to apply T gates (i.e. 45 degree rotations around the Z axis).
+But you can CNOT a surface-coded qubit onto a clean surface-coded ancilla qubit, unwrap the ancilla into a raw physical qubit where 45 degree rotations <em>are</em> possible, and do the phasing there:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-11-21-proxy-phasing/cnot-physical-phasing.png"/></p>
+
+<p>Other techniques are used to remove the noise caused by using a non-error-corrected qubit.
+Still, the realization &quot;Oh, that&#39;s proxy phasing&quot; is a solid opening move for understanding magic state distillation.</p>
+
+<h1>Proxy-phasing combinations of qubits</h1>
+
+<p>Suppose that we CNOT <em>multiple</em> qubits onto a single clean ancilla, then phase the ancilla.
+What happens?</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-11-21-proxy-phasing/parity-phasing.png"/></p>
+
+<p>To answer this question, we ask another: if this was a classical circuit, what states would lead to the ancilla bit being ON?</p>
+
+<p>Well, each CNOT may or may not toggle the ancilla bit.
+If there&#39;s an odd number of toggles, the ancilla bit will end up ON.
+If there&#39;s an even number of toggles, the ancilla bit will end up OFF.
+And our circuit toggles the ancilla bit once for each input bit that&#39;s ON...
+Therefore the ancilla bit will be ON if the input state has an odd number of set bits.</p>
+
+<p>Now back to the quantum case.
+All of the operations that are present permute the computational basis <em>without mixing (interfering) any of its elements</em> (e.g. there are no Hadamard operations).
+Because of this fact, we can basically directly apply what we learned when considering the classical case.
+For computational basis states with an odd number of set bits, the ancilla qubit ends up ON.
+For the other states, it ends up off.
+For example, the input state $a |000\rangle + b|010\rangle + c|011\rangle$ will expand into the intermediate state $a |000\rangle|0\rangle + b|010\rangle|1\rangle + c|011\rangle|0\rangle$.</p>
+
+<p>Speaking a bit more abstractly, the three CNOTs transition the system from the state $\sum_k w_k |k\rangle$ to the state $\sum_k w_k |k\rangle |P(k)\rangle$, where $P$ is a parity function that determines whether $k$&#39;s <a href="https://en.wikipedia.org/wiki/Hamming_weight">Hamming weight</a> $H(k)$ is odd or even.
+It is reasonable to describe this situation as &quot;the ancilla qubit is storing the parity of the other three&quot;.
+So, when we phase the ancilla, we are phasing <em>that parity</em>.
+States where the parity is 1 get phased, and states where the parity is 0 don&#39;t get phased.</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-11-21-proxy-phasing/parity-phasing-2.png"/></p>
+
+<p>This concept generalizes.
+To phase the set of states matching a predicate $P^\prime$, you compute $P^\prime$ and store the result into an ancilla $A$, then phase $A$ by the desired amount, then uncompute $P^\prime$.
+Any set whose membership can be computed can be phased in this way.
+The easier it is to compute a set, the easier it is to phase that set.</p>
+
+<p>For example, suppose you&#39;re using Grover&#39;s algorithm to search for variable assignments that satisfy a 3-SAT problem.
+This requires you to apply a phase factor of -1 to all of the satisfying variable assignments.
+But... how can you phase the very thing you&#39;re looking for, without already knowing where it is?
+That&#39;s where proxy phasing comes in.
+Apply a reversible circuit that outputs whether the inputs are a satisfying assignment to the problem, apply a Z gate to the output qubit, uncompute the circuit, and you&#39;ve done it!</p>
+
+<p>Remember: to phase a specific set of states, all you need is a function that recognizes that set.</p>
+
+<h1>Phase gradients</h1>
+
+<p>Being able to construct a nice circuit for phasing a set of states is great, but often you&#39;ll want more fine-grained control than just phase-or-not-phase.</p>
+
+<p>In particular, suppose we want to phase each computational basis state $|k\rangle$ by $k \cdot c$ radians for some constant $c$, such as $c = \frac{\pi}{1000}$.
+(I call this kind of operation a &quot;phase gradient&quot; or &quot;linear phase gradient&quot;.)
+This task is actually quite simple, because of the binary-to-unary relationship between the qubits and the state indices.
+Assuming the qubits are in little-endian order from top to bottom, we simply phase the top qubit by $\frac{\pi}{1000}$ radians, the next qubit by $\frac{2 \pi}{1000}$ radians, the next by $\frac{4 \pi}{1000}$ radians, and so forth until the bottom ($n$&#39;th) qubit is phased by $\frac{2^{n-1} \pi}{1000}$:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-11-21-proxy-phasing/gradient-phasing.png"/></p>
+
+<p>To understand why this works, consider the state $|01011\rangle$.
+01011 is eleven in binary, so we want to phase this state by $\frac{11 \pi}{1000}$.
+When we phase a qubit, the $|01011\rangle$ state is phased if and only if it has a 1 at that qubit&#39;s position.
+In this case, the state will be affected by phasing applied to the first, second, and fourth qubits but not by phasing applied to other qubits.
+If we combine the phasings effects from the first, second, and fourth qubits we get $\frac{1 \pi}{1000} + \frac{2 \pi}{1000} + \frac{8 \pi}{1000}$.
+Which is equal to $\frac{11 \pi}{1000}$, which is what we wanted.</p>
+
+<p>The reason this works is because we&#39;re matching the phasing of each qubit to its weight in our binary encoding of numbers.
+The fourth bit of a binary number has a weight of $2^3$ (turning it on increases the represented number by 8), and so we scale the phasing effect by 8.
+The weights of the set bits add up to the number we want to represent, and the phasing effects add up in exactly the same way.</p>
+
+<p>Now that we have phase gradients, we can start using them on proxy qubits.</p>
+
+<h1>Computed phasing</h1>
+
+<p>Suppose we want to phase each state $|k\rangle$ by some function $F$ of $k$ that isn&#39;t of the form $F(k) = c \cdot k$.
+For example, suppose we want to phase each computational basis state $|k\rangle$ by $F(k) = k^2 \frac{\pi}{50}$ radians.
+Can we construct a reasonable circuit to do that?
+Yes we can!
+And, as you might guess based on the content so far, the trick involves a circuit that computes the function we&#39;re interested in phasing by.</p>
+
+<p>We want to phase by an amount proportional to $k^2$, so the first thing to do is construct a classical reversible circuit to compute the square of an input.
+Second, use this circuit to store the input&#39;s square into an ancilla register.
+Third, apply a phase gradient to the ancilla register.
+Lastly, uncompute the ancilla register.</p>
+
+<p>To phase by a different function, replace squaring with any other computable function $F$:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-11-21-proxy-phasing/computed-phasing.png"/></p>
+
+<p>Keep in mind that the phase gradient can absorb pesky constant factors.
+Also keep in mind that, for most choices of $F$, you will want to compute an approximation rather than an exact result.
+The result must be stored in fixed point arithmetic, not floating point arithmetic, for the phase gradient construction to make sense.</p>
+
+<h1>Applications</h1>
+
+<p>The fact that you can phase by any computable function is useful to keep in mind.
+For example, consider a circuit that rotates $N$ qubits by $\theta$ radians.
+This effect is so simple that you might assume it is impossible to optimize beyond just applying an $R_Z(\theta)$ gate to each qubit.
+But, knowing about computed phasing, you may feel prompted to ask: what&#39;s the function that this circuit is applying to the state?
+Is there a fast way to compute that function?</p>
+
+<p>Consider the state $|011001\rangle$.
+How much is this state phased by applying $R_Z(\theta)$ to every qubit?
+The $R_Z(\theta)$ operation doesn&#39;t phase 0s, but phases 1s by $\theta$.
+The state $|011001\rangle$ has three ones, so it will be phased by $\theta$ three times totalling $3 \theta$.
+Other states follow the same rule: the number of set bits determines how much phasing happens.
+State $|k\rangle$ will be phased by $F(k) = \theta \cdot H(k)$, where $H$ is the Hamming weight function</p>
+
+<p>Okay, so instead of rotating the $N$ qubits individually we can make a circuit that computes the Hamming weight of the qubits (i.e. adds them all together), apply a phase gradient to the $\lg N$ qubits making up the Hamming weight register, then uncompute the register.
+Surprisingly, when performing error corrected computation, this can be cheaper than applying the individual rotations!
+Arbitrary rotations by some $\theta$ have to be synthesized by combining a fixed set of available rotations, with the dominant cost being the number of $T$ gates (45 degree rotations around Z).
+As your desired accuracy $\epsilon$ gets smaller, more and more T gates are required.
+It can take dozens of T gates to synthesize a good-enough rotation!
+By contrast, temporarily counting up $n$ qubits takes roughly 4 T gates per qubit (see my paper <a href="https://arxiv.org/abs/1709.06648">Halving the cost of quantum addition</a>).</p>
+
+<p>Suppose it takes $m$ T gates to synthesize one accurate-enough rotation.
+The cost of individually rotating all $n$ qubits would be $m \cdot n$, but the cost of counting up the bits and applying a phase gradient is $4n + m \cdot \lg n + O(\lg n)$.
+Even if $m$ is 20 and $n$ is 3, this reduces our T-count from 60 to 44.
+As $m$ and $n$ get larger, the savings start becoming very big very fast.
+Surprisingly, this means that there&#39;s no &quot;really hard angle&quot; $\theta_{\text{hard}}$ where synthesizing many rotations by $\theta_{\text{hard}}$ is arbitrarily more expensive than synthesizing the same number of T gates.
+The phase-by-count construction guarantees that performing many rotations by any single $\theta$ always limits to at most 4 times as expensive as a T gate.</p>
+
+<p>Computed phasing is also interesting from a programming language design perspective.
+For example, it allows the quantum Fourier to be written very succinctly:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">apply_qft</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
+  <span class="nb">apply</span> <span class="n">reverse</span> <span class="n">to</span> <span class="n">register</span>
+  <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
+    <span class="n">phaseby</span> <span class="n">q</span> <span class="o">*</span> <span class="n">register</span><span class="p">[:</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="n">k</span>
+    <span class="nb">apply</span> <span class="n">H</span> <span class="n">to</span> <span class="n">q</span>
+</code></pre></div>
+<p>But I digress.</p>
+
+<h1>Summary</h1>
+
+<p>Any computable phasing function can be applied with the cost of merely computing and uncomputing that function.
+(The same is <em>not</em> true for magnitudes. Exercise: why?)</p>
+
+<p>If you want to phase a specific set of states, make a circuit that temporarily computes membership in that state and applies a Z gate to that computation&#39;s output. If you want to phase each state by an amount determined by a function, make a circuit that temporarily computes a fixed-point register proportional to the function&#39;s output and applies a phase gradient to the output register.</p>
+
+<p>When phasing qubits, consider how the underlying states are being phased.
+Is there an easy-to-compute function that picks out the affected states, or that determines how much each state is phased by?
+If so, computed phasing may be more efficient than a naive construction.</p>
+
+</div>
+
+<!-- IntenseDebate comments -->
+
+
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1718">&laquo; Shor's Quantum Factoring Algorithm</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
