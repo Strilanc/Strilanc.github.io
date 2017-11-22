@@ -2,7 +2,6 @@
 layout: post
 title: "Reducing Test Boilerplate with Ascii Diagrams"
 date: 2016-05-15 6:10:10 EST
-comments: true
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
@@ -91,3 +90,15 @@ So I'll be looking for other opportunities to try this out: find a class of test
 
 When you're going to write a lot of tests that use an object, invest effort into making it really *really* easy to create instances of that object.
 You'll end up with tests that are easier to understand, and make fewer stupid mistakes when writing them.
+
+
+# Comments
+
+<div style="background-color: #EEE; border: 1px solid black; padding: 5px; font-size: 12px;">
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>db48x</strong> - May 22, 2016
+    <br/>
+
+    That's a pretty crazy DSL, but I like it!
+  </div>
+</div>
