@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Proxy Phasing and Computed Phasing</title>
+                <description>&lt;p&gt;In this post, I&amp;#39;m going to explain a trick for phasing quantum states in a convenient and flexible way. Basically, the trick involves preparing ancilla qubits to act as proxies for the states you want to target, then phasing those ancilla. Thus the name &amp;quot;proxy phasing&amp;quot;.&lt;/p&gt; &lt;p&gt;We&amp;#39;ll start simple, but...</description>
+                <pubDate>Tue, 21 Nov 2017 10:10:10 -0800</pubDate>
+                <link>http://algassert.com/post/1719</link>
+                <guid isPermaLink="true">http://algassert.com/post/1719</guid>
+            </item>
+            <item>
                 <title>Shor's Quantum Factoring Algorithm</title>
                 <description>&lt;p&gt;A few years ago, I wrote a post on &lt;a href=&quot;http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm&quot;&gt;how Grover&amp;#39;s quantum search algorithm works&lt;/a&gt;. I think it went over quite well. I&amp;#39;ve heard from several people that it was the first time they &amp;quot;got&amp;quot; anything about quantum computing. Today I want to do the same thing, but with...</description>
                 <pubDate>Mon, 28 Aug 2017 06:10:20 -0700</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sun, 11 Jun 2017 12:11:11 -0700</pubDate>
                 <link>http://algassert.com/post/1710</link>
                 <guid isPermaLink="true">http://algassert.com/post/1710</guid>
-            </item>
-            <item>
-                <title>Simple Algorithm for Multiplicative Inverses mod 2ⁿ</title>
-                <description>&lt;p&gt;Lately, as part of writing a paper, I&amp;#39;ve been thinking about quantum circuits for doing multiplication while using very little workspace. Surprisingly, this stumbled me into a nice way to compute multiplicative-inverses.&lt;/p&gt; &lt;p&gt;Consider that multiplying by 3 is equivalent to adding a register into itself, left-shifted:&lt;/p&gt; &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span...</description>
-                <pubDate>Tue, 06 Jun 2017 10:10:10 -0700</pubDate>
-                <link>http://algassert.com/post/1709</link>
-                <guid isPermaLink="true">http://algassert.com/post/1709</guid>
             </item>
     </channel>
 </rss>
