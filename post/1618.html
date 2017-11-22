@@ -195,25 +195,94 @@ Sometimes it behaves like spontaneous decay, other times like a random walk.</p>
 <p>Despite the surprisingly different behaviors, we&#39;re not actually controlling the qubit.
 We&#39;re just revealing things about it at different rates.</p>
 
+<h1>Comments</h1>
+
+<div style="background-color: #EEE; border: 1px solid black; padding: 5px; font-size: 12px;">
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>Peter de Rivaz</strong> - June 28, 2016
+    <br/>
+
+    Does a similar circuit represent the Quantum Zeno effect?
+    <br/>
+    <br/>
+
+    I know you had an <a href="http://algorithmicassertions.com/quantum/2015/10/26/Quantum-Zeno-Effect.html">earlier post about Zeno</a> but it didn't have a circuit diagram in it. My guess is that the Qbit should have a fixed initial state and then small rotations applied along the top line, but that the presence of the conditional gates may help to preserve the Qbit in its original state?
+  </div>
+
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>Craig Gidney</strong> - June 28, 2016
+    <br/>
+
+    Yes, it's a similar circuit. The main difference is that, in the Zeno effect, the small rotation is applied *to* the qubit-of-interest. Here the qubit-of-interest is controlling the small rotation. Also the Zeno effect involves constantly directly measuring the qubit-of-interest, whereas here we're only measuring related information.
+    <br/>
+    <br/>
+
+    <a href="http://algorithmicassertions.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22X%5E%E2%85%9B%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22X%5E%E2%85%9B%22%5D%2C%5B%22%E2%80%A2%22%2C1%2C%22X%22%5D%2C%5B%22X%5E%E2%85%9B%22%5D%2C%5B%22%E2%80%A2%22%2C1%2C1%2C%22X%22%5D%2C%5B%22X%5E%E2%85%9B%22%5D%2C%5B%22%E2%80%A2%22%2C1%2C1%2C1%2C%22X%22%5D%2C%5B%22X%5E%E2%85%9B%22%5D%2C%5B%22%E2%80%A2%22%2C1%2C1%2C1%2C1%2C%22X%22%5D%2C%5B%22X%5E%E2%85%9B%22%5D%2C%5B%22%E2%80%A2%22%2C1%2C1%2C1%2C1%2C1%2C%22X%22%5D%2C%5B%22X%5E%E2%85%9B%22%5D%2C%5B%22%E2%80%A2%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22X%22%5D%2C%5B%22X%5E%E2%85%9B%22%5D%2C%5B%22%E2%80%A2%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22X%22%5D%5D%7D">Here's a mock Zeno circuit</a> (normally eight X^(1/8) gates would do a full NOT, but due to the intermediate CNOTs the qubit stays mostly off; the effect gets stronger with smaller rotations) 
+  </div>
+
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>Peter de Rivaz</strong> - June 28, 2016
+    <br/>
+
+    Ah, that's brilliant! I'd tried a similar circuit, but I had the control gates upside down (which fails to have any effect at all).
+    <br/>
+    (By the way, the link is a bit hard to copy/paste from the comment box - I had to use developer tools to get access to the full string)
+  </div>
+
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>Mahdi</strong> - July 05, 2016
+    <br/>
+
+    We’re delighted that you have taken an interest in our paper, and have taken the time to think it through. We certainly agree that the unconditional dynamics of decay will be the same despite how one detects the emission, and it would make no sense if that was the case. So the ‘control’ that we have over the qubit is indeed conditional. For example, if we initialize the qubit in a state along X and perform homodyne measurements of the emission, each decay trajectory will be different and some of these trajectories will result in the qubit moving toward its excited state. So if we can use the information we have collected we can effectively control the qubit to move into its excited state. Of course, this protocol does not work every time, about half the time it ends up in its ground state (so it is an uncontrolled control). Is this useful? Absolutely. In the paper, we use this type of evolution to herald different initial states that we want to study, something that could have been achieved by a complicated sequence of pulses, but instead we can allow the random quantum evolution to herald the state.
+    <br/>
+    <br/>
+
+    Again, this sounds like selective information, but it is in fact much deeper than that. When the qubit decays it becomes entangled with the electromagnetic field which exhibits quantum fluctuations. These fluctuations lead to the random conditional evolution of the qubit. Let’s describe the field in terms of the quadratures: a^dagger e^{i phi} + a e^{-iphi}, for phi=0 the field is coupled to the X dipole of the qubit, and for phi = pi/2 it is coupled to the Y dipole. (i.e. if I measure the field quadrature along phi=0 it gives me information about the random walk the qubit takes along the X-Z plane of the Bloch sphere, and if I measure along phi=pi/2 I get information about evolution in the Y-Z plane. So by measuring both quadratures, I would get random evolution over the whole Bloch Sphere (as was done in this very nice paper: Observing quantum state diffusion by heterodyne detection of fluorescence. Phys. Rev. X 6, 011002 (2016) )
+    <br/>
+    <br/>
+
+    Okay, but when we measure a specific quadrature, we actually squeeze the fluctuations of the electromagnetic field, effectively erasing the fluctuations in the phi = pi/2 quadrature, and amplifying the fluctuations in the phi=0 quadrature. In this case, the evolution of the qubit is restricted to the X-Z plane, not because we have ignored the information about diffusion in the Y-Z plane, but because we have erased that information. If our quantum efficiency was perfect, then we would maintain a perfectly pure state of the qubit. So the random walk is “controlled” in the sense that it is confined to a specific great circle of evolution, but it uncontrolled in that the evolution is still random. At the core, this is because there is entanglement between the qubit and the field, so the “control” aspect takes on similarities to a violation of Bell’s inequality. This is called "EPR steering”.
+    <br/>
+    <br/>
+
+    Now, I should admit that we don’t have high enough quantum efficiency to prove that we can steer the state, but this is something that we’re working on and I’ll let you know when we get there.
+  </div>
+
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>Craig Gidney</strong> - July 05, 2016
+    <br/>
+
+    Thank you for commenting.
+    <br/>
+    <br/>
+
+    I do feel a bit bad about not explaining the lack of control more fully in the post. The content happened to overlap with a future planned post about EPR steering where I was going to go over it in more detail. (I assume EPR steering is not what you were referring to when you said 'steer the state'.)
+    <br/>
+    <br/>
+
+    Fair warning though: don't put too much effort into controlling the state in this way. Suppose the default sequence of axis choices succeeds at creating some desired state 10% of the time after 100 step and you come up with a better sequence that succeeds 11% of the time after 100 steps. You then pass these states along to some consumer who uses them to do something observable that succeeds more often when the qubits are in the desired state. So if you used the 10% process then the task might succeed 1% of the time, but with the 11% process the task would succeed 2% of the time.
+    <br/>
+    <br/>
+
+    Congratulations, you just created an FTL communication mechanism!
+    <br/>
+    <br/>
+
+    Alice produces a qubit and sends it to Bob, but she keeps the qubits she needs to perform the measurement sequence coherent. She repeats this many times. Later, Alice receives a message to send to Bob. Using an error correcting code, she encodes the message into the choice of using the 10%-success process or the 11%-success process. Bob receives the information by performing the task Y and tracking whether or not it succeeds (1% of the time for Off, 2% of he time for On). Although this communication channel is extremely noisy, it doesn't require any interaction between Alice and Bob except for the initial sharing of qubits.
+    <br/>
+    <br/>
+
+    So we can conclude, in full generality, that there's no way to improve any measurable outcome of any task by just using a clever sequence of measurements in this situation. It violates the no-communication theorem.
+    <br/>
+    <br/>
+
+    Of course if you *use* the measurement results, then you can control the qubit. Suppose you want qubits either in the state cos(t) |0> + sin(t) |1> for t = pi-0.1 or t=pi+0.1 but no other t. You want to feed the pi-0.1 qubits to one experiment, and the pi+0.1 qubits to another. It would be silly to use the "full decay" measurement, since both outcomes are bad. The "random walk" measurement on the other hand would do pretty well. But this is all based on the fact that you feed the measurements back into what happens to the qubit. The control doesn't come from just the measurement results, it comes from doing things to the qubit (based on the measurement results).
+  </div>
+</div>
+
 </div>
 
 <!-- IntenseDebate comments -->
-
-  <script>
-  var idcomments_acct = '7d0006bd6a016f9a2892cc2ecc64de01';
-  var idcomments_post_id = '/post/1618';
-  var idcomments_post_url = 'http://algorithmicassertions.com/post/1618';
-  </script>
-  <span id="IDCommentsPostTitle" style="display:none"></span>
-  <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
-  <noscript>
-    <hr>
-    <font color=red>
-      Comments script blocked. Comments won't work.
-    </font>
-    <br/>
-    Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>intensedebate.com</strong> to fix.
-  </noscript>
 
 
 
