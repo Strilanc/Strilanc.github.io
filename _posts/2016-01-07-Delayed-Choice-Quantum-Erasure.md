@@ -3,7 +3,6 @@ layout: post
 title: "Deflating Delayed Choice Quantum Erasure"
 date: 2016-01-07 11:30:00 EST
 categories: quantum
-comments: true
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
@@ -203,3 +202,43 @@ The experiment will have the same outcome whether or not a human is present.
 Ultimately all we're doing is either measuring the information needed to find the hidden interference patterns, or not.
 If you don't measure the needed information, you can't find the hidden patterns.
 Duh.
+
+
+# Comments
+
+<div style="background-color: #EEE; border: 1px solid black; padding: 5px; font-size: 12px;">
+
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>Jconnors</strong> - Mar 31, 2016
+    <br/>
+
+    Isn't the big take away that the measurement (observer effect) isn't causing the collapse of the wave function, it is rather the possibility of having information or not having information that causes the collapse? 
+  </div>
+
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>Craig Gidney</strong> - April 1, 2016
+    <br/>
+
+    That is a useful insight to have, but I don't like to phrase it that way. I think people distort "possibility of having information" into wrong ideas like "Burning the paper the computer printed the result onto without looking at it takes away the possibility of having information, so the interference pattern should come back.".
+    <br/>
+    <br/>
+
+    One thing I want to try to communicate eventually, equivalent to what you're saying, is the concept of FOCUS ON THE COPIES. As long as an entangled copy of the information exists, no matter how obfuscated, there will be no self-interfering. Bringing back the self-interference requires un-making any copies. Un-making a copy is generally done by flawlessly running a copy-making process in reverse. Post-selection obscures the symmetry between making and un-making copies. Measurement is just thermodynamically-irreversible copy-making.
+  </div>
+
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>Alex Torres</strong> - Sep 25, 2016
+    <br/>
+
+    Kim's version of DCQE has a very simple set up, it was designed to rule out completely any sort of physical decoherence/interaction with the only variable left being the availability or not of information.....there's no mathematical equation to explain that... .of course this is not a physical one since it belongs to the cognitive realm...that's the spookiness on this....besides that, nonlocality can very well explain the apparent retro causality...
+  </div>
+
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>Alex Torres</strong> - Sep 26, 2016
+    <br/>
+
+    The video you are referring to is a layman's compilation of various top yt videos...so may I suggest a more explicit in terms of graphical cold explanation....then you might have a better grasp of why this experiment is so mind boggling....
+    <br/>
+	https://m.youtube.com/watch?v=u9bXolOFAB8
+  </div>
+</div>
