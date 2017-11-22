@@ -3,7 +3,6 @@ layout: post
 title: "Unknowable, but Equal"
 date: 2016-01-19 11:30:00 EST
 categories: quantum
-comments: true
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
@@ -166,3 +165,39 @@ If position and momentum are entangled to agree simultaneously, the individual v
 Furthermore, measuring the positions destroys the agreement in momentums while measuring the momentums destroys the agreement in positions.
 
 When you try to mess with Heisenberg, Heisenberg messes with you.
+
+
+# Comments
+
+<div style="background-color: #EEE; border: 1px solid black; padding: 5px; font-size: 12px;">
+
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>Peter</strong> - Jan 19, 2016
+    <br/>
+
+    Nice timing! I was trying to understand the (probably fatally flawed) paper about the linear time SAT solving quantum algorithm you mentioned in an earlier post but was struggling to understand what was meant by the paper measuring along the Z axis. I came here today in the hope that I could find an explanation of such a measurement in terms of QBits (which make more sense to me than the Bloch sphere) and had a lovely surprise :)
+    <br/>
+    <br/>
+
+    By the way, with respect to the seven red lines I assume you've seen https://www.youtube.com/watch?v=B7MIJP90biM
+    <br/>
+    <br/>
+
+    Is the inconsistent spelling of Heisenberg/Heisenburg a hidden joke?
+  </div>
+
+  <div style="border: 1px solid gray; padding: 5px; margin: 5px;">
+    <strong>Craig Gidney</strong> - Jan 19, 2016
+    <br/>
+
+    I do intend to get back to that linear-time paper (the author left a comment that he updated the paper). I want to simulate it with Microsoft's LiQui|> to check that it really does match the behavior of the classical equivalent, then show that the classical equivalent scales exponentially slowly.
+    <br/>
+    <br/>
+
+    I hadn't seen that response video to the red pen sketch. My thoughts watching the sketch were more long the lines of "If they don't even know what it means, then they'll be satisfied with different constraints. Work with them to figure it out what they actually want.".
+    <br/>
+    <br/>
+
+    The Heisenburgs were just typos. They're fixed now; thanks for catching it. 
+  </div>
+</div>
