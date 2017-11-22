@@ -199,3 +199,5 @@ If you want to phase a specific set of states, make a circuit that temporarily c
 When phasing qubits, consider how the underlying states are being phased.
 Is there an easy-to-compute function that picks out the affected states, or that determines how much each state is phased by?
 If so, computed phasing may be more efficient than a naive construction.
+
+[Discuss on r/algassert](https://www.reddit.com/r/algassert/comments/7en9sy/comment_thread_proxy_phasing_and_computed_phasing/)
