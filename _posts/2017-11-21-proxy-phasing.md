@@ -176,7 +176,7 @@ Surprisingly, this means that there's no "really hard angle" $\theta\_{\text{har
 The phase-by-count construction guarantees that performing many rotations by any single $\theta$ always limits to at most 4 times as expensive as a T gate.
 
 Computed phasing is also interesting from a programming language design perspective.
-For example, it allows the quantum Fourier to be written very succinctly:
+For example, it allows the quantum Fourier transform to be written very succinctly:
 
 ```python
 def apply_qft(register):
@@ -194,7 +194,7 @@ But I digress.
 Any computable phasing function can be applied with the cost of merely computing and uncomputing that function.
 (The same is *not* true for magnitudes. Exercise: why?)
 
-If you want to phase a specific set of states, make a circuit that temporarily computes membership in that state and applies a Z gate to that computation's output. If you want to phase each state by an amount determined by a function, make a circuit that temporarily computes a fixed-point register proportional to the function's output and applies a phase gradient to the output register.
+If you want to phase a specific set of states, make a circuit that temporarily computes membership in that set and applies a Z gate to that computation's output. If you want to phase each state by an amount determined by a function, make a circuit that temporarily computes a fixed-point register proportional to the function's output and applies a phase gradient to the output register.
 
 When phasing qubits, consider how the underlying states are being phased.
 Is there an easy-to-compute function that picks out the affected states, or that determines how much each state is phased by?
