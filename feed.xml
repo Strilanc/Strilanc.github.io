@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>A classical delayed choice experiment</title>
+                <description>&lt;p&gt;The delayed choice quantum eraser (DCQE) is a widely misunderstood experiment. The internet is full of &lt;a href=&quot;https://www.quora.com/Does-the-delayed-choice-quantum-eraser-experiment-prove-that-time-is-just-an-illusion&quot;&gt;questions&lt;/a&gt; and &lt;a href=&quot;http://www.louisdelmonte.com/a-classic-time-travel-paradox-double-slit-experiment-demonstrates-reverse-causality/&quot;&gt;posts&lt;/a&gt; and &lt;a href=&quot;https://www.youtube.com/watch?v=KnpCH9VRvPg&quot;&gt;videos&lt;/a&gt; and &lt;a href=&quot;https://io9.gizmodo.com/an-experiment-that-might-let-us-control-events-millions-1525760859&quot;&gt;articles&lt;/a&gt; that seem to think the DCQE is definitive proof of time travel or some other nonsense. But, from the perspective of quantum information...</description>
+                <pubDate>Tue, 12 Dec 2017 05:10:20 -0800</pubDate>
+                <link>http://algassert.com/post/1720</link>
+                <guid isPermaLink="true">http://algassert.com/post/1720</guid>
+            </item>
+            <item>
                 <title>Proxy Phasing and Computed Phasing</title>
                 <description>&lt;p&gt;In this post, I&amp;#39;m going to explain a trick for phasing quantum states in a convenient and flexible way. Basically, the trick involves preparing ancilla qubits to act as proxies for the states you want to target, then phasing those ancilla. Thus the name &amp;quot;proxy phasing&amp;quot;.&lt;/p&gt; &lt;p&gt;We&amp;#39;ll start simple, but...</description>
                 <pubDate>Tue, 21 Nov 2017 10:10:10 -0800</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sun, 18 Jun 2017 13:10:10 -0700</pubDate>
                 <link>http://algassert.com/post/1711</link>
                 <guid isPermaLink="true">http://algassert.com/post/1711</guid>
-            </item>
-            <item>
-                <title>Computing Fractional Fourier Transforms</title>
-                <description>&lt;p&gt;Recently, I was side-tracked by a stumble into the &lt;a href=&quot;https://en.wikipedia.org/wiki/Fractional_Fourier_transform&quot;&gt;Wikipedia article on fractional Fourier transforms&lt;/a&gt;. I found it interesting, because normally I think of the Fourier transform as an all-or-nothing proposition. I&amp;#39;m either thinking in the frequency domain or in the time domain, not some combination both. What would...</description>
-                <pubDate>Sun, 11 Jun 2017 12:11:11 -0700</pubDate>
-                <link>http://algassert.com/post/1710</link>
-                <guid isPermaLink="true">http://algassert.com/post/1710</guid>
             </item>
     </channel>
 </rss>
