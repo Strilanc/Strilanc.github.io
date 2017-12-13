@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "A classical delayed choice experiment"
+title: "A Classical Delayed Choice Experiment"
 date: 2017-12-12 5:10:20 am PST
 permalink: post/1720
 ---
@@ -120,3 +120,5 @@ For example, in order to avoid the [signalling loophole](https://en.wikipedia.or
 
 In the end, the "mysterious" parts of the delayed choice quantum eraser are just bad explanations mistaking correlations due to entanglement as causation.
 You'd think the fact that the "causation" was going backwards in time would have been a strong hint about that.
+
+[Discuss on reddit](https://www.reddit.com/r/algassert/comments/7jf9ig/comment_thread_a_classical_delayed_choice/)
