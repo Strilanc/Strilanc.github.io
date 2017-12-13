@@ -241,7 +241,7 @@ Surprisingly, this means that there&#39;s no &quot;really hard angle&quot; $\the
 The phase-by-count construction guarantees that performing many rotations by any single $\theta$ always limits to at most 4 times as expensive as a T gate.</p>
 
 <p>Computed phasing is also interesting from a programming language design perspective.
-For example, it allows the quantum Fourier to be written very succinctly:</p>
+For example, it allows the quantum Fourier transform to be written very succinctly:</p>
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">apply_qft</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
   <span class="nb">apply</span> <span class="n">reverse</span> <span class="n">to</span> <span class="n">register</span>
   <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
@@ -255,7 +255,7 @@ For example, it allows the quantum Fourier to be written very succinctly:</p>
 <p>Any computable phasing function can be applied with the cost of merely computing and uncomputing that function.
 (The same is <em>not</em> true for magnitudes. Exercise: why?)</p>
 
-<p>If you want to phase a specific set of states, make a circuit that temporarily computes membership in that state and applies a Z gate to that computation&#39;s output. If you want to phase each state by an amount determined by a function, make a circuit that temporarily computes a fixed-point register proportional to the function&#39;s output and applies a phase gradient to the output register.</p>
+<p>If you want to phase a specific set of states, make a circuit that temporarily computes membership in that set and applies a Z gate to that computation&#39;s output. If you want to phase each state by an amount determined by a function, make a circuit that temporarily computes a fixed-point register proportional to the function&#39;s output and applies a phase gradient to the output register.</p>
 
 <p>When phasing qubits, consider how the underlying states are being phased.
 Is there an easy-to-compute function that picks out the affected states, or that determines how much each state is phased by?
@@ -274,7 +274,7 @@ If so, computed phasing may be more efficient than a naive construction.</p>
           <a href="/post/1718">&laquo; Shor's Quantum Factoring Algorithm</a>
         </td>
         <td align="right">
-          
+          <a href="/post/1720">A classical delayed choice experiment &raquo;</a>
         </td>
       </tr>
     </table>

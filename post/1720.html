@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>A classical delayed choice experiment</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">A classical delayed choice experiment</h1>
+<p class="meta">12 Dec 2017</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>The delayed choice quantum eraser (DCQE) is a widely misunderstood experiment.
+The internet is full of <a href="https://www.quora.com/Does-the-delayed-choice-quantum-eraser-experiment-prove-that-time-is-just-an-illusion">questions</a> and <a href="http://www.louisdelmonte.com/a-classic-time-travel-paradox-double-slit-experiment-demonstrates-reverse-causality/">posts</a> and <a href="https://www.youtube.com/watch?v=KnpCH9VRvPg">videos</a> and <a href="https://io9.gizmodo.com/an-experiment-that-might-let-us-control-events-millions-1525760859">articles</a> that seem to think the DCQE is definitive proof of time travel or some other nonsense.
+But, from the perspective of quantum information theory, the DCQE is very straightforward and not at all magical.
+So the existence of so much misguided content is pretty depressing.</p>
+
+<p>It&#39;s tempting to say people are confused by the DCQE for the same reason they&#39;re confused about anything with &quot;quantum&quot; in the name.
+Quantum mechanics is known to be counter-intuitive.
+But I don&#39;t think &quot;it has quantum&quot; is the root cause of people&#39;s confusion.
+I think confusion over the DCQE really comes down to mistaking correlation for causation, and &quot;quantum&quot; just makes the mistake hard to spot.</p>
+
+<p>The key property that makes the DCQE mysterious, or rather the key property that people <em>say</em> makes the DCQE mysterious, is the conditional appearance of an interference pattern after-the-fact.
+An experimenter makes a decision during an experiment, and this decision <em>appears</em> to determine the kind of data that was recorded earlier in the experiment.
+This is reasonably well summarized by a <a href="https://en.wikipedia.org/wiki/Delayed_choice_quantum_eraser#The_experiment_of_Kim_et_al._(2000)">diagram from Wikipedia</a>:</p>
+
+<p><img style="max-width:100%;" src="/assets/2017-12-12-classical-delayed-choice/quantum-wavy-choice.png"/></p>
+
+<p>In the experiment this diagram is from, the experimenter is basically choosing whether or not to insert a beam splitter into an optical setup.
+The left hand column shows some measured distributions of photons landing on a screen when the beam splitter is inserted, and the right hand column shows what you get without the beam splitter.</p>
+
+<p>The left hand column has wavy patterns whereas the right hand column does not, so people say stuff like &quot;choosing to insert the beam splitter determines whether there was an interference pattern&quot;.
+This appears surprising, because the data being plotted in the diagrams is actually collected before anything relevant reaches the beam splitter.</p>
+
+<p>Instead of explaining why this isn&#39;t as amazing as it looks in terms of the original experiment, let&#39;s remove any quantum obfuscation and do a classical experiment that has the same property.
+This will make it very obvious where the &quot;magic&quot; is coming from.</p>
+
+<h1>Classical delayed choice experiment</h1>
+
+<p>In our classical experiment, Alice will play the role of the chooser and Bob will play the role of the physical system (e.g. the photons and the screen).</p>
+
+<p>Bob has a six-sided die, a two-sided coin, and a small empty box to put the coin in.
+He rolls the die, gets a result between 1 and 6, and places the coin in the box in a way that depends on the die roll.
+If the die roll was even, the coin is placed heads up.
+If the die roll was odd, the coin is placed tails up.
+Bob then writes down his die roll, and carefully hands the box to Alice.</p>
+
+<p>Alice now has to decide to either a) just open the box or b) shake the box before opening it.
+(Shaking the box randomizes the coin.)
+Once the box is open, she writes down whether the coin was face up or face down, and also writes down whether or not she shook the box.</p>
+
+<p>Later, after repeating the above process many times, Alice and Bob get together and compare notes.
+They notice something a bit confusing: Alice&#39;s choice seems to have affected Bob&#39;s results, even though Bob wrote down his results before Alice&#39;s choice!</p>
+
+<p>To be specific, Alice&#39;s choice seems to determine whether or not Bob&#39;s die rolls were &quot;banded&quot;!
+Look for yourself:</p>
+
+<p><img style="max-width:100%;" src="/assets/2017-12-12-classical-delayed-choice/classical-banded-choice.png"/></p>
+
+<p>As you can see in the above diagram, Bob&#39;s die rolls depend on Alice&#39;s choice and coin results.
+When Alice shook the box, we see a flat distribution for Bob&#39;s die rolls.
+When Alice didn&#39;t shake the box, we see banded disributions.</p>
+
+<p>Therefore, by the same logic people use when explaining the DCQE, Alice&#39;s choice to shake the box has <em>reached backwards in time and changed Bob&#39;s die roll</em>.</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>Just kidding.
+Obviously this has nothing to do with retrocausation.
+Alice&#39;s coin was prepared in a way that correlated it with Bob&#39;s die rolls.
+<em>Of course</em> conditioning on the coin when plotting the die rolls will show those correlations.
+And <em>of course</em> you won&#39;t see any correlation if you shake the box first.
+You&#39;ve thrown away the correlated information by randomizing the coin!</p>
+
+<p>Alice&#39;s choice wasn&#39;t whether or not to go back in time and affect Bob&#39;s die roll.
+Alice&#39;s choice was whether to get <em>useful correlated information</em> or <em>useless random information</em>.
+Trying to explain the situation in terms of Alice&#39;s choice causing Bob&#39;s die rolls to be banded is just... a weird/confused/misguided way to think about it.</p>
+
+<p>Oh, and do note that Bob never directly sees a banded distribution in his die roll data.
+He needs to group his die rolls by the unshaken coin result in order to find anything banded.
+The banding is in the <em>correlations</em>.</p>
+
+<h1>Back to quantum</h1>
+
+<p>The quantum delayed choice experiment uses exactly the same &quot;effect&quot; as the classical one, i.e. it involves choosing whether or not to measure useful correlated information or else something useless.</p>
+
+<p>In the same way that Alice&#39;s coin was correlated with Bob&#39;s die roll, the idler photon&#39;s state (the one that will go through a beam splitter or not) is correlated with the hit position of the screen-hitting photon.
+The mechanism by which this correlation is created is totally different (i.e. entanglement instead of after-the-fact preparation), but the outcome is the same.</p>
+
+<p>To demonstrate the fact that the idler&#39;s state depends on the hit position, I simulated a quantum delayed choice experiment in Quirk:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-12-12-classical-delayed-choice/quirk-delayed-choice-sim.gif"/></p>
+
+<p>The tall green rectangle in the middle of the above diagram is showing possible screen hit positions, sampled by the click-click-clicky detectors.
+The green sphere above the rectangle has an indicator showing the corresponding state of the idler photon, conditioned on the displayed hit position.
+The further down the hit position is, the more the indicator has been rotated around the equator of the sphere.</p>
+
+<p>Now comes the choice, where Alice decides whether to measure something useful or not.
+Again the mechanism will be different from the classical case, but the outcome will be the same.</p>
+
+<p>If Alice measures the idler photon&#39;s qubit along the up-vs-down axis, the measurement is not affected by the rotation around the equator related to the hit position.
+The reason the measurement isn&#39;t affected is because every point on the equator is equidistance from the top and bottom, meaning the measurement is always 50/50 random.
+However, if Alice first rotates the qubit (by inserting that $X^{1/2}$ gate representing the beam splitter), so that the side-to-side equator rotations become top-to-bottom rotations, then the rotation around equator related to the hit position does affect the measurement probabilities.</p>
+
+<p>By choosing whether or not to rotate the qubit, Alice is deciding whether or not variations from the hit position will affect her measurement probabilities.
+She is deciding whether to measure something useful or something useless.</p>
+
+<p>When Alice picks the useful measurement, there are correlations between her result and the screen hit position.
+Grouping the screen hits by her result will show a wavy distribution.
+Grouping by the useless measurement will show a flat distribution.
+It&#39;s exactly like the classical case, just with quantum mechanisms.
+There&#39;s no time travel, no disproof of materialism, just plain &#39;ol correlation being mistaken for causation.</p>
+
+<p>This does raise the question: is it possible to tweak the DCQE so that there <em>isn&#39;t</em> a classical analogue of the experiment?
+Well... yes.
+It&#39;s called a <a href="https://en.wikipedia.org/wiki/Bell_test_experiments">Bell test</a>.
+But you&#39;ll lose all of the characteristic features of the DCQE in doing so.
+For example, in order to avoid the <a href="https://en.wikipedia.org/wiki/Loopholes_in_Bell_test_experiments#Communication,_or_locality">signalling loophole</a>, the choice can no longer be delayed.</p>
+
+<p>In the end, the &quot;mysterious&quot; parts of the delayed choice quantum eraser are just bad explanations mistaking correlations due to entanglement as causation.
+You&#39;d think the fact that the &quot;causation&quot; was going backwards in time would have been a strong hint about that.</p>
+
+</div>
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1719">&laquo; Proxy Phasing and Computed Phasing</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
