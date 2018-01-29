@@ -143,3 +143,5 @@ More qubits means more spacetime volume to route through.
 More qubits, more qubits, more qubits!
 
 ...More qubits.
+
+[Discuss on reddit](https://www.reddit.com/r/algassert/comments/7tux6k/comment_thread_why_will_quantum_computers_be_slow/)
