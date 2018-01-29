@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Why will quantum computers be slow?</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Why will quantum computers be slow?</h1>
+<p class="meta">28 Jan 2018</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Large error corrected quantum computers are many years away.
+Despite that, we know the factors that will decide how fast (or slow) these hypothetical machines will run.
+They are: being able to hold the computation in the first place, distilling states fast enough to feed the computation, waiting for measurements one after another, and routing within the available spacetime volume.
+In this post, I want to discuss each of those bottlenecks in more detail.</p>
+
+<h1>Bottleneck #0: Qubit count</h1>
+
+<p>Today, there&#39;s really only one bottleneck faced by quantum computers: qubit count, qubit count, qubit count.
+(Also qubit quality.)</p>
+
+<p>Consider Shor&#39;s quantum factoring algorithm.
+To run this algorithm on a quantum computer, you need to store the number you want to factor.
+If you want to factor a 2048-bit number, you need 2048 qubits to store it.
+On top of that, you&#39;ll need a spare 2048-qubit register to do arithmetic with.
+Also, there are other overheads.
+For simplicity, let&#39;s say you need an even 5000 qubits.</p>
+
+<p>Given that everybody seems to be announcing 50 qubit chips lately, you could be forgiven for thinking we&#39;re about $\frac{50}{5000} = 1\%$ of the way to the 5000 qubits I just said were needed to factor modern RSA keys.
+But actually all the current announcements are about <em>noisy qubits</em>.
+Shor&#39;s algorithm needs <em>error corrected qubits</em>.
+You can turn noisy qubits into error corrected qubits with an error correcting code, but each error corrected qubit will need a thousand, maybe even ten thousand, noisy qubits.
+So, in terms of qubit count, we&#39;re actually only about $\frac{50}{5000 \cdot 1000} = 0.001\%$ of the way to factoring modern RSA keys.
+If the qubit count doubles every year, it&#39;ll be 17 years before we get to 100%.</p>
+
+<p>That 17 year gap is daunting.
+50 to 100 noisy qubits should be enough to do something <a href="https://en.wikipedia.org/wiki/Quantum_supremacy"><em>hard</em></a>, and 100 to 200 logical qubits should be enough to do something <a href="https://en.wikipedia.org/wiki/Computational_chemistry"><em>useful</em></a>, but at the moment <a href="https://arxiv.org/abs/1801.00862">it&#39;s not known if there&#39;s much in between</a>.
+If there really is nothing on the decade-long road from 100 noisy qubits to 100 error-corrected qubits, the whole field of quantum computing could stall on a built-in <a href="https://en.wikipedia.org/wiki/Hype_cycle">trough of disillusionment</a>.
+So the qubit count bottleneck is <em>kind of a big deal</em>.</p>
+
+<p>But, supposing we do reach the error corrected regime and large-scale quantum computation becomes a thing, we stop caring about <em>possible</em> and start caring about <em>fast</em>.
+Meaning factors beyond qubit count start to matter.</p>
+
+<h1>Bottleneck #1: T count</h1>
+
+<p>In order to perform non-trivial operations, error corrected quantum computers must prepare and consume special resource states.
+In particular, a quantum computer based on the surface code is not able to natively perform 45 degree phase rotations (&quot;T gates&quot;).
+Instead, a secondary error correcting code is used to prepare and refine copies of the state $|T\rangle = \frac{1}{\sqrt{2}} (|0\rangle + e^{i \pi / 4} |1\rangle)$.
+For each $|T\rangle$ state produced, it is possible to perform one error corrected T gate.</p>
+
+<p>Producing $|T\rangle$ states isn&#39;t cheap.
+It takes time, and it takes space.
+To produce $|T\rangle$ states, you need to annex some of your available qubits into &quot;T factories&quot;.
+It&#39;s hard to give any solid estimates on the productivity or footprint of T factories, because they&#39;re the subject of ongoing research.
+Fortunately for you, I was able to lock <a href="https://research.google.com/pubs/105043.html">Austin Fowler</a> in a small dark room and poke him with sticks until he was willing to give order of magnitude estimates.
+I won&#39;t bore you with the many relevant caveats he gave; suffice it to say that we&#39;re going to assume that a T factory zone covering $N$ (error corrected) qubits will produce $|T\rangle$ states at a rate of $100N$ per second.</p>
+
+<p>For scale, suppose that factoring a 2048-bit number requires on the order of $4 \cdot n^3 \approx 30 \text{ billion}$ T gates.
+If you have a T factory zone made out of a thousand qubits, it will take four days to produce enough $|T\rangle$ states to finish this factoring computation.
+But if you had a hundred thousand qubits zoned as T factories, you could finish the factoring computation in an hour.</p>
+
+<p>As long as a quantum computation is bottlenecked on $|T\rangle$ state production, making quantum computers larger will make the computation faster (because there will be more qubits available for use in T factories).
+The speedup from adding more qubits will be particularly significant when computations just barely fit.
+If a generation-X quantum computer can spare 10% of its qubit capacity for T factories, then a generation-(X+1) quantum computer with twice as many qubits could dedicate 55% of its capacity to T factories and would perform the same computation over an order of magnitude faster!</p>
+
+<p>We could easily spend a decade making quantum computers faster merely by having more and more qubits to annex into T factories.
+But, eventually, we&#39;ll be making $|T\rangle$ states so fast that other bottlenecks become relevant.</p>
+
+<h1>Bottleneck #2: Measurement depth</h1>
+
+<p>Measurements are inherently serial.
+Most operations native to the surface code can be deformed in ways that allow them to be parallelized, so that they consume space instead of time.
+But if a measurement determines whether or not an operation is present, and that operation can affect a later measurement, there is no way to avoid waiting for the first measurement result before starting the later measurement.</p>
+
+<p>The amount of time you have to wait for a measurement result is another number that is the subject of ongoing research, and of course it depends a lot on the architecture of your quantum computer.
+But, by ignoring even more of Austin&#39;s caveats, we can assume it takes about 10 microseconds to perform, decode, and react to an error corrected measurement.
+So an algorithm that performed a million measurements, one after another, would take about 10 seconds to finish.</p>
+
+<p>Because most quantum algorithms only really have to measure once at the end, a bottleneck on the speed of measurements doesn&#39;t seem so bad.
+The problem is that, in the context of error correcting codes, many operations actually hide a measurement.
+In particular, performing the <a href="https://en.wikipedia.org/wiki/Toffoli_gate">quantum equivalent of an AND operation</a> within the surface code requires several measurements.
+And computing ANDs is really common.
+The measurements for a single AND can be arranged into one parallel layer, so that you&#39;re waiting for all of them at the same time instead of one after another, but still.</p>
+
+<p>Going back to our factoring example, suppose the measurement depth of factoring a 2048-bit number is on the order of $2 \cdot n^3 \approx 15 \text{ billion}$.
+It would take two hours to wait for all those measurements.
+That doesn&#39;t matter when we have 1000 qubits worth of T factory and it takes four days to produce enough $|T\rangle$ states, but it does matter when we have a T factory zone covering a hundred thousand qubits and can make all the $|T\rangle$ states within an hour.
+Once we&#39;re making $|T\rangle$ states faster than we can use them, because we keep waiting for measurements, we have to start making tradeoffs.</p>
+
+<p>As an example tradeoff, note that the dominant cost in Shor&#39;s algorithm is addition and that we have a choice of what type of adder to use.
+We can use ripple-carry adders, which require $4n + O(1)$ T gates but have $2n + O(1)$ measurement depth, or we can use carry-lookahead adders which require $12n + O(\lg n)$ T gates but have $O(\lg n)$ measurement depth.
+When we&#39;re bottlenecked on T count, we prefer the ripple-carry adders because they use a third as many T gates.
+When we&#39;re bottlenecked on measurement depth, we prefer the carry-lookahead adders because they&#39;re exponentially shallower.
+And when we&#39;re bottlenecked on T count and measurement depth simultaneously, we&#39;d use a mix of both types of adder in order to exactly balance the two bottlenecks.</p>
+
+<p>In other words, there will be an extended period of time where algorithms are bottlenecked by both measurement depth and by T count.
+Saving time on one will cost time on the other, and this back-and-forth balancing could be a defining feature of yet another decade of quantum computers getting faster as qubit counts rise.
+Yet, as the number of T factories gets ridiculously high, and circuits get ridiculously wide to save on depth, another factor can limit speed.</p>
+
+<h1>Bottleneck #3: Spacetime volume</h1>
+
+<p>Suppose you have a T-hungry computation packed into a $d \times d$ patch of qubits.
+The computation needs $100 \cdot d^2$ $|T\rangle$ states to finish, and we have $\Theta(d^2)$ factories to feed it with.
+Clearly we have enough T factories for the computation to finish in $O(1)$ time, but... does it?
+The answer is no.</p>
+
+<p>The problem is that the perimeter of the computationally-relevant area is $4d$, and the perimeter determines how quickly $|T\rangle$ states can enter.
+So, as $d$ increases, the rate that $|T\rangle$ states can enter grows like $\Theta(d)$ instead of like $\Theta(d^2)$.
+The $\Theta(d^2)$ T factories are producing enough $|T\rangle$ states to finish in constant time, but it simply doesn&#39;t matter: there&#39;s not enough room to route all those $|T\rangle$ states into the computationally-relevant area all at once.
+Consequently, the computation will take $\Omega(d)$ time instead of $O(1)$ time.
+It&#39;s like building really absurdly tall buildings: make the building tall enough, and keeping the higher floors in use and supplied forces the lower floors to be <a href="https://what-if.xkcd.com/94/">nothing but elevators</a>.</p>
+
+<p>This example is indicative of a more general problem: every operation in the surface code has to happen somewhere and somewhen.
+There is great flexibility in exactly where and exactly when, but ultimately you must allocate <em>some</em> minimum amount of &quot;spacetime volume&quot; from your computation to performing the operation.
+So, even though qubits in the surface code can be moved from place to place arbitrarily fast by placing a &quot;horizontal tube&quot; between the qubit&#39;s current position and the target position, there <em>may not be room for the horizontal tube when you need it</em>.
+The tubes from other qubits being moved and operated on could form a wall, forcing you to wait to move the qubit or to reschedule other operations in order to make a gap.</p>
+
+<p>Unlike the other bottlenecks, spacetime volume doesn&#39;t have a uniform cost.
+It&#39;s not like with T gates, where every additional operation contributes the same amount of overall time.
+Instead, the cost of using spacetime volume goes up and down depending on where you are in the algorithm.
+If there&#39;s a lot of routing happening, spacetime volume may be at a premium.
+If not, it may be plentiful and free to use.
+But keep in mind that any under-utilized spacetime volume can be used for T factories; there will always be pressure to use less volume.</p>
+
+<h1>Summary</h1>
+
+<p>To run a quantum computation really fast, you need:</p>
+
+<ol>
+<li>Enough qubits to fit the computation in the first place.</li>
+<li>Then enough T factories to perform T gates as fast as the computation needs them.</li>
+<li>Then wider circuits that do measurements in parallel instead of serially.</li>
+<li>Then efficient strategies for routing qubits and packing braiding operations.</li>
+</ol>
+
+<p>I like to imagine that each bottleneck will be the &quot;most relevant&quot; for about a decade.
+We&#39;ll naturally transition from one to the next because, funnily enough, every single one of these bottlenecks falls to adding more qubits.
+More qubits means more space to fit your computation.
+More qubits means more space for T factories.
+More qubits means more space for wide parallel circuit constructions.
+More qubits means more spacetime volume to route through.
+More qubits, more qubits, more qubits!</p>
+
+<p>...More qubits.</p>
+
+</div>
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1720">&laquo; A Classical Delayed Choice Experiment</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
