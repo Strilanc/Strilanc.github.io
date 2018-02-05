@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Canonicalizing H+S+CNOT+T Circuits</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Canonicalizing H+S+CNOT+T Circuits</h1>
+<p class="meta">04 Feb 2018</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>A problem I&#39;ve been interested in lately is &quot;how do I prove I <em>need</em> some number of T gates for a circuit?&quot;.
+As part of thinking about that, I wanted some way to systematically search through circuit space.
+But just iterating over all the possible combinations and permutations of gates is extremely inefficient, because many circuits with different gates actually apply the same function.
+For example, take any circuit and add two identical CNOT gates, one right after the other, into the middle of the circuit.
+This produces a new circuit that&#39;s different, but functionally equivalent to the original.</p>
+
+<p>One way to avoid redundant circuits when searching would be to have a bunch of rules like &quot;if the previous operation is a CNOT, don&#39;t add that same CNOT again right now&quot;.
+But the ways that circuits can be equivalent is really quite varied, so a rule-based approach is not enough.
+A better approach is to have some way to transform a given circuit into a standard form, and then instead of searching over all of circuit space just search over the space of circuits in standard form (i.e. canonicalized circuits).</p>
+
+<p>In this post, I&#39;m going to talk about a way to put circuits that contain H, S, CNOT, and T gates into a standard form.
+Actually, since the H+S+CNOT gate set covers the space of stabilizer circuits, this is a way a way to canonicalize any stabilizer circuit that doesn&#39;t do any measurements but does have T gates (which aren&#39;t stabilizer gates) sprinkled throughout.
+Leaving out measurement is kind of a big deal, since constructions that use the minimum number of T gates often use measurement, but for this post we&#39;ll focus on the simpler case without it.</p>
+
+<h1>Transporting Ts</h1>
+
+<p>The key thing we need to do, in order to canonicalize our circuit, is to separate the non-stabilizer operations (the T gates) from the stabilizer operations (the H, S, and CNOT gates).
+If we can do that, we can handle the T gates on our own and use existing work to canonicalize the stabilizer part (e.g. Scott Aaronson provides a canonical form for stabilizers in <a href="https://arxiv.org/abs/quant-ph/0406196">&quot;Improved Simulation of Stabilizer Circuits&quot;</a>).</p>
+
+<p>Getting the T gates out is just a matter of moving them to the left.
+Problem is, there&#39;s all these operations in the way causing complications.
+If you haphazrdly move a T gate over the target of a CNOT gate, correcting the phase kickback requires adding a T gate and (more seriously) a non-stabilizer gate that isn&#39;t in our gate set (a controlled-S):</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2018-02-04-canonicalize-t-cnot-h-s/T-across-CNOT-kickback.png"/></p>
+
+<p>Lucky for us, there&#39;s an easy way to avoid this problem: move the T gate <em>downward</em>.
+That is to say, use <a href="/post/1719">proxy phasing</a> to perform the T gate on an ancilla instead of on a qubit in the middle of the circuit:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2018-02-04-canonicalize-t-cnot-h-s/move-T-onto-ancilla.png"/></p>
+
+<p>The benefit of doing this is that, now, the part we need to move over other gates is a CNOT and CNOTs are stabilizer operations.
+When we move a CNOT over other stabilizer operations, the fixup operations we have to add to restore the circuit&#39;s function will be other stabilizer operations.</p>
+
+<p>Actually, in order to make things conceptually simpler, it will help to <a href="/post/1706">reverse how we think about the CNOT</a>.
+Instead of thinking of the original qubit (the one the T gate used to be on) as a Z-axis control determining whether an X-axis operation happens to the ancilla qubit, we&#39;ll think of the ancilla qubit as being an X-axis control determining whether a Z-axis operation happens to the original qubit:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2018-02-04-canonicalize-t-cnot-h-s/xz-equals-xz.png"/></p>
+
+<p>Now consider what happens when we move a Z gate over, say, an H gate.
+The H gate swaps the X and Z axes, so the rotation axis of the Z gate gets switched from the Z axis to the X axis.
+In other words, it becomes an X gate.
+This transformation occurs even if the Z gate is controlled:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2018-02-04-canonicalize-t-cnot-h-s/move-CZ-across-H.png"/></p>
+
+<p>If we had passed the Z gate over an S gate instead of an H gate, nothing would have happened (because they both rotate around the Z axis).
+But if we pass our X gate over an S gate, it gets changed into a Y gate.
+Actually, that&#39;s not quite right: it gets changed into a <em>minus</em> Y gate.
+In order to cancel the minus, we kickback a gate out of our control.
+Since our control is an X-axis control, the kickback operation is an X gate:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2018-02-04-canonicalize-t-cnot-h-s/move-CY-across-S.png"/></p>
+
+<p>In general, the single-qubit operations we pass over will either do nothing to our controlled operation, or switch the axis it operates on, and/or kickback an X gate onto the ancilla qubit.
+Ultimately, single qubit operations are pretty easy to cross.</p>
+
+<p>Crossing two-qubit operations introduces new complications.
+When we cross a two-qubit operation, we may get a kickback operation on the <em>other qubit involved in the two-qubit operation</em>.
+Furthermore, this kickback operation will be controlled by the ancilla qubit.
+We end up with an ancilla qubit controlling two operations instead of one:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2018-02-04-canonicalize-t-cnot-h-s/move-CY-across-CNOT.png"/></p>
+
+<p>This effect can spread until we&#39;re controlling operations on every single qubit in the circuit.
+But that&#39;s as far as it can go.
+If we end up with two controlled Paulis targeting the same qubit, we can combine them into a single operation.
+Note that this can cause kickback onto the ancilla qubit (e.g. because $XY = iZ$ instead of just $Z$).
+Because the kickback phase is $i$ instead of $-1$, the kickback will be an $\sqrt{X}$ gate instead of a whole X gate.
+That would be a problem, except it turns out that these $\sqrt{X}$ kickbacks always come in pairs that either cancel or combine into a whole X gate.
+They only happen when crossing two-qubit operation with an anti-commuting Pauli on each relevant qubit:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2018-02-04-canonicalize-t-cnot-h-s/move-CYX-across-CNOT.png"/></p>
+
+<p>We&#39;ve now covered all the relevant cases.
+We just have to take things one gate at a time, pushing each controlled operation further and further left, until we reach the start of the circuit.
+We&#39;ll be left with a &quot;Pauli string&quot; of gates on the qubits, and some kicked-back X gates on the ancilla qubit that combine together to form a single X gate or the identity gate.</p>
+
+<p>Once the CNOT has been moved to the start of the circuit, we can slide the T gate leftward to meet it.
+We also have to move the other CNOT, but because it will pass through exactly the same operations as the first CNOT it will end up with an identical Pauli string and X kickback.
+So we can just copy-paste the one we already moved.</p>
+
+<p>All in all, extracting a T looks something like this:</p>
+
+<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2018-02-04-canonicalize-t-cnot-h-s/extract-T.png"/></p>
+
+<p>We simply repeat the T-extraction process for each T gate in the circuit, from earliest to latest.
+The result is a circuit that starts by applying T gates to several Pauli strings, and finishes with a stabilizer transformation (without measurement).
+That&#39;s our standard form.</p>
+
+<p>Note that the ancilla qubit we introduced and still have at the end of the transformation into the standard form is not strictly necessary.
+It&#39;s possible to migrate the T gate from the ancilla qubit to one of the qubits being targeted by a controlled operation.
+But this would introduce an unnecessary degree of freedom (i.e. which wire the T gate is placed on), and we prefer standard forms to not have unnecessary degrees of freedom.
+So we&#39;ll ignore this optimization.</p>
+
+<h1>Counting circuits</h1>
+
+<p>After we&#39;ve canonicalized a circuit, it has two parts: the T-applying head, and the stabilizer-applying tail.
+The effect of each T gate in the head is determined by which controlled Pauli operation they apply to each qubit, and whether they have X kickbacks.
+There are four possible Pauli operations (I, X, Y, and Z) and two possible kickbacks (I and X).
+So each T gate has $2 \cdot 4^n$ possibilities, where $n$ is the number of qubits.
+If we have $t$ T gates, and $n$ qubits, there are $(2 \cdot 4^n)^t$ possible circuit heads.</p>
+
+<p>Bounding the size of the circuit tail is a bit more complicated.
+Instead of working it out, we&#39;re just going to look up how many distinct stabilizer operations there are for $n$ qubits.
+<a href="http://home.lu.lv/%7Esd20008/papers/essays/Clifford%20group%20%5Bpaper%5D.pdf">Turns out it&#39;s</a> $\Pi_{k=1}^n 2 \cdot 4^k \cdot (4^k - 1)$.
+That&#39;s a pretty complicated expression, so we&#39;ll work with the approximation $\frac{2}{3} 2^{2 n^2 + 3 n}$ instead.</p>
+
+<p>By combining the number of possible heads and the number of possible tails, we find that there are $\frac{2}{3} 2^{2 n^2 + 3 n} 2^t \cdot 4^{nt}$ standard circuits with $n$ qubits and $t$ T gates.
+For scale, note that exploring all 6-qubit circuits that use 3 T gates would involve looking over roughly $10^{39}$ possibilities.
+Which is an insanely high number.
+Even if we had some way of solving for the stabilizer part, which sounds pretty reasonable actually, the T part still has ten billion cases.</p>
+
+<p>... I guess that&#39;s why people don&#39;t find T-count-optimal quantum circuits of any reasonable size using brute force searches.</p>
+
+<h1>Summary</h1>
+
+<p>It&#39;s possible to move T gates across measurement-less stabilizer circuits, without introducing any new operations that aren&#39;t stabilizer operations.
+This allows us to canonicalize stabilizer+T circuits into a standard form that can be searched more efficiently than the full space of circuits.
+Unfortunately, the reduced space is still gigantic and intractable to search beyond a handful of T gates.
+(Also, measurement is an important resource when optimizing T count.)</p>
+
+<p>If you&#39;re interesting in proving lower bounds on T counts in a slightly more tractable way, check out the <em>Robustness of Magic</em> approach explained in &quot;<a href="https://arxiv.org/abs/1609.07488">Application of a resource theory for magic states to fault-tolerant quantum computing</a>&quot; by Mark Howard and Earl T. Campbell.</p>
+
+</div>
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1800">&laquo; Why will quantum computers be slow?</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
