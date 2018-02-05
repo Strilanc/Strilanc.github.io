@@ -29,7 +29,7 @@ If we can do that, we can handle the T gates on our own and use existing work to
 
 Getting the T gates out is just a matter of moving them to the left.
 Problem is, there's all these operations in the way causing complications.
-If you haphazrdly move a T gate over the target of a CNOT gate, correcting the phase kickback requires adding a T gate and (more seriously) a non-stabilizer gate that isn't in our gate set (a controlled-S):
+If you haphazardly move a T gate over the target of a CNOT gate, correcting the phase kickback requires adding a T gate and (more seriously) a non-stabilizer gate that isn't in our gate set (a controlled-S):
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/T-across-CNOT-kickback.png"/>
 
@@ -132,3 +132,5 @@ Unfortunately, the reduced space is still gigantic and intractable to search bey
 (Also, measurement is an important resource when optimizing T count.)
 
 If you're interesting in proving lower bounds on T counts in a slightly more tractable way, check out the *Robustness of Magic* approach explained in "[Application of a resource theory for magic states to fault-tolerant quantum computing](https://arxiv.org/abs/1609.07488)" by Mark Howard and Earl T. Campbell.
+
+[Discuss on reddit](https://www.reddit.com/r/algassert/comments/7vcuzq/comment_thread_canonicalizing_hscnott_circuits/)
