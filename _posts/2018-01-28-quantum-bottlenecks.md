@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Why will quantum computers be slow?"
+title: "Why Will Quantum Computers be Slow?"
 date: 2018-01-28 10:10:10 am PST
 permalink: post/1800
 ---
