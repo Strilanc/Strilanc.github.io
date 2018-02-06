@@ -5,6 +5,8 @@ date: 2015-01-17 11:30:00 EST
 categories: quantum
 ---
 
+{% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
+
 When you want to send classical information, but are doing so over a quantum communication channel (one that can transmit qubits), you're normally limited to sending 1 classical bit per sent qubit. How inconvenient.
 
 However, there is a caveat to that limitation. If the sender and receiver happen to share a [bell pair](http://en.wikipedia.org/wiki/Bell_state), they can consume said bell pair to pack 2 classical bits into a single qubit in a process called [superdense coding](http://en.wikipedia.org/wiki/Superdense_coding). In [a previous post](http://strilanc.com/quantum/2014/05/03/Storing-Bandwidth-with-Superdense-Coding.html), I talked about how this is like "storing bandwidth".
@@ -15,7 +17,7 @@ In this post, I'm going to go one step further. Instead of consuming previously 
 
 Suppose you have a quantum circuit where the top and bottom are separated by a large field of alternating swap gates. Anything introduced at the top will get swapped downward and downward and downward until it hits the bottom. Conversely, things introduced at the bottom get swapped upward until they hit the top:
 
-![Alternating swap field with bouncing signals](http://i.imgur.com/CvQ223O.png)
+<img style="max-width:100%;" alt="Alternating swap field with bouncing signals" src="/assets/{{ loc }}/swap-field-bouncing-signals.png"/>
 
 In the above diagram, you can see two values bouncing back and forth, up and down, between the outer borders of the swap field. This allows the upper area to communicate with the bottom area. The field of swaps will be our quantum channel, and we will try to send lots of classical information over it in one direction. We'll arbitrarily say that the sender is the area below the swap field, and so the receiver is the area above the swap field. They are only allowed to mess with the field's outer-most wire on their side.
 
@@ -23,7 +25,7 @@ The easiest way to send classical information is for the sender to toggle its co
 
 Here's a diagram of the process:
 
-![Values propagating upwards](http://i.imgur.com/e1X9RF1.png)
+<img style="max-width:100%;" alt="Values propagating upwards" src="/assets/{{ loc }}/values-propagating-upwards.png"/>
 
 In the diagram, you can see that the classical bit $a$ determines whether or not the bottom wire gets toggled from off to on in the second time step. Then the swap gates move $a$ up, and up, and up, and then into the top wire. There it gets measured by the receiver. The receiver also resets the wire to be off, so as to avoid interfering with future bits being sent.
 
@@ -43,7 +45,7 @@ Assuming we go with the superdense encoding approach, what will the circuit look
 
 To make the circuit a *bit* more understandable, lets define a gate (the **SR** gate) to encapsulate most of the receiver work:
 
-![Superdense receiver gate](http://i.imgur.com/I7fRlYt.png)
+<img style="max-width:100%;" alt="Superdense receiver gate" src="/assets/{{ loc }}/superdense-receiver.png"/>
 
 The above gate has the interesting property of outputting what it should later be given as input. It consumes some entropy to initialize two zero qubits, entangles them into a bell pair, swaps that pair for the incoming bell pair, then superdense-decodes the classical information that pair held.
 
@@ -51,17 +53,17 @@ It's important that each bell pair ends up matched back together. If they get ou
 
 Here's a diagram of what the solution using superdense coding looks like:
 
-![Superdense swap field](http://i.imgur.com/5R3sSsD.png)
+<img style="max-width:100%;" alt="Superdense swap field" src="/assets/{{ loc }}/superdense-swap-field.png"/>
 
 In the above diagram, you can see that the bell pair generated in the second time step is what is used to send the classical bits $a$ and $b$. Actually writing out the full state of the system at each step is left as an exercise for the reader.
 
 That diagram looks really busy, but it's just the same thing repeated over and over again. There's the receiver part, the sender part, the quantum channel between them, and the fake quantum channel we're using as a delay queue:
 
-![Superdense swap tile](http://i.imgur.com/7qLFR9j.png)
+<img style="max-width:100%;" alt="Superdense swap tile" src="/assets/{{ loc }}/superdense-swap-tile.png"/>
 
 Instead of seeing it as a circuit, we could interpret the pieces as hardware components that apply their effect many times per second. You'd have a long cable for the channel, with a sender widget on one end and a receiver widget on the other:
 
-![Physical Interpretation](http://i.imgur.com/ull0Hp7.png)
+<img style="max-width:100%;" alt="Physical Interpretation" src="/assets/{{ loc }}/physical-interpretation.png"/>
 
 Looked at that way, it almost looks practical! We'd need to be able to consistently perform bell basis measurement on entangled photons, hold photons coherently for tens of milliseconds, circulate them, time their arrival very accurately, and maybe a few more unsolved challenges I'm not even aware of because I'm not a hardware engineer (is optical fiber even a two-way quantum channel?)... but all that aside, we could potentially conceivably maybe actually use this to increase bandwidth in the real world! Awesome!
 

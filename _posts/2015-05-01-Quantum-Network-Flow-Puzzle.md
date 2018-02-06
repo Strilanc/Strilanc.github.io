@@ -5,13 +5,15 @@ date: 2015-05-01 11:30:00 EST
 categories: quantum
 ---
 
+{% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
+
 Quantum networks are... let's call it *interesting*. Information can flow through them in surprising ways. To illustrate this point, I have made a puzzle.
 
 **The Puzzle**
 
 Consider the following network of quantum computers and quantum channels:
 
-![Quantum Network Diagram](http://i.imgur.com/ActbFbw.png)
+<img style="max-width:100%;" alt="Quantum network diagram" src="/assets/{{ loc }}/quantum-network-diagram.png"/>
 
 Each of the nodes in the diagram represents a quantum computer. Quantum computers can receive, process, introduce, and send qubits.
 
@@ -155,7 +157,7 @@ On the other side of the network, note that the Receiver has 3 inward capacity a
 
 With those forced moves noted, we find ourselves in this situation:
 
-![Partial Solution as Network Diagram w/ Some Transmissions Noted](http://i.imgur.com/iHKETa0.png)
+<img style="max-width:100%;" alt="Partial Solution as Network Diagram w/ Some Transmissions Noted" src="/assets/{{ loc }}/partial-solution.png"/>
 
 This is where I would have hit a wall, if I was solving this puzzle without knowing the trick ahead of time. We have to get $u$, $v$, $u\_{a,b}$, and $v\_{c,d}$ to the Receiver in order for superdense decoding to happen. That's four qubits to send, but only three qubits worth of capacity to receive. And three is less than four (*oh my!*).
 
@@ -210,11 +212,11 @@ Finally, the Receiver consumes its half of $w$ to superdense-decode $w\_{u,v}$ i
 
 Here's the network, with all of the edges annotated by the information passing over them:
 
-![Solution as Network Diagram w/ Transmissions Noted](http://i.imgur.com/0jzARIS.png)
+<img style="max-width:100%;" alt="Solution as Network Diagram w/ Transmissions Noted" src="/assets/{{ loc }}/solution-network-diagram.png"/>
 
 And here's a circuit diagram, showing the exact operations that are occurring. Each colored area corresponds to a node in the network diagram:
 
-![Solution as Quantum Circuit](http://i.imgur.com/3tdJvBb.png)
+<img style="max-width:100%;" alt="Solution as Quantum Circuit" src="/assets/{{ loc }}/solution-circuit.png"/>
 
 And that's how you can superdense encode Bell pairs and other "flat" qubits: by cleaning up the garbage created by that process.
 
@@ -232,7 +234,9 @@ When I made the puzzle I was trying to exclude solutions that only used the norm
 
 Splitting the cleaner node into two pieces might fix the issue. Or maybe not! Give it a try:
 
-<a href="http://i.imgur.com/TgWzCsY.png"><img src="http://i.imgur.com/TgWzCsY.png" alt="Puzzle attempt number 2" style="width: 200px;"/></a>
+<a href="/assets/{{ loc }}/fixed-puzzle-diagram.png">
+  <img style="max-width:100%; width: 200px;" alt="Puzzle attempt number 2" src="/assets/{{ loc }}/fixed-puzzle-diagram.png"/>
+</a>
 
 # Update 2
 
