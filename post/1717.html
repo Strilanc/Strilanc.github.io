@@ -219,7 +219,7 @@ I&#39;ll be referring to the operation performed by the tilde operator as the &q
 
 <p>To be mathematically precise, I define the control-product of two commuting unitary operations $A$ and $B$ to be $A \sim B = \exp(-\frac{i}{\pi} \ln(A) \cdot \ln(B))$.
 (<em>Side note for physicists: Yes, I&#39;m just multiplying the Hamiltonians together.</em>)
-Interestingly, even though we started with an asymmetric concept (one operation controlling another), the math ended up symmetric (i.e. associative).
+Interestingly, even though we started with an asymmetric concept (one operation controlling another), the math ended up symmetric.
 You can think of either operation as being &quot;the control&quot; of the other.</p>
 
 <p>We can sanity-check the control-product definition by verifying that the CNOT operation&#39;s matrix is in fact the control-product of phase-flipping the control and toggling the target:</p>
@@ -306,7 +306,7 @@ In particular, if we pick two axes that aren&#39;t perpendicular to each other (
 <p>The reason we need to use perpendicular axes comes down to the fact that the observables for those axes anti-commute.
 In some fundamental sense that I&#39;m not going to try to explain, pairing the $X$ axis with the $Z$ axis works because their axis-flip operations $X=\bimat{0}{1}{1}{0}$ and $Z=\bimat{1}{0}{0}{-1}$ have an anti-commutator $\{X, Z\}$ that satisfies $\{X, Z\} = XZ + ZX = 0$ (i.e. we have $XZ = -ZX$).</p>
 
-<p>Generally speaking, if the axis-flip operations $A$ and $B$ satisfy ${A, B} = 0$, then the operation $\text{AXIS_SWAP}^{A, B}_{i, j} = (A_i \sim B_j) \cdot (B_i \sim A_j) \cdot (A_i \sim B_j)$ is a swap operation between qubit $i$ and qubit $j$.</p>
+<p>Generally speaking, if the axis-flip operations $A$ and $B$ satisfy $\{A, B\} = 0$, then the operation $\text{AXIS_SWAP}^{A, B}_{i, j} = (A_i \sim B_j) \cdot (B_i \sim A_j) \cdot (A_i \sim B_j)$ is a swap operation between qubit $i$ and qubit $j$.</p>
 
 <p>We&#39;ve generalized from Xor-Swapping with CNOTs to a construction that can swap two qubits by back-and-forth interacting two qubits along any perpendicular pair of axes.
 But we&#39;re not done generalizing yet!</p>

@@ -112,7 +112,7 @@
 
 <p>The paper even politely includes an example circuit, which I have tweaked slightly, that compresses 3 identical qubits into 2 qubits:</p>
 
-<p><img src="http://i.imgur.com/3NyMpUq.png" alt="3-to-2 compression circuit"></p>
+<p><img style="max-width:100%;" alt="3-to-2 compression circuit" src="/assets/2014-12-25-Quantum-Compression/3-to-2-compression-circuit.png"/></p>
 
 <p>The circuit uses several controlled gates. Two are common (the <a href="http://en.wikipedia.org/wiki/Quantum_gate#Pauli-X_gate">NOT gate</a> &quot;X&quot; and the <a href="http://en.wikipedia.org/wiki/Quantum_gate#Hadamard_gate">Hadamard gate</a> &quot;H&quot;) and two are unusual.</p>
 
@@ -124,7 +124,7 @@
 
 <p>Using the <a href="https://github.com/Strilanc/Quantum-Circuit-Inspector">toy quantum circuit inspector</a> I&#39;ve been working on lately, I tried feeding various invariant-under-permutation states through the circuit given by the paper. For example, here&#39;s an animation of what happens when the qubits are all gradually rotated around the X axis of the <a href="http://en.wikipedia.org/wiki/Bloch_sphere">Block Sphere</a>:</p>
 
-<p><img src="http://i.imgur.com/vzpTOjg.gif" alt="Animated circuit with peek gates"></p>
+<p><img style="max-width:100%;" alt="Animated circuit with peek gates" src="/assets/2014-12-25-Quantum-Compression/animated-circuit-with-peek-gates.gif"/></p>
 
 <p>(Note that the rotation-to-quantum-operation mapping I&#39;m using is <a href="http://strilanc.com/quantum/2014/11/24/Converting-Rotations-into-Nice-Qubit-Operations.html">the one I&#39;ve discussed previously</a>. Specifically, each qubit&#39;s pre-compressed state is following the curve $\psi(t) = \frac{1}{2} \parens{1 + e^{i t} } \ket{0} + \frac{1}{2} \parens{1 - e^{i t}} \ket{1}$.)</p>
 
@@ -136,11 +136,11 @@
 
 <p>One interesting thing I noticed is how the output amplitudes behave as the input qubits are rotated. Here&#39;s an animation of the output amplitudes from the above circuit:</p>
 
-<p><img src="http://i.imgur.com/FQ4Hq8p.gif" alt="Output amplitudes"></p>
+<p><img style="max-width:100%;" alt="Output amplitudes" src="/assets/2014-12-25-Quantum-Compression/output-amplitudes.gif"/></p>
 
 <p>As the probability of each input wire being ON varies, the distribution of amplitudes appears to be tracking the <a href="http://www.wolframalpha.com/input/?i=plot+%281-p%29%5E%283-x%29+p%5Ex+binomial%283%2C+x%29+for+x%3D%7B0%2C1%2C2%2C3%7D%2C+0+%3C%3D+p+%3C%3D+1">probability of getting k heads with 3 biased coin flips</a>!</p>
 
-<p><img src="http://i.imgur.com/2YLhcDB.png" alt="Binomial distribution"></p>
+<p><img style="max-width:100%;" alt="Binomial distribution" src="/assets/2014-12-25-Quantum-Compression/binomial-distribution.png"/></p>
 
 <p>The same thing happens for all the other inputs I tried, as long as they were invariant under permutation. Entangled states can even skip directly from 0 heads to 3 heads without passing through 1 and 2! It&#39;s like the compression circuit is sampling the qubits and counting how many of them are ON, despite not collapsing the superposition! Perhaps not useful, but definitely interesting.</p>
 
