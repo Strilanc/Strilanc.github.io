@@ -80,7 +80,7 @@
 
 <p>Consider the following network of quantum computers and quantum channels:</p>
 
-<p><img src="http://i.imgur.com/ActbFbw.png" alt="Quantum Network Diagram"></p>
+<p><img style="max-width:100%;" alt="Quantum network diagram" src="/assets/2015-05-01-Quantum-Network-Flow-Puzzle/quantum-network-diagram.png"/></p>
 
 <p>Each of the nodes in the diagram represents a quantum computer. Quantum computers can receive, process, introduce, and send qubits.</p>
 
@@ -224,7 +224,7 @@
 
 <p>With those forced moves noted, we find ourselves in this situation:</p>
 
-<p><img src="http://i.imgur.com/iHKETa0.png" alt="Partial Solution as Network Diagram w/ Some Transmissions Noted"></p>
+<p><img style="max-width:100%;" alt="Partial Solution as Network Diagram w/ Some Transmissions Noted" src="/assets/2015-05-01-Quantum-Network-Flow-Puzzle/partial-solution.png"/></p>
 
 <p>This is where I would have hit a wall, if I was solving this puzzle without knowing the trick ahead of time. We have to get $u$, $v$, $u_{a,b}$, and $v_{c,d}$ to the Receiver in order for superdense decoding to happen. That&#39;s four qubits to send, but only three qubits worth of capacity to receive. And three is less than four (<em>oh my!</em>).</p>
 
@@ -279,11 +279,11 @@ The only catch is that the process creates an entangled copy of the qubits inste
 
 <p>Here&#39;s the network, with all of the edges annotated by the information passing over them:</p>
 
-<p><img src="http://i.imgur.com/0jzARIS.png" alt="Solution as Network Diagram w/ Transmissions Noted"></p>
+<p><img style="max-width:100%;" alt="Solution as Network Diagram w/ Transmissions Noted" src="/assets/2015-05-01-Quantum-Network-Flow-Puzzle/solution-network-diagram.png"/></p>
 
 <p>And here&#39;s a circuit diagram, showing the exact operations that are occurring. Each colored area corresponds to a node in the network diagram:</p>
 
-<p><img src="http://i.imgur.com/3tdJvBb.png" alt="Solution as Quantum Circuit"></p>
+<p><img style="max-width:100%;" alt="Solution as Quantum Circuit" src="/assets/2015-05-01-Quantum-Network-Flow-Puzzle/solution-circuit.png"/></p>
 
 <p>And that&#39;s how you can superdense encode Bell pairs and other &quot;flat&quot; qubits: by cleaning up the garbage created by that process.</p>
 
@@ -303,7 +303,9 @@ The only catch is that the process creates an entangled copy of the qubits inste
 
 <p>Splitting the cleaner node into two pieces might fix the issue. Or maybe not! Give it a try:</p>
 
-<p><a href="http://i.imgur.com/TgWzCsY.png"><img src="http://i.imgur.com/TgWzCsY.png" alt="Puzzle attempt number 2" style="width: 200px;"/></a></p>
+<p><a href="/assets/2015-05-01-Quantum-Network-Flow-Puzzle/fixed-puzzle-diagram.png">
+  <img style="max-width:100%; width: 200px;" alt="Puzzle attempt number 2" src="/assets/2015-05-01-Quantum-Network-Flow-Puzzle/fixed-puzzle-diagram.png"/>
+</a></p>
 
 <h1>Update 2</h1>
 
