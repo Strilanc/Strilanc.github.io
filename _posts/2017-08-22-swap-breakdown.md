@@ -148,7 +148,7 @@ I'll be referring to the operation performed by the tilde operator as the "contr
 
 To be mathematically precise, I define the control-product of two commuting unitary operations $A$ and $B$ to be $A \sim B = \exp(-\frac{i}{\pi} \ln(A) \cdot \ln(B))$.
 (*Side note for physicists: Yes, I'm just multiplying the Hamiltonians together.*)
-Interestingly, even though we started with an asymmetric concept (one operation controlling another), the math ended up symmetric (i.e. associative).
+Interestingly, even though we started with an asymmetric concept (one operation controlling another), the math ended up symmetric.
 You can think of either operation as being "the control" of the other.
 
 We can sanity-check the control-product definition by verifying that the CNOT operation's matrix is in fact the control-product of phase-flipping the control and toggling the target:
@@ -244,7 +244,7 @@ In particular, if we pick two axes that aren't perpendicular to each other (e.g.
 The reason we need to use perpendicular axes comes down to the fact that the observables for those axes anti-commute.
 In some fundamental sense that I'm not going to try to explain, pairing the $X$ axis with the $Z$ axis works because their axis-flip operations $X=\bimat{0}{1}{1}{0}$ and $Z=\bimat{1}{0}{0}{-1}$ have an anti-commutator $\\\{X, Z\\\}$ that satisfies $\\\{X, Z\\\} = XZ + ZX = 0$ (i.e. we have $XZ = -ZX$).
 
-Generally speaking, if the axis-flip operations $A$ and $B$ satisfy $\{A, B\} = 0$, then the operation $\text{AXIS_SWAP}^{A, B}\_{i, j} = (A\_i \sim B\_j) \cdot (B\_i \sim A\_j) \cdot (A\_i \sim B\_j)$ is a swap operation between qubit $i$ and qubit $j$.
+Generally speaking, if the axis-flip operations $A$ and $B$ satisfy $\\\{A, B\\\} = 0$, then the operation $\text{AXIS_SWAP}^{A, B}\_{i, j} = (A\_i \sim B\_j) \cdot (B\_i \sim A\_j) \cdot (A\_i \sim B\_j)$ is a swap operation between qubit $i$ and qubit $j$.
 
 We've generalized from Xor-Swapping with CNOTs to a construction that can swap two qubits by back-and-forth interacting two qubits along any perpendicular pair of axes.
 But we're not done generalizing yet!

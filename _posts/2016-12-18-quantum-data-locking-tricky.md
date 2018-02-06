@@ -58,7 +58,7 @@ X-axis states are uniform superpositions of all the Z-axis states, so basically 
 But the chances of a random key decrypting random bits into something that looks like English is *incredibly* low, especially if the document is long.
 So the vast majority of the superposition will be cases that fail validation, and when Bob measures the result he gets "Nope! Don't use the Z axis!" with high probability.
 
-Furthermore, although measureming the is-valid result caused a collapse that destroyed any states that happened to pass validation, those states made up such a small fraction of the whole so this is only a tiny perturbation to the overall state.
+Furthermore, although measuring the is-valid result caused a collapse that destroyed any states that happened to pass validation, those states made up such a small fraction of the whole so this is only a tiny perturbation to the overall state.
 That means we can expect the X-axis measurements to have been essentially unchanged by running the validation process.
 
 So Bob wins in both the Z-axis and X-axis cases (with high probability).

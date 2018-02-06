@@ -331,6 +331,17 @@ Finally, it's bad UX to introduce the concept of a "for-all" control when it onl
 I would want the for-all control to do useful things with other gates as well.
 
 
+# Update (Feb 2018): Iteration 7
+
+In the months since writing this post, I've made a couple improvements to the display:
+
+<img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/entanglement-display-iter7.gif"/>
+
+I made the display bigger by pushing the control wire down, and moving the "for-all" control to the side.
+I also realized it was much clearer to root the axis lines not at the origin but at the unconditioned bloch vector of the qubit.
+This makes the "center" of the lines move along with the shape, so that the two visually reinforce each other instead of fighting.
+
+
 # Closing Remarks
 
 Pure 2-qubit entangled states are like rotations, and can be represented reasonably well as such.
