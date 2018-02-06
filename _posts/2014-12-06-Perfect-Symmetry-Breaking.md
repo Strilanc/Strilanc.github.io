@@ -5,6 +5,8 @@ date: 2014-12-06 11:30:00 EST
 permalink: quantum/2014/12/06/Perfect-Symmetry-Breaking-with-Quantum-Computers.html
 ---
 
+{% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
+
 **Symmetry Breaking**
 
 One of the many primitives used by [distributed algorithms](http://en.wikipedia.org/wiki/Distributed_algorithm) is symmetry breaking. A symmetry breaking primitive takes two identical nodes, does its thing, and ends up assigning true to one node and false to the other (and the nodes agree about who got which value).
@@ -32,7 +34,7 @@ After about ten minutes I found a solution.
 
 Here's the circuit I found:
 
-![Initial solution](http://i.imgur.com/SUuBsyk.png)
+<img style="max-width:100%;" alt="Initial solution" src="/assets/{{ loc }}/initial-solution.png"/>
 
 Reading the circuit from right to left, each side should:
 
@@ -44,11 +46,11 @@ Reading the circuit from right to left, each side should:
 
 Here's a cleaned up circuit diagram, which better shows the symmetry:
 
-![Cleaned up solution](http://i.imgur.com/EOXIT0q.png)
+<img style="max-width:100%;" alt="Cleaned up solution" src="/assets/{{ loc }}/cleaned-up-solution.png"/>
 
 And here's a diagram of the amplitudes making up the final state, with cells where A1 and B1 agree never getting any amplitude:
 
-![Output state](http://i.imgur.com/msvTZDs.png)
+<img style="max-width:100%;" alt="output-state" src="/assets/{{ loc }}/output-state.png"/>
 
 The above solution is completely impractical in practice, what with the not being able to make quantum computers thing. But, if we pretend noise isn't a thing that exists, it is 100% guaranteed to always finish after just one round and that's what the goal was. Another nice property the above solution has is that it only requires one qubit exchange. The classical algorithms expect you to send at least two bits on average.
 

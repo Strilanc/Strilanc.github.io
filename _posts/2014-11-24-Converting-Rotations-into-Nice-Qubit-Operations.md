@@ -5,6 +5,8 @@ date: 2014-11-24 11:30:00 EST
 categories: quantum
 ---
 
+{% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
+
 In this post: avoiding some issues when mapping from rotations to unitary matrices, and running into *different* issues.
 
 **Common Mapping**
@@ -81,7 +83,7 @@ How do we choose whether $s$ should be $+1$ or $-1$? A naive solution would be t
 
 Flipping $s$ without introducing a discontinuity in the phase correction requires $|v|$ to be a whole number of half turns, since that's the only time when $e^{i \pi \theta} = e^{-i \pi \theta}$. But we need to flip $s$ for all $v$-vs-$-v$ pairs including ones that aren't half-turns, and we can swivel the axis around to make the flips meet, so... no matter what we do we're going to end up with a discontinuity in our phase correction angle. [Something like this](http://www.wolframalpha.com/input/?i=plot+sqrt%28x^2+%2B+y^2%29+*+sign%28x+%2B+y%29):
 
-![Plot with discontinuity](http://i.imgur.com/HOtVOGJ.png)
+<img style="max-width:100%;" alt="Plot with discontinuity" src="/assets/{{ loc }}/plot-with-discontinuity.png"/>
 
 (Okay you got me, it doesn't *have* to be one discontinuity. It can be more than one, too.)
 

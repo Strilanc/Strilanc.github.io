@@ -5,6 +5,8 @@ date: 2014-12-25 11:30:00 EST
 categories: quantum
 ---
 
+{% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
+
 Usually, pop science articles are terrible at explaining quantum anything. The breadth of their audience prevents them from going into detail, nevermind including an equation. I am under no such constraint, and in this series of posts ("[Un]popular Qubits") I look a bit more in-depth at quantum computing things reported by the media.
 
 In this installment: *quantum compression* ([example](http://motherboard.vice.com/read/physicists-succeed-in-compressing-quantum-data) [popular](http://physicsworld.com/cws/article/news/2014/sep/29/quantum-data-are-compressed-for-the-first-time) [articles](http://www.nature.com/news/quantum-bits-get-their-first-compression-1.15961); [the actual paper](http://arxiv.org/pdf/1410.3941.pdf)).
@@ -43,7 +45,7 @@ Fortunately for me, the paper says exactly how to go about re-arranging the ampl
 
 The paper even politely includes an example circuit, which I have tweaked slightly, that compresses 3 identical qubits into 2 qubits:
 
-![3-to-2 compression circuit](http://i.imgur.com/3NyMpUq.png)
+<img style="max-width:100%;" alt="3-to-2 compression circuit" src="/assets/{{ loc }}/3-to-2-compression-circuit.png"/>
 
 The circuit uses several controlled gates. Two are common (the [NOT gate](http://en.wikipedia.org/wiki/Quantum_gate#Pauli-X_gate) "X" and the [Hadamard gate](http://en.wikipedia.org/wiki/Quantum_gate#Hadamard_gate) "H") and two are unusual.
 
@@ -55,7 +57,7 @@ The paper goes on to explain how they experimentally implemented that circuit as
 
 Using the [toy quantum circuit inspector](https://github.com/Strilanc/Quantum-Circuit-Inspector) I've been working on lately, I tried feeding various invariant-under-permutation states through the circuit given by the paper. For example, here's an animation of what happens when the qubits are all gradually rotated around the X axis of the [Block Sphere](http://en.wikipedia.org/wiki/Bloch_sphere):
 
-![Animated circuit with peek gates](http://i.imgur.com/vzpTOjg.gif)
+<img style="max-width:100%;" alt="Animated circuit with peek gates" src="/assets/{{ loc }}/animated-circuit-with-peek-gates.gif"/>
 
 (Note that the rotation-to-quantum-operation mapping I'm using is [the one I've discussed previously](http://strilanc.com/quantum/2014/11/24/Converting-Rotations-into-Nice-Qubit-Operations.html). Specifically, each qubit's pre-compressed state is following the curve $\psi(t) = \frac{1}{2} \parens{1 + e^{i t} } \ket{0} + \frac{1}{2} \parens{1 - e^{i t}} \ket{1}$.)
 
@@ -67,11 +69,11 @@ I tried lots of other cases: rotating around the Y axis, combinations of X and Y
 
 One interesting thing I noticed is how the output amplitudes behave as the input qubits are rotated. Here's an animation of the output amplitudes from the above circuit:
 
-![Output amplitudes](http://i.imgur.com/FQ4Hq8p.gif)
+<img style="max-width:100%;" alt="Output amplitudes" src="/assets/{{ loc }}/output-amplitudes.gif"/>
 
 As the probability of each input wire being ON varies, the distribution of amplitudes appears to be tracking the [probability of getting k heads with 3 biased coin flips](http://www.wolframalpha.com/input/?i=plot+%281-p%29^%283-x%29+p^x+binomial%283%2C+x%29+for+x%3D{0%2C1%2C2%2C3}%2C+0+%3C%3D+p+%3C%3D+1)!
 
-![Binomial distribution](http://i.imgur.com/2YLhcDB.png)
+<img style="max-width:100%;" alt="Binomial distribution" src="/assets/{{ loc }}/binomial-distribution.png"/>
 
 The same thing happens for all the other inputs I tried, as long as they were invariant under permutation. Entangled states can even skip directly from 0 heads to 3 heads without passing through 1 and 2! It's like the compression circuit is sampling the qubits and counting how many of them are ON, despite not collapsing the superposition! Perhaps not useful, but definitely interesting.
 
