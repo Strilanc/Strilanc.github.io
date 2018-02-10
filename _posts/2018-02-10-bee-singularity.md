@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "The Bee Movie Singularity"
-date: 2018-02-07 10:10:10 am PST
+date: 2018-02-10 10:10:10 am PST
 permalink: post/1802
 ---
 
@@ -194,3 +194,5 @@ It's probably fine though; watching The Bee Movie infinitely many times in the s
 There's an infinitely long loop of movie to get through, but we run off the end of the loop... [what's going to play after that?](https://www.youtube.com/watch?v=ffUnNaQTfZE)
 
 I'm pretty sure that the video I linked isn't compounding the speedups correctly, because I didn't transcend reality and achieve enlightenment while watching the last frame.
+
+[Discuss on reddit](https://www.reddit.com/r/algassert/comments/7wosg9/comment_thread_the_bee_movie_singularity/)
