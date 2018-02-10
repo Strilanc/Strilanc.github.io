@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>The Bee Movie Singularity</title>
+                <description>&lt;p&gt;For whatever reason, people on youtube really like to come up with weird ways to watch The Bee Movie. Case in point: &lt;a href=&quot;https://www.youtube.com/watch?v=JMG1Nl7uWko&quot;&gt;&amp;quot;The Entire Bee Movie but every time it says bee it speeds up by 15%&amp;quot;&lt;/a&gt;. (If you want a long discussion of this general phenomenon, see PBS...</description>
+                <pubDate>Wed, 07 Feb 2018 10:10:10 -0800</pubDate>
+                <link>http://algassert.com/post/1802</link>
+                <guid isPermaLink="true">http://algassert.com/post/1802</guid>
+            </item>
+            <item>
                 <title>Canonicalizing H+S+CNOT+T Circuits</title>
                 <description>&lt;p&gt;A problem I&amp;#39;ve been interested in lately is &amp;quot;how do I prove I &lt;em&gt;need&lt;/em&gt; some number of T gates for a circuit?&amp;quot;. As part of thinking about that, I wanted some way to systematically search through circuit space. But just iterating over all the possible combinations and permutations of gates...</description>
                 <pubDate>Sun, 04 Feb 2018 10:10:10 -0800</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sun, 23 Jul 2017 13:10:20 -0700</pubDate>
                 <link>http://algassert.com/post/1714</link>
                 <guid isPermaLink="true">http://algassert.com/post/1714</guid>
-            </item>
-            <item>
-                <title>Impractical Experiments #4: High Powered Phase Estimation</title>
-                <description>&lt;p&gt;In &lt;a href=&quot;/post/1710&quot;&gt;a previous post&lt;/a&gt;, I explained how using quantum phase estimation on an operation can provide a mechanism for applying fractional powers of that operation. The basic idea being that the register containing the phase estimation acts as an index into the eigenspaces of the operation, allowing you phase...</description>
-                <pubDate>Sun, 09 Jul 2017 13:10:20 -0700</pubDate>
-                <link>http://algassert.com/post/1713</link>
-                <guid isPermaLink="true">http://algassert.com/post/1713</guid>
             </item>
     </channel>
 </rss>
