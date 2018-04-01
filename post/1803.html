@@ -6,7 +6,7 @@
     <meta name="author" content="Craig Gidney">
     <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
     <meta name="description" content="Craig Gidney's computer science blog">
-    <title>My Preprints #2: A Slightly Smaller Surface Code S Gate</title>
+    <title>Announcement: My Quantum Cloud Service</title>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <meta name="viewport" content="width=device-width">
 
@@ -40,8 +40,8 @@
     </div>
     <div class="site">
 
-      <h1 class="post_title">My Preprints #2: A Slightly Smaller Surface Code S Gate</h1>
-<p class="meta">31 Jul 2017</p>
+      <h1 class="post_title">Announcement: My Quantum Cloud Service</h1>
+<p class="meta">01 Apr 2018</p>
 
     <!-- MathJax latest -->
     <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
@@ -74,57 +74,46 @@
     </noscript>
 
 <div class="post">
-<p>Recently, I was trying to learn more about the surface code by reading through the 2012 paper &quot;<a href="https://arxiv.org/abs/1208.0928">Surface codes: Towards practical large-scale quantum computation</a>&quot; by Austin Fowler et al.
-The paper is great; it uses lots of concepts and ways of thinking about quantum states that I&#39;m not used to.
-However, there was one notable exception to that pattern: the S gate construction.</p>
+<p>In 2016, IBM launched the IBM Quantum Experience, a cloud service allowing anyone to run quantum programs on a 5 qubit chip.
+The number of qubits has gone up since then, and other companies have launched their own services, but personally I&#39;ve been generally disappointed with this whole thing.
+You see, although quantum computing is <strike>being hyped</strike> exciting more people than ever before, the news cycle has been hyper-focused on <em>quantity</em> of qubits.
+But what I want is high <em>quality</em> of qubits, and no service has met my exacting demands.</p>
 
-<p>In Fowler et al&#39;s paper, the &quot;native&quot; operations available to the surface code are CNOT, H, X, Y, and Z.
-There is a significant difference between the Pauli gates (X, Y, and Z) and the H and CNOT gates.
-Namely, the Pauli gates can be performed within the control software, without actually doing anything extra to the qubits.
-The Pauli gates don&#39;t use up any &quot;volume&quot;; they&#39;re effectively free.
-This difference in cost will be important.</p>
+<p>Until now, that is.
+Here, on this very special day, I am proud to announce the <strong>Algassert Zero Qubit Quantum Cloud Service (AZQQCS)</strong>.</p>
 
-<p>Non-native gates are performed with combinations of the native gates, often aided by specially prepared ancilla states.
-For example, in order to perform the S gate, Austin et al. keep re-using the ancilla state $|Y\rangle = \frac{1}{\sqrt{2}}|0\rangle + \frac{1}{\sqrt{2}} i |1\rangle$.</p>
+<p>Every qubit available on AZQQCS is literally perfect.
+Every.
+Single.
+One.
+To be absolutely positive of this fact, I&#39;ve done meticulous analysis of all possible errors.
+Network hiccups, power outages, meteor strikes, dropping my sandwhich, you name it.
+Thanks to this analysis, I can guarantee that no user of AZQQCS will ever observe an error due to decoherence, miscalibration, or any other qubit quality related issue.</p>
 
-<p>I&#39;ve thought about this kind of gate-from-re-usable-ancilla construction in the past.
-In fact, I came up <a href="/post/1622">with the exact same S-gate-via-ancilla circuit as the one used in the paper</a>:</p>
+<p>Another major benefit of AZQQCS is that, unlike other services, we don&#39;t require registration or payment or technically even an internet connection.
+Just use the editor right below this very paragraph to drag gates onto the available qubits, then hit &quot;run circuit&quot; to see the results of your simulation!</p>
 
-<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-07-31-paper-smaller-surface-s-gate/old-s-gate.png"/></p>
+<!-- jQuery 2.1.0 -->
 
-<p>As soon as I saw the above circuit in the context of the paper, i.e. knowing that Pauli gates are cheaper than CNOT or H gates, I had to <a href="http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22X%5E-%C2%BD%22%2C1%2C%22H%22%5D%2C%5B1%2C1%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22%E2%80%A6%22%2C1%2C%22%E2%80%A6%22%5D%2C%5B1%2C1%2C%22Amps2%22%5D%2C%5B%22Bloch%22%5D%2C%5B%22X%22%2C1%2C%22%E2%80%A2%22%5D%2C%5B%22H%22%5D%2C%5B%22X%22%2C1%2C%22%E2%80%A2%22%5D%2C%5B%22H%22%5D%2C%5B%22Bloch%22%2C1%2C%22Amps2%22%5D%5D%7D">try optimizing it in Quirk</a>.
-And it worked!
-It turns out that the outside Hadamard gate is simply fixing a phase flip of the ancilla state; you can use a Z gate instead:</p>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
 
-<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-07-31-paper-smaller-surface-s-gate/new-s-gate.png"/></p>
+<noscript>
+  <font color=red>
+    jQuery javascript was blocked.
+    Examples may not work.
+  </font>
+  (Allow <strong>ajax.googleapis.com</strong> to fix.)
+  <hr/>
+</noscript>
 
-<p>Actually, within the context of the surface code, Pauli gates are so cheap that it feels misleading to draw a whole box with a Z inside it.
-A more cost-representative way to draw the circuit is like this:</p>
+<canvas id="drawCanvas" width="325" height="400" style="border:1px solid #000000;"></canvas>
 
-<p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-07-31-paper-smaller-surface-s-gate/new-s-gate-compact.png"/></p>
+<p><input type="button" value="Run Circuit!" id="btnEval" style="width: 325px; height: 50px"></input></p>
 
-<p>Note that this is basically the same circuit that we started with, but with the outside Hadamard removed.
-It&#39;s not very often that you make a circuit better by simply dropping an operation!
-(Sorta.)</p>
+<script src="/assets/2018-04-01-zero-qubit-service/editor.js"></script>
 
-<p>Austin Fowler is one of my co-workers, so I sent him an email noting this silly little optimization.
-It would be unfair to say that Austin was excited, but anything that makes the surface code even slightly closer to practical tends to make his day.
-So that was good.</p>
-
-<p>Austin and I also happen to be fans of the idea of publishing these little discoveries by themselves.
-Globbing something like this into the background of a larger paper just makes it harder to find.
-Sure it won&#39;t meet the significance criteria of a journal, but it&#39;s still worth putting out there.</p>
-
-<p>So, with that in mind, I set out to write the shortest paper I possibly could.
-It had an abstract, the abstract said to look at figure 1, and figure 1 was the old circuit followed by the new circuit.
-Also there was a reference.
-It took all of half of a page.</p>
-
-<p>Austin didn&#39;t find the extreme brevity as funny as I did, unfortunately.
-He fleshed out the paper with some justification, a more appropriate set of references, and some follow-up diagrams.
-The result is now on the arXiv as: <a href="https://arxiv.org/abs/1708.00054">&quot;A slightly smaller surface code S gate&quot;</a>.</p>
-
-<p><a href="https://www.reddit.com/r/algassert/comments/6s1pcs/comment_thread_my_second_paper_a_slightly_smaller/">Discuss on reddit</a></p>
+<p>If you have any complaints, please call 555-555-QBIT for support.
+We have one person on call 24/7 per available qubit.</p>
 
 </div>
 
@@ -134,10 +123,10 @@ The result is now on the arXiv as: <a href="https://arxiv.org/abs/1708.00054">&q
     <table style="width: 100%;">
       <tr>
         <td align="left">
-          <a href="/post/1714">&laquo; Reversible Computation isn't Free</a>
+          <a href="/post/1802">&laquo; The Bee Movie Singularity</a>
         </td>
         <td align="right">
-          <a href="/post/1716">Visualizing 2-Qubit Entanglement &raquo;</a>
+          
         </td>
       </tr>
     </table>
