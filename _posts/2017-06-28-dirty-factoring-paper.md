@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "My First Paper: Dirty Period Finding"
+title: "My Preprints #1: Dirty Period Finding"
 date: 2017-06-28 12:10:10 pm PST
 permalink: post/1712
 ---

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "My Second Paper: A Slightly Smaller Surface Code S Gate"
+title: "My Preprints #2: A Slightly Smaller Surface Code S Gate"
 date: 2017-07-31 7:10:20 pm PST
 permalink: post/1715
 ---
