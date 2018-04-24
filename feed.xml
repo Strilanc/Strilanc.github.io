@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>A Slightly Larger S Gate</title>
+                <description>&lt;p&gt;This is a followup to a post from last year, &lt;a href=&quot;/post/1715&quot;&gt;&amp;quot;A Slightly Smaller Surface Code S Gate&amp;quot;&lt;/a&gt;, where I showed that the S gate construction from &lt;a href=&quot;https://arxiv.org/abs/1208.0928&quot;&gt;here&lt;/a&gt; could be simplified by replacing a Hadamard operation with a Pauli operation. (It&amp;#39;s better because Hadamards need spacetime volume, but Paulis...</description>
+                <pubDate>Mon, 23 Apr 2018 14:10:20 -0700</pubDate>
+                <link>http://algassert.com/post/1804</link>
+                <guid isPermaLink="true">http://algassert.com/post/1804</guid>
+            </item>
+            <item>
                 <title>Announcement: My Quantum Cloud Service</title>
                 <description>&lt;p&gt;In 2016, IBM launched the IBM Quantum Experience, a cloud service allowing anyone to run quantum programs on a 5 qubit chip. The number of qubits has gone up since then, and other companies have launched their own services, but personally I&amp;#39;ve been generally disappointed with this whole thing. You...</description>
                 <pubDate>Sun, 01 Apr 2018 14:10:20 -0700</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sun, 06 Aug 2017 13:10:20 -0700</pubDate>
                 <link>http://algassert.com/post/1716</link>
                 <guid isPermaLink="true">http://algassert.com/post/1716</guid>
-            </item>
-            <item>
-                <title>My Preprints #2: A Slightly Smaller Surface Code S Gate</title>
-                <description>&lt;p&gt;Recently, I was trying to learn more about the surface code by reading through the 2012 paper &amp;quot;&lt;a href=&quot;https://arxiv.org/abs/1208.0928&quot;&gt;Surface codes: Towards practical large-scale quantum computation&lt;/a&gt;&amp;quot; by Austin Fowler et al. The paper is great; it uses lots of concepts and ways of thinking about quantum states that I&amp;#39;m not used...</description>
-                <pubDate>Mon, 31 Jul 2017 20:10:20 -0700</pubDate>
-                <link>http://algassert.com/post/1715</link>
-                <guid isPermaLink="true">http://algassert.com/post/1715</guid>
             </item>
     </channel>
 </rss>
