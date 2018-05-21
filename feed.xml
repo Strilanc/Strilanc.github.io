@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Roulette Selection fit for a Quantum Computer</title>
+                <description>&lt;p&gt;This post will cover two things. First, we&amp;#39;ll go over a particularly nice way of performing classical &lt;a href=&quot;https://en.wikipedia.org/wiki/Fitness_proportionate_selection&quot;&gt;roulette selection&lt;/a&gt;. Second, we&amp;#39;ll enter quantum land and I&amp;#39;ll explain how the improved roulette selection method allowed me and some collaborators to make a key element of quantum chemistry simulations a lot...</description>
+                <pubDate>Sun, 20 May 2018 11:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/1805</link>
+                <guid isPermaLink="true">http://algassert.com/post/1805</guid>
+            </item>
+            <item>
                 <title>A Slightly Larger S Gate</title>
                 <description>&lt;p&gt;This is a followup to a post from last year, &lt;a href=&quot;/post/1715&quot;&gt;&amp;quot;A Slightly Smaller Surface Code S Gate&amp;quot;&lt;/a&gt;, where I showed that the S gate construction from &lt;a href=&quot;https://arxiv.org/abs/1208.0928&quot;&gt;here&lt;/a&gt; could be simplified by replacing a Hadamard operation with a Pauli operation. (It&amp;#39;s better because Hadamards need spacetime volume, but Paulis...</description>
                 <pubDate>Mon, 23 Apr 2018 14:10:20 -0700</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Tue, 22 Aug 2017 13:10:20 -0700</pubDate>
                 <link>http://algassert.com/post/1717</link>
                 <guid isPermaLink="true">http://algassert.com/post/1717</guid>
-            </item>
-            <item>
-                <title>Visualizing 2-Qubit Entanglement</title>
-                <description>&lt;p&gt;One of the annoying things about quantum computing is that it&amp;#39;s not very amenable to visualization. We do have a great way to draw the state of one qubit, i.e. the &lt;a href=&quot;https://en.wikipedia.org/wiki/Bloch_sphere&quot;&gt;Bloch sphere&lt;/a&gt;, but it doesn&amp;#39;t work very well for more qubits. This makes the Bloch sphere a double-edged...</description>
-                <pubDate>Sun, 06 Aug 2017 13:10:20 -0700</pubDate>
-                <link>http://algassert.com/post/1716</link>
-                <guid isPermaLink="true">http://algassert.com/post/1716</guid>
             </item>
     </channel>
 </rss>
