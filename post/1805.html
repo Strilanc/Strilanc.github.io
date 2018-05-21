@@ -240,6 +240,10 @@ And if you&#39;re just a <em>tiny</em> bit more clever, you can get the runtime 
 
 <p>I&#39;ll leave figuring out an $O(n)$ algorithm as a challenge for the reader, and move on to quantum computing.</p>
 
+<p><strong>Update (May 21):</strong> I figured there must be pre-existing work that covered subsampling, but I couldn&#39;t cite it because I didn&#39;t know what it was called!
+Fortunately for me, <a href="https://www.reddit.com/r/programming/comments/8kylnx/roulette_selection_fit_for_a_quantum_computer/dzbtb4t/">commenter &#39;notfancy&#39; did</a>.
+They pointed out that &quot;subsampling&quot; is more commonly called <a href="https://en.wikipedia.org/wiki/Alias_method">&quot;the alias method&quot;</a> and that the linear time algorithm for generating the index used by the alias method is called <a href="http://www.keithschwarz.com/darts-dice-coins/">Vose&#39;s algorithm</a> (see the 1991 paper <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.398.3339&rep=rep1&type=pdf">&quot;A linear algorithm for generating random numbers with a given distribution&quot;</a>).</p>
+
 <h1>Preparing Superpositions</h1>
 
 <p>In the paper <a href="https://arxiv.org/abs/1805.03662">&quot;Encoding Electronic Spectra in Quantum Circuits with Linear T Complexity&quot;</a>, there is a particular task that we need to perform millions of times: preparing a superposition with specified amplitudes.
@@ -279,7 +283,7 @@ If we mess up the phases during prepare it won&#39;t hurt the controlled operati
 <p>The reason this is a key insight is because it implies we can have registers that are entangled/correlated with the prepared superposition.
 Normally that kind of thing is fatal to a quantum algorithm.
 It&#39;s <em>classical</em> algorithms that can spread correlated data around willy-nilly, without ruining everything.
-This basically that, because we are insensitive to phase error, we can use preparation strategies that would normally only make sense in a classical algorithm.
+This basically means that, because we are insensitive to phase error, we can use preparation strategies that would normally only make sense in a classical algorithm.
 In a certain sense, our superposition-preparing problem has turned into a much easier probability-distribution-preparing problem.
 The preparation process we use must still be reversible, but that&#39;s trivial to do: just keep track of any junk you produce.</p>
 
@@ -312,7 +316,7 @@ Here is a circuit diagram of the quantum process, from the paper:</p>
 
 <p><img src="/assets/2018-05-20-quantum-roulette-selection/subsampling-circuit.png" style="max-width: 100%; border: 1px solid black; padding: 20px;"/></p>
 
-<p>And here is a circuit showing how you do the uniform superposition preparation steps cheaply:</p>
+<p>And for completeness here is a slightly magical circuit showing how you do the uniform superposition preparation steps cheaply:</p>
 
 <p><img src="/assets/2018-05-20-quantum-roulette-selection/uniform-circuit.png" style="max-width: 100%; border: 1px solid black; padding: 20px;"/></p>
 
