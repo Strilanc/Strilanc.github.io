@@ -177,6 +177,9 @@ And if you're just a *tiny* bit more clever, you can get the runtime down to $O(
 
 I'll leave figuring out an $O(n)$ algorithm as a challenge for the reader, and move on to quantum computing.
 
+**Update (May 21):** I figured there must be pre-existing work that covered subsampling, but I couldn't cite it because I didn't know what it was called!
+Fortunately for me, [commenter 'notfancy' did](https://www.reddit.com/r/programming/comments/8kylnx/roulette_selection_fit_for_a_quantum_computer/dzbtb4t/).
+They pointed out that "subsampling" is more commonly called ["the alias method"](https://en.wikipedia.org/wiki/Alias_method) and that the linear time algorithm for generating the index used by the alias method is called [Vose's algorithm](http://www.keithschwarz.com/darts-dice-coins/) (see the 1991 paper ["A linear algorithm for generating random numbers with a given distribution"](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.398.3339&rep=rep1&type=pdf)).
 
 # Preparing Superpositions
 
@@ -217,7 +220,7 @@ If we mess up the phases during prepare it won't hurt the controlled operations,
 The reason this is a key insight is because it implies we can have registers that are entangled/correlated with the prepared superposition.
 Normally that kind of thing is fatal to a quantum algorithm.
 It's *classical* algorithms that can spread correlated data around willy-nilly, without ruining everything.
-This basically that, because we are insensitive to phase error, we can use preparation strategies that would normally only make sense in a classical algorithm.
+This basically means that, because we are insensitive to phase error, we can use preparation strategies that would normally only make sense in a classical algorithm.
 In a certain sense, our superposition-preparing problem has turned into a much easier probability-distribution-preparing problem.
 The preparation process we use must still be reversible, but that's trivial to do: just keep track of any junk you produce.
 
@@ -246,7 +249,7 @@ Here is a circuit diagram of the quantum process, from the paper:
 
 <img src="/assets/{{ loc }}/subsampling-circuit.png" style="max-width: 100%; border: 1px solid black; padding: 20px;"/>
 
-And here is a circuit showing how you do the uniform superposition preparation steps cheaply:
+And for completeness here is a slightly magical circuit showing how you do the uniform superposition preparation steps cheaply:
 
 <img src="/assets/{{ loc }}/uniform-circuit.png" style="max-width: 100%; border: 1px solid black; padding: 20px;"/>
 
