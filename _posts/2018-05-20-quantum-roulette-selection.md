@@ -11,6 +11,9 @@ This post will cover two things.
 First, we'll go over a particularly nice way of performing classical [roulette selection](https://en.wikipedia.org/wiki/Fitness_proportionate_selection).
 Second, we'll enter quantum land and I'll explain how the improved roulette selection method allowed me and some collaborators to make a key element of quantum chemistry simulations a lot faster.
 
+**Update (June 2018)**: I presented on this topic at the joint session of [QPL 2018](https://www.mathstat.dal.ca/qpl2018/) and [MFPS 2018](https://www.mathstat.dal.ca/mfps2018/).
+The talk wasn't recorded, but you can [view the slides](https://docs.google.com/presentation/d/e/2PACX-1vReeRxH80RuuU1cAwrsJ1ybeVQyxG35CqvRSGRGX2PhkYybAup7ScLz6G-AYH5DF-J7EhEJzMoVceCL/pub?start=false&loop=false&delayms=3000) (or [as a pdf](/assets/{{ loc }}/slides.pdf)).
+
 
 # Roulette Selection
 
