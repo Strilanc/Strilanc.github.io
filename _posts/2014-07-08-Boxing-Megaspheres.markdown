@@ -236,6 +236,19 @@ So do be awestruck at the sheer vastness of the number of megaspheres we can put
 
 How many million-dimensional spheres can we pack into a slightly wider box? A lot.
 
+**Update (2018)**
+
+[There is a much better, simpler, lower bound for this problem.](https://news.ycombinator.com/item?id=16886810)
+
+When you place a megasphere in the megabox, it is preventing you from placing other megapsheres nearby.
+Specifically, if you place a megasphere centered at position $p$, this sphere makes it impossible to place a second megasphere centered at any point $q$ within 0.99 meters of $p$.
+No other points are eliminated by placing a megasphere.
+So, in other words, placing a sphere decreases the remaining 'available volume' by at most the volume of a sphere of radius 0.99 meters.
+
+The volume of a million-dimensional hypersphere with a radius of 0.99 meters is $(0.99 \sqrt{\pi})^{10^6} / \Gamma(10^6/2 + 1) \approx 10^{-2388130}$.
+We start with $0.01^{10^6}$ volume of available space to place sphere centers, and each placed megasphere reduces that space by at most $10^{-2388130}$.
+Do the division, and you see that it must be possible to place at least $10^{388118}$ megaspheres in the megabox.
+
 ---
 
 [Discuss on Reddit](http://www.reddit.com/r/math/comments/2a55h0/puzzle_boxing_megaspheres/)
