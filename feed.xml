@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Improving Block Code Distillation (Part 1)</title>
+                <description>&lt;p&gt;This series of posts began with the discovery a mistake, and an attempt to fix the problem. It ends with an insight into and improvement upon the original result.&lt;/p&gt; &lt;p&gt;Part 1: (this post) Resynthesizing the circuits&lt;/p&gt; &lt;p&gt;Part 2: (work in progress) Reconceptualizing the distillation&lt;/p&gt; &lt;p&gt;Part 3: (work in progress) Rebraiding...</description>
+                <pubDate>Tue, 12 Jun 2018 11:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/1806</link>
+                <guid isPermaLink="true">http://algassert.com/post/1806</guid>
+            </item>
+            <item>
                 <title>Roulette Selection fit for a Quantum Computer</title>
                 <description>&lt;p&gt;This post will cover two things. First, we&amp;#39;ll go over a particularly nice way of performing classical &lt;a href=&quot;https://en.wikipedia.org/wiki/Fitness_proportionate_selection&quot;&gt;roulette selection&lt;/a&gt;. Second, we&amp;#39;ll enter quantum land and I&amp;#39;ll explain how the improved roulette selection method allowed me and some collaborators to make a key element of quantum chemistry simulations a lot...</description>
                 <pubDate>Sun, 20 May 2018 11:10:10 -0700</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Mon, 28 Aug 2017 06:10:20 -0700</pubDate>
                 <link>http://algassert.com/post/1718</link>
                 <guid isPermaLink="true">http://algassert.com/post/1718</guid>
-            </item>
-            <item>
-                <title>Breaking Down the Quantum Swap</title>
-                <description>&lt;p&gt;Suppose you have two qubits. For evocative purposes, suppose you&amp;#39;re literally holding them as &lt;a href=&quot;https://en.wikipedia.org/wiki/Bloch_sphere&quot;&gt;balls&lt;/a&gt; in your hands: one in the left hand, and one in the right hand. Your goal is to swap the qubits, so that your right hand ends up holding a qubit storing the state...</description>
-                <pubDate>Tue, 22 Aug 2017 13:10:20 -0700</pubDate>
-                <link>http://algassert.com/post/1717</link>
-                <guid isPermaLink="true">http://algassert.com/post/1717</guid>
             </item>
     </channel>
 </rss>
