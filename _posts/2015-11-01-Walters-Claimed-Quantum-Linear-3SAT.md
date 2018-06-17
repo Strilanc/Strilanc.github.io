@@ -10,7 +10,7 @@ categories: quantum
 At the end of September, Zachary B. Walters published a preprint to arXiv titled [A linear time quantum algorithm for 3SAT](http://arxiv.org/abs/1510.00409).
 
 I enjoy looking through papers like this one, because they're an excellent source of subtle misconceptions worth explaining.
-In the [last paper I covered](http://algorithmicassertions.com/quantum/2015/08/27/Simulating-a-Claimed-BQP-NP-Algorithm.html), the problem was that all the optimization came from post-selection.
+In the [last paper I covered](/quantum/2015/08/27/Simulating-a-Claimed-BQP-NP-Algorithm.html), the problem was that all the optimization came from post-selection.
 This paper has a different mistake: using measurements to erase information.
 
 *(Note: these posts are __not__ in a mocking tone.

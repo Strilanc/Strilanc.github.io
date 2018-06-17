@@ -58,7 +58,7 @@ Enough details, let's travel through time.
   <img style="max-width:100%; max-height:256px;" src="/assets/{{ loc }}/prehistory-appearance.png"/>
 </a>
 
-This is a random widget I included in [a post near the start of 2014](http://algorithmicassertions.com/quantum/2014/03/07/Building-your-own-Quantum-Fourier-Transform.html).
+This is a random widget I included in [a post near the start of 2014](/quantum/2014/03/07/Building-your-own-Quantum-Fourier-Transform.html).
 Quirk grew out of this widget.
 Unfortunately, it can't do a 10-qubit QFT... I only included it here out of a misguided desire for completeness.
 
