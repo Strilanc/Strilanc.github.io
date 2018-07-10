@@ -239,7 +239,7 @@ The number of peaks is equal to the spacing between states.</p>
 <p>(If the quantum computer was really in just one of the classical states, how could a property about the spacing <strong>between</strong> the possible states be getting into the output?
 The frequency spectrums tell a very clear story about what&#39;s really going on.)</p>
 
-<p>As a concrete example, I used my <a href="http://algassert.com/quirk">drag-and-drop quantum circuit simulator Quirk</a> to prepare a periodic quantum state (more on that in a bit).
+<p>As a concrete example, I used my <a href="/quirk">drag-and-drop quantum circuit simulator Quirk</a> to prepare a periodic quantum state (more on that in a bit).
 Then I used a <a href="https://en.wikipedia.org/wiki/Quantum_Fourier_transform">Quantum fourier transform operation</a> to switch the state into its own frequency space.
 This is the result:</p>
 
@@ -318,7 +318,7 @@ That&#39;s a periodic state with period $2^3$.</p>
 <p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/simple-prepare-period-8.png"/></p>
 
 <p>An alternative way to create a quantum state that has period 8 is to hit every qubit with a Hadamard gate, add the register we want to prepare into a register of size 3, then measure the other register and try again if the result isn&#39;t 0.
-<a href="http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22Chance7%22%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2B%3DA3%22%5D%2C%5B%22Chance7%22%5D%2C%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22Chance7%22%5D%5D%7D">Here&#39;s how that looks</a>:</p>
+<a href="/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22Chance7%22%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2B%3DA3%22%5D%2C%5B%22Chance7%22%5D%2C%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22Chance7%22%5D%5D%7D">Here&#39;s how that looks</a>:</p>
 
 <p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/prepare-period-8-postselect.png"/></p>
 
@@ -326,7 +326,7 @@ That&#39;s a periodic state with period $2^3$.</p>
 It looks like the addition didn&#39;t change to the state of the register we&#39;re preparing.
 Actually, its state was affected in a very important way.</p>
 
-<p>One way to make the change caused by the addition more apparent is to <a href="http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22Density7%22%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2B%3DA3%22%5D%2C%5B%22Density7%22%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22Density7%22%5D%5D%7D">use Quirk&#39;s density matrix display</a>:</p>
+<p>One way to make the change caused by the addition more apparent is to <a href="/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22Density7%22%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2B%3DA3%22%5D%2C%5B%22Density7%22%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22Density7%22%5D%5D%7D">use Quirk&#39;s density matrix display</a>:</p>
 
 <p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/prepare-period-8-postdensity.png"/></p>
 
@@ -352,7 +352,7 @@ The only practical difference between doing a &quot;real&quot; measurement and i
 
 <p>To convince you that the input register really does contain a periodic state, even if we don&#39;t condition on or measure the second register, let&#39;s make another circuit in Quirk.
 The frequency peaks don&#39;t move when you offset the input signal, so it really shouldn&#39;t matter that there&#39;s an unknown or even unmeasured offset.
-<a href="http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2B%3DA3%22%5D%2C%5B%22Density7%22%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%22QFT%E2%80%A07%22%5D%2C%5B%22Chance7%22%5D%5D%7D">Prepare a uniform superposition in the input register, add into the ancilla register, Fourier-transform the input register, and...</a></p>
+<a href="/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2B%3DA3%22%5D%2C%5B%22Density7%22%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%5D%2C%5B%22QFT%E2%80%A07%22%5D%2C%5B%22Chance7%22%5D%5D%7D">Prepare a uniform superposition in the input register, add into the ancilla register, Fourier-transform the input register, and...</a></p>
 
 <p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/prepare-period-8-qft.png"/></p>
 
@@ -394,7 +394,7 @@ Let&#39;s move on to preparing states with other periods.</p>
 This allows us to prepare a periodic quantum state with any period we want.
 The state we prepare will still have an unknown offset, but that&#39;s okay: the frequency peaks don&#39;t care.</p>
 
-<p>For example, here is a <a href="http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%7B%22id%22%3A%22setR%22%2C%22arg%22%3A7%7D%5D%2C%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2BAmodR3%22%5D%2C%5B%22QFT%E2%80%A07%22%5D%2C%5B%22Chance7%22%5D%5D%7D">circuit in Quirk</a> that prepares a periodic quantum state with period 7, then applies a Fourier transform to show that there are 7 peaks in the output state:</p>
+<p>For example, here is a <a href="/quirk#circuit=%7B%22cols%22%3A%5B%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%7B%22id%22%3A%22setR%22%2C%22arg%22%3A7%7D%5D%2C%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22inputA7%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%2BAmodR3%22%5D%2C%5B%22QFT%E2%80%A07%22%5D%2C%5B%22Chance7%22%5D%5D%7D">circuit in Quirk</a> that prepares a periodic quantum state with period 7, then applies a Fourier transform to show that there are 7 peaks in the output state:</p>
 
 <p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/prepare-period-7.png"/></p>
 
@@ -510,7 +510,7 @@ Open Quirk, create a uniform superposition for $x$, initialize the ancilla regis
 
 <p>Okay okay, let&#39;s try something a bit harder.
 This time we&#39;re going to be multiplying by 7 modulo 58, and I&#39;m not going to show you the impossible-in-reality chance display.
-<a href="http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%7B%22id%22%3A%22setB%22%2C%22arg%22%3A7%7D%2C1%2C%7B%22id%22%3A%22setR%22%2C%22arg%22%3A58%7D%5D%2C%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22X%22%5D%2C%5B%22inputA10%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22*BToAmodR6%22%5D%2C%5B%22QFT%E2%80%A010%22%5D%2C%5B%22Sample10%22%5D%5D%7D">All you get is a sample</a>:</p>
+<a href="/quirk#circuit=%7B%22cols%22%3A%5B%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%7B%22id%22%3A%22setB%22%2C%22arg%22%3A7%7D%2C1%2C%7B%22id%22%3A%22setR%22%2C%22arg%22%3A58%7D%5D%2C%5B%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22X%22%5D%2C%5B%22inputA10%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22*BToAmodR6%22%5D%2C%5B%22QFT%E2%80%A010%22%5D%2C%5B%22Sample10%22%5D%5D%7D">All you get is a sample</a>:</p>
 
 <p><img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/2017-08-28-shor-algorithm/quirk-secret-mul-period.png"/></p>
 
