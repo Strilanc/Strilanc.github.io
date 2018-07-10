@@ -7,8 +7,15 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Improving Block Code Distillation (Part 2)</title>
+                <description>&lt;p&gt;This series of posts began with the discovery a mistake, and an attempt to fix the problem. In this post, I give an insight into the problem that improvemes on the original result.&lt;/p&gt; &lt;p&gt;Part 1: &lt;a href=&quot;/post/1806&quot;&gt;Resynthesizing the circuits&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Part 2: (this post) Reconceptualizing the distillation&lt;/p&gt; &lt;p&gt;Part 3: (work in...</description>
+                <pubDate>Sun, 24 Jun 2018 11:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/1807</link>
+                <guid isPermaLink="true">http://algassert.com/post/1807</guid>
+            </item>
+            <item>
                 <title>Improving Block Code Distillation (Part 1)</title>
-                <description>&lt;p&gt;This series of posts began with the discovery a mistake, and an attempt to fix the problem. It ends with an insight into and improvement upon the original result.&lt;/p&gt; &lt;p&gt;Part 1: (this post) Resynthesizing the circuits&lt;/p&gt; &lt;p&gt;Part 2: (work in progress) Reconceptualizing the distillation&lt;/p&gt; &lt;p&gt;Part 3: (work in progress) Rebraiding...</description>
+                <description>&lt;p&gt;This series of posts began with the discovery a mistake, and an attempt to fix the problem. It ends with an insight into and improvement upon the original result.&lt;/p&gt; &lt;p&gt;Part 1: (this post) Resynthesizing the circuits&lt;/p&gt; &lt;p&gt;Part 2: &lt;a href=&quot;/post/1807&quot;&gt;Reconceptualizing the distillation&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Part 3: (work in progress) Rebraiding the factory&lt;/p&gt;...</description>
                 <pubDate>Tue, 12 Jun 2018 11:10:10 -0700</pubDate>
                 <link>http://algassert.com/post/1806</link>
                 <guid isPermaLink="true">http://algassert.com/post/1806</guid>
@@ -68,13 +75,6 @@
                 <pubDate>Tue, 21 Nov 2017 10:10:10 -0800</pubDate>
                 <link>http://algassert.com/post/1719</link>
                 <guid isPermaLink="true">http://algassert.com/post/1719</guid>
-            </item>
-            <item>
-                <title>Shor's Quantum Factoring Algorithm</title>
-                <description>&lt;p&gt;A few years ago, I wrote a post on &lt;a href=&quot;http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm&quot;&gt;how Grover&amp;#39;s quantum search algorithm works&lt;/a&gt;. I think it went over quite well. I&amp;#39;ve heard from several people that it was the first time they &amp;quot;got&amp;quot; anything about quantum computing. Today I want to do the same thing, but with...</description>
-                <pubDate>Mon, 28 Aug 2017 06:10:20 -0700</pubDate>
-                <link>http://algassert.com/post/1718</link>
-                <guid isPermaLink="true">http://algassert.com/post/1718</guid>
             </item>
     </channel>
 </rss>
