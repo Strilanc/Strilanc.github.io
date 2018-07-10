@@ -12,7 +12,7 @@ It ends with an insight into and improvement upon the original result.
 
 Part 1: (this post) Resynthesizing the circuits
 
-Part 2: (work in progress) Reconceptualizing the distillation
+Part 2: [Reconceptualizing the distillation](/post/1807)
 
 Part 3: (work in progress) Rebraiding the factory
 
