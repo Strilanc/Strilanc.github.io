@@ -233,7 +233,7 @@ print(SwapXY.round().astype(int))
 
 Yup.
 
-We can also test this in Quirk, [which has support for X-axis and Y-axis controls](http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22X%5Et%22%5D%2C%5B%22Bloch%22%2C%22Bloch%22%5D%2C%5B%22Y%22%2C%22%E2%8A%96%22%5D%2C%5B%22%E2%8A%96%22%2C%22Y%22%5D%2C%5B%22Y%22%2C%22%E2%8A%96%22%5D%2C%5B%22Bloch%22%2C%22Bloch%22%5D%5D%7D):
+We can also test this in Quirk, [which has support for X-axis and Y-axis controls](/quirk#circuit=%7B%22cols%22%3A%5B%5B%22X%5Et%22%5D%2C%5B%22Bloch%22%2C%22Bloch%22%5D%2C%5B%22Y%22%2C%22%E2%8A%96%22%5D%2C%5B%22%E2%8A%96%22%2C%22Y%22%5D%2C%5B%22Y%22%2C%22%E2%8A%96%22%5D%2C%5B%22Bloch%22%2C%22Bloch%22%5D%5D%7D):
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/axis-swap.png"/>
 
@@ -400,7 +400,7 @@ What if that's not the case?
 ...Well then you're pretty well stuck, unless you have some source of shared entanglement.
 
 If you have some mechanism for building up entanglement in your two disconnected components, then you can use that entanglement to swap the two qubits with quantum teleportation.
-Here's what [the circuit to do that looks like](http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B1%2C%22H%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22H%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22X%22%5D%2C%5B1%2C1%2C%22X%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%E2%80%A2%22%5D%2C%5B%22X%5Et%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22Y%5Et%22%5D%2C%5B%22Bloch%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22Bloch%22%5D%2C%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22Swap%22%2C%22Swap%22%5D%2C%5B%22Swap%22%2C%22Swap%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22X%22%2C%22%E2%80%A2%22%5D%2C%5B1%2C%22H%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22H%22%5D%2C%5B1%2C%22Measure%22%2C%22Measure%22%2C1%2C1%2C1%2C1%2C1%2C%22Measure%22%2C%22Measure%22%5D%2C%5B1%2C1%2C%22%E2%80%A2%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22X%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22Z%22%5D%2C%5B%22X%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%E2%80%A2%22%5D%2C%5B%22Z%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%E2%80%A2%22%5D%2C%5B%22Bloch%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22Bloch%22%5D%5D%7D):
+Here's what [the circuit to do that looks like](/quirk#circuit=%7B%22cols%22%3A%5B%5B1%2C%22H%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22H%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22X%22%5D%2C%5B1%2C1%2C%22X%22%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%E2%80%A2%22%5D%2C%5B%22X%5Et%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22Y%5Et%22%5D%2C%5B%22Bloch%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22Bloch%22%5D%2C%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22Swap%22%2C%22Swap%22%5D%2C%5B%22Swap%22%2C%22Swap%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22X%22%2C%22%E2%80%A2%22%5D%2C%5B1%2C%22H%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22H%22%5D%2C%5B1%2C%22Measure%22%2C%22Measure%22%2C1%2C1%2C1%2C1%2C1%2C%22Measure%22%2C%22Measure%22%5D%2C%5B1%2C1%2C%22%E2%80%A2%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22X%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22Z%22%5D%2C%5B%22X%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%E2%80%A2%22%5D%2C%5B%22Z%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22%E2%80%A2%22%5D%2C%5B%22Bloch%22%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C1%2C%22Bloch%22%5D%5D%7D):
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/tele-swap.png"/>
 

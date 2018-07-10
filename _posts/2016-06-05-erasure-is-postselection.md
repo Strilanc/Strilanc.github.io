@@ -6,7 +6,7 @@ date: 2016-06-05 12:10:10 pm EST
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
 
-For a few months, I've intended to revisit my ['Quantum vs NP' post pointing out mistakes in Zachary B. Walters' claimed linear-time 3SAT paper](http://algorithmicassertions.com/quantum/2015/11/01/Walters-Claimed-Quantum-Linear-3SAT.html).
+For a few months, I've intended to revisit my ['Quantum vs NP' post pointing out mistakes in Zachary B. Walters' claimed linear-time 3SAT paper](/quantum/2015/11/01/Walters-Claimed-Quantum-Linear-3SAT.html).
 Walters commented on the post, and there was some back-and-forth, but we still disagree over whether his algorithm works.
 (I'm the one who thinks it obviously doesn't.)
 

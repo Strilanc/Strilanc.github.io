@@ -10,7 +10,7 @@ permalink: post/1701
 I had a bit of a surprise this week.
 Despite never publishing a paper, I've been cited in one!
 The preprint ["Factoring using 2n+2 qubits with Toffoli based modular multiplication"](https://arxiv.org/abs/1611.07995), by Häner et al., cited [this answer on cs.stackexchange](http://cs.stackexchange.com/a/44292/535).
-The answer is me summarizing a few of the tricks I found [while trying to solve an exercise in Nielsen and Chuang's textbook](http://algorithmicassertions.com/circuits/2015/06/22/Using-Quantum-Gates-instead-of-Ancilla-Bits.html).
+The answer is me summarizing a few of the tricks I found [while trying to solve an exercise in Nielsen and Chuang's textbook](/circuits/2015/06/22/Using-Quantum-Gates-instead-of-Ancilla-Bits.html).
 
 So I figured I'd spend a post discussing one of the problems addressed by the paper: adding a compile-time constant into a qubit register.
 
@@ -18,7 +18,7 @@ So I figured I'd spend a post discussing one of the problems addressed by the pa
 
 Surprisingly, reversibly adding a constant into a register is *harder* than adding a register with an unknown value into another register.
 
-For example, in the post [Constructing Large Increment Gates](http://algorithmicassertions.com/circuits/2015/06/12/Constructing-Large-Increment-Gates.html) I cited the [VanRantergem adder](http://ftp.qucis.queensu.ca/home/akl/cisc879/papers/PAPERS_FROM_UNCONVENTIONAL_COMPUTING/VOLUME_1_Issue_4/RENTERGEM.pdf) and its ability to add one register into another with a linear number of gates using only one OFF ancilla.
+For example, in the post [Constructing Large Increment Gates](/circuits/2015/06/12/Constructing-Large-Increment-Gates.html) I cited the [VanRantergem adder](http://ftp.qucis.queensu.ca/home/akl/cisc879/papers/PAPERS_FROM_UNCONVENTIONAL_COMPUTING/VOLUME_1_Issue_4/RENTERGEM.pdf) and its ability to add one register into another with a linear number of gates using only one OFF ancilla.
 Since then, I found a way to avoid the ancilla:
 
 <img style="max-width:100%;" src="/assets/{{ loc }}/linear-inline-subtraction.png"/>
@@ -63,7 +63,7 @@ This time we pull out a many-controlled-NOT.
 
 Fixing the fact that the many-controlled-NOT touches every wire is more complicated.
 We need quantum operations.
-I won't go into the details here; see the post [Using Quantum Gates instead of Ancilla Bits](http://algorithmicassertions.com/circuits/2015/06/22/Using-Quantum-Gates-instead-of-Ancilla-Bits.html) if you want them.
+I won't go into the details here; see the post [Using Quantum Gates instead of Ancilla Bits](/circuits/2015/06/22/Using-Quantum-Gates-instead-of-Ancilla-Bits.html) if you want them.
 
 After pulling an increment out of the constant-addition, pulling a many-controlled-NOT out of the increment, and using quantum operations to reduce the size of the many-controlled-NOT, we're left with a circuit that has at least one free qubit available to borrow at all stages:
 

@@ -25,7 +25,7 @@ In fact, I came up [with the exact same S-gate-via-ancilla circuit as the one us
 
 <img style="max-width:100%; border:1px solid gray; padding: 5px;" src="/assets/{{ loc }}/old-s-gate.png"/>
 
-As soon as I saw the above circuit in the context of the paper, i.e. knowing that Pauli gates are cheaper than CNOT or H gates, I had to [try optimizing it in Quirk](http://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22X%5E-%C2%BD%22%2C1%2C%22H%22%5D%2C%5B1%2C1%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22%E2%80%A6%22%2C1%2C%22%E2%80%A6%22%5D%2C%5B1%2C1%2C%22Amps2%22%5D%2C%5B%22Bloch%22%5D%2C%5B%22X%22%2C1%2C%22%E2%80%A2%22%5D%2C%5B%22H%22%5D%2C%5B%22X%22%2C1%2C%22%E2%80%A2%22%5D%2C%5B%22H%22%5D%2C%5B%22Bloch%22%2C1%2C%22Amps2%22%5D%5D%7D).
+As soon as I saw the above circuit in the context of the paper, i.e. knowing that Pauli gates are cheaper than CNOT or H gates, I had to [try optimizing it in Quirk](/quirk#circuit=%7B%22cols%22%3A%5B%5B%22X%5E-%C2%BD%22%2C1%2C%22H%22%5D%2C%5B1%2C1%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22%E2%80%A6%22%2C1%2C%22%E2%80%A6%22%5D%2C%5B1%2C1%2C%22Amps2%22%5D%2C%5B%22Bloch%22%5D%2C%5B%22X%22%2C1%2C%22%E2%80%A2%22%5D%2C%5B%22H%22%5D%2C%5B%22X%22%2C1%2C%22%E2%80%A2%22%5D%2C%5B%22H%22%5D%2C%5B%22Bloch%22%2C1%2C%22Amps2%22%5D%5D%7D).
 And it worked!
 It turns out that the outside Hadamard gate is simply fixing a phase flip of the ancilla state; you can use a Z gate instead:
 

@@ -35,7 +35,7 @@ It affects the parse tree in a way you didn't expect, tampering with your intend
 Even when the user loses, they appear to win.
 Oops.
 
-I grappled with this specific problem when writing the javascript widgets for the [you-vs-bell-tests-vs-no-communication post](http://algorithmicassertions.com/quantum/2015/10/11/Bell-Tests-vs-No-Communication.html).
+I grappled with this specific problem when writing the javascript widgets for the [you-vs-bell-tests-vs-no-communication post](/quantum/2015/10/11/Bell-Tests-vs-No-Communication.html).
 Users can enter custom coordination strategies, and the code started off looking something like this:
 
 ```javascript
