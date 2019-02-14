@@ -7,15 +7,22 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Improving Block Code Distillation (Part 3)</title>
+                <description>&lt;p&gt;This series of posts began with the discovery a mistake, and an attempt to fix the problem. In this post, the series finishes with the production of optimized braiding diagrams.&lt;/p&gt; &lt;p&gt;Part 1: &lt;a href=&quot;/post/1806&quot;&gt;Resynthesizing the circuits&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Part 2: &lt;a href=&quot;/post/1807&quot;&gt;Reconceptualizing the distillation&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Part 3: (this post) Rebraiding the factory&lt;/p&gt; &lt;strong&gt;Starting...</description>
+                <pubDate>Wed, 13 Feb 2019 10:10:10 -0800</pubDate>
+                <link>http://algassert.com/post/1900</link>
+                <guid isPermaLink="true">http://algassert.com/post/1900</guid>
+            </item>
+            <item>
                 <title>Improving Block Code Distillation (Part 2)</title>
-                <description>&lt;p&gt;This series of posts began with the discovery a mistake, and an attempt to fix the problem. In this post, I give an insight into the problem that improvemes on the original result.&lt;/p&gt; &lt;p&gt;Part 1: &lt;a href=&quot;/post/1806&quot;&gt;Resynthesizing the circuits&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Part 2: (this post) Reconceptualizing the distillation&lt;/p&gt; &lt;p&gt;Part 3: (work in...</description>
-                <pubDate>Sun, 24 Jun 2018 11:10:10 -0700</pubDate>
+                <description>&lt;p&gt;This series of posts began with the discovery a mistake, and an attempt to fix the problem. In this post, I give an insight into the problem that improves on the original result.&lt;/p&gt; &lt;p&gt;Part 1: &lt;a href=&quot;/post/1806&quot;&gt;Resynthesizing the circuits&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Part 2: (this post) Reconceptualizing the distillation&lt;/p&gt; &lt;p&gt;Part 3: &lt;a href=&quot;/post/1900&quot;&gt;Rebraiding...</description>
+                <pubDate>Mon, 09 Jul 2018 11:10:10 -0700</pubDate>
                 <link>http://algassert.com/post/1807</link>
                 <guid isPermaLink="true">http://algassert.com/post/1807</guid>
             </item>
             <item>
                 <title>Improving Block Code Distillation (Part 1)</title>
-                <description>&lt;p&gt;This series of posts began with the discovery a mistake, and an attempt to fix the problem. It ends with an insight into and improvement upon the original result.&lt;/p&gt; &lt;p&gt;Part 1: (this post) Resynthesizing the circuits&lt;/p&gt; &lt;p&gt;Part 2: &lt;a href=&quot;/post/1807&quot;&gt;Reconceptualizing the distillation&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Part 3: (work in progress) Rebraiding the factory&lt;/p&gt;...</description>
+                <description>&lt;p&gt;This series of posts began with the discovery a mistake, and an attempt to fix the problem. It ends with an insight into and improvement upon the original result.&lt;/p&gt; &lt;p&gt;Part 1: (this post) Resynthesizing the circuits&lt;/p&gt; &lt;p&gt;Part 2: &lt;a href=&quot;/post/1807&quot;&gt;Reconceptualizing the distillation&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Part 3: &lt;a href=&quot;/post/1900&quot;&gt;Rebraiding the factory&lt;/a&gt;&lt;/p&gt; &lt;strong&gt;Noticing a...</description>
                 <pubDate>Tue, 12 Jun 2018 11:10:10 -0700</pubDate>
                 <link>http://algassert.com/post/1806</link>
                 <guid isPermaLink="true">http://algassert.com/post/1806</guid>
@@ -68,13 +75,6 @@
                 <pubDate>Tue, 12 Dec 2017 05:10:20 -0800</pubDate>
                 <link>http://algassert.com/post/1720</link>
                 <guid isPermaLink="true">http://algassert.com/post/1720</guid>
-            </item>
-            <item>
-                <title>Proxy Phasing and Computed Phasing</title>
-                <description>&lt;p&gt;In this post, I&amp;#39;m going to explain a trick for phasing quantum states in a convenient and flexible way. Basically, the trick involves preparing ancilla qubits to act as proxies for the states you want to target, then phasing those ancilla. Thus the name &amp;quot;proxy phasing&amp;quot;.&lt;/p&gt; &lt;p&gt;We&amp;#39;ll start simple, but...</description>
-                <pubDate>Tue, 21 Nov 2017 10:10:10 -0800</pubDate>
-                <link>http://algassert.com/post/1719</link>
-                <guid isPermaLink="true">http://algassert.com/post/1719</guid>
             </item>
     </channel>
 </rss>

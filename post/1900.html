@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Improving Block Code Distillation (Part 3)</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Improving Block Code Distillation (Part 3)</h1>
+<p class="meta">13 Feb 2019</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>This series of posts began with the discovery a mistake, and an attempt to fix the problem.
+In this post, the series finishes with the production of optimized braiding diagrams.</p>
+
+<p>Part 1: <a href="/post/1806">Resynthesizing the circuits</a></p>
+
+<p>Part 2: <a href="/post/1807">Reconceptualizing the distillation</a></p>
+
+<p>Part 3: (this post) Rebraiding the factory</p>
+
+<h1>Starting point</h1>
+
+<p>Before we really begin, let&#39;s take a look at our competition.
+Here is the braiding diagram from <a href="https://arxiv.org/abs/1301.7107">the original paper</a> (minor mistakes pointed out in part 1 notwithstanding):</p>
+
+<p><img src="/assets/2019-02-13-better-block-coding-3/paper-comparison.PNG" style="max-width: 100%; border: 1px solid black; padding: 20px;"/></p>
+
+<p>The above diagram has a depth of 12 (count white cubes from left to right).</p>
+
+<p>In order to compare apples to apples, and to finally get this post finished, I won&#39;t be using the allow-k-to-be-odd or T-saving tricks I explained in parts 1 and 2.
+The circuit that we will be laying out braids for will be a slightly different form of the block code circuit than the ones I showed in previous parts.
+I made this form of the circuit, with a nicely optimized depth, just for this post.</p>
+
+<p>Well, actually, there&#39;s a bit of a snag with the circuit.</p>
+
+<p>You see, in the several months that this post was sitting half-done I, uh, well... I lost it.
+I still had the braiding diagrams I&#39;d derived from it, but despite a few hours effort I wasn&#39;t able to start from the circuits I had in the previous parts of this series and re-derive the circuit I intended to use here.
+I had to work backwards from the braiding diagrams in order to recover the circuit.
+Here it is:</p>
+
+<p><img src="/assets/2019-02-13-better-block-coding-3/circuit.png" style="max-width: 100%; border: 1px solid black; padding: 20px;"/></p>
+
+<p>Note that the above circuit has 18 qubits, but the maximum supported by Quirk is 16.
+Regardless, here is a <a href="/quirk#circuit=%7B%22cols%22:%5B%5B%22H%22,%22H%22,1,1,1,1,%22H%22,1,1,1,%22H%22,1,1,1,%22H%22%5D,%5B1,1,%22%E2%8A%96%22,1,1,1,%22Z%22,1,1,1,%22Z%22,1,1,1,%22Z%22%5D,%5B1,1,%22%7E5b7s%22,1,1,1,%22%7E5b7s%22,1,1,1,%22%7E5b7s%22,1,1,1,%22%7E5b7s%22%5D,%5B1,%22%E2%80%A2%22,1,%22X%22,%22X%22,1,1,%22X%22,%22X%22,1,1,%22X%22,%22X%22,1,1,%22X%22,%22X%22%5D,%5B%22%E2%80%A2%22,1,%22X%22,1,%22X%22,1,%22X%22,1,%22X%22,1,%22X%22,1,%22X%22,1,%22X%22,1,%22X%22%5D,%5B1,1,%22Z%5E%C2%BC%22,%22Z%5E%C2%BC%22,%22Z%5E%C2%BC%22,%22Z%5E%C2%BC%22,%22Z%5E%C2%BC%22,%22Z%5E%C2%BC%22,%22Z%5E%C2%BC%22,%22Z%5E%C2%BC%22,%22X%22,%22Z%5E%C2%BC%22,%22Z%5E%C2%BC%22,%22Z%5E%C2%BC%22,%22X%22,%22Z%5E%C2%BC%22,%22Z%5E%C2%BC%22,%22Z%5E%C2%BC%22%5D,%5B%22H%22,%22H%22,%22H%22,%22H%22,%22H%22,%22H%22,%22H%22,%22H%22,%22H%22,%22H%22,1,%22H%22,%22H%22,%22H%22,1,%22H%22,%22H%22,%22H%22%5D,%5B%22Measure%22,%22Measure%22,%22Measure%22,%22Measure%22,%22Measure%22,%22Measure%22,%22Measure%22,%22Measure%22,%22Measure%22,%22Measure%22,1,%22Measure%22,%22Measure%22,%22Measure%22,1,%22Measure%22,%22Measure%22,%22Measure%22%5D,%5B%22X%22,%22X%22,%22X%22,%22%E2%80%A2%22%5D,%5B1,%22X%22,%22X%22,1,%22%E2%80%A2%22%5D,%5B%22X%22,1,%22X%22,1,1,%22%E2%80%A2%22%5D,%5B1,1,%22X%22,1,1,1,%22%E2%80%A2%22,1,1,1,%22Z%22,1,1,1,%22Z%22%5D,%5B%22X%22,%22X%22,%22X%22,1,1,1,1,%22%E2%80%A2%22,1,1,%22Z%22,1,1,1,%22Z%22%5D,%5B1,%22X%22,%22X%22,1,1,1,1,1,%22%E2%80%A2%22,1,%22Z%22,1,1,1,%22Z%22%5D,%5B%22X%22,1,%22X%22,1,1,1,1,1,1,%22%E2%80%A2%22,%22Z%22,1,1,1,%22Z%22%5D,%5B%22X%22,%22X%22,1,1,1,1,1,1,1,1,%22Z%22,%22%E2%80%A2%22%5D,%5B1,%22X%22,1,1,1,1,1,1,1,1,%22Z%22,1,%22%E2%80%A2%22%5D,%5B%22X%22,1,1,1,1,1,1,1,1,1,%22Z%22,1,1,%22%E2%80%A2%22%5D,%5B%22X%22,%22X%22,1,1,1,1,1,1,1,1,1,1,1,1,%22Z%22,%22%E2%80%A2%22%5D,%5B1,%22X%22,1,1,1,1,1,1,1,1,1,1,1,1,%22Z%22,1,%22%E2%80%A2%22%5D,%5B%22X%22,1,1,1,1,1,1,1,1,1,1,1,1,1,%22Z%22,1,1,%22%E2%80%A2%22%5D,%5B%22%7C0%E2%9F%A9%E2%9F%A80%7C%22,%22%7C0%E2%9F%A9%E2%9F%A80%7C%22,%22%7C0%E2%9F%A9%E2%9F%A80%7C%22,1,1,1,1,1,1,1,%22Amps1%22,1,1,1,%22Amps1%22%5D%5D,%22gates%22:%5B%7B%22id%22:%22%7E5b7s%22,%22circuit%22:%7B%22cols%22:%5B%5B%22%E2%80%A2%22,%22X%22,%22X%22,%22X%22%5D%5D%7D%7D%5D%7D">Quirk link to the circuit</a>.
+You&#39;ll only be able to truly open it if you copy-paste the &#39;#circuit=...&#39; part of the link into a development version of Quirk that you&#39;ve modified to allow 18 qubits.
+(Versions modified to allow 18 qubits are much slower, and the simulation can become unstable due to floating point precision issues.
+So I&#39;ll leave playing with the circuit in Quirk as an exercise for the highly motivated reader.)</p>
+
+<p>The red box in the diagram is showing the &quot;tiling unit&quot;.
+If you want more T state outputs, you vertically stack more of these tiling units (except for the columns with controls within the tiling unit; those have to become new columns when tiling).
+The parts outlined in blue are &quot;places I had to add NOT gates to make it work when the number of tiling units was even instead of odd&quot;.
+Sorry I can&#39;t be more specific than that, I only really checked k=0 and k=2; there may be slight variations for k=4.
+This is a consequence of losing the original diagram.</p>
+
+<h1>Braiding the circuit</h1>
+
+<p>Our initial braiding diagram is basically going to be the canonical braids for each gate of this circuit, one after the other, from start to finish.
+The only caveat is that we have to replace the multi-target X-controlled Z gate with multiple independent CNOT gates, since there&#39;s not a native way to do that operation.
+Don&#39;t worry, we&#39;ll eventually fix the explosion in depth due to this conversion.</p>
+
+<p>Basically, we have a nice trivially-correct place to start from:</p>
+
+<p><img src="/assets/2019-02-13-better-block-coding-3/braid-00-canonical.PNG" style="max-width: 100%; border: 1px solid black; padding: 20px;"/></p>
+
+<p>Now, because this computation is topological in nature, any deformation of the shape that doesn&#39;t change how white and black chunks are tied around each other is allowed.
+For starters, anywhere there&#39;s a &quot;pole&quot; sticking out, we can retract the pole.
+For poles emerging from a ring, the pole retracts into the ring.
+For poles that are just a pole and nothing else, the pole retracts all the way into nothingness.</p>
+
+<p>There are quite a lot of white poles in the starting diagram.
+Here&#39;s the result of retracting them:</p>
+
+<p><img src="/assets/2019-02-13-better-block-coding-3/braid-01-retract-primal.PNG" style="max-width: 100%; border: 1px solid black; padding: 20px;"/></p>
+
+<p>An optimization we can perform that does change the topology, but not the computation, is <a href="https://arxiv.org/abs/1209.0510">&quot;bridging&quot;</a>.
+When you have two finite chunks of the same color, you can add a bridge piece connecting them.
+This bridge typically starts as a single connecting line, then expands and grows until the two shapes have been sucked into each other much more intimately.</p>
+
+<p>I was careful, when laying out the canonical circuit, to make sure that the multi-target CNOT operations (the tall black structures) had matching sides.
+This allows us to bridge them in a way that simply merges their sides:</p>
+
+<p><img src="/assets/2019-02-13-better-block-coding-3/braid-03-bridge-dual.PNG" style="max-width: 100%; border: 1px solid black; padding: 20px;"/></p>
+
+<p>Next we&#39;re going to fix that giant staircase on the left, caused by replacing the multi-target X-controlled Z with many CNOTs.
+The key idea here is that, if we take the white ring extending left along the top, and pull it downward, then we can slide each of the black rings around that white ring to also point left.
+This makes it so that the rings no longer overlap in the horizontal direction:</p>
+
+<p><img src="/assets/2019-02-13-better-block-coding-3/braid-04-verticalize.PNG" style="max-width: 100%; border: 1px solid black; padding: 20px;"/></p>
+
+<p>Now we do a small prepatory move, before pulling those horizontal black rings rightward, by flattening out the vertical black rings that the horizontal black rings will be bridged into.
+We could have made this move as soon as the white poles had retracted, but we&#39;re making it now instead:</p>
+
+<p><img src="/assets/2019-02-13-better-block-coding-3/braid-05-flatten-dual-rings.PNG" style="max-width: 100%; border: 1px solid black; padding: 20px;"/></p>
+
+<p>It&#39;s now possible to pull the horizontal black rings in tight, bridging them into the vertical rings.
+Let&#39;s also switch our perspective, so that time is moving upward instead of rightward:</p>
+
+<p><img src="/assets/2019-02-13-better-block-coding-3/braid-06-pull-tight-rotate.PNG" style="max-width: 100%; border: 1px solid black; padding: 20px;"/></p>
+
+<p>Now that we&#39;ve bridge-compressed the black rings, a new feature has appeared in the diagram: there are white rings completely surrounding single black poles.
+These rings actually &quot;cut&quot; the black poles (it&#39;s impossible for quantum correlations to make it through the ring, so its contents may as well not be present), and then the ring can be collapsed.
+Here&#39;s the result of doing that:</p>
+
+<p><img src="/assets/2019-02-13-better-block-coding-3/braid-07-discard-rings.PNG" style="max-width: 100%; border: 1px solid black; padding: 20px;"/></p>
+
+<p>Then just a bit of tightening up:</p>
+
+<p><img src="/assets/2019-02-13-better-block-coding-3/braid-09-pull-primal-against-tower.PNG" style="max-width: 100%; border: 1px solid black; padding: 20px;"/></p>
+
+<p>And that&#39;s it!
+If you count the white boxes from bottom to top, you&#39;ll see we&#39;re at depth 7 instead of depth 12.
+(Well, actually, you&#39;d want the outputs to exit backward heading into the far distance so they don&#39;t overlap with the next instantiation of the factory coming immediately afterwards.
+But you can close the white outputs around black rings to send them sideways.)</p>
+
+<p>There are more optimizations we can do.
+For example, we still have the opportunity to add bridges between several of the white chunks.
+I&#39;m positive the construction can go down to depth 6.
+But I&#39;ve been putting off this blog post for months, and in my mind braiding <a href="https://arxiv.org/abs/1808.06709">has been superceded by lattice surgery</a>, so let&#39;s call 7 close-enough-to-half of 12 and leave it at that.</p>
+
+<h1>Takeaways</h1>
+
+<ul>
+<li><p>Optimizations at the circuit level can make a huge difference in depth at the braiding level.</p></li>
+<li><p>Multi-target X-controlled Z gates can be laid out in O(1) depth, at least when they appear at the start of a circuit.</p></li>
+<li><p>When you find a nice circuit, save it somewhere where you can find it again months later.</p></li>
+</ul>
+
+</div>
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1807">&laquo; Improving Block Code Distillation (Part 2)</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
