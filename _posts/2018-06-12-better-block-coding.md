@@ -14,7 +14,7 @@ Part 1: (this post) Resynthesizing the circuits
 
 Part 2: [Reconceptualizing the distillation](/post/1807)
 
-Part 3: (work in progress) Rebraiding the factory
+Part 3: [Rebraiding the factory](/post/1900)
 
 
 # Noticing a mistake

@@ -1,20 +1,20 @@
 ---
 layout: post
 title: "Improving Block Code Distillation (Part 2)"
-date: 2018-06-24 10:10:10 am PST
+date: 2018-07-09 10:10:10 am PST
 permalink: post/1807
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
 
 This series of posts began with the discovery a mistake, and an attempt to fix the problem.
-In this post, I give an insight into the problem that improvemes on the original result.
+In this post, I give an insight into the problem that improves on the original result.
 
 Part 1: [Resynthesizing the circuits](/post/1806)
 
 Part 2: (this post) Reconceptualizing the distillation
 
-Part 3: (work in progress) Rebraiding the factory
+Part 3: [Rebraiding the factory](/post/1900)
 
 
 # Switching strategies
