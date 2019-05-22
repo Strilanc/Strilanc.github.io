@@ -2,7 +2,7 @@
 layout: post
 title: "Constant Depth Encoded Addition"
 date: 2019-05-22 4:10:10 am PST
-permalink: post/1902
+permalink: post/1901
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
@@ -239,3 +239,5 @@ I just put out [a paper on the arXiv](https://arxiv.org/abs/1905.08488) that con
 Can that depth be achieved with a deterministic adder instead of an (arbitrarily good) approximate adder?
 Can the depth be reduced further, all the way down to $O(1)$?
 I really don't know.
+
+[View r/algassert comment thread](https://www.reddit.com/r/algassert/comments/brrcxn/comment_thread_constant_depth_encoded_addition/)
