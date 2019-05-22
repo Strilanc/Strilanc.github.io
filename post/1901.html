@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Constant Depth Encoded Addition</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Constant Depth Encoded Addition</h1>
+<p class="meta">22 May 2019</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Additions circuits compute output bits that depend on a linear number of input bits.
+This kind of dependence forces <a href="https://cs.stackexchange.com/questions/19468/what-circuit-depth-is-required-to-add">addition circuits to have $\Omega(\lg n)$ depth</a>.
+This is a proven theorem.
+There is no such thing as a constant depth adder.</p>
+
+<p>...</p>
+
+<p>...</p>
+
+<p>Or is there?</p>
+
+<h1>Paradox</h1>
+
+<p>There are many historical examples of a result that is correct despite apparently violating a theorem.
+For example, <a href="https://en.wikipedia.org/wiki/Holevo%27s_theorem">Holevo&#39;s theorem</a> proves you can&#39;t transmit more than 1 bit per qubit.
+But <a href="https://en.wikipedia.org/wiki/Superdense_coding">superdense coding</a> is a method for transmitting 2 bits per qubit.
+The reason these two results don&#39;t contradict each other is because they disagree about whether pre-established entanglement counts as transmitted qubits.
+Superdense coding doesn&#39;t violate Holevo&#39;s theorem, it merely violated our implicit assumptions about what Holevo&#39;s theorem meant in practice.</p>
+
+<p>In this blog post, I&#39;m going to present a constant depth adder.
+That sounds silly, since there&#39;s no such thing as a constant depth adder.
+But that&#39;s only true if you&#39;re using the normal binary representation of a number.
+We&#39;re going to make an <em>encoded</em> constant depth adder, which uses a different representation to enable faster processing.</p>
+
+<h1>Construction</h1>
+
+<p>The idea I have in mind isn&#39;t particularly complicated, basically it just amounts to &quot;keep the carries instead of propagating them&quot;, so I&#39;ll explain it with an example.
+In this example we will be performing online accumulation.
+That is to say, we will be fed a series of integers, one by one, and we need to add up their total value.
+To keep things simple I&#39;ll work in decimal, and assume we want to perform fixed width addition with 10 digits.</p>
+
+<p>We start by initializing an accumulation register to zero, including an extra top row for carries:</p>
+
+<p>$$
+t_0 = {\tiny 0 \atop 0}{\tiny 0 \atop 0}{\tiny 0 \atop 0}{\tiny 0 \atop 0}{\tiny 0 \atop 0}
+\
+{\tiny 0 \atop 0}{\tiny 0 \atop 0}{\tiny 0 \atop 0}{\tiny 0 \atop 0}{\tiny 0 \atop 0}
+$$</p>
+
+<p>The first number shows up.
+It&#39;s $x_0=97546\ 96672$.
+Nothing really interesting happens as we add it into the accumulation register, because no carries can occur.
+Clearly we could do this particular addition in constant depth, because each digit position can be processed in parallel.
+Without carries the various digit positions don&#39;t interact:</p>
+
+<p>$$
+\begin{aligned}
+t_1=&amp;t_0 + x_0
+\\=&amp;\left(
+{\tiny  \atop { \atop +} }
+{\tiny 0 \atop {0 \atop 9} }
+{\tiny 0 \atop {0 \atop 7} }
+{\tiny 0 \atop {0 \atop 5} }
+{\tiny 0 \atop {0 \atop 4} }
+{\tiny 0 \atop {0 \atop 6} }
+\
+{\tiny 0 \atop {0 \atop 9} }
+{\tiny 0 \atop {0 \atop 6} }
+{\tiny 0 \atop {0 \atop 6} }
+{\tiny 0 \atop {0 \atop 7} }
+{\tiny 0 \atop {0 \atop 2} }
+\right)
+\\=&amp;\left(
+{\tiny 0 \atop 9}
+{\tiny 0 \atop 7}
+{\tiny 0 \atop 5}
+{\tiny 0 \atop 4}
+{\tiny 0 \atop 6}
+\
+{\tiny 0 \atop 9}
+{\tiny 0 \atop 6}
+{\tiny 0 \atop 6}
+{\tiny 0 \atop 7}
+{\tiny 0 \atop 2}
+\right)
+\end{aligned}
+$$</p>
+
+<p>The second number arrives.
+It&#39;s $x_1 = 64019\ 68795$.
+You might think we can&#39;t work on every digit in parallel this time, because there will be carries.
+But that&#39;s actually fine; it just means that all the carry bits are going to be generated in parallel.
+It&#39;s only when we try to propagate the carries that we can run into trouble.
+And, remember, basically the whole trick here is to <em>not</em> propagate the carries:</p>
+
+<p>$$
+\begin{aligned}
+t_2=&amp;t_1 + x_1
+\\=&amp;\left(
+{\tiny  \atop { \atop +} }
+{\tiny 0 \atop {9 \atop 6} }
+{\tiny 0 \atop {7 \atop 4} }
+{\tiny 0 \atop {5 \atop 0} }
+{\tiny 0 \atop {4 \atop 1} }
+{\tiny 0 \atop {6 \atop 9} }
+\
+{\tiny 0 \atop {9 \atop 6} }
+{\tiny 0 \atop {6 \atop 8} }
+{\tiny 0 \atop {6 \atop 7} }
+{\tiny 0 \atop {7 \atop 9} }
+{\tiny 0 \atop {2 \atop 5} }
+\right)
+\\=&amp;\left(
+{\tiny 1 \atop 5}
+{\tiny 0 \atop 1}
+{\tiny 0 \atop 5}
+{\tiny 1 \atop 5}
+{\tiny 1 \atop 5}
+\
+{\tiny 1 \atop 5}
+{\tiny 1 \atop 4}
+{\tiny 1 \atop 3}
+{\tiny 0 \atop 6}
+{\tiny 0 \atop 7}
+\right)
+\end{aligned}
+$$</p>
+
+<p>Note how we&#39;re just storing the carries instead of propagating them.</p>
+
+<p>The third number lands, $x_2 = 73532\ 55939$, and things finally get a little interesting.
+There is finally an interaction between digits: the carry bit at position $k$ needs to be read by the digit addition at position $k$, but it also needs to be written by the digit addition at position $k-1$.
+We deal with this by simply copying the current carry bits into a temporary carry register that we associate with $x_2$.
+We can then work in parallel over each digit position:</p>
+
+<p>$$
+\begin{aligned}
+t_2=&amp;t_1 + x_1
+\\=&amp;\left(
+{\tiny\text{ } \atop { \atop +} }
+{\tiny 1 \atop {5 \atop 7} }
+{\tiny 0 \atop {1 \atop 3} }
+{\tiny 0 \atop {5 \atop 5} }
+{\tiny 1 \atop {5 \atop 3} }
+{\tiny 1 \atop {5 \atop 2} }
+\
+{\tiny 1 \atop {5 \atop 5} }
+{\tiny 1 \atop {4 \atop 5} }
+{\tiny 1 \atop {3 \atop 9} }
+{\tiny 0 \atop {6 \atop 3} }
+{\tiny 0 \atop {7 \atop 9} }
+\right)
+\\=&amp;\left(
+{ {\atop} \atop {\tiny+ \atop +} }
+{ {\tiny 0 \atop 5} \atop {\tiny 1 \atop 7} }
+{ {\tiny 0 \atop 1} \atop {\tiny 0 \atop 3} }
+{ {\tiny 0 \atop 5} \atop {\tiny 0 \atop 5} }
+{ {\tiny 0 \atop 5} \atop {\tiny 1 \atop 3} }
+{ {\tiny 0 \atop 5} \atop {\tiny 1 \atop 2} }
+\
+{ {\tiny 0 \atop 5} \atop {\tiny 1 \atop 5} }
+{ {\tiny 0 \atop 4} \atop {\tiny 1 \atop 5} }
+{ {\tiny 0 \atop 3} \atop {\tiny 1 \atop 9} }
+{ {\tiny 0 \atop 6} \atop {\tiny 0 \atop 3} }
+{ {\tiny 0 \atop 7} \atop {\tiny 0 \atop 9} }
+\right)
+\\=&amp;\left(
+{\tiny 0 \atop 3}
+{\tiny 1 \atop 4}
+{\tiny 0 \atop 0}
+{\tiny 0 \atop 9}
+{\tiny 1 \atop 8}
+\
+{\tiny 1 \atop 1}
+{\tiny 1 \atop 0}
+{\tiny 0 \atop 3}
+{\tiny 1 \atop 9}
+{\tiny 0 \atop 6}
+\right)
+\end{aligned}
+$$</p>
+
+<p>And we&#39;ve now covered the general case; hopefully you see why it works.
+As long as you do the absolute bare minimum work with the carries, as long as you don&#39;t fall prey to a desire to propagate them to completion, updating the accumulator becomes embarassingly parallel.
+Thus additions can be done in constant depth.</p>
+
+<p>Of course, eventually, you will want the final result.
+When that time comes, you will need to fully propagate the carries and this will take logarithmic depth.
+But during the accumulation, when you&#39;re using the unfolded-carries representation of the total, each addition can be done in constant depth.</p>
+
+<p>With the idea explained, it&#39;s now just a matter of translating it into code:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="k">class</span> <span class="nc">Accumulator</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">carries</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">incoming</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">incoming</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bits</span><span class="p">)</span>
+        <span class="n">old_carries</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">carries</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">carries</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">maj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bits</span><span class="p">,</span> <span class="n">incoming</span><span class="p">,</span> <span class="n">old_carries</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bits</span> <span class="o">^=</span> <span class="n">incoming</span> <span class="o">^</span> <span class="n">old_carries</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__int__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">bits_as_int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bits</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="n">bits_as_int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">carries</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">%=</span> <span class="mi">2</span><span class="o">**</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bits</span><span class="p">)</span>  <span class="c1"># We want fixed-width addition.</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+<span class="k">def</span> <span class="nf">maj</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">a</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">a</span> <span class="o">&amp;</span> <span class="n">c</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">b</span> <span class="o">&amp;</span> <span class="n">c</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">bits_as_int</span><span class="p">(</span><span class="n">bits</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bits</span><span class="p">))</span>
+</code></pre></div>
+<p>You can tell that the <code>__iadd__</code> method is constant depth (in principle) because it never branches and it only uses broadcasting numpy operations.</p>
+
+<h1>Conclusion</h1>
+
+<p>There are number representations other than 2s complement integers, and some of these representations have adders with depths lower than what can be achieved in 2s complement.
+The specific number preresentation used in this blog post is a pair of 2s complement registers (the main register and the carry register) where the represented integer is the sum of the two registers.
+It is possible to add into this representation (from either an integer using the same representation or from a normal 2s complement integer) in constant depth.</p>
+
+<p>This &quot;use a different representation with lower depth&quot; idea feels like a thing that should already be known and named.
+But the closest I was able to find was <a href="https://doi.org/10.1117/12.327033">&quot;Use of delayed addition techniques to accelerate integer and floating-point calculations in configurable hardware&quot; by Luo et al</a>,
+which uses (I think) a representation with $\Theta(n \lg n)$ bits instead of the $2n$ bit representation I explained in this post.
+If someone knows a relevant paper or wikipedia page with previous work, please let me know.</p>
+
+<p>Here&#39;s an interesting follow-up question for this post: are there <em>quantum</em> constant depth encoded adders?
+The quantum case is harder because you aren&#39;t allowed to leak information about the values that were added into the register (other than the final sum, obviously).
+You can&#39;t use a pair of registers the way I did in this post, because information leaks out via the way bits are distributed between the two registers.
+I just put out <a href="https://arxiv.org/abs/1905.08488">a paper on the arXiv</a> that contains a construction for an $O(\lg \lg t)$ depth approximate encoded quantum adder (where $t$ is the number of additions you will perform).
+Can that depth be achieved with a deterministic adder instead of an (arbitrarily good) approximate adder?
+Can the depth be reduced further, all the way down to $O(1)$?
+I really don&#39;t know.</p>
+
+</div>
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1900">&laquo; Improving Block Code Distillation (Part 3)</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
