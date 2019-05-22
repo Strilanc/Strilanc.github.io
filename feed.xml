@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Constant Depth Encoded Addition</title>
+                <description>&lt;p&gt;Additions circuits compute output bits that depend on a linear number of input bits. This kind of dependence forces &lt;a href=&quot;https://cs.stackexchange.com/questions/19468/what-circuit-depth-is-required-to-add&quot;&gt;addition circuits to have $\Omega(\lg n)$ depth&lt;/a&gt;. This is a proven theorem. There is no such thing as a constant depth adder.&lt;/p&gt; &lt;p&gt;...&lt;/p&gt; &lt;p&gt;...&lt;/p&gt; &lt;p&gt;Or is there?&lt;/p&gt; &lt;strong&gt;Paradox&lt;/strong&gt; &lt;p&gt;There are...</description>
+                <pubDate>Wed, 22 May 2019 05:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/1901</link>
+                <guid isPermaLink="true">http://algassert.com/post/1901</guid>
+            </item>
+            <item>
                 <title>Improving Block Code Distillation (Part 3)</title>
                 <description>&lt;p&gt;This series of posts began with the discovery a mistake, and an attempt to fix the problem. In this post, the series finishes with the production of optimized braiding diagrams.&lt;/p&gt; &lt;p&gt;Part 1: &lt;a href=&quot;/post/1806&quot;&gt;Resynthesizing the circuits&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Part 2: &lt;a href=&quot;/post/1807&quot;&gt;Reconceptualizing the distillation&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Part 3: (this post) Rebraiding the factory&lt;/p&gt; &lt;strong&gt;Starting...</description>
                 <pubDate>Wed, 13 Feb 2019 10:10:10 -0800</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sun, 28 Jan 2018 10:10:10 -0800</pubDate>
                 <link>http://algassert.com/post/1800</link>
                 <guid isPermaLink="true">http://algassert.com/post/1800</guid>
-            </item>
-            <item>
-                <title>A Classical Delayed Choice Experiment</title>
-                <description>&lt;p&gt;The delayed choice quantum eraser (DCQE) is a widely misunderstood experiment. The internet is full of &lt;a href=&quot;https://www.quora.com/Does-the-delayed-choice-quantum-eraser-experiment-prove-that-time-is-just-an-illusion&quot;&gt;questions&lt;/a&gt; and &lt;a href=&quot;http://www.louisdelmonte.com/a-classic-time-travel-paradox-double-slit-experiment-demonstrates-reverse-causality/&quot;&gt;posts&lt;/a&gt; and &lt;a href=&quot;https://www.youtube.com/watch?v=KnpCH9VRvPg&quot;&gt;videos&lt;/a&gt; and &lt;a href=&quot;https://io9.gizmodo.com/an-experiment-that-might-let-us-control-events-millions-1525760859&quot;&gt;articles&lt;/a&gt; that seem to think the DCQE is definitive proof of time travel or some other nonsense. But, from the perspective of quantum information...</description>
-                <pubDate>Tue, 12 Dec 2017 05:10:20 -0800</pubDate>
-                <link>http://algassert.com/post/1720</link>
-                <guid isPermaLink="true">http://algassert.com/post/1720</guid>
             </item>
     </channel>
 </rss>
