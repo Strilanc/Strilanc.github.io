@@ -231,6 +231,7 @@ This "use a different representation with lower depth" idea feels like a thing t
 But the closest I was able to find was ["Use of delayed addition techniques to accelerate integer and floating-point calculations in configurable hardware" by Luo et al](https://doi.org/10.1117/12.327033),
 which uses (I think) a representation with $\Theta(n \lg n)$ bits instead of the $2n$ bit representation I explained in this post.
 If someone knows a relevant paper or wikipedia page with previous work, please let me know.
+**Update**: thank you to [peterderivaz for pointing out](https://www.reddit.com/r/algassert/comments/brrcxn/comment_thread_constant_depth_encoded_addition/eom77or/) that this is known as a [carry-save adder](https://en.wikipedia.org/wiki/Carry-save_adder) and dates all the way back to John von Neumann (wow).
 
 Here's an interesting follow-up question for this post: are there *quantum* constant depth encoded adders?
 The quantum case is harder because you aren't allowed to leak information about the values that were added into the register (other than the final sum, obviously).
