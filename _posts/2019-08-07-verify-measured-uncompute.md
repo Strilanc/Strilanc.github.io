@@ -88,3 +88,5 @@ Toffoli simulators can efficiently test measurement based uncomputation construc
 I opened [an issue on the Q# github repository](https://github.com/microsoft/qsharp-runtime/issues/24) and explained the MBUC simulation strategy there, so hopefully it will be added in a future version.
 
 I have tested out the MBUC verification idea in my work-in-progress [quantumpseudocode](https://github.com/Strilanc/quantumpseudocode/) project, and so can report with confidence that it is good at catching dumb mistakes.
+
+[View r/algassert comment thread](https://www.reddit.com/r/algassert/comments/cn8hlw/comment_thread_verifying_measurement_based/)
