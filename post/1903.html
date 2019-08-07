@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Verifying Measurement Based Uncomputation</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Verifying Measurement Based Uncomputation</h1>
+<p class="meta">07 Aug 2019</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Often, when uncomputing intermediate values produced during a quantum computation, it is possible to save resources by using measurement operations in ways that don&#39;t work when computing those values in the first place.
+For example, computing the AND of two qubits requires non-stabilizer operations such as T gates, but you can get rid of an AND result using only stabilizer operations:</p>
+
+<p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22Amps2%22%5D%2C%5B%5D%2C%5B1%2C1%2C%22H%22%5D%2C%5B1%2C1%2C%22Z%5E%C2%BC%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B1%2C1%2C%22Z%5E-%C2%BC%22%5D%2C%5B%22%E2%80%A2%22%2C1%2C%22X%22%5D%2C%5B1%2C1%2C%22Z%5E%C2%BC%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B1%2C1%2C%22Z%5E-%C2%BC%22%5D%2C%5B1%2C1%2C%22H%22%5D%2C%5B1%2C1%2C%22Z%5E-%C2%BD%22%5D%2C%5B%22Amps3%22%5D%2C%5B%5D%2C%5B1%2C1%2C%22H%22%5D%2C%5B1%2C1%2C%22Measure%22%5D%2C%5B%22%E2%80%A2%22%2C%22Z%22%2C%22%E2%80%A2%22%5D%2C%5B%22Amps2%22%5D%5D%2C%22init%22%3A%5B%22%2B%22%2C%22%2B%22%5D%7D"><img src="/assets/2019-08-07-verify-measured-uncompute/and-circuits.png" title="AND computation and uncomputation" style="max-width: 90%; border: 1px solid black; padding: 20px;"/></a></p>
+
+<p>Another example is <a href="/quantum/2015/09/02/Partially-Erasing-Entanglement-with-Measurement.html">entanglement erasure</a>.
+When limited to local quantum operations and classical communication (the LOCC regime), it is impossible to establish entanglement between parties.
+And yet, under LOCC it is possible to cleanly and selectively <em>dis</em>entangle parties.
+For example, three parties sharing a GHZ state can eject any one of the qubits from the state such that the remaining two form an EPR pair:</p>
+
+<p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%2C%22X%22%5D%2C%5B%22Amps3%22%5D%2C%5B%5D%2C%5B1%2C1%2C%22H%22%5D%2C%5B1%2C1%2C%22Measure%22%5D%2C%5B1%2C%22Z%22%2C%22%E2%80%A2%22%5D%2C%5B%22Amps2%22%5D%5D%7D">
+<img src="/assets/2019-08-07-verify-measured-uncompute/ghz-to-bell-circuit.png" title="GHZ to Bell Pair conversion" style="max-width: 90%; border: 1px solid black; padding: 20px;"/>
+</a></p>
+
+<p>Yet another example is my contribution to the paper <a href="https://arxiv.org/abs/1902.02134">&quot;Qubitization of Arbitrary Basis Quantum Chemistry Leveraging Sparsity and Low Rank Factorization&quot;</a> by Berry et al, which you can find in Appendix C.
+I figured out a method for cleaning up a QROM read (a table lookup) using significantly fewer non-stabilizer operations than are needed to compute the read.
+The method works by performing an X basis measurement of each of the looked-up qubits, figuring out which entries in the table toggled an odd number of the qubits that reported a True measurement result, and then phase-flipping the addresses of those entries by using a smaller table lookup:</p>
+
+<p><img src="/assets/2019-08-07-verify-measured-uncompute/uncompute-table-read.png" title="table lookup uncomputation" style="max-width: 90%; border: 1px solid black; padding: 20px;"/></p>
+
+<p>That last example brings us nicely into what I want to discuss in this post.
+As you can see, the above circuit is a bit complicated; it has a lot of details.
+So I wanted to verify that it works correctly.
+But when I tried to implement it in Q# in order to verify it, I ran into an obstacle.</p>
+
+<h1>Problem</h1>
+
+<p>Q# has two different simulators: a state vector simulator and a Toffoli simulator.
+The state vector simulator can handle arbitrary quantum operations, but the cost of simulating each operation grows exponentially with the number of qubits.
+The Toffoli simulator is much <em><strong>much</strong></em> faster, needing only constant time per operation, but it only allows classical reversible gates such as the CNOT gate and the Toffoli gate.
+Generally speaking, the speed advantage of the Toffoli simulator is so great that you want to avoid operations that prevent you from using it.</p>
+
+<p>Measurement Based UnComputation (hereafter <strong>MBUC</strong>), such as the lookup uncomputation and the AND uncomputation that I mentioned, almost always start by measuring qubits in the X basis.
+X basis measurement is not a classical operation.
+Therefore MBUCs are incompatible with Q#&#39;s Toffoli simulator.
+This is problematic, because MBUCs are often subroutines useful in larger computations (consider: how often do you use an AND gate?).
+If you start introducing MBUCs into your code base, you will soon find that you aren&#39;t able to simulate <em>anything</em> efficiently anymore.
+This forces an apparent tradeoff: give up the ability to simulate (and thus verify) your code, or else give up the ability to achieve optimal resource counts.
+Neither choice is particularly appealing.</p>
+
+<h1>Solution</h1>
+
+<p>I spent a lot of time thinking about this problem and, eventually, came up with what I think is a pretty elegant solution.
+In order to explain it, I first need to explain the effect of X basis measurements at the start of an MBUC.</p>
+
+<p>Suppose we are in a computational basis state (which is always the case for a Toffoli simulator).
+We measure a qubit in the X basis, and then reset the qubit to the 0 state by applying a Hadamard and then bit-flipping the qubit depending on the measurement result.
+What is the overall effect of this process?
+It&#39;s actually surprisingly simple.
+In all cases the qubit will be forced into the 0 state but, additionally, in exactly the case where the qubit was in the 1 state and the X basis measurement returned True, <em>the phase of the computational basis state gets negated</em>:</p>
+
+<p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%5D%2C%5B%22%7C1%E2%9F%A9%E2%9F%A81%7C%22%5D%2C%5B%22X%22%5D%2C%5B%22Amps1%22%5D%5D%2C%22init%22%3A%5B1%5D%7D">
+<img src="/assets/2019-08-07-verify-measured-uncompute/x-cases.png" title="x basis measurement cases" style="max-width: 90%; border: 1px solid black; padding: 20px;"/>
+</a></p>
+
+<p>It may seem that we don&#39;t have to care about this phasing effect, because phase is irrelevant when not in superposition.
+But the only reason we&#39;re not in a superposition state is because we&#39;re testing in situations compatible with the Toffoli simulator.
+In practice these circuits would of course be applied to states under superposition (otherwise you wouldn&#39;t need a quantum computer), and in those cases this phasing effect is important and must be accounted for.
+Since none of the computational basis phases are negated when performing a normal uncomputation, the same must be true of a correct MBUC.
+For an MBUC to be correct, it is necessary and sufficient that it perform phasing operations that correct the probabilistic phase flips introduced by the X basis measurements.</p>
+
+<p>So here is a simple way to test whether an MBUC is functioning correctly, without having to resort to a full state vector simulation.
+All you need to do is check that, for the given computational basis state that we happen to be in, and for the given random X basis measurements we happened to generate, that the MBUC cancelled out the phase flips caused by the X basis measurements.</p>
+
+<p>As long as every MBUC declares where it starts and ends, and as long as the Toffoli simulator keeps track of the phase of the state (e.g. when an S gate is applied to a qubit that is ON the state&#39;s phase should be rotated 90 degrees), the Toffoli simulator can simulate MBUCs and automatically flag when an MBUC performs an incorrect phase fixup.</p>
+
+<p>Assuming X basis measurement results are generated at random, any time we run a simulator performing this check we are essentially randomly sampling possible fixup cases and verifying that they are correct.
+We are fuzzing the MBUC.
+This fuzzing approach is sufficient for most purposes, but it would be a good idea to allow unit tests control over the pattern of simulated X basis measurements in order to guarantee that particular corner cases are hit.</p>
+
+<p>Adding MBUC simulation and verification to Toffoli simulators is a clear win.
+It allows the Toffoli simulator to handle more gates, and fixes a nasty tradeoff between simulation efficiency and quantum gate count efficiency.</p>
+
+<h1>Summary</h1>
+
+<p>Toffoli simulators can efficiently test measurement based uncomputation constructions by tracking phase information and confirming that phase flips introduced by X basis measurements at the start of an MBUC have been cancelled out by the end of the MBUC.</p>
+
+<p>I opened <a href="https://github.com/microsoft/qsharp-runtime/issues/24">an issue on the Q# github repository</a> and explained the MBUC simulation strategy there, so hopefully it will be added in a future version.</p>
+
+<p>I have tested out the MBUC verification idea in my work-in-progress <a href="https://github.com/Strilanc/quantumpseudocode/">quantumpseudocode</a> project, and so can report with confidence that it is good at catching dumb mistakes.</p>
+
+</div>
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1902">&laquo; Weakening the Born Rule</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Weakening the Born Rule</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Weakening the Born Rule</h1>
+<p class="meta">06 Aug 2019</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Recently I read the blog post <a href="http://blog.rongarret.info/2019/07/the-trouble-with-many-worlds.html">&quot;The Trouble with Many Worlds&quot;</a>.
+I liked the post, but I always find it a bit strange reading this kind of content.
+People seem so very philosophically upset/confused/fascinated by &quot;the measurement problem&quot; and the Born rule, but I have to admit that deep down I&#39;ve never found this problem compelling.
+Every physical model needs some kind of mapping from abstract symbol land into concrete action-and-expectation land, and when you look at the other postulates of quantum mechanics (mainly unitarity) the form that this mapping is going to have to take seems pretty clear.</p>
+
+<p>Anyways, I realize that this sense of &quot;of course it will take that form&quot; is ultimately subjective, and that there are subtle philosophical issues here.
+I also realize that I am not nearly the first person express the sentiment that the Born rule appears intrinsic to the structure of quantum mechanics.
+For example, David Deutsch has papers proving that, given some sort of rationality constraint, agents embedded into quantum mechanical systems are forced to use the Born rule.
+But I still want to try to explain in my own terms where this sense I get, that if you have unitary of course you&#39;re going to have the Born rule, comes from.</p>
+
+<p>The argument that I will make is going to take a pretty typical form.
+I&#39;ll pick a few assumptions that I think are &quot;an easier sell&quot; than the Born rule, and then show that the Born rule is a practical consequence.</p>
+
+<h1>Axioms / assumptions / definitions</h1>
+
+<p>You can&#39;t prove anything without defining your terms or saying which axioms are allowed.
+I have attempted to choose a &quot;reasonable&quot; set of assumptions, though I do realize that readers&#39; preferences will vary.
+Here are the otherwise-unjustified things which will be needed by the argument I am going to make:</p>
+
+<ol>
+<li><strong>Standard representation</strong>. A quantum state is a unit vector in $\mathbb{C}^{N}$ and a quantum operation is a unitary matrix from $\mathbb{U}(N)$.</li>
+<li><strong>Compatible certainty</strong>. As the amplitude of a computational basis state approaches 1, the probability of a measurement returning that state as a result must also approach 1.</li>
+<li><strong>No signalling</strong>. The measurement outcome probabilities for a qubit are unaffected by unitary operations on other qubits.</li>
+<li><strong>Compatible computation</strong>. Reversible classical circuits &quot;do the same thing&quot; when run in a quantum context. Concepts defined in terms of a reversible classical circuit are implicitly defined and generalized into the quantum context via the quantum behavior of the same circuit.</li>
+<li><strong>Frequentist probability</strong>. When I say &quot;the process $f$ has probability $p$&quot; I mean that the following computation will usually produce a positive result: perform $f$ many times, count up the number of positive results, divide the count by the number of samples, and check if that produced a value near $p$.</li>
+</ol>
+
+<p>The most important thing in the above list is the definition of what is meant by the term probability, so let&#39;s lay that out in more detail.
+We need to define some notion of a sample rate $k/n$ being &quot;near&quot; a hypothesized rate $p$.
+The main subtlety is how near is near enough.
+We&#39;ll use a maximum distance of $n^{-1/3}$ from the true rate, because this expression is pretty simple and ensures that the expected number of false positives and false negatives (when applying this definition to random sampling) will limit to 0 as $n$ goes to infinity:</p>
+
+<p>$$
+\text{RateNear}(k, n, p) = \Big( |k/n - p| &lt; n^{-1/3} \Big)
+$$</p>
+
+<p>The above check only achieves perfect precision in the infinite limit, so it&#39;s important to have that concept available:</p>
+
+<p>$$
+\text{RateApproaches}(f, p) = \lim_{n \rightarrow \infty} \text{RateNear}(\text{CountPositiveSamples}(f, n), n, p)
+$$</p>
+
+<p>And now we can properly define the true rate of $f$ (assuming the underlying limits exist):</p>
+
+<p>$$
+\text{Rate}(f) = \text{argmax}_p \; \text{RateApproaches}(f, p)
+$$</p>
+
+<p>(The argmax is being used to find the unique value of $p$ that makes the rate-approaches predicate return 1 (True) instead of 0 (False).)</p>
+
+<p>When I say &quot;$f$ has probability $p$&quot;, you should interpret that as meaning $\text{Rate}(f) = p$ and nothing else.
+That&#39;s not because I think quantum mechanics is incompatible with e.g. the Bayesian concept of probability; I&#39;m just trying to keep this post focused.</p>
+
+<p>In order to generalize this frequentist definition of probability to the quantum domain, we have to operationalize it into a concrete reversible classical circuit.
+For example, the circuit could have a counter and for each sample the circuit would increment the counter conditioned on that sample.
+The circuit would then check if the counter was close enough to the expected value and, if so, toggle an output bit.
+The counter would then be uncomputed by conditionally decrementing it for each sample.
+The details here aren&#39;t particularly important; what matters is that there is some circuit that implements the is-rate-near check:</p>
+
+<p><img src="/assets/2019-08-06-born-rule/circuit.png" title="Circuit realization of part of probability definition"/></p>
+
+<p>where $W(k)$ is the Hamming Weight of the integer $k$; the number of 1s in $k$&#39;s binary representation.</p>
+
+<p>The above circuit, which I will refer to as $C_{n,p}$, is a computational definition of $\text{RateNear}$.
+The limiting behavior, when considering a series of larger and larger such circuits, matches what we mean by probability classically.
+Our goal is to apply the <strong>compatible computation</strong> assumption to generalize this definition of probability into the quantum domain, and determine what it tells us about the rate of $f$ when $f$ is a quantum process such as &quot;prepare the state $|\psi\rangle = \cos \theta |0\rangle + \sin \theta |1\rangle$&quot;.</p>
+
+<h1>Quantum behavior of the probability definition circuit</h1>
+
+<p>Quantumly, the action of $C_{n,p}$ on a computational basis state $|k\rangle$ is:</p>
+
+<p>$$
+C_{n,p} |k\rangle|0\rangle = |k\rangle|\text{RateNear}(k, n, p)\rangle 
+$$</p>
+
+<p>Or, across an entire wavefunction:</p>
+
+<p>$$
+C_{n,p} \sum_{k=0}^{2^n-1} \sum_{b=0}^1 \lambda_{k,b} |k\rangle|b\rangle = \sum_{k=0}^{2^n-1} \sum_{b=0}^1 \lambda_{k,b}|k\rangle|b \oplus \text{RateNear}(k, n, p)\rangle 
+$$</p>
+
+<p>To make it easier to describe what comes out of $C_{n,p}$ when we input many copies of $|\psi\rangle = \cos \theta |0\rangle + \sin \theta |1\rangle$, we need a few bits of notation.</p>
+
+<p>The set of integers of bit length $n$ with Hamming weight $w$ is written like this:</p>
+
+<p>$$\left\{ n \atop w \right\} = \{k \in [0, 2^n) | W(k) = w\}$$</p>
+
+<p>The sum of all computational basis states kets with Hamming weight $w$ is written like this:</p>
+
+<p>$$
+\left| n \atop w \right\rangle = \sum_{k \in \left\{ n \atop w \right\}}
+|k\rangle
+$$</p>
+
+<p>With this notation, the input state can be rewritten into the following form:</p>
+
+<p>$$\begin{aligned}
+\text{input}
+&amp;=
+|\psi\rangle^{\otimes n}|0\rangle
+\\&amp;=
+(\cos \theta |0\rangle + \sin \theta |1\rangle)^{\otimes n} |0\rangle
+\\&amp;=
+\sum_{w=0}^n
+\cos^{n-w} \theta
+\sin^w \theta
+\left| n \atop w \right\rangle
+|0\rangle
+\end{aligned}$$</p>
+
+<p>We can then very easily write down the result of applying $C_{n,p}$ to this state:</p>
+
+<p>$$\begin{aligned}
+\text{output}
+&amp;=
+C_{n,p} \cdot \text{input}
+\\&amp;=
+C_{n,p}
+\sum_{w=0}^n
+\cos^{n-w} \theta
+\sin^w \theta
+\left| n \atop w \right\rangle
+|0\rangle
+\\&amp;=
+\sum_{w=0}^n
+\cos^{n-w} \theta
+\sin^w \theta
+\left(
+C_{n,p}
+\left| n \atop w \right\rangle
+|0\rangle
+\right)
+\\&amp;=
+\sum_{w=0}^n
+\cos^{n-w} \theta
+\sin^w \theta
+\left| n \atop w \right\rangle
+|\text{RateNear}(w, n, p)\rangle
+\end{aligned}$$</p>
+
+<p>In order to make the output state even more convenient to work with, we will rewrite it into the form $|v_0\rangle|0\rangle + |v_1\rangle|1\rangle$. The parts $|v_0\rangle$ and $|v_1\rangle$ just limit the iteration variable $w$ to the non-accepting and accepting ranges respectively:</p>
+
+<p>$$\begin{aligned}
+|v_0\rangle
+&amp;=
+\sum_{w=0}^{\lceil np-n^{2/3} \rceil-1}
+\cos(\theta)^{n-w}
+\sin(\theta)^{w}
+\left| n \atop w \right\rangle
+\\&amp;+
+\sum_{w=\lfloor np + n^{2/3} \rfloor+1}^{n}
+\cos(\theta)^{n-w}
+\sin(\theta)^{w}
+\left| n \atop w \right\rangle
+\end{aligned}$$</p>
+
+<p>and:</p>
+
+<p>$$
+|v_1\rangle =
+\sum_{w=\lceil np-n^{2/3} \rceil}^{\lfloor np + n^{2/3} \rfloor}
+\cos(\theta)^{n-w}
+\sin(\theta)^{w}
+\left| n \atop w \right\rangle
+$$</p>
+
+<p>Note that, currently, our output state has amplitude spread over many computational basis states.
+We need to fix this, because otherwise we will not be able to apply the <strong>compatible certainty</strong> axiom.
+The way we do so is by applying the <strong>no signalling</strong> axiom to send $|v_0\rangle$ and $|v_1\rangle$ to individual computational basis states.</p>
+
+<p>Because $|v_0\rangle$ is orthogonal to $|v_1\rangle$, there is a unitary operation $U$ such that $U|v_0\rangle = \sqrt{\alpha} |0\rangle^{\otimes n}$ and $U |v_1\rangle = \sqrt{\beta} |1\rangle^{\otimes n}$.
+Because unitary operations preserve the 2-norm, we know that $\alpha + \beta = 1$ and that $\beta$ is determined by the 2-norm of $|v_1\rangle$:</p>
+
+<p>$$\begin{aligned}
+\beta
+&amp;=
+\langle U v_1 | Uv_1 \rangle
+\\&amp;=
+\langle v_1 | v_1 \rangle
+\\&amp;=
+\sum_{w=\lceil np-n^{2/3} \rceil}^{\lfloor np + n^{2/3} \rfloor}
+{n \choose w}
+(\cos^2 \theta)^{n-w}
+(\sin^2 \theta)^w
+\\&amp;=
+\sum_{w=\lceil np-n^{2/3} \rceil}^{\lfloor np + n^{2/3} \rfloor}
+\text{Binomial}(n, w, \sin^2 \theta)
+\end{aligned}$$</p>
+
+<p>By the properties of the binomial distribution, this sum limits to 1 as $n$ goes to infinity if and only if $p=\sin^2 \theta$:</p>
+
+<p>$$\begin{aligned}
+\lim_{n \rightarrow \infty} \beta
+&amp;=
+\lim_{n \rightarrow \infty} \sum_{w=\lceil np-n^{2/3} \rceil}^{\lfloor np + n^{2/3} \rfloor}
+\text{Binomial}(n, w, \sin^2 \theta)
+\\&amp;=\begin{cases}
+p=\sin^2 \theta &amp;\rightarrow 1
+\\
+p\neq \sin^2 \theta &amp;\rightarrow 0
+\end{cases}
+\\&amp;= (p \stackrel{?}{=} \sin^2 \theta)
+\end{aligned}$$</p>
+
+<p>And then via $\alpha + \beta = 1$ we get:</p>
+
+<p>$$\lim_{n \rightarrow \infty}\alpha = (p \stackrel{?}{\neq} \sin^2 \theta)$$</p>
+
+<p>And now we have enough information to determine the behavior of the output state, after applying $U$, in the large $n$ limit:</p>
+
+<p>$$\begin{aligned}
+\lim_{n\rightarrow \infty}U \cdot C_{n,p} \cdot |\psi\rangle^{\otimes n}|0\rangle
+&amp;=
+\lim_{n \rightarrow \infty} \alpha |0\rangle^{\otimes n+1}
++
+\beta |1\rangle^{\otimes n+1}
+\\&amp;=
+(p \stackrel{?}{\neq} \cos^2 \theta)|0\rangle^{\otimes n+1} + 
+(p \stackrel{?}{=} \cos^2 \theta)|1\rangle^{\otimes n+1}
+\end{aligned}
+$$</p>
+
+<p>In other words, if the correct $p$ is being used (i.e. $p=\sin^2 \theta$), then as $n$ becomes larger and larger the amount of amplitude in the all-1s state will approach 1.
+Otherwise the amplitude in the all-0s state will approach 1.
+We have managed to encode into the output state, with high fidelity, information about what the probability associated with the process that produces copies of $\cos \theta |0\rangle + \sin \theta |1\rangle$ must be.</p>
+
+<h1>Therefore Born</h1>
+
+<p>By <strong>compatible certainty</strong>, limiting-to-1 behavior of amplitudes implies the same limiting-to-1 behavior in measurement probabilities.
+As $n$ increases, the amplitude of the positive result state (after applying the probability definition circuit to $n$ copies of $\cos \theta |0\rangle + \sin \theta |1\rangle$ and also the fixup unitary $U$) limits to 1 when $p$ is set to $\sin^2 \theta$ and limits to 0 otherwise. Therefore the probability of getting a positive result when performing this process and then measuring the output bit limits to 1 when $p$ is set to $\sin^2 \theta$ and limits to 0 otherwise.</p>
+
+<p>By <strong>no signalling</strong>, the application of $U$ can be removed without affecting the result probability (because $U$ acts on qubits that aren&#39;t the qubit we are measuring).
+Therefore when we apply just the probability definition circuit to $n$ copies of $\cos \theta |0\rangle + \sin \theta |1\rangle$, the probability of getting a positive result limits to 1 if $p=\sin^2 \theta$ and otherwise limits to 0.</p>
+
+<p>By <strong>compatible computation</strong> this behavior of the probability definition circuit implies that the probability-of-getting-1 of the state $\cos \theta |0\rangle + \sin \theta |1\rangle$ is ...(<em>insert drum roll</em>)... $\sin^2 \theta$!
+In other words, probabilities are determined by the Born rule.</p>
+
+<h1>Summary</h1>
+
+<p>If you assume a few &quot;obvious&quot; things about measurement (i.e. <strong>no signalling</strong> and <strong>compatible certainty</strong>), and you like your definitions of abstract concepts to cash out in terms of the results of physical experiments (i.e. you assume <strong>compatible computation</strong> and <strong>frequentist probability</strong>), then the Born rule is a natural consequence of the unitarity of quantum mechanics.</p>
+
+</div>
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1901">&laquo; Constant Depth Encoded Addition</a>
+        </td>
+        <td align="right">
+          <a href="/post/1903">Verifying Measurement Based Uncomputation &raquo;</a>
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

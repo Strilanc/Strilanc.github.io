@@ -7,6 +7,20 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Verifying Measurement Based Uncomputation</title>
+                <description>&lt;p&gt;Often, when uncomputing intermediate values produced during a quantum computation, it is possible to save resources by using measurement operations in ways that don&amp;#39;t work when computing those values in the first place. For example, computing the AND of two qubits requires non-stabilizer operations such as T gates, but you...</description>
+                <pubDate>Wed, 07 Aug 2019 09:30:00 -0700</pubDate>
+                <link>http://algassert.com/post/1903</link>
+                <guid isPermaLink="true">http://algassert.com/post/1903</guid>
+            </item>
+            <item>
+                <title>Weakening the Born Rule</title>
+                <description>&lt;p&gt;Recently I read the blog post &lt;a href=&quot;http://blog.rongarret.info/2019/07/the-trouble-with-many-worlds.html&quot;&gt;&amp;quot;The Trouble with Many Worlds&amp;quot;&lt;/a&gt;. I liked the post, but I always find it a bit strange reading this kind of content. People seem so very philosophically upset/confused/fascinated by &amp;quot;the measurement problem&amp;quot; and the Born rule, but I have to admit that deep...</description>
+                <pubDate>Tue, 06 Aug 2019 09:30:00 -0700</pubDate>
+                <link>http://algassert.com/post/1902</link>
+                <guid isPermaLink="true">http://algassert.com/post/1902</guid>
+            </item>
+            <item>
                 <title>Constant Depth Encoded Addition</title>
                 <description>&lt;p&gt;Additions circuits compute output bits that depend on a linear number of input bits. This kind of dependence forces &lt;a href=&quot;https://cs.stackexchange.com/questions/19468/what-circuit-depth-is-required-to-add&quot;&gt;addition circuits to have $\Omega(\lg n)$ depth&lt;/a&gt;. This is a proven theorem. There is no such thing as a constant depth adder.&lt;/p&gt; &lt;p&gt;...&lt;/p&gt; &lt;p&gt;...&lt;/p&gt; &lt;p&gt;Or is there?&lt;/p&gt; &lt;strong&gt;Paradox&lt;/strong&gt; &lt;p&gt;There are...</description>
                 <pubDate>Wed, 22 May 2019 05:10:10 -0700</pubDate>
@@ -61,20 +75,6 @@
                 <pubDate>Sat, 10 Feb 2018 10:10:10 -0800</pubDate>
                 <link>http://algassert.com/post/1802</link>
                 <guid isPermaLink="true">http://algassert.com/post/1802</guid>
-            </item>
-            <item>
-                <title>Canonicalizing H+S+CNOT+T Circuits</title>
-                <description>&lt;p&gt;A problem I&amp;#39;ve been interested in lately is &amp;quot;how do I prove I &lt;em&gt;need&lt;/em&gt; some number of T gates for a circuit?&amp;quot;. As part of thinking about that, I wanted some way to systematically search through circuit space. But just iterating over all the possible combinations and permutations of gates...</description>
-                <pubDate>Sun, 04 Feb 2018 10:10:10 -0800</pubDate>
-                <link>http://algassert.com/post/1801</link>
-                <guid isPermaLink="true">http://algassert.com/post/1801</guid>
-            </item>
-            <item>
-                <title>Why Will Quantum Computers be Slow?</title>
-                <description>&lt;p&gt;Large error corrected quantum computers are many years away. Despite that, we know the factors that will decide how fast (or slow) these hypothetical machines will run. They are: being able to hold the computation in the first place, distilling states fast enough to feed the computation, waiting for measurements...</description>
-                <pubDate>Sun, 28 Jan 2018 10:10:10 -0800</pubDate>
-                <link>http://algassert.com/post/1800</link>
-                <guid isPermaLink="true">http://algassert.com/post/1800</guid>
             </item>
     </channel>
 </rss>
