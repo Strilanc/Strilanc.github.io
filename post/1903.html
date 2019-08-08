@@ -77,14 +77,14 @@
 <p>Often, when uncomputing intermediate values produced during a quantum computation, it is possible to save resources by using measurement operations in ways that don&#39;t work when computing those values in the first place.
 For example, computing the AND of two qubits requires non-stabilizer operations such as T gates, but you can get rid of an AND result using only stabilizer operations:</p>
 
-<p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22Amps2%22%5D%2C%5B%5D%2C%5B1%2C1%2C%22H%22%5D%2C%5B1%2C1%2C%22Z%5E%C2%BC%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B1%2C1%2C%22Z%5E-%C2%BC%22%5D%2C%5B%22%E2%80%A2%22%2C1%2C%22X%22%5D%2C%5B1%2C1%2C%22Z%5E%C2%BC%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B1%2C1%2C%22Z%5E-%C2%BC%22%5D%2C%5B1%2C1%2C%22H%22%5D%2C%5B1%2C1%2C%22Z%5E-%C2%BD%22%5D%2C%5B%22Amps3%22%5D%2C%5B%5D%2C%5B1%2C1%2C%22H%22%5D%2C%5B1%2C1%2C%22Measure%22%5D%2C%5B%22%E2%80%A2%22%2C%22Z%22%2C%22%E2%80%A2%22%5D%2C%5B%22Amps2%22%5D%5D%2C%22init%22%3A%5B%22%2B%22%2C%22%2B%22%5D%7D"><img src="/assets/2019-08-07-verify-measured-uncompute/and-circuits.png" title="AND computation and uncomputation" style="max-width: 90%; border: 1px solid black; padding: 20px;"/></a></p>
+<p><a href="/quirk#circuit=%7B%22cols%22%3A%5B%5B%22Amps2%22%5D%2C%5B%5D%2C%5B1%2C1%2C%22H%22%5D%2C%5B1%2C1%2C%22Z%5E%C2%BC%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B1%2C1%2C%22Z%5E-%C2%BC%22%5D%2C%5B%22%E2%80%A2%22%2C1%2C%22X%22%5D%2C%5B1%2C1%2C%22Z%5E%C2%BC%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B1%2C1%2C%22Z%5E-%C2%BC%22%5D%2C%5B1%2C1%2C%22H%22%5D%2C%5B1%2C1%2C%22Z%5E-%C2%BD%22%5D%2C%5B%22Amps3%22%5D%2C%5B%5D%2C%5B1%2C1%2C%22H%22%5D%2C%5B1%2C1%2C%22Measure%22%5D%2C%5B%22%E2%80%A2%22%2C%22Z%22%2C%22%E2%80%A2%22%5D%2C%5B%22Amps2%22%5D%5D%2C%22init%22%3A%5B%22%2B%22%2C%22%2B%22%5D%7D"><img src="/assets/2019-08-07-verify-measured-uncompute/and-circuits.png" title="AND computation and uncomputation" style="max-width: 90%; border: 1px solid black; padding: 20px;"/></a></p>
 
 <p>Another example is <a href="/quantum/2015/09/02/Partially-Erasing-Entanglement-with-Measurement.html">entanglement erasure</a>.
 When limited to local quantum operations and classical communication (the LOCC regime), it is impossible to establish entanglement between parties.
 And yet, under LOCC it is possible to cleanly and selectively <em>dis</em>entangle parties.
 For example, three parties sharing a GHZ state can eject any one of the qubits from the state such that the remaining two form an EPR pair:</p>
 
-<p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%2C%22X%22%5D%2C%5B%22Amps3%22%5D%2C%5B%5D%2C%5B1%2C1%2C%22H%22%5D%2C%5B1%2C1%2C%22Measure%22%5D%2C%5B1%2C%22Z%22%2C%22%E2%80%A2%22%5D%2C%5B%22Amps2%22%5D%5D%7D">
+<p><a href="/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%2C%22X%22%5D%2C%5B%22Amps3%22%5D%2C%5B%5D%2C%5B1%2C1%2C%22H%22%5D%2C%5B1%2C1%2C%22Measure%22%5D%2C%5B1%2C%22Z%22%2C%22%E2%80%A2%22%5D%2C%5B%22Amps2%22%5D%5D%7D">
 <img src="/assets/2019-08-07-verify-measured-uncompute/ghz-to-bell-circuit.png" title="GHZ to Bell Pair conversion" style="max-width: 90%; border: 1px solid black; padding: 20px;"/>
 </a></p>
 
@@ -125,7 +125,7 @@ What is the overall effect of this process?
 It&#39;s actually surprisingly simple.
 In all cases the qubit will be forced into the 0 state but, additionally, in exactly the case where the qubit was in the 1 state and the X basis measurement returned True, <em>the phase of the computational basis state gets negated</em>:</p>
 
-<p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%5D%2C%5B%22%7C1%E2%9F%A9%E2%9F%A81%7C%22%5D%2C%5B%22X%22%5D%2C%5B%22Amps1%22%5D%5D%2C%22init%22%3A%5B1%5D%7D">
+<p><a href="/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%5D%2C%5B%22%7C1%E2%9F%A9%E2%9F%A81%7C%22%5D%2C%5B%22X%22%5D%2C%5B%22Amps1%22%5D%5D%2C%22init%22%3A%5B1%5D%7D">
 <img src="/assets/2019-08-07-verify-measured-uncompute/x-cases.png" title="x basis measurement cases" style="max-width: 90%; border: 1px solid black; padding: 20px;"/>
 </a></p>
 

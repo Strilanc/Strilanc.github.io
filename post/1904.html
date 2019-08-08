@@ -79,7 +79,7 @@ The paper describes a paradox of reasoning, where deductions involving rational 
 In this post, I want to discuss a possible resolution to the paradox.
 Basically I&#39;ll be retreading the same ground as Scott Aaronson&#39;s post <a href="https://www.scottaaronson.com/blog/?p=3975">&quot;It’s hard to think when someone Hadamards your brain&quot;</a>, but with more details filled in.</p>
 
-<p>When faced with a quantum paradox, I&#39;ve found that a very good trick to try is to see if you can remove the quantum while keeping the paradox. For example, this trick works well <a href="https://algassert.com/post/1720">on the delayed choice quantum eraser</a> and also on <a href="https://algassert.com/post/1624">quantum teleportation</a> (though I guess that&#39;s not technically a paradox).
+<p>When faced with a quantum paradox, I&#39;ve found that a very good trick to try is to see if you can remove the quantum while keeping the paradox. For example, this trick works well <a href="/post/1720">on the delayed choice quantum eraser</a> and also on <a href="/post/1624">quantum teleportation</a> (though I guess that&#39;s not technically a paradox).
 There are of course cases where this de-quantizing strategy doesn&#39;t work, notably Bell inequality paradoxes (that&#39;s kind of the point of them, actually), but it&#39;s a good first thing to try.</p>
 
 <p>Here&#39;s the sequence of events that are going to play out in this post.
@@ -117,7 +117,7 @@ Since $|+\rangle$ has no overlap with $|-\rangle$, and at least one of the state
 
 <p>Here&#39;s another way to &quot;prove&quot; there&#39;s no overlap with $|--\rangle$, using a series of inferences that can be visualized using Quirk&#39;s conditioned displays:</p>
 
-<p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22~vfqn%22%5D%2C%5B%22Amps2%22%5D%2C%5B%5D%2C%5B%22%E2%8A%96%22%2C%22Bloch%22%5D%2C%5B%22Bloch%22%2C%22%E2%80%A2%22%5D%2C%5B%22%E2%97%A6%22%2C%22Bloch%22%5D%2C%5B%22H%22%2C%22H%22%5D%2C%5B%22Measure%22%2C%22Measure%22%5D%2C%5B%22Chance2%22%5D%5D%2C%22gates%22%3A%5B%7B%22id%22%3A%22~vfqn%22%2C%22name%22%3A%22Prep%22%2C%22matrix%22%3A%22%7B%7B%E2%88%9A%E2%85%93%2C%E2%88%9A%E2%85%93%2C%E2%88%9A%E2%85%93%2C0%7D%2C%7B%E2%88%9A%E2%85%93%2C-0.2886751%2B%C2%BDi%2C-0.2886751-%C2%BDi%2C0%7D%2C%7B%E2%88%9A%E2%85%93%2C-0.2886751-%C2%BDi%2C-0.2886751%2B%C2%BDi%2C0%7D%2C%7B0%2C0%2C0%2C1%7D%7D%22%7D%5D%7D">
+<p><a href="/quirk#circuit=%7B%22cols%22%3A%5B%5B%22~vfqn%22%5D%2C%5B%22Amps2%22%5D%2C%5B%5D%2C%5B%22%E2%8A%96%22%2C%22Bloch%22%5D%2C%5B%22Bloch%22%2C%22%E2%80%A2%22%5D%2C%5B%22%E2%97%A6%22%2C%22Bloch%22%5D%2C%5B%22H%22%2C%22H%22%5D%2C%5B%22Measure%22%2C%22Measure%22%5D%2C%5B%22Chance2%22%5D%5D%2C%22gates%22%3A%5B%7B%22id%22%3A%22~vfqn%22%2C%22name%22%3A%22Prep%22%2C%22matrix%22%3A%22%7B%7B%E2%88%9A%E2%85%93%2C%E2%88%9A%E2%85%93%2C%E2%88%9A%E2%85%93%2C0%7D%2C%7B%E2%88%9A%E2%85%93%2C-0.2886751%2B%C2%BDi%2C-0.2886751-%C2%BDi%2C0%7D%2C%7B%E2%88%9A%E2%85%93%2C-0.2886751-%C2%BDi%2C-0.2886751%2B%C2%BDi%2C0%7D%2C%7B0%2C0%2C0%2C1%7D%7D%22%7D%5D%7D">
 <img src="/assets/2019-08-08-paradox/circuit-deduction.png" title="deduction steps represented with conditioned displays" style="max-width: 100%"/>
 </a></p>
 
@@ -135,7 +135,7 @@ Therefore there must be no overlap with the $|--\rangle$ state... right?</p>
 <p>Anyways, the paradox is that the above reasoning is wrong.
 The initial state <em>does</em> have overlap with the $|--\rangle$ state, and so when Annette and Bennette perform an experiment where they measure the qubits in the X basis, to check the deductions made by Alice and Bob, about 8% of the time they will see an outcome that was concluded to be impossible:</p>
 
-<p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22~vfqn%22%5D%2C%5B%22Amps2%22%5D%2C%5B%5D%2C%5B%22H%22%2C%22H%22%5D%2C%5B%22Measure%22%2C%22Measure%22%5D%2C%5B%22Chance2%22%5D%5D%2C%22gates%22%3A%5B%7B%22id%22%3A%22~vfqn%22%2C%22name%22%3A%22Prep%22%2C%22matrix%22%3A%22%7B%7B%E2%88%9A%E2%85%93%2C%E2%88%9A%E2%85%93%2C%E2%88%9A%E2%85%93%2C0%7D%2C%7B%E2%88%9A%E2%85%93%2C-0.2886751%2B%C2%BDi%2C-0.2886751-%C2%BDi%2C0%7D%2C%7B%E2%88%9A%E2%85%93%2C-0.2886751-%C2%BDi%2C-0.2886751%2B%C2%BDi%2C0%7D%2C%7B0%2C0%2C0%2C1%7D%7D%22%7D%5D%7D">
+<p><a href="/quirk#circuit=%7B%22cols%22%3A%5B%5B%22~vfqn%22%5D%2C%5B%22Amps2%22%5D%2C%5B%5D%2C%5B%22H%22%2C%22H%22%5D%2C%5B%22Measure%22%2C%22Measure%22%5D%2C%5B%22Chance2%22%5D%5D%2C%22gates%22%3A%5B%7B%22id%22%3A%22~vfqn%22%2C%22name%22%3A%22Prep%22%2C%22matrix%22%3A%22%7B%7B%E2%88%9A%E2%85%93%2C%E2%88%9A%E2%85%93%2C%E2%88%9A%E2%85%93%2C0%7D%2C%7B%E2%88%9A%E2%85%93%2C-0.2886751%2B%C2%BDi%2C-0.2886751-%C2%BDi%2C0%7D%2C%7B%E2%88%9A%E2%85%93%2C-0.2886751-%C2%BDi%2C-0.2886751%2B%C2%BDi%2C0%7D%2C%7B0%2C0%2C0%2C1%7D%7D%22%7D%5D%7D">
 <img src="/assets/2019-08-08-paradox/overlap-circuit.png" title="00+01+10 has overlap with --"  style="max-width: 100%"/>
 </a></p>
 
@@ -153,7 +153,7 @@ In other words, they put the axioms of decision theory into conflict with the ax
 In particular, I failed to mention that these measurements cannot be single-qubit measurements because the relevant qubits have been entangled with Alice and Bob.
 In the paper, Alice and Bob are modelled as individual qubits that the qubits of the input state are CNOT&#39;d into, like this:</p>
 
-<p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22~vfqn%22%5D%2C%5B%22Amps2%22%5D%2C%5B1%2C1%2C%22~cth3%22%2C%22~1flp%22%5D%2C%5B%22%E2%80%A2%22%2C1%2C%22X%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C1%2C%22X%22%5D%5D%2C%22gates%22%3A%5B%7B%22id%22%3A%22~vfqn%22%2C%22name%22%3A%22Prep%22%2C%22matrix%22%3A%22%7B%7B%E2%88%9A%E2%85%93%2C%E2%88%9A%E2%85%93%2C%E2%88%9A%E2%85%93%2C0%7D%2C%7B%E2%88%9A%E2%85%93%2C-0.2886751%2B%C2%BDi%2C-0.2886751-%C2%BDi%2C0%7D%2C%7B%E2%88%9A%E2%85%93%2C-0.2886751-%C2%BDi%2C-0.2886751%2B%C2%BDi%2C0%7D%2C%7B0%2C0%2C0%2C1%7D%7D%22%7D%2C%7B%22id%22%3A%22~cth3%22%2C%22name%22%3A%22Alice%22%2C%22matrix%22%3A%22%7B%7B1%2C0%7D%2C%7B0%2C1%7D%7D%22%7D%2C%7B%22id%22%3A%22~1flp%22%2C%22name%22%3A%22Bob%22%2C%22matrix%22%3A%22%7B%7B1%2C0%7D%2C%7B0%2C1%7D%7D%22%7D%5D%7D">
+<p><a href="/quirk#circuit=%7B%22cols%22%3A%5B%5B%22~vfqn%22%5D%2C%5B%22Amps2%22%5D%2C%5B1%2C1%2C%22~cth3%22%2C%22~1flp%22%5D%2C%5B%22%E2%80%A2%22%2C1%2C%22X%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C1%2C%22X%22%5D%5D%2C%22gates%22%3A%5B%7B%22id%22%3A%22~vfqn%22%2C%22name%22%3A%22Prep%22%2C%22matrix%22%3A%22%7B%7B%E2%88%9A%E2%85%93%2C%E2%88%9A%E2%85%93%2C%E2%88%9A%E2%85%93%2C0%7D%2C%7B%E2%88%9A%E2%85%93%2C-0.2886751%2B%C2%BDi%2C-0.2886751-%C2%BDi%2C0%7D%2C%7B%E2%88%9A%E2%85%93%2C-0.2886751-%C2%BDi%2C-0.2886751%2B%C2%BDi%2C0%7D%2C%7B0%2C0%2C0%2C1%7D%7D%22%7D%2C%7B%22id%22%3A%22~cth3%22%2C%22name%22%3A%22Alice%22%2C%22matrix%22%3A%22%7B%7B1%2C0%7D%2C%7B0%2C1%7D%7D%22%7D%2C%7B%22id%22%3A%22~1flp%22%2C%22name%22%3A%22Bob%22%2C%22matrix%22%3A%22%7B%7B1%2C0%7D%2C%7B0%2C1%7D%7D%22%7D%5D%7D">
 <img src="/assets/2019-08-08-paradox/alice-bob-circuit.png" title="Alice and Bob" style="max-width: 100%" style="max-width: 100%"/>
 </a></p>
 
@@ -217,6 +217,8 @@ This places an unexpected constrain on the deductions: they must be made with th
 The conclusions being made by Alice and Bob are valid the first time (with respect to the initial state) but not the second time (when they are being recomputed during the logical X basis measurements).
 Because Alice and Bob&#39;s reasoning is not sound, it is not sound for Annette and Bennette to use their conclusions.
 This dissolves the paradox.</p>
+
+<p><a href="https://www.reddit.com/r/algassert/comments/cnpvzp/comment_thread_the_frauchigerrenner_paradox_is_a/">View r/algassert comment thread</a></p>
 
 </div>
 
