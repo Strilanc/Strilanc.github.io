@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>The Frauchiger-Renner Paradox is a Sleeping Beauty Problem</title>
+                <description>&lt;p&gt;Last year, Frauchiger and Renner published the paper &lt;a href=&quot;https://www.nature.com/articles/s41467-018-05739-8&quot;&gt;&amp;quot;Quantum theory cannot consistently describe the use of itself&amp;quot;&lt;/a&gt;. The paper describes a paradox of reasoning, where deductions involving rational agents under superposition end up being wrong. In this post, I want to discuss a possible resolution to the paradox. Basically...</description>
+                <pubDate>Thu, 08 Aug 2019 11:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/1904</link>
+                <guid isPermaLink="true">http://algassert.com/post/1904</guid>
+            </item>
+            <item>
                 <title>Verifying Measurement Based Uncomputation</title>
                 <description>&lt;p&gt;Often, when uncomputing intermediate values produced during a quantum computation, it is possible to save resources by using measurement operations in ways that don&amp;#39;t work when computing those values in the first place. For example, computing the AND of two qubits requires non-stabilizer operations such as T gates, but you...</description>
                 <pubDate>Wed, 07 Aug 2019 09:30:00 -0700</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sun, 01 Apr 2018 14:10:20 -0700</pubDate>
                 <link>http://algassert.com/post/1803</link>
                 <guid isPermaLink="true">http://algassert.com/post/1803</guid>
-            </item>
-            <item>
-                <title>The Bee Movie Singularity</title>
-                <description>&lt;p&gt;For whatever reason, people on youtube really like to come up with weird ways to watch The Bee Movie. Case in point: &lt;a href=&quot;https://www.youtube.com/watch?v=JMG1Nl7uWko&quot;&gt;&amp;quot;The Entire Bee Movie but every time it says bee it speeds up by 15%&amp;quot;&lt;/a&gt;. (If you want a long discussion of this general phenomenon, see PBS...</description>
-                <pubDate>Sat, 10 Feb 2018 10:10:10 -0800</pubDate>
-                <link>http://algassert.com/post/1802</link>
-                <guid isPermaLink="true">http://algassert.com/post/1802</guid>
             </item>
     </channel>
 </rss>
