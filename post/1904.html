@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>The Frauchiger-Renner Paradox is a Sleeping Beauty Problem</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">The Frauchiger-Renner Paradox is a Sleeping Beauty Problem</h1>
+<p class="meta">08 Aug 2019</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Last year, Frauchiger and Renner published the paper <a href="https://www.nature.com/articles/s41467-018-05739-8">&quot;Quantum theory cannot consistently describe the use of itself&quot;</a>.
+The paper describes a paradox of reasoning, where deductions involving rational agents under superposition end up being wrong.
+In this post, I want to discuss a possible resolution to the paradox.
+Basically I&#39;ll be retreading the same ground as Scott Aaronson&#39;s post <a href="https://www.scottaaronson.com/blog/?p=3975">&quot;It’s hard to think when someone Hadamards your brain&quot;</a>, but with more details filled in.</p>
+
+<p>When faced with a quantum paradox, I&#39;ve found that a very good trick to try is to see if you can remove the quantum while keeping the paradox. For example, this trick works well <a href="https://algassert.com/post/1720">on the delayed choice quantum eraser</a> and also on <a href="https://algassert.com/post/1624">quantum teleportation</a> (though I guess that&#39;s not technically a paradox).
+There are of course cases where this de-quantizing strategy doesn&#39;t work, notably Bell inequality paradoxes (that&#39;s kind of the point of them, actually), but it&#39;s a good first thing to try.</p>
+
+<p>Here&#39;s the sequence of events that are going to play out in this post.
+First, I&#39;m going to describe the paradox from the paper.
+Second, I&#39;m going to specify implementation details of some of the processes that are left unstated in the paper.
+In particular, I&#39;ll replace a complicated measurement with a single-qubit measurement conjugated by an uncomputation.
+Third, I&#39;ll argue that it&#39;s the <em>uncomputation</em> that&#39;s invalidating conclusions.
+Fourth, I&#39;ll give a classical situation exhibiting the same basic paradox.
+Let&#39;s get started.</p>
+
+<h1>The  Frauchiger-Renner Paradox</h1>
+
+<p>Alice and Bob are quantum agents stored in quantum computers.
+Annette and Bennette are classical agents operating the quantum computers.
+Annette manages Alice&#39;s computer and Bennette manages Bob&#39;s computer.</p>
+
+<p>Annette and Bennette are going to initialize a two-qubit entangled state, and spread it between the two computers.
+Specifically, they will prepare the state $|00\rangle + |01\rangle + |10\rangle$ and then give one of the qubits to Alice and the other to Bob.</p>
+
+<p>Within the computers, Alice and Bob measure their qubits.
+Well, maybe measurement is the wrong word, since the quantum computers are not going to perform a literal measurement operation.
+Rather, the computers will execute unitary operations that correspond to measurement <em>within their simulations of Alice and Bob</em>.
+The computers will evolve Alice and Bob&#39;s state in a fashion that conditions on the qubits they&#39;ve been handed.</p>
+
+<p>Now let&#39;s imagine things from Bob&#39;s perspective.
+He picks up the qubit, and observes whether it is in the $|0\rangle$ state or the $|1\rangle$ state.
+Based on the value he observes, he can determine the implied state of Alice&#39;s qubit.
+If his qubit is in the $|0\rangle$ state, he knows that Alice&#39;s qubit must be in the $|+\rangle$ state (i.e. the $|0\rangle + |1\rangle$ state).
+If his qubit is in the $|1\rangle$ state, he knows that Alice&#39;s qubit must be in the $|0\rangle$ state.
+And of course this all holds true vice-versa for Alice observing her qubit and deducing about Bob&#39;s qubit.</p>
+
+<p>Because the initial state has no $|11\rangle$ component, at least one of Alice and Bob must have seen $|0\rangle$ and concluded that the other is in the $|+\rangle$ state.
+Therefore a measurement that checks if either of them is in the $|+\rangle$ state must succeed with certainty.
+Since $|+\rangle$ has no overlap with $|-\rangle$, and at least one of the states is $|+\rangle$, the initial state must not overlap with the $|--\rangle$ state.</p>
+
+<p>Here&#39;s another way to &quot;prove&quot; there&#39;s no overlap with $|--\rangle$, using a series of inferences that can be visualized using Quirk&#39;s conditioned displays:</p>
+
+<p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22~vfqn%22%5D%2C%5B%22Amps2%22%5D%2C%5B%5D%2C%5B%22%E2%8A%96%22%2C%22Bloch%22%5D%2C%5B%22Bloch%22%2C%22%E2%80%A2%22%5D%2C%5B%22%E2%97%A6%22%2C%22Bloch%22%5D%2C%5B%22H%22%2C%22H%22%5D%2C%5B%22Measure%22%2C%22Measure%22%5D%2C%5B%22Chance2%22%5D%5D%2C%22gates%22%3A%5B%7B%22id%22%3A%22~vfqn%22%2C%22name%22%3A%22Prep%22%2C%22matrix%22%3A%22%7B%7B%E2%88%9A%E2%85%93%2C%E2%88%9A%E2%85%93%2C%E2%88%9A%E2%85%93%2C0%7D%2C%7B%E2%88%9A%E2%85%93%2C-0.2886751%2B%C2%BDi%2C-0.2886751-%C2%BDi%2C0%7D%2C%7B%E2%88%9A%E2%85%93%2C-0.2886751-%C2%BDi%2C-0.2886751%2B%C2%BDi%2C0%7D%2C%7B0%2C0%2C0%2C1%7D%7D%22%7D%5D%7D">
+<img src="/assets/2019-08-08-paradox/circuit-deduction.png" title="deduction steps represented with conditioned displays" style="max-width: 100%"/>
+</a></p>
+
+<p>From left to right, the conditioned displays read:</p>
+
+<ol>
+<li>If Alice&#39;s qubit is in the $|-\rangle$ state then Bob&#39;s qubit must be in the $|1\rangle$ state. (I.e. if you condition on an X basis control on one qubit then the bloch vector of the other qubit points down.)</li>
+<li>If Bob&#39;s qubit is in the $|1\rangle$ state then Alice&#39;s qubit must be in the $|0\rangle$ state. (I.e. if you condition on a Z basis control on one qubit then the bloch vector of the other qubit points up.)</li>
+<li>If Alice&#39;s qubit is in the $|0\rangle$ state then Bob&#39;s qubit must be in the $|+\rangle$ state. (I.e. if you condition on a Z basis anti-control on one qubit then the bloch vector of the other qubit points forward.)</li>
+</ol>
+
+<p>If you naively follow the 1-2-3 inferrence chain, then you find that Alice&#39;s qubit being in the $|-\rangle$ state implies Bob&#39;s qubit being in the $|+\rangle$ state.
+Therefore there must be no overlap with the $|--\rangle$ state... right?</p>
+
+<p>Anyways, the paradox is that the above reasoning is wrong.
+The initial state <em>does</em> have overlap with the $|--\rangle$ state, and so when Annette and Bennette perform an experiment where they measure the qubits in the X basis, to check the deductions made by Alice and Bob, about 8% of the time they will see an outcome that was concluded to be impossible:</p>
+
+<p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22~vfqn%22%5D%2C%5B%22Amps2%22%5D%2C%5B%5D%2C%5B%22H%22%2C%22H%22%5D%2C%5B%22Measure%22%2C%22Measure%22%5D%2C%5B%22Chance2%22%5D%5D%2C%22gates%22%3A%5B%7B%22id%22%3A%22~vfqn%22%2C%22name%22%3A%22Prep%22%2C%22matrix%22%3A%22%7B%7B%E2%88%9A%E2%85%93%2C%E2%88%9A%E2%85%93%2C%E2%88%9A%E2%85%93%2C0%7D%2C%7B%E2%88%9A%E2%85%93%2C-0.2886751%2B%C2%BDi%2C-0.2886751-%C2%BDi%2C0%7D%2C%7B%E2%88%9A%E2%85%93%2C-0.2886751-%C2%BDi%2C-0.2886751%2B%C2%BDi%2C0%7D%2C%7B0%2C0%2C0%2C1%7D%7D%22%7D%5D%7D">
+<img src="/assets/2019-08-08-paradox/overlap-circuit.png" title="00+01+10 has overlap with --"  style="max-width: 100%"/>
+</a></p>
+
+<p>As I&#39;ve stated the paradox, it&#39;s not particularly compelling.
+The 1-2-3 inferrence chain that I set up was phrased a bit misleadingly, to hide the fact that the steps are only valid <em>conditional on measuring in a particular basis</em>.
+When you attempt to chain the more accurate statements, which are of the form &quot;If Bob measures in the Z basis and Alice measures in the X basis and Bob got a $|1\rangle$ result then Alice got a $|+\rangle$ result&quot;, you find that it doesn&#39;t work because step 1 requires Alice to measure in the X basis while steps 2 and 3 require Alice to measure in the Z basis.</p>
+
+<p>The main contribution of Frauchiger and Renner to this paradox is to fix the &quot;not compelling&quot; problem.
+Basically, they try to get around the &quot;you have to assume the measurement basis to get the implication&quot; problem by using a decision theory axiom to convert hypothetical reasoning by Alice into conclusions by Annette.
+In other words, they put the axioms of decision theory into conflict with the axioms of quantum theory, which implies big trouble if correct.</p>
+
+<h1>Implementation Details</h1>
+
+<p>So far, I&#39;ve been rather loose with the description of how Annette and Bennette go about performing their X basis measurements.
+In particular, I failed to mention that these measurements cannot be single-qubit measurements because the relevant qubits have been entangled with Alice and Bob.
+In the paper, Alice and Bob are modelled as individual qubits that the qubits of the input state are CNOT&#39;d into, like this:</p>
+
+<p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22~vfqn%22%5D%2C%5B%22Amps2%22%5D%2C%5B1%2C1%2C%22~cth3%22%2C%22~1flp%22%5D%2C%5B%22%E2%80%A2%22%2C1%2C%22X%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C1%2C%22X%22%5D%5D%2C%22gates%22%3A%5B%7B%22id%22%3A%22~vfqn%22%2C%22name%22%3A%22Prep%22%2C%22matrix%22%3A%22%7B%7B%E2%88%9A%E2%85%93%2C%E2%88%9A%E2%85%93%2C%E2%88%9A%E2%85%93%2C0%7D%2C%7B%E2%88%9A%E2%85%93%2C-0.2886751%2B%C2%BDi%2C-0.2886751-%C2%BDi%2C0%7D%2C%7B%E2%88%9A%E2%85%93%2C-0.2886751-%C2%BDi%2C-0.2886751%2B%C2%BDi%2C0%7D%2C%7B0%2C0%2C0%2C1%7D%7D%22%7D%2C%7B%22id%22%3A%22~cth3%22%2C%22name%22%3A%22Alice%22%2C%22matrix%22%3A%22%7B%7B1%2C0%7D%2C%7B0%2C1%7D%7D%22%7D%2C%7B%22id%22%3A%22~1flp%22%2C%22name%22%3A%22Bob%22%2C%22matrix%22%3A%22%7B%7B1%2C0%7D%2C%7B0%2C1%7D%7D%22%7D%5D%7D">
+<img src="/assets/2019-08-08-paradox/alice-bob-circuit.png" title="Alice and Bob" style="max-width: 100%" style="max-width: 100%"/>
+</a></p>
+
+<p>I prefer not to use single qubits to represent whole agents.
+An agent is a big complicated object with beliefs and inferences and hopes and dreams; to pack that all down into a single qubit is misleading to the intuition.
+So I will instead imagine agents as large multi-qubit systems, somewhat hazily specified.
+In order to write down what the measurement being performed actually is, I will define the following basis vectors:</p>
+
+<p>$$|+_A\rangle = |\text{qubit=0},\text{Alice=thinking about qubit being 0}\rangle + |\text{qubit=1},\text{Alice=thinking about qubit being 1}\rangle$$</p>
+
+<p>$$|+_B\rangle = |\text{qubit=0},\text{Bob=thinking about qubit being 0}\rangle + |\text{qubit=1},\text{Bob=thinking about qubit being 1}\rangle$$</p>
+
+<p>$$|-_A\rangle = |\text{qubit=0},\text{Alice=thinking about qubit being 0}\rangle - |\text{qubit=1},\text{Alice=thinking about qubit being 1}\rangle$$</p>
+
+<p>$$|-_B\rangle = |\text{qubit=0},\text{Bob=thinking about qubit being 0}\rangle - |\text{qubit=1},\text{Bob=thinking about qubit being 1}\rangle$$</p>
+
+<p>When Alice concludes that Bob&#39;s qubit was in the $|+\rangle$ state, she is actually concluding that the Bob-and-his-qubit system is in the $|+_B\rangle$ state.
+And when Bennette measures &quot;Bob&#39;s qubit in the X basis&quot;, he is actually performing a logical X basis measurement that distinguishes $|+_B\rangle$ from $|-_B\rangle$.
+Note that this measurement includes qubits defining the state of Bob&#39;s brain.</p>
+
+<p>The paper does not specify a mechanism by which these logical X basis measurements are done, it just says that they are done.
+The lack of detail about implementation means that any mechanism should work, and I will pick one that makes my argument easy.
+To me, the simplest possible mechanism would be to get the state back onto a single qubit and perform the usual single-qubit X basis measurement.
+And the simplest way to get the state back onto a single qubit is to notice that it <em>started</em> that way, so whatever operations we did in between we just need to temporarily reverse.
+Therefore the experiment would be implemented like this:</p>
+
+<p><img src="/assets/2019-08-08-paradox/conjugated-measure-circuit.png" title="Alice and Bob's deductions are uncomputed for the measurement" style="max-width: 100%"/></p>
+
+<p>where the &quot;$\text{Thinkin&#39;}$&quot; gates are unitary operations corresponding to Alice and Bob&#39;s brains processing their observations, and making deductions.
+The &quot;$\text{Think}^\dagger$&quot; gates are the inverse unitary operation.</p>
+
+<p>The key thing to notice about the above implementation is that all the deductions that Alice and Bob make are un-made during the measurement.
+Then, after the physical single qubit measurement, Alice and Bob <strong>accidentially repeat their deductions in the wrong context</strong> (note the Thinkin&#39; gates on the right hand side).
+When Bob is thinking &quot;Oh I saw $|0\rangle$ therefore Alice has $|+\rangle$&quot;, he is assuming that he is thinking this during the <em>initial</em> computation and not during the <em>recomputation</em>.
+(From Bob&#39;s perspective, these two scenarios are indistinguishable.)
+You can see how this would cause a problem; in order for Bob&#39;s conclusions to be completely correct he has to limit himself to things that would be true in both contexts.</p>
+
+<p>I claim that this sloppiness with respect to context and recomputation is the core of the Frauchiger-Renner paradox.</p>
+
+<h1>Sleeping Beauty Problem</h1>
+
+<p>In the classical world, problems where agents attempt to reason under conditions where they are uncomputed/forced-to-forget are known as <a href="https://en.wikipedia.org/wiki/Sleeping_Beauty_problem">sleeping beauty problems</a>.
+Here is my attempt to phrase the Frauchiger-Renner paradox as a sleeping beauty problem.</p>
+
+<p>Annette tells Alice that Annette will wake Alice up once with an apple hidden under the bed, and then Annette will put Alice to sleep, erase Alice&#39;s memories, and wake Alice up again but with an orange under the bed.
+Each time Alice wakes, she must guess whether there is an apple or an orange under the bed.
+Alice decides to use the strategy that, whenever she wakes up, she says &quot;this is the first time I woke up, therefore there is an apple under the bed&quot;.
+This strategy works during the first wake up, and then of course fails during the second wake up.</p>
+
+<p>The phrasing I&#39;ve used in the above paragraph makes the error in reason extremely obvious.
+But when you take this error and hide it behind formal postulates about what Annette can infer from Alice&#39;s reasoning as a rational agent, and when you obscure the fact that Alice is being woken up a second time, and when you phrase the whole thing in terms of a counter-intuitive physical theorie, and when you don&#39;t prime the reader to look for this exact kind of mistake... well, then it&#39;s much harder to spot the problem.
+And that is what I believe the Frauchiger-Renner paradox is; a subtle way to dress up the mistake made in the previous paragraph.</p>
+
+<h1>Summary</h1>
+
+<p>Like Scott Aaronson said, it’s hard to think when someone Hadamards your brain.
+To be more specific, when someone performs a logical X basis measurement that includes the state of your brain, this measurement may be equivalent to forcing you to un-think and then re-think deductions that you made.
+This places an unexpected constrain on the deductions: they must be made with the understanding that they should be correct with respect to the initial state and also with respect to the state during the recomputation after the measurement.</p>
+
+<p>This before-and-after constraint is what prevents the decision theoretic argument made in Frauchiger and Renner&#39;s paper from going through.
+The conclusions being made by Alice and Bob are valid the first time (with respect to the initial state) but not the second time (when they are being recomputed during the logical X basis measurements).
+Because Alice and Bob&#39;s reasoning is not sound, it is not sound for Annette and Bennette to use their conclusions.
+This dissolves the paradox.</p>
+
+</div>
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1903">&laquo; Verifying Measurement Based Uncomputation</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
