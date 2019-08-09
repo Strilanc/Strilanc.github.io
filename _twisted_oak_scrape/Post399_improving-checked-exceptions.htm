@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<!-- saved from url=(0070)http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions -->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Unity3D Consulting | Technical Magic</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="http://www.twistedoakstudios.com/css/1140.css">
+    <link rel="stylesheet" href="http://www.twistedoakstudios.com/css/style.css?v=1.1">
+    <link rel="stylesheet" href="http://www.twistedoakstudios.com/css/blogstyle.css?v=1.1">
+<link rel="stylesheet" href="http://twistedoakstudios.com/blog/prettify.css" media="all">
+<link rel="stylesheet" href="http://twistedoakstudios.com/blog/sunburst.css" media="all">
+<script type="text/javascript" async="" src="./Post399_improving-checked-exceptions_files/ga.js"></script><script type="text/javascript" src="./Post399_improving-checked-exceptions_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="./Post399_improving-checked-exceptions_files/css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="./Post399_improving-checked-exceptions_files/modernizr-2.0.6.min.js"></script>
+<style type="text/css"></style></head>
+<body onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions#"><img class="logo" src="./Post399_improving-checked-exceptions_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a class="scroll" href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="./Post399_improving-checked-exceptions_files/Post399_improving-checked-exceptions.htm" rel="bookmark" title="Permanent Link to Improving Checked Exceptions">Improving Checked Exceptions</a></h2>
+<div class="meta">posted by Craig Gidney on January 15, 2013</div>
+
+<p>The only mainstream programming language with checked exceptions (that I am aware of) is Java. Unfortunately, Java’s checked exceptions are not… ideal. Encapsulation is verbose. Doing the wrong thing is succinct. In this post I’ll discuss the problems, a few hypothetical changes that could make the situation much better, and some looming issues.</p>
+<p>Disclaimer: handling failures is one of the many controversial subjects amongst programmers. Opinions about it are many and varied, with a <a href="http://blogs.msdn.com/b/ericlippert/archive/2008/09/10/vexing-exceptions.aspx">correspondingly</a> large <a href="http://www.hans-eric.com/2009/10/31/the-bad-practices-of-exception-handling/">amount</a> of available <a href="http://www.artima.com/intv/handcuffs.html">content</a>. The tools exposed by programming languages to handle failure conditions are also varied, ranging from <a href="http://en.wikipedia.org/wiki/Error_code">error codes</a> to <a href="http://en.wikipedia.org/wiki/Exception_handling">exceptions</a> to <a href="http://www.gigamonkeys.com/book/beyond-exception-handling-conditions-and-restarts.html">conditions</a> to <a href="http://hackage.haskell.org/packages/archive/mtl/2.1.2/doc/html/Control-Monad-Error.html">monads</a> (and plenty of mixing and matching). I could write <em>a lot</em> on this subject, but I will try not to stray too much.</p>
+<h3>The Pit of <del datetime="2013-01-14T21:49:12+00:00">Success</del> Failure</h3>
+<p>In Java, doing the wrong thing with checked exceptions takes less code than doing the right thing.</p>
+<p>Suppose you’re writing a function. Inside your function you do something that might throw a <a href="http://docs.oracle.com/javase/1.4.2/docs/api/org/xml/sax/SAXException.html">SAXException</a>. The compiler, helpfully, warns you about this terrible state of affairs:</p>
+<pre><code class="prettyprint"><span class="kwd">void</span><span class="pln"> createNewProject</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+    doSomeXMLStuff</span><span class="pun">();</span><span class="pln"> </span><span class="com">// compile error: SAXException not handled</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>Fortunately, there are a lot of ways to make this compiler error go away. Unfortunately, the easiest fixes are wrong. The two simplest are adding a throws declaration, or swallowing the exception.</p>
+<p>First, let’s consider adding a ‘throws’ declaration. This is by far the smallest change you can make:</p>
+<pre><code class="prettyprint"><span class="com">// "easy" idea #1: declare throws</span><span class="pln">
+</span><span class="kwd">void</span><span class="pln"> createNewProject</span><span class="pun">()</span><span class="pln"> </span><span class="kwd">throws</span><span class="pln"> </span><span class="typ">SAXException</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+    doSomeXMLStuff</span><span class="pun">();</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>To be fair, this change is actually alright in small doses. The problem is that propagating exceptions without changing their type has a nasty tendency to break encapsulation, without providing any benefit, and the negative effects compound over time.</p>
+<p>In the example, having ‘createNewProject’ throw an exception related to XML is <em>totally useless to a caller</em>. The information “I failed to create the project and the error is related to XML” is not more useful than just “I failed to create the project”. Creating a project is likely to do many different things related to XML (reading config files, writing project files, etc), and these things may change from version to version, so the information “related to XML” is not indicative or reliable. We’ve effectively exposed a volatile implementation detail to the caller, instead of encapsulating it behind a more appropriate type of exception.</p>
+<p>Have you ever had to convert sql exceptions into xml exceptions, in order to maintain backwards compatibility, when a backend changed from files to a database? That’s because of this mistake. On the other end of the spectrum, have you ever worked with code that declared ‘throws Exception’ everywhere? That’s because of the compounded effects of this mistake blending all of the different exception types together into a hodgepodge of “something went wrong but I don’t know what”.</p>
+<p>Blindly rethrowing is tempting, because it is so succinct. I am certainly not innocent in this regard. On the other hand, a lot of checked exception hate can be traced back to this very problem.</p>
+<p>Another portion of checked exception hate comes from the second “fix” I mentioned: swallowing the exception. This is easily achieved with a small try-catch block:</p>
+<pre><code class="prettyprint"><span class="com">// "easy" idea #2: swallow</span><span class="pln">
+</span><span class="kwd">void</span><span class="pln"> createNewProject</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+    </span><span class="kwd">try</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        doSomeXMLStuff</span><span class="pun">();</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">catch</span><span class="pln"> </span><span class="pun">(</span><span class="typ">SAXException</span><span class="pln"> ex</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        ex</span><span class="pun">.</span><span class="pln">printStackTrace</span><span class="pun">();</span><span class="pln"> </span><span class="com">// &lt;-- "advanced" users log instead of silently ignoring</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>This fix has basically no redeeming factors, but is probably the most common mistake I've encountered in the past. When you see code like this, set off the alarms. Why is this exception so benign that we can continue without doing anything to fix it, and yet important enough to require logging? This is not handling, it is ignoring (there are cases where it makes sense to ignore an exception, but they are <em>rare</em> and <em>should be commented</em>). Even if the current version of doSomeXMLStuff happens to only declare that it throws a SAXException, never actually throwing one, this fact may not be true of past or future versions (which your code may end up interacting with).</p>
+<p>Exceptions that are believed to be impossible should be rethrown as an unchecked RuntimeException. Exceptions that are known to be benign should be documented. Do not blindly swallow exceptions, assuming everything will go right. If you want to assume everything will go right, then that's asserting the exception is impossible (and as I said, you should rethrow it as a RuntimeException).</p>
+<h3>The Mountain of Encapsulation</h3>
+<p>Both of the misguided fixes from the previous section make the same mistake, but in two different ways. They both <em>fail to encapsulate properly</em>. Good methods expose their underlying failures as cases that callers will want to act on. Furthermore, callers should want to act on different cases in different ways. If callers are going to act on two different error cases in the same way, those error cases should be combined. If callers are going to try to pick apart an exception in order to decide what to do, then the error case it represents should be split.</p>
+<p>Swallowing exceptions is a poor encapsulation because it prevents callers from knowing about problems in the first place. The caller will be forced to pick apart the eventual RuntimeException caused by the program being in an unexpected state, if they can even recover at all. Blindly rethrowing exceptions is a poor encapsulation because it creates muddled error cases. Do callers actually treat an SQLException differently from a SAXException? If not, then why are you telling them more than they need to know?</p>
+<p>Java has several exception types to cover common failure cases, but it is often ideal to define your own method-specific exceptions. For example, you may want to disambiguate the different ways a FileNotFoundException may have been thrown. The way you recover from a missing configuration file is different from how you recover from a missing cache file.</p>
+<p>Suppose we've decided to create a ReadConfigValue function that, given a file path, opens the file at that location and returns the number written into both of the first two lines. Our users happen to care about four unique conditions (not counting 'unexpected bug' and 'worked successfully'): the file is missing, the file is present but unreadable, the file is present and readable but the data is corrupted, or the file is present and readable and not corrupted but the two lines have inconsistent numbers. We want to expose each of these failure cases as a checked exception. This... is going to take a lot of code:</p>
+<pre><code class="prettyprint"><span class="lit">@SuppressWarnings</span><span class="pun">(</span><span class="str">"serial"</span><span class="pun">)</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">UnreadableException</span><span class="pln"> </span><span class="kwd">extends</span><span class="pln"> </span><span class="typ">IOException</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">UnreadableException</span><span class="pun">(</span><span class="typ">String</span><span class="pln"> message</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">super</span><span class="pun">(</span><span class="pln">message</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">UnreadableException</span><span class="pun">(</span><span class="typ">Throwable</span><span class="pln"> cause</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">super</span><span class="pun">(</span><span class="pln">cause</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">UnreadableException</span><span class="pun">(</span><span class="typ">String</span><span class="pln"> message</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Throwable</span><span class="pln"> cause</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">super</span><span class="pun">(</span><span class="pln">message</span><span class="pun">,</span><span class="pln"> cause</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="lit">@SuppressWarnings</span><span class="pun">(</span><span class="str">"serial"</span><span class="pun">)</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">CorruptedException</span><span class="pln"> </span><span class="kwd">extends</span><span class="pln"> </span><span class="typ">IOException</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">CorruptedException</span><span class="pun">(</span><span class="typ">String</span><span class="pln"> message</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">super</span><span class="pun">(</span><span class="pln">message</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">CorruptedException</span><span class="pun">(</span><span class="typ">Throwable</span><span class="pln"> cause</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">super</span><span class="pun">(</span><span class="pln">cause</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">CorruptedException</span><span class="pun">(</span><span class="typ">String</span><span class="pln"> message</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Throwable</span><span class="pln"> cause</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">super</span><span class="pun">(</span><span class="pln">message</span><span class="pun">,</span><span class="pln"> cause</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="lit">@SuppressWarnings</span><span class="pun">(</span><span class="str">"serial"</span><span class="pun">)</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">InconsistentException</span><span class="pln"> </span><span class="kwd">extends</span><span class="pln"> </span><span class="typ">IOException</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">InconsistentException</span><span class="pun">(</span><span class="typ">String</span><span class="pln"> message</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">super</span><span class="pun">(</span><span class="pln">message</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">InconsistentException</span><span class="pun">(</span><span class="typ">Throwable</span><span class="pln"> cause</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">super</span><span class="pun">(</span><span class="pln">cause</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">InconsistentException</span><span class="pun">(</span><span class="typ">String</span><span class="pln"> message</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Throwable</span><span class="pln"> cause</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">super</span><span class="pun">(</span><span class="pln">message</span><span class="pun">,</span><span class="pln"> cause</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">ConfigData</span><span class="pln"> </span><span class="typ">ReadConfigValue</span><span class="pun">(</span><span class="typ">String</span><span class="pln"> configFilePath</span><span class="pun">)</span><span class="pln"> 
+        </span><span class="kwd">throws</span><span class="pln"> </span><span class="typ">FileNotFoundException</span><span class="pun">,</span><span class="pln"> 
+               </span><span class="typ">UnreadableException</span><span class="pun">,</span><span class="pln"> 
+               </span><span class="typ">CorruptedException</span><span class="pun">,</span><span class="pln">
+               </span><span class="typ">InconsistentException</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">configFilePath </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">IllegalArgumentException</span><span class="pun">(</span><span class="str">"configFilePath == null"</span><span class="pun">);</span><span class="pln">
+    
+    </span><span class="kwd">try</span><span class="pln"> </span><span class="pun">(</span><span class="typ">BufferedReader</span><span class="pln"> x </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">BufferedReader</span><span class="pun">(</span><span class="kwd">new</span><span class="pln"> </span><span class="typ">FileReader</span><span class="pun">(</span><span class="pln">configFilePath</span><span class="pun">)))</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">try</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="typ">String</span><span class="pln"> line1 </span><span class="pun">=</span><span class="pln"> x</span><span class="pun">.</span><span class="pln">readLine</span><span class="pun">();</span><span class="pln">
+            </span><span class="typ">String</span><span class="pln"> line2 </span><span class="pun">=</span><span class="pln"> x</span><span class="pun">.</span><span class="pln">readLine</span><span class="pun">();</span><span class="pln">
+            </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">line1 </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pln"> </span><span class="pun">||</span><span class="pln"> line2 </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">CorruptedException</span><span class="pun">(</span><span class="str">"Not enough lines"</span><span class="pun">);</span><span class="pln">
+            </span><span class="kwd">int</span><span class="pln"> v1 </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Integer</span><span class="pun">.</span><span class="pln">parseInt</span><span class="pun">(</span><span class="pln">line1</span><span class="pun">);</span><span class="pln">
+            </span><span class="kwd">int</span><span class="pln"> v2 </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Integer</span><span class="pun">.</span><span class="pln">parseInt</span><span class="pun">(</span><span class="pln">line2</span><span class="pun">);</span><span class="pln">
+            </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">v1 </span><span class="pun">!=</span><span class="pln"> v2</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">InconsistentException</span><span class="pun">(</span><span class="str">"Line values don't match."</span><span class="pun">);</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ConfigData</span><span class="pun">(</span><span class="pln">v1</span><span class="pun">);</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">catch</span><span class="pln"> </span><span class="pun">(</span><span class="typ">IOException</span><span class="pln"> readFailedEx</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">UnreadableException</span><span class="pun">(</span><span class="pln">readFailedEx</span><span class="pun">);</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">catch</span><span class="pln"> </span><span class="pun">(</span><span class="typ">NumberFormatException</span><span class="pln"> parseFailedEx</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">CorruptedException</span><span class="pun">(</span><span class="pln">parseFailedEx</span><span class="pun">);</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">catch</span><span class="pln"> </span><span class="pun">(</span><span class="typ">IOException</span><span class="pln"> closeFailedEx</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="com">// should never happen: we're not writing so there's no unflushed buffer</span><span class="pln">
+        </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">RuntimeException</span><span class="pun">(</span><span class="pln">closeFailedEx</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>Notice that this code hides the fact that the configuration file contains plain numbers, as opposed to key value pairs or XML. Changing the format of the configuration file does not require changing the method's signature. This is good. What's not so good is the sheer amount of code.</p>
+<p>Since three of the exceptions are non-standard, we had to define all of them. These definitions make up the majority of the code. Afterwards, the next biggest contributor of boilerplate is the wrap-and-rethrow logic. Both of these cases (defining and wrapping) are extremely common to encounter when you want to encapsulate, but Java makes them relatively verbose. So much so that I'm not sure I'd recommend actually bothering to encapsulate!</p>
+<p>A few hypothetical changes improve the situation dramatically:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> </span><span class="typ">ReadConfigValue</span><span class="pun">(</span><span class="typ">String</span><span class="pln"> configFilePath</span><span class="pun">)</span><span class="pln"> 
+        </span><span class="com">// 'throws X as Y' means when an X propagates out, we wrap it as a Y</span><span class="pln">
+        </span><span class="com">// 'forge' means create a new exception type, namespaced to the function, with the given name</span><span class="pln">
+        </span><span class="kwd">throws</span><span class="pln"> </span><span class="typ">FileNotFoundException</span><span class="pun">,</span><span class="pln"> 
+               </span><span class="typ">NumberFormatException</span><span class="pln"> </span><span class="kwd">as</span><span class="pln"> forge </span><span class="typ">Corrupted</span><span class="pun">,</span><span class="pln">
+               </span><span class="typ">IOException</span><span class="pln"> </span><span class="kwd">as</span><span class="pln"> forge </span><span class="typ">Unreadable</span><span class="pun">,</span><span class="pln">
+               forge </span><span class="typ">Inconsistent</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">configFilePath </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">IllegalArgumentException</span><span class="pun">(</span><span class="str">"configFilePath == null"</span><span class="pun">);</span><span class="pln">
+    
+    </span><span class="kwd">try</span><span class="pln"> </span><span class="pun">(</span><span class="typ">BufferedReader</span><span class="pln"> x </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">BufferedReader</span><span class="pun">(</span><span class="kwd">new</span><span class="pln"> </span><span class="typ">FileReader</span><span class="pun">(</span><span class="pln">configFilePath</span><span class="pun">)))</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="typ">String</span><span class="pln"> line1 </span><span class="pun">=</span><span class="pln"> x</span><span class="pun">.</span><span class="pln">readLine</span><span class="pun">();</span><span class="pln">
+        </span><span class="typ">String</span><span class="pln"> line2 </span><span class="pun">=</span><span class="pln"> x</span><span class="pun">.</span><span class="pln">readLine</span><span class="pun">();</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">line1 </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pln"> </span><span class="pun">||</span><span class="pln"> line2 </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Corrupted</span><span class="pun">(</span><span class="str">"Not enough lines"</span><span class="pun">);</span><span class="pln">
+        </span><span class="kwd">int</span><span class="pln"> v1 </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Integer</span><span class="pun">.</span><span class="pln">parseInt</span><span class="pun">(</span><span class="pln">line1</span><span class="pun">);</span><span class="pln">
+        </span><span class="kwd">int</span><span class="pln"> v2 </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Integer</span><span class="pun">.</span><span class="pln">parseInt</span><span class="pun">(</span><span class="pln">line2</span><span class="pun">);</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">v1 </span><span class="pun">!=</span><span class="pln"> v2</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Inconsistent</span><span class="pun">(</span><span class="str">"Line values don't match."</span><span class="pun">);</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> v1</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>This code makes use of two hypothetical features: "throw as" and "forge". A throws declaration of the style "throws HiddenExceptionType as WrappingExceptionType" is equivalent to wrapping the method body in a try-catch block that catches the hidden exception type, and throws the wrapping exception type (with the hidden exception as the wrapping exception's inner exception). Prefixing an exception type in a throws declaration with "forge" is equivalent to defining a whole new exception type with that name (the type would be placed in the same package, or perhaps linked to the function somehow).</p>
+<p>Of course, these features are merely hypothetical. It's all well and good to declare "Encapsulation good! Even for exceptions!" but, in practice, the cost of trying (in Java) is significant. I hope that, at the very least, I've made a convincing case that it would be good to have ubiquitous repackaging of thrown exceptions based on <em>what's useful to a caller</em> instead of <em>what the implementation happens to call</em>.</p>
+<h3>Looming Issues</h3>
+<p>In the near future, Java will have <a href="http://openjdk.java.net/projects/lambda/">proper lambda expressions</a> and as a result the <a href="http://cr.openjdk.java.net/~briangoetz/lambda/collections-overview.html">collections API will support functional concepts</a> like mapping and filtering. Unfortunately, these features currently interact badly with Java's checked exceptions. Consider this code:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">RunStuff</span><span class="pun">()</span><span class="pln"> </span><span class="kwd">throws</span><span class="pln"> </span><span class="typ">SQLException</span><span class="pun">,</span><span class="pln"> </span><span class="typ">KeyNotFoundException</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    someUnfortunatelyGlobalCollection</span><span class="pun">.</span><span class="pln">filter</span><span class="pun">(</span><span class="pln">
+        e </span><span class="pun">-&gt;</span><span class="pln"> getAgeFromDatabase</span><span class="pun">(</span><span class="pln">e</span><span class="pun">)</span><span class="pln"> </span><span class="pun">&lt;</span><span class="pln"> </span><span class="lit">50</span><span class="pln"> </span><span class="com">// getAgeFromDatabase throws SQLException, KeyNotFoundException</span><span class="pln">
+    </span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>Notice that the type of exceptions thrown by filter depend on the exceptions thrown by the lambda given to it. In this case, isInDatabase throws SQLException and KeyNotFoundException and so filter throws SQLException and KeyNotFoundException. But wait, how will the compiler determine this fact about filter? How is filter actually implemented?</p>
+<p>There's a few possibilities, none ideal. Basically, from the outside, actual implementations choose between being used like this:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">RunStuff</span><span class="pun">()</span><span class="pln"> </span><span class="kwd">throws</span><span class="pln"> </span><span class="typ">SQLException</span><span class="pun">,</span><span class="pln"> </span><span class="typ">KeyNotFoundException</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    someUnfortunatelyGlobalCollection
+        </span><span class="com">// filter throws the exception types provided to it</span><span class="pln">
+        </span><span class="pun">.</span><span class="pln">filter</span><span class="pun">&lt;</span><span class="typ">WhateverTheItemTypeIs</span><span class="pun">,</span><span class="pln"> </span><span class="typ">SQLException</span><span class="pun">,</span><span class="pln"> </span><span class="typ">KeyNotFoundException</span><span class="pun">&gt;(</span><span class="pln">
+            e </span><span class="pun">-&gt;</span><span class="pln"> getAgeFromDatabase</span><span class="pun">(</span><span class="pln">e</span><span class="pun">)</span><span class="pln"> </span><span class="pun">&lt;</span><span class="pln"> </span><span class="lit">50</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>(Which requires lots of repetition of thrown types, and hits limitations created by type erasure.) or being used like this:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">RunStuff</span><span class="pun">()</span><span class="pln"> </span><span class="kwd">throws</span><span class="pln"> </span><span class="typ">SQLException</span><span class="pun">,</span><span class="pln"> </span><span class="typ">KeyNotFoundException</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">try</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        someUnfortunatelyGlobalCollection
+            </span><span class="pun">.</span><span class="pln">filter</span><span class="pun">(</span><span class="pln">e </span><span class="pun">-&gt;</span><span class="pln"> getAgeFromDatabase</span><span class="pun">(</span><span class="pln">e</span><span class="pun">)</span><span class="pln"> </span><span class="pun">&lt;</span><span class="pln"> </span><span class="lit">50</span><span class="pun">);</span><span class="pln"> </span><span class="com">// filter throws Exception</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">catch</span><span class="pln"> </span><span class="pun">(</span><span class="typ">SQLException</span><span class="pln"> ex</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">throw</span><span class="pln"> ex</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">catch</span><span class="pln"> </span><span class="pun">(</span><span class="typ">KeyNotFoundException</span><span class="pln"> ex</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">throw</span><span class="pln"> ex</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">catch</span><span class="pln"> </span><span class="pun">(</span><span class="typ">Exception</span><span class="pln"> ex</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">RuntimeException</span><span class="pun">(</span><span class="pln">ex</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>(Which is a mess of unverified-by-the-compiler boilerplate to pull the types back out.)</p>
+<p>Actually solving this issue will require support from the language, but I have no idea what that should look like. Functional languages would sidestep the problem with error monads, but such an approach is not idiomatic in Java.</p>
+<h3>Summary</h3>
+<p>Methods should expose encapsulated error cases that are useful to the caller. Java makes doing this very verbose. Conversely, Java makes subtly and blatantly wrong approaches to checked exceptions unfortunately succinct. This problem could be improved with the addition of succinct syntax for wrapping and declaring exceptions.</p>
+<p>Secondarily, the introduction of lambda expressions to Java has the potential to create lots of new problems related to checked exceptions.</p>
+<p>---</p>
+<h3>Discuss on <a href="http://www.reddit.com/r/programming/comments/16lpvu/improving_checked_exceptions/">Reddit</a>, <a href="http://news.ycombinator.com/item?id=5058864">Hacker News</a></h3>
+<p>---</p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia. <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2 class="endofpage">Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait" rel="bookmark" title="Permanent Link to Emulating Actors in C# with Async/Await">Emulating Actors in C# with Async/Await</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2096_making-an-immutable-queue-with-guaranteed-constant-time-operations" rel="bookmark" title="Permanent Link to Making an immutable queue with guaranteed constant time operations">Making an immutable queue with guaranteed constant time operations</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime" rel="bookmark" title="Permanent Link to Perishable Collections: The Benefits of Removal-by-Lifetime">Perishable Collections: The Benefits of Removal-by-Lifetime</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control" rel="bookmark" title="Permanent Link to Decoupling shared control">Decoupling shared control</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1694_decoupling-inlined-ui-code" rel="bookmark" title="Permanent Link to Decoupling inlined UI code">Decoupling inlined UI code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet" rel="bookmark" title="Permanent Link to Linq to Collections: Beyond IEnumerable&lt;T&gt;">Linq to Collections: Beyond IEnumerable&lt;T&gt;</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+ <div id="upprev_box" style="right: -400px;">
+	<h6>
+		More interesting posts <span class="num"> (2 of 4 articles)</span>
+	</h6>
+	<div class="upprev_excerpt">
+		<p>
+			<a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime" rel="prev">Perishable Collections: The Benefits of Removal-by-Lifetime</a>
+		</p>
+	</div>
+	
+		<p>
+Or check out our <a href="http://twistedoakstudios.com/portfolio">Portfolio</a>.		</p><button id="upprev_close" type="button">Close</button>
+</div><!-- #upprev_box -->
+<link rel="stylesheet" id="upprev-css-css" href="./Post399_improving-checked-exceptions_files/upprev.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-quicklatex-format-css" href="./Post399_improving-checked-exceptions_files/quicklatex-format.css" type="text/css" media="all">
+<script type="text/javascript" src="./Post399_improving-checked-exceptions_files/jquery.js"></script>
+<script type="text/javascript" src="./Post399_improving-checked-exceptions_files/upprev_js.php"></script>
+<script type="text/javascript" src="./Post399_improving-checked-exceptions_files/comment-reply.min.js"></script>
+ 
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+			<nav>
+				<ul class="primary-nav clearfix">
+					<li><a href="http://www.twistedoakstudios.com/">Home</a></li>
+					<li><a href="http://twistedoakstudios.com/portfolio">Portfolio</a></li>
+				</ul>
+			</nav>
+		</div>
+		
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				6082 Shirley Street<br>
+				Halifax, NS, Canada B3H 2M8</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+		
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script>- 2013 Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="./Post399_improving-checked-exceptions_files/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="./Post399_improving-checked-exceptions_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script></body></html>

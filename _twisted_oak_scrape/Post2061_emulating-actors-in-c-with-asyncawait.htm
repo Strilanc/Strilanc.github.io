@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<!-- saved from url=(0080)http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait -->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Unity3D Consulting | Technical Magic</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="http://www.twistedoakstudios.com/css/1140.css">
+    <link rel="stylesheet" href="http://www.twistedoakstudios.com/css/style.css?v=1.1">
+    <link rel="stylesheet" href="http://www.twistedoakstudios.com/css/blogstyle.css?v=1.1">
+<link rel="stylesheet" href="http://twistedoakstudios.com/blog/prettify.css" media="all">
+<link rel="stylesheet" href="http://twistedoakstudios.com/blog/sunburst.css" media="all">
+<script type="text/javascript" async="" src="./Post2061_emulating-actors-in-c-with-asyncawait_files/ga.js"></script><script type="text/javascript" src="./Post2061_emulating-actors-in-c-with-asyncawait_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="./Post2061_emulating-actors-in-c-with-asyncawait_files/css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="./Post2061_emulating-actors-in-c-with-asyncawait_files/modernizr-2.0.6.min.js"></script>
+<style type="text/css"></style></head>
+<body onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait#"><img class="logo" src="./Post2061_emulating-actors-in-c-with-asyncawait_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a class="scroll" href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="./Post2061_emulating-actors-in-c-with-asyncawait_files/Post2061_emulating-actors-in-c-with-asyncawait.htm" rel="bookmark" title="Permanent Link to Emulating Actors in C# with Async/Await">Emulating Actors in C# with Async/Await</a></h2>
+<div class="meta">posted by Craig Gidney on January 29, 2013</div>
+
+<p>The <a href="http://en.wikipedia.org/wiki/Actor_model">actor model</a> is an approach to concurrency based on having small single-threaded objects (actors), that can only interact via concurrent messages (as opposed to shared state, <a href="http://en.wikipedia.org/wiki/Lock_%28computer_science%29">locks</a>, <a href="http://en.wikipedia.org/wiki/Condition_variables">condition variables</a>, etc). This isolation not only makes it easier to reason about the actors, but allows for different actors to be <a href="http://en.wikipedia.org/wiki/Distributed_system">distributed</a> across different machines without any significant change in architecture. It’s no coincidence that <a href="http://en.wikipedia.org/wiki/Erlang_%28programming_language%29">Erlang</a>, a language with a reputation for reliability and scalability, is based on the actor model.</p>
+<p>Not surprisingly, there are several projects related to bringing the actor model (or actor-like things) to .Net. There’s the (<a href="http://blogs.msdn.com/b/maestroteam/archive/2011/02/28/the-state-of-axum.aspx">cancelled</a>) <a href="http://en.wikipedia.org/wiki/Axum_%28programming_language%29">Axum</a> language (a former <a href="http://msdn.microsoft.com/en-us/devlabs/cc795432.aspx">DevLabs</a> project), the <a href="http://msdn.microsoft.com/en-us/devlabs/gg585582">Task Parallel Library Dataflow</a> library, the <a href="http://msdn.microsoft.com/en-us/library/bb648752.aspx">Concurrency and Coordination Runtime</a>, and plenty of <a href="http://archive.msdn.microsoft.com/ActorLite">small stuff</a>.</p>
+<p>In this post, I hope to explain a nice way to emulate actors in C#, with a minimum of cruft. To do so, we’ll take advantage of the new-in-C#5 <a href="http://msdn.microsoft.com/en-us/library/vstudio/hh191443.aspx">async/await</a> functionality. Basically: “messages” will be calls to, and results from, asynchronous methods posted to message queues (with the help of some <a href="https://github.com/Strilanc/Methods/tree/master/Methods/Types/ActorModel">machinery</a>).</p>
+<h3>Motivating Example</h3>
+<p>Lets start with an example of our destination. A queue implemented as an actor:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">sealed</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">QueueActor</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="com">// (note: we need to implement the ActorSynchronizationContext class)</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="typ">ActorSynchronizationContext</span><span class="pln"> _messageQueue
+        </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ActorSynchronizationContext</span><span class="pun">();</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="typ">Queue</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> _items </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Queue</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;();</span><span class="pln">
+
+    </span><span class="kwd">public</span><span class="pln"> async </span><span class="typ">Task</span><span class="pln"> </span><span class="typ">EnqueueAsync</span><span class="pun">(</span><span class="pln">T item</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="com">// (note: we need to implement a custom awaiter to allow awaiting the message queue)</span><span class="pln">
+        await _messageQueue</span><span class="pun">;</span><span class="pln">
+        _items</span><span class="pun">.</span><span class="typ">Enqueue</span><span class="pun">(</span><span class="pln">item</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    
+    </span><span class="com">// (note: using my option type </span><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c"><span class="com">(see post)</span></a><span class="com"> for the result)</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> async </span><span class="typ">Task</span><span class="pun">&lt;</span><span class="typ">May</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;&gt;</span><span class="pln"> </span><span class="typ">TryDequeueAsync</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        await _messageQueue</span><span class="pun">;</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">_items</span><span class="pun">.</span><span class="typ">Count</span><span class="pln"> </span><span class="pun">==</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> </span><span class="typ">May</span><span class="pun">.</span><span class="typ">NoValue</span><span class="pun">;</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> _items</span><span class="pun">.</span><span class="typ">Dequeue</span><span class="pun">();</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>This queue has two public methods: EnqueueAsync and DequeueAsync. Both start by awaiting the message queue. This will immediately return a task result to the caller, representing the <em>eventual</em> result, and post the rest of the method into the message queue (to be executed when its turn comes). EnqueueAsync will eventually place an item into the queue, whereas DequeueAsync will eventually try to remove an item from the queue. If either method were to throw an exception, then the exception would be propagated into the task result. If you’ve used the async/await functionality before, everything here should be familiar (except perhaps the semantics of awaiting something that isn’t a task).</p>
+<p>Using this actor queue looks exactly like using a normal queue, except you need to await the changes:</p>
+<pre><code class="prettyprint"><span class="com">// the async keyword allows using await</span><span class="pln">
+</span><span class="com">// we return a task, instead of void, so callers can await us finishing</span><span class="pln">
+async </span><span class="typ">Task</span><span class="pln"> </span><span class="typ">UseQueue</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> q </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">QueueActor</span><span class="str">&lt;int&gt;</span><span class="pun">;</span><span class="pln">
+
+    </span><span class="com">// sending messages and waiting for the responses</span><span class="pln">
+    await q</span><span class="pun">.</span><span class="typ">EnqueueAsync</span><span class="pun">(</span><span class="lit">1</span><span class="pun">);</span><span class="pln">
+    </span><span class="typ">May</span><span class="str">&lt;int&gt;</span><span class="pln"> r1 </span><span class="pun">=</span><span class="pln"> await q</span><span class="pun">.</span><span class="typ">TryDequeueAsync</span><span class="pun">();</span><span class="pln"> </span><span class="com">// r1 will contain 1</span><span class="pln">
+    </span><span class="typ">May</span><span class="str">&lt;int&gt;</span><span class="pln"> r2 </span><span class="pun">=</span><span class="pln"> await q</span><span class="pun">.</span><span class="typ">TryDequeueAsync</span><span class="pun">();</span><span class="pln"> </span><span class="com">// r2 will contain no value</span><span class="pln">
+
+    </span><span class="com">// spamming messages, then later checking for the responses</span><span class="pln">
+    </span><span class="typ">Task</span><span class="pln"> t3 </span><span class="pun">=</span><span class="pln"> q</span><span class="pun">.</span><span class="typ">EnqueueAsync</span><span class="pun">(</span><span class="lit">2</span><span class="pun">);</span><span class="pln">
+    </span><span class="typ">Task</span><span class="pun">&lt;</span><span class="typ">May</span><span class="str">&lt;int&gt;</span><span class="pun">&gt;</span><span class="pln"> t4 </span><span class="pun">=</span><span class="pln"> q</span><span class="pun">.</span><span class="typ">TryDequeueAsync</span><span class="pun">();</span><span class="pln">
+    </span><span class="typ">Task</span><span class="pun">&lt;</span><span class="typ">May</span><span class="str">&lt;int&gt;</span><span class="pun">&gt;</span><span class="pln"> t5 </span><span class="pun">=</span><span class="pln"> q</span><span class="pun">.</span><span class="typ">TryDequeueAsync</span><span class="pun">();</span><span class="pln">
+    await t3</span><span class="pun">;</span><span class="pln"> </span><span class="com">// if our enqueue had failed somehow, this would rethrow the exception</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> r5 </span><span class="pun">=</span><span class="pln"> await t5</span><span class="pun">;</span><span class="pln"> </span><span class="com">// r5 will contain no value</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> r4 </span><span class="pun">=</span><span class="pln"> await t4</span><span class="pun">;</span><span class="pln"> </span><span class="com">// r4 will contain 2</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>This example shows two ways to interact with our queue actor. You can invoke and await methods one by one. This lets you use intermediate results to make decisions. Alternatively, you can invoke a series of methods and then only await the results afterwards. This is faster, because there are fewer round trips to and from the actor, but easier to get wrong. For example, it’s easier to forget to await one of the results, which (if it might fail) can result in an unobserved exception that will terminate the program (unless you have an <a href="http://msdn.microsoft.com/en-us/library/system.threading.tasks.taskscheduler.unobservedtaskexception.aspx">unobserved task exception</a> handler setup). Also, if one of the early methods fails, you’ve still called the later methods in the sequence (oops…).</p>
+<p>So, summarizing what we’ve learned from this example, our actors will work as follows:</p>
+<ul>
+<li>The actor uses a message queue to take care of running things in order and without overlap (on some other thread, without blocking callers).
+</li><li>Messages are represented by methods that return tasks.
+</li><li>Each actor method starts by awaiting the message queue. This causes the rest of the method to be run later. The caller will immediately get a result, a task, representing the actual <em>eventual</em> result of the method.
+</li><li>Callers access the eventual response to their messages by awaiting the tasks they receive (or by using <a href="http://msdn.microsoft.com/en-us/library/dd235663.aspx">ContinueWith</a>/<a href="http://msdn.microsoft.com/en-us/library/dd235635.aspx">Wait</a>).
+</li></ul>
+<p>Note that each individual actor method actually represents three “messages”: the request from the caller (“please enqueue an item”), the later response to the caller (“I enqueued your item”), and the implicit await-is-done-message to the caller (“Note to self: they enqueued my item, deal with it”). Having these different representations for a message (a method call, a task result, an implicit return-to-context) might not be in-theory-clean, but it’s incredibly convenient in practice. Being able to await results allows usage that looks like idiomatic C#, while allowing all kinds of concurrent interactions (with much less risk of accidentally ending up in unexpected states).</p>
+<p>There’s two things we need to implement in order to make this all work: the message queue type (<a href="https://github.com/Strilanc/Methods/blob/master/Methods/Types/ActorModel/ActorSynchronizationContext.cs">ActorSynchronizationContext</a>) and a custom awaiter to allow awaiting message queues (<a href="https://github.com/Strilanc/Methods/blob/master/Methods/Types/ActorModel/SynchronizationContextAwaiter.cs">SynchronizationContextAwaiter</a>).</p>
+<h3>Actor Contexts</h3>
+<p>In .Net, a <a href="http://msdn.microsoft.com/en-us/library/system.threading.synchronizationcontext.aspx">synchronization context</a> roughly corresponds to a strategy for running methods. For example, the UI synchronization context will take “posted” methods and queue them to be run on the UI thread. The default synchronization context, on the other hand, runs methods on the thread pool.</p>
+<p>Why are synchronization contexts important? Because, by default, awaiting a task will resume execution in the same context. This means that if you’re in the UI context, and you await a task, the rest of your method will still execute in the UI context. This is much more convenient than having to manually Invoke your way back after every asynchronous operation (like you used to have to do). Since our actor methods will return tasks, giving each actor a synchronization context allows them to send messages and await responses without accidentally leaving their individual contexts.</p>
+<p>The main requirement that an actor synchronization context must satisfy is exclusion. Only one message may be processed at a time. All our actor synchronization context will actually do is wrap an underlying context to ensure posted methods are being run one by one instead of all at once. Doing this efficiently is quite tricky but, luckily, most of the really tricky stuff is already packaged into the <a href="http://msdn.microsoft.com/en-us/library/dd267265.aspx">ConcurrentQueue</a> class. We just need to make sure that what we put in the queue gets run:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">sealed</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">ActorSynchronizationContext</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">SynchronizationContext</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="typ">SynchronizationContext</span><span class="pln"> _subContext</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="typ">ConcurrentQueue</span><span class="pun">&lt;</span><span class="typ">Action</span><span class="pun">&gt;</span><span class="pln"> _pending </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ConcurrentQueue</span><span class="pun">&lt;</span><span class="typ">Action</span><span class="pun">&gt;();</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> _pendingCount</span><span class="pun">;</span><span class="pln">
+    
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">ActorSynchronizationContext</span><span class="pun">(</span><span class="typ">SynchronizationContext</span><span class="pln"> subContext </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">_subContext </span><span class="pun">=</span><span class="pln"> subContext </span><span class="pun">??</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">SynchronizationContext</span><span class="pun">();</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">override</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">Post</span><span class="pun">(</span><span class="typ">SendOrPostCallback</span><span class="pln"> d</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">object</span><span class="pln"> state</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">d </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentNullException</span><span class="pun">(</span><span class="str">"d"</span><span class="pun">);</span><span class="pln">
+        _pending</span><span class="pun">.</span><span class="typ">Enqueue</span><span class="pun">(()</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> d</span><span class="pun">(</span><span class="pln">state</span><span class="pun">));</span><span class="pln">
+
+        </span><span class="com">// trigger consumption when the queue was empty</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="typ">Interlocked</span><span class="pun">.</span><span class="typ">Increment</span><span class="pun">(</span><span class="kwd">ref</span><span class="pln"> _pendingCount</span><span class="pun">)</span><span class="pln"> </span><span class="pun">&gt;</span><span class="pln"> </span><span class="lit">1</span><span class="pun">)</span><span class="pln"> 
+            _subContext</span><span class="pun">.</span><span class="typ">Post</span><span class="pun">(</span><span class="typ">Consume</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">Consume</span><span class="pun">(</span><span class="kwd">object</span><span class="pln"> state</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">var</span><span class="pln"> surroundingContext </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Current</span><span class="pun">;</span><span class="pln">
+        </span><span class="kwd">try</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="com">// temporarily replace surrounding sync context with this context</span><span class="pln">
+            </span><span class="typ">SetSynchronizationContext</span><span class="pun">(</span><span class="kwd">this</span><span class="pun">);</span><span class="pln">
+
+            </span><span class="com">// run pending actions until there are no more</span><span class="pln">
+            </span><span class="kwd">do</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+                </span><span class="typ">Action</span><span class="pln"> a</span><span class="pun">;</span><span class="pln">
+                _pending</span><span class="pun">.</span><span class="typ">TryDequeue</span><span class="pun">(</span><span class="kwd">out</span><span class="pln"> a</span><span class="pun">);</span><span class="pln"> </span><span class="com">// always succeeds, due to usage of _pendingCount</span><span class="pln">
+                a</span><span class="pun">.</span><span class="typ">Invoke</span><span class="pun">();</span><span class="pln"> </span><span class="com">// if an enqueued action throws... well, that's very bad</span><span class="pln">
+            </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">while</span><span class="pln"> </span><span class="pun">(</span><span class="typ">Interlocked</span><span class="pun">.</span><span class="typ">Decrement</span><span class="pun">(</span><span class="kwd">ref</span><span class="pln"> _pendingCount</span><span class="pun">)</span><span class="pln"> </span><span class="pun">&gt;</span><span class="pln"> </span><span class="lit">0</span><span class="pun">);</span><span class="pln">
+
+        </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">finally</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="typ">SetSynchronizationContext</span><span class="pun">(</span><span class="pln">surroundingContext</span><span class="pun">);</span><span class="pln"> </span><span class="com">// restore surrounding sync context</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">override</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">Send</span><span class="pun">(</span><span class="typ">SendOrPostCallback</span><span class="pln"> d</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">object</span><span class="pln"> state</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">NotSupportedException</span><span class="pun">();</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">override</span><span class="pln"> </span><span class="typ">SynchronizationContext</span><span class="pln"> </span><span class="typ">CreateCopy</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>The above code manages running the consume method via the _pendingCount field. The _pendingCount field is atomically incremented after enqueuing actions, and atomically decremented after dequeuing (and invoking) actions. Initially, exactly one producer will be the one to increment _pendingCount from 0 to 1. They’re in charge of triggering the start of consumption. The consumer can only decrement from 1 to 0 if no more actions have finished being enqueued. It’s possible for an action to be in the queue when the decrement-to-0 happens, but only if there’s a producer about to increment from 0 to 1 and re-trigger consumption! The consumer can just stop when it <em>looks like</em> the queue is empty, even if it’s not!</p>
+<p>(Self-indulgence: I was <em>really</em> happy when I thought of the above strategy for managing consumption. The way I used to approach the problem required the consumer to try to re-acquire before they could exit, which was ugly because a thread could technically be live-locked in an infinite loop of releasing, seeing a change, re-acquiring, and seeing the change had already been handled.)</p>
+<p>There is a bit of boilerplate here. The actor context doesn’t support synchronous entrance (Send), can’t have CreateCopy returning a copy of the base class (a thread-pool context), and needs posted methods to see the actor context, instead of the underlying context, as the current synchronization context. There are also other methods that we could override, but they’re not documented very well and I’m not actually sure where they’re even used… (If anyone could enlighten me, that would be appreciated. What the heck is OperationCompleted for? Why is Wait virtual?).</p>
+<p>In any case, now that we have our synchronization context, we want to use it.</p>
+<h3>Awaiting Contexts</h3>
+<p>At the moment, without a custom awaiter, we would need to nest the bodies of our actor methods inside of lambda expressions passed to their message queue’s post method. We can avoid such problem by making synchronization contexts awaitable, with the understanding that this means ‘enter the context’ instead of the usual ‘once this task is done, resume on the current context’ semantics of awaiting.</p>
+<p>Making a class awaitable involves giving it a ‘GetAwaiter’ method. The GetAwaiter method can be a member method or an extension method, as long as the compiler can find it. The type returned by GetAwaiter must implement the INotifyCompletion interface, have an IsCompleted property, have an OnCompleted method, and have a GetResult method.</p>
+<p>IsCompleted determines whether or not awaiting can be skipped. The result of tasks that are already complete can be extracted immediately, instead of registering a callback. OnCompleted registers a callback to run once the awaited thing is complete (if it’s already complete, the callback runs immediately). GetResult is used to get the value or rethrow the exception contained in the awaited thing, once it has completed. The type of GetResult corresponds to the type of value the awaited thing will contain. In our case it will be void. </p>
+<p>There is more information on <a href="http://blogs.msdn.com/b/lucian/archive/2012/12/12/how-to-write-a-custom-awaiter.aspx">writing custom awaiters</a> available elsewhere. For our purposes, what I’ve covered is enough to cobble something together:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">sealed</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">SynchronizationContextAwaiter</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">INotifyCompletion</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="typ">SynchronizationContext</span><span class="pln"> _context</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">SynchronizationContextAwaiter</span><span class="pun">(</span><span class="typ">SynchronizationContext</span><span class="pln"> context</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">context </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentNullException</span><span class="pun">(</span><span class="str">"context"</span><span class="pun">);</span><span class="pln">
+        _context </span><span class="pun">=</span><span class="pln"> context</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">bool</span><span class="pln"> </span><span class="typ">IsCompleted</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">get</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="com">// always re-enter, even if already in the context</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">;</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">OnCompleted</span><span class="pun">(</span><span class="typ">Action</span><span class="pln"> action</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="com">// resume inside the context</span><span class="pln">
+        _context</span><span class="pun">.</span><span class="typ">Post</span><span class="pun">(</span><span class="pln">x </span><span class="pun">=&gt;</span><span class="pln"> action</span><span class="pun">(),</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">GetResult</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="com">// no value to return, no exceptions to propagate</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">SynchronizationContextExtensions</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">SynchronizationContextAwaiter</span><span class="pln"> </span><span class="typ">GetAwaiter</span><span class="pun">(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">SynchronizationContext</span><span class="pln"> context</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">context </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentNullException</span><span class="pun">(</span><span class="str">"context"</span><span class="pun">);</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">SynchronizationContextAwaiter</span><span class="pun">(</span><span class="pln">context</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>With this code included in our project, we’re able to await our message queues (and other synchronization contexts). The compiler will take care of calling GetAwaiter and registering the “rest of the method” as the callback passed to the OnCompleted method. We don’t have to worry about those details anymore.</p>
+<h3>Using our new powers</h3>
+<p>Now that I’ve explained the underlying machinery, we can move on to a more complicated example. For some reason, people always use bank accounts for concurrency examples. So… I guess we’ll do that:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">sealed</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">BankAccountActor</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="typ">ActorSynchronizationContext</span><span class="pln"> _messageQueue
+        </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ActorSynchronizationContext</span><span class="pun">();</span><span class="pln">
+    
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">decimal</span><span class="pln"> _balance</span><span class="pun">;</span><span class="pln">
+
+    </span><span class="kwd">public</span><span class="pln"> async </span><span class="typ">Task</span><span class="str">&lt;decimal&gt;</span><span class="pln"> </span><span class="typ">CheckBalanceAsync</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        await _messageQueue</span><span class="pun">;</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> _balance</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">WriteToTransactionLog</span><span class="pun">(</span><span class="kwd">object</span><span class="pln"> entry</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="com">// ... save to persistent storage ...</span><span class="pln">
+        </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">NotImplementedException</span><span class="pun">();</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> async </span><span class="typ">Task</span><span class="pun">&lt;</span><span class="typ">IReadOnlyList</span><span class="str">&lt;object&gt;</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">GetTransactionLogAsync</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        await _messageQueue</span><span class="pun">;</span><span class="pln">
+        </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">NotImplementedException</span><span class="pun">();</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+
+    </span><span class="kwd">public</span><span class="pln"> async </span><span class="typ">Task</span><span class="str">&lt;decimal&gt;</span><span class="pln"> </span><span class="typ">DepositAndGetNewBalanceAsync</span><span class="pun">(</span><span class="kwd">decimal</span><span class="pln"> amount</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">object</span><span class="pln"> transactionId</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="com">// note: any thrown exceptions will be packaged into the resulting task</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">amount </span><span class="pun">&lt;=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentOutOfRangeException</span><span class="pun">(</span><span class="str">"amount"</span><span class="pun">,</span><span class="pln"> </span><span class="str">"amount &lt;= 0"</span><span class="pun">);</span><span class="pln">
+        await _messageQueue</span><span class="pun">;</span><span class="pln">
+        
+        </span><span class="kwd">var</span><span class="pln"> newBalance </span><span class="pun">=</span><span class="pln"> _balance </span><span class="pun">+</span><span class="pln"> amount</span><span class="pun">;</span><span class="pln">
+        _balance </span><span class="pun">=</span><span class="pln"> newBalance</span><span class="pun">;</span><span class="pln">
+
+        </span><span class="typ">WriteToTransactionLog</span><span class="pun">(</span><span class="kwd">new</span><span class="pln"> </span><span class="pun">{</span><span class="pln">type </span><span class="pun">=</span><span class="pln"> </span><span class="str">"deposit"</span><span class="pun">,</span><span class="pln"> id </span><span class="pun">=</span><span class="pln"> transactionId</span><span class="pun">,</span><span class="pln"> amount</span><span class="pun">});</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> _newBalance</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+
+    </span><span class="kwd">public</span><span class="pln"> async </span><span class="typ">Task</span><span class="str">&lt;decimal&gt;</span><span class="pln"> </span><span class="typ">WithdrawAndGetNewBalanceAsync</span><span class="pun">(</span><span class="kwd">decimal</span><span class="pln"> amount</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">object</span><span class="pln"> transactionId</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">amount </span><span class="pun">&lt;=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentOutOfRangeException</span><span class="pun">(</span><span class="str">"amount"</span><span class="pun">,</span><span class="pln"> </span><span class="str">"amount &lt;= 0"</span><span class="pun">);</span><span class="pln">
+        await _messageQueue</span><span class="pun">;</span><span class="pln">
+        
+        </span><span class="kwd">var</span><span class="pln"> newBalance </span><span class="pun">=</span><span class="pln"> _balance </span><span class="pun">-</span><span class="pln"> amount</span><span class="pun">;</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">newBalance </span><span class="pun">&lt;</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="typ">WriteToTransactionLog</span><span class="pun">(</span><span class="kwd">new</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> type </span><span class="pun">=</span><span class="pln"> </span><span class="str">"failed withdrawal"</span><span class="pun">,</span><span class="pln"> id </span><span class="pun">=</span><span class="pln"> transactionId</span><span class="pun">,</span><span class="pln"> amount </span><span class="pun">});</span><span class="pln">
+            </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">InsufficientFundsException</span><span class="pun">(</span><span class="pln">_balance</span><span class="pun">,</span><span class="pln"> amount</span><span class="pun">);</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+        _balance </span><span class="pun">=</span><span class="pln"> newBalance</span><span class="pun">;</span><span class="pln">
+
+        </span><span class="typ">WriteToTransactionLog</span><span class="pun">(</span><span class="kwd">new</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> type </span><span class="pun">=</span><span class="pln"> </span><span class="str">"successful withdrawal"</span><span class="pun">,</span><span class="pln"> id </span><span class="pun">=</span><span class="pln"> transactionId</span><span class="pun">,</span><span class="pln"> amount </span><span class="pun">});</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> _balance</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>Lets review three things this example doesn’t get wrong.</p>
+<ol>
+<li>The balance is stored as a <a href="http://msdn.microsoft.com/en-us/library/364x0z75%28v=vs.71%29.aspx">decimal</a>, instead of a float or double. This ensures that, if you start with a balance of 1$, and withdraw 10¢ ten times, you don’t end up with a non-zero balance (like -0.0000015¢, enjoy those fees!). This is <em>absolutely necessary</em> if you’re going to be handling money.
+</li><li>Transactions are logged to persistent storage before they are reported as completed. If the system crashes, it’s possible to reconstruct what was going on as well as whether or not withdrawals/deposits/etc completed or not. This is <em>absolutely necessary</em> if you’re going to be handling money.
+</li><li>The deposit/withdraw operations return the new balance. Having access to a snapshot of the immediately-after and/or of the immediately-before state is often extremely useful. For example, <a href="http://msdn.microsoft.com/en-us/library/system.threading.interlocked.compareexchange.aspx">Interlocked.CompareExchange</a> returns the previous value in the referenced location, allowing you to determine whether and why the exchange did, or did not, occur.
+</li></ol>
+<p>Of course, I still have to implement the most important operation for banks to support: transfer funds from one account to another. But this makes more sense on a ‘bank actor’ than the bank account actors, and introduces a complication: the transfer can’t be done atomically.</p>
+<p>If we were using locks, then we could acquire the locks of both accounts (<a href="http://en.wikipedia.org/wiki/Deadlock">but not in a potentially reversed order</a>!), ensuring the system can never be viewed in a state where the money is in neither account. This is tempting, but remember that this approach would break as soon as we wanted to do a bank-to-bank transfer, from one computer system to another. The actor model may not allow us to atomically transfer funds, but neither does reality. There’s an unavoidable communications delay, where the withdrawn funds have yet to be deposited.</p>
+<p>Since the transfer can’t be done atomically, we need a different strategy to ensure that money is not lost. Actually, the account implementation already has one: logging. All of the work is basically done already:</p>
+<pre><code class="prettyprint"><span class="com">// inside a BankActor ...</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> async </span><span class="typ">Task</span><span class="pln"> </span><span class="typ">TransferAsync</span><span class="pun">(</span><span class="typ">BankAccountActor</span><span class="pln"> source</span><span class="pun">,</span><span class="pln">
+                                </span><span class="typ">BankAccountActor</span><span class="pln"> destination</span><span class="pun">,</span><span class="pln">
+                                </span><span class="kwd">decimal</span><span class="pln"> amount</span><span class="pun">,</span><span class="pln">
+                                </span><span class="kwd">object</span><span class="pln"> transactionId</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">source </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentNullException</span><span class="pun">(</span><span class="str">"source"</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">destination </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentNullException</span><span class="pun">(</span><span class="str">"destination"</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">amount </span><span class="pun">&lt;=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentOutOfRangeException</span><span class="pun">(</span><span class="str">"amount"</span><span class="pun">,</span><span class="pln"> </span><span class="str">"amount &lt;= 0"</span><span class="pun">);</span><span class="pln">
+    await _messageQueue</span><span class="pun">;</span><span class="pln">
+
+    </span><span class="com">// note: if the source has insufficient funds, the exception will be propagated</span><span class="pln">
+    </span><span class="com">// note: the source will write the withdrawal to persistent storage</span><span class="pln">
+    </span><span class="com">// note: after awaiting, we will be posted back onto the message queue automatically</span><span class="pln">
+    await source</span><span class="pun">.</span><span class="typ">AttemptWithdrawAndGetNewBalanceAsync</span><span class="pun">(</span><span class="pln">amount</span><span class="pun">,</span><span class="pln"> id</span><span class="pun">);</span><span class="pln">
+        
+    </span><span class="com">// note: the destination will write the deposit to persistent storage</span><span class="pln">
+    </span><span class="com">// note: technically we should be logging here to, but it would clutter the example</span><span class="pln">
+    await destination</span><span class="pun">.</span><span class="typ">DepositAndGetNewBalanceAsync</span><span class="pun">(</span><span class="pln">amount</span><span class="pun">,</span><span class="pln"> id</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>If this method were to crash at any point, the logging from the bank accounts would make it possible to reconstruct the state of the transfer. Is there no log entry of the withdrawal in the source's account logs? Then the transfer didn't even get started. Is there a log entry in the source account's log, but not in the destination? Then the transfer was incomplete when the system crashed, and needs to be rolled back or completed. Is there a log entry in the source account's log and also in the destination account's log? Then the transfer completed successfully, and nothing needs to be done.</p>
+<p>Note that it takes time to get used to "thinking with actors". The best approaches to problems change, especially if your old solution involved multiple locks. For example, because actors act like distributed systems, time and ordering become more complicated (see: <a href="http://en.wikipedia.org/wiki/Vector_clock">vector clocks</a>).</p>
+<p>(Unfortunately, I can't start discussing and explaining all of the interesting intricacies of using actors or we'd be here for days!)</p>
+<h3>Summary</h3>
+<p>The actor model is a way of approaching concurrency that is highly reliable and distributable. We can emulate actors in C#, in a very concise way, by taking advantage of the new async/await functionality.</p>
+<p>Each actor becomes an instance of a class with a message queue (ActorSynchronizationContext). You "send a message" to the instance by invoking one of its public asynchronous methods, and "receive a message" back by awaiting the result. A <a href="https://github.com/Strilanc/Methods/tree/master/Methods/Types/ActorModel">couple custom types</a> make this possible.</p>
+<p>---</p>
+<h3>Discuss on <a href="http://www.reddit.com/r/programming/comments/17hd2o/emulating_actors_in_c_with_asyncawait/">Reddit</a>, <a href="http://news.ycombinator.com/item?id=5132589">Hacker News</a></h3>
+<p>---</p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia. <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2 class="endofpage">Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post2096_making-an-immutable-queue-with-guaranteed-constant-time-operations" rel="bookmark" title="Permanent Link to Making an immutable queue with guaranteed constant time operations">Making an immutable queue with guaranteed constant time operations</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions" rel="bookmark" title="Permanent Link to Improving Checked Exceptions">Improving Checked Exceptions</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime" rel="bookmark" title="Permanent Link to Perishable Collections: The Benefits of Removal-by-Lifetime">Perishable Collections: The Benefits of Removal-by-Lifetime</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control" rel="bookmark" title="Permanent Link to Decoupling shared control">Decoupling shared control</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1694_decoupling-inlined-ui-code" rel="bookmark" title="Permanent Link to Decoupling inlined UI code">Decoupling inlined UI code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet" rel="bookmark" title="Permanent Link to Linq to Collections: Beyond IEnumerable&lt;T&gt;">Linq to Collections: Beyond IEnumerable&lt;T&gt;</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+ <link rel="stylesheet" id="upprev-css-css" href="./Post2061_emulating-actors-in-c-with-asyncawait_files/upprev.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-quicklatex-format-css" href="./Post2061_emulating-actors-in-c-with-asyncawait_files/quicklatex-format.css" type="text/css" media="all">
+<script type="text/javascript" src="./Post2061_emulating-actors-in-c-with-asyncawait_files/jquery.js"></script>
+<script type="text/javascript" src="./Post2061_emulating-actors-in-c-with-asyncawait_files/upprev_js.php"></script>
+<script type="text/javascript" src="./Post2061_emulating-actors-in-c-with-asyncawait_files/comment-reply.min.js"></script>
+ 
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+			<nav>
+				<ul class="primary-nav clearfix">
+					<li><a href="http://www.twistedoakstudios.com/">Home</a></li>
+					<li><a href="http://twistedoakstudios.com/portfolio">Portfolio</a></li>
+				</ul>
+			</nav>
+		</div>
+		
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				6082 Shirley Street<br>
+				Halifax, NS, Canada B3H 2M8</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+		
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script>- 2013 Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="./Post2061_emulating-actors-in-c-with-asyncawait_files/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="./Post2061_emulating-actors-in-c-with-asyncawait_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script></body></html>

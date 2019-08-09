@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script id="bug.surrogate">var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}}; if (document.location.host == 'www.salon.com') {var _ga_ = document.querySelectorAll('script[src$=ga\\.js]')[0], ga_e = document.createEvent('Event'); ga_e.initEvent('load', true, true);_ga_.dispatchEvent(ga_e);}</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Game Developers | Unity 3D Development</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Post532_tasks-for-action-script-3_files/1140.css">
+    <link rel="stylesheet" href="Post532_tasks-for-action-script-3_files/style.css">
+    <link rel="stylesheet" href="Post532_tasks-for-action-script-3_files/blogstyle.css">
+<link rel="stylesheet" href="Post532_tasks-for-action-script-3_files/prettify.css" media="all">
+<link rel="stylesheet" href="Post532_tasks-for-action-script-3_files/sunburst.css" media="all">
+<script type="text/javascript" src="Post532_tasks-for-action-script-3_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Post532_tasks-for-action-script-3_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Post532_tasks-for-action-script-3_files/modernizr-2.js"></script>
+</head>
+<body onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="#"><img class="logo" src="Post532_tasks-for-action-script-3_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></h2>
+<div class="meta">posted by Craig Gidney on October 2, 2012</div>
+
+<p>I was somewhat recently involved in an ActionScript 3 project. During that project I implemented <a href="https://github.com/Strilanc/AS3-Async-Tasks">tasks for AS3</a>
+ which, thanks to how we handle code ownership, I can post on github for
+ everyone. The API is based on .Net’s task parallel library, and I will 
+be using it in my examples.</p>
+<p>Before we begin, a disclaimer: I am an amateur in ActionScript. Maybe
+ there’s already some nice alternative to events (where appropriate)… 
+but I haven’t found it. There’s also the chance that tearing the library
+ out has broken some of the code. Hopefully both veterans and amateurs 
+will at least find the concept useful.</p>
+<p>—</p>
+<p>Many of the things you want to do in ActionScript require events. For
+ example, to load content from a file, you start by creating a loader. 
+Then you register event handlers for Event.Complete, 
+IOErrorEvent.IO_Error and SecurityErrorEvent.SECURITY_ERROR (and maybe 
+more? Don’t forget any!). Then, when one of the handlers is run, you 
+react appropriately and unregister the callbacks. If this sounds like a 
+lot of boilerplate code and documentation-reading to discover what 
+events might be thrown… it is. Events are a very broadly applicable 
+construct, but it is terrifying how easy and enticing it is to do use 
+them the wrong way (only register for Event.Complete, never bother 
+unregistering). Luckily, by using the more specialized concept of a 
+“task”, we can make it far easier to do the right thing.</p>
+<p>A task (also often called a <a href="http://en.wikipedia.org/wiki/Futures_and_promises">future or a promise</a>)
+ is an “eventual result”. In order to access the result of a task, you 
+register a callback that will be run once when the task completes or 
+faults. It sounds a lot like an event, but callbacks are guaranteed to 
+be called only once and you don’t need additional out-of-band 
+functionality to propagate exceptions. As a result, you don’t need to 
+worry about unregistering callbacks (it happens automatically) and 
+there’s no need to search documentation in order to discover what errors
+ are possible (unless you want to specially handle them).</p>
+<p>More concretely, my task interface is this:</p>
+<pre><code class="prettyprint"><span class="com">/// A result that will be available in the future.</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">interface</span><span class="pln"> </span><span class="typ">Task</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+	</span><span class="com">/// Determines if the task has completed successfully.</span><span class="pln">
+	</span><span class="kwd">function</span><span class="pln"> </span><span class="typ">IsCompleted</span><span class="pun">()</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">Boolean</span><span class="pun">;</span><span class="pln">
+	</span><span class="com">/// Determines if the task has 'completed' due to an error.</span><span class="pln">
+	</span><span class="kwd">function</span><span class="pln"> </span><span class="typ">IsFaulted</span><span class="pun">()</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">Boolean</span><span class="pun">;</span><span class="pln">
+	</span><span class="com">/// Determines if the task has faulted due to cancellation.</span><span class="pln">
+	</span><span class="kwd">function</span><span class="pln"> </span><span class="typ">IsCancelled</span><span class="pun">()</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">Boolean</span><span class="pun">;</span><span class="pln">
+	</span><span class="com">/// Determines if the task has not yet completed or faulted.</span><span class="pln">
+	</span><span class="kwd">function</span><span class="pln"> </span><span class="typ">IsRunning</span><span class="pun">()</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">Boolean</span><span class="pun">;</span><span class="pln">
+
+	</span><span class="com">/// Returns the task's result. Fails if the task has not completed successfully.</span><span class="pln">
+	</span><span class="kwd">function</span><span class="pln"> </span><span class="typ">Result</span><span class="pun">()</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="pun">*;</span><span class="pln">
+	</span><span class="com">/// Returns the task's fault. Fails if the task has not faulted.</span><span class="pln">
+	</span><span class="kwd">function</span><span class="pln"> </span><span class="typ">Fault</span><span class="pun">()</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="pun">*;</span><span class="pln">
+
+	</span><span class="com">/// Runs a callback after the given task completes or faults.</span><span class="pln">
+	</span><span class="com">/// Returns the callback's eventual result as a task.</span><span class="pln">
+	</span><span class="com">/// The callback must take 0 arguments.</span><span class="pln">
+	</span><span class="com">/// If the given task has already completed then the callback may be run synchronously.</span><span class="pln">
+	</span><span class="kwd">function</span><span class="pln"> </span><span class="typ">Await</span><span class="pun">(</span><span class="pln">callback </span><span class="pun">:</span><span class="pln"> </span><span class="typ">Function</span><span class="pun">)</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">;</span><span class="pln">
+
+	</span><span class="com">/// Runs a callback using the result of the given task.</span><span class="pln">
+	</span><span class="com">/// Returns the callback's eventual result as a task.</span><span class="pln">
+	</span><span class="com">/// The callback must take 0 arguments or 1 argument for the task's result.</span><span class="pln">
+	</span><span class="com">/// If the given task faults then the fault is propagated and the callback is not run.</span><span class="pln">
+	</span><span class="com">/// If the given task has already completed then the callback may be run synchronously.</span><span class="pln">
+	</span><span class="kwd">function</span><span class="pln"> </span><span class="typ">ContinueWith</span><span class="pun">(</span><span class="pln">callback </span><span class="pun">:</span><span class="pln"> </span><span class="typ">Function</span><span class="pun">)</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">;</span><span class="pln">
+
+	</span><span class="com">/// Returns a Task&lt;T&gt; equivalent to the eventual Task&lt;T&gt; resulting from this Task&lt;Task&lt;T&gt;&gt;.</span><span class="pln">
+	</span><span class="com">/// Intuitively, transforms this Task&lt;Task&lt;T&gt;&gt; into a Task&lt;T&gt; in the reasonable way.</span><span class="pln">
+	</span><span class="com">/// If either this Task&lt;Task&lt;T&gt;&gt; or its resulting Task&lt;T&gt; fault, the returned Task&lt;T&gt; faults.</span><span class="pln">
+	</span><span class="kwd">function</span><span class="pln"> </span><span class="typ">Unwrap</span><span class="pun">()</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">;</span><span class="pln">
+
+	</span><span class="com">/// Runs a callback using the unwrapped result of the given task.</span><span class="pln">
+	</span><span class="com">/// Returns the callback's eventual result as a task.</span><span class="pln">
+	</span><span class="com">/// Equivalent to ContinueWith(callback).Unwrap()</span><span class="pln">
+	</span><span class="kwd">function</span><span class="pln"> </span><span class="typ">Bind</span><span class="pun">(</span><span class="pln">callback </span><span class="pun">:</span><span class="pln"> </span><span class="typ">Function</span><span class="pun">)</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">;</span><span class="pln">
+
+	</span><span class="com">/// Runs a callback based on the failure of the given task.</span><span class="pln">
+	</span><span class="com">/// Returns the callback's eventual result as a task.</span><span class="pln">
+	</span><span class="com">/// The callback must take 0 arguments or 1 argument for the task's fault.</span><span class="pln">
+	</span><span class="com">/// If the given task does not fault, the resulting task will contain a null result.</span><span class="pln">
+	</span><span class="com">/// If the given task has already completed then the callback may be run synchronously.</span><span class="pln">
+	</span><span class="kwd">function</span><span class="pln"> </span><span class="typ">CatchWith</span><span class="pun">(</span><span class="pln">callback </span><span class="pun">:</span><span class="pln"> </span><span class="typ">Function</span><span class="pun">)</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<h3>Consuming Tasks</h3>
+<p>Tasks are consumed in a very simple and consistent way: registering a
+ callback to be run when the task is finished. (Side note: the methods 
+to synchronously access a task’s state, such as IsCompleted, are there 
+for conveniences like debugging. You <em>can</em> use them, but it’s not
+ recommended.) You don’t need to search documentation for the right 
+‘name’ or ‘key’. You don’t need to worry about “missing” a task (if the 
+task has already finished then the callback runs immediately). You don’t
+ need to cleanup the callback registration. You just get the task, and 
+register your callback.</p>
+<p>In my <a href="https://github.com/Strilanc/AS3-Async-Tasks">implementation</a> there are four important methods for consuming tasks: ContinueWith, CatchWith, Await and Unwrap:</p>
+<ul>
+<li>ContinueWith: Runs a callback when/if a task succeeds. The task 
+returned by ContinueWith represents the eventual result of running the 
+callback. If the task faults, the error is propagated to the returned 
+task without running the callback.
+</li><li>CatchWith: Runs a callback when/if a task faults. If the task 
+succeeds, the returned task will contain null. If the task faults, the 
+returned task will contain the result of running the callback.
+</li><li>Await: Runs a callback when a task completes in any way, 
+success or failure. The returned task contains the result of running the
+ callback.
+</li><li>Unwrap: Turns ‘doubly relative’ tasks (e.g. an outer task 
+containing an inner task containing an int) into proper tasks (e.g. a 
+task containing just an int). If either the outer or inner task faults, 
+then the resulting task faults. If both succeed then the resulting task 
+succeeds with the result of the inner task.
+</li></ul>
+<p>There are also other useful methods, but these four are the most 
+important to understand. Even understanding only ContinueWith is enough 
+to ‘pull out’ values. For example, here’s how you access the content of a
+ text file, given a function that loads it and exposes the result as a 
+task:</p>
+<pre><code class="prettyprint"><span class="typ">TaskInterop</span><span class="pun">.</span><span class="typ">LoadText</span><span class="pun">(</span><span class="pln">url</span><span class="pun">).</span><span class="typ">ContinueWith</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">(</span><span class="pln">text</span><span class="pun">:</span><span class="typ">String</span><span class="pun">):</span><span class="kwd">void</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    trace</span><span class="pun">(</span><span class="str">"The loaded text is: "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> text</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">});</span></code></pre>
+<p>Note that I am using an <a href="http://en.wikipedia.org/wiki/Anonymous_function">anonymous function</a>
+ to put the callback inline, keeping related code close together. I’m 
+not sure how commonly used they are in ActionScript because I don’t see 
+them in online examples, but I highly recommend them. In any case, this 
+will print the contents of the text file once it is loaded. If the text 
+file failed to load or the debug trace somehow failed, the error would 
+be in a task returned from ContinueWith.</p>
+<p>Handling failure is done via CatchWith. For example, we could invoke a
+ remote web service method and include some error handling:</p>
+<pre><code class="prettyprint"><span class="typ">TaskInterop</span><span class="pun">.</span><span class="typ">InvokeWebServiceMethod</span><span class="pun">(</span><span class="pln">webService</span><span class="pun">,</span><span class="pln"> </span><span class="str">"GetUserEmailAddress"</span><span class="pun">,</span><span class="pln"> username</span><span class="pun">)</span><span class="pln">
+</span><span class="pun">.</span><span class="typ">ContinueWith</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">(</span><span class="pln">emailAddress</span><span class="pun">:</span><span class="typ">String</span><span class="pun">):</span><span class="kwd">void</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    trace</span><span class="pun">(</span><span class="pln">username </span><span class="pun">+</span><span class="pln"> </span><span class="str">"'s email address is "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> emailAddress</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">})</span><span class="pln">
+</span><span class="pun">.</span><span class="typ">CatchWith</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">(</span><span class="pln">err</span><span class="pun">:*):</span><span class="kwd">void</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+   trace</span><span class="pun">(</span><span class="str">"There was an error retrieving "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> username </span><span class="pun">+</span><span class="pln"> </span><span class="str">"'s email address: "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> err</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">});</span></code></pre>
+<p>This code attempts to invoke the “GetUserEmailAddress” method on the 
+given remote web service, using the username variable as an argument. It
+ registers a callback to print the returned email address, and also a 
+callback to print any error.</p>
+<p>Notice that you don’t have to care about the implementation details 
+of LoadText or InvokeWebServiceMethod in order to use their result. All 
+you need to know is that they return a task, and you’re set. You can 
+treat them the same way. You can’t forget to register for 
+SecurityErrorEvent.SECURITY_ERROR, you can’t forget to unregister the 
+callbacks, it all just works.</p>
+<h3>Chaining Tasks</h3>
+<p>The most useful aspect of tasks is the powerful, yet easy, ability to
+ chain them off of each other. ContinueWith returns a task, which you 
+can use ContinueWith on again, and again on the result of that, and on 
+the result of that, and so forth indefinitely. The previous example was 
+already using chaining, but here’s a more involved example:</p>
+<pre><code class="prettyprint"><span class="typ">TaskInterop</span><span class="pun">.</span><span class="typ">LoadText</span><span class="pun">(</span><span class="pln">configFileUrl</span><span class="pun">)</span><span class="pln">
+</span><span class="pun">.</span><span class="typ">ContinueWith</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">(</span><span class="pln">configText</span><span class="pun">:</span><span class="typ">String</span><span class="pun">):</span><span class="typ">Task</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+   </span><span class="kwd">var</span><span class="pln"> contentUrl</span><span class="pun">:</span><span class="typ">String</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> configText</span><span class="pun">;</span><span class="pln">
+   </span><span class="kwd">return</span><span class="pln"> </span><span class="typ">TaskInterop</span><span class="pun">.</span><span class="typ">Load</span><span class="pun">(</span><span class="pln">contentUrl</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">})</span><span class="pln">
+</span><span class="pun">.</span><span class="typ">Unwrap</span><span class="pun">()</span><span class="pln"> </span><span class="com">// we have a Task of Task of content, so unwrap into a single-level Task of content</span><span class="pln">
+          </span><span class="com">// or could have used Bind, which is equivalent to ContinueWith(...).Unwrap()</span><span class="pln">
+</span><span class="pun">.</span><span class="typ">ContinueWith</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">(</span><span class="pln">content</span><span class="pun">:</span><span class="typ">MovieClip</span><span class="pun">):</span><span class="kwd">void</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    trace</span><span class="pun">(</span><span class="str">"Loaded clip"</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">})</span><span class="pln">
+</span><span class="pun">.</span><span class="typ">CatchWith</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">(</span><span class="pln">err</span><span class="pun">:*):</span><span class="kwd">void</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    trace</span><span class="pun">(</span><span class="str">"Error! Oh no! - "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> err</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">});</span></code></pre>
+<p>In this example the code attempts to load a config file, read a URL 
+from it, then attempts to load a movie clip from that URL. If it 
+succeeds in loading a movie clip then it prints “Loaded clip”. If it 
+fails at any point along this chain, then the failure is printed.</p>
+<p>We can also <em>combine</em> tasks as part of chaining. For example, 
+maybe you want to load many files concurrently and continue once the 
+eventual array of content is available. Writing that with events is a 
+sick joke, especially if you want to handle errors, but it’s a breeze 
+with tasks thanks to useful utility methods like AwaitAll:</p>
+<pre><code class="prettyprint"><span class="kwd">var</span><span class="pln"> contentTasks </span><span class="pun">:</span><span class="pln"> </span><span class="typ">Array</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Array</span><span class="pun">();</span><span class="pln">
+</span><span class="kwd">foreach</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">var</span><span class="pln"> url </span><span class="pun">:</span><span class="pln"> </span><span class="typ">String</span><span class="pln"> </span><span class="kwd">in</span><span class="pln"> urls</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    contentTasks</span><span class="pun">.</span><span class="typ">Push</span><span class="pun">(</span><span class="typ">TaskInterop</span><span class="pun">.</span><span class="typ">Load</span><span class="pun">(</span><span class="pln">url</span><span class="pun">));</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="typ">TaskEx</span><span class="pun">.</span><span class="typ">AwaitAll</span><span class="pun">(</span><span class="pln">contentTasks</span><span class="pun">)</span><span class="pln">
+</span><span class="pun">.</span><span class="typ">ContinueWith</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">(</span><span class="pln">content</span><span class="pun">:</span><span class="typ">Array</span><span class="pun">):</span><span class="kwd">void</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    trace</span><span class="pun">(</span><span class="str">"All content loaded successfully"</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">})</span><span class="pln">
+</span><span class="pun">.</span><span class="typ">CatchWith</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">(</span><span class="pln">aggregateErr</span><span class="pun">:*):</span><span class="kwd">void</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    trace</span><span class="pun">(</span><span class="str">"There was an error loading one or more files: "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> aggregateErr</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">});</span></code></pre>
+<p>This code loads the content in all of the URLs in an array. If they 
+all succeed then it prints “All content loaded successfully” (the loaded
+ content was passed in via the content parameter, but not used). If any 
+of the content fails to load then any and all errors are printed.</p>
+<p>For other useful task-chaining methods, see the <a href="https://github.com/Strilanc/AS3-Async-Tasks/blob/master/src/Async/TaskEx.as">TaskEx</a> class.</p>
+<h3>Producing Tasks</h3>
+<p>There is a lot of functionality in ActionScript that could be exposed
+ as a task, but is not. You can create your own methods to do the 
+conversion, using the ‘TaskSource’ class. A TaskSource is a task, but it
+ has methods to manually set the result (or exception). To expose some 
+functionality as a task you just write a method that creates a new task 
+source, registers callbacks that set its result, and returns the source 
+to the caller as a task. For example, here’s a method that returns a 
+task that will contain a given result but only after a specified 
+real-time delay:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="typ">Delay</span><span class="pun">(</span><span class="pln">delayMilliseconds </span><span class="pun">:</span><span class="pln"> </span><span class="typ">Number</span><span class="pun">,</span><span class="pln"> result </span><span class="pun">:</span><span class="pln"> </span><span class="pun">*</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">):</span><span class="typ">Task</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> r</span><span class="pun">:</span><span class="typ">TaskSource</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">TaskSource</span><span class="pun">();</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> t</span><span class="pun">:</span><span class="typ">Timer</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Timer</span><span class="pun">(</span><span class="pln">delayMilliseconds</span><span class="pun">,</span><span class="pln"> </span><span class="lit">1</span><span class="pun">);</span><span class="pln">
+    t</span><span class="pun">.</span><span class="pln">addEventListener</span><span class="pun">(</span><span class="typ">TimerEvent</span><span class="pun">.</span><span class="pln">TIMER_COMPLETE</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">e</span><span class="pun">:</span><span class="typ">TimerEvent</span><span class="pun">):</span><span class="kwd">void</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        r</span><span class="pun">.</span><span class="typ">SetResult</span><span class="pun">(</span><span class="pln">result</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">});</span><span class="pln">
+    t</span><span class="pun">.</span><span class="pln">start</span><span class="pun">();</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> r</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>and here’s a method that invokes a web service method, returning the eventual result as a task:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="typ">InvokeWebServiceMethod</span><span class="pun">(</span><span class="pln">ws</span><span class="pun">:</span><span class="typ">WebService</span><span class="pun">,</span><span class="pln"> name</span><span class="pun">:</span><span class="typ">String</span><span class="pun">,</span><span class="pln"> </span><span class="pun">...</span><span class="pln"> args</span><span class="pun">):</span><span class="typ">Task</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> r</span><span class="pun">:</span><span class="typ">TaskSource</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">TaskSource</span><span class="pun">();</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> op</span><span class="pun">:</span><span class="typ">AbstractOperation</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> ws</span><span class="pun">.</span><span class="pln">getOperation</span><span class="pun">(</span><span class="pln">name</span><span class="pun">);</span><span class="pln">
+    op</span><span class="pun">.</span><span class="pln">arguments </span><span class="pun">=</span><span class="pln"> args</span><span class="pun">;</span><span class="pln">
+    op</span><span class="pun">.</span><span class="pln">addEventListener</span><span class="pun">(</span><span class="pln">
+        mx</span><span class="pun">.</span><span class="pln">rpc</span><span class="pun">.</span><span class="pln">events</span><span class="pun">.</span><span class="typ">FaultEvent</span><span class="pun">.</span><span class="pln">FAULT</span><span class="pun">,</span><span class="pln">
+        </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">e</span><span class="pun">:</span><span class="typ">Object</span><span class="pun">):</span><span class="kwd">void</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> r</span><span class="pun">.</span><span class="typ">TrySetFault</span><span class="pun">(</span><span class="pln">e</span><span class="pun">.</span><span class="pln">fault</span><span class="pun">);</span><span class="pln"> </span><span class="pun">}</span><span class="pln"> </span><span class="pun">);</span><span class="pln">
+    op</span><span class="pun">.</span><span class="pln">addEventListener</span><span class="pun">(</span><span class="pln">
+        mx</span><span class="pun">.</span><span class="pln">rpc</span><span class="pun">.</span><span class="pln">events</span><span class="pun">.</span><span class="typ">ResultEvent</span><span class="pun">.</span><span class="pln">RESULT</span><span class="pun">,</span><span class="pln">
+        </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">e</span><span class="pun">:</span><span class="typ">Object</span><span class="pun">):</span><span class="kwd">void</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> r</span><span class="pun">.</span><span class="typ">TrySetResult</span><span class="pun">(</span><span class="pln">e</span><span class="pun">.</span><span class="pln">result</span><span class="pun">);</span><span class="pln"> </span><span class="pun">}</span><span class="pln"> </span><span class="pun">);</span><span class="pln">
+    op</span><span class="pun">.</span><span class="pln">send</span><span class="pun">();</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> r</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>I’ve implemented a few other adapter methods in the <a href="https://github.com/Strilanc/AS3-Async-Tasks/blob/master/src/Async/TaskInterop.as">TaskInterop</a> class.</p>
+<h3>Summary</h3>
+<p>Tasks make common use cases easier and, with chaining, allow you to 
+tackle functionality that would be almost impossible to do correctly 
+otherwise. I highly recommend trying them out.</p>
+<p><a href="http://www.reddit.com/r/programming/comments/10tvkb/tasks_for_action_script_3_improving_on/"><em>View comments on reddit</em></a></p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers efficient, flexible remote and on-the-floor 
+development and consulting without any middle-man or excessive 
+administrivia. <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2>Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+			<nav>
+				<ul class="primary-nav clearfix">
+					<li><a href="http://www.twistedoakstudios.com/">Home</a></li>
+					<li><a href="http://twistedoakstudios.com/portfolio">Portfolio</a></li>
+				</ul>
+			</nav>
+		</div>
+		
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				6082 Shirley Street<br>
+				Halifax, NS, Canada B3H 2M8</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+		
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script> Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Post532_tasks-for-action-script-3_files/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Post532_tasks-for-action-script-3_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script></body></html>

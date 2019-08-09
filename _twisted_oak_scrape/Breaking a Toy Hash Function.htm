@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script>var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}};</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Unity3D Consulting | Technical Magic</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Breaking%20a%20Toy%20Hash%20Function_files/1140.css">
+    <link rel="stylesheet" href="Breaking%20a%20Toy%20Hash%20Function_files/style.css">
+    <link rel="stylesheet" href="Breaking%20a%20Toy%20Hash%20Function_files/blogstyle.css">
+<link rel="stylesheet" href="Breaking%20a%20Toy%20Hash%20Function_files/prettify.css" media="all">
+<link rel="stylesheet" href="Breaking%20a%20Toy%20Hash%20Function_files/sunburst.css" media="all">
+<script type="text/javascript" src="Breaking%20a%20Toy%20Hash%20Function_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Breaking%20a%20Toy%20Hash%20Function_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Breaking%20a%20Toy%20Hash%20Function_files/modernizr-2.js"></script>
+</head>
+<body class=" customize-support" onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="#"><img class="logo" src="Breaking%20a%20Toy%20Hash%20Function_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a href="http://twistedoakstudios.com/labs/">Labs</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+    <p class="big-callout">We're hiring! Experience with Game Dev, Unity3D, Graphics, Signal Processing, or Networking? Eligible to work in Canada? 
+      <a href="http://www.twistedoakstudios.com/jobs.php">Check it out</a>!
+
+    </p>
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post4706_breaking-a-toy-hash-function" rel="bookmark" title="Permanent Link to Breaking a Toy Hash Function">Breaking a Toy Hash Function</a></h2>
+<div class="meta">posted by Craig Gidney on July 2, 2013</div>
+
+<p>You probably know that <a href="http://en.wikipedia.org/wiki/Cryptographic_hash_function#Password_verification">hash functions can be used to protect passwords</a>.
+ The idea is that someone with access to the hash can’t figure out the 
+corresponding password, but can use the hash to recognize that password 
+when it is received. This is really, really useful in cases where 
+attackers have access to your source code and your data.</p>
+<p>For example, consider WarCraft 3 maps (essentially little 
+self-contained games). Maps specify terrain, units, code and etc but 
+can’t access the internet, the file system, or even the current time. 
+Anyone who has a map knows every detail of how it works, if they care to
+ look. If you want to make a map that recognizes a password, perhaps to 
+give yourself some sort of unfair admin powers as a joke, you’ll want to
+ protect that password so that people who look inside the map won’t be 
+able to play the joke on you.</p>
+<p>In fact, years ago, I happened across <a href="http://www.wc3c.net/showpost.php?p=1026901&amp;postcount=45">exactly that sort of thing</a>: a bit of <a href="http://en.wikipedia.org/wiki/JASS">JASS</a>
+ code that hashes the user’s name and a password in order to recognize 
+the map maker and a couple of their friends. However, the hash function 
+being used was created by a friend of the map maker. It is not a 
+standard cryptographic hash function.</p>
+<p>One of the standard refrains in cryptography is “Do not write your 
+own crypto.”. Given that this person wrote their own crypto, I wondered 
+if I could break their hash function. I tried a bit and gave up, but the
+ problem stayed in the back of my mind. Every year or so I’d get the 
+urge to go back and try again, waste a day messing with it, and give up 
+again.</p>
+<p>This year, I finally succeeded. I reversed the password, and all three usernames.</p>
+<p>Note that I am not a cryptographer. The way I broke this function is 
+probably… naive. I assume that, to a real cryptographer, this function 
+is a toy to be crushed in an hour (“Ha! Just use <a href="http://en.wikipedia.org/wiki/Differential_cryptanalysis">X</a>!”).</p>
+<p>Nevertheless, I broke the hash function and I’m going to explain how.</p>
+<h3>The Hash Function</h3>
+<p>Given that most readers won’t know the intricacies of obfuscated 
+JASS, I’ve taken the liberty of translating the hash function to C#:</p>
+<pre><code class="prettyprint"><span class="kwd">static</span><span class="pln"> </span><span class="typ">Tuple</span><span class="pun">&lt;</span><span class="typ">Int32</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Int32</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">Hash</span><span class="pun">(</span><span class="kwd">string</span><span class="pln"> text</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> charSet</span><span class="pun">=</span><span class="str">"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&amp;*()_+-=|[];',.{}:&lt;&gt;? "</span><span class="pun">;</span><span class="pln">
+    </span><span class="typ">Int32</span><span class="pln"> a </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln">
+    </span><span class="typ">Int32</span><span class="pln"> b </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">foreach</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">var</span><span class="pln"> letter </span><span class="kwd">in</span><span class="pln"> text</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">var</span><span class="pln"> e </span><span class="pun">=</span><span class="pln"> charSet</span><span class="pun">.</span><span class="typ">IndexOf</span><span class="pun">(</span><span class="pln">letter</span><span class="pun">);</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">e </span><span class="pun">==</span><span class="pln"> </span><span class="pun">-</span><span class="lit">1</span><span class="pun">)</span><span class="pln"> e </span><span class="pun">=</span><span class="pln"> charSet</span><span class="pun">.</span><span class="typ">Length</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="lit">1</span><span class="pun">;</span><span class="pln">
+        </span><span class="kwd">for</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">var</span><span class="pln"> i </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln"> i </span><span class="pun">&lt;</span><span class="pln"> </span><span class="lit">17</span><span class="pun">;</span><span class="pln"> i</span><span class="pun">++)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            a </span><span class="pun">=</span><span class="pln"> a </span><span class="pun">*-</span><span class="lit">6</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> b </span><span class="pun">+</span><span class="pln"> </span><span class="lit">0x74FA</span><span class="pln"> </span><span class="pun">-</span><span class="pln"> e</span><span class="pun">;</span><span class="pln">
+            b </span><span class="pun">=</span><span class="pln"> b </span><span class="pun">/</span><span class="pln"> </span><span class="lit">3</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> a </span><span class="pun">+</span><span class="pln"> </span><span class="lit">0x81BE</span><span class="pln"> </span><span class="pun">-</span><span class="pln"> e</span><span class="pun">;</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="typ">Tuple</span><span class="pun">.</span><span class="typ">Create</span><span class="pun">(</span><span class="pln">a</span><span class="pun">,</span><span class="pln"> b</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>As you can see, the state of the hash function is made up of two 32-bit signed integers (<img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_011.png" class="ql-img-inline-formula " alt="a" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="9">, <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_013.png" class="ql-img-inline-formula " alt="b" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="8">) that both start out as <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_015.png" class="ql-img-inline-formula " alt="0" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="9">.
+ The input is a sequence of characters, drawn from 93 possibilities. 
+Each character from the input is mixed into the state over a progression
+ of 17 rounds and, when the last character has been mixed in, the result
+ is just the final state of (<img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_011.png" class="ql-img-inline-formula " alt="a" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="9">, <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_013.png" class="ql-img-inline-formula " alt="b" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="8">).</p>
+<p>Note that addition and multiplication are unchecked (e.g. 
+Int32.MaxValue+1 = Int32.MinValue, Int32.MaxValue*2 = -2) and division 
+rounds towards 0 (e.g. -4/3 = -1, 7/3 = 2).</p>
+<p>In addition to the hash function, here is translated code to verify that a username/password combination is valid:</p>
+<pre><code class="prettyprint"><span class="kwd">static</span><span class="pln"> </span><span class="kwd">bool</span><span class="pln"> </span><span class="typ">Verify</span><span class="pun">(</span><span class="kwd">string</span><span class="pln"> username</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">string</span><span class="pln"> password</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> expectedPassHash </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Tuple</span><span class="pun">.</span><span class="typ">Create</span><span class="pun">(-</span><span class="lit">0x20741256</span><span class="pun">,</span><span class="pln"> </span><span class="pun">-</span><span class="lit">0x4A579222</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> expectedNameHashes </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="typ">Tuple</span><span class="pun">.</span><span class="typ">Create</span><span class="pun">(-</span><span class="lit">0x52BEB283</span><span class="pun">,</span><span class="pln"> </span><span class="pun">-</span><span class="lit">0x733C9599</span><span class="pun">),</span><span class="pln">
+        </span><span class="typ">Tuple</span><span class="pun">.</span><span class="typ">Create</span><span class="pun">(</span><span class="lit">0x605D4A4F</span><span class="pun">,</span><span class="pln"> </span><span class="lit">0x7EDDB1E5</span><span class="pun">),</span><span class="pln">
+        </span><span class="typ">Tuple</span><span class="pun">.</span><span class="typ">Create</span><span class="pun">(</span><span class="lit">0x3D10F092</span><span class="pun">,</span><span class="pln"> </span><span class="lit">0x60084719</span><span class="pun">)</span><span class="pln">
+    </span><span class="pun">};</span><span class="pln">
+        
+    </span><span class="kwd">var</span><span class="pln"> passHash </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Hash</span><span class="pun">(</span><span class="pln">password</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> nameHash </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Hash</span><span class="pun">(</span><span class="pln">username</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> password</span><span class="pun">.</span><span class="typ">StartsWith</span><span class="pun">(</span><span class="str">"&lt;+"</span><span class="pun">)</span><span class="pln">
+        </span><span class="pun">&amp;&amp;</span><span class="pln"> passHash</span><span class="pun">.</span><span class="typ">Equals</span><span class="pun">(</span><span class="pln">expectedPassHash</span><span class="pun">)</span><span class="pln">
+        </span><span class="pun">&amp;&amp;</span><span class="pln"> expectedNameHashes</span><span class="pun">.</span><span class="typ">Contains</span><span class="pun">(</span><span class="pln">nameHash</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>As you can see, both the valid usernames and the valid password are 
+protected by hashing them. Also, the first two characters of the 
+password are included in the code.</p>
+<p><em>Side Note:</em> Although it might seem dumb to give away some of 
+the password's characters, it's actually a good idea given the context. 
+The prefix is used as a filter for the chat event that triggers the 
+hashing, to avoid hashing every single chat message said by anyone. The 
+filter also allows the game to avoid secretly sharing all team messages 
+with opponents (They need to know something matching the filter was said
+ in order to run the chat event trigger, and need to know what was said 
+in order to feed the right information into the hash function. Otherwise
+ they can't advance in lockstep.).</p>
+<p>Our goal is to find a username and a password that make Verify return true.</p>
+<h3>Leaking Entropy</h3>
+<p>The first thing to notice about the above function, that suggests it 
+should be easy to break, is that it leaks entropy. It is using 
+non-reversible operations, which decrease the number of the states the 
+system might be in.</p>
+<p>To make it easier to talk about that, here's a spread out version of 
+the internal loop, with the multiplication by -6 factored and the 
+division by 3 split into rounding followed by inverse-multiplying.</p>
+<pre><code class="prettyprint"><span class="pln">a </span><span class="pun">*=</span><span class="pln"> </span><span class="lit">2</span><span class="pun">;</span><span class="pln">
+a </span><span class="pun">*=</span><span class="pln"> </span><span class="pun">-</span><span class="lit">3</span><span class="pun">;</span><span class="pln">
+a </span><span class="pun">+=</span><span class="pln"> b</span><span class="pun">;</span><span class="pln">
+a </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">0x74FA</span><span class="pun">;</span><span class="pln">
+a </span><span class="pun">-=</span><span class="pln"> e</span><span class="pun">;</span><span class="pln">
+b </span><span class="pun">-=</span><span class="pln"> b </span><span class="pun">%</span><span class="pln"> </span><span class="lit">3</span><span class="pun">;</span><span class="pln"> </span><span class="com">// round to multiple of 3, towards 0</span><span class="pln">
+b </span><span class="pun">*=</span><span class="pln"> </span><span class="pun">-</span><span class="lit">1431655765</span><span class="pun">;</span><span class="pln"> </span><span class="com">// multiplicative inverse of 3 (mod 2^32)</span><span class="pln">
+b </span><span class="pun">+=</span><span class="pln"> a</span><span class="pun">;</span><span class="pln">
+b </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">0x81BE</span><span class="pun">;</span><span class="pln">
+b </span><span class="pun">-=</span><span class="pln"> e</span><span class="pun">;</span></code></pre>
+<p>When working in modular arithmetic, some multiplications are reversible (do not leak entropy) but others aren't.</p>
+<p>Multiplying a 32-bit integer by <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_008.png" class="ql-img-inline-formula " alt="3" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="9">
+ does not decrease the amount of entropy because it is reversible. Every
+ input state corresponds to exactly one output state. You can even 
+efficiently run the operation backwards by multiplying by the <a href="http://en.wikipedia.org/wiki/Modular_multiplicative_inverse">modular multiplicative inverse</a> of <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_008.png" class="ql-img-inline-formula " alt="3" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="9">. The multiplicative inverse of <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_008.png" class="ql-img-inline-formula " alt="3" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="9"> is <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_007.png" class="ql-img-inline-formula " alt="3^{-1} \equiv -1431655765 \pmod{2^{32}}" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="19" width="237"> because multiplying them together gives a result equivalent to one: <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_006.png" class="ql-img-inline-formula " alt="3 \cdot 3^{-1} = 3 \cdot -1431655765 = -4294967295 = -2^{32}+1 \equiv 1 \pmod{2^{32}}" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="19" width="531">.</p>
+<p>Multiplying by <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_017.png" class="ql-img-inline-formula " alt="2" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="8"> is <em>NOT</em> reversible. It does decrease the amount of entropy. This happens because <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_003.png" class="ql-img-inline-formula " alt="(x+2^{31}) \cdot 2 \equiv x \cdot 2 + 2^{32} \equiv x \cdot 2 \pmod{2^{32}}" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="19" width="330">, meaning both inputs of either <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_010.png" class="ql-img-inline-formula " alt="x" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="10"> or <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex.png" class="ql-img-inline-formula " alt="x+2^{31}" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="16" width="54"> are collided into the single output of <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_018.png" class="ql-img-inline-formula " alt="2 \cdot x" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="32">. In the worst case this limits the possible number of output states to be half the number of input states, destroying <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_009.png" class="ql-img-inline-formula " alt="1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="13" width="7"> bit of entropy. Many inputs map to one output, so the operation is not reversible and leaks entropy.</p>
+<p>The other non-reversible operation is rounding to the nearest multiple of 3 towards 0. In the worst case this destroys about <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_005.png" class="ql-img-inline-formula " alt="1.5" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="14" width="21"> bits of entropy, reducing the number of possible states by about a third.</p>
+<p>These leaks occur every single round, and it's possible for their cumulative effects to be very bad. It's a bit like those <a href="http://www.youtube.com/watch?v=6wk9zWa-Fww">"mixing tank" problems</a>
+ you solve when learning differential equations, except the input 
+mixture keeps changing color. If the tank is leaking then the 
+contributions of the early colors to the average color decrease 
+exponentially, instead of linearly, as more colors are added.</p>
+<p>These leaks make me suspect that earlier values are in danger of 
+'diluting away'. Every round destroys a couple bits and replaces them 
+with mixtures of the remaining entropy. Later values don't get destroyed
+ and mixed much, but early ones do. Maybe, to find a preimage, I only 
+have to care about the last few characters instead of all the 
+characters. Maybe, to find a collision, I can significantly increase my 
+chances by adding the same long suffix to any two starting strings.</p>
+<p>It turns out that these leaks weren't devastating, but they really 
+shouldn't have existed in the first place. Fixing the leak caused by 
+multiplying by -6 is as easy as changing 6 to 7. Fixing the leak caused 
+by rounding to a multiple of 3 is also easy: just remove the rounding.</p>
+<p>Wait, no, that last idea is <em>terrible</em>.</p>
+<h3>Almost Linear</h3>
+<p>All of the operations in the hash function, except rounding to a multiple of three, are linear. They distribute over addition.</p>
+<p>If we removed the rounding operation, the contributions of every 
+input could be separated and reduced to a single multiplicative constant
+ that depended only on the position relative to the end of the string. 
+Each input value would be multiplied by the constant corresponding to 
+its position, you'd sum up the products, and that'd be the result of 
+hashing. Suddenly, finding an input that hashes to a given value would 
+be like solving the <a href="http://en.wikipedia.org/wiki/Subset_sum">subset sum</a> problem and there'd all this <em>structure</em> we might be able to take advantage of to save huge amounts of time.</p>
+<p><em>Fun fact</em>: if you fixed the entropy leak due to the rounding 
+(by removing it), but didn't fix the leak due to the multiplication by 
+-6, you'd have made things <em>far, far worse</em>. The constants corresponding to positions would keep gaining factors of two. Ultimately, <em>only the last four characters</em> would get non-zero corresponding constants and collisions would be somewhat easier to find.</p>
+<p>It's interesting that the operation that rounds <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_013.png" class="ql-img-inline-formula " alt="b" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="8"> to be a multiple of three affects the state very little. It offsets it by at most <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_017.png" class="ql-img-inline-formula " alt="2" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="8">,
+ but that little tweak is the only reason reversing the hash function is
+ difficult. Of course, in a properly designed hash function, the 
+non-linearities are reversible and their effects are not tiny tweaks to 
+state (e.g. they might XOR <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_011.png" class="ql-img-inline-formula " alt="a" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="9"> into <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_013.png" class="ql-img-inline-formula " alt="b" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="8"> instead of adding <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_011.png" class="ql-img-inline-formula " alt="a" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="9"> into <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_013.png" class="ql-img-inline-formula " alt="b" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="8">, presumably flipping half of <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_013.png" class="ql-img-inline-formula " alt="b" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="8">'s bits).</p>
+<p>The fact that the non-linearity is so small made me wonder if I could just apply <a href="http://en.wikipedia.org/wiki/Integer_programming">integer programming</a> to the problem. Presumably integer constraint solvers are super fast when there's this sort of regularity. <a href="http://stackoverflow.com/a/16004230/52239">That did not go well</a>.</p>
+<p>Integer constraint solvers are not designed with modular arithmetic 
+in mind. Every solver I used failed to reverse even three of the 
+seventeen rounds needed to process a single character, because the 
+solutions required values that exceeded the solvers' valid range. 
+Confusingly, the solvers mostly just claimed "no solution". The only 
+solver that actually told me I was going out of range, instead of 
+pretending there was no solution, was <a href="http://www-01.ibm.com/software/commerce/optimization/cplex-optimizer/">IBM's CPLEX</a>. I hereby award them one competence point.</p>
+<p>I also tried extracting the non-linearities by rearranging the code by hand. I took this <a href="https://github.com/Strilanc/Toy-Hash-Break/blob/master/YearlyHash/Hash3.cs#L67">way, way too far</a> before giving up.</p>
+<h3>Meet in the Spring</h3>
+<p>Eventually, I figured maybe I should try the obvious thing and brute-force the answer.</p>
+<p><strong>First</strong>, I tried just enumerating all inputs. This starts getting pretty slow once you get to five characters, since there's <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_012.png" class="ql-img-inline-formula " alt="93" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="18"> possibilities for each character and <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_016.png" class="ql-img-inline-formula " alt="93^5 = 6956883693 \approx 10^{10}" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="16" width="193">.
+ With that many possibilities to check, every additional operation 
+needed to check a single possibility is adding at least a second to your
+ running time (and hashing involves hundreds of operations). At six 
+characters that goes up to a hundred seconds per operation, and you'll 
+be left waiting for days.</p>
+<p><strong>Second</strong>, I tried to meet in the middle.</p>
+<p>Because the entirety of the hash function's state is used as its 
+output, it's possible to run it backwards (this is slower, though). Just
+ do the inverses of each operation. This allows you to explore both 
+forwards and backwards, while trying to find common middle states.</p>
+<p>To say that this gives a performance boost is a bit of an 
+understatement. Instead of using almost a trillion hash operations to 
+try all possible six character strings, we're only going to spend a 
+million hash operations and a million reverse-hash operations. The 
+million hash operations are used to try all possible three character 
+prefixes, building a dictionary that takes a reached state and tells you
+ the prefix that reaches it. The million reverse hash operations are 
+used to try all possible three character suffixes, telling you which 
+intermediate states can be reached by exploring backwards from the end 
+state. If there's a path from the start point to the end point, then one
+ of the states reached by traveling backwards will be in the dictionary 
+and you're done.</p>
+<p>I used meeting in the middle to go from searching all five character 
+strings to all six character strings. I didn't bother with seven because
+ my machine would go out of memory trying to store all the 
+four-character states.</p>
+<p><strong>Third</strong>, I decided to use a bloom filter instead of a 
+dictionary to store the middle states. Now, instead of immediately 
+getting a solution when I found a match in the middle, each match was a 
+possible solution that I could verify later on by re-exploring the 
+possible prefixes.</p>
+<p>Why is it worth sacrificing the immediate result to go from three 
+'cached' rounds to four cached rounds? Because every cached round is 
+effectively a 100-fold speedup. I could even have gone to five cached 
+rounds, if my machine had more than 4 gigs of memory (the bloom filters 
+had to be quite large to accommodate the hundreds of millions of items 
+while maintaining low false-positive rates).</p>
+<p><strong>Fourth</strong>, I tried tracking integer constraints. I knew
+ a lot of constraints that intermediate states had to satisfy, so I 
+checked them constantly and discarded states that didn't fit. When I 
+measured how much this was reducing the search space it was a staggering
+ 50% per reverse-round. I assumed most of this was being burned 
+countering the search space increasing as irreversible operations had 
+multiple possible inputs.</p>
+<p>At this point I found my first result, which I could have found 
+earlier if I'd just let things run longer. One of the usernames only had
+ seven characters: "Procyon". However, I was still hitting a massive 
+time investment wall. Checking all those constraints took time.</p>
+<p>Then I realized the 50% reduction in search space from the 
+constraints was wrong. It turned out that the constraints were just 
+catching what would have been caught by the very next 
+reverse-multiplication or reverse-division-by-3. The constraints were 
+actually achieving a... 0% reduction. Whoops. Removing them sped things 
+up quite a bit, allowing me to search all 9 character strings.</p>
+<p><strong>Finally</strong>, I realized that I should switch the 
+direction of caching. Going backwards was more expensive than going 
+forwards, and I was memory-limited to caching fewer rounds than I was 
+exploring from the other direction. Caching the results of going 
+backwards, instead of going forwards, would reduce the amount of reverse
+ hash operations and allow me to search all strings up to ten characters
+ as long as I was willing to wait a couple days while my laptop chugged 
+away.</p>
+<h3>Collision</h3>
+<p>We've finally reached the weakness I ultimately used to beat the hash function: the size of its output.</p>
+<p>The output size is 64 bits, which allows a bit more than <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_002.png" class="ql-img-inline-formula " alt="10^{19}" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="16" width="31"> possibilities. I can search through every string up to ten characters (with 93 possibilities per character), which is <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_014.png" class="ql-img-inline-formula " alt="93^{10}" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="15" width="32"> possibilities. That's about five times <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_002.png" class="ql-img-inline-formula " alt="10^{19}" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="16" width="31">.</p>
+<p>Right. At this point it doesn't matter how long the real password is.
+ By pure brute luck, I'm going to stumble onto strings that hash to the 
+same thing.</p>
+<p>My work is done. I just need to let the computer churn.</p>
+<h3>Code</h3>
+<p>This is the code I used to break the hash function:</p>
+<pre><code class="prettyprint"><span class="com">/// Returns a given start state and a sequence of values of the given length that reach the given end state.</span><span class="pln">
+</span><span class="com">/// If not such sequence exists, returns null.</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">Tuple</span><span class="pun">&lt;</span><span class="typ">HashState</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">[]&gt;</span><span class="pln"> </span><span class="typ">Break</span><span class="pun">(</span><span class="typ">HashState</span><span class="pln"> </span><span class="kwd">end</span><span class="pun">,</span><span class="pln">
+                                            </span><span class="kwd">int</span><span class="pln"> assumedLength</span><span class="pun">,</span><span class="pln">
+                                            </span><span class="typ">IEnumerable</span><span class="pun">&lt;</span><span class="typ">HashState</span><span class="pun">&gt;</span><span class="pln"> startStates</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="com">// generate bloom filter going backwards from end</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> numExpandBackward </span><span class="pun">=</span><span class="pln"> </span><span class="pun">(</span><span class="pln">assumedLength </span><span class="pun">-</span><span class="pln"> </span><span class="lit">1</span><span class="pun">).</span><span class="typ">Min</span><span class="pun">((</span><span class="pln">assumedLength </span><span class="pun">*</span><span class="pln"> </span><span class="lit">2</span><span class="pun">)</span><span class="pln"> </span><span class="pun">/</span><span class="pln"> </span><span class="lit">3</span><span class="pun">).</span><span class="typ">Max</span><span class="pun">(</span><span class="lit">0</span><span class="pun">).</span><span class="typ">Min</span><span class="pun">(</span><span class="lit">4</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> filter </span><span class="pun">=</span><span class="pln"> </span><span class="typ">HashStateBloomFilter</span><span class="pun">.</span><span class="typ">GenReverseCache</span><span class="pun">(</span><span class="kwd">end</span><span class="pun">,</span><span class="pln"> numExpandBackward</span><span class="pun">,</span><span class="pln"> pFalsePositive</span><span class="pun">:</span><span class="pln"> </span><span class="lit">0.0001</span><span class="pun">);</span><span class="pln">
+    
+    </span><span class="com">// explore forward from starts to filter, discard states that don't match</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> possiblePartialSolutions </span><span class="pun">=</span><span class="pln">
+        </span><span class="kwd">from</span><span class="pln"> start </span><span class="kwd">in</span><span class="pln"> startStates
+        </span><span class="kwd">from</span><span class="pln"> midStateAndData </span><span class="kwd">in</span><span class="pln"> start</span><span class="pun">.</span><span class="typ">ExploreTraceVolatile</span><span class="pun">(</span><span class="pln">assumedLength </span><span class="pun">-</span><span class="pln"> numExpandBackward</span><span class="pun">)</span><span class="pln">
+        </span><span class="kwd">where</span><span class="pln"> filter</span><span class="pun">.</span><span class="typ">MayContain</span><span class="pun">(</span><span class="pln">midStateAndData</span><span class="pun">.</span><span class="typ">Item1</span><span class="pun">)</span><span class="pln">
+        </span><span class="kwd">select</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> start</span><span class="pun">,</span><span class="pln"> data </span><span class="pun">=</span><span class="pln"> midStateAndData</span><span class="pun">.</span><span class="typ">Item2</span><span class="pun">.</span><span class="typ">ToArray</span><span class="pun">(),</span><span class="pln"> </span><span class="kwd">end</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> midStateAndData</span><span class="pun">.</span><span class="typ">Item1</span><span class="pln"> </span><span class="pun">};</span><span class="pln">
+    
+    </span><span class="com">// base case: not enough length to bother meeting in the middle. Partials are actually complete solutions.</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">numExpandBackward </span><span class="pun">==</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> possiblePartialSolutions
+            </span><span class="pun">.</span><span class="typ">Select</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="typ">Tuple</span><span class="pun">.</span><span class="typ">Create</span><span class="pun">(</span><span class="pln">e</span><span class="pun">.</span><span class="pln">start</span><span class="pun">,</span><span class="pln"> e</span><span class="pun">.</span><span class="pln">data</span><span class="pun">))</span><span class="pln">
+            </span><span class="pun">.</span><span class="typ">FirstOrDefault</span><span class="pun">();</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    
+    </span><span class="com">// we don't want to wait for all possible partial solutions before checking. That would take tons of memory.</span><span class="pln">
+    </span><span class="com">// we also don't want to check after every single possible partial solution, because that's expensive.</span><span class="pln">
+    </span><span class="com">// so we partition possible solutions and check whenever there's enough to make it worth the time.</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> partitions </span><span class="pun">=</span><span class="pln"> possiblePartialSolutions</span><span class="pun">.</span><span class="typ">PartitionVolatile</span><span class="pun">(</span><span class="lit">10000</span><span class="pun">);</span><span class="pln">
+
+    </span><span class="com">// complete any partial solutions</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> solutions </span><span class="pun">=</span><span class="pln">
+        </span><span class="kwd">from</span><span class="pln"> partition </span><span class="kwd">in</span><span class="pln"> partitions
+        let partialSolutionMap </span><span class="pun">=</span><span class="pln"> partition</span><span class="pun">.</span><span class="typ">ToDictionary</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> e</span><span class="pun">.</span><span class="kwd">end</span><span class="pun">,</span><span class="pln"> e </span><span class="pun">=&gt;</span><span class="pln"> e</span><span class="pun">)</span><span class="pln">
+        </span><span class="com">// recursively solve the gap</span><span class="pln">
+        let secondHalf </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Break</span><span class="pun">(</span><span class="kwd">end</span><span class="pun">,</span><span class="pln"> numExpandBackward</span><span class="pun">,</span><span class="pln"> partialSolutionMap</span><span class="pun">.</span><span class="typ">Keys</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">)</span><span class="pln">
+        </span><span class="kwd">where</span><span class="pln"> secondHalf </span><span class="pun">!=</span><span class="pln"> </span><span class="kwd">null</span><span class="pln">
+        </span><span class="com">// Anything reaching here is a solution. Combine it with the first half and return it.</span><span class="pln">
+        let partialSolution </span><span class="pun">=</span><span class="pln"> partialSolutionMap</span><span class="pun">[</span><span class="pln">secondHalf</span><span class="pun">.</span><span class="typ">Item1</span><span class="pun">]</span><span class="pln">
+        let start </span><span class="pun">=</span><span class="pln"> partialSolution</span><span class="pun">.</span><span class="pln">start
+        let data </span><span class="pun">=</span><span class="pln"> partialSolution</span><span class="pun">.</span><span class="pln">data</span><span class="pun">.</span><span class="typ">Concat</span><span class="pun">(</span><span class="pln">secondHalf</span><span class="pun">.</span><span class="typ">Item2</span><span class="pun">).</span><span class="typ">ToArray</span><span class="pun">()</span><span class="pln">
+        </span><span class="kwd">select</span><span class="pln"> </span><span class="typ">Tuple</span><span class="pun">.</span><span class="typ">Create</span><span class="pun">(</span><span class="pln">start</span><span class="pun">,</span><span class="pln"> data</span><span class="pun">);</span><span class="pln">
+
+    </span><span class="com">// actually run the queries</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> solutions</span><span class="pun">.</span><span class="typ">FirstOrDefault</span><span class="pun">();</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>The above code makes a bloom filter containing states that can reach 
+the end by adding a suffix of some length (up to 4). It then iterates 
+over prefixes of the complementary length, noting any that match the 
+filter. Once it has ten thousand matching prefixes, or runs out, it 
+recursively tries to break the gap from the states reached by matching 
+prefixes to the end state. If it finds a way to break the gap, the 
+correct prefix is paired with the gap solution in order to make a full 
+solution. Otherwise it keeps going until it runs out of prefixes.</p>
+<p>Note that the code is not optimized very much. In particular, it's 
+using Linq queries instead of the equivalent imperative code. As far as I
+ know, neither the C# compiler not the .Net jit optimize them 
+particularly well and so the code is paying for tons of virtual function
+ calls when it doesn't have to. On the other hand, the equivalent 
+imperative code is stupidly hard to get right because you end up mixing 
+everything together in a big jumble. (I spent my time doing other things
+ while the computer did the tedious work.)</p>
+<h3>Solutions</h3>
+<p>After about two days of computing, and one dead laptop, the code 
+returned a password that matched the password hash. The password is 
+"&lt;+nt1AkgbMht" (or rather, &lt;+nt1AkgbMht is a string that hashes to
+ the same thing as the true password). If you're wondering why the 
+password has 12 characters, when I said I was searching 10, recall that 
+the first two characters of the password were given away in the JASS 
+code. I searched 10 <em>additional</em> characters.</p>
+<p>(It's tempting to pretend I didn't know those two characters, because <img src="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex_004.png" class="ql-img-inline-formula " alt="93^{12} \approx 10^{24}" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="16" width="88">, so I could say I literally searched a <strong>trillion</strong> <em>trillion</em> possibilities.)</p>
+<p>After another three days, I had both remaining usernames. These are 
+clearly collisions, instead of the actual names, but here they are 
+nonetheless: "hRlGz%W3&amp;R" and "b&gt;4FXV'Xf8" match the first and 
+third hashed usernames respectively (the second was "Procyon").</p>
+<h3>My Reward</h3>
+<p>With the solutions in hand I can finally download <a href="http://www.epicwar.com/maps/130461/">Phase Killer</a>, play it in single player with a profile called "Procyon", say "&lt;+nt1AkgbMht" and see... a red "VALID" message.</p>
+<p><img src="Breaking%20a%20Toy%20Hash%20Function_files/FbYlHTU.png" alt="Valid"></p>
+<p>Worth it.</p>
+<h3>Summary</h3>
+<p>Things we've learned about writing hash functions:</p>
+<ul>
+<li>Don't write your own hash function.
+</li><li>Don't leak entropy. All round operations should be reversible.
+</li><li>Don't use the hash's entire state as its result. Running backwards from the result should be hard. (See also: <a href="http://en.wikipedia.org/wiki/Length_extension_attack">length extension attack</a>.)
+</li><li>Use non-linear combinations of operations and apply them a lot.
+ The effects of each input should be difficult to separate. (See also: <a href="http://en.wikipedia.org/wiki/Avalanche_effect">avalanche effect</a>.)
+</li><li>Have a result with lots of bits. Collisions should be hard to find. (See also: <a href="http://en.wikipedia.org/wiki/Birthday_attack">birthday attack</a>.)
+</li><li>Don't write your own hash function (except for fun).
+</li></ul>
+<p><a href="http://www.youtube.com/watch?v=t8s4m6CB6Tg">Happy Canada Day</a>.</p>
+<p>---</p>
+<h3>Discuss on <a href="http://www.reddit.com/r/programming/comments/1hh5zy/breaking_a_toy_hash_function/">Reddit</a></h3>
+<p>---</p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers consulting and development on high-tech interactive projects. Check out our <a href="http://twistedoakstudios.com/portfolio/">portfolio</a>, or <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2 class="endofpage">Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post5365_searching-a-sorted-matrix-faster" rel="bookmark" title="Permanent Link to Searching a Sorted Matrix Faster">Searching a Sorted Matrix Faster</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5273_how-to-read-nested-ternary-operators" rel="bookmark" title="Permanent Link to How to Read Nested Ternary Operators">How to Read Nested Ternary Operators</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5204_making-sublime-text-2-jump-to-the-correct-line-with-unity-on-os-x" rel="bookmark" title="Permanent Link to Making Sublime Text 2 Jump to the Correct Line with Unity on OS X">Making Sublime Text 2 Jump to the Correct Line with Unity on OS X</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5096_my-bug-my-bad-4-reading-concurrently" rel="bookmark" title="Permanent Link to My Bug, My Bad #4: Reading Concurrently">My Bug, My Bad #4: Reading Concurrently</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5018_whole-api-testing-with-reflection" rel="bookmark" title="Permanent Link to Whole API Testing with Reflection">Whole API Testing with Reflection</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4708_optimizing-a-parser-combinator-into-a-memcpy" rel="bookmark" title="Permanent Link to Optimizing a Parser Combinator into a memcpy">Optimizing a Parser Combinator into a memcpy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4872_dont-treat-paths-like-strings" rel="bookmark" title="Permanent Link to Don’t Treat Paths Like Strings">Don’t Treat Paths Like Strings</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4425_counting-iterators-lazily" rel="bookmark" title="Permanent Link to Counting Iterators Lazily">Counting Iterators Lazily</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4428_unfathomable-bugs-6-pretend-precision" rel="bookmark" title="Permanent Link to Unfathomable Bugs #6: Pretend Precision">Unfathomable Bugs #6: Pretend Precision</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4281_my-bug-my-bad-3-accidentally-attacking-warcraft-3" rel="bookmark" title="Permanent Link to My Bug, My Bad #3: Accidentally Attacking WarCraft 3">My Bug, My Bad #3: Accidentally Attacking WarCraft 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4130_collapsing-types-vs-monads-followup" rel="bookmark" title="Permanent Link to Collapsing Types vs Monads (followup)">Collapsing Types vs Monads (followup)</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4008_collapsing-futures-easy-to-use-hard-to-represent" rel="bookmark" title="Permanent Link to Collapsing Futures: Easy to Use, Hard to Represent">Collapsing Futures: Easy to Use, Hard to Represent</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3858_eventual-exceptions-vs-programming-in-a-minimal-functional-style" rel="bookmark" title="Permanent Link to Eventual Exceptions vs Programming in a Minimal Functional Style">Eventual Exceptions vs Programming in a Minimal Functional Style</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3769_the-mystery-of-flunf" rel="bookmark" title="Permanent Link to The Mystery of Flunf">The Mystery of Flunf</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3724_explain-it-like-im-five-the-socialist-millionaire-problem-and-secure-multi-party-computation" rel="bookmark" title="Permanent Link to Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation">Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3631_computer-science-blows-my-mind" rel="bookmark" title="Permanent Link to Computer Science Blows My Mind">Computer Science Blows My Mind</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3484_a-visit-to-execution-labs-in-montreal" rel="bookmark" title="Permanent Link to A visit to Execution Labs in Montréal">A visit to Execution Labs in Montréal</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3573_transmuting-dice-conserving-entropy" rel="bookmark" title="Permanent Link to Transmuting Dice, Conserving Entropy">Transmuting Dice, Conserving Entropy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3516_rule-of-thumb-ask-for-the-clock" rel="bookmark" title="Permanent Link to Rule of Thumb: Ask for the Clock">Rule of Thumb: Ask for the Clock</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3477_rule-of-thumb-use-purposefully-weakened-methods" rel="bookmark" title="Permanent Link to Rule of Thumb: Use Purposefully Weakened Methods">Rule of Thumb: Use Purposefully Weakened Methods</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3376_rule-of-thumb-preconditions-should-be-checked-explicitly" rel="bookmark" title="Permanent Link to Rule of thumb: Preconditions Should be Checked Explicitly">Rule of thumb: Preconditions Should be Checked Explicitly</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3280_intersecting-linked-lists-faster" rel="bookmark" title="Permanent Link to Intersecting Linked Lists Faster">Intersecting Linked Lists Faster</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3138_mouse-path-smoothing-for-jack-lumber" rel="bookmark" title="Permanent Link to Mouse Path Smoothing for Jack Lumber">Mouse Path Smoothing for Jack Lumber</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3044_my-bug-my-bad-2-sunk-by-float" rel="bookmark" title="Permanent Link to My Bug, My Bad #2: Sunk by Float">My Bug, My Bad #2: Sunk by Float</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2852_repeat-yourself-differently" rel="bookmark" title="Permanent Link to Repeat Yourself Differently">Repeat Yourself Differently</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm" rel="bookmark" title="Permanent Link to Grover’s Quantum Search Algorithm">Grover’s Quantum Search Algorithm</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2766_followup-to-non-nullable-types-vs-c" rel="bookmark" title="Permanent Link to Followup to Non-Nullable Types vs C#">Followup to Non-Nullable Types vs C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2540_optimizing-just-in-time-with-expression-trees" rel="bookmark" title="Permanent Link to Optimizing Just in Time with Expression Trees">Optimizing Just in Time with Expression Trees</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2353_when-one-way-latency-doesnt-matter" rel="bookmark" title="Permanent Link to When One-Way Latency Doesn’t Matter">When One-Way Latency Doesn’t Matter</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point" rel="bookmark" title="Permanent Link to Determining exactly if/when/where a moving line intersected a moving point">Determining exactly if/when/where a moving line intersected a moving point</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait" rel="bookmark" title="Permanent Link to Emulating Actors in C# with Async/Await">Emulating Actors in C# with Async/Await</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2096_making-an-immutable-queue-with-guaranteed-constant-time-operations" rel="bookmark" title="Permanent Link to Making an immutable queue with guaranteed constant time operations">Making an immutable queue with guaranteed constant time operations</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions" rel="bookmark" title="Permanent Link to Improving Checked Exceptions">Improving Checked Exceptions</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime" rel="bookmark" title="Permanent Link to Perishable Collections: The Benefits of Removal-by-Lifetime">Perishable Collections: The Benefits of Removal-by-Lifetime</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control" rel="bookmark" title="Permanent Link to Decoupling shared control">Decoupling shared control</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1694_decoupling-inlined-ui-code" rel="bookmark" title="Permanent Link to Decoupling inlined UI code">Decoupling inlined UI code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet" rel="bookmark" title="Permanent Link to Linq to Collections: Beyond IEnumerable&lt;T&gt;">Linq to Collections: Beyond IEnumerable&lt;T&gt;</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+ <div id="upprev_box" style="right: -400px;">
+	<h6>
+		More interesting posts <span class="num"> (6 of 20 articles)</span>
+	</h6>
+	<div class="upprev_excerpt">
+		<p>
+			<a href="http://twistedoakstudios.com/blog/Post4425_counting-iterators-lazily" rel="prev">Counting Iterators Lazily</a>
+		</p>
+	</div>
+	
+		<p>
+Or check out our <a href="http://twistedoakstudios.com/portfolio">Portfolio</a>.		</p><button id="upprev_close" type="button">Close</button>
+</div><!-- #upprev_box -->
+<link rel="stylesheet" id="al2fb_style-css" href="Breaking%20a%20Toy%20Hash%20Function_files/add-link-to-facebook.css" type="text/css" media="all">
+<link rel="stylesheet" id="admin-bar-css" href="Breaking%20a%20Toy%20Hash%20Function_files/admin-bar.css" type="text/css" media="all">
+<link rel="stylesheet" id="upprev-css-css" href="Breaking%20a%20Toy%20Hash%20Function_files/upprev.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-quicklatex-format-css" href="Breaking%20a%20Toy%20Hash%20Function_files/quicklatex-format.css" type="text/css" media="all">
+<script type="text/javascript" src="Breaking%20a%20Toy%20Hash%20Function_files/admin-bar.js"></script>
+<script type="text/javascript" src="Breaking%20a%20Toy%20Hash%20Function_files/jquery_002.js"></script>
+<script type="text/javascript" src="Breaking%20a%20Toy%20Hash%20Function_files/upprev_js.php"></script>
+<script type="text/javascript" src="Breaking%20a%20Toy%20Hash%20Function_files/comment-reply.js"></script>
+	<script type="text/javascript">
+		(function() {
+			var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
+
+			request = true;
+
+			b[c] = b[c].replace( rcs, ' ' );
+			b[c] += ( window.postMessage && request ? ' ' : ' no-' ) + cs;
+		}());
+	</script>
+			
+
+		 
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+      <!-- home portfolio used to be here -->
+		</div>
+
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				138-1657 Barrington St.<br>
+				Halifax, NS, Canada B3J 2A1</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script>- 2013 Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Breaking%20a%20Toy%20Hash%20Function_files/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Breaking%20a%20Toy%20Hash%20Function_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<div id="wpadminbar" class="nojq " role="navigation">
+			<a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1">Skip to toolbar</a>
+			<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Top navigation toolbar." tabindex="0">
+				<ul id="wp-admin-bar-root-default" class="ab-top-menu">
+		<li id="wp-admin-bar-wp-logo" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/about.php" title="About WordPress"><span class="ab-icon"></span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-wp-logo-default" class="ab-submenu">
+		<li id="wp-admin-bar-about"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/about.php">About WordPress</a>		</li></ul><ul id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu">
+		<li id="wp-admin-bar-wporg"><a class="ab-item" href="http://wordpress.org/">WordPress.org</a>		</li>
+		<li id="wp-admin-bar-documentation"><a class="ab-item" href="http://codex.wordpress.org/">Documentation</a>		</li>
+		<li id="wp-admin-bar-support-forums"><a class="ab-item" href="http://wordpress.org/support/">Support Forums</a>		</li>
+		<li id="wp-admin-bar-feedback"><a class="ab-item" href="http://wordpress.org/support/forum/requests-and-feedback">Feedback</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-site-name" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/">twistedoakstudios.com</a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-site-name-default" class="ab-submenu">
+		<li id="wp-admin-bar-dashboard"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/">Dashboard</a>		</li></ul><ul id="wp-admin-bar-appearance" class="ab-submenu">
+		<li id="wp-admin-bar-themes"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/themes.php">Themes</a>		</li>
+		<li id="wp-admin-bar-customize" class="hide-if-no-customize"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/customize.php?url=http%3A%2F%2Ftwistedoakstudios.com%2Fblog%2FPost4706_breaking-a-toy-hash-function">Customize</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-updates"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/update-core.php" title="3 Plugin Updates, 1 Theme Update"><span class="ab-icon"></span><span class="ab-label">4</span><span class="screen-reader-text">3 Plugin Updates, 1 Theme Update</span></a>		</li>
+		<li id="wp-admin-bar-comments"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/edit-comments.php" title="0 comments awaiting moderation"><span class="ab-icon"></span><span id="ab-awaiting-mod" class="ab-label awaiting-mod pending-count count-0">0</span></a>		</li>
+		<li id="wp-admin-bar-new-content" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php" title="Add New"><span class="ab-icon"></span><span class="ab-label">New</span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-new-content-default" class="ab-submenu">
+		<li id="wp-admin-bar-new-post"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php">Post</a>		</li>
+		<li id="wp-admin-bar-new-media"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/media-new.php">Media</a>		</li>
+		<li id="wp-admin-bar-new-link"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/link-add.php">Link</a>		</li>
+		<li id="wp-admin-bar-new-page"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php?post_type=page">Page</a>		</li>
+		<li id="wp-admin-bar-new-user"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/user-new.php">User</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-edit"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post.php?post=4706&amp;action=edit">Edit Post</a>		</li></ul><ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
+		<li id="wp-admin-bar-search" class="admin-bar-search"><div class="ab-item ab-empty-item" tabindex="-1"><form action="http://twistedoakstudios.com/blog/" method="get" id="adminbarsearch"><input class="adminbar-input" name="s" id="adminbar-search" maxlength="150" type="text"><input class="adminbar-button" value="Search" type="submit"></form></div>		</li>
+		<li id="wp-admin-bar-my-account" class="menupop with-avatar"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/profile.php" title="My Account">Howdy, Craig Gidney<img alt="" src="Breaking%20a%20Toy%20Hash%20Function_files/31a6ce579f8f9f9d528715d1e941726e_002.png" class="avatar avatar-16 photo" height="16" width="16"></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-user-actions" class="ab-submenu">
+		<li id="wp-admin-bar-user-info"><a class="ab-item" tabindex="-1" href="http://twistedoakstudios.com/blog/wp-admin/profile.php"><img alt="" src="Breaking%20a%20Toy%20Hash%20Function_files/31a6ce579f8f9f9d528715d1e941726e.png" class="avatar avatar-64 photo" height="64" width="64"><span class="display-name">Craig Gidney</span><span class="username">craig</span></a>		</li>
+		<li id="wp-admin-bar-edit-profile"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/profile.php">Edit My Profile</a>		</li>
+		<li id="wp-admin-bar-logout"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=535624defb">Log Out</a>		</li></ul></div>		</li></ul>			</div>
+			<a class="screen-reader-shortcut" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=535624defb">Log Out</a>
+		</div></body></html>

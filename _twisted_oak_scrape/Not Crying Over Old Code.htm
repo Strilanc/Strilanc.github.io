@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script src="Not%20Crying%20Over%20Old%20Code_files/Post8000_not-crying-over-old-code.htm" async=""></script><script id="bug.surrogate.1">var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}};</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<title>Not Crying Over Old Code | Twisted Oak Studios Blog</title>
+
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Not%20Crying%20Over%20Old%20Code_files/1140.css">
+    <link rel="stylesheet" href="Not%20Crying%20Over%20Old%20Code_files/style.css">
+    <link rel="stylesheet" href="Not%20Crying%20Over%20Old%20Code_files/blogstyle.css">
+<link rel="stylesheet" href="Not%20Crying%20Over%20Old%20Code_files/prettify.css" media="all">
+<link rel="stylesheet" href="Not%20Crying%20Over%20Old%20Code_files/sunburst.css" media="all">
+<script type="text/javascript" src="Not%20Crying%20Over%20Old%20Code_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Not%20Crying%20Over%20Old%20Code_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Not%20Crying%20Over%20Old%20Code_files/modernizr-2.js"></script>
+<script src="Not%20Crying%20Over%20Old%20Code_files/embed.js" async="" type="text/javascript"></script></head>
+<body class=" customize-support" onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="http://twistedoakstudios.com/"><img class="logo" src="Not%20Crying%20Over%20Old%20Code_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a href="http://twistedoakstudios.com/labs/">Labs</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+    <p class="big-callout">
+    <!--We're hiring! Experience with Game Dev, Unity3D, Graphics, Signal Processing, or Networking? Eligible to work in Canada? 
+      <a href="http://www.twistedoakstudios.com/jobs.php">Check it out</a>!
+-->
+		</p><section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post8000_not-crying-over-old-code" rel="bookmark" title="Permanent Link to Not Crying Over Old Code">Not Crying Over Old Code</a></h2>
+<div class="meta">posted by Craig Gidney on November 26, 2013</div>
+
+<p>There is a meme in the programming community which goes roughly as follows: <a href="http://swizec.com/blog/my-old-code-is-atrocious/swizec/6414">I always hate my old code</a> but <a href="http://blog.marcomonteiro.net/post/the-six-months-rule">that’s good because it means I’m improving</a>.</p>
+<p>I think that’s wrong<a href="http://www.newrepublic.com/article/115726/period-our-simplest-punctuation-mark-has-become-sign-anger">.</a></p>
+<h3>Most Improved</h3>
+<p>If you join a team that plays a sport you’ve never played before, you
+ can expect to get a “Most Improved” trophy at the end of the year. 
+That’s a good sign… <em>unless you keep getting it every year</em>.</p>
+<p>When you’re new to programming, you can legitimately expect to look 
+back and hate the code you’re writing at the moment. It takes time to 
+absorb the tacit knowledge that makes things work smoothly. This can 
+continues for years, because programming well requires depth and breadth
+ of experience.</p>
+<p>(You also expect a learning curve when trying out a new 
+language/library/framework/paradigm, but over a much shorter time 
+scale.)</p>
+<p>However, there comes a point where you should stop expecting to hate 
+the code you’re writing now. If you’ve been programming in the same 
+language for half a decade, but still consistently find yourself hating 
+your old code, something is wrong. You’re either writing bad code 
+without realizing it <em>right now</em>, or you’re too picky about what constitutes good code.</p>
+<p>There are a myriad articles on how to not write bad code, so I’m just going to focus on how picky you should be.</p>
+<h3>Evaluating Code</h3>
+<p>When evaluating how good or bad some code is, it’s important to keep 
+in mind how familiar you are with it. Otherwise you’ll end up equating 
+“I already know it” with “good”. For example, it’s easy to think of your
+ own code as more understandable than others’ code because <em>you</em> write what <em>you</em> understand.</p>
+<p>The same effect comes into play when you look at your old code. Old 
+code will always seem less understandable than you remember, because 
+it’s not as fresh in your mind anymore. Comparing stale old code against
+ fresh new code can create the illusion that you’re constantly 
+improving. Alternatively, comparing against the unattainable feeling you
+ get when looking at freshly written code might trick you into thinking 
+all your old code is uniformly bad.</p>
+<p>This is one of the reasons it’s so important to read lots of code 
+written by other people. It calibrates your sense of what’s good and 
+what’s not.</p>
+<p>I suppose the rest of this post could discuss what makes code 
+objectively good or bad… but I really don’t know a good way to summarize
+ it. Effort required to get it working properly?… Average time for a new
+ programmer to successfully update it?… Moles of dopamine released upon 
+reading<a href="http://stackoverflow.com/questions/184618/what-is-the-best-comment-in-source-code-you-have-ever-encountered">?…</a></p>
+<p>Whatever. There’s plenty of other discussion about that. You already 
+know your opinion about it. Let’s just go over some of my own old code.</p>
+<h3>Critiquing My Own</h3>
+<p>The oldest project I have on github is <a href="https://github.com/Strilanc/Tinker">Tinker</a>
+ (a warcraft 3 hosting bot). Tinker was a hobby project, has about 35 
+thousand lines of code, and is written in VB.Net. Some would say those 
+facts don’t bode well.</p>
+<p>I have a surprisingly good memory for code. Especially when compared 
+to my day to day memory. It’s been years, but I still remember how 
+Tinker is laid out and which classes I had trouble splitting up. Let’s 
+look at one of the classes I remember being okay with, though not 
+particularly happy about: GameServer. It’s been at least a year since I 
+touched it, and year<strong>s</strong> since I made any major changes. Here’s the <a href="https://github.com/Strilanc/Tinker/blob/master/Warcraft3/Server/GameServer.vb">class’ current code</a>:</p>
+<div id="" style="overflow-y: scroll; height:300px;">
+<pre><code class="prettyprint"><span class="typ">Public</span><span class="pln"> </span><span class="typ">NotInheritable</span><span class="pln"> </span><span class="typ">Class</span><span class="pln"> </span><span class="typ">GameServer</span><span class="pln">
+    </span><span class="typ">Inherits</span><span class="pln"> </span><span class="typ">DisposableWithTask</span><span class="pln">
+
+    </span><span class="typ">Private</span><span class="pln"> </span><span class="typ">Shared</span><span class="pln"> </span><span class="typ">ReadOnly</span><span class="pln"> </span><span class="typ">InitialConnectionTimeout</span><span class="pln"> </span><span class="typ">As</span><span class="pln"> </span><span class="typ">TimeSpan</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">5.Seconds</span><span class="pln">
+
+    </span><span class="typ">Private</span><span class="pln"> </span><span class="typ">ReadOnly</span><span class="pln"> inQueue </span><span class="typ">As</span><span class="pln"> </span><span class="typ">CallQueue</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="typ">MakeTaskedCallQueue</span><span class="pln">
+    </span><span class="typ">Private</span><span class="pln"> </span><span class="typ">ReadOnly</span><span class="pln"> outQueue </span><span class="typ">As</span><span class="pln"> </span><span class="typ">CallQueue</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="typ">MakeTaskedCallQueue</span><span class="pln">
+
+    </span><span class="typ">Private</span><span class="pln"> </span><span class="typ">ReadOnly</span><span class="pln"> _clock </span><span class="typ">As</span><span class="pln"> </span><span class="typ">IClock</span><span class="pln">
+    </span><span class="typ">Private</span><span class="pln"> </span><span class="typ">ReadOnly</span><span class="pln"> _logger </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Logger</span><span class="pln">
+    </span><span class="typ">Private</span><span class="pln"> </span><span class="typ">ReadOnly</span><span class="pln"> _gameSets </span><span class="typ">As</span><span class="pln"> </span><span class="typ">New</span><span class="pln"> </span><span class="typ">Dictionary</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">UInt32</span><span class="pun">,</span><span class="pln"> </span><span class="typ">GameSet</span><span class="pun">)()</span><span class="pln">
+    </span><span class="typ">Private</span><span class="pln"> </span><span class="typ">ReadOnly</span><span class="pln"> _viewGameSets </span><span class="typ">As</span><span class="pln"> </span><span class="typ">New</span><span class="pln"> </span><span class="typ">ObservableCollection</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">GameSet</span><span class="pun">)(</span><span class="pln">outQueue</span><span class="pun">:=</span><span class="pln">outQueue</span><span class="pun">)</span><span class="pln">
+    </span><span class="typ">Private</span><span class="pln"> </span><span class="typ">ReadOnly</span><span class="pln"> _viewActiveGameSets </span><span class="typ">As</span><span class="pln"> </span><span class="typ">New</span><span class="pln"> </span><span class="typ">ObservableCollection</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">GameSet</span><span class="pun">)(</span><span class="pln">outQueue</span><span class="pun">:=</span><span class="pln">outQueue</span><span class="pun">)</span><span class="pln">
+    </span><span class="typ">Private</span><span class="pln"> </span><span class="typ">ReadOnly</span><span class="pln"> _viewGames </span><span class="typ">As</span><span class="pln"> </span><span class="typ">New</span><span class="pln"> </span><span class="typ">ObservableCollection</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">Tuple</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">GameSet</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Game</span><span class="pun">))(</span><span class="pln">outQueue</span><span class="pun">:=</span><span class="pln">outQueue</span><span class="pun">)</span><span class="pln">
+    </span><span class="typ">Private</span><span class="pln"> </span><span class="typ">ReadOnly</span><span class="pln"> _viewPlayers </span><span class="typ">As</span><span class="pln"> </span><span class="typ">New</span><span class="pln"> </span><span class="typ">ObservableCollection</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">Tuple</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">GameSet</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Game</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Player</span><span class="pun">))(</span><span class="pln">outQueue</span><span class="pun">:=</span><span class="pln">outQueue</span><span class="pun">)</span><span class="pln">
+
+    </span><span class="typ">Public</span><span class="pln"> </span><span class="typ">Event</span><span class="pln"> </span><span class="typ">PlayerTalked</span><span class="pun">(</span><span class="pln">sender </span><span class="typ">As</span><span class="pln"> </span><span class="typ">GameServer</span><span class="pun">,</span><span class="pln"> game </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Game</span><span class="pun">,</span><span class="pln"> player </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Player</span><span class="pun">,</span><span class="pln"> text </span><span class="typ">As</span><span class="pln"> </span><span class="typ">String</span><span class="pun">)</span><span class="pln">
+    </span><span class="typ">Public</span><span class="pln"> </span><span class="typ">Event</span><span class="pln"> </span><span class="typ">PlayerLeft</span><span class="pun">(</span><span class="pln">sender </span><span class="typ">As</span><span class="pln"> </span><span class="typ">GameServer</span><span class="pun">,</span><span class="pln"> game </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Game</span><span class="pun">,</span><span class="pln"> gameState </span><span class="typ">As</span><span class="pln"> </span><span class="typ">GameState</span><span class="pun">,</span><span class="pln"> player </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Player</span><span class="pun">,</span><span class="pln"> reportedResult </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Protocol</span><span class="pun">.</span><span class="typ">PlayerLeaveReason</span><span class="pun">,</span><span class="pln"> reasonDescription </span><span class="typ">As</span><span class="pln"> </span><span class="typ">String</span><span class="pun">)</span><span class="pln">
+    </span><span class="typ">Public</span><span class="pln"> </span><span class="typ">Event</span><span class="pln"> </span><span class="typ">PlayerSentData</span><span class="pun">(</span><span class="pln">sever </span><span class="typ">As</span><span class="pln"> </span><span class="typ">GameServer</span><span class="pun">,</span><span class="pln"> game </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Game</span><span class="pun">,</span><span class="pln"> player </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Player</span><span class="pun">,</span><span class="pln"> data </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Byte</span><span class="pun">())</span><span class="pln">
+    </span><span class="typ">Public</span><span class="pln"> </span><span class="typ">Event</span><span class="pln"> </span><span class="typ">PlayerEntered</span><span class="pun">(</span><span class="pln">sender </span><span class="typ">As</span><span class="pln"> </span><span class="typ">GameServer</span><span class="pun">,</span><span class="pln"> game </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Game</span><span class="pun">,</span><span class="pln"> player </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Player</span><span class="pun">)</span><span class="pln">
+
+    </span><contractinvariantmethod()><span class="pln"> </span><span class="typ">Private</span><span class="pln"> </span><span class="typ">Sub</span><span class="pln"> </span><span class="typ">ObjectInvariant</span><span class="pun">()</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Invariant</span><span class="pun">(</span><span class="pln">_clock </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Invariant</span><span class="pun">(</span><span class="pln">_viewGames </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Invariant</span><span class="pun">(</span><span class="pln">_viewGameSets </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Invariant</span><span class="pun">(</span><span class="pln">_viewActiveGameSets </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Invariant</span><span class="pun">(</span><span class="pln">_viewPlayers </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Invariant</span><span class="pun">(</span><span class="pln">_gameSets </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Invariant</span><span class="pun">(</span><span class="pln">_logger </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Invariant</span><span class="pun">(</span><span class="pln">inQueue </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Invariant</span><span class="pun">(</span><span class="pln">outQueue </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+    </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Sub</span><span class="pln">
+
+    </span><span class="typ">Public</span><span class="pln"> </span><span class="typ">Sub</span><span class="pln"> </span><span class="typ">New</span><span class="pun">(</span><span class="pln">clock </span><span class="typ">As</span><span class="pln"> </span><span class="typ">IClock</span><span class="pun">,</span><span class="pln">
+                   </span><span class="typ">Optional</span><span class="pln"> logger </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Logger</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Assume</span><span class="pun">(</span><span class="pln">clock </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Me</span><span class="pun">.</span><span class="pln">_logger </span><span class="pun">=</span><span class="pln"> </span><span class="typ">If</span><span class="pun">(</span><span class="pln">logger</span><span class="pun">,</span><span class="pln"> </span><span class="typ">New</span><span class="pln"> </span><span class="typ">Logger</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Me</span><span class="pun">.</span><span class="pln">_clock </span><span class="pun">=</span><span class="pln"> clock
+    </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Sub</span><span class="pln">
+
+    </span><span class="typ">Public</span><span class="pln"> </span><span class="typ">ReadOnly</span><span class="pln"> </span><span class="typ">Property</span><span class="pln"> </span><span class="typ">Logger</span><span class="pln"> </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Logger</span><span class="pln">
+        </span><span class="typ">Get</span><span class="pln">
+            </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Ensures</span><span class="pun">(</span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Result</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">Logger</span><span class="pun">)()</span><span class="pln"> </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+            </span><span class="typ">Return</span><span class="pln"> _logger
+        </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Get</span><span class="pln">
+    </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Property</span><span class="pln">
+    </span><span class="typ">Public</span><span class="pln"> </span><span class="typ">ReadOnly</span><span class="pln"> </span><span class="typ">Property</span><span class="pln"> </span><span class="typ">Clock</span><span class="pln"> </span><span class="typ">As</span><span class="pln"> </span><span class="typ">IClock</span><span class="pln">
+        </span><span class="typ">Get</span><span class="pln">
+            </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Ensures</span><span class="pun">(</span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Result</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">IClock</span><span class="pun">)()</span><span class="pln"> </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+            </span><span class="typ">Return</span><span class="pln"> _clock
+        </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Get</span><span class="pln">
+    </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Property</span><span class="pln">
+
+    </span><span class="str">'''</span><summary><span class="str">Handles new connections to the server.</span></summary><span class="str">'</span><span class="pln">
+    </span><span class="typ">Private</span><span class="pln"> </span><span class="typ">Async</span><span class="pln"> </span><span class="typ">Sub</span><span class="pln"> </span><span class="typ">AcceptSocket</span><span class="pun">(</span><span class="pln">socket </span><span class="typ">As</span><span class="pln"> W3Socket</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Assume</span><span class="pun">(</span><span class="pln">socket </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+
+        _logger</span><span class="pun">.</span><span class="typ">Log</span><span class="pun">(</span><span class="str">"Connection from {0}."</span><span class="pun">.</span><span class="typ">Frmt</span><span class="pun">(</span><span class="pln">socket</span><span class="pun">.</span><span class="typ">Name</span><span class="pun">),</span><span class="pln"> </span><span class="typ">LogMessageType</span><span class="pun">.</span><span class="typ">Positive</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Dim</span><span class="pln"> socketHandled </span><span class="pun">=</span><span class="pln"> </span><span class="typ">New</span><span class="pln"> </span><span class="typ">OnetimeLock</span><span class="pun">()</span><span class="pln">
+
+        </span><span class="str">'Setup initial timeout'</span><span class="pln">
+        </span><span class="typ">Call</span><span class="pln"> </span><span class="typ">Async</span><span class="pln"> </span><span class="typ">Sub</span><span class="pun">()</span><span class="pln">
+                 </span><span class="typ">Await</span><span class="pln"> _clock</span><span class="pun">.</span><span class="typ">Delay</span><span class="pun">(</span><span class="typ">InitialConnectionTimeout</span><span class="pun">)</span><span class="pln">
+                 </span><span class="typ">If</span><span class="pln"> </span><span class="typ">Not</span><span class="pln"> socketHandled</span><span class="pun">.</span><span class="typ">TryAcquire</span><span class="pln"> </span><span class="typ">Then</span><span class="pln"> </span><span class="typ">Return</span><span class="pln">
+                 socket</span><span class="pun">.</span><span class="typ">Disconnect</span><span class="pun">(</span><span class="pln">expected</span><span class="pun">:=</span><span class="kwd">True</span><span class="pun">,</span><span class="pln"> reason</span><span class="pun">:=</span><span class="str">"Timeout"</span><span class="pun">)</span><span class="pln">
+             </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Sub</span><span class="pln">
+
+        </span><span class="str">'Try to read Knock packet'</span><span class="pln">
+        </span><span class="typ">Try</span><span class="pln">
+            </span><span class="typ">Dim</span><span class="pln"> data </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Await</span><span class="pln"> socket</span><span class="pun">.</span><span class="typ">AsyncReadPacket</span><span class="pun">()</span><span class="pln">
+            </span><span class="typ">If</span><span class="pln"> </span><span class="typ">Not</span><span class="pln"> socketHandled</span><span class="pun">.</span><span class="typ">TryAcquire</span><span class="pln"> </span><span class="typ">Then</span><span class="pln"> </span><span class="typ">Return</span><span class="pln">
+            </span><span class="typ">HandleFirstPacket</span><span class="pun">(</span><span class="pln">socket</span><span class="pun">,</span><span class="pln"> data</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Catch</span><span class="pln"> ex </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Exception</span><span class="pln">
+            socket</span><span class="pun">.</span><span class="typ">Disconnect</span><span class="pun">(</span><span class="pln">expected</span><span class="pun">:=</span><span class="kwd">False</span><span class="pun">,</span><span class="pln"> reason</span><span class="pun">:=</span><span class="pln">ex</span><span class="pun">.</span><span class="typ">Summarize</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Try</span><span class="pln">
+    </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Sub</span><span class="pln">
+    </span><span class="typ">Public</span><span class="pln"> </span><span class="typ">Function</span><span class="pln"> </span><span class="typ">QueueAcceptSocket</span><span class="pun">(</span><span class="pln">socket </span><span class="typ">As</span><span class="pln"> W3Socket</span><span class="pun">)</span><span class="pln"> </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Task</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Requires</span><span class="pun">(</span><span class="pln">socket </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Ensures</span><span class="pun">(</span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Result</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">)()</span><span class="pln"> </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Return</span><span class="pln"> inQueue</span><span class="pun">.</span><span class="typ">QueueAction</span><span class="pun">(</span><span class="typ">Sub</span><span class="pun">()</span><span class="pln"> </span><span class="typ">AcceptSocket</span><span class="pun">(</span><span class="pln">socket</span><span class="pun">))</span><span class="pln">
+    </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Function</span><span class="pln">
+    </span><span class="typ">Private</span><span class="pln"> </span><span class="typ">Sub</span><span class="pln"> </span><span class="typ">HandleFirstPacket</span><span class="pun">(</span><span class="pln">socket </span><span class="typ">As</span><span class="pln"> W3Socket</span><span class="pun">,</span><span class="pln"> data </span><span class="typ">As</span><span class="pln"> </span><span class="typ">IRist</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">Byte</span><span class="pun">))</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Requires</span><span class="pun">(</span><span class="pln">socket </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Requires</span><span class="pun">(</span><span class="pln">data </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">If</span><span class="pln"> data</span><span class="pun">.</span><span class="typ">Count</span><span class="pln"> </span><span class="pun">&lt;</span><span class="pln"> </span><span class="lit">4</span><span class="pln"> </span><span class="typ">OrElse</span><span class="pln"> data</span><span class="pun">(</span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="pun">&lt;&gt;</span><span class="pln"> </span><span class="typ">Protocol</span><span class="pun">.</span><span class="typ">Packets</span><span class="pun">.</span><span class="typ">PacketPrefix</span><span class="pln"> </span><span class="typ">OrElse</span><span class="pln"> data</span><span class="pun">(</span><span class="lit">1</span><span class="pun">)</span><span class="pln"> </span><span class="pun">&lt;&gt;</span><span class="pln"> </span><span class="typ">Protocol</span><span class="pun">.</span><span class="typ">PacketId</span><span class="pun">.</span><span class="typ">Knock</span><span class="pln"> </span><span class="typ">Then</span><span class="pln">
+            </span><span class="typ">Throw</span><span class="pln"> </span><span class="typ">New</span><span class="pln"> IO</span><span class="pun">.</span><span class="typ">InvalidDataException</span><span class="pun">(</span><span class="str">"{0} was not a warcraft 3 player connection."</span><span class="pun">.</span><span class="typ">Frmt</span><span class="pun">(</span><span class="pln">socket</span><span class="pun">.</span><span class="typ">Name</span><span class="pun">))</span><span class="pln">
+        </span><span class="typ">End</span><span class="pln"> </span><span class="typ">If</span><span class="pln">
+
+        </span><span class="str">'Parse'</span><span class="pln">
+        </span><span class="typ">Dim</span><span class="pln"> pickle </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Protocol</span><span class="pun">.</span><span class="typ">ClientPackets</span><span class="pun">.</span><span class="typ">Knock</span><span class="pun">.</span><span class="typ">Jar</span><span class="pun">.</span><span class="typ">ParsePickle</span><span class="pun">(</span><span class="pln">data</span><span class="pun">.</span><span class="typ">SkipExact</span><span class="pun">(</span><span class="lit">4</span><span class="pun">))</span><span class="pln">
+        </span><span class="typ">Dim</span><span class="pln"> knockData </span><span class="pun">=</span><span class="pln"> pickle</span><span class="pun">.</span><span class="typ">Value</span><span class="pln">
+
+        </span><span class="str">'Handle'</span><span class="pln">
+        </span><span class="typ">Dim</span><span class="pln"> oldSocketName </span><span class="pun">=</span><span class="pln"> socket</span><span class="pun">.</span><span class="typ">Name</span><span class="pln">
+        _logger</span><span class="pun">.</span><span class="typ">Log</span><span class="pun">(</span><span class="typ">Function</span><span class="pun">()</span><span class="pln"> </span><span class="str">"{0} self-identified as {1} and wants to join game with id = {2}"</span><span class="pun">.</span><span class="typ">Frmt</span><span class="pun">(</span><span class="pln">oldSocketName</span><span class="pun">,</span><span class="pln">
+                                                                                                      knockData</span><span class="pun">.</span><span class="typ">Name</span><span class="pun">,</span><span class="pln">
+                                                                                                      knockData</span><span class="pun">.</span><span class="typ">GameId</span><span class="pun">),</span><span class="pln"> </span><span class="typ">LogMessageType</span><span class="pun">.</span><span class="typ">Positive</span><span class="pun">)</span><span class="pln">
+        socket</span><span class="pun">.</span><span class="typ">Name</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> knockData</span><span class="pun">.</span><span class="typ">Name</span><span class="pln">
+        _logger</span><span class="pun">.</span><span class="typ">Log</span><span class="pun">(</span><span class="typ">Function</span><span class="pun">()</span><span class="pln"> </span><span class="str">"Received {0} from {1}"</span><span class="pun">.</span><span class="typ">Frmt</span><span class="pun">(</span><span class="typ">Protocol</span><span class="pun">.</span><span class="typ">PacketId</span><span class="pun">.</span><span class="typ">Knock</span><span class="pun">,</span><span class="pln"> oldSocketName</span><span class="pun">),</span><span class="pln"> </span><span class="typ">LogMessageType</span><span class="pun">.</span><span class="typ">DataEvent</span><span class="pun">)</span><span class="pln">
+        _logger</span><span class="pun">.</span><span class="typ">Log</span><span class="pun">(</span><span class="typ">Function</span><span class="pun">()</span><span class="pln"> </span><span class="str">"Received {0} from {1}: {2}"</span><span class="pun">.</span><span class="typ">Frmt</span><span class="pun">(</span><span class="typ">Protocol</span><span class="pun">.</span><span class="typ">PacketId</span><span class="pun">.</span><span class="typ">Knock</span><span class="pun">,</span><span class="pln"> oldSocketName</span><span class="pun">,</span><span class="pln"> pickle</span><span class="pun">.</span><span class="typ">Description</span><span class="pun">),</span><span class="pln"> </span><span class="typ">LogMessageType</span><span class="pun">.</span><span class="typ">DataParsed</span><span class="pun">)</span><span class="pln">
+        inQueue</span><span class="pun">.</span><span class="typ">QueueAction</span><span class="pun">(</span><span class="typ">Sub</span><span class="pun">()</span><span class="pln"> </span><span class="typ">OnPlayerIntroduction</span><span class="pun">(</span><span class="pln">knockData</span><span class="pun">,</span><span class="pln"> socket</span><span class="pun">))</span><span class="pln">
+    </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Sub</span><span class="pln">
+
+    </span><span class="str">'''</span><summary><span class="str">Handles connecting players that have sent their Knock packet.</span></summary><span class="str">'</span><span class="pln">
+    </span><span class="typ">Private</span><span class="pln"> </span><span class="typ">Async</span><span class="pln"> </span><span class="typ">Sub</span><span class="pln"> </span><span class="typ">OnPlayerIntroduction</span><span class="pun">(</span><span class="pln">knockData </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Protocol</span><span class="pun">.</span><span class="typ">KnockData</span><span class="pun">,</span><span class="pln"> socket </span><span class="typ">As</span><span class="pln"> W3Socket</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Assume</span><span class="pun">(</span><span class="pln">knockData </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Assume</span><span class="pun">(</span><span class="pln">socket </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+
+        </span><span class="str">'Get players desired game set'</span><span class="pln">
+        </span><span class="typ">If</span><span class="pln"> </span><span class="typ">Not</span><span class="pln"> _gameSets</span><span class="pun">.</span><span class="typ">ContainsKey</span><span class="pun">(</span><span class="pln">knockData</span><span class="pun">.</span><span class="typ">GameId</span><span class="pun">)</span><span class="pln"> </span><span class="typ">Then</span><span class="pln">
+            _logger</span><span class="pun">.</span><span class="typ">Log</span><span class="pun">(</span><span class="str">"{0} specified an invalid game id ({1})"</span><span class="pun">.</span><span class="typ">Frmt</span><span class="pun">(</span><span class="pln">knockData</span><span class="pun">.</span><span class="typ">Name</span><span class="pun">,</span><span class="pln"> knockData</span><span class="pun">.</span><span class="typ">GameId</span><span class="pun">),</span><span class="pln"> </span><span class="typ">LogMessageType</span><span class="pun">.</span><span class="typ">Negative</span><span class="pun">)</span><span class="pln">
+            socket</span><span class="pun">.</span><span class="typ">SendPacket</span><span class="pun">(</span><span class="typ">Protocol</span><span class="pun">.</span><span class="typ">MakeReject</span><span class="pun">(</span><span class="typ">Protocol</span><span class="pun">.</span><span class="typ">RejectReason</span><span class="pun">.</span><span class="typ">GameNotFound</span><span class="pun">))</span><span class="pln">
+            socket</span><span class="pun">.</span><span class="typ">Disconnect</span><span class="pun">(</span><span class="pln">expected</span><span class="pun">:=</span><span class="kwd">False</span><span class="pun">,</span><span class="pln"> reason</span><span class="pun">:=</span><span class="str">"Invalid game id"</span><span class="pun">)</span><span class="pln">
+            </span><span class="typ">Return</span><span class="pln">
+        </span><span class="typ">End</span><span class="pln"> </span><span class="typ">If</span><span class="pln">
+        </span><span class="typ">Dim</span><span class="pln"> entry </span><span class="pun">=</span><span class="pln"> _gameSets</span><span class="pun">(</span><span class="pln">knockData</span><span class="pun">.</span><span class="typ">GameId</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Assume</span><span class="pun">(</span><span class="pln">entry </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+
+        </span><span class="str">'Send player to game set'</span><span class="pln">
+        </span><span class="typ">Try</span><span class="pln">
+            </span><span class="typ">Dim</span><span class="pln"> game </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Await</span><span class="pln"> entry</span><span class="pun">.</span><span class="typ">QueueTryAcceptPlayer</span><span class="pun">(</span><span class="pln">knockData</span><span class="pun">,</span><span class="pln"> socket</span><span class="pun">)</span><span class="pln">
+            _logger</span><span class="pun">.</span><span class="typ">Log</span><span class="pun">(</span><span class="str">"{0} entered {1}."</span><span class="pun">.</span><span class="typ">Frmt</span><span class="pun">(</span><span class="pln">knockData</span><span class="pun">.</span><span class="typ">Name</span><span class="pun">,</span><span class="pln"> game</span><span class="pun">.</span><span class="typ">Name</span><span class="pun">),</span><span class="pln"> </span><span class="typ">LogMessageType</span><span class="pun">.</span><span class="typ">Positive</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Catch</span><span class="pln"> ex </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Exception</span><span class="pln">
+            _logger</span><span class="pun">.</span><span class="typ">Log</span><span class="pun">(</span><span class="str">"A game could not be found for {0}."</span><span class="pun">.</span><span class="typ">Frmt</span><span class="pun">(</span><span class="pln">knockData</span><span class="pun">.</span><span class="typ">Name</span><span class="pun">),</span><span class="pln"> </span><span class="typ">LogMessageType</span><span class="pun">.</span><span class="typ">Negative</span><span class="pun">)</span><span class="pln">
+            socket</span><span class="pun">.</span><span class="typ">SendPacket</span><span class="pun">(</span><span class="typ">Protocol</span><span class="pun">.</span><span class="typ">MakeReject</span><span class="pun">(</span><span class="typ">Protocol</span><span class="pun">.</span><span class="typ">RejectReason</span><span class="pun">.</span><span class="typ">GameFull</span><span class="pun">))</span><span class="pln">
+            socket</span><span class="pun">.</span><span class="typ">Disconnect</span><span class="pun">(</span><span class="pln">expected</span><span class="pun">:=</span><span class="kwd">True</span><span class="pun">,</span><span class="pln"> reason</span><span class="pun">:=</span><span class="str">"A game could not be found for {0}."</span><span class="pun">.</span><span class="typ">Frmt</span><span class="pun">(</span><span class="pln">knockData</span><span class="pun">.</span><span class="typ">Name</span><span class="pun">))</span><span class="pln">
+        </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Try</span><span class="pln">
+    </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Sub</span><span class="pln">
+
+    </span><span class="typ">Private</span><span class="pln"> </span><span class="typ">Function</span><span class="pln"> </span><span class="typ">AddGameSet</span><span class="pun">(</span><span class="pln">gameSettings </span><span class="typ">As</span><span class="pln"> </span><span class="typ">GameSettings</span><span class="pun">)</span><span class="pln"> </span><span class="typ">As</span><span class="pln"> </span><span class="typ">GameSet</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Requires</span><span class="pun">(</span><span class="pln">gameSettings </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Ensures</span><span class="pun">(</span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Result</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">GameSet</span><span class="pun">)()</span><span class="pln"> </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+
+        </span><span class="typ">Dim</span><span class="pln"> id </span><span class="pun">=</span><span class="pln"> gameSettings</span><span class="pun">.</span><span class="typ">GameDescription</span><span class="pun">.</span><span class="typ">GameId</span><span class="pln">
+        </span><span class="typ">If</span><span class="pln"> _gameSets</span><span class="pun">.</span><span class="typ">ContainsKey</span><span class="pun">(</span><span class="pln">id</span><span class="pun">)</span><span class="pln"> </span><span class="typ">Then</span><span class="pln"> </span><span class="typ">Throw</span><span class="pln"> </span><span class="typ">New</span><span class="pln"> </span><span class="typ">InvalidOperationException</span><span class="pun">(</span><span class="str">"There is already a server entry with that game id."</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Dim</span><span class="pln"> gameSet </span><span class="pun">=</span><span class="pln"> </span><span class="typ">New</span><span class="pln"> </span><span class="typ">GameSet</span><span class="pun">(</span><span class="pln">gameSettings</span><span class="pun">,</span><span class="pln"> _clock</span><span class="pun">)</span><span class="pln">
+        _gameSets</span><span class="pun">(</span><span class="pln">id</span><span class="pun">)</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> gameSet
+        _viewGameSets</span><span class="pun">.</span><span class="typ">Add</span><span class="pun">(</span><span class="pln">gameSet</span><span class="pun">)</span><span class="pln">
+        _viewActiveGameSets</span><span class="pun">.</span><span class="typ">Add</span><span class="pun">(</span><span class="pln">gameSet</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Dim</span><span class="pln"> activeAdder </span><span class="typ">As</span><span class="pln"> WC3</span><span class="pun">.</span><span class="typ">GameSet</span><span class="pun">.</span><span class="typ">StateChangedEventHandler</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Sub</span><span class="pun">(</span><span class="pln">sender</span><span class="pun">,</span><span class="pln"> active</span><span class="pun">)</span><span class="pln"> inQueue</span><span class="pun">.</span><span class="typ">QueueAction</span><span class="pun">(</span><span class="pln">
+            </span><span class="typ">Sub</span><span class="pun">()</span><span class="pln">
+                </span><span class="typ">If</span><span class="pln"> _viewActiveGameSets</span><span class="pun">.</span><span class="typ">Contains</span><span class="pun">(</span><span class="pln">sender</span><span class="pun">)</span><span class="pln"> </span><span class="pun">&lt;&gt;</span><span class="pln"> active </span><span class="typ">Then</span><span class="pln">
+                    </span><span class="typ">If</span><span class="pln"> active </span><span class="typ">Then</span><span class="pln">
+                        _viewActiveGameSets</span><span class="pun">.</span><span class="typ">Add</span><span class="pun">(</span><span class="pln">sender</span><span class="pun">)</span><span class="pln">
+                    </span><span class="typ">Else</span><span class="pln">
+                        _viewActiveGameSets</span><span class="pun">.</span><span class="typ">Remove</span><span class="pun">(</span><span class="pln">sender</span><span class="pun">)</span><span class="pln">
+                    </span><span class="typ">End</span><span class="pln"> </span><span class="typ">If</span><span class="pln">
+                </span><span class="typ">End</span><span class="pln"> </span><span class="typ">If</span><span class="pln">
+            </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Sub</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">AddHandler</span><span class="pln"> gameSet</span><span class="pun">.</span><span class="typ">StateChanged</span><span class="pun">,</span><span class="pln"> activeAdder
+
+        </span><span class="typ">Dim</span><span class="pln"> gameLink </span><span class="pun">=</span><span class="pln"> gameSet</span><span class="pun">.</span><span class="typ">ObserveGames</span><span class="pun">(</span><span class="pln">
+                adder</span><span class="pun">:=</span><span class="typ">Sub</span><span class="pun">(</span><span class="pln">game</span><span class="pun">)</span><span class="pln"> inQueue</span><span class="pun">.</span><span class="typ">QueueAction</span><span class="pun">(</span><span class="typ">Sub</span><span class="pun">()</span><span class="pln"> _viewGames</span><span class="pun">.</span><span class="typ">Add</span><span class="pun">(</span><span class="typ">Tuple</span><span class="pun">.</span><span class="typ">Create</span><span class="pun">(</span><span class="pln">gameSet</span><span class="pun">,</span><span class="pln"> game</span><span class="pun">))),</span><span class="pln">
+                remover</span><span class="pun">:=</span><span class="typ">Sub</span><span class="pun">(</span><span class="pln">game</span><span class="pun">)</span><span class="pln"> inQueue</span><span class="pun">.</span><span class="typ">QueueAction</span><span class="pun">(</span><span class="typ">Sub</span><span class="pun">()</span><span class="pln"> _viewGames</span><span class="pun">.</span><span class="typ">Remove</span><span class="pun">(</span><span class="typ">Tuple</span><span class="pun">.</span><span class="typ">Create</span><span class="pun">(</span><span class="pln">gameSet</span><span class="pun">,</span><span class="pln"> game</span><span class="pun">))))</span><span class="pln">
+        </span><span class="typ">Dim</span><span class="pln"> playerLink </span><span class="pun">=</span><span class="pln"> gameSet</span><span class="pun">.</span><span class="typ">ObservePlayers</span><span class="pun">(</span><span class="pln">
+                adder</span><span class="pun">:=</span><span class="typ">Sub</span><span class="pun">(</span><span class="pln">game</span><span class="pun">,</span><span class="pln"> player</span><span class="pun">)</span><span class="pln"> inQueue</span><span class="pun">.</span><span class="typ">QueueAction</span><span class="pun">(</span><span class="typ">Sub</span><span class="pun">()</span><span class="pln"> _viewPlayers</span><span class="pun">.</span><span class="typ">Add</span><span class="pun">(</span><span class="typ">Tuple</span><span class="pun">.</span><span class="typ">Create</span><span class="pun">(</span><span class="pln">gameSet</span><span class="pun">,</span><span class="pln"> game</span><span class="pun">,</span><span class="pln"> player</span><span class="pun">))),</span><span class="pln">
+                remover</span><span class="pun">:=</span><span class="typ">Sub</span><span class="pun">(</span><span class="pln">game</span><span class="pun">,</span><span class="pln"> player</span><span class="pun">)</span><span class="pln"> inQueue</span><span class="pun">.</span><span class="typ">QueueAction</span><span class="pun">(</span><span class="typ">Sub</span><span class="pun">()</span><span class="pln"> _viewPlayers</span><span class="pun">.</span><span class="typ">Remove</span><span class="pun">(</span><span class="typ">Tuple</span><span class="pun">.</span><span class="typ">Create</span><span class="pun">(</span><span class="pln">gameSet</span><span class="pun">,</span><span class="pln"> game</span><span class="pun">,</span><span class="pln"> player</span><span class="pun">))))</span><span class="pln">
+
+        </span><span class="str">'Automatic removal'</span><span class="pln">
+        </span><span class="typ">Call</span><span class="pln"> </span><span class="typ">Async</span><span class="pln"> </span><span class="typ">Sub</span><span class="pun">()</span><span class="pln">
+                 </span><span class="typ">Await</span><span class="pln"> gameSet</span><span class="pun">.</span><span class="typ">DisposalTask</span><span class="pln">
+                 _gameSets</span><span class="pun">.</span><span class="typ">Remove</span><span class="pun">(</span><span class="pln">id</span><span class="pun">)</span><span class="pln">
+                 _viewGameSets</span><span class="pun">.</span><span class="typ">Remove</span><span class="pun">(</span><span class="pln">gameSet</span><span class="pun">)</span><span class="pln">
+                 _viewActiveGameSets</span><span class="pun">.</span><span class="typ">Remove</span><span class="pun">(</span><span class="pln">gameSet</span><span class="pun">)</span><span class="pln">
+                 </span><span class="typ">Call</span><span class="pln"> </span><span class="typ">Async</span><span class="pln"> </span><span class="typ">Sub</span><span class="pun">()</span><span class="pln"> </span><span class="typ">Await</span><span class="pln"> gameLink</span><span class="pun">.</span><span class="typ">DisposeAsync</span><span class="pun">()</span><span class="pln">
+                 </span><span class="typ">Call</span><span class="pln"> </span><span class="typ">Async</span><span class="pln"> </span><span class="typ">Sub</span><span class="pun">()</span><span class="pln"> </span><span class="typ">Await</span><span class="pln"> playerLink</span><span class="pun">.</span><span class="typ">DisposeAsync</span><span class="pun">()</span><span class="pln">
+                 </span><span class="typ">RemoveHandler</span><span class="pln"> gameSet</span><span class="pun">.</span><span class="typ">StateChanged</span><span class="pun">,</span><span class="pln"> activeAdder
+             </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Sub</span><span class="pln">
+
+        </span><span class="typ">Return</span><span class="pln"> gameSet
+    </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Function</span><span class="pln">
+    </span><span class="typ">Public</span><span class="pln"> </span><span class="typ">Function</span><span class="pln"> </span><span class="typ">QueueAddGameSet</span><span class="pun">(</span><span class="pln">gameSettings </span><span class="typ">As</span><span class="pln"> </span><span class="typ">GameSettings</span><span class="pun">)</span><span class="pln"> </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">GameSet</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Requires</span><span class="pun">(</span><span class="pln">gameSettings </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Ensures</span><span class="pun">(</span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Result</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">GameSet</span><span class="pun">))()</span><span class="pln"> </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Return</span><span class="pln"> inQueue</span><span class="pun">.</span><span class="typ">QueueFunc</span><span class="pun">(</span><span class="typ">Function</span><span class="pun">()</span><span class="pln"> </span><span class="typ">AddGameSet</span><span class="pun">(</span><span class="pln">gameSettings</span><span class="pun">))</span><span class="pln">
+    </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Function</span><span class="pln">
+
+    </span><span class="typ">Protected</span><span class="pln"> </span><span class="typ">Overrides</span><span class="pln"> </span><span class="typ">Function</span><span class="pln"> </span><span class="typ">PerformDispose</span><span class="pun">(</span><span class="pln">finalizing </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Boolean</span><span class="pun">)</span><span class="pln"> </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Task</span><span class="pln">
+        </span><span class="typ">If</span><span class="pln"> finalizing </span><span class="typ">Then</span><span class="pln"> </span><span class="typ">Return</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pln">
+        </span><span class="typ">Return</span><span class="pln"> inQueue</span><span class="pun">.</span><span class="typ">QueueAction</span><span class="pun">(</span><span class="pln">
+            </span><span class="typ">Sub</span><span class="pun">()</span><span class="pln">
+                </span><span class="typ">For</span><span class="pln"> </span><span class="typ">Each</span><span class="pln"> entry </span><span class="typ">In</span><span class="pln"> _gameSets</span><span class="pun">.</span><span class="typ">Values</span><span class="pln">
+                    entry</span><span class="pun">.</span><span class="typ">Dispose</span><span class="pun">()</span><span class="pln">
+                </span><span class="typ">Next</span><span class="pln"> entry
+            </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Sub</span><span class="pun">)</span><span class="pln">
+    </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Function</span><span class="pln">
+
+    </span><span class="typ">Private</span><span class="pln"> </span><span class="typ">Async</span><span class="pln"> </span><span class="typ">Function</span><span class="pln"> </span><span class="typ">AsyncFindPlayer</span><span class="pun">(</span><span class="pln">username </span><span class="typ">As</span><span class="pln"> </span><span class="typ">String</span><span class="pun">)</span><span class="pln"> </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">Player</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Assume</span><span class="pun">(</span><span class="pln">username </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="str">'Contract.Ensures(Contract.Result(Of Task(Of Player))() IsNot Nothing)'</span><span class="pln">
+        </span><span class="typ">Dim</span><span class="pln"> findResults </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Await</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">.</span><span class="typ">WhenAll</span><span class="pun">(</span><span class="typ">From</span><span class="pln"> entry </span><span class="typ">In</span><span class="pln"> _gameSets</span><span class="pun">.</span><span class="typ">Values</span><span class="pln"> </span><span class="typ">Select</span><span class="pln"> entry</span><span class="pun">.</span><span class="typ">QueueTryFindPlayer</span><span class="pun">(</span><span class="pln">username</span><span class="pun">))</span><span class="pln">
+        </span><span class="typ">Return</span><span class="pln"> </span><span class="pun">(</span><span class="typ">From</span><span class="pln"> player </span><span class="typ">In</span><span class="pln"> findResults </span><span class="typ">Where</span><span class="pln"> player </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">).</span><span class="typ">FirstOrDefault</span><span class="pln">
+    </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Function</span><span class="pln">
+    </span><span class="typ">Public</span><span class="pln"> </span><span class="typ">Function</span><span class="pln"> </span><span class="typ">QueueFindPlayer</span><span class="pun">(</span><span class="pln">userName </span><span class="typ">As</span><span class="pln"> </span><span class="typ">String</span><span class="pun">)</span><span class="pln"> </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">Player</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Ensures</span><span class="pun">(</span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Result</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">Player</span><span class="pun">))()</span><span class="pln"> </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Return</span><span class="pln"> inQueue</span><span class="pun">.</span><span class="typ">QueueFunc</span><span class="pun">(</span><span class="typ">Function</span><span class="pun">()</span><span class="pln"> </span><span class="typ">AsyncFindPlayer</span><span class="pun">(</span><span class="pln">userName</span><span class="pun">)).</span><span class="typ">Unwrap</span><span class="pun">.</span><span class="typ">AssumeNotNull</span><span class="pln">
+    </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Function</span><span class="pln">
+
+    </span><span class="typ">Private</span><span class="pln"> </span><span class="typ">Async</span><span class="pln"> </span><span class="typ">Function</span><span class="pln"> </span><span class="typ">AsyncFindPlayerGame</span><span class="pun">(</span><span class="pln">username </span><span class="typ">As</span><span class="pln"> </span><span class="typ">String</span><span class="pun">)</span><span class="pln"> </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">Game</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Assume</span><span class="pun">(</span><span class="pln">username </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="str">'Contract.Ensures(Contract.Result(Of Task(Of Game))() IsNot Nothing)'</span><span class="pln">
+        </span><span class="typ">Dim</span><span class="pln"> findResults </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Await</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">.</span><span class="typ">WhenAll</span><span class="pun">(</span><span class="typ">From</span><span class="pln"> entry </span><span class="typ">In</span><span class="pln"> _gameSets</span><span class="pun">.</span><span class="typ">Values</span><span class="pln"> </span><span class="typ">Select</span><span class="pln"> entry</span><span class="pun">.</span><span class="typ">QueueTryFindPlayerGame</span><span class="pun">(</span><span class="pln">username</span><span class="pun">))</span><span class="pln">
+        </span><span class="typ">Return</span><span class="pln"> </span><span class="pun">(</span><span class="typ">From</span><span class="pln"> game </span><span class="typ">In</span><span class="pln"> findResults </span><span class="typ">Where</span><span class="pln"> game </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">).</span><span class="typ">FirstOrDefault</span><span class="pln">
+    </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Function</span><span class="pln">
+    </span><span class="typ">Public</span><span class="pln"> </span><span class="typ">Function</span><span class="pln"> </span><span class="typ">QueueFindPlayerGame</span><span class="pun">(</span><span class="pln">userName </span><span class="typ">As</span><span class="pln"> </span><span class="typ">String</span><span class="pun">)</span><span class="pln"> </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">Game</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Ensures</span><span class="pun">(</span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Result</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">Game</span><span class="pun">))()</span><span class="pln"> </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Return</span><span class="pln"> inQueue</span><span class="pun">.</span><span class="typ">QueueFunc</span><span class="pun">(</span><span class="typ">Function</span><span class="pun">()</span><span class="pln"> </span><span class="typ">AsyncFindPlayerGame</span><span class="pun">(</span><span class="pln">userName</span><span class="pun">)).</span><span class="typ">Unwrap</span><span class="pun">.</span><span class="typ">AssumeNotNull</span><span class="pln">
+    </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Function</span><span class="pln">
+
+    </span><span class="typ">Public</span><span class="pln"> </span><span class="typ">Function</span><span class="pln"> </span><span class="typ">ObserveGameSets</span><span class="pun">(</span><span class="pln">adder </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Action</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">GameSet</span><span class="pun">),</span><span class="pln">
+                                    remover </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Action</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">GameSet</span><span class="pun">))</span><span class="pln"> </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">IDisposable</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Requires</span><span class="pun">(</span><span class="pln">adder </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Requires</span><span class="pun">(</span><span class="pln">remover </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Ensures</span><span class="pun">(</span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Result</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">IDisposable</span><span class="pun">))()</span><span class="pln"> </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Return</span><span class="pln"> inQueue</span><span class="pun">.</span><span class="typ">QueueFunc</span><span class="pun">(</span><span class="typ">Function</span><span class="pun">()</span><span class="pln"> _viewGameSets</span><span class="pun">.</span><span class="typ">Observe</span><span class="pun">(</span><span class="pln">adder</span><span class="pun">,</span><span class="pln"> remover</span><span class="pun">))</span><span class="pln">
+    </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Function</span><span class="pln">
+
+    </span><span class="typ">Public</span><span class="pln"> </span><span class="typ">Function</span><span class="pln"> </span><span class="typ">ObserveActiveGameSets</span><span class="pun">(</span><span class="pln">adder </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Action</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">GameSet</span><span class="pun">),</span><span class="pln">
+                                          remover </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Action</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">GameSet</span><span class="pun">))</span><span class="pln"> </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">IDisposable</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Requires</span><span class="pun">(</span><span class="pln">adder </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Requires</span><span class="pun">(</span><span class="pln">remover </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Ensures</span><span class="pun">(</span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Result</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">IDisposable</span><span class="pun">))()</span><span class="pln"> </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Return</span><span class="pln"> inQueue</span><span class="pun">.</span><span class="typ">QueueFunc</span><span class="pun">(</span><span class="typ">Function</span><span class="pun">()</span><span class="pln"> _viewActiveGameSets</span><span class="pun">.</span><span class="typ">Observe</span><span class="pun">(</span><span class="pln">adder</span><span class="pun">,</span><span class="pln"> remover</span><span class="pun">))</span><span class="pln">
+    </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Function</span><span class="pln">
+
+    </span><span class="typ">Public</span><span class="pln"> </span><span class="typ">Function</span><span class="pln"> </span><span class="typ">ObserveGames</span><span class="pun">(</span><span class="pln">adder </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Action</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">GameSet</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Game</span><span class="pun">),</span><span class="pln">
+                                 remover </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Action</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">GameSet</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Game</span><span class="pun">))</span><span class="pln"> </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">IDisposable</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Requires</span><span class="pun">(</span><span class="pln">adder </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Requires</span><span class="pun">(</span><span class="pln">remover </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Ensures</span><span class="pun">(</span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Result</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">IDisposable</span><span class="pun">))()</span><span class="pln"> </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Return</span><span class="pln"> inQueue</span><span class="pun">.</span><span class="typ">QueueFunc</span><span class="pun">(</span><span class="typ">Function</span><span class="pun">()</span><span class="pln"> _viewGames</span><span class="pun">.</span><span class="typ">Observe</span><span class="pun">(</span><span class="pln">
+            adder</span><span class="pun">:=</span><span class="typ">Sub</span><span class="pun">(</span><span class="pln">item</span><span class="pun">)</span><span class="pln"> adder</span><span class="pun">(</span><span class="pln">item</span><span class="pun">.</span><span class="typ">Item1</span><span class="pun">,</span><span class="pln"> item</span><span class="pun">.</span><span class="typ">Item2</span><span class="pun">),</span><span class="pln">
+            remover</span><span class="pun">:=</span><span class="typ">Sub</span><span class="pun">(</span><span class="pln">item</span><span class="pun">)</span><span class="pln"> remover</span><span class="pun">(</span><span class="pln">item</span><span class="pun">.</span><span class="typ">Item1</span><span class="pun">,</span><span class="pln"> item</span><span class="pun">.</span><span class="typ">Item2</span><span class="pun">)))</span><span class="pln">
+    </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Function</span><span class="pln">
+
+    </span><span class="typ">Public</span><span class="pln"> </span><span class="typ">Function</span><span class="pln"> </span><span class="typ">ObservePlayers</span><span class="pun">(</span><span class="pln">adder </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Action</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">GameSet</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Game</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Player</span><span class="pun">),</span><span class="pln">
+                                   remover </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Action</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">GameSet</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Game</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Player</span><span class="pun">))</span><span class="pln"> </span><span class="typ">As</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">IDisposable</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Requires</span><span class="pun">(</span><span class="pln">adder </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Requires</span><span class="pun">(</span><span class="pln">remover </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Ensures</span><span class="pun">(</span><span class="typ">Contract</span><span class="pun">.</span><span class="typ">Result</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">(</span><span class="typ">Of</span><span class="pln"> </span><span class="typ">IDisposable</span><span class="pun">))()</span><span class="pln"> </span><span class="typ">IsNot</span><span class="pln"> </span><span class="typ">Nothing</span><span class="pun">)</span><span class="pln">
+        </span><span class="typ">Return</span><span class="pln"> inQueue</span><span class="pun">.</span><span class="typ">QueueFunc</span><span class="pun">(</span><span class="typ">Function</span><span class="pun">()</span><span class="pln"> _viewPlayers</span><span class="pun">.</span><span class="typ">Observe</span><span class="pun">(</span><span class="pln">
+            adder</span><span class="pun">:=</span><span class="typ">Sub</span><span class="pun">(</span><span class="pln">item</span><span class="pun">)</span><span class="pln"> adder</span><span class="pun">(</span><span class="pln">item</span><span class="pun">.</span><span class="typ">Item1</span><span class="pun">,</span><span class="pln"> item</span><span class="pun">.</span><span class="typ">Item2</span><span class="pun">,</span><span class="pln"> item</span><span class="pun">.</span><span class="typ">Item3</span><span class="pun">),</span><span class="pln">
+            remover</span><span class="pun">:=</span><span class="typ">Sub</span><span class="pun">(</span><span class="pln">item</span><span class="pun">)</span><span class="pln"> remover</span><span class="pun">(</span><span class="pln">item</span><span class="pun">.</span><span class="typ">Item1</span><span class="pun">,</span><span class="pln"> item</span><span class="pun">.</span><span class="typ">Item2</span><span class="pun">,</span><span class="pln"> item</span><span class="pun">.</span><span class="typ">Item3</span><span class="pun">)))</span><span class="pln">
+    </span><span class="typ">End</span><span class="pln"> </span><span class="typ">Function</span><span class="pln">
+</span><span class="typ">End</span><span class="pln"> </span><span class="typ">Class</span></contractinvariantmethod()></code></pre>
+</div>
+<p>Right off the bat I can see that this class’ purpose, how it fits 
+into the overall code base, is not explained. There should be a doc 
+comment stating that <code>GameServer</code> is, roughly speaking, the 
+model part of an MVC pattern. That it tracks what games the bot is 
+running, places joining players into those games, and is controlled by a
+ <a href="https://github.com/Strilanc/Tinker/blob/master/Warcraft3/Server/WC3GameServerManager.vb">game server manager</a>. That the manager class exposes <code>GameServer</code>
+ as a bot ‘component’ (so it can be created/disposed/commanded by the 
+user). That unlike most of the other components, server components are 
+not created manually (although they could be). That when the bot is 
+asked to host a game, it automatically <a href="https://github.com/Strilanc/Tinker/blob/master/Bot/MainBot.vb#L91">gets-or-creates a server component</a> and then uses that from then on. And so on.</p>
+<p>The next thing that should be fixed is the commented out <code>Contract.Ensures</code>
+ lines. I remember that they’re commented out because they were crashing
+ the static verifier, but that should be explained. Actually, because I 
+remember having so many issues with crashing/confusing the static 
+verifier that I don’t think they’re worth it anymore, I’d probably just 
+cut all of the contracts stuff.</p>
+<p>Looking at the code with my current knowledge, I can see I didn’t know about <a href="http://msdn.microsoft.com/en-ca/data/gg577609.aspx">Rx</a> and hadn’t figured out <a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime">perishable collections</a> when I wrote it. Refactoring the ‘ObservableCollection’ fields and associated accessor methods to expose <code>IObservable&lt;Perishable&lt;T&gt;&gt;</code>
+ instances would simplify things a lot. For example, it would trivialize
+ the tricky interleaved-into-everything-else code making it possible to 
+observe all of the players in all of the games in all of the game sets.</p>
+<p>I also notice that <code>GameServer</code> is designed as an <a href="https://en.wikipedia.org/wiki/Actor_model">actor</a>,
+ with all incoming requests going onto a call queue to be run in order. 
+This can now be done more succinctly by awaiting into the call queues, 
+as I explained in the post <a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait">Emulating Actors in C#</a>.</p>
+<p>The method <code>AsyncFindPlayerGame</code> forwards the search to all the game sets, and uses <code><a href="http://msdn.microsoft.com/en-us/library/system.threading.tasks.task.whenall%28v=vs.110%29.aspx">WhenAll</a></code> to await them all completing. Using <code><a href="http://msmvps.com/blogs/jon_skeet/archive/2012/01/16/eduasync-part-19-ordering-by-completion-ahead-of-time.aspx">OrderByCompletion</a></code> could make the code more robust, because then the search could complete before all game sets had responded.</p>
+<p>The order of the <code>QueueAcceptSocket</code>, <code>AcceptSocket</code>, and <code>HandleFirstPacket</code> methods is not reflective of the order they actually run.</p>
+<p>Finally, if I were writing this class now, I would experiment with 
+using cancellation tokens to control its lifetime instead of making it 
+disposable. I’ve <a href="http://twistedoakstudios.com/blog/Post7391_cancellation-tokens-and-collapsing-futures-for-objective-c">posted about why recently</a>: cancellation tokens tend to remove boilerplate.</p>
+<h5>Verdict</h5>
+<p>The above probably sounds like I’m hammering on how terrible this 
+code is, but I’m not. I actually think it’s fine, except for the lack of
+ documentation and the mysteriously commented out lines. Everything else
+ I mentioned is an alternative to explore, not a blocking issue. 
+(Interestingly, I subconsciously switched from “should” for the blocking
+ issues to “can/could/would” for the non-blocking issues.)</p>
+<p>Most of the code in Tinker follows the same basic pattern: it 
+averages ‘good’, except it lacks documentation. That’s my personal 
+opinion of it, anyways. By far the most common comment I get from other 
+people is just “VB? Bleh!”, with the occasional accompanying “Huh. 
+That’s some nice VB.”.</p>
+<p>Other classes I remember having difficulty simplifying are <a href="https://github.com/Strilanc/Tinker/blob/master/Bnet/Bnet%20Client.vb">BnetClient</a> and <a href="https://github.com/Strilanc/Tinker/blob/master/Warcraft3/Game/W3Game.vb">W3Game</a>. W3Game has the <a href="https://github.com/Strilanc/Tinker/blob/master/Warcraft3/Game/W3Game.vb#L37">line I’m most embarrassed about</a>. The classes I still like the most are the <a href="https://github.com/Strilanc/Tinker/blob/master/Bnet/Protocol/Bnet%20Protocol.vb">protocol</a> <a href="https://github.com/Strilanc/Tinker/blob/master/Warcraft3/Protocol/WC3%20Protocol.vb">and</a> <a href="https://github.com/Strilanc/Tinker/blob/master/Warcraft3/Replay/Replay%20Format.vb">format</a> <a href="https://github.com/Strilanc/Tinker/blob/master/Warcraft3/Protocol/Game%20Action%20Protocol.vb">definitions</a>.</p>
+<h3>Summary</h3>
+<p>Don’t expect to improve indefinitely without ever slowing down.</p>
+<p>Adjust for familiarity when comparing how you feel about your old code to how you feel about your new code.</p>
+<p>Distinguish between <em>bad</em> and <em>different</em>.</p>
+<p>—</p>
+<h3><a href="http://www.reddit.com/r/programming/comments/1rhr9k/not_crying_over_old_code/">Discuss on Reddit</a></h3>
+<p>—</p>
+<h3>My Twitter: <a href="https://twitter.com/CraigGidney">@CraigGidney</a></h3>
+<p>—</p>
+
+<blockquote><p>
+
+
+</p><div id="disqus_thread"><iframe verticalscrolling="no" horizontalscrolling="no" src="Not%20Crying%20Over%20Old%20Code_files/a.htm" style="width: 100% ! important; border: medium none ! important; overflow: hidden ! important; height: 578px ! important;" role="complementary" allowtransparency="true" data-disqus-uid="2" id="dsq-2" scrolling="no" width="100%" frameborder="0"></iframe></div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://twistedoakstudios.com/blog/Post8000_not-crying-over-old-code';
+    var disqus_identifier = '8000 http://twistedoakstudios.com/blog/?p=8000';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'twistedoakstudios';
+    var disqus_title = "Not Crying Over Old Code";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+        config.language = '';
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = '?cf_action=sync_comments&post_id=8000';
+
+            var firstScript = document.getElementsByTagName( "script" )[0];
+            firstScript.parentNode.insertBefore(script, firstScript);
+        });
+                    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/twistedoakstudios.com\/blog\/Post8000_not-crying-over-old-code\/trackback"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.' + 'disqus.com' + '/embed.js?pname=wordpress&pver=2.74';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+
+<h3>
+<spacer>
+</spacer></h3>
+
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers consulting and development on high-tech interactive projects. Check out our <a href="http://twistedoakstudios.com/portfolio/">portfolio</a>, or <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+<p></p></blockquote>
+
+<h2 class="endofpage">Archive</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post8147_referencing-substrings-faster-without-leaking-memory" rel="bookmark" title="Permanent Link to Referencing Substrings Faster, without Leaking Memory">Referencing Substrings Faster, without Leaking Memory</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post8000_not-crying-over-old-code" rel="bookmark" title="Permanent Link to Not Crying Over Old Code">Not Crying Over Old Code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7878_exploring-universal-ternary-gates" rel="bookmark" title="Permanent Link to Exploring Universal Ternary Gates">Exploring Universal Ternary Gates</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7748_impractical-experiments-2-securing-peer-to-peer-fog-of-war-against-map-hacks" rel="bookmark" title="Permanent Link to Impractical Experiments #2: Securing Peer to Peer Fog of War against Map Hacks">Impractical Experiments #2: Securing Peer to Peer Fog of War against Map Hacks</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7694_achieving-exponential-slowdown-by-enumerating-twice" rel="bookmark" title="Permanent Link to Achieving Exponential Slowdown by Enumerating Twice">Achieving Exponential Slowdown by Enumerating Twice</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7525_using-immortality-to-kill-accidental-callback-cycles" rel="bookmark" title="Permanent Link to Using Immortality to Kill Accidental Callback Cycles">Using Immortality to Kill Accidental Callback Cycles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7391_cancellation-tokens-and-collapsing-futures-for-objective-c" rel="bookmark" title="Permanent Link to Cancellation Tokens (and Collapsing Futures) for Objective-C">Cancellation Tokens (and Collapsing Futures) for Objective-C</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7254_visualizing-the-eigenvectors-of-a-rotation" rel="bookmark" title="Permanent Link to Visualizing the Eigenvectors of a Rotation">Visualizing the Eigenvectors of a Rotation</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7149_collapsing-futures-in-objective-c" rel="bookmark" title="Permanent Link to Collapsing Futures in Objective-C">Collapsing Futures in Objective-C</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7052_bug-hunting-1-garbled-audio-from-end-to-end" rel="bookmark" title="Permanent Link to Bug Hunting #1: Garbled Audio from End to End">Bug Hunting #1: Garbled Audio from End to End</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post6871_impractical-experiments-1-representing-numbers-as-polynomials" rel="bookmark" title="Permanent Link to Impractical Experiments #1: Representing Numbers as Polynomials">Impractical Experiments #1: Representing Numbers as Polynomials</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post6536_implementing-quantum-pseudo-telepathy" rel="bookmark" title="Permanent Link to Implementing Quantum Pseudo-Telepathy">Implementing Quantum Pseudo-Telepathy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post6422_turn-on-your-damn-warnings" rel="bookmark" title="Permanent Link to Turn On Your Damn Warnings">Turn On Your Damn Warnings</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5953_big-o-made-trivial" rel="bookmark" title="Permanent Link to Big-O Made Trivial">Big-O Made Trivial</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5268_unfathomable-bugs-7-the-broken-oven" rel="bookmark" title="Permanent Link to Unfathomable Bugs #7: The Broken Oven">Unfathomable Bugs #7: The Broken Oven</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5623_solomonoffs-mad-scientist" rel="bookmark" title="Permanent Link to Solomonoff’s Mad Scientist">Solomonoff’s Mad Scientist</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5753_yearly-blogging-roundup-1" rel="bookmark" title="Permanent Link to Yearly Blogging Roundup #1">Yearly Blogging Roundup #1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5485_what-isnt-a-monad" rel="bookmark" title="Permanent Link to What isn’t a Monad">What isn’t a Monad</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5365_searching-a-sorted-matrix-faster" rel="bookmark" title="Permanent Link to Searching a Sorted Matrix Faster">Searching a Sorted Matrix Faster</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5273_how-to-read-nested-ternary-operators" rel="bookmark" title="Permanent Link to How to Read Nested Ternary Operators">How to Read Nested Ternary Operators</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5204_making-sublime-text-2-jump-to-the-correct-line-with-unity-on-os-x" rel="bookmark" title="Permanent Link to Making Sublime Text 2 Jump to the Correct Line with Unity on OS X">Making Sublime Text 2 Jump to the Correct Line with Unity on OS X</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5096_my-bug-my-bad-4-reading-concurrently" rel="bookmark" title="Permanent Link to My Bug, My Bad #4: Reading Concurrently">My Bug, My Bad #4: Reading Concurrently</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5018_whole-api-testing-with-reflection" rel="bookmark" title="Permanent Link to Whole API Testing with Reflection">Whole API Testing with Reflection</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4708_optimizing-a-parser-combinator-into-a-memcpy" rel="bookmark" title="Permanent Link to Optimizing a Parser Combinator into a memcpy">Optimizing a Parser Combinator into a memcpy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4872_dont-treat-paths-like-strings" rel="bookmark" title="Permanent Link to Don’t Treat Paths Like Strings">Don’t Treat Paths Like Strings</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4706_breaking-a-toy-hash-function" rel="bookmark" title="Permanent Link to Breaking a Toy Hash Function">Breaking a Toy Hash Function</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4425_counting-iterators-lazily" rel="bookmark" title="Permanent Link to Counting Iterators Lazily">Counting Iterators Lazily</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4428_unfathomable-bugs-6-pretend-precision" rel="bookmark" title="Permanent Link to Unfathomable Bugs #6: Pretend Precision">Unfathomable Bugs #6: Pretend Precision</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4281_my-bug-my-bad-3-accidentally-attacking-warcraft-3" rel="bookmark" title="Permanent Link to My Bug, My Bad #3: Accidentally Attacking WarCraft 3">My Bug, My Bad #3: Accidentally Attacking WarCraft 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4130_collapsing-types-vs-monads-followup" rel="bookmark" title="Permanent Link to Collapsing Types vs Monads (followup)">Collapsing Types vs Monads (followup)</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4008_collapsing-futures-easy-to-use-hard-to-represent" rel="bookmark" title="Permanent Link to Collapsing Futures: Easy to Use, Hard to Represent">Collapsing Futures: Easy to Use, Hard to Represent</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3858_eventual-exceptions-vs-programming-in-a-minimal-functional-style" rel="bookmark" title="Permanent Link to Eventual Exceptions vs Programming in a Minimal Functional Style">Eventual Exceptions vs Programming in a Minimal Functional Style</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3769_the-mystery-of-flunf" rel="bookmark" title="Permanent Link to The Mystery of Flunf">The Mystery of Flunf</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3724_explain-it-like-im-five-the-socialist-millionaire-problem-and-secure-multi-party-computation" rel="bookmark" title="Permanent Link to Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation">Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3631_computer-science-blows-my-mind" rel="bookmark" title="Permanent Link to Computer Science Blows My Mind">Computer Science Blows My Mind</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3484_a-visit-to-execution-labs-in-montreal" rel="bookmark" title="Permanent Link to A visit to Execution Labs in Montréal">A visit to Execution Labs in Montréal</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3573_transmuting-dice-conserving-entropy" rel="bookmark" title="Permanent Link to Transmuting Dice, Conserving Entropy">Transmuting Dice, Conserving Entropy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3516_rule-of-thumb-ask-for-the-clock" rel="bookmark" title="Permanent Link to Rule of Thumb: Ask for the Clock">Rule of Thumb: Ask for the Clock</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3477_rule-of-thumb-use-purposefully-weakened-methods" rel="bookmark" title="Permanent Link to Rule of Thumb: Use Purposefully Weakened Methods">Rule of Thumb: Use Purposefully Weakened Methods</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3376_rule-of-thumb-preconditions-should-be-checked-explicitly" rel="bookmark" title="Permanent Link to Rule of thumb: Preconditions Should be Checked Explicitly">Rule of thumb: Preconditions Should be Checked Explicitly</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3280_intersecting-linked-lists-faster" rel="bookmark" title="Permanent Link to Intersecting Linked Lists Faster">Intersecting Linked Lists Faster</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3138_mouse-path-smoothing-for-jack-lumber" rel="bookmark" title="Permanent Link to Mouse Path Smoothing for Jack Lumber">Mouse Path Smoothing for Jack Lumber</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3044_my-bug-my-bad-2-sunk-by-float" rel="bookmark" title="Permanent Link to My Bug, My Bad #2: Sunk by Float">My Bug, My Bad #2: Sunk by Float</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2852_repeat-yourself-differently" rel="bookmark" title="Permanent Link to Repeat Yourself Differently">Repeat Yourself Differently</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm" rel="bookmark" title="Permanent Link to Grover’s Quantum Search Algorithm">Grover’s Quantum Search Algorithm</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2766_followup-to-non-nullable-types-vs-c" rel="bookmark" title="Permanent Link to Followup to Non-Nullable Types vs C#">Followup to Non-Nullable Types vs C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2540_optimizing-just-in-time-with-expression-trees" rel="bookmark" title="Permanent Link to Optimizing Just in Time with Expression Trees">Optimizing Just in Time with Expression Trees</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2353_when-one-way-latency-doesnt-matter" rel="bookmark" title="Permanent Link to When One-Way Latency Doesn’t Matter">When One-Way Latency Doesn’t Matter</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point" rel="bookmark" title="Permanent Link to Determining exactly if/when/where a moving line intersected a moving point">Determining exactly if/when/where a moving line intersected a moving point</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait" rel="bookmark" title="Permanent Link to Emulating Actors in C# with Async/Await">Emulating Actors in C# with Async/Await</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2096_making-an-immutable-queue-with-guaranteed-constant-time-operations" rel="bookmark" title="Permanent Link to Making an immutable queue with guaranteed constant time operations">Making an immutable queue with guaranteed constant time operations</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions" rel="bookmark" title="Permanent Link to Improving Checked Exceptions">Improving Checked Exceptions</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime" rel="bookmark" title="Permanent Link to Perishable Collections: The Benefits of Removal-by-Lifetime">Perishable Collections: The Benefits of Removal-by-Lifetime</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control" rel="bookmark" title="Permanent Link to Decoupling shared control">Decoupling shared control</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1694_decoupling-inlined-ui-code" rel="bookmark" title="Permanent Link to Decoupling inlined UI code">Decoupling inlined UI code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet" rel="bookmark" title="Permanent Link to Linq to Collections: Beyond IEnumerable&lt;T&gt;">Linq to Collections: Beyond IEnumerable&lt;T&gt;</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+ <div id="upprev_box" style="right: -400px;">
+	<h6>
+		More interesting posts <span class="num"> (1 of 5 articles)</span>
+	</h6>
+	<div class="upprev_excerpt">
+		<p>
+			<a href="http://twistedoakstudios.com/blog/Post3516_rule-of-thumb-ask-for-the-clock" rel="prev">Rule of Thumb: Ask for the Clock</a>
+		</p>
+	</div>
+	
+		<p>
+Or check out our <a href="http://twistedoakstudios.com/portfolio">Portfolio</a>.		</p><button id="upprev_close" type="button">Close</button>
+</div><!-- #upprev_box -->
+<link rel="stylesheet" id="al2fb_style-css" href="Not%20Crying%20Over%20Old%20Code_files/add-link-to-facebook.css" type="text/css" media="all">
+<link rel="stylesheet" id="admin-bar-css" href="Not%20Crying%20Over%20Old%20Code_files/admin-bar.css" type="text/css" media="all">
+<link rel="stylesheet" id="upprev-css-css" href="Not%20Crying%20Over%20Old%20Code_files/upprev.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-quicklatex-format-css" href="Not%20Crying%20Over%20Old%20Code_files/quicklatex-format.css" type="text/css" media="all">
+<script type="text/javascript" src="Not%20Crying%20Over%20Old%20Code_files/admin-bar.js"></script>
+<script type="text/javascript" src="Not%20Crying%20Over%20Old%20Code_files/jquery_002.js"></script>
+<script type="text/javascript" src="Not%20Crying%20Over%20Old%20Code_files/upprev_js.php"></script>
+<script type="text/javascript" src="Not%20Crying%20Over%20Old%20Code_files/comment-reply.js"></script>
+	<script type="text/javascript">
+		(function() {
+			var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
+
+			request = true;
+
+			b[c] = b[c].replace( rcs, ' ' );
+			b[c] += ( window.postMessage && request ? ' ' : ' no-' ) + cs;
+		}());
+	</script>
+			
+
+		 
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+      <!-- home portfolio used to be here -->
+		</div>
+
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				138-1657 Barrington St.<br>
+				Halifax, NS, Canada B3J 2A1</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script>- 2013 Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Not%20Crying%20Over%20Old%20Code_files/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Not%20Crying%20Over%20Old%20Code_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<div id="wpadminbar" class="nojq " role="navigation">
+			<a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1">Skip to toolbar</a>
+			<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Top navigation toolbar." tabindex="0">
+				<ul id="wp-admin-bar-root-default" class="ab-top-menu">
+		<li id="wp-admin-bar-wp-logo" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/about.php" title="About WordPress"><span class="ab-icon"></span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-wp-logo-default" class="ab-submenu">
+		<li id="wp-admin-bar-about"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/about.php">About WordPress</a>		</li></ul><ul id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu">
+		<li id="wp-admin-bar-wporg"><a class="ab-item" href="http://wordpress.org/">WordPress.org</a>		</li>
+		<li id="wp-admin-bar-documentation"><a class="ab-item" href="http://codex.wordpress.org/">Documentation</a>		</li>
+		<li id="wp-admin-bar-support-forums"><a class="ab-item" href="http://wordpress.org/support/">Support Forums</a>		</li>
+		<li id="wp-admin-bar-feedback"><a class="ab-item" href="http://wordpress.org/support/forum/requests-and-feedback">Feedback</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-site-name" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/">Twisted Oak Studios Blog</a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-site-name-default" class="ab-submenu">
+		<li id="wp-admin-bar-dashboard"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/">Dashboard</a>		</li></ul><ul id="wp-admin-bar-appearance" class="ab-submenu">
+		<li id="wp-admin-bar-themes"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/themes.php">Themes</a>		</li>
+		<li id="wp-admin-bar-customize" class="hide-if-no-customize"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/customize.php?url=http%3A%2F%2Ftwistedoakstudios.com%2Fblog%2FPost8000_not-crying-over-old-code">Customize</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-updates"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/update-core.php" title="3 Plugin Updates, 3 Theme Updates"><span class="ab-icon"></span><span class="ab-label">6</span><span class="screen-reader-text">3 Plugin Updates, 3 Theme Updates</span></a>		</li>
+		<li id="wp-admin-bar-comments"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/edit-comments.php" title="0 comments awaiting moderation"><span class="ab-icon"></span><span id="ab-awaiting-mod" class="ab-label awaiting-mod pending-count count-0">0</span></a>		</li>
+		<li id="wp-admin-bar-new-content" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php" title="Add New"><span class="ab-icon"></span><span class="ab-label">New</span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-new-content-default" class="ab-submenu">
+		<li id="wp-admin-bar-new-post"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php">Post</a>		</li>
+		<li id="wp-admin-bar-new-media"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/media-new.php">Media</a>		</li>
+		<li id="wp-admin-bar-new-link"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/link-add.php">Link</a>		</li>
+		<li id="wp-admin-bar-new-page"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php?post_type=page">Page</a>		</li>
+		<li id="wp-admin-bar-new-user"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/user-new.php">User</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-edit"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post.php?post=8000&amp;action=edit">Edit Post</a>		</li></ul><ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
+		<li id="wp-admin-bar-search" class="admin-bar-search"><div class="ab-item ab-empty-item" tabindex="-1"><form action="http://twistedoakstudios.com/blog/" method="get" id="adminbarsearch"><input class="adminbar-input" name="s" id="adminbar-search" maxlength="150" type="text"><input class="adminbar-button" value="Search" type="submit"></form></div>		</li>
+		<li id="wp-admin-bar-my-account" class="menupop with-avatar"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/profile.php" title="My Account">Howdy, Craig Gidney<img alt="" src="Not%20Crying%20Over%20Old%20Code_files/31a6ce579f8f9f9d528715d1e941726e.png" class="avatar avatar-16 photo" width="16" height="16"></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-user-actions" class="ab-submenu">
+		<li id="wp-admin-bar-user-info"><a class="ab-item" tabindex="-1" href="http://twistedoakstudios.com/blog/wp-admin/profile.php"><img alt="" src="Not%20Crying%20Over%20Old%20Code_files/31a6ce579f8f9f9d528715d1e941726e_002.png" class="avatar avatar-64 photo" width="64" height="64"><span class="display-name">Craig Gidney</span><span class="username">craig</span></a>		</li>
+		<li id="wp-admin-bar-edit-profile"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/profile.php">Edit My Profile</a>		</li>
+		<li id="wp-admin-bar-logout"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=8f8dfa30f4">Log Out</a>		</li></ul></div>		</li></ul>			</div>
+			<a class="screen-reader-shortcut" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=8f8dfa30f4">Log Out</a>
+		</div></body></html>

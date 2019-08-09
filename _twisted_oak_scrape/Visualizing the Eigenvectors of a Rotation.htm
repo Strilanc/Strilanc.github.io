@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/Post7254_visualizing-the-eigenvectors-of-a-rotation.htm" async=""></script><script>var COMSCORE={beacon:function(){},purge:function(){},__noSuchMethod__:function(){}}</script><script>var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}};</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<title>Visualizing the Eigenvectors of a Rotation | Twisted Oak Studios Blog</title>
+
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/1140.css">
+    <link rel="stylesheet" href="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/style.css">
+    <link rel="stylesheet" href="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/blogstyle.css">
+<link rel="stylesheet" href="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/prettify.css" media="all">
+<link rel="stylesheet" href="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/sunburst.css" media="all">
+<script type="text/javascript" src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/modernizr-2.js"></script>
+<script src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/embed.js" async="" type="text/javascript"></script></head>
+<body class=" customize-support" onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="http://twistedoakstudios.com/"><img class="logo" src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a href="http://twistedoakstudios.com/labs/">Labs</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+    <p class="big-callout">
+    <!--We're hiring! Experience with Game Dev, Unity3D, Graphics, Signal Processing, or Networking? Eligible to work in Canada? 
+      <a href="http://www.twistedoakstudios.com/jobs.php">Check it out</a>!
+-->
+		</p><section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post7254_visualizing-the-eigenvectors-of-a-rotation" rel="bookmark" title="Permanent Link to Visualizing the Eigenvectors of a Rotation">Visualizing the Eigenvectors of a Rotation</a></h2>
+<div class="meta">posted by Craig Gidney on October 15, 2013</div>
+
+<p>In this post: a visual understanding of complex eigenvectors.</p>
+<h3>Motivation</h3>
+<p>Did you know rotation can be thought of as a type of scaling?</p>
+<p>I’ve been trying to fix the fact that my knowledge of quantum 
+computing is not well grounded. To that end, I’ve been slowly working my
+ way through the first couple chapters of <a href="http://www.amazon.ca/Quantum-Computation-Information-Anniversary-Edition/dp/1107002176">Quantum Computation and Quantum Information</a>. Basically that just means I’m brushing up on linear algebra. More specifically, linear algebra involving complex numbers.</p>
+<p>Linear algebra involving complex numbers is surprisingly similar to 
+“normal” linear algebra, with a few tweaks. For example, the inner 
+product is no longer just the dot product. You have to take the complex 
+complement of the second vector first. So <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_011.png" class="ql-img-inline-formula " alt="\left&lt; 1, i \right&gt;" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;" height="19" width="34"> is orthogonal to <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_005.png" class="ql-img-inline-formula " alt="\left&lt; i, 1 \right&gt;" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;" height="19" width="34"> because <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_006.png" class="ql-img-inline-formula " alt="\left&lt; 1, i \right&gt; \cdot \overline{\left&lt; i, 1 \right&gt;} = \left&lt; 1, i \right&gt; \cdot \left&lt; -i, 1 \right&gt; = 1 \cdot -i + i \cdot 1 = -i+i = 0" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;" height="21" width="427">.</p>
+<p>Another difference is that rotating a vector can be broken down into scaling its components in a particular basis.</p>
+<h3>Rotating vs Scaling</h3>
+<p>The effect of an operation on a particular vector is sometimes very 
+simple. When an operation does nothing except scale a vector by a 
+constant factor, that vector is called an <a href="http://en.wikipedia.org/wiki/Eigenvector">eigenvector</a>
+ of the operation. In “normal” linear algebra, without complex numbers, 
+rotations have no eigenvectors (not counting 0° and 180° rotations). 
+Basically, everything gets twisted instead of scaled. (Go ahead, try to 
+find one.)</p>
+<p>It turns out that once you allow complex numbers into your linear 
+algebra, rotations do have eigenvectors. When you try to turn these 
+vectors, you end up scaling them instead.</p>
+<p>This idea is counter-intuitive, so I went searching for an 
+explanation. Turns out someone already asked about it on the mathematics
+ stack exchange: <a href="http://math.stackexchange.com/q/241097/3820">Geometric interpretation for complex eigenvectors of a 2×2 rotation matrix</a>. The <a href="http://math.stackexchange.com/a/241399/3820">top answer</a>
+ is really good, except… it’s an algebraic interpretation, not 
+geometric. I understand it… but when I read the title of the question I 
+was hoping for a picture-type answer.</p>
+<p>I know that making things complex doubles the number of dimensions, and that means even picturing basic things like how <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_011.png" class="ql-img-inline-formula " alt="\left&lt; 1, i \right&gt;" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;" height="19" width="34"> is orthogonal to <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_005.png" class="ql-img-inline-formula " alt="\left&lt; i, 1 \right&gt;" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;" height="19" width="34">
+ requires the intractable feat of visualizing 4 dimensional space. So we
+ can’t picture things the obvious way. But surely there’s <em>some</em> visual way to explain these eigenvectors?</p>
+<p>Oh wait, I already have just the right tool for the job.</p>
+<h3>Phased Bar Charts</h3>
+<p>I’ve thought about how to represent complex vector spaces and operations in the past, when writing my explanations of <a href="http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm">Grover’s quantum search algorithm</a> and <a href="http://twistedoakstudios.com/blog/Post6536_implementing-quantum-pseudo-telepathy">quantum pseudo-telepathy</a>.
+ One idea I came up with, that didn’t work at the time for reasons that 
+will become obvious, is what I call a “phased bar chart”.</p>
+<p>A phased bar chart is like a normal bar chart, but each bar 
+represents a complex number instead of a real number. The length of a 
+bar is still the magnitude of the number, but you rotate the bars to 
+also show the phase. With some careful layout to ensure bars don’t 
+overlap, you end up with what looks like bars shooting out of a convex 
+polygon.</p>
+<p>Here’s how the components of the vector <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_004.png" class="ql-img-inline-formula " alt="\left&lt; 1,i,(i-1)/3 \right&gt;" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;" height="19" width="110"> are represented as a phased bar chart:</p>
+<p><img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/6xEfK5s.png" alt="Representation of Vector"></p>
+<p>As you can see, the first component is represented by the blue bar labelled <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_002.png" class="ql-img-inline-formula " alt="c_1" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="12" width="14">. It points to the right because <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_009.png" class="ql-img-inline-formula " alt="c_1 = 1" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="16" width="47"> and the positive real direction in the complex plane is rightward. Similarly, the red bar labelled <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex.png" class="ql-img-inline-formula " alt="c_2" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="11" width="15"> points upward because the imaginary axis increases in that direction and the second component is <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_013.png" class="ql-img-inline-formula " alt="+i" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="13" width="20">. Finally, the yellow bar labelled <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_003.png" class="ql-img-inline-formula " alt="c_3" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="11" width="15"> represents the third component of the vector, and is diagonal because <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_017.png" class="ql-img-inline-formula " alt="c_3=(i-1)/3" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;" height="19" width="108"> is not purely real or imaginary.</p>
+<p>One strength of phased bar charts is that, when animated, they 
+demonstrate the effects of scaling very clearly. For example, here’s 
+what happens as we scale <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_004.png" class="ql-img-inline-formula " alt="\left&lt; 1,i,(i-1)/3 \right&gt;" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;" height="19" width="110">:</p>
+<p><img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/VtfQTXJ.gif" alt="Real Scaling"></p>
+<p>Even if I hadn’t said what operation was being animated in the above 
+diagram, it’s trivial to see that it’s scaling. The scaling of each bar 
+perfectly matches the scaling of the overall vector.</p>
+<p>We’re not just limited to scaling by a real factor. We can scale by <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_014.png" class="ql-img-inline-formula " alt="i" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="6">,
+ and this will also have a simple visual effect on the diagram: it will 
+rotate. Here’s what happens as we scale our vector by values from the 
+complex unit circle:</p>
+<p><img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/Cj1vtyE.gif" alt="Complex scaling looks like rotation"></p>
+<p>Keep in mind that the rotation you’re seeing is not between the 
+components of the vector, but within each component’s phase. The vector 
+is not turning, its components are phasing.</p>
+<p>In general, scaling by a complex factor will scale and rotate a 
+phased bar chart. The scaling is proportional to the magnitude of the 
+scaling factor, and the rotation is proportional to the phase (as you 
+can see above).</p>
+<p>So scaling by a complex factor has simple, easily recognizable 
+effects on a phased bar chart. What about other operations? Well… not so
+ clear. For example, can you guess what operation is being shown by the 
+following animation?</p>
+<p><img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/AaWQIzd.gif" alt="Unspecified operation, not scaling, looks weird"></p>
+<p>I have no idea what’s going on in the above animation. I know what the operation is, and it’s still confusing!</p>
+<p>Phased bar charts are not a good way to convey a sense of what an arbitrary operation is doing to a complex vector.</p>
+<p>But. We don’t need to be able to recognize any old operation. We only
+ care about recognizing scaling by a complex factor, because that’s the 
+only thing that happens to the eigenvectors of an operation. When we 
+animate what happens to an <em>eigenvector</em>, the chart will just scale and rotate. When we animate <em>other</em> vectors, the chart will wiggle and skip and warp. So we can use the animation to recognize eigenvectors!</p>
+<h3>Charting Rotation</h3>
+<p>The matrix that rotates a 2-dimensional vector by <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_016.png" class="ql-img-inline-formula " alt="\theta" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="9"> radians is <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_010.png" class="ql-img-inline-formula " alt="\left[ \begin{array}{cc} cos(\theta) &amp; sin(\theta) \\ -sin(\theta) &amp; cos(\theta) \end{array} \right]" title="Rendered by QuickLaTeX.com" style="vertical-align: -17px;" height="43" width="152">. Let’s see how things animate as we increase <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_016.png" class="ql-img-inline-formula " alt="\theta" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="9"> and show the result of multiplying some test vectors by the rotation matrix.</p>
+<p>The obvious place to start is with the vector <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_008.png" class="ql-img-inline-formula " alt="\left&lt; 1, 0 \right&gt;" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;" height="19" width="37">. Rotating it through the range of angles and charting the outputs results in this animation:</p>
+<p><img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/MiTK8j8.gif" alt="Rotating [1,0] looks sinusoidal but not like rotation"></p>
+<p>The vector is turning, but the diagram is not scaling/rotating. The 
+bars are individually scaling based on a sinusoidal motion, which is 
+promising since circular motions are made up of sinusoidal motions along
+ each axis, but nevertheless <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_008.png" class="ql-img-inline-formula " alt="\left&lt; 1, 0 \right&gt;" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;" height="19" width="37"> is not an eigenvector.</p>
+<p>The next obvious vector to test is <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_015.png" class="ql-img-inline-formula " alt="\left&lt; 0, 1 \right&gt;" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;" height="19" width="37">:</p>
+<p><img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/SXwTY6P.gif" alt="Rotating [0,1] also looks sinusoidal but not like rotation"></p>
+<p>Just the same sinusoidal motion again, although it has shifted by a 
+quarter period. I guess I was foolishly hoping that switching to the 
+other component would give us some vertical motion.</p>
+<p>Vertical corresponds to imaginary, so let’s try the vector <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_007.png" class="ql-img-inline-formula " alt="\left&lt; i, 0 \right&gt;" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;" height="19" width="34"> now:</p>
+<p><img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/TTiDr3i.gif" alt="Rotating [i,0] just makes things vertical"></p>
+<p>Aha, there’s that vertical motion. Real components are moving 
+horizontally, imaginary components are moving vertically, and the 
+movement is sinusoidal…</p>
+<p>I bet combining the real and imaginary bits is going to look circular. Let’s try <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_011.png" class="ql-img-inline-formula " alt="\left&lt; 1, i \right&gt;" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;" height="19" width="34">:</p>
+<p><img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/Sop0diU.gif" alt="Rotating [1,i] shows scaling. It's an eigen vector"></p>
+<p>Well. Hello, Mr. Eigenvector, how are you doing today? Rotating counter-clockwise? How interesting!</p>
+<p>I bet the other eigenvector from the StackExchange question rotates in the opposite direction. Trying <img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex_012.png" class="ql-img-inline-formula " alt="\left&lt; 1, -i \right&gt;" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;" height="19" width="48">:</p>
+<p><img src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/5uIwPhw.gif" alt="Rotating [1,-i] shows scaling. It's an eigen vector"></p>
+<p>Yup, clockwise instead of counter-clockwise.</p>
+<p>I think I almost intuitively understand what’s happening, now. The 
+vector rotation between the components is being turned into phase 
+rotation within the components.</p>
+<p>The two eigenvectors form a basis. You can rewrite any 2-dimensional 
+complex vector in terms of that basis, and thus interpret rotation as 
+scaling/phasing the rewritten components. The specific scaling factors 
+depend on the amount of rotation, and changing the scaling factors will 
+change how much the vector rotates. So rotation is, in a sense, a type 
+of scaling.</p>
+<h3>Summary</h3>
+<p>Phased bar charts scale and rotate without distorting when, and only 
+when, the operation being animated is being applied to one of its 
+eigenvectors. This allows us to visually recognize eigenvectors.</p>
+<p>The complex eigenvectors of rotation change phase (a type of complex scaling) when you rotate them, instead of turning.</p>
+<p>—</p>
+<h3>Discuss on <a href="http://www.reddit.com/r/math/comments/1ohklm/visualizing_the_eigenvectors_of_a_rotation/">Reddit</a></h3>
+<p>—</p>
+<h3>My Twitter: <a href="https://twitter.com/CraigGidney">@CraigGidney</a></h3>
+<p>—</p>
+
+<blockquote><p>
+
+
+</p><div id="disqus_thread"><iframe verticalscrolling="no" horizontalscrolling="no" src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/a.htm" style="width: 100% ! important; border: medium none ! important; overflow: hidden ! important; height: 476px ! important;" role="complementary" allowtransparency="true" data-disqus-uid="2" id="dsq2" frameborder="0" scrolling="no" width="100%"></iframe><iframe style="width: 1060px ! important; border: medium none ! important; overflow: hidden ! important; top: 0px ! important; position: fixed ! important; height: 29px ! important; display: none ! important;" role="alert" allowtransparency="true" data-disqus-uid="-indicator-north" id="dsq-indicator-north" frameborder="0" scrolling="no"></iframe><iframe style="width: 1060px ! important; border: medium none ! important; overflow: hidden ! important; bottom: 0px ! important; position: fixed ! important; height: 29px ! important; display: none ! important;" role="alert" allowtransparency="true" data-disqus-uid="-indicator-south" id="dsq-indicator-south" frameborder="0" scrolling="no"></iframe></div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://twistedoakstudios.com/blog/Post7254_visualizing-the-eigenvectors-of-a-rotation';
+    var disqus_identifier = '7254 http://twistedoakstudios.com/blog/?p=7254';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'twistedoakstudios';
+    var disqus_title = "Visualizing the Eigenvectors of a Rotation";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+        config.language = '';
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = '?cf_action=sync_comments&post_id=7254';
+
+            var firstScript = document.getElementsByTagName( "script" )[0];
+            firstScript.parentNode.insertBefore(script, firstScript);
+        });
+                    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/twistedoakstudios.com\/blog\/Post7254_visualizing-the-eigenvectors-of-a-rotation\/trackback"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.' + 'disqus.com' + '/embed.js?pname=wordpress&pver=2.74';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+
+<h3>
+<spacer>
+</spacer></h3>
+
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers consulting and development on high-tech interactive projects. Check out our <a href="http://twistedoakstudios.com/portfolio/">portfolio</a>, or <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+<p></p></blockquote>
+
+<h2 class="endofpage">Archive</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post7254_visualizing-the-eigenvectors-of-a-rotation" rel="bookmark" title="Permanent Link to Visualizing the Eigenvectors of a Rotation">Visualizing the Eigenvectors of a Rotation</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7149_collapsing-futures-in-objective-c" rel="bookmark" title="Permanent Link to Collapsing Futures in Objective-C">Collapsing Futures in Objective-C</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7052_bug-hunting-1-garbled-audio-from-end-to-end" rel="bookmark" title="Permanent Link to Bug Hunting #1: Garbled Audio from End to End">Bug Hunting #1: Garbled Audio from End to End</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post6871_impractical-experiments-1-representing-numbers-as-polynomials" rel="bookmark" title="Permanent Link to Impractical Experiments #1: Representing Numbers as Polynomials">Impractical Experiments #1: Representing Numbers as Polynomials</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post6536_implementing-quantum-pseudo-telepathy" rel="bookmark" title="Permanent Link to Implementing Quantum Pseudo-Telepathy">Implementing Quantum Pseudo-Telepathy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post6422_turn-on-your-damn-warnings" rel="bookmark" title="Permanent Link to Turn On Your Damn Warnings">Turn On Your Damn Warnings</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5953_big-o-made-trivial" rel="bookmark" title="Permanent Link to Big-O Made Trivial">Big-O Made Trivial</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5268_unfathomable-bugs-7-the-broken-oven" rel="bookmark" title="Permanent Link to Unfathomable Bugs #7: The Broken Oven">Unfathomable Bugs #7: The Broken Oven</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5623_solomonoffs-mad-scientist" rel="bookmark" title="Permanent Link to Solomonoff’s Mad Scientist">Solomonoff’s Mad Scientist</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5753_yearly-blogging-roundup-1" rel="bookmark" title="Permanent Link to Yearly Blogging Roundup #1">Yearly Blogging Roundup #1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5485_what-isnt-a-monad" rel="bookmark" title="Permanent Link to What isn’t a Monad">What isn’t a Monad</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5365_searching-a-sorted-matrix-faster" rel="bookmark" title="Permanent Link to Searching a Sorted Matrix Faster">Searching a Sorted Matrix Faster</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5273_how-to-read-nested-ternary-operators" rel="bookmark" title="Permanent Link to How to Read Nested Ternary Operators">How to Read Nested Ternary Operators</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5204_making-sublime-text-2-jump-to-the-correct-line-with-unity-on-os-x" rel="bookmark" title="Permanent Link to Making Sublime Text 2 Jump to the Correct Line with Unity on OS X">Making Sublime Text 2 Jump to the Correct Line with Unity on OS X</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5096_my-bug-my-bad-4-reading-concurrently" rel="bookmark" title="Permanent Link to My Bug, My Bad #4: Reading Concurrently">My Bug, My Bad #4: Reading Concurrently</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5018_whole-api-testing-with-reflection" rel="bookmark" title="Permanent Link to Whole API Testing with Reflection">Whole API Testing with Reflection</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4708_optimizing-a-parser-combinator-into-a-memcpy" rel="bookmark" title="Permanent Link to Optimizing a Parser Combinator into a memcpy">Optimizing a Parser Combinator into a memcpy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4872_dont-treat-paths-like-strings" rel="bookmark" title="Permanent Link to Don’t Treat Paths Like Strings">Don’t Treat Paths Like Strings</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4706_breaking-a-toy-hash-function" rel="bookmark" title="Permanent Link to Breaking a Toy Hash Function">Breaking a Toy Hash Function</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4425_counting-iterators-lazily" rel="bookmark" title="Permanent Link to Counting Iterators Lazily">Counting Iterators Lazily</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4428_unfathomable-bugs-6-pretend-precision" rel="bookmark" title="Permanent Link to Unfathomable Bugs #6: Pretend Precision">Unfathomable Bugs #6: Pretend Precision</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4281_my-bug-my-bad-3-accidentally-attacking-warcraft-3" rel="bookmark" title="Permanent Link to My Bug, My Bad #3: Accidentally Attacking WarCraft 3">My Bug, My Bad #3: Accidentally Attacking WarCraft 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4130_collapsing-types-vs-monads-followup" rel="bookmark" title="Permanent Link to Collapsing Types vs Monads (followup)">Collapsing Types vs Monads (followup)</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4008_collapsing-futures-easy-to-use-hard-to-represent" rel="bookmark" title="Permanent Link to Collapsing Futures: Easy to Use, Hard to Represent">Collapsing Futures: Easy to Use, Hard to Represent</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3858_eventual-exceptions-vs-programming-in-a-minimal-functional-style" rel="bookmark" title="Permanent Link to Eventual Exceptions vs Programming in a Minimal Functional Style">Eventual Exceptions vs Programming in a Minimal Functional Style</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3769_the-mystery-of-flunf" rel="bookmark" title="Permanent Link to The Mystery of Flunf">The Mystery of Flunf</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3724_explain-it-like-im-five-the-socialist-millionaire-problem-and-secure-multi-party-computation" rel="bookmark" title="Permanent Link to Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation">Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3631_computer-science-blows-my-mind" rel="bookmark" title="Permanent Link to Computer Science Blows My Mind">Computer Science Blows My Mind</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3484_a-visit-to-execution-labs-in-montreal" rel="bookmark" title="Permanent Link to A visit to Execution Labs in Montréal">A visit to Execution Labs in Montréal</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3573_transmuting-dice-conserving-entropy" rel="bookmark" title="Permanent Link to Transmuting Dice, Conserving Entropy">Transmuting Dice, Conserving Entropy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3516_rule-of-thumb-ask-for-the-clock" rel="bookmark" title="Permanent Link to Rule of Thumb: Ask for the Clock">Rule of Thumb: Ask for the Clock</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3477_rule-of-thumb-use-purposefully-weakened-methods" rel="bookmark" title="Permanent Link to Rule of Thumb: Use Purposefully Weakened Methods">Rule of Thumb: Use Purposefully Weakened Methods</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3376_rule-of-thumb-preconditions-should-be-checked-explicitly" rel="bookmark" title="Permanent Link to Rule of thumb: Preconditions Should be Checked Explicitly">Rule of thumb: Preconditions Should be Checked Explicitly</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3280_intersecting-linked-lists-faster" rel="bookmark" title="Permanent Link to Intersecting Linked Lists Faster">Intersecting Linked Lists Faster</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3138_mouse-path-smoothing-for-jack-lumber" rel="bookmark" title="Permanent Link to Mouse Path Smoothing for Jack Lumber">Mouse Path Smoothing for Jack Lumber</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3044_my-bug-my-bad-2-sunk-by-float" rel="bookmark" title="Permanent Link to My Bug, My Bad #2: Sunk by Float">My Bug, My Bad #2: Sunk by Float</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2852_repeat-yourself-differently" rel="bookmark" title="Permanent Link to Repeat Yourself Differently">Repeat Yourself Differently</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm" rel="bookmark" title="Permanent Link to Grover’s Quantum Search Algorithm">Grover’s Quantum Search Algorithm</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2766_followup-to-non-nullable-types-vs-c" rel="bookmark" title="Permanent Link to Followup to Non-Nullable Types vs C#">Followup to Non-Nullable Types vs C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2540_optimizing-just-in-time-with-expression-trees" rel="bookmark" title="Permanent Link to Optimizing Just in Time with Expression Trees">Optimizing Just in Time with Expression Trees</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2353_when-one-way-latency-doesnt-matter" rel="bookmark" title="Permanent Link to When One-Way Latency Doesn’t Matter">When One-Way Latency Doesn’t Matter</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point" rel="bookmark" title="Permanent Link to Determining exactly if/when/where a moving line intersected a moving point">Determining exactly if/when/where a moving line intersected a moving point</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait" rel="bookmark" title="Permanent Link to Emulating Actors in C# with Async/Await">Emulating Actors in C# with Async/Await</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2096_making-an-immutable-queue-with-guaranteed-constant-time-operations" rel="bookmark" title="Permanent Link to Making an immutable queue with guaranteed constant time operations">Making an immutable queue with guaranteed constant time operations</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions" rel="bookmark" title="Permanent Link to Improving Checked Exceptions">Improving Checked Exceptions</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime" rel="bookmark" title="Permanent Link to Perishable Collections: The Benefits of Removal-by-Lifetime">Perishable Collections: The Benefits of Removal-by-Lifetime</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control" rel="bookmark" title="Permanent Link to Decoupling shared control">Decoupling shared control</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1694_decoupling-inlined-ui-code" rel="bookmark" title="Permanent Link to Decoupling inlined UI code">Decoupling inlined UI code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet" rel="bookmark" title="Permanent Link to Linq to Collections: Beyond IEnumerable&lt;T&gt;">Linq to Collections: Beyond IEnumerable&lt;T&gt;</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+ <div id="upprev_box" style="right: -400px;">
+	<h6>
+		More interesting posts <span class="num"> (1 of 10 articles)</span>
+	</h6>
+	<div class="upprev_excerpt">
+		<p>
+			<a href="http://twistedoakstudios.com/blog/Post6536_implementing-quantum-pseudo-telepathy" rel="prev">Implementing Quantum Pseudo-Telepathy</a>
+		</p>
+	</div>
+	
+		<p>
+Or check out our <a href="http://twistedoakstudios.com/portfolio">Portfolio</a>.		</p><button id="upprev_close" type="button">Close</button>
+</div><!-- #upprev_box -->
+<link rel="stylesheet" id="al2fb_style-css" href="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/add-link-to-facebook.css" type="text/css" media="all">
+<link rel="stylesheet" id="admin-bar-css" href="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/admin-bar.css" type="text/css" media="all">
+<link rel="stylesheet" id="upprev-css-css" href="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/upprev.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-quicklatex-format-css" href="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/quicklatex-format.css" type="text/css" media="all">
+<script type="text/javascript" src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/admin-bar.js"></script>
+<script type="text/javascript" src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/jquery.js"></script>
+<script type="text/javascript" src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/upprev_js.php"></script>
+<script type="text/javascript" src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/comment-reply.js"></script>
+	<script type="text/javascript">
+		(function() {
+			var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
+
+			request = true;
+
+			b[c] = b[c].replace( rcs, ' ' );
+			b[c] += ( window.postMessage && request ? ' ' : ' no-' ) + cs;
+		}());
+	</script>
+			
+
+		 
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+      <!-- home portfolio used to be here -->
+		</div>
+
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				138-1657 Barrington St.<br>
+				Halifax, NS, Canada B3J 2A1</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script>- 2013 Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/jquery_002.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<div id="wpadminbar" class="nojq " role="navigation">
+			<a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1">Skip to toolbar</a>
+			<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Top navigation toolbar." tabindex="0">
+				<ul id="wp-admin-bar-root-default" class="ab-top-menu">
+		<li id="wp-admin-bar-wp-logo" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/about.php" title="About WordPress"><span class="ab-icon"></span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-wp-logo-default" class="ab-submenu">
+		<li id="wp-admin-bar-about"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/about.php">About WordPress</a>		</li></ul><ul id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu">
+		<li id="wp-admin-bar-wporg"><a class="ab-item" href="http://wordpress.org/">WordPress.org</a>		</li>
+		<li id="wp-admin-bar-documentation"><a class="ab-item" href="http://codex.wordpress.org/">Documentation</a>		</li>
+		<li id="wp-admin-bar-support-forums"><a class="ab-item" href="http://wordpress.org/support/">Support Forums</a>		</li>
+		<li id="wp-admin-bar-feedback"><a class="ab-item" href="http://wordpress.org/support/forum/requests-and-feedback">Feedback</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-site-name" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/">Twisted Oak Studios Blog</a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-site-name-default" class="ab-submenu">
+		<li id="wp-admin-bar-dashboard"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/">Dashboard</a>		</li></ul><ul id="wp-admin-bar-appearance" class="ab-submenu">
+		<li id="wp-admin-bar-themes"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/themes.php">Themes</a>		</li>
+		<li id="wp-admin-bar-customize" class="hide-if-no-customize"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/customize.php?url=http%3A%2F%2Ftwistedoakstudios.com%2Fblog%2FPost7254_visualizing-the-eigenvectors-of-a-rotation">Customize</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-updates"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/update-core.php" title="3 Plugin Updates, 3 Theme Updates"><span class="ab-icon"></span><span class="ab-label">6</span><span class="screen-reader-text">3 Plugin Updates, 3 Theme Updates</span></a>		</li>
+		<li id="wp-admin-bar-comments"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/edit-comments.php" title="0 comments awaiting moderation"><span class="ab-icon"></span><span id="ab-awaiting-mod" class="ab-label awaiting-mod pending-count count-0">0</span></a>		</li>
+		<li id="wp-admin-bar-new-content" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php" title="Add New"><span class="ab-icon"></span><span class="ab-label">New</span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-new-content-default" class="ab-submenu">
+		<li id="wp-admin-bar-new-post"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php">Post</a>		</li>
+		<li id="wp-admin-bar-new-media"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/media-new.php">Media</a>		</li>
+		<li id="wp-admin-bar-new-link"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/link-add.php">Link</a>		</li>
+		<li id="wp-admin-bar-new-page"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php?post_type=page">Page</a>		</li>
+		<li id="wp-admin-bar-new-user"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/user-new.php">User</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-edit"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post.php?post=7254&amp;action=edit">Edit Post</a>		</li></ul><ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
+		<li id="wp-admin-bar-search" class="admin-bar-search"><div class="ab-item ab-empty-item" tabindex="-1"><form action="http://twistedoakstudios.com/blog/" method="get" id="adminbarsearch"><input class="adminbar-input" name="s" id="adminbar-search" maxlength="150" type="text"><input class="adminbar-button" value="Search" type="submit"></form></div>		</li>
+		<li id="wp-admin-bar-my-account" class="menupop with-avatar"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/profile.php" title="My Account">Howdy, Craig Gidney<img alt="" src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/31a6ce579f8f9f9d528715d1e941726e.png" class="avatar avatar-16 photo" height="16" width="16"></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-user-actions" class="ab-submenu">
+		<li id="wp-admin-bar-user-info"><a class="ab-item" tabindex="-1" href="http://twistedoakstudios.com/blog/wp-admin/profile.php"><img alt="" src="Visualizing%20the%20Eigenvectors%20of%20a%20Rotation_files/31a6ce579f8f9f9d528715d1e941726e_002.png" class="avatar avatar-64 photo" height="64" width="64"><span class="display-name">Craig Gidney</span><span class="username">craig</span></a>		</li>
+		<li id="wp-admin-bar-edit-profile"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/profile.php">Edit My Profile</a>		</li>
+		<li id="wp-admin-bar-logout"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=81b5dfe333">Log Out</a>		</li></ul></div>		</li></ul>			</div>
+			<a class="screen-reader-shortcut" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=81b5dfe333">Log Out</a>
+		</div></body></html>

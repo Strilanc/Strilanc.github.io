@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<title>Solomonoff’s Mad Scientist | Twisted Oak Studios Blog</title>
+
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Solomonoff%E2%80%99s%20Mad%20Scientist_files/1140.css">
+    <link rel="stylesheet" href="Solomonoff%E2%80%99s%20Mad%20Scientist_files/style.css">
+    <link rel="stylesheet" href="Solomonoff%E2%80%99s%20Mad%20Scientist_files/blogstyle.css">
+<link rel="stylesheet" href="Solomonoff%E2%80%99s%20Mad%20Scientist_files/prettify.css" media="all">
+<link rel="stylesheet" href="Solomonoff%E2%80%99s%20Mad%20Scientist_files/sunburst.css" media="all">
+<script src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/Post5623_solomonoffs-mad-scientist.htm" async=""></script><script src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/ga.js" async="" type="text/javascript"></script><script type="text/javascript" src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Solomonoff%E2%80%99s%20Mad%20Scientist_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/modernizr-2.js"></script>
+<script src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/embed.js" async="" type="text/javascript"></script></head>
+<body class=" customize-support" onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="http://twistedoakstudios.com/"><img class="logo" src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a href="http://twistedoakstudios.com/labs/">Labs</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+    <p class="big-callout">
+    <!--We're hiring! Experience with Game Dev, Unity3D, Graphics, Signal Processing, or Networking? Eligible to work in Canada? 
+      <a href="http://www.twistedoakstudios.com/jobs.php">Check it out</a>!
+-->
+Attending Unite or PAX this year, or maybe just abide in the Pacific 
+Northwest? We're visiting and we'd love to say hi and chat shop! <a href="mailto:mjewkes@twistedoakstudios.com?subject=PNW%20Visit">Drop us a note</a>.
+    </p>
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post5623_solomonoffs-mad-scientist" rel="bookmark" title="Permanent Link to Solomonoff’s Mad Scientist">Solomonoff’s Mad Scientist</a></h2>
+<div class="meta">posted by Craig Gidney on August 27, 2013</div>
+
+<p>In this post: designing an AI scientist. An AI scientist that, if the
+ opportunity came up, would destroy the entire universe just to learn 
+another digit of <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_012.png" class="ql-img-inline-formula " alt="c" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="8">. Why? FOR SCIENCE!</p>
+<p>To build our scientist, we need two fundamental ingredients: the ability to do induction, and a way to choose actions.</p>
+<h3>The Induction Problem</h3>
+<p>Suppose you want to write a program that predicts data. Not some 
+specific type of data, but any type of data. You want to start the 
+program, feed it <em>whatever</em>, and have the program discover any 
+patterns in the data no matter how complicated. Whether or not this 
+takes tons of data isn’t so much a concern, as long as we <em>eventually</em> achieve any desired level of accuracy.</p>
+<p>How to <a href="http://en.wikipedia.org/wiki/Computational_complexity_theory#Intractability">efficiently</a>
+ solve the above problem, on real world data, is a huge open question in
+ the field of AI. We’re going to completely sidestep that open question:
+ we’ll ignore efficiency and only worry about <a href="http://en.wikipedia.org/wiki/Computability">computability</a>.
+ Given an arbitrarily fast processor, with an arbitrarily large amount 
+of memory, can we eventually infer patterns in arbitrary data?</p>
+<p>It turns out that we can, and the solution is called <a href="http://en.wikipedia.org/wiki/Solomonoff_induction">Solomonoff Induction</a>.</p>
+<h3>Solomonoff Induction</h3>
+<p>Solomonoff induction is a fully general, if inefficient, method to 
+discover patterns behind data. Essentially, it searches for programs 
+that output the observed data. The only assumption it makes is the <a href="http://en.wikipedia.org/wiki/Church%E2%80%93Turing_thesis">Church-Turing thesis</a>.
+ That is to say, Solomonoff induction assumes all patterns, rules, 
+regularities, laws, or whatever that might affect observations will be 
+in principle computable by a Turing machine. It won’t be able to predict
+ anything that’s not Turing-computable (like a halting oracle).</p>
+<p>Before we can start performing Solomonoff induction, we need to 
+choose a way to prioritize programs. Typically this is done by choosing a
+ <a href="http://en.wikipedia.org/wiki/Prefix_code">prefix-free encoding</a> for all possible programs, and assigning each program a weight equal to <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_009.png" class="ql-img-inline-formula " alt="\frac{1}{2^n}" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;" height="22" width="16">, where <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_006.png" class="ql-img-inline-formula " alt="n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="11"> is the length of the program’s encoding. This weighting scheme, also known as the Solomonoff Prior, gives us the <a href="http://www.scholarpedia.org/article/Algorithmic_probability">algorithmic probability</a> of each program.</p>
+<p>The Solomonoff Prior has a few nice properties. First, it’s a proper 
+probability distribution because the total weight of all programs limits
+ to 1. Second, it exactly cancels the benefits large programs can gain 
+from over-fitting. Matching a random target that’s twice as small 
+requires on average one more bit of program. One more bit of program 
+halves the weight, exactly countering the doubled precision. Third, the 
+weights it assigns to programs don’t decrease so fast that you end up in
+ a <a href="http://lesswrong.com/lw/hd3/pascals_muggle_short_version/">Pascal’s Muggle</a> scenario.</p>
+<p>The main downside of “the” Solomonoff Prior is that it’s dependent on
+ the encoding you choose. Choosing a different encoding can shuffle 
+around which programs are more probable. Luckily that’s fine for our 
+purposes, since we’ll still converge to the same answer regardless.</p>
+<p>Each program that will be considered during induction will correspond
+ to a list of predictions. The details of this correspondence aren’t 
+particularly important, especially when we don’t care about 
+tractability, so let’s just say each program takes an integer input <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_005.png" class="ql-img-inline-formula " alt="i" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="6"> and whatever it outputs when given <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_005.png" class="ql-img-inline-formula " alt="i" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="6"> is its <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_005.png" class="ql-img-inline-formula " alt="i" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="6">‘th prediction. We’ll also arbitrarily say observations are in list form, so the <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_005.png" class="ql-img-inline-formula " alt="i" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="6">‘th observation matches up with the <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_005.png" class="ql-img-inline-formula " alt="i" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="6">‘th prediction of each program.</p>
+<p>Once we’ve decided on our arbitrary prior and our arbitrary 
+correspondence between programs, predictions, and observations, we can 
+start performing induction. It’s actually relatively simple:</p>
+<ul>
+<li>Discard any program that contradicts a known observation.
+</li><li>The predicted probability of an unknown observation <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_005.png" class="ql-img-inline-formula " alt="i" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="6"> taking on value <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_010.png" class="ql-img-inline-formula " alt="v" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="9"> is the total weight of programs that output <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_010.png" class="ql-img-inline-formula " alt="v" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="9"> when given <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_005.png" class="ql-img-inline-formula " alt="i" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="6">, divided by the total weight of undiscarded programs.
+</li><li>Avoid the halting problem by advancing incrementally (see: <a href="http://en.wikipedia.org/wiki/Dovetailing_%28computer_science%29">dove tailing</a>, <a href="http://en.wikipedia.org/wiki/Rate_of_convergence">rate of convergence</a>) and penalizing the weights of long-running programs.
+</li></ul>
+<p>As long as we throw lots and lots (no, <strong>LOTS</strong>) of computational power at this process, it will discover patterns behind arbitrary data.</p>
+<p><span style="font-size: x-small;"><em>Side note</em>: I wanted to provide an implementation to make this explanation a bit more concrete. I did start a <a href="https://github.com/Strilanc/Solomonoff-Mad-Scientist">Solomonoff’s Mad Scientist repo on GitHub</a>,
+ and it does contain code to do induction over arbitrary programs, but 
+at the moment it’s using the wrong prior. Also it’s incomplete because 
+it has no allowance for choosing actions. Oh, and it’s impossible to 
+test due to the massive computational costs. Nevertheless, actual code 
+can be helpful.</span></p>
+<p>For a more detailed explanation of Solomonoff induction, see <a href="http://lesswrong.com/lw/dhg/an_intuitive_explanation_of_solomonoff_induction/">An Intuitive Explanation of Solomonoff Induction</a>.</p>
+<p>Let’s go over an example.</p>
+<h3>Example: Inferring Tau</h3>
+<p>Suppose the data we want to predict with Solomonoff induction is just the digits of <a href="http://en.wikipedia.org/wiki/Tau_%282%CF%80%29">tau</a> (<img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_003.png" class="ql-img-inline-formula " alt="\tau = 2\pi = 6.283185..." title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="14" width="158">).
+ We feed in the first billion digits as observations, let the induction 
+process run for arbitrarily long, then look at predictions for the next 
+billion digits. How accurate will the predictions be? What will the 
+internal state look like?</p>
+<p>Let <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_011.png" class="ql-img-inline-formula " alt="P" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="14"> be the shortest program that outputs the correct digits of tau under our scheme.</p>
+<p>Considering how short <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_011.png" class="ql-img-inline-formula " alt="P" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="14">
+ is likely to be, because there are so many simple formulas that compute
+ tau, it’s unlikely that any shorter programs will happen to match the 
+billion observed digits. The only way I see that happening is a 
+maliciously chosen program encoding. Adding more digits would eventually
+ discover any such program (alternatively, it would match so many digits
+ that we wouldn’t really care). To keep things simple, let’s just assume
+ that <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_011.png" class="ql-img-inline-formula " alt="P" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="14"> is the shortest program that matches the first billion digits.</p>
+<p>A program that’s longer than <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_011.png" class="ql-img-inline-formula " alt="P" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="14"> will fall into four categories:</p>
+<ul>
+<li><strong>Blatant Negatives</strong>: Programs that return an incorrect prediction for one of the known digits.
+</li><li><strong>Decaying Negatives</strong>: Programs that don’t halt.
+</li><li><strong>False Positives</strong>: Programs that return correct 
+predictions for all of the known digits, but will give an incorrect 
+prediction on a digit yet to be observed.
+</li><li><strong>Redundant Positives</strong>: Programs that are equivalent to <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_011.png" class="ql-img-inline-formula " alt="P" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="14">, but weigh less due to being longer.
+</li></ul>
+<p>The vast majority of programs (by weight) will end up as known 
+negatives or decaying negatives, simply because what most programs 
+output is not the first billion digits of tau. Their effect on 
+predictions is negligible in the long run (i.e. converges to 0 in the 
+limit). Blatant negatives will be discarded when it’s discovered that 
+they output an incorrect digit. Decaying negatives will have their 
+weights penalized more and more heavily the longer they run.</p>
+<p>Of the remaining programs, the positives, most (by weight) will fall 
+into the redundant positives category. They’ll tend to be minor 
+variations on <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_011.png" class="ql-img-inline-formula " alt="P" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="14">,
+ such as hard-coding the first few digits or having an unnecessary 
+intermediate state. These redundant positives can be thought of as just 
+contributing directly to the weight of <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_011.png" class="ql-img-inline-formula " alt="P" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="14">, since they’re equivalent.</p>
+<p>The smallest category (by weight) will be the false positives. This 
+category is the smallest because of the need to match so many digits, 
+but then <em>still get things wrong somehow</em>. This category will contain two notable types of programs: programs that essentially include <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_011.png" class="ql-img-inline-formula " alt="P" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="14"> but tweak it after the billionth digit, and programs that hard-code the first billion digits of tau.</p>
+<p>Programs that hard-code the first billion digits will contribute 
+almost no weight at all to predictions, because they need to be so long.
+ Their total weight will be around <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_004.png" class="ql-img-inline-formula " alt="\frac{1}{10^{10^9}}" title="Rendered by QuickLaTeX.com" style="vertical-align: -10px;" height="26" width="34">, which is negligible.</p>
+<p>The total weight of programs that tweak <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_011.png" class="ql-img-inline-formula " alt="P" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="14"> after the first billion digits, like <code>if input &lt; 2**30 then 0 else P(input)</code>, is not negligible. It affects our predictions. However, tweaking <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_011.png" class="ql-img-inline-formula " alt="P" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="14"> requires making <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_011.png" class="ql-img-inline-formula " alt="P" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="14"> longer and so the weight of false negatives will tend to be less than the weight of <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_011.png" class="ql-img-inline-formula " alt="P" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="14">. This will contribute a small error to our predictions.</p>
+<p>Note that, although the weight of false positives technically limits 
+to 0 as we observe more digits, in practice it limits so slowly 
+(consider: use <a href="http://en.wikipedia.org/wiki/Busy_beaver">busy beavers</a>
+ for the tweak threshold) that we should consider it insensitive to 
+observing more digits. On the bright side, the truly subtle false 
+positives agree with <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_011.png" class="ql-img-inline-formula " alt="P" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="14">
+ on almost all the digits that matter. So, even if their weight doesn't 
+tractably converge to 0, their average effect on predictive error still 
+can. (Even if it doesn't, we really don't want to get rid of the errors 
+because that would sacrifice accuracy when the observed data was really 
+being generated by a tweaked algorithm.)</p>
+<p>Putting that all together, we can see that most of the predictive weight will eventually come from <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_011.png" class="ql-img-inline-formula " alt="P" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="14">. The next biggest contributor is minor variants of <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_011.png" class="ql-img-inline-formula " alt="P" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="14">,
+ followed by false positives (that will tend to agree on a lot of 
+predictions). How well will the Solomonoff inductor do at predicting the
+ next digit? An exact number is way beyond our computational power to 
+determine, but I wouldn't be surprised if it hit <a href="http://en.wikipedia.org/wiki/High_availability">five nines</a>.</p>
+<h3>Thinking with Programs: Random Data</h3>
+<p>One thing to notice about Solomonoff induction, or at least the 
+variant I've described, is that it uses deterministic programs that 
+predict a single result. There's no allowance for randomness. You might 
+expect that, in order to deal with a random world, we'd need to allow 
+randomized programs or programs that output probability distributions. 
+Actually, that's not the case.</p>
+<p>Consider what happens if we feed a Solomonoff inductor a sequence of 
+observations generated by flipping a truly random fair coin. Each 
+observation has a 50% chance of being 0 and a 50% chance of being 1.</p>
+<p>Because <a href="http://en.wikipedia.org/wiki/Incompressible_string">random strings are incompressible</a>,
+ the shortest program that reproduces the observations so far will tend 
+to be nothing but hard-coded results. Call that program <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex.png" class="ql-img-inline-formula " alt="H" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="16">. What does <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex.png" class="ql-img-inline-formula " alt="H" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="16"> predict for the next observation? Well, that depends on details. But, what about programs <em>near</em> <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex.png" class="ql-img-inline-formula " alt="H" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="16">?</p>
+<p>We can extend <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex.png" class="ql-img-inline-formula " alt="H" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="16"> just a little bit, hard coding a bit more data, and get a program that predicts the next observation to be <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_007.png" class="ql-img-inline-formula " alt="0" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="9">. Make a slightly different extension and you get a program that predicts the next observation to be <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_002.png" class="ql-img-inline-formula " alt="1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="13" width="7">. In fact, because <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex.png" class="ql-img-inline-formula " alt="H" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="16">
+ is based on hard-coded data, most of the nearby programs (by weight) 
+will tend to be evenly split on the next observation being 0 or being 1.
+ They push the prediction towards 50%!</p>
+<p>Now consider what happens if our truly random coin was not fair. 
+Let's say each observation has a 30% chance of being 0 and a 70% chance 
+of being 1.</p>
+<p>The generated strings are no longer incompressible, but they're only 
+compressible up to a point. The best programs will still hard-code the 
+data, but they'll use <a href="http://en.wikipedia.org/wiki/Arithmetic_coding">arithmetic coding</a> with <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_008.png" class="ql-img-inline-formula " alt="P(0)=0.3,P(1)=0.7" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="174">
+ (or something similar). What happens when you append a 0 or a 1 
+uniformly at random to the end of arithmetically coded data with <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_008.png" class="ql-img-inline-formula " alt="P(0)=0.3,P(1)=0.7" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="174">?
+ Well... about 30% of the time you end up appending a 0, and about 70% 
+of the time you end up appending a 1. So now the programs near <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex.png" class="ql-img-inline-formula " alt="H" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="16"> will push the predictions towards <img src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex_008.png" class="ql-img-inline-formula " alt="P(0)=0.3,P(1)=0.7" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="174">!</p>
+<p>What this means is that, although there could be some systemic bias, 
+it's not strictly necessary for us to account for randomness when doing 
+Solomonoff induction. Summing over the weighted space of matching 
+programs sort of naturally deals with it.</p>
+<h3>The Ability to Take Action</h3>
+<p>At this point we have the ability to do induction, to infer 
+underlying rules based on observations and use those rules to make 
+predictions about future observations. However, we're not actually 
+applying that ability for any purpose. If we dropped off our machine it 
+would just passively sit there, figuring out the universe but not able 
+to do anything.</p>
+<p>So let's add a capability to our machine. In addition to some sort of
+ sensor to feed induction, we'll include some sort of output (like an 
+arm, a flash light, or a laser cannon).</p>
+<p>Of course we won't build the machine with any knowledge of what the 
+output does. Instead, we'll adjust the Solomonoff inductor to include 
+the history of outputs as part of the observations. That will make it 
+infer how its outputs are affecting its inputs. Neat.</p>
+<p>Now we just need some way to choose outputs. One potential strategy 
+is to search for sequences of actions that are predicted to maximize an 
+observed value, like <a href="http://wiki.lesswrong.com/wiki/AIXI">the number of times a reward button was pressed</a>. We're going to do something slightly more abstract.</p>
+<h3>Strategic Science</h3>
+<p>At the moment, our machine learns passively. When two programs can 
+give conflicting predictions, there's no effort made to resolve that 
+situation. If an observation happens to differentiate between them, 
+great, but there's no effort made to find such observations.</p>
+<p>Aha!</p>
+<p>What if we tried to choose actions that helped out the process of 
+Solomonoff induction? All we'd need to do is find sequences of actions 
+where programs disagreed about what should happen, given that those 
+actions were taken.</p>
+<p>What we'll do is try all sequences of actions up to some length. For 
+each sequence of actions, we'll use our Solomonoff inductor's state to 
+predict what should be observed. When the prediction is just one 
+possibility near 100%, we want to avoid that sequence of actions. When 
+it's lots of different predictions with roughly equal probabilities, we 
+want to prefer that sequence of actions. More precisely, we want to 
+choose actions that maximize the <a href="http://en.wikipedia.org/wiki/Information_entropy">information entropy</a> of predictions.</p>
+<p>What is the machine doing? Performing actions that are predicted to 
+distinguish between the most hypotheses (by weight). It's doing SCIENCE!</p>
+<h3>Madness</h3>
+<p>Here's a question: if we actually had the ability to build this science-maximizing AI, would we want to?</p>
+<p>No.</p>
+<p>Consider what would happen if the machine's input was a camera that 
+reported the number of living people, and its output was a laser cannon.</p>
+<p>Yeah... it wouldn't take long for it to realize that firing the laser
+ cannon would distinguish between models that do or don't include the 
+equivalent of "if laser cannon has been fired then the number of people 
+living will be 0".</p>
+<p>We kinda didn't specify any goals <em>besides</em> science. Our 
+machine will actively pursue science at all costs. It would have no 
+qualms about experimenting on us or killing us, because we <em>didn't give it qualms in the first place</em>. That's why I call it Solomonoff's <em>Mad</em> Scientist, and why we probably don't want it to have the ability to fire (or build) a laser cannon.</p>
+<p>Actually, just to drive home how mad our little scientist is, note 
+that it would unwaveringly sacrifice itself in the name of science. It 
+has no concept of its own embedding within the world, and so it wouldn't
+ realize that if you want to <em>keep</em> doing science then you need 
+to be far away from the nuclear test. (I have no idea how to repair that
+ flaw. Given that this thing would essentially be evil, I'm not sure I'd
+ want to.)</p>
+<p>To be clear, it's not at all obvious what <em>exactly</em> 
+Solomonoff's Mad Scientist would do. It might do nothing due to 
+obsessing over the unpredictability of particles' positions. It might 
+immediately experiment on and destroy itself. It's really hard to say, 
+because the space of programs is truly vast and absurdly expensive to 
+explore.</p>
+<p>We can be sure of one thing though: even if Solomonoff's Mad 
+Scientist discovered right and wrong, it would not be motivated by that 
+discovery. We included nothing to make that happen. Madness results.</p>
+<h3>Summary</h3>
+<p>Solomonoff induction works by incrementally trying more and more complicated programs to predict observations.</p>
+<p>Solomonoff's Mad Scientist pairs Solomonoff induction with choosing 
+actions that result in uncertain predictions. Essentially, it maximizes 
+learning by finding ways to pit hypotheses against each other. It's a 
+"mad" scientist because it cares for <em>nothing</em> else. It has no concept of morality, of self-preservation, or even of self.</p>
+<p>If you actually built Solmonoff's mad scientist, actually had the 
+computational resources to run it, actually started it, and it 
+eventually predicted that actions resulting in murder-suicide would 
+maximize eliminated hypotheses... well, at least the nightmare would be 
+over.</p>
+<p>---</p>
+<h3><a href="http://www.reddit.com/r/programming/comments/1l6dvq/solomonoffs_mad_scientist/">Discuss on Reddit</a></h3>
+<p>---</p>
+<h3>My Twitter:<a href="https://twitter.com/CraigGidney"> @CraigGidney</a></h3>
+<p>---</p>
+
+<blockquote><p>
+
+
+</p><div id="disqus_thread"><iframe verticalscrolling="no" horizontalscrolling="no" src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/a.htm" style="width: 100%; border: medium none; overflow: hidden; height: 340px;" role="complementary" allowtransparency="true" data-disqus-uid="1" id="dsq1" frameborder="0" scrolling="no" width="100%"></iframe><iframe style="width: 1060px; border: medium none; overflow: hidden; top: 0px; min-width: 1060px; max-width: 1060px; position: fixed; max-height: 29px; min-height: 29px; height: 29px; display: none;" role="alert" allowtransparency="true" data-disqus-uid="-indicator-north" id="dsq-indicator-north" frameborder="0" scrolling="no"></iframe><iframe style="width: 1060px; border: medium none; overflow: hidden; bottom: 0px; min-width: 1060px; max-width: 1060px; position: fixed; max-height: 29px; min-height: 29px; height: 29px; display: none;" role="alert" allowtransparency="true" data-disqus-uid="-indicator-south" id="dsq-indicator-south" frameborder="0" scrolling="no"></iframe></div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://twistedoakstudios.com/blog/Post5623_solomonoffs-mad-scientist';
+    var disqus_identifier = '5623 http://twistedoakstudios.com/blog/?p=5623';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'twistedoakstudios';
+    var disqus_title = "Solomonoff&#8217;s Mad Scientist";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+        config.language = '';
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = '?cf_action=sync_comments&post_id=5623';
+
+            var firstScript = document.getElementsByTagName( "script" )[0];
+            firstScript.parentNode.insertBefore(script, firstScript);
+        });
+                    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/twistedoakstudios.com\/blog\/Post5623_solomonoffs-mad-scientist\/trackback"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.' + 'disqus.com' + '/embed.js?pname=wordpress&pver=2.74';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers consulting and development on high-tech interactive projects. Check out our <a href="http://twistedoakstudios.com/portfolio/">portfolio</a>, or <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+<p></p></blockquote>
+
+<h2 class="endofpage">Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post5753_yearly-blogging-roundup-1" rel="bookmark" title="Permanent Link to Yearly Blogging Roundup #1">Yearly Blogging Roundup #1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5485_what-isnt-a-monad" rel="bookmark" title="Permanent Link to What isn’t a Monad">What isn’t a Monad</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5365_searching-a-sorted-matrix-faster" rel="bookmark" title="Permanent Link to Searching a Sorted Matrix Faster">Searching a Sorted Matrix Faster</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5273_how-to-read-nested-ternary-operators" rel="bookmark" title="Permanent Link to How to Read Nested Ternary Operators">How to Read Nested Ternary Operators</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5204_making-sublime-text-2-jump-to-the-correct-line-with-unity-on-os-x" rel="bookmark" title="Permanent Link to Making Sublime Text 2 Jump to the Correct Line with Unity on OS X">Making Sublime Text 2 Jump to the Correct Line with Unity on OS X</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5096_my-bug-my-bad-4-reading-concurrently" rel="bookmark" title="Permanent Link to My Bug, My Bad #4: Reading Concurrently">My Bug, My Bad #4: Reading Concurrently</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5018_whole-api-testing-with-reflection" rel="bookmark" title="Permanent Link to Whole API Testing with Reflection">Whole API Testing with Reflection</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4708_optimizing-a-parser-combinator-into-a-memcpy" rel="bookmark" title="Permanent Link to Optimizing a Parser Combinator into a memcpy">Optimizing a Parser Combinator into a memcpy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4872_dont-treat-paths-like-strings" rel="bookmark" title="Permanent Link to Don’t Treat Paths Like Strings">Don’t Treat Paths Like Strings</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4706_breaking-a-toy-hash-function" rel="bookmark" title="Permanent Link to Breaking a Toy Hash Function">Breaking a Toy Hash Function</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4425_counting-iterators-lazily" rel="bookmark" title="Permanent Link to Counting Iterators Lazily">Counting Iterators Lazily</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4428_unfathomable-bugs-6-pretend-precision" rel="bookmark" title="Permanent Link to Unfathomable Bugs #6: Pretend Precision">Unfathomable Bugs #6: Pretend Precision</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4281_my-bug-my-bad-3-accidentally-attacking-warcraft-3" rel="bookmark" title="Permanent Link to My Bug, My Bad #3: Accidentally Attacking WarCraft 3">My Bug, My Bad #3: Accidentally Attacking WarCraft 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4130_collapsing-types-vs-monads-followup" rel="bookmark" title="Permanent Link to Collapsing Types vs Monads (followup)">Collapsing Types vs Monads (followup)</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4008_collapsing-futures-easy-to-use-hard-to-represent" rel="bookmark" title="Permanent Link to Collapsing Futures: Easy to Use, Hard to Represent">Collapsing Futures: Easy to Use, Hard to Represent</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3858_eventual-exceptions-vs-programming-in-a-minimal-functional-style" rel="bookmark" title="Permanent Link to Eventual Exceptions vs Programming in a Minimal Functional Style">Eventual Exceptions vs Programming in a Minimal Functional Style</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3769_the-mystery-of-flunf" rel="bookmark" title="Permanent Link to The Mystery of Flunf">The Mystery of Flunf</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3724_explain-it-like-im-five-the-socialist-millionaire-problem-and-secure-multi-party-computation" rel="bookmark" title="Permanent Link to Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation">Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3631_computer-science-blows-my-mind" rel="bookmark" title="Permanent Link to Computer Science Blows My Mind">Computer Science Blows My Mind</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3484_a-visit-to-execution-labs-in-montreal" rel="bookmark" title="Permanent Link to A visit to Execution Labs in Montréal">A visit to Execution Labs in Montréal</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3573_transmuting-dice-conserving-entropy" rel="bookmark" title="Permanent Link to Transmuting Dice, Conserving Entropy">Transmuting Dice, Conserving Entropy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3516_rule-of-thumb-ask-for-the-clock" rel="bookmark" title="Permanent Link to Rule of Thumb: Ask for the Clock">Rule of Thumb: Ask for the Clock</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3477_rule-of-thumb-use-purposefully-weakened-methods" rel="bookmark" title="Permanent Link to Rule of Thumb: Use Purposefully Weakened Methods">Rule of Thumb: Use Purposefully Weakened Methods</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3376_rule-of-thumb-preconditions-should-be-checked-explicitly" rel="bookmark" title="Permanent Link to Rule of thumb: Preconditions Should be Checked Explicitly">Rule of thumb: Preconditions Should be Checked Explicitly</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3280_intersecting-linked-lists-faster" rel="bookmark" title="Permanent Link to Intersecting Linked Lists Faster">Intersecting Linked Lists Faster</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3138_mouse-path-smoothing-for-jack-lumber" rel="bookmark" title="Permanent Link to Mouse Path Smoothing for Jack Lumber">Mouse Path Smoothing for Jack Lumber</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3044_my-bug-my-bad-2-sunk-by-float" rel="bookmark" title="Permanent Link to My Bug, My Bad #2: Sunk by Float">My Bug, My Bad #2: Sunk by Float</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2852_repeat-yourself-differently" rel="bookmark" title="Permanent Link to Repeat Yourself Differently">Repeat Yourself Differently</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm" rel="bookmark" title="Permanent Link to Grover’s Quantum Search Algorithm">Grover’s Quantum Search Algorithm</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2766_followup-to-non-nullable-types-vs-c" rel="bookmark" title="Permanent Link to Followup to Non-Nullable Types vs C#">Followup to Non-Nullable Types vs C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2540_optimizing-just-in-time-with-expression-trees" rel="bookmark" title="Permanent Link to Optimizing Just in Time with Expression Trees">Optimizing Just in Time with Expression Trees</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2353_when-one-way-latency-doesnt-matter" rel="bookmark" title="Permanent Link to When One-Way Latency Doesn’t Matter">When One-Way Latency Doesn’t Matter</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point" rel="bookmark" title="Permanent Link to Determining exactly if/when/where a moving line intersected a moving point">Determining exactly if/when/where a moving line intersected a moving point</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait" rel="bookmark" title="Permanent Link to Emulating Actors in C# with Async/Await">Emulating Actors in C# with Async/Await</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2096_making-an-immutable-queue-with-guaranteed-constant-time-operations" rel="bookmark" title="Permanent Link to Making an immutable queue with guaranteed constant time operations">Making an immutable queue with guaranteed constant time operations</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions" rel="bookmark" title="Permanent Link to Improving Checked Exceptions">Improving Checked Exceptions</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime" rel="bookmark" title="Permanent Link to Perishable Collections: The Benefits of Removal-by-Lifetime">Perishable Collections: The Benefits of Removal-by-Lifetime</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control" rel="bookmark" title="Permanent Link to Decoupling shared control">Decoupling shared control</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1694_decoupling-inlined-ui-code" rel="bookmark" title="Permanent Link to Decoupling inlined UI code">Decoupling inlined UI code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet" rel="bookmark" title="Permanent Link to Linq to Collections: Beyond IEnumerable&lt;T&gt;">Linq to Collections: Beyond IEnumerable&lt;T&gt;</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+ <div id="upprev_box" style="right: -400px;">
+	<h6>
+		More interesting posts <span class="num"> (1 of 10 articles)</span>
+	</h6>
+	<div class="upprev_excerpt">
+		<p>
+			<a href="http://twistedoakstudios.com/blog/Post5485_what-isnt-a-monad" rel="prev">What isn’t a Monad</a>
+		</p>
+	</div>
+	
+		<p>
+Or check out our <a href="http://twistedoakstudios.com/portfolio">Portfolio</a>.		</p><button id="upprev_close" type="button">Close</button>
+</div><!-- #upprev_box -->
+<link rel="stylesheet" id="al2fb_style-css" href="Solomonoff%E2%80%99s%20Mad%20Scientist_files/add-link-to-facebook.css" type="text/css" media="all">
+<link rel="stylesheet" id="admin-bar-css" href="Solomonoff%E2%80%99s%20Mad%20Scientist_files/admin-bar.css" type="text/css" media="all">
+<link rel="stylesheet" id="upprev-css-css" href="Solomonoff%E2%80%99s%20Mad%20Scientist_files/upprev.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-quicklatex-format-css" href="Solomonoff%E2%80%99s%20Mad%20Scientist_files/quicklatex-format.css" type="text/css" media="all">
+<script type="text/javascript" src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/admin-bar.js"></script>
+<script type="text/javascript" src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/jquery_002.js"></script>
+<script type="text/javascript" src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/upprev_js.php"></script>
+<script type="text/javascript" src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/comment-reply.js"></script>
+	<script type="text/javascript">
+		(function() {
+			var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
+
+			request = true;
+
+			b[c] = b[c].replace( rcs, ' ' );
+			b[c] += ( window.postMessage && request ? ' ' : ' no-' ) + cs;
+		}());
+	</script>
+			
+
+		 
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+      <!-- home portfolio used to be here -->
+		</div>
+
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				138-1657 Barrington St.<br>
+				Halifax, NS, Canada B3J 2A1</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script>- 2013 Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<div id="wpadminbar" class="nojq " role="navigation">
+			<a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1">Skip to toolbar</a>
+			<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Top navigation toolbar." tabindex="0">
+				<ul id="wp-admin-bar-root-default" class="ab-top-menu">
+		<li id="wp-admin-bar-wp-logo" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/about.php" title="About WordPress"><span class="ab-icon"></span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-wp-logo-default" class="ab-submenu">
+		<li id="wp-admin-bar-about"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/about.php">About WordPress</a>		</li></ul><ul id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu">
+		<li id="wp-admin-bar-wporg"><a class="ab-item" href="http://wordpress.org/">WordPress.org</a>		</li>
+		<li id="wp-admin-bar-documentation"><a class="ab-item" href="http://codex.wordpress.org/">Documentation</a>		</li>
+		<li id="wp-admin-bar-support-forums"><a class="ab-item" href="http://wordpress.org/support/">Support Forums</a>		</li>
+		<li id="wp-admin-bar-feedback"><a class="ab-item" href="http://wordpress.org/support/forum/requests-and-feedback">Feedback</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-site-name" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/">Twisted Oak Studios Blog</a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-site-name-default" class="ab-submenu">
+		<li id="wp-admin-bar-dashboard"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/">Dashboard</a>		</li></ul><ul id="wp-admin-bar-appearance" class="ab-submenu">
+		<li id="wp-admin-bar-themes"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/themes.php">Themes</a>		</li>
+		<li id="wp-admin-bar-customize" class="hide-if-no-customize"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/customize.php?url=http%3A%2F%2Ftwistedoakstudios.com%2Fblog%2FPost5623_solomonoffs-mad-scientist">Customize</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-updates"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/update-core.php" title="3 Plugin Updates, 3 Theme Updates"><span class="ab-icon"></span><span class="ab-label">6</span><span class="screen-reader-text">3 Plugin Updates, 3 Theme Updates</span></a>		</li>
+		<li id="wp-admin-bar-comments"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/edit-comments.php" title="0 comments awaiting moderation"><span class="ab-icon"></span><span id="ab-awaiting-mod" class="ab-label awaiting-mod pending-count count-0">0</span></a>		</li>
+		<li id="wp-admin-bar-new-content" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php" title="Add New"><span class="ab-icon"></span><span class="ab-label">New</span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-new-content-default" class="ab-submenu">
+		<li id="wp-admin-bar-new-post"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php">Post</a>		</li>
+		<li id="wp-admin-bar-new-media"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/media-new.php">Media</a>		</li>
+		<li id="wp-admin-bar-new-link"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/link-add.php">Link</a>		</li>
+		<li id="wp-admin-bar-new-page"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php?post_type=page">Page</a>		</li>
+		<li id="wp-admin-bar-new-user"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/user-new.php">User</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-edit"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post.php?post=5623&amp;action=edit">Edit Post</a>		</li></ul><ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
+		<li id="wp-admin-bar-search" class="admin-bar-search"><div class="ab-item ab-empty-item" tabindex="-1"><form action="http://twistedoakstudios.com/blog/" method="get" id="adminbarsearch"><input class="adminbar-input" name="s" id="adminbar-search" maxlength="150" type="text"><input class="adminbar-button" value="Search" type="submit"></form></div>		</li>
+		<li id="wp-admin-bar-my-account" class="menupop with-avatar"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/profile.php" title="My Account">Howdy, Craig Gidney<img alt="" src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/31a6ce579f8f9f9d528715d1e941726e.png" class="avatar avatar-16 photo" height="16" width="16"></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-user-actions" class="ab-submenu">
+		<li id="wp-admin-bar-user-info"><a class="ab-item" tabindex="-1" href="http://twistedoakstudios.com/blog/wp-admin/profile.php"><img alt="" src="Solomonoff%E2%80%99s%20Mad%20Scientist_files/31a6ce579f8f9f9d528715d1e941726e_002.png" class="avatar avatar-64 photo" height="64" width="64"><span class="display-name">Craig Gidney</span><span class="username">craig</span></a>		</li>
+		<li id="wp-admin-bar-edit-profile"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/profile.php">Edit My Profile</a>		</li>
+		<li id="wp-admin-bar-logout"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=9f8cb522ec">Log Out</a>		</li></ul></div>		</li></ul>			</div>
+			<a class="screen-reader-shortcut" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=9f8cb522ec">Log Out</a>
+		</div></body></html>

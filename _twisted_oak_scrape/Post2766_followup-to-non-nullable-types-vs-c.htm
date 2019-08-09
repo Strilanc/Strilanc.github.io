@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script id="bug.surrogate">var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}}; if (document.location.host == 'www.salon.com') {var _ga_ = document.querySelectorAll('script[src$=ga\\.js]')[0], ga_e = document.createEvent('Event'); ga_e.initEvent('load', true, true);_ga_.dispatchEvent(ga_e);}</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Unity3D Consulting | Technical Magic</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Post2766_followup-to-non-nullable-types-vs-c_files/1140.css">
+    <link rel="stylesheet" href="Post2766_followup-to-non-nullable-types-vs-c_files/style.css">
+    <link rel="stylesheet" href="Post2766_followup-to-non-nullable-types-vs-c_files/blogstyle.css">
+<link rel="stylesheet" href="Post2766_followup-to-non-nullable-types-vs-c_files/prettify.css" media="all">
+<link rel="stylesheet" href="Post2766_followup-to-non-nullable-types-vs-c_files/sunburst.css" media="all">
+<script type="text/javascript" src="Post2766_followup-to-non-nullable-types-vs-c_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Post2766_followup-to-non-nullable-types-vs-c_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Post2766_followup-to-non-nullable-types-vs-c_files/modernizr-2.js"></script>
+</head>
+<body class=" customize-support" onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="#"><img class="logo" src="Post2766_followup-to-non-nullable-types-vs-c_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post2766_followup-to-non-nullable-types-vs-c" rel="bookmark" title="Permanent Link to Followup to Non-Nullable Types vs C#">Followup to Non-Nullable Types vs C#</a></h2>
+<div class="meta">posted by Craig Gidney on February 26, 2013</div>
+
+<p>About five months ago, I posted <a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a>.
+ In that post I wrote about the lack of non-nullable reference types in 
+C#, why that was undesirable, discussed some reasons it was difficult to
+ fix the issue, and proposed a potential solution.</p>
+<p>The post received a lot of feedback, including various alternative 
+approaches. A few people even caught a mistake I made. In this followup 
+post I’ll be discussing suggested alternatives (that don’t work), and 
+also correcting my own error.</p>
+<h3>Alternatives</h3>
+<p>There were a few common suggestions, on reddit as well as by other 
+bloggers, for alternative approaches. They can be grouped, roughly, 
+into: make it a type constraint, require no-arg constructors, and just 
+use structs.</p>
+<p>Unfortunately, before writing the post, I’d considered each of these 
+and come to the conclusion that they wouldn’t work well enough. Lets go 
+over them one by one (the headers are links to a comment/post advocating
+ the alternative).</p>
+<p><a href="http://kodefuguru.com/default-objects-with-csharp">A MAY-NOT-have-a-default type constraint</a></p>
+<p>The advantage of having a “may-not-have-a-default” constraint, like <code>where T : default</code>,
+ is that it uses an existing language feature (type constraints), 
+instead of introducing new ones (non-null type modifiers and such). The 
+problem with this approach is that it breaks the underlying rules of 
+type constraints, so it’s actually a misuse of a language feature.</p>
+<p>Type constraints are used to ensure that particular functionality 
+will be present. Constraining a generic type reduces the scope of 
+admissible types, but augments what we are able to do with those types. 
+For example, constraining a generic type to implement an interface 
+allows calling that interface’s methods. The hypothetical 
+may-not-have-a-default-value “constraint” <em>increases</em> the number of admissible types and <em>prevents</em> us from using <code>default(T)</code> on the type. It’s actually a type <em>loosening</em>, not a type constraint.</p>
+<p>It’s not appropriate to loosen a type via a type constraint because constraints and loosenings <a href="http://blogs.msdn.com/b/ericlippert/archive/2007/10/16/covariance-and-contravariance-in-c-part-one.aspx">vary in the opposite way</a>.
+ Constraining a type is supposed to be a covariant ["in"] change (if a 
+method asks for a constrained type, and I want to call that method, then
+ I must ask for the constrained type), but loosening a type is a 
+contravariant ["out"] change (if a method returns a loosened type, and I
+ want to return that method’s result, then I must return the loosened 
+type).</p>
+<p>(Strengthening the modifier to mean ‘must-not-have-a-default-value’ 
+would be an actual constraint, but also force every generic method to be
+ implemented twice: once with the non-nullable constraint and once 
+without the non-nullable constraint.)</p>
+<p>(The opposite approach, requiring a MUST-have-a-default type constraint to use <code>default(T)</code>, breaks backwards compatibility.)</p>
+<p><a href="http://www.reddit.com/r/programming/comments/10eq96/nonnullable_types_vs_c_fixing_the_billion_dollar/c6cv12e">Non-nullability requires a no-arg constructor</a></p>
+<p>Requiring a no-arg constructor is tempting because it bypasses the 
+core underlying problem (some non-nullable types don’t have default 
+values). The problem, of course, is that it only works half of the time.</p>
+<p>There are a lot of types that don’t have default constructors (e.g. <a href="http://msdn.microsoft.com/en-us/library/system.net.sockets.networkstream.aspx">NetworkStream</a>). It would be a bit <em>infuriatingly arbitrary</em>
+ to be able to create a list of non-null strings, but not a list of 
+non-null network streams, or to be table to declare methods that 
+take/return a non-null textbox control, but not a non-null function that
+ returns textbox controls.</p>
+<p>Also, interfaces, abstract classes, and delegates don’t have no-arg 
+constructors. They can’t be instantiated directly. Presumably the 
+compiler would try to find an implementing type, but there’s no 
+guarantee that <em>any</em> implementing type exists in the relevant 
+scope (especially true for delegates). For example, a program might 
+declare a plugin interface but never actually implement it (that’s for 
+customers to do). Not allowing lists of non-null plugins because they 
+happen to not be implemented seems… misguided.</p>
+<p>Basically, it’s unreasonable to expect programmers to memorize which 
+types have no-arg constructors and which don’t. It’s also unreasonable 
+to encourage programmers to put work into creating artificial no-arg 
+constructors, to make types non-null-safe. Requiring no-arg constructors
+ is a recipe for busy-work and frustration at a half-working language 
+feature.</p>
+<p><a href="http://www.reddit.com/r/programming/comments/10eq96/nonnullable_types_vs_c_fixing_the_billion_dollar/c6d7807">Use structs / implement a NonNull&lt;T&gt; type</a></p>
+<p>If this approach worked, we wouldn’t need a new language feature. 
+That would be great but, unfortunately, we’d just move the “no valid 
+default value” problem around.</p>
+<p>For example, what’s the value of <code>default(NonNull&lt;NetworkStream&gt;)</code>?
+ It’s either going to be an invalid instance, containing a null 
+NetworkStream or a broken NetworkStream, or do very odd things like 
+throw an exception because it tried to create a connection to 0.0.0.0 or
+ localhost on port 0. The proper solution, for a NonNull type to not 
+allow <code>default(T)</code>, can only be done at the language level.</p>
+<h3>My Mistake</h3>
+<p>Enough picking on other people. Time to pick on me.</p>
+<p>My proposal involved a type modifier (the exclamation point) to 
+indicate “is non-nullable” or “may be non-nullable / have no default 
+value”, a <code>withdefault(T)</code> operation, to strip the 
+non-nullability off of a generic type to enable backwards compatibility 
+(for cases like Enumerable.FirstOrDefault), and various rules to prevent
+ the creation of uninitialized non-nullable values.</p>
+<p><a href="http://www.reddit.com/r/programming/comments/10eq96/nonnullable_types_vs_c_fixing_the_billion_dollar/c6ux2vw">One commenter</a> wondered the equivalent of “What’s the default value of a struct containing a non-null field?”:</p>
+<pre><code class="prettyprint"><span class="pln">    </span><span class="kwd">var</span><span class="pln"> blegh </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">default</span><span class="pun">(</span><span class="pln">S</span><span class="pun">);</span><span class="pln">
+
+</span><span class="pun">...</span><span class="pln">
+
+</span><span class="kwd">struct</span><span class="pln"> S </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="kwd">object</span><span class="pun">!</span><span class="pln"> </span><span class="typ">NonNullValue</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> S</span><span class="pun">(</span><span class="kwd">object</span><span class="pun">!</span><span class="pln"> value</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">this</span><span class="pun">.</span><span class="typ">NonNullValue</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> value</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>Well that’s… oops. Clearly a struct type, that contains a field 
+without a default value (e.g. a non-nullable type), can’t have a default
+ value. The rules I specified don’t cover that case, despite the fact 
+that I almost made such a struct as part of the non-nullable dictionary 
+example (but ended up side-stepping the problem). This case also turns 
+out to be important.</p>
+<p>I see two possible solutions here: either ban structs with 
+non-nullable fields, or deal with the fact that some structs won’t have a
+ default value (contagious non-nullability).</p>
+<p>Banning structs with non-nullable fields is a bad idea. It just 
+re-introduces the underlying problems with null back into to the system.
+ Consider what happens when we try to update the <code>KeyValuePair&lt;K, V&gt;</code> struct to allow non-null type arguments, assuming non-nullable fields are banned. Note that <code>Dictionary&lt;K, V&gt;</code> implements <code>IEnumerable&lt;KeyValuePair&lt;K, V&gt;&gt;</code>,
+ so we need to make KeyValuePair non-null safe in order to achieve the 
+very desirable goal of making Dictionary non-null safe. To allow the key
+ and value fields to exist we are forced to use <code>withdefault(T)</code>, which forces casts in the public getters:</p>
+<pre><code class="prettyprint"><span class="kwd">struct</span><span class="pln"> </span><span class="typ">KeyValuePair</span><span class="pun">&lt;</span><span class="pln">K</span><span class="pun">!,</span><span class="pln"> V</span><span class="pun">!&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> withdefault</span><span class="pun">(</span><span class="pln">K</span><span class="pun">)</span><span class="pln"> _key</span><span class="pun">;</span><span class="pln"> </span><span class="com">// non-nullables banned. Can't use maybe-non-nullable K.</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> withdefault</span><span class="pun">(</span><span class="pln">V</span><span class="pun">)</span><span class="pln"> _value</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> K </span><span class="typ">Key</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">get</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">(</span><span class="pln">K</span><span class="pun">)</span><span class="pln">_key</span><span class="pun">;</span><span class="pln"> </span><span class="pun">}</span><span class="pln"> </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> V </span><span class="typ">Value</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">get</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">(</span><span class="pln">V</span><span class="pun">)</span><span class="pln">_value</span><span class="pun">;</span><span class="pln"> </span><span class="pun">}</span><span class="pln"> </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>Ugh, this means <code>default(KeyValuePair&lt;object!, object!&gt;)</code>
+ will throw an exception if we try to access its key or value. All we’ve
+ done is move the invalid value problem around. Instead of having a 
+default value (null) that fails when you access it, we have… a default 
+value that fails when you access it (but isn’t called null).</p>
+<p>Since banning non-nullable struct fields is a bad idea, that leaves 
+us with “contagious non-nullability” or, more aptly, “contagious 
+not-having-a-default-value-ness” (from now on I will use lack-of-default
+ and non-null interchangeably).</p>
+<p>Note that, in order to maintain backwards compatibility, <code>KeyValuePair&lt;object, int&gt;</code> must have a default value despite <code>KeyValuePair&lt;object!, int&gt;</code> not having one. A generic struct may or may not have a default value, depending on the type arguments you give to it (bleh!).</p>
+<p>If you make a struct with a non-nullable field, then you won’t be 
+able to pass it to generic parameters that haven’t been updated to be 
+non-null safe (without using <code>withdefault(T)</code> and casts). Until types you use are updated to be non-null safe, you might be better off avoiding such struct types.</p>
+<p>Both of these costs are worth paying, and get better over time as more code is updated.</p>
+<p>I think that’s everything…</p>
+<p>Oh wait, we need to decide what <code>withdefault(KeyValuePair&lt;object!, int&gt;)</code> returns. I think it’s pretty clear that it must be something like <code>KeyValuePair&lt;object!, int&gt;?</code>.
+ That kind of sucks, especially considering the 
+conditional-on-generic-parameter non-nullability. Oh, and that also 
+means there needs to be an additional special rule allowing the Nullable
+ struct to have a non-nullable field (or we need a Nullable class, but 
+that seems worse to me).</p>
+<p>Still seems worth it.</p>
+<p>…</p>
+<p>… Hmmmm …</p>
+<p>…</p>
+<p>First commenter to point out a serious omission gets a hypothetical cookie. I purposefully left one in.</p>
+<h3>Summary</h3>
+<p>People make mistakes, including me. Adding non-nullable types to 
+C#/.Net is a breeding ground for mistakes, because the scope of the 
+change appears small but is actually <em>huge</em>. Huge parts of the C#
+ language and .Net framework were designed with the implicit assumption 
+that types have a default value (e.g. the semantics of how arrays are 
+initialized).</p>
+<p>Apologies for the sorta-kinda rehash of old content post. Next week: I
+ try to explain Grover’s algorithm (quantum computing), with the help of
+ “fancy” animations.</p>
+<p>—</p>
+<h3>Discuss on <a href="http://www.reddit.com/r/programming/comments/198vgh/followup_to_nonnullable_types_vs_c/?already_submitted=true">Reddit</a>, <a href="http://news.ycombinator.com/item?id=5284323">Hacker News</a></h3>
+<p>—</p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers efficient, flexible remote and on-the-floor 
+development and consulting without any middle-man or excessive 
+administrivia. <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2 class="endofpage">Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm" rel="bookmark" title="Permanent Link to Grover’s Quantum Search Algorithm">Grover’s Quantum Search Algorithm</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2540_optimizing-just-in-time-with-expression-trees" rel="bookmark" title="Permanent Link to Optimizing Just in Time with Expression Trees">Optimizing Just in Time with Expression Trees</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2353_when-one-way-latency-doesnt-matter" rel="bookmark" title="Permanent Link to When One-Way Latency Doesn’t Matter">When One-Way Latency Doesn’t Matter</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point" rel="bookmark" title="Permanent Link to Determining exactly if/when/where a moving line intersected a moving point">Determining exactly if/when/where a moving line intersected a moving point</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait" rel="bookmark" title="Permanent Link to Emulating Actors in C# with Async/Await">Emulating Actors in C# with Async/Await</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2096_making-an-immutable-queue-with-guaranteed-constant-time-operations" rel="bookmark" title="Permanent Link to Making an immutable queue with guaranteed constant time operations">Making an immutable queue with guaranteed constant time operations</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions" rel="bookmark" title="Permanent Link to Improving Checked Exceptions">Improving Checked Exceptions</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime" rel="bookmark" title="Permanent Link to Perishable Collections: The Benefits of Removal-by-Lifetime">Perishable Collections: The Benefits of Removal-by-Lifetime</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control" rel="bookmark" title="Permanent Link to Decoupling shared control">Decoupling shared control</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1694_decoupling-inlined-ui-code" rel="bookmark" title="Permanent Link to Decoupling inlined UI code">Decoupling inlined UI code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet" rel="bookmark" title="Permanent Link to Linq to Collections: Beyond IEnumerable&lt;T&gt;">Linq to Collections: Beyond IEnumerable&lt;T&gt;</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+ <div id="upprev_box" style="right: 0px;">
+	<h6>
+		More interesting posts <span class="num"> (1 of 4 articles)</span>
+	</h6>
+	<div class="upprev_excerpt">
+		<p>
+			<a href="http://twistedoakstudios.com/blog/Post2540_optimizing-just-in-time-with-expression-trees" rel="prev">Optimizing Just in Time with Expression Trees</a>
+		</p>
+	</div>
+	
+		<p>
+Or check out our <a href="http://twistedoakstudios.com/portfolio">Portfolio</a>.		</p><button id="upprev_close" type="button">Close</button>
+</div><!-- #upprev_box -->
+<link rel="stylesheet" id="admin-bar-css" href="Post2766_followup-to-non-nullable-types-vs-c_files/admin-bar.css" type="text/css" media="all">
+<link rel="stylesheet" id="upprev-css-css" href="Post2766_followup-to-non-nullable-types-vs-c_files/upprev.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-quicklatex-format-css" href="Post2766_followup-to-non-nullable-types-vs-c_files/quicklatex-format.css" type="text/css" media="all">
+<script type="text/javascript" src="Post2766_followup-to-non-nullable-types-vs-c_files/admin-bar.js"></script>
+<script type="text/javascript" src="Post2766_followup-to-non-nullable-types-vs-c_files/jquery_002.js"></script>
+<script type="text/javascript" src="Post2766_followup-to-non-nullable-types-vs-c_files/upprev_js.php"></script>
+<script type="text/javascript" src="Post2766_followup-to-non-nullable-types-vs-c_files/comment-reply.js"></script>
+	<script type="text/javascript">
+		(function() {
+			var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
+
+			request = true;
+
+			b[c] = b[c].replace( rcs, ' ' );
+			b[c] += ( window.postMessage && request ? ' ' : ' no-' ) + cs;
+		}());
+	</script>
+			
+
+		 
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+			<nav>
+				<ul class="primary-nav clearfix">
+					<li><a href="http://www.twistedoakstudios.com/">Home</a></li>
+					<li><a href="http://twistedoakstudios.com/portfolio">Portfolio</a></li>
+				</ul>
+			</nav>
+		</div>
+		
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				6082 Shirley Street<br>
+				Halifax, NS, Canada B3H 2M8</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+		
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script>- 2013 Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Post2766_followup-to-non-nullable-types-vs-c_files/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Post2766_followup-to-non-nullable-types-vs-c_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script><div id="wpadminbar" class="nojq " role="navigation">
+			<a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1">Skip to toolbar</a>
+			<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Top navigation toolbar." tabindex="0">
+				<ul id="wp-admin-bar-root-default" class="ab-top-menu">
+		<li id="wp-admin-bar-wp-logo" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/about.php" title="About WordPress"><span class="ab-icon"></span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-wp-logo-default" class="ab-submenu">
+		<li id="wp-admin-bar-about"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/about.php">About WordPress</a>		</li></ul><ul id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu">
+		<li id="wp-admin-bar-wporg"><a class="ab-item" href="http://wordpress.org/">WordPress.org</a>		</li>
+		<li id="wp-admin-bar-documentation"><a class="ab-item" href="http://codex.wordpress.org/">Documentation</a>		</li>
+		<li id="wp-admin-bar-support-forums"><a class="ab-item" href="http://wordpress.org/support/">Support Forums</a>		</li>
+		<li id="wp-admin-bar-feedback"><a class="ab-item" href="http://wordpress.org/support/forum/requests-and-feedback">Feedback</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-site-name" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/">twistedoakstudios.com</a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-site-name-default" class="ab-submenu">
+		<li id="wp-admin-bar-dashboard"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/">Dashboard</a>		</li></ul><ul id="wp-admin-bar-appearance" class="ab-submenu">
+		<li id="wp-admin-bar-themes"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/themes.php">Themes</a>		</li>
+		<li id="wp-admin-bar-customize" class="hide-if-no-customize"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/customize.php?url=http%3A%2F%2Ftwistedoakstudios.com%2Fblog%2FPost2766_followup-to-non-nullable-types-vs-c">Customize</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-updates"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/update-core.php" title="1 Plugin Update, 1 Theme Update"><span class="ab-icon"></span><span class="ab-label">2</span><span class="screen-reader-text">1 Plugin Update, 1 Theme Update</span></a>		</li>
+		<li id="wp-admin-bar-comments"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/edit-comments.php" title="0 comments awaiting moderation"><span class="ab-icon"></span><span id="ab-awaiting-mod" class="ab-label awaiting-mod pending-count count-0">0</span></a>		</li>
+		<li id="wp-admin-bar-new-content" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php" title="Add New"><span class="ab-icon"></span><span class="ab-label">New</span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-new-content-default" class="ab-submenu">
+		<li id="wp-admin-bar-new-post"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php">Post</a>		</li>
+		<li id="wp-admin-bar-new-media"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/media-new.php">Media</a>		</li>
+		<li id="wp-admin-bar-new-link"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/link-add.php">Link</a>		</li>
+		<li id="wp-admin-bar-new-page"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php?post_type=page">Page</a>		</li>
+		<li id="wp-admin-bar-new-user"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/user-new.php">User</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-edit"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post.php?post=2766&amp;action=edit">Edit Post</a>		</li></ul><ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
+		<li id="wp-admin-bar-search" class="admin-bar-search"><div class="ab-item ab-empty-item" tabindex="-1"><form action="http://twistedoakstudios.com/blog/" method="get" id="adminbarsearch"><input class="adminbar-input" name="s" id="adminbar-search" maxlength="150" type="text"><input class="adminbar-button" value="Search" type="submit"></form></div>		</li>
+		<li id="wp-admin-bar-my-account" class="menupop with-avatar"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/profile.php" title="My Account">Howdy, Craig Gidney<img alt="" src="Post2766_followup-to-non-nullable-types-vs-c_files/31a6ce579f8f9f9d528715d1e941726e.png" class="avatar avatar-16 photo" height="16" width="16"></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-user-actions" class="ab-submenu">
+		<li id="wp-admin-bar-user-info"><a class="ab-item" tabindex="-1" href="http://twistedoakstudios.com/blog/wp-admin/profile.php"><img alt="" src="Post2766_followup-to-non-nullable-types-vs-c_files/31a6ce579f8f9f9d528715d1e941726e_002.png" class="avatar avatar-64 photo" height="64" width="64"><span class="display-name">Craig Gidney</span><span class="username">craig</span></a>		</li>
+		<li id="wp-admin-bar-edit-profile"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/profile.php">Edit My Profile</a>		</li>
+		<li id="wp-admin-bar-logout"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=4684ead381">Log Out</a>		</li></ul></div>		</li></ul>			</div>
+			<a class="screen-reader-shortcut" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=4684ead381">Log Out</a>
+		</div></body></html>

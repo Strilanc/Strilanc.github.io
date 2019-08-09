@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script id="bug.surrogate">var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}}; if (document.location.host == 'www.salon.com') {var _ga_ = document.querySelectorAll('script[src$=ga\\.js]')[0], ga_e = document.createEvent('Event'); ga_e.initEvent('load', true, true);_ga_.dispatchEvent(ga_e);}</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Game Developers | Unity 3D Development</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Post1130_when-null-is-not-enough-an-option-type-for-c_files/1140.css">
+    <link rel="stylesheet" href="Post1130_when-null-is-not-enough-an-option-type-for-c_files/style.css">
+    <link rel="stylesheet" href="Post1130_when-null-is-not-enough-an-option-type-for-c_files/blogstyle.css">
+<link rel="stylesheet" href="Post1130_when-null-is-not-enough-an-option-type-for-c_files/prettify.css" media="all">
+<link rel="stylesheet" href="Post1130_when-null-is-not-enough-an-option-type-for-c_files/sunburst.css" media="all">
+<script type="text/javascript" src="Post1130_when-null-is-not-enough-an-option-type-for-c_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Post1130_when-null-is-not-enough-an-option-type-for-c_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Post1130_when-null-is-not-enough-an-option-type-for-c_files/modernizr-2.js"></script>
+</head>
+<body onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="#"><img class="logo" src="Post1130_when-null-is-not-enough-an-option-type-for-c_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></h2>
+<div class="meta">posted by Craig Gidney on December 4, 2012</div>
+
+<p>In C# you use “null” to indicate a lack of value. This is, in a 
+sense, both too permissive and too restrictive. I covered the “too 
+permissive” aspect, the fact that you can’t ask for a reference that’s 
+not potentially null, in <a href="http://twistedoakstudios.com/blog/?p=330">a previous post</a>. In this post I’ll be covering the “too restrictive” aspect, and implementing a reasonable solution in the form of an <a href="http://en.wikipedia.org/wiki/Option_type">option type</a>.</p>
+<p>You can use the option type, right now, by referencing its <a href="https://nuget.org/packages/Strilanc.Value.May">NuGet package</a>. You can also view the <a href="https://github.com/Strilanc/May">source code on github</a>.</p>
+<h3>Option types</h3>
+<p>The basic problem with null in C# is that it only allows for one 
+level of indicating that a value is missing. This prevents you from 
+telling <em>why</em> a value is missing in a nice way. For example, consider the method <a href="http://msdn.microsoft.com/en-us/library/bb340482.aspx">FirstOrDefault</a>.
+ When given an empty list of strings, FirstOrDefault indicates that 
+there is no first value by returning null. But, when given a list 
+starting with a null string, it also returns null. The distinction 
+between these two cases is often important, but FirstOrDefault can’t do 
+it for you (despite containing the necessary logic). We <em>can</em> 
+refactor FirstOrDefault to distinguish between these two cases but… what
+ type of thing should it return? The answer is: an option type.</p>
+<p>Option types are <a href="http://msdn.microsoft.com/en-us/library/dd233245.aspx">pretty</a> <a href="http://ocaml-lib.sourceforge.net/doc/Option.html">popular</a> <a href="http://pdp7.org/blog/?p=100">in</a> <a href="http://www.scala-lang.org/api/current/scala/Option.html">functional</a> <a href="http://hackage.haskell.org/packages/archive/base/4.6.0.0/doc/html/Data-Maybe.html">languages</a>.
+ The idea is to have a generic type, typically with a name like 
+Option&lt;T&gt;, Maybe&lt;T&gt;, or Nullable&lt;T&gt; (I’ll be using the
+ shorter May&lt;T&gt;), that can logically contain either a value of 
+type T or no value. Whenever you need the ability to represent 
+lack-of-value, you can return a May&lt;T&gt; instead of a T without 
+worrying about ambiguities. Pretty much anything you can nest (pointers,
+ Tuple&lt;T&gt;, List&lt;T&gt;) is <em>usable</em> as an option type, although it may be awkward to do so.</p>
+<p>The ability to nest allows you to distinguish between multiple 
+lack-of-value cases by choosing at what level the lack-of-value occurs. 
+If you need two lack-of-value cases, you can return a 
+May&lt;May&lt;T&gt;&gt;. One case will correspond to a 
+May&lt;May&lt;T&gt;&gt; that does not contain a value of type 
+May&lt;T&gt; and the other case will correspond to a 
+May&lt;May&lt;T&gt;&gt; that contains a value of type May&lt;T&gt; that 
+does not contain a value of type T.</p>
+<p>I should point out that C# does have a built-in sorta-kinda option type: <a href="http://msdn.microsoft.com/en-us/library/b3h38hb0.aspx">Nullable&lt;T&gt;</a>.
+ You use it with special syntax: append “?” to a type T. For example, 
+the type “int?” may contain an int or may contain null. However, T? is 
+only valid when T is a value type. You can’t use it on reference types 
+and you can’t nest nullable inside of itself: neither “object?” nor 
+“int??” are allowed. These restrictions are justified by the <a href="http://msdn.microsoft.com/en-us/library/ms228597.aspx">special rules for boxing nullable types</a>, but of course cause problems in general. If we want a proper option type, we’ll have to write our own.</p>
+<h3>Relation to null</h3>
+<p>Before we start coding an option type, we need to make a choice: how 
+do we interact with null? Null is the built-in way to represent a lack 
+of value, so it’s important to interoperate with it in a useful way. The
+ “right way” might seem obvious on the surface, but it’s actually very 
+controversial. I’m aware of three common choices:</p>
+<ol>
+<li><strong>Emulate null</strong>. Make your option type behave as much like a reference as possible. This is the approach taken by <a href="http://msdn.microsoft.com/en-us/library/b3h38hb0.aspx">.Net’s Nullable&lt;T&gt;</a>.
+</li><li><strong>Replace null</strong>. Don’t allow a null to be stored 
+inside your option type. Encourage using your option type instead of 
+ever using null. This is how the proposed <a href="http://docs.guava-libraries.googlecode.com/git/javadoc/com/google/common/base/Optional.html">Optional type for Java 8</a> works.
+</li><li><strong>Augment null</strong>. Treat null like any other value:
+ a possibility for what can be stored inside the optional type, distinct
+ from not storing a value. <a href="http://msdn.microsoft.com/en-us/library/dd233197.aspx">F# interacts with null values</a> in this way.
+</li></ol>
+<p>Emulating null is ideal, except for the exceptions, but impractical 
+to implement as a library. There’s also already the built-in Nullable 
+type that takes this approach, and it is helped along by special rules 
+that hide some of the differences between it and true reference types 
+(like how boxing works, and the automatic ‘lifting’ of operators). 
+Unfortunately, mere mortals like me don’t have access to the sort of 
+black magic that makes ((object)(int?)1).GetType() return Int32. It 
+would be great to have a proper option type that interoperated well with
+ null and allowed nesting, I just don’t think it can be done properly 
+without help from the language.</p>
+<p>Replacing nulls is tempting, but ultimately a bad idea. For example, 
+consider refactoring the FirstOrDefault method I mentioned earlier into 
+an OptionalFirst method that returns an OptionNotNull&lt;T&gt;. What 
+will happen when you invoke this method on a list starting with a null 
+string? Well, the method will attempt to construct an OptionNotNull 
+containing a null, which is not allowed. You need to add logic to detect
+ this case and replace it with a request for an OptionNotNull containing
+ no value instead of one containing a value. Except, that’s the result 
+that you were using to represent the empty list case! You need the 
+ability to represent a second lack-of-value case, which could be done by
+ either adding another layer of optional nesting or returning a null 
+OptionNotNull (ummm…). Both of these options are bad: you’re either 
+confusing people by half-replacing half-using null or burdening people 
+with the task of always applying the option type <em>twice</em> to be 
+safe. I would strongly recommend not trying to replace nulls, because it
+ leads you to fighting the language instead of using it.</p>
+<p>Since emulating nulls is impractical and replacing nulls is a bad 
+idea, I chose to implement an option type that augments nulls. The main 
+downside of this approach is that users must be conscious of both 
+nullability and the option type. However, given that nulls are already 
+everywhere, that was going to be the case anyways.</p>
+<h3>Avoiding forced errors</h3>
+<p>Another issue I want to address, before talking about implementation,
+ are the exceptions caused by trying to access a value that isn’t there.
+ The fact that this occurs is unfortunate, because it’s possible to 
+avoid it by design (for most cases). A good example of avoiding this 
+type of error by design is the usage of <a href="http://en.wikipedia.org/wiki/Pattern_matching">pattern matching</a>
+ in functional languages. You’ll never see a null reference exception 
+caused by pattern matching, because it makes that mistake impossible. 
+When using pattern matching, the compiler will tell you if you haven’t 
+handled the lack-of-value case:</p>
+<pre><code class="prettyprint"><span class="pln">match potentialValue </span><span class="kwd">with</span><span class="pln">
+</span><span class="pun">|</span><span class="pln"> </span><span class="typ">NoValue</span><span class="pln"> </span><span class="pun">-&gt;</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> </span><span class="com">// if you forget this line, the compiler complains</span><span class="pln">
+</span><span class="pun">|</span><span class="pln"> </span><span class="typ">Some</span><span class="pln"> v </span><span class="pun">-&gt;</span><span class="pln"> v </span><span class="pun">*</span><span class="pln"> v</span></code></pre>
+<p>C# doesn’t have pattern matching, but that doesn’t mean we can’t push users into the <a href="http://www.codinghorror.com/blog/2007/08/falling-into-the-pit-of-success.html">pit of success</a>. We can still ensure error cases must be <em>introduced</em> instead of <em>avoided</em>.
+ The safe approach I settled on (I tried a couple) was to just emulate 
+pattern matching: have a Match method that is told what to do in each 
+case. In case you’re worried that supporting only matching is less 
+expressive than exposing a Value property, here’s how the equivalent of 
+Nullable&lt;T&gt;.Value is implemented via Match:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> T </span><span class="typ">ForceGetValue</span><t><span class="pun">(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">May</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> potentialValue</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> potentialValue</span><span class="pun">.</span><span class="typ">Match</span><span class="pun">(</span><span class="pln">
+        e </span><span class="pun">=&gt;</span><span class="pln"> e</span><span class="pun">,</span><span class="pln">
+        </span><span class="pun">()</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">InvalidOperationException</span><span class="pun">(</span><span class="str">"No Value"</span><span class="pun">);</span><span class="pln"> </span><span class="pun">});</span><span class="pln">
+</span><span class="pun">}</span></t></code></pre>
+<p>There’s a similarly simple construction for ‘HasValue’ but, since 
+HasValue is always well-defined and safe to use, it’s not worth the 
+effort of creating an indirect re-incantation of it.</p>
+<h3>Implementation Details</h3>
+<p>The <a href="https://github.com/Strilanc/May/blob/master/May/May.cs">May&lt;T&gt; type</a>
+ is a struct, which is ideal for avoiding null reference exceptions when
+ working with one that happens to contain no value. May&lt;T&gt;’s 
+default value is an instance not containing a value, and you can get 
+such an instance conveniently via May&lt;T&gt;.NoValue. For creating 
+instances containing a value, there’s a simple one-argument constructor.</p>
+<p>One unfortunate downside of using a value type instead of a reference type is that it requires us to sacrifice <a href="http://en.wikipedia.org/wiki/Covariance_and_contravariance_%28computer_science%29">covariance</a> (only interfaces may be covariant in C#, and interfaces are reference types). A May&lt;string&gt; is not a May&lt;object&gt;.</p>
+<p>To avoid requiring the repetition of type information, I included an 
+extension method ‘Maybe’ and a static field ‘May.NoValue’. Maybe wraps 
+whatever you give it into an instance of May&lt;TypeOfGivenThing&gt;. 
+May.NoValue has a type that implicitly casts itself to a NoValue 
+instance of any May&lt;T&gt; type. Both are especially useful when 
+you’re trying to work with an anonymous type, since anonymous types 
+don’t have utterable names.</p>
+<p>The existence of ‘May.NoValue’ has consequences on how equality 
+works: NoValue is considered equivalent across types. For example, 
+May&lt;int&gt;.NoValue is equal to May&lt;string&gt;.NoValue, including 
+details like having the same hash code (but note that they are different
+ from a NoValue nested inside a potential value, like 
+May&lt;int&gt;.NoValue.Maybe()). This is done because equality that 
+breaks when an implicit conversion is omitted is confusing. May.NoValue 
+has to be equal to May&lt;T&gt;.NoValue, or else subtle differences that
+ affect whether or not an implicit cast occurs (like using Object.Equals
+ instead of ==) would start to matter. Since equality has to be 
+transitive, this further implies every May&lt;T&gt;.NoValue must be 
+equal to every other. Internally, equality across the types is 
+implemented by using a hidden <a href="https://github.com/Strilanc/May/blob/master/May/IMayHaveValue.cs">IMayHaveValue interface</a> implemented by both May&lt;T&gt; and <a href="https://github.com/Strilanc/May/blob/master/May/MayNoValue.cs">MayNoValue</a>,
+ the hidden type of May.NoValue. Beware the unfortunate downside of this
+ equality: the incorrect implication that ((string)null).Maybe() will be
+ equal to ((object)null).Maybe() when it really won’t.</p>
+<p>Internally, May&lt;T&gt; stores a value and a boolean flag to 
+determine if the value is specified or not. Externally, the only way to 
+get at that value is via the Match method (and equality comparisons, I 
+guess). Match is actually very simple:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="typ">TOut</span><span class="pln"> </span><span class="typ">Match</span><span class="pun">&lt;</span><span class="typ">TOut</span><span class="pun">&gt;(</span><span class="typ">Func</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> valueProjection</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Func</span><span class="pun">&lt;</span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> alternativeFunc</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">valueProjection </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentNullException</span><span class="pun">(</span><span class="str">"valueProjection"</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">alternativeFunc </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentNullException</span><span class="pun">(</span><span class="str">"alternativeFunc"</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> _hasValue </span><span class="pun">?</span><span class="pln"> valueProjection</span><span class="pun">(</span><span class="pln">_value</span><span class="pun">)</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> alternativeFunc</span><span class="pun">();</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>Note that the alternative value is given as a function, allowing its potentially expensive computation to be avoided.</p>
+<p>Writing other utility methods in terms of _hasValue and _value is 
+possible, but I wanted to keep the core May&lt;T&gt; type minimal and 
+safe. As a result, all of the utility methods for working with 
+May&lt;T&gt; are implemented as extension methods that ultimately 
+delegate to the Match method. For example, the oh-so-useful Else method 
+and the methods that make linq queries work are implemented like this:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> T </span><span class="typ">Else</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">May</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> potentialValue</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Func</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> alternativeFunc</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">alternativeFunc </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentNullException</span><span class="pun">(</span><span class="str">"alternativeFunc"</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> potentialValue</span><span class="pun">.</span><span class="typ">Match</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> e</span><span class="pun">,</span><span class="pln"> alternativeFunc</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">May</span><span class="pun">&lt;</span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">Bind</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TOut</span><span class="pun">&gt;(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">May</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">&gt;</span><span class="pln"> potentialValue</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Func</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">,</span><span class="pln"> </span><span class="typ">May</span><span class="pun">&lt;</span><span class="typ">TOut</span><span class="pun">&gt;&gt;</span><span class="pln"> projection</span><span class="pun">){</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">projection </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentNullException</span><span class="pun">(</span><span class="str">"projection"</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> potentialValue</span><span class="pun">.</span><span class="typ">Match</span><span class="pun">(</span><span class="pln">projection</span><span class="pun">,</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="typ">NoValue</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">May</span><span class="pun">&lt;</span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">Select</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TOut</span><span class="pun">&gt;(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">May</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">&gt;</span><span class="pln"> value</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Func</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> projection</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">projection </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentNullException</span><span class="pun">(</span><span class="str">"projection"</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> value</span><span class="pun">.</span><span class="typ">Bind</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> projection</span><span class="pun">(</span><span class="pln">e</span><span class="pun">).</span><span class="typ">Maybe</span><span class="pun">());</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">May</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">Where</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">May</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> value</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Func</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">bool</span><span class="pun">&gt;</span><span class="pln"> filter</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">filter </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentNullException</span><span class="pun">(</span><span class="str">"filter"</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> value</span><span class="pun">.</span><span class="typ">Bind</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> filter</span><span class="pun">(</span><span class="pln">e</span><span class="pun">)</span><span class="pln"> </span><span class="pun">?</span><span class="pln"> e</span><span class="pun">.</span><span class="typ">Maybe</span><span class="pun">()</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">NoValue</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">May</span><span class="pun">&lt;</span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">SelectMany</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TMid</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TOut</span><span class="pun">&gt;(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">May</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">&gt;</span><span class="pln"> source</span><span class="pun">,</span><span class="pln">
+                                                    </span><span class="typ">Func</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">,</span><span class="pln"> </span><span class="typ">May</span><span class="pun">&lt;</span><span class="typ">TMid</span><span class="pun">&gt;&gt;</span><span class="pln"> maySelector</span><span class="pun">,</span><span class="pln">
+                                                    </span><span class="typ">Func</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TMid</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> resultSelector</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">maySelector </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentNullException</span><span class="pun">(</span><span class="str">"maySelector"</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">resultSelector </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentNullException</span><span class="pun">(</span><span class="str">"resultSelector"</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> source</span><span class="pun">.</span><span class="typ">Bind</span><span class="pun">(</span><span class="pln">s </span><span class="pun">=&gt;</span><span class="pln"> maySelector</span><span class="pun">(</span><span class="pln">s</span><span class="pun">).</span><span class="typ">Select</span><span class="pun">(</span><span class="pln">m </span><span class="pun">=&gt;</span><span class="pln"> resultSelector</span><span class="pun">(</span><span class="pln">s</span><span class="pun">,</span><span class="pln"> m</span><span class="pun">)));</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>These methods allows us to write query expressions that treat 
+optional values as if they were lists that contained either 0 or 1 
+items:</p>
+<pre><code class="prettyprint"><span class="kwd">var</span><span class="pln"> r </span><span class="pun">=</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">from</span><span class="pln"> v1 </span><span class="kwd">in</span><span class="pln"> potentialInt1 </span><span class="com">// the query evaluates to NoValue if potentialInt1 is NoValue</span><span class="pln">
+         </span><span class="kwd">from</span><span class="pln"> v2 </span><span class="kwd">in</span><span class="pln"> potentialInt2 </span><span class="com">// the query also evaluates to NoValue if potentialInt2 is NoValue</span><span class="pln">
+         </span><span class="kwd">where</span><span class="pln"> v1 </span><span class="pun">!=</span><span class="pln"> v2 </span><span class="com">// the query ALSO evaluates to NoValue when the extracted values are equal</span><span class="pln">
+         </span><span class="kwd">select</span><span class="pln"> </span><span class="lit">1.0</span><span class="pln"> </span><span class="pun">/</span><span class="pln"> </span><span class="pun">(</span><span class="pln">v1 </span><span class="pun">-</span><span class="pln"> v2</span><span class="pun">);</span><span class="pln"> </span><span class="com">// the result is the inverse difference, assuming we made it this far</span><span class="pln">
+        </span><span class="pun">).</span><span class="typ">Else</span><span class="pun">(</span><span class="kwd">double</span><span class="pun">.</span><span class="typ">NegativeInfinity</span><span class="pun">)</span><span class="pln"> </span><span class="com">// use a default value of -infinity if the query returned NoValue</span></code></pre>
+<p>Fun! There’s other utility methods in the <a href="https://github.com/Strilanc/May/blob/master/May/MayExtensions.cs">MayExtensions class</a>, but also ones related to other types like IEnumerable&lt;T&gt; in the <a href="https://github.com/Strilanc/May/blob/master/May/MayUtilities.cs">MayUtilities class</a>.</p>
+<h3>Usage</h3>
+<p>The simplest task you can do with the library is produce optional 
+values (instances of May&lt;T&gt;). I’ve already mentioned May.NoValue 
+and the Maybe extension method, but sometimes code is clearer than 
+words:</p>
+<pre><code class="prettyprint"><span class="com">//using Strilanc.Value</span><span class="pln">
+
+</span><span class="com">// you can get a type's lack-of-value by asking for it explicitely:</span><span class="pln">
+</span><span class="typ">May</span><span class="str">&lt;int&gt;</span><span class="pln"> noInt </span><span class="pun">=</span><span class="pln"> </span><span class="typ">May</span><span class="str">&lt;int&gt;</span><span class="pun">.</span><span class="typ">NoValue</span><span class="pun">;</span><span class="pln">
+</span><span class="com">// or by asking for a default value:</span><span class="pln">
+</span><span class="typ">May</span><span class="str">&lt;int&gt;</span><span class="pln"> noIntAgain </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">default</span><span class="pun">(</span><span class="typ">May</span><span class="str">&lt;int&gt;</span><span class="pun">);</span><span class="pln">
+</span><span class="com">// but the easiest way is May.NoValue, which doesn't require repeating the type:</span><span class="pln">
+</span><span class="typ">May</span><span class="str">&lt;int&gt;</span><span class="pln"> noIntYetAgain </span><span class="pun">=</span><span class="pln"> </span><span class="typ">May</span><span class="pun">.</span><span class="typ">NoValue</span><span class="pun">;</span><span class="pln">
+</span><span class="typ">May</span><span class="pun">&lt;</span><span class="typ">Dictionary</span><span class="pun">&lt;</span><span class="kwd">string</span><span class="pun">,</span><span class="pln"> </span><span class="typ">List</span><span class="str">&lt;int&gt;</span><span class="pun">&gt;&gt;</span><span class="pln"> noComplicatedThing </span><span class="pun">=</span><span class="pln"> </span><span class="typ">May</span><span class="pun">.</span><span class="typ">NoValue</span><span class="pun">;</span><span class="pln">
+
+</span><span class="com">// you can get a potential value by using May&lt;T&gt;'s constructor:</span><span class="pln">
+</span><span class="typ">May</span><span class="str">&lt;int&gt;</span><span class="pln"> mayZeroAgain </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">May</span><span class="str">&lt;int&gt;</span><span class="pun">(</span><span class="lit">0</span><span class="pun">);</span><span class="pln">
+</span><span class="com">// or you can avoid repeating the type by using the Maybe extension method:</span><span class="pln">
+</span><span class="typ">May</span><span class="str">&lt;int&gt;</span><span class="pln"> mayZero </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0.Maybe</span><span class="pun">();</span><span class="pln">
+</span><span class="typ">May</span><span class="str">&lt;string&gt;</span><span class="pln"> mayIPlease </span><span class="pun">=</span><span class="pln"> </span><span class="str">"I Please"</span><span class="pun">.</span><span class="typ">Maybe</span><span class="pun">();</span><span class="pln">
+</span><span class="com">// and you can even get away with raw values, as long as there's an implied cast:</span><span class="pln">
+</span><span class="typ">May</span><span class="str">&lt;bool&gt;</span><span class="pln"> mayTrue </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">;</span></code></pre>
+<p>With the ability to create optional values in hand, you can write 
+useful methods that return them. The naming convention I’ve settled on 
+for naming methods returning optional results is to use the prefix 
+“May”. For example, one of the methods in the example project is a 
+wrapper around int.TryParse called MayParseInt32:</p>
+<pre><code class="prettyprint"><span class="com">///&lt;summary&gt;Returns the signed 32 bit integer represented by a string, if there is one.&lt;/summary&gt;</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">May</span><span class="str">&lt;int&gt;</span><span class="pln"> </span><span class="typ">MayParseInt32</span><span class="pun">(</span><span class="kwd">this</span><span class="pln"> </span><span class="kwd">string</span><span class="pln"> text</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> result</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(!</span><span class="typ">Int32</span><span class="pun">.</span><span class="typ">TryParse</span><span class="pun">(</span><span class="pln">text</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">out</span><span class="pln"> result</span><span class="pun">))</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> </span><span class="typ">May</span><span class="pun">.</span><span class="typ">NoValue</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> result</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>The library’s <a href="https://github.com/Strilanc/May/blob/master/May/MayUtilities.cs">MayUtilities</a>
+ class implements several methods that produce optional values, mostly 
+related to reducing sequences to a single value. These variants all have
+ “May” prefixed to their name, and you use them exactly like the 
+standard enumerable methods. Some examples:</p>
+<pre><code class="prettyprint"><span class="com">// 'MayFirst' returns the first value in a sequence, unless it's empty</span><span class="pln">
+</span><span class="typ">May</span><span class="str">&lt;int&gt;</span><span class="pln"> noInt </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">[</span><span class="lit">0</span><span class="pun">]</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">MayFirst</span><span class="pun">();</span><span class="pln">
+</span><span class="typ">May</span><span class="str">&lt;int&gt;</span><span class="pln"> mayZero </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="lit">1</span><span class="pun">,</span><span class="pln"> </span><span class="lit">2</span><span class="pun">,</span><span class="pln"> </span><span class="lit">3</span><span class="pln"> </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">MayFirst</span><span class="pun">();</span><span class="pln">
+
+</span><span class="com">// 'MayLast' returns the last value in a sequence, unless it's empty</span><span class="pln">
+</span><span class="typ">May</span><span class="str">&lt;int&gt;</span><span class="pln"> noIntAgain </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">[</span><span class="lit">0</span><span class="pun">]</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">MayLast</span><span class="pun">();</span><span class="pln">
+</span><span class="typ">May</span><span class="str">&lt;int&gt;</span><span class="pln"> mayThree </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="lit">1</span><span class="pun">,</span><span class="pln"> </span><span class="lit">2</span><span class="pun">,</span><span class="pln"> </span><span class="lit">3</span><span class="pln"> </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">MayLast</span><span class="pun">();</span><span class="pln">
+
+</span><span class="com">// 'MayAggregate' combines the values in a sequence together into a single value, unless it's empty</span><span class="pln">
+</span><span class="typ">May</span><span class="str">&lt;string&gt;</span><span class="pln"> mayIPlease </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="str">"may"</span><span class="pun">,</span><span class="pln"> </span><span class="str">"I"</span><span class="pun">,</span><span class="pln"> </span><span class="str">"Please"</span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">MayAggregate</span><span class="pun">((</span><span class="pln">e1</span><span class="pun">,</span><span class="pln"> e2</span><span class="pun">)</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> e1 </span><span class="pun">+</span><span class="pln"> e2</span><span class="pun">);</span><span class="pln">
+
+</span><span class="com">// 'WhereHasValue' skips the lack-of-values in a sequence</span><span class="pln">
+</span><span class="typ">IEnumerable</span><span class="str">&lt;string&gt;</span><span class="pln"> acd </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="str">"a"</span><span class="pun">.</span><span class="typ">Maybe</span><span class="pun">(),</span><span class="pln"> </span><span class="typ">May</span><span class="pun">.</span><span class="typ">NoValue</span><span class="pun">,</span><span class="pln"> </span><span class="str">"c"</span><span class="pun">.</span><span class="typ">Maybe</span><span class="pun">(),</span><span class="pln"> </span><span class="str">"d"</span><span class="pun">.</span><span class="typ">Maybe</span><span class="pun">()</span><span class="pln"> </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">WhereHasValue</span><span class="pun">();</span><span class="pln">
+
+</span><span class="com">// 'MayAll' directly enumerates the values in a sequence, unless some are missing</span><span class="pln">
+</span><span class="typ">May</span><span class="pun">&lt;</span><span class="typ">IEnumerable</span><span class="str">&lt;string&gt;</span><span class="pun">&gt;</span><span class="pln"> abcd </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="str">"a"</span><span class="pun">.</span><span class="typ">Maybe</span><span class="pun">(),</span><span class="pln"> </span><span class="str">"b"</span><span class="pun">.</span><span class="typ">Maybe</span><span class="pun">(),</span><span class="pln"> </span><span class="str">"c"</span><span class="pun">.</span><span class="typ">Maybe</span><span class="pun">(),</span><span class="pln"> </span><span class="str">"d"</span><span class="pun">.</span><span class="typ">Maybe</span><span class="pun">()</span><span class="pln"> </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">MayAll</span><span class="pun">();</span><span class="pln">
+</span><span class="typ">May</span><span class="pun">&lt;</span><span class="typ">IEnumerable</span><span class="str">&lt;string&gt;</span><span class="pun">&gt;</span><span class="pln"> noSequence </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="str">"a"</span><span class="pun">.</span><span class="typ">Maybe</span><span class="pun">(),</span><span class="pln"> </span><span class="typ">May</span><span class="pun">.</span><span class="typ">NoValue</span><span class="pun">,</span><span class="pln"> </span><span class="str">"c"</span><span class="pun">.</span><span class="typ">Maybe</span><span class="pun">(),</span><span class="pln"> </span><span class="str">"d"</span><span class="pun">.</span><span class="typ">Maybe</span><span class="pun">()</span><span class="pln"> </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">MayAll</span><span class="pun">();</span></code></pre>
+<p>The advantage of methods that return a May&lt;T&gt;, as opposed to a 
+value and a boolean flag, is the manipulations you can do on the result.
+ The <a href="https://github.com/Strilanc/May/blob/master/May/MayExtensions.cs">MayExtensions</a> file contains manipulation methods. Here’s some examples of manipulating potential values:</p>
+<pre><code class="prettyprint"><span class="com">// 'Select' transforms the potential value</span><span class="pln">
+</span><span class="typ">May</span><span class="str">&lt;double&gt;</span><span class="pln"> mayPi </span><span class="pun">=</span><span class="pln"> </span><span class="lit">1.Maybe</span><span class="pun">()</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">Select</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> e </span><span class="pun">*</span><span class="pln"> </span><span class="typ">Math</span><span class="pun">.</span><span class="pln">PI</span><span class="pun">);</span><span class="pln">
+</span><span class="typ">May</span><span class="str">&lt;double&gt;</span><span class="pln"> noDouble </span><span class="pun">=</span><span class="pln"> </span><span class="typ">May</span><span class="str">&lt;int&gt;</span><span class="pun">.</span><span class="typ">NoValue</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">Select</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> e </span><span class="pun">*</span><span class="pln"> </span><span class="typ">Math</span><span class="pun">.</span><span class="pln">PI</span><span class="pun">);</span><span class="pln">
+</span><span class="typ">May</span><span class="str">&lt;double&gt;</span><span class="pln"> mayPiAgain </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">from</span><span class="pln"> e </span><span class="kwd">in</span><span class="pln"> </span><span class="lit">1.Maybe</span><span class="pun">()</span><span class="pln"> </span><span class="kwd">select</span><span class="pln"> e </span><span class="pun">*</span><span class="pln"> </span><span class="typ">Math</span><span class="pun">.</span><span class="pln">PI</span><span class="pun">;</span><span class="pln">
+
+</span><span class="com">// 'Else' gets the potential value or else uses an alternate value</span><span class="pln">
+</span><span class="kwd">int</span><span class="pln"> two </span><span class="pun">=</span><span class="pln"> </span><span class="lit">2.Maybe</span><span class="pun">().</span><span class="typ">Else</span><span class="pun">(</span><span class="lit">5</span><span class="pun">);</span><span class="pln">
+</span><span class="kwd">int</span><span class="pln"> five </span><span class="pun">=</span><span class="pln"> </span><span class="typ">May</span><span class="str">&lt;int&gt;</span><span class="pun">.</span><span class="typ">NoValue</span><span class="pun">.</span><span class="typ">Else</span><span class="pun">(</span><span class="lit">5</span><span class="pun">);</span><span class="pln">
+
+</span><span class="com">// 'Match' either transforms the potential value or else uses an alternate</span><span class="pln">
+</span><span class="kwd">bool</span><span class="pln"> truth </span><span class="pun">=</span><span class="pln"> </span><span class="str">""</span><span class="pun">.</span><span class="typ">Maybe</span><span class="pun">()</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">Match</span><span class="pun">(</span><span class="pln">value </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">,</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">);</span><span class="pln">
+</span><span class="kwd">bool</span><span class="pln"> falsehood </span><span class="pun">=</span><span class="pln"> </span><span class="typ">May</span><span class="str">&lt;string&gt;</span><span class="pun">.</span><span class="typ">NoValue</span><span class="pun">.</span><span class="typ">Maybe</span><span class="pun">()</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">Match</span><span class="pun">(</span><span class="pln">value </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">,</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">);</span><span class="pln">
+
+</span><span class="com">// 'ForceGetValue' gets the potential value or else throws an exception</span><span class="pln">
+</span><span class="kwd">int</span><span class="pln"> one </span><span class="pun">=</span><span class="pln"> </span><span class="lit">1.Maybe</span><span class="pun">().</span><span class="typ">ForceGetValue</span><span class="pun">();</span><span class="pln">
+</span><span class="kwd">int</span><span class="pln"> throwsException </span><span class="pun">=</span><span class="pln"> </span><span class="typ">May</span><span class="str">&lt;int&gt;</span><span class="pun">.</span><span class="typ">NoValue</span><span class="pun">.</span><span class="typ">ForceGetValue</span><span class="pun">();</span><span class="pln">
+
+</span><span class="com">// 'IfHasValueThenDo' and 'ElseDo' are useful for performing actions that have no returned result</span><span class="pln">
+</span><span class="com">// you can also use the more imperative "if (x.HasValue) x.ForceGetValue()" instead</span><span class="pln">
+</span><span class="lit">1.Maybe</span><span class="pun">()</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">IfHasValueThenDo</span><span class="pun">(</span><span class="pln">value </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="typ">System</span><span class="pun">.</span><span class="typ">Diagnostics</span><span class="pun">.</span><span class="typ">Debug</span><span class="pun">.</span><span class="typ">WriteLine</span><span class="pun">(</span><span class="str">""</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> value</span><span class="pun">))</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">ElseDo</span><span class="pun">(()</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="typ">System</span><span class="pun">.</span><span class="typ">Diagnostics</span><span class="pun">.</span><span class="typ">Debug</span><span class="pun">.</span><span class="typ">WriteLine</span><span class="pun">(</span><span class="str">"no val"</span><span class="pun">));</span><span class="pln">
+</span><span class="typ">May</span><span class="str">&lt;int&gt;</span><span class="pun">.</span><span class="typ">NoValue</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">IfHasValueThenDo</span><span class="pun">(</span><span class="pln">value </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="typ">System</span><span class="pun">.</span><span class="typ">Diagnostics</span><span class="pun">.</span><span class="typ">Debug</span><span class="pun">.</span><span class="typ">WriteLine</span><span class="pun">(</span><span class="str">""</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> value</span><span class="pun">))</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">ElseDo</span><span class="pun">(()</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="typ">System</span><span class="pun">.</span><span class="typ">Diagnostics</span><span class="pun">.</span><span class="typ">Debug</span><span class="pun">.</span><span class="typ">WriteLine</span><span class="pun">(</span><span class="str">"no val"</span><span class="pun">));</span></code></pre>
+<p>That’s all there is to it. The library provides methods to create 
+potential values from scratch, to derive potential values from common 
+operations like aggregation, and to safely and conveniently manipulate 
+potential values once you have them. Go nuts!… just don’t try to fight 
+the language. Some of the features of C#, like iterator methods and 
+async methods, work better when paired with an imperative style of 
+programming. Be aware of when it’s simpler to use ForceGetValue rather 
+than the high level methods like Select and IfHasValueThenDo.</p>
+<p>There are several examples of usage in the <a href="https://github.com/Strilanc/May/blob/master/MayExample/MainWindow.xaml.cs#L10">MainWindow.cs file</a> in the example project.</p>
+<h3>Summary</h3>
+<p>Option types are a compelling augmentation over null, despite not 
+being built into the language. They’re naturally non-ambiguous and can 
+even minimize instances of lack-of-value exceptions.</p>
+<p>If you’re interested, try out the option type described in this post by referencing the <a href="https://nuget.org/packages/Strilanc.Value.May">Strilanc.Value.May NuGet package</a> (right-click project references -&gt; Manage NuGet Packages…) or check out the <a href="https://github.com/Strilanc/May">source code on github</a>.</p>
+<p>—</p>
+<h3><a href="http://www.reddit.com/r/programming/comments/14930f/when_null_is_not_enough_an_option_type_for_c/">Discuss on Reddit</a></h3>
+<p>—</p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers efficient, flexible remote and on-the-floor 
+development and consulting without any middle-man or excessive 
+administrivia. <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2>Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+			<nav>
+				<ul class="primary-nav clearfix">
+					<li><a href="http://www.twistedoakstudios.com/">Home</a></li>
+					<li><a href="http://twistedoakstudios.com/portfolio">Portfolio</a></li>
+				</ul>
+			</nav>
+		</div>
+		
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				6082 Shirley Street<br>
+				Halifax, NS, Canada B3H 2M8</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+		
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script> Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Post1130_when-null-is-not-enough-an-option-type-for-c_files/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Post1130_when-null-is-not-enough-an-option-type-for-c_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script></body></html>

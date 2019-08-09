@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/Post7748_impractical-experiments-2-securing-peer-to-peer-fog.htm" async=""></script><script id="bug.surrogate.1">var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}};</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<title>Impractical Experiments #2: Securing Peer to Peer Fog of War against Map Hacks | Twisted Oak Studios Blog</title>
+
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/1140.css">
+    <link rel="stylesheet" href="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/style.css">
+    <link rel="stylesheet" href="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/blogstyle.css">
+<link rel="stylesheet" href="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/prettify.css" media="all">
+<link rel="stylesheet" href="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/sunburst.css" media="all">
+<script type="text/javascript" src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/modernizr-2.js"></script>
+<script src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/embed.js" async="" type="text/javascript"></script></head>
+<body class=" customize-support" onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="http://twistedoakstudios.com/"><img class="logo" src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a href="http://twistedoakstudios.com/labs/">Labs</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+    <p class="big-callout">
+    <!--We're hiring! Experience with Game Dev, Unity3D, Graphics, Signal Processing, or Networking? Eligible to work in Canada? 
+      <a href="http://www.twistedoakstudios.com/jobs.php">Check it out</a>!
+-->
+		</p><section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post7748_impractical-experiments-2-securing-peer-to-peer-fog-of-war-against-map-hacks" rel="bookmark" title="Permanent Link to Impractical Experiments #2: Securing Peer to Peer Fog of War against Map Hacks">Impractical Experiments #2: Securing Peer to Peer Fog of War against Map Hacks</a></h2>
+<div class="meta">posted by Craig Gidney on November 12, 2013</div>
+
+<p>In this post: how to beat map hacks, without a server to hide the information on, using cryptography.</p>
+<h3>Map Hacks and Publicly Private Information</h3>
+<p><a href="https://en.wikipedia.org/wiki/Cheating_in_online_games#Maphacking">Map hacks</a> are a common problem in real time strategy games.</p>
+<p>Most RTS’s use a networking model called lockstepping. When 
+lockstepping, the state of each player’s game is not synchronized so 
+much as <em>kept</em> synchronized. Actions that players perform are 
+queued, instead of being applied immediately, to give time to tell all 
+players to apply that action at the same game time. This allows each 
+player’s simulation to advance in exactly the same way; in lockstep. It 
+would have <a href="http://www.gamasutra.com/view/feature/3094/1500_archers_on_a_288_network_.php/">been impossible for Age of Empires to keep thousands of units synchronized</a> if they hadn’t used lock-stepping.</p>
+<p>The downside of lock-stepping, besides the fact that it does a poor job <a href="http://www.gdcvault.com/play/1014345/I-Shot-You-First-Networking">hiding perception of lag</a>, is that it makes the game vulnerable to map hacks. Lock-stepping <em>requires</em>
+ every player’s game to know where every player’s units are. Your game 
+can’t advance its simulation of your enemy’s units if it doesn’t know 
+where they are! Because all the information is present, just not shown, 
+making a maphack can be as easy as nop-ing over the code checking if a 
+unit is visible (and there’s not much game developers can do about it 
+beyond <a href="http://www.iacr.org/archive/crypto2001/21390001.pdf">obfuscation</a>).</p>
+<p>Another reason the game needs to know about each enemy units is to 
+figure out when units are crossing paths. This is difficult, because 
+each player doesn’t have enough information to solve it on their own. 
+Contrast that with (most) tabletop games, where players never need 
+information they don’t have in order to know what moves they’re allowed 
+to make.</p>
+<p>For example, imagine a Magic the Gathering card with the following attribute: <code>Discard if another player has this card in their hand; otherwise do not reveal you have this card in your hand</code>.
+ Imagine you draw the card. You’re faced with a dilemma: you have to ask
+ your opponents if they have the card, otherwise you might break the 
+rules by failing to discard it. But you can’t ask your opponents if they
+ have the card, because if they don’t then asking about it reveals you 
+have it and breaks the rules!</p>
+<p>One way to solve these sorts of problems, where a result depends on 
+two private inputs, is to introduce a trusted third party. A judge looks
+ at everyone’s hands, and tells you when you must discard. A server 
+looks at the units of every player, and tells them about units they can 
+see.</p>
+<p>But… what if you don’t want to <em>need</em> a judge around in order to play your game? Can it still be done? It turns out that it is possible, using <a href="https://en.wikipedia.org/wiki/Secure_multi-party_computation">secure multi-party computation</a>. That’s what we’ll be experimenting with today.</p>
+<h3>Secure Multi Party Computation</h3>
+<p>I’ve previously explained how to do basic secure multi-party computation (SMPC) <a href="http://twistedoakstudios.com/blog/Post3724_explain-it-like-im-five-the-socialist-millionaire-problem-and-secure-multi-party-computation">in the physical world by using locked suggestion boxes</a>. The locked suggestion boxes allow you to perform an <a href="https://en.wikipedia.org/wiki/Oblivious_transfer">oblivious transfer</a>,
+ and oblivious transfer can be used as the basis for any SMPC protocol. 
+So if we want to do some SMPC-ing in software, we just need a way to do 
+oblivious transfer.</p>
+<p>Unfortunately, <a href="http://security.stackexchange.com/questions/39929/software-library-for-1-2-oblivious-transfer">there aren’t any established software libraries that implement oblivious transfer</a>
+ and implementing it ourselves would be… non-trivial. Really, really 
+non-trivial. 
+Dozens-of-people-checking-each-other’s-work-then-waiting-years-to-see-if-dedicated-cryptographic-analysis-fails-to-find-any-attacks-but-attacks-are-found-so-you-do-it-again
+ levels of non-trivial.</p>
+<p>Fortunately, there’s another technique that can be used as a basis for SMPC: <a href="https://en.wikipedia.org/wiki/Secret_sharing">secret sharing</a>.
+ Secret sharing lets you split a secret value into multiple shares, and 
+recover the secret value if enough shares are present. Using secret 
+sharing will force us to have at least three players present, but there 
+are also upsides.</p>
+<p>Secret sharing is simple enough that implementing it requires only a basic understanding of <a href="https://en.wikipedia.org/wiki/Modular_arithmetic">modular arithmetic</a> and polynomials. Also, because secret sharing has <a href="https://en.wikipedia.org/wiki/Information_theoretic_security">information theoretic security</a>, instead of security based on <a href="https://en.wikipedia.org/wiki/Computational_security">computational hardness</a>, there’s no risk of a clever algorithm being discovered and ruining our day (though there are still ways to be wrong).</p>
+<h3>How Everybody Computes</h3>
+<p>So we’re going to use secret sharing to do secure multi-party computation. What does that mean <em>exactly</em>?</p>
+<p>Well, you can think of SMPC as simulating a virtual machine. Players 
+do specific things in order to write private inputs to the machine, read
+ private outputs from the machine, and perform operations within the 
+machine. Let’s start with how to transfer a private value known only to 
+one of the players into the simulated machine.</p>
+<h5>Input</h5>
+<p>When a player wants to input a value into the simulated machine, they
+ use secret sharing to split the value into a share for each player. 
+We’ll be using <a href="https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing">Shamir’s Secret Sharing Scheme</a>,
+ which uses polynomials over a finite field. We need at least four 
+x-coordinates in the finite field we’re doing arithmetic in (one for the
+ secret and one for each of the three shares), so we’ll be doing 
+arithmetic modulo 5 (the smallest prime not less than 4).</p>
+<p>To split a secret value into shares, such that only two of the shares
+ are needed to reconstruct the point, we will create a line. The line’s 
+offset will be the secret value, and the line’s slope will be a random 
+value. The line’s y-coordinate at <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_065.png" class="ql-img-inline-formula " alt="x=0" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" width="43" height="12"> is the secret, and the y-coordinates at <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_044.png" class="ql-img-inline-formula " alt="x=1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" width="42" height="13">, <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_019.png" class="ql-img-inline-formula " alt="x=2" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" width="42" height="12">, and <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_014.png" class="ql-img-inline-formula " alt="x=3" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" width="43" height="12"> are the shares for players 1, 2, and 3 respectively.</p>
+<p>All in all, inputting a private value looks like this:</p>
+<p><img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/tW7pyU1.png" alt="Input Private Value"></p>
+<p>Let’s go through an example. Suppose the private value is <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_004.png" class="ql-img-inline-formula " alt="v=2" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" width="41" height="12">. First, we pick a random slope <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex.png" class="ql-img-inline-formula " alt="s" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" width="8" height="8">. Suppose it happens to be <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_015.png" class="ql-img-inline-formula " alt="s=4" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" width="41" height="13">. That means the equation for our line is <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_055.png" class="ql-img-inline-formula " alt="y(x) = v+s \cdot x = 2 + 4x \pmod{5}" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="262" height="18">. To make shares we just evaluate at each x-coordinate. Player 1 gets the share <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_043.png" class="ql-img-inline-formula " alt="y(1) = 2+4 = 6 = 1 \pmod{5}" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="230" height="18">, player 2 gets <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_058.png" class="ql-img-inline-formula " alt="y(2) = 2+8 = 10 = 0 \pmod{5}" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="239" height="18">, and player 3 gets <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_007.png" class="ql-img-inline-formula " alt="y(3) = 2+12 = 14 = 4 \pmod{5}" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="247" height="18">.</p>
+<p>Notice that, by changing the slope, we could have made player 2′s 
+share be any of the five possible values in our finite field (just 0, 1,
+ 2, 3 and 4). The reverse is true as well: holding player 2′s share 
+fixed, we find that each possible slope corresponds to a different 
+secret value. This is fundamentally why each player knows nothing about 
+what the secret input is: the slope is hiding it.</p>
+<h5>Output</h5>
+<p>To extract a value from the simulated machine, player’s must combine 
+their shares. Every player sends their share to the player, or players, 
+that are supposed to get the output. The receiving players do <a href="https://en.wikipedia.org/wiki/Polynomial_interpolation">polynomial interpolation</a> on the points to recover the line (or parabola, since there’s three points) and evaluate it at <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_065.png" class="ql-img-inline-formula " alt="x=0" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" width="43" height="12"> to recover the secret output value.</p>
+<p>Because we know we’re working with the integers modulo 5, and that 
+there are always 3 players, this whole process actually simplifies quite
+ a bit. We just multiply each share by a constant and sum them up:</p>
+<p><img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/k7RuNjl.png" alt="Reveal Private Value"></p>
+<p>Let’s continue our example from before. Suppose the shares owned by 
+each player happen to be the ones we generated in the input example: <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_035.png" class="ql-img-inline-formula " alt="a_1=1" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="49" height="16">, <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_051.png" class="ql-img-inline-formula " alt="a_2=0" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" width="50" height="15">, and <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_047.png" class="ql-img-inline-formula " alt="a_3=4" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" width="50" height="15">. We could figure out that these points are on a line with slope of <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_057.png" class="ql-img-inline-formula " alt="-1 = 4" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" width="54" height="13">
+ and work from there… but for three players working modulo five, 
+interpolating then evaluating at zero always simplifies down to this 
+expression: <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_026.png" class="ql-img-inline-formula " alt="3 a_1 + 2 a_2 + 1 a_3" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="120" height="16">. Computing that gives <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_045.png" class="ql-img-inline-formula " alt="v = 3 \cdot 1 + 2 \cdot 0 + 1 \cdot 4 = 7 = 2 \pmod{5}" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="302" height="18">. As required, that’s the private input from the first example.</p>
+<h5>Addition</h5>
+<p>Addition of values in the simulated machine is dead simple: each 
+player just adds their share of the value. The value encoded by the 
+resulting shares is the sum of the two inputs. There’s not even any 
+communication, as shown in this diagram:</p>
+<p><img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/t5OkIMK.png" alt="Addition dataflow"></p>
+<p>Just to show that this works, let’s do an addition all the way from input to output.</p>
+<p>Suppose player 1 has the private value <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_041.png" class="ql-img-inline-formula " alt="v_1 = 1" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="48" height="16"> and player 2 has the private value <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_061.png" class="ql-img-inline-formula " alt="v_2 = 3" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" width="49" height="15">. They input them into the simulated machine, with the random slope hiding <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_018.png" class="ql-img-inline-formula " alt="v_1" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="15" height="12"> ending up as <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_016.png" class="ql-img-inline-formula " alt="s_1=1" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="48" height="16"> and the random slope hiding <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_012.png" class="ql-img-inline-formula " alt="v_2" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" width="16" height="11"> ending up as <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_071.png" class="ql-img-inline-formula " alt="s_2=2" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" width="48" height="15">.</p>
+<p>The degree-1 polynomial (a.k.a. a line) encoding <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_018.png" class="ql-img-inline-formula " alt="v_1" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="15" height="12"> is <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_023.png" class="ql-img-inline-formula " alt="p_1(x) = s_1 x + v_1 = x + 1 \pmod{5}" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="263" height="18">, meaning the players’ respective share are <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_021.png" class="ql-img-inline-formula " alt="p_1(1)=2" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="72" height="18">, <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_059.png" class="ql-img-inline-formula " alt="p_1(2)=3" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="73" height="18">, and <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_011.png" class="ql-img-inline-formula " alt="p_1(3)=4" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="73" height="18">. The polynomial for <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_012.png" class="ql-img-inline-formula " alt="v_2" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" width="16" height="11"> is <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_028.png" class="ql-img-inline-formula " alt="p_2(x) = s_2 x + v_2 = 2x + 3 \pmod{5}" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="272" height="18">, giving respective shares of <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_022.png" class="ql-img-inline-formula " alt="p_2(1)=0" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="73" height="18">, <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_039.png" class="ql-img-inline-formula " alt="p_2(2)=2" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="72" height="18">, and <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_054.png" class="ql-img-inline-formula " alt="p_2(3)=4" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="73" height="18">.</p>
+<p>Once each player has been given their share, they add them together. The resulting shares are points on the polynomial <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_066.png" class="ql-img-inline-formula " alt="p_3" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="17" height="12"> that encodes the result. We have the points <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_027.png" class="ql-img-inline-formula " alt="p_3(1) = 2+0 = 2" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="135" height="18">, <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_006.png" class="ql-img-inline-formula " alt="p_3(2) = 3+2 = 0" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="136" height="18">, and <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_063.png" class="ql-img-inline-formula " alt="p_3(3) = 4+4 = 3" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="136" height="18">. A player with all three points can figure out that the polynomial’s equation is <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_020.png" class="ql-img-inline-formula " alt="p_3(x) = 4+3x \pmod{5}" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="184" height="18">, which encodes the value <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_002.png" class="ql-img-inline-formula " alt="v_3 = p_3(0) = 4" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="112" height="18">, which is in fact the sum of <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_032.png" class="ql-img-inline-formula " alt="1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" width="7" height="13"> and <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_008.png" class="ql-img-inline-formula " alt="3" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" width="9" height="12">.</p>
+<h5>Multiplication</h5>
+<p>Multiplication of private values is more complicated than addition. 
+You start in the same way, multiplying each player’s share of the inputs
+ together, but this causes a problem. Multiplying polynomials together 
+creates a polynomial of higher degree: the resulting polynomial is 
+quadratic instead of linear. If we didn’t have three shares we wouldn’t 
+even be able to interpolate the result and, if we want to be able to do 
+more multiplications without adding more players, we need to reduce that
+ quadratic polynomial back to a linear one before continuing. (Also the 
+extra degree of freedom would leak bits of private state.)</p>
+<p>The way degree reduction is done is kind of amazing in a 
+how-the-heck-does-that-work way: each player splits their share as if 
+they were creating a private value, broadcasts the shares-of-shares to 
+the corresponding players, then recombines the shares-of-shares that 
+they received as if to reveal a private value. The resulting values are 
+shares of the product. I don’t remember what paper I got this from, but 
+there’s all kinds with the necessary information if you google around 
+(like <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.144.24&amp;rep=rep1&amp;type=pdf">this thesis</a>).</p>
+<p>Here’s a diagram showing the process:</p>
+<p><img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/bwronQn.png" alt="Multiplication dataflow"></p>
+<p>This one definitely needs an example from input to output.</p>
+<p>Suppose we have private values encoding <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_037.png" class="ql-img-inline-formula " alt="v_1 = 3" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="49" height="16"> and <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_042.png" class="ql-img-inline-formula " alt="v_2 = 4" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" width="49" height="15">, and that the slope hiding <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_018.png" class="ql-img-inline-formula " alt="v_1" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="15" height="12"> is <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_017.png" class="ql-img-inline-formula " alt="s_1=2" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="48" height="16"> and the slope hiding <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_012.png" class="ql-img-inline-formula " alt="v_2" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" width="16" height="11"> is <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_062.png" class="ql-img-inline-formula " alt="s_2=1" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" width="48" height="15">. We want to compute <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_070.png" class="ql-img-inline-formula " alt="v_3=v_1 \cdot v_2" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="85" height="12">, using only the shares.</p>
+<p>The polynomial for <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_018.png" class="ql-img-inline-formula " alt="v_1" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="15" height="12"> is <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_050.png" class="ql-img-inline-formula " alt="p_1(x) = 2x + 3 \pmod{5}" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="184" height="18">, meaning the players’ respective share are <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_056.png" class="ql-img-inline-formula " alt="p_1(1)=0" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="73" height="18">, <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_053.png" class="ql-img-inline-formula " alt="p_1(2)=2" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="72" height="18">, and <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_011.png" class="ql-img-inline-formula " alt="p_1(3)=4" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="73" height="18">. The polynomial for <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_012.png" class="ql-img-inline-formula " alt="v_2" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" width="16" height="11"> is <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_060.png" class="ql-img-inline-formula " alt="p_2(x) = x + 4 \pmod{5}" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="175" height="18">, meaning the players’ respective share are <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_022.png" class="ql-img-inline-formula " alt="p_2(1)=0" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="73" height="18">, <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_010.png" class="ql-img-inline-formula " alt="p_2(2)=1" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="72" height="18">, and <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_013.png" class="ql-img-inline-formula " alt="p_2(3)=2" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="72" height="18">.</p>
+<p>By multiplying the shares each player has together, we get the points <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_029.png" class="ql-img-inline-formula " alt="q(1) = 0 \cdot 0 = 0" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="118" height="18">, <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_048.png" class="ql-img-inline-formula " alt="q(2) = 2 \cdot 1 = 2" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="117" height="18">, <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_030.png" class="ql-img-inline-formula " alt="q(3) = 4 \cdot 2 = 3" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="118" height="18">. The polynomial running through these points is <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_067.png" class="ql-img-inline-formula " alt="q(x) = 2x^2 + x + 2" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="144" height="19">, which has the correct value at <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_065.png" class="ql-img-inline-formula " alt="x=0" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" width="43" height="12">: <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_033.png" class="ql-img-inline-formula " alt="q(0) = 3 \cdot 4 = 2 \pmod{5}" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="188" height="18">. (We could have avoided interpolation by just using the simplified expression: <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_038.png" class="ql-img-inline-formula " alt="3 \cdot 0 + 2 \cdot 2 + 1 \cdot 3 = 4+3 = 2" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" width="230" height="13">.) The players never see this polynomial, because they do degree reduction.</p>
+<p>Degree reduction starts by splitting each share as if to input it into the machine. Suppose player 1 uses the slope <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_032.png" class="ql-img-inline-formula " alt="1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" width="7" height="13"> to hide <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_040.png" class="ql-img-inline-formula " alt="q(1) = 0" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="64" height="18">, player 2 uses the slope <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_069.png" class="ql-img-inline-formula " alt="2" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" width="8" height="12"> to hide <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_031.png" class="ql-img-inline-formula " alt="q(2) = 2" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="63" height="18">, and player 3 uses slope <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_008.png" class="ql-img-inline-formula " alt="3" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" width="9" height="12"> to hide <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_068.png" class="ql-img-inline-formula " alt="q(3) = 3" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="64" height="18">. So player 1′s share splits into <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_005.png" class="ql-img-inline-formula " alt="1,2,3" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="41" height="16">, player 2′s share splits into <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_052.png" class="ql-img-inline-formula " alt="4,1,3" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="42" height="16">, and player 3′s share splits into <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_024.png" class="ql-img-inline-formula " alt="1,4,2" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="40" height="16">. They send the corresponding shares to each player. Player 1 ends up with <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_025.png" class="ql-img-inline-formula " alt="1,4,1" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="40" height="16">, player 2 ends up with <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_036.png" class="ql-img-inline-formula " alt="2,1,4" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="42" height="16">, and player 3 ends up with <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_034.png" class="ql-img-inline-formula " alt="3,3,2" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="41" height="16">.</p>
+<p>Degree reduction finishes with each player privately recombining the 
+shares-of-shares they received as if to read an output, with player 1 
+getting <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_049.png" class="ql-img-inline-formula " alt="p_3(1) = 3 \cdot 1 + 2 \cdot 4 + 1 \cdot 1 = 3+3+1 = 2" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="324" height="18">, player 2 getting <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_046.png" class="ql-img-inline-formula " alt="p_3(2) = 3 \cdot 2 + 2 \cdot 1 + 1 \cdot 4 = 6+2+4 = 2" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="324" height="18">, and player 3 getting <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_003.png" class="ql-img-inline-formula " alt="p_3(3) = 3 \cdot 3 + 2 \cdot 3 + 1 \cdot 2 = 9+6+6 = 2" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="324" height="18">.</p>
+<p>The polynomial <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_066.png" class="ql-img-inline-formula " alt="p_3" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="17" height="12"> interpolates as <img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_064.png" class="ql-img-inline-formula " alt="p_3(x) = 2" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="73" height="18">, which has degree less-than-2 like we wanted and still encodes the correct answer (<img src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex_009.png" class="ql-img-inline-formula " alt="p_3(0) = 2 = 3 \cdot 4 \pmod{5}" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" width="197" height="18">).</p>
+<h3>Implementation</h3>
+<p>I used the SMPC explained above to implement a “game” with fog of war
+ computed peer-to-peer, without a server, in Javascript. You can view 
+the source in the below JSFiddle, or play the “game” (I keep using 
+quotes because all you can do is move around) by clicking the ‘Result’ 
+button at the top:</p>
+<p><iframe src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/a.htm" allowfullscreen="allowfullscreen" width="100%" frameborder="0" height="500"></iframe></p>
+<p>(In case JSFiddle is down, as it was intermittently while I was writing this post, you can view the <a href="https://github.com/Strilanc/SecureMultiPartyFogOfWar">code on github</a>.)</p>
+<p>(I count at least five things in the above code that betray the fact 
+that it’s essentially the first time I’ve written javascript that’s 
+longer than a dozen lines.)</p>
+<p>The code implements a stack-based SMPC virtual machine. There are operations to hide+push, pop+reveal, add, and multiply.</p>
+<p>To determine who can see what, the code uses those operations to 
+rebuild the primitive we couldn’t start with (oblivious transfer). For 
+each location on the map, and for each player taking their turn acting 
+as the one receiving the result, the information at that location is 
+obliviously transfer to the player.</p>
+<p>The oblivious transfer is done by having the two sending players push
+ 1 if they have a unit at that location, or 0 otherwise. That pushes two
+ values onto the stack, which are then added. Since units can’t occupy 
+the same location, the result pushed onto the stack is always either 0 
+or 1. Then the querying player pushes 0 onto the stack if they can’t see
+ the location in question spot, or 1 if they can. Then a multiplication 
+is performed, and the result is revealed to the querying player. When 
+they can’t see, the result is always 0. When they can see, the result is
+ 1 when there’s a unit present.</p>
+<p>All three players are simulated locally, but could be communicating 
+over the network with essentially no architectural changes. They don’t 
+touch each others private information or anything like that.</p>
+<h3>Impracticalities</h3>
+<p>If you’ve been considering how what I’ve been describing would work 
+in more practical scenarios, you’ve probably realized that the answer 
+is: not very well. I’ll quickly go over the issues:</p>
+<ul>
+<li><strong>Trusting players not to lie</strong>. We’re not using a <a href="https://en.wikipedia.org/wiki/Verifiable_secret_sharing">verifiable secret sharing scheme</a>
+ and we’re not checking (after the game has finished) that players 
+didn’t simply lie about what they could see. Dealing with adversarial 
+players makes things a <em>lot</em> more complicated, but in practice you must.
+</li><li><strong>Trusting players not to collude</strong>. If two of the
+ three players work together, they can reveal the private information in
+ the “secure” computation. This is fine for an example, but in reality 
+players gang up on each other all the time. Again, dealing with this 
+makes things a lot more complicated, but in practice you must.
+</li><li><strong>Huge bandwidth requirements</strong>. The required 
+network bandwidth is proportional to the size of the map! Players do an 
+oblivious transfer for every location a unit might be in. This is worse 
+even compared to synchronizing every unit, which was already 
+significantly worse compared to just sending actions.
+</li><li><strong>High sensitivity to network hiccups</strong>. RTS games usually allow a player to fail to check in a few times before pausing to wait for them, but we <em>need</em>
+ all three players for our computations to advance. If a player’s 
+connection hiccups for even half a second, and the game is scheduling 
+actions at a leisurely rate of 4Hz, the game will have to pause and wait
+ for a moment. This basically means you’d need to be on a LAN to play 
+the game, or else it would need to be redesigned into a turn based game.
+</li><li><strong>Lots of round trips</strong>. A sequence of 
+multiplications requires one network round trip per multiplication. The 
+time it takes to compute anything non-trivial is going to be measured in
+ <em>seconds</em>.
+</li><li><strong>High implementation costs</strong>. Working with partial information makes the game simulation and resynchronization code a lot harder to write and get right.
+</li></ul>
+<p>I think those points more than justify this being an <em>impractical</em> experiment.</p>
+<h3>Summary</h3>
+<p>Secure multi-party computation can do all the things, except be practical.</p>
+<p>—</p>
+<h3><a href="http://www.reddit.com/r/programming/comments/1qg5o9/securing_peer_to_peer_fog_of_war_against_map_hacks/">Discuss on Reddit</a></h3>
+<p>—</p>
+<h3>My Twitter: <a href="https://twitter.com/CraigGidney">@CraigGidney</a></h3>
+<p>—</p>
+
+<blockquote><p>
+
+
+</p><div id="disqus_thread"><iframe verticalscrolling="no" horizontalscrolling="no" src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/a_002.htm" style="width: 100% ! important; border: medium none ! important; overflow: hidden ! important; height: 393px ! important;" role="complementary" allowtransparency="true" data-disqus-uid="2" id="dsq-2" scrolling="no" width="100%" frameborder="0"></iframe></div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://twistedoakstudios.com/blog/Post7748_impractical-experiments-2-securing-peer-to-peer-fog-of-war-against-map-hacks';
+    var disqus_identifier = '7748 http://twistedoakstudios.com/blog/?p=7748';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'twistedoakstudios';
+    var disqus_title = "Impractical Experiments #2: Securing Peer to Peer Fog of War against Map Hacks";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+        config.language = '';
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = '?cf_action=sync_comments&post_id=7748';
+
+            var firstScript = document.getElementsByTagName( "script" )[0];
+            firstScript.parentNode.insertBefore(script, firstScript);
+        });
+                    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/twistedoakstudios.com\/blog\/Post7748_impractical-experiments-2-securing-peer-to-peer-fog-of-war-against-map-hacks\/trackback"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.' + 'disqus.com' + '/embed.js?pname=wordpress&pver=2.74';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+
+<h3>
+<spacer>
+</spacer></h3>
+
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers consulting and development on high-tech interactive projects. Check out our <a href="http://twistedoakstudios.com/portfolio/">portfolio</a>, or <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+<p></p></blockquote>
+
+<h2 class="endofpage">Archive</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post8147_referencing-substrings-faster-without-leaking-memory" rel="bookmark" title="Permanent Link to Referencing Substrings Faster, without Leaking Memory">Referencing Substrings Faster, without Leaking Memory</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post8000_not-crying-over-old-code" rel="bookmark" title="Permanent Link to Not Crying Over Old Code">Not Crying Over Old Code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7878_exploring-universal-ternary-gates" rel="bookmark" title="Permanent Link to Exploring Universal Ternary Gates">Exploring Universal Ternary Gates</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7748_impractical-experiments-2-securing-peer-to-peer-fog-of-war-against-map-hacks" rel="bookmark" title="Permanent Link to Impractical Experiments #2: Securing Peer to Peer Fog of War against Map Hacks">Impractical Experiments #2: Securing Peer to Peer Fog of War against Map Hacks</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7694_achieving-exponential-slowdown-by-enumerating-twice" rel="bookmark" title="Permanent Link to Achieving Exponential Slowdown by Enumerating Twice">Achieving Exponential Slowdown by Enumerating Twice</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7525_using-immortality-to-kill-accidental-callback-cycles" rel="bookmark" title="Permanent Link to Using Immortality to Kill Accidental Callback Cycles">Using Immortality to Kill Accidental Callback Cycles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7391_cancellation-tokens-and-collapsing-futures-for-objective-c" rel="bookmark" title="Permanent Link to Cancellation Tokens (and Collapsing Futures) for Objective-C">Cancellation Tokens (and Collapsing Futures) for Objective-C</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7254_visualizing-the-eigenvectors-of-a-rotation" rel="bookmark" title="Permanent Link to Visualizing the Eigenvectors of a Rotation">Visualizing the Eigenvectors of a Rotation</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7149_collapsing-futures-in-objective-c" rel="bookmark" title="Permanent Link to Collapsing Futures in Objective-C">Collapsing Futures in Objective-C</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7052_bug-hunting-1-garbled-audio-from-end-to-end" rel="bookmark" title="Permanent Link to Bug Hunting #1: Garbled Audio from End to End">Bug Hunting #1: Garbled Audio from End to End</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post6871_impractical-experiments-1-representing-numbers-as-polynomials" rel="bookmark" title="Permanent Link to Impractical Experiments #1: Representing Numbers as Polynomials">Impractical Experiments #1: Representing Numbers as Polynomials</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post6536_implementing-quantum-pseudo-telepathy" rel="bookmark" title="Permanent Link to Implementing Quantum Pseudo-Telepathy">Implementing Quantum Pseudo-Telepathy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post6422_turn-on-your-damn-warnings" rel="bookmark" title="Permanent Link to Turn On Your Damn Warnings">Turn On Your Damn Warnings</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5953_big-o-made-trivial" rel="bookmark" title="Permanent Link to Big-O Made Trivial">Big-O Made Trivial</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5268_unfathomable-bugs-7-the-broken-oven" rel="bookmark" title="Permanent Link to Unfathomable Bugs #7: The Broken Oven">Unfathomable Bugs #7: The Broken Oven</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5623_solomonoffs-mad-scientist" rel="bookmark" title="Permanent Link to Solomonoff’s Mad Scientist">Solomonoff’s Mad Scientist</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5753_yearly-blogging-roundup-1" rel="bookmark" title="Permanent Link to Yearly Blogging Roundup #1">Yearly Blogging Roundup #1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5485_what-isnt-a-monad" rel="bookmark" title="Permanent Link to What isn’t a Monad">What isn’t a Monad</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5365_searching-a-sorted-matrix-faster" rel="bookmark" title="Permanent Link to Searching a Sorted Matrix Faster">Searching a Sorted Matrix Faster</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5273_how-to-read-nested-ternary-operators" rel="bookmark" title="Permanent Link to How to Read Nested Ternary Operators">How to Read Nested Ternary Operators</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5204_making-sublime-text-2-jump-to-the-correct-line-with-unity-on-os-x" rel="bookmark" title="Permanent Link to Making Sublime Text 2 Jump to the Correct Line with Unity on OS X">Making Sublime Text 2 Jump to the Correct Line with Unity on OS X</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5096_my-bug-my-bad-4-reading-concurrently" rel="bookmark" title="Permanent Link to My Bug, My Bad #4: Reading Concurrently">My Bug, My Bad #4: Reading Concurrently</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5018_whole-api-testing-with-reflection" rel="bookmark" title="Permanent Link to Whole API Testing with Reflection">Whole API Testing with Reflection</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4708_optimizing-a-parser-combinator-into-a-memcpy" rel="bookmark" title="Permanent Link to Optimizing a Parser Combinator into a memcpy">Optimizing a Parser Combinator into a memcpy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4872_dont-treat-paths-like-strings" rel="bookmark" title="Permanent Link to Don’t Treat Paths Like Strings">Don’t Treat Paths Like Strings</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4706_breaking-a-toy-hash-function" rel="bookmark" title="Permanent Link to Breaking a Toy Hash Function">Breaking a Toy Hash Function</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4425_counting-iterators-lazily" rel="bookmark" title="Permanent Link to Counting Iterators Lazily">Counting Iterators Lazily</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4428_unfathomable-bugs-6-pretend-precision" rel="bookmark" title="Permanent Link to Unfathomable Bugs #6: Pretend Precision">Unfathomable Bugs #6: Pretend Precision</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4281_my-bug-my-bad-3-accidentally-attacking-warcraft-3" rel="bookmark" title="Permanent Link to My Bug, My Bad #3: Accidentally Attacking WarCraft 3">My Bug, My Bad #3: Accidentally Attacking WarCraft 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4130_collapsing-types-vs-monads-followup" rel="bookmark" title="Permanent Link to Collapsing Types vs Monads (followup)">Collapsing Types vs Monads (followup)</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4008_collapsing-futures-easy-to-use-hard-to-represent" rel="bookmark" title="Permanent Link to Collapsing Futures: Easy to Use, Hard to Represent">Collapsing Futures: Easy to Use, Hard to Represent</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3858_eventual-exceptions-vs-programming-in-a-minimal-functional-style" rel="bookmark" title="Permanent Link to Eventual Exceptions vs Programming in a Minimal Functional Style">Eventual Exceptions vs Programming in a Minimal Functional Style</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3769_the-mystery-of-flunf" rel="bookmark" title="Permanent Link to The Mystery of Flunf">The Mystery of Flunf</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3724_explain-it-like-im-five-the-socialist-millionaire-problem-and-secure-multi-party-computation" rel="bookmark" title="Permanent Link to Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation">Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3631_computer-science-blows-my-mind" rel="bookmark" title="Permanent Link to Computer Science Blows My Mind">Computer Science Blows My Mind</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3484_a-visit-to-execution-labs-in-montreal" rel="bookmark" title="Permanent Link to A visit to Execution Labs in Montréal">A visit to Execution Labs in Montréal</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3573_transmuting-dice-conserving-entropy" rel="bookmark" title="Permanent Link to Transmuting Dice, Conserving Entropy">Transmuting Dice, Conserving Entropy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3516_rule-of-thumb-ask-for-the-clock" rel="bookmark" title="Permanent Link to Rule of Thumb: Ask for the Clock">Rule of Thumb: Ask for the Clock</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3477_rule-of-thumb-use-purposefully-weakened-methods" rel="bookmark" title="Permanent Link to Rule of Thumb: Use Purposefully Weakened Methods">Rule of Thumb: Use Purposefully Weakened Methods</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3376_rule-of-thumb-preconditions-should-be-checked-explicitly" rel="bookmark" title="Permanent Link to Rule of thumb: Preconditions Should be Checked Explicitly">Rule of thumb: Preconditions Should be Checked Explicitly</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3280_intersecting-linked-lists-faster" rel="bookmark" title="Permanent Link to Intersecting Linked Lists Faster">Intersecting Linked Lists Faster</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3138_mouse-path-smoothing-for-jack-lumber" rel="bookmark" title="Permanent Link to Mouse Path Smoothing for Jack Lumber">Mouse Path Smoothing for Jack Lumber</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3044_my-bug-my-bad-2-sunk-by-float" rel="bookmark" title="Permanent Link to My Bug, My Bad #2: Sunk by Float">My Bug, My Bad #2: Sunk by Float</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2852_repeat-yourself-differently" rel="bookmark" title="Permanent Link to Repeat Yourself Differently">Repeat Yourself Differently</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm" rel="bookmark" title="Permanent Link to Grover’s Quantum Search Algorithm">Grover’s Quantum Search Algorithm</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2766_followup-to-non-nullable-types-vs-c" rel="bookmark" title="Permanent Link to Followup to Non-Nullable Types vs C#">Followup to Non-Nullable Types vs C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2540_optimizing-just-in-time-with-expression-trees" rel="bookmark" title="Permanent Link to Optimizing Just in Time with Expression Trees">Optimizing Just in Time with Expression Trees</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2353_when-one-way-latency-doesnt-matter" rel="bookmark" title="Permanent Link to When One-Way Latency Doesn’t Matter">When One-Way Latency Doesn’t Matter</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point" rel="bookmark" title="Permanent Link to Determining exactly if/when/where a moving line intersected a moving point">Determining exactly if/when/where a moving line intersected a moving point</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait" rel="bookmark" title="Permanent Link to Emulating Actors in C# with Async/Await">Emulating Actors in C# with Async/Await</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2096_making-an-immutable-queue-with-guaranteed-constant-time-operations" rel="bookmark" title="Permanent Link to Making an immutable queue with guaranteed constant time operations">Making an immutable queue with guaranteed constant time operations</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions" rel="bookmark" title="Permanent Link to Improving Checked Exceptions">Improving Checked Exceptions</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime" rel="bookmark" title="Permanent Link to Perishable Collections: The Benefits of Removal-by-Lifetime">Perishable Collections: The Benefits of Removal-by-Lifetime</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control" rel="bookmark" title="Permanent Link to Decoupling shared control">Decoupling shared control</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1694_decoupling-inlined-ui-code" rel="bookmark" title="Permanent Link to Decoupling inlined UI code">Decoupling inlined UI code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet" rel="bookmark" title="Permanent Link to Linq to Collections: Beyond IEnumerable&lt;T&gt;">Linq to Collections: Beyond IEnumerable&lt;T&gt;</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+ <div id="upprev_box" style="right: -400px;">
+	<h6>
+		More interesting posts <span class="num"> (1 of 2 articles)</span>
+	</h6>
+	<div class="upprev_excerpt">
+		<p>
+			<a href="http://twistedoakstudios.com/blog/Post6871_impractical-experiments-1-representing-numbers-as-polynomials" rel="prev">Impractical Experiments #1: Representing Numbers as Polynomials</a>
+		</p>
+	</div>
+	
+		<p>
+Or check out our <a href="http://twistedoakstudios.com/portfolio">Portfolio</a>.		</p><button id="upprev_close" type="button">Close</button>
+</div><!-- #upprev_box -->
+<link rel="stylesheet" id="al2fb_style-css" href="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/add-link-to-facebook.css" type="text/css" media="all">
+<link rel="stylesheet" id="admin-bar-css" href="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/admin-bar.css" type="text/css" media="all">
+<link rel="stylesheet" id="upprev-css-css" href="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/upprev.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-quicklatex-format-css" href="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/quicklatex-format.css" type="text/css" media="all">
+<script type="text/javascript" src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/admin-bar.js"></script>
+<script type="text/javascript" src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/jquery.js"></script>
+<script type="text/javascript" src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/upprev_js.php"></script>
+<script type="text/javascript" src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/comment-reply.js"></script>
+	<script type="text/javascript">
+		(function() {
+			var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
+
+			request = true;
+
+			b[c] = b[c].replace( rcs, ' ' );
+			b[c] += ( window.postMessage && request ? ' ' : ' no-' ) + cs;
+		}());
+	</script>
+			
+
+		 
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+      <!-- home portfolio used to be here -->
+		</div>
+
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				138-1657 Barrington St.<br>
+				Halifax, NS, Canada B3J 2A1</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script>- 2013 Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/jquery_002.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<div id="wpadminbar" class="nojq " role="navigation">
+			<a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1">Skip to toolbar</a>
+			<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Top navigation toolbar." tabindex="0">
+				<ul id="wp-admin-bar-root-default" class="ab-top-menu">
+		<li id="wp-admin-bar-wp-logo" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/about.php" title="About WordPress"><span class="ab-icon"></span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-wp-logo-default" class="ab-submenu">
+		<li id="wp-admin-bar-about"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/about.php">About WordPress</a>		</li></ul><ul id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu">
+		<li id="wp-admin-bar-wporg"><a class="ab-item" href="http://wordpress.org/">WordPress.org</a>		</li>
+		<li id="wp-admin-bar-documentation"><a class="ab-item" href="http://codex.wordpress.org/">Documentation</a>		</li>
+		<li id="wp-admin-bar-support-forums"><a class="ab-item" href="http://wordpress.org/support/">Support Forums</a>		</li>
+		<li id="wp-admin-bar-feedback"><a class="ab-item" href="http://wordpress.org/support/forum/requests-and-feedback">Feedback</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-site-name" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/">Twisted Oak Studios Blog</a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-site-name-default" class="ab-submenu">
+		<li id="wp-admin-bar-dashboard"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/">Dashboard</a>		</li></ul><ul id="wp-admin-bar-appearance" class="ab-submenu">
+		<li id="wp-admin-bar-themes"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/themes.php">Themes</a>		</li>
+		<li id="wp-admin-bar-customize" class="hide-if-no-customize"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/customize.php?url=http%3A%2F%2Ftwistedoakstudios.com%2Fblog%2FPost7748_impractical-experiments-2-securing-peer-to-peer-fog-of-war-against-map-hacks">Customize</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-updates"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/update-core.php" title="3 Plugin Updates, 3 Theme Updates"><span class="ab-icon"></span><span class="ab-label">6</span><span class="screen-reader-text">3 Plugin Updates, 3 Theme Updates</span></a>		</li>
+		<li id="wp-admin-bar-comments"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/edit-comments.php" title="0 comments awaiting moderation"><span class="ab-icon"></span><span id="ab-awaiting-mod" class="ab-label awaiting-mod pending-count count-0">0</span></a>		</li>
+		<li id="wp-admin-bar-new-content" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php" title="Add New"><span class="ab-icon"></span><span class="ab-label">New</span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-new-content-default" class="ab-submenu">
+		<li id="wp-admin-bar-new-post"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php">Post</a>		</li>
+		<li id="wp-admin-bar-new-media"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/media-new.php">Media</a>		</li>
+		<li id="wp-admin-bar-new-link"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/link-add.php">Link</a>		</li>
+		<li id="wp-admin-bar-new-page"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php?post_type=page">Page</a>		</li>
+		<li id="wp-admin-bar-new-user"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/user-new.php">User</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-edit"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post.php?post=7748&amp;action=edit">Edit Post</a>		</li></ul><ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
+		<li id="wp-admin-bar-search" class="admin-bar-search"><div class="ab-item ab-empty-item" tabindex="-1"><form action="http://twistedoakstudios.com/blog/" method="get" id="adminbarsearch"><input class="adminbar-input" name="s" id="adminbar-search" maxlength="150" type="text"><input class="adminbar-button" value="Search" type="submit"></form></div>		</li>
+		<li id="wp-admin-bar-my-account" class="menupop with-avatar"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/profile.php" title="My Account">Howdy, Craig Gidney<img alt="" src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/31a6ce579f8f9f9d528715d1e941726e.png" class="avatar avatar-16 photo" width="16" height="16"></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-user-actions" class="ab-submenu">
+		<li id="wp-admin-bar-user-info"><a class="ab-item" tabindex="-1" href="http://twistedoakstudios.com/blog/wp-admin/profile.php"><img alt="" src="Impractical%20Experiments%20%232%20%20Securing%20Peer%20to%20Peer%20Fog%20of%20War%20against%20Map%20Hacks_files/31a6ce579f8f9f9d528715d1e941726e_002.png" class="avatar avatar-64 photo" width="64" height="64"><span class="display-name">Craig Gidney</span><span class="username">craig</span></a>		</li>
+		<li id="wp-admin-bar-edit-profile"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/profile.php">Edit My Profile</a>		</li>
+		<li id="wp-admin-bar-logout"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=8f8dfa30f4">Log Out</a>		</li></ul></div>		</li></ul>			</div>
+			<a class="screen-reader-shortcut" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=8f8dfa30f4">Log Out</a>
+		</div></body></html>

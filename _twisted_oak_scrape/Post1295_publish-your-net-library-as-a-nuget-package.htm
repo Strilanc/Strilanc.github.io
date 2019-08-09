@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script id="bug.surrogate">var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}}; if (document.location.host == 'www.salon.com') {var _ga_ = document.querySelectorAll('script[src$=ga\\.js]')[0], ga_e = document.createEvent('Event'); ga_e.initEvent('load', true, true);_ga_.dispatchEvent(ga_e);}</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Game Developers | Unity 3D Development</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Post1295_publish-your-net-library-as-a-nuget-package_files/1140.css">
+    <link rel="stylesheet" href="Post1295_publish-your-net-library-as-a-nuget-package_files/style.css">
+    <link rel="stylesheet" href="Post1295_publish-your-net-library-as-a-nuget-package_files/blogstyle.css">
+<link rel="stylesheet" href="Post1295_publish-your-net-library-as-a-nuget-package_files/prettify.css" media="all">
+<link rel="stylesheet" href="Post1295_publish-your-net-library-as-a-nuget-package_files/sunburst.css" media="all">
+<script type="text/javascript" src="Post1295_publish-your-net-library-as-a-nuget-package_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Post1295_publish-your-net-library-as-a-nuget-package_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Post1295_publish-your-net-library-as-a-nuget-package_files/modernizr-2.js"></script>
+</head>
+<body onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="#"><img class="logo" src="Post1295_publish-your-net-library-as-a-nuget-package_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></h2>
+<div class="meta">posted by Craig Gidney on December 11, 2012</div>
+
+<p><a href="http://en.wikipedia.org/wiki/Nuget">NuGet</a> is a package 
+manager for .Net that is integrated into visual studio. This post 
+explains why I think you should use a package manager, both for 
+consuming and publishing software libraries, and is also a simple 
+tutorial on how to create a basic NuGet package.</p>
+<h3>Motivation</h3>
+<p>When writing about a concept, I like to provide concrete 
+implementations to ground what I’m trying to communicate. Often this 
+takes the form of code snippets, but sometimes I implement and provide a
+ complete (small) library (i.e. <a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles">encapsulating angles</a>, <a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c">option types for C#</a>).
+ In those cases I publish a NuGet package, in addition to releasing the 
+source code, to try to make it as easy as possible to try out the thing 
+I’m talking about.</p>
+<p>A NuGet package can be referenced without thinking about 
+dependencies, compilation, or the other minutia that you need to worry 
+about when dealing with source code organized only by human conventions 
+instead of executable rules. A package can be tried out in a matter of 
+minutes (just <a href="http://msdn.microsoft.com/en-us/vs2010trainingcourse_aspnetmvcnuget_topic3.aspx">search and click install</a>)
+ instead of who-knows-how-long (I assume I’m not the only one who has 
+found themselves recursively tracking down dependencies for hours trying
+ to get some stupid library to compile). You can save a <em>lot</em> of time by checking out <a href="https://nuget.org/">NuGet.org</a> before google, despite getting fewer results, because what you do find can be tried out so quickly.</p>
+<p>Disclaimer: This idea of ‘packaging’ software libraries is a good 
+one, but I’m not implying it’s an original idea or unique to NuGet/.Net.
+ Perl has <a href="http://www.cpan.org/">CPAN</a>, python has <a href="http://pypi.python.org/pypi">PyPI</a>, ruby has <a href="http://rubyforge.org/projects/rubygems/">gems</a>, haskell has <a href="http://www.haskell.org/cabal/">Cabal</a>, and there’s <a href="http://en.wikipedia.org/wiki/List_of_software_package_management_systems#Application-level_package_managers">plenty more</a>. There’s even another package manager for .Net: <a href="http://www.openwrap.org/">OpenWrap</a>.</p>
+<p>Because using packaged libraries is consistently easier, library 
+maintainers can help out their users by publishing packages for their 
+libraries (in addition to whatever else they do). There are lots of 
+existing libraries available as NuGet packages. Examples include <a href="https://nuget.org/packages/Rx-Main">Rx</a>, <a href="https://nuget.org/packages/NodaTime">NodaTime</a>, <a href="https://nuget.org/packages/jQuery">jQuery</a>, <a href="https://nuget.org/packages/NUnit">NUnit</a>, and <a href="https://nuget.org/packages">the rest</a>. You can do this too, and I’m going to tell you how.</p>
+<h3>Tutorial</h3>
+<p>Figuring out how to publish a NuGet package is, in hindsight, a very 
+simple process. However, at least for me, getting started was a trial 
+and error process. There are tutorials online, including the <a href="http://docs.nuget.org/docs/creating-packages/creating-and-publishing-a-package">official documentation on how to publish a package</a>,
+ but they tend to describe things at a lower level than I like to start 
+at. My hope is that this tutorial will make it easier to get started, 
+and build a familiarity with the basic concepts that allow the other 
+tutorials to make intuitive sense.</p>
+<p>The process of creating a NuGet package can be divided into three 
+steps: building the files you want to include in the package, packaging 
+those files alongside metadata describing what they are, and publishing 
+that package so it is available to everyone. The least simple step is 
+packaging, but we’ll get to that.</p>
+<h3>Step 1: Building</h3>
+<p>Before you can create a NuGet package, you need something to package.
+ At the very least you need a compiled assembly (.dll) for users to 
+reference, but you should also include a documentation file (.xml). 
+You’re allowed to create NuGet packages that don’t include a 
+documentation file, but then users won’t see the many helpful 
+method/class/parameter comments you’ve responsibly included in your 
+code.</p>
+<p>One way to create these files is via a class library project in 
+visual studio. By default, building the class library creates the files 
+you want in (ProjectDirectory)/bin/Debug or 
+(ProjectDirectory)/bin/Release, based on whether you’re building in 
+Debug or Release mode. If the documentation file (.xml) is missing, 
+ensure that the <em>XML documentation file</em> setting within the Build tab of the project’s properties is turned on before building the project again.</p>
+<p>Be aware of the framework(s) targeted by your library. In visual 
+studio you can check (and change) this setting from within the 
+Application tab of the project’s properties. Targeting an earlier 
+version of the .Net framework allows more people to use your library, 
+but also limits the features available for use by your library. For 
+example, the <a href="http://msdn.microsoft.com/en-us/library/dd460717.aspx">task parallel library</a> is only available if you target .Net 4.0 or higher.</p>
+<h3>Step 2: Packaging</h3>
+<p>Once you have the necessary files, you need to package them inside of
+ a .nupkg file including metadata describing your library. The easiest 
+way to do this is by using the <a href="http://npe.codeplex.com/">NuGet Package Explorer</a>.
+ Once you’ve downloaded, installed, and run the package explorer, you 
+start by clicking on “Create a new package”. You should see a screen 
+that looks like this:</p>
+<p><img src="Post1295_publish-your-net-library-as-a-nuget-package_files/RaPSO.png" alt="New Package"></p>
+<p>In order to add your build files to the package, you need to create a
+ folder for them to be placed in, based on what version of the .net 
+framework the library is targeting.</p>
+<p>To create a framework folder, right-click within the “Package 
+contents” area and select “Add Lib Folder” from the context menu. Once 
+that’s done, right-click on the new lib folder and use the context menu 
+to add a folder that corresponds to the framework your project targets. 
+For example, if your project is a class library that targets version 4.5
+ of the .Net framework, then select “Add .Net folder” -&gt; “v4.5″. 
+Alternatively, if your project is a portable class library, then select 
+“Add Portable Library folder” and pick the exact same options as the 
+ones specified in the Application tab of your portable library project’s
+ settings.</p>
+<p>Once you have a target folder to place them in, drag the assembly and
+ documentation files into it. Now you should see something like this:</p>
+<p><img src="Post1295_publish-your-net-library-as-a-nuget-package_files/sZKM6.png" alt="Package with lib contents"></p>
+<p>Note that you can have multiple framework folders in a single NuGet 
+package, each containing its own respective build files. This allows you
+ to have multiple variants of your library that target different 
+frameworks in the same package. For example, you can have a reduced 
+variant of your library that only uses features from version 2.0 of the 
+.Net framework.</p>
+<p>There are other useful root folders besides ‘lib’. For example 
+there’s the ‘content’ folder (for images and other prepared assets the 
+library uses), the ‘tools’ folder (for scripts and other tools the 
+library user can use), and the ‘src’ folder (for making source code 
+available).</p>
+<p>To finish your package, you need to specify metadata that describes 
+it. This is pretty straightforward, just go to Edit -&gt; Edit Metadata 
+and fill in the fields. Here’s what they’re each used for:</p>
+<ul>
+<li><strong>Id</strong>: The unique name that unambiguously identifies your library.
+</li><li><strong>Version</strong>: The version of your library contained
+ in the package. When you upload an updated package you must increase 
+this value. Note that, although old versions can be “delisted”, they can
+ never truly be deleted (to protect dependents).
+</li><li><strong>Title</strong>: The name shown when browsing packages. 
+You should provide a title, even though it’s not required, because 
+otherwise the raw Id is shown instead.
+</li><li><strong>Authors</strong>: Who wrote the library.
+</li><li><strong>Owners</strong>: Who is allowed to update or delist the package. <a href="http://nuget.codeplex.com/discussions/324977">Not having ownership of your library’s Id is a bit of a hassle</a>. You can conveniently leave this field blank, because it seems to default to the package uploader.
+</li><li><strong>Icon Url</strong>: The location of the image shown on the package’s page and beside the package when browsing packages.
+</li><li><strong>Project Url</strong>: The location people should go to in order to contribute/learn/inquire about the project.
+</li><li><strong>Requires License Acceptance</strong>: Determines if users must accept terms before they can use the library.
+</li><li><strong>License Url</strong>: The location of the terms users must agree to before they can use the library.
+</li><li><strong>Summary</strong>: A short description of the package. Shown when browsing packages, when the full description doesn’t fit.
+</li><li><strong>Description</strong>: An explanation of what the 
+package contains. Shown on the package’s page and when browsing packages
+ (if it fits, or a truncated version if no summary is specified).
+</li><li><strong>Release Notes</strong>: A description of the changes made to your library between versions. Shown on the package’s page and when updating.
+</li><li><strong>Copyright</strong>: You should enter “Craig Gidney 2012″ into this field.
+</li><li><strong>Language</strong>: I’m not sure what changing this 
+property actually affects. My best guess is it describes the language 
+used in the metadata text fields, potentially for filtering search 
+results.
+</li><li><strong>Tags</strong>: Categories that the package belongs to. 
+Shown when browsing packages and used for search results (but so are 
+some of the other text fields, like the title).
+</li><li><strong>Dependencies</strong>: Things your library depends upon
+ to work properly. Dependencies are specified per framework you target 
+and consist of either parts of the .Net framework, like System.Numerics,
+ or other NuGet packages. For example, if your library targets version 
+4.5 of the .Net framework and relies on the jQuery NuGet package, then 
+you would click “Edit dependencies”, add a group whose name matched the 
+name of your framework folder (net45), then browse for the jQuery 
+package and add it to the list of dependencies.
+</li></ul>
+<p>After you’re done entering meta data, you should see something like this:</p>
+<p><img src="Post1295_publish-your-net-library-as-a-nuget-package_files/JZNOh.png" alt="Package with meta data"></p>
+<p>You finish creating the package by saving it as a .nupkg file named 
+based on your package’s Id and Version. You can use Tools -&gt; Analyze 
+Package to check that everything’s alright, but saving does this 
+automatically. For me, the whole process looked like this:</p>
+<p><img src="Post1295_publish-your-net-library-as-a-nuget-package_files/Dyx2l.gif" alt="Using the package explorer"></p>
+<h3>Step 3: Publishing</h3>
+<p>In order to publish a package, you need an account at <a href="https://nuget.org/">nuget.org</a>. Once you have an account, publishing a package is as easy as clicking <a href="https://nuget.org/packages/upload">Upload Package</a>
+ and browsing to the package file (.nupkg) on your computer. After 
+confirming some details, you’re done: your library is online and ready 
+to be referenced! Well, almost, since it might take a few minutes before
+ it shows up in search results.</p>
+<p>To make sure everything is setup properly, you should try to use your
+ package in a new project. I do this by starting a new instance of 
+visual studio, creating a new project, referencing the package 
+(right-click references, select ‘Manage NuGet Packages…’, search, 
+install), and trying it out. Remember: it’s not the end of the world if 
+you go through a few version numbers before everything is perfect.</p>
+<h3>Summary</h3>
+<p>There’s no restriction on who is allowed to publish packages. Have 
+some cool library that does X? Package it, making it easier to use 
+(“lowering entry barriers”), to increase the number of people using it. 
+I’ll certainly appreciate it when I’m looking for something that does X.<br>
+—</p>
+<h3><a href="http://www.reddit.com/r/programming/comments/14nlyj/publish_your_net_library_as_a_nuget_package/">Discuss on Reddit</a></h3>
+<p>—</p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers efficient, flexible remote and on-the-floor 
+development and consulting without any middle-man or excessive 
+administrivia. <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2>Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+			<nav>
+				<ul class="primary-nav clearfix">
+					<li><a href="http://www.twistedoakstudios.com/">Home</a></li>
+					<li><a href="http://twistedoakstudios.com/portfolio">Portfolio</a></li>
+				</ul>
+			</nav>
+		</div>
+		
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				6082 Shirley Street<br>
+				Halifax, NS, Canada B3H 2M8</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+		
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script> Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Post1295_publish-your-net-library-as-a-nuget-package_files/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Post1295_publish-your-net-library-as-a-nuget-package_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script></body></html>

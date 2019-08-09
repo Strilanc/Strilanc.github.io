@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script id="bug.surrogate">var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}}; if (document.location.host == 'www.salon.com') {var _ga_ = document.querySelectorAll('script[src$=ga\\.js]')[0], ga_e = document.createEvent('Event'); ga_e.initEvent('load', true, true);_ga_.dispatchEvent(ga_e);}</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Unity3D Consulting | Technical Magic</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/1140.css">
+    <link rel="stylesheet" href="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/style.css">
+    <link rel="stylesheet" href="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/blogstyle.css">
+<link rel="stylesheet" href="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/prettify.css" media="all">
+<link rel="stylesheet" href="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/sunburst.css" media="all">
+<script type="text/javascript" src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/modernizr-2.js"></script>
+</head>
+<body class=" customize-support" onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="#"><img class="logo" src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a href="http://twistedoakstudios.com/labs/">Labs</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post4008_collapsing-futures-easy-to-use-hard-to-represent" rel="bookmark" title="Permanent Link to Collapsing Futures: Easy to Use, Hard to Represent">Collapsing Futures: Easy to Use, Hard to Represent</a></h2>
+<div class="meta">posted by Craig Gidney on May 28, 2013</div>
+
+<p>Type systems are useful things, but they can also over-constrain how 
+you represent values. In this post I discuss a useful kind of type 
+that’s difficult to represent in the type systems of most popular 
+languages: types that “collapse” when you nest them inside of 
+themselves.</p>
+<h3>Collapsing the Eventual Eventual Future</h3>
+<p>Suppose you have a <a href="http://en.wikipedia.org/wiki/Futures_and_promises">Future</a>:
+ a representation of a value that may not be computed yet but will 
+eventually be ready. Further suppose the eventual value of that future 
+(call it <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_002.png" class="ql-img-inline-formula " alt="F_{outer}" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="15" width="43">) is itself a future (call it <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_012.png" class="ql-img-inline-formula " alt="F_{inner}" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="15" width="44">), and that the eventual value of <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_012.png" class="ql-img-inline-formula " alt="F_{inner}" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="15" width="44"> is the integer <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_009.png" class="ql-img-inline-formula " alt="1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="13" width="7">. Said another way, <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_002.png" class="ql-img-inline-formula " alt="F_{outer}" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="15" width="43"> is eventually <em>eventually</em> <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_009.png" class="ql-img-inline-formula " alt="1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="13" width="7">. Notice that “eventually” was repeated twice.</p>
+<p>An interesting property of the word “eventually” is that repeating it
+ twice doesn’t seem to change the literal meaning of sentences. Saying 
+something will eventually <em>eventually</em> happen is the same as 
+saying it will just eventually happen. Doubly-eventual is the same as 
+singly-eventual. However, your typical implementation of a <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_007.png" class="ql-img-inline-formula " alt="Future(T)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="83"> type will not have this “doubly is the same as singly” property. You’ll find that that <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_006.png" class="ql-img-inline-formula " alt="F_{outer}.Value \neq 1" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="17" width="129">, even though <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_002.png" class="ql-img-inline-formula " alt="F_{outer}" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="15" width="43"> is eventually <em>eventually</em> <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_009.png" class="ql-img-inline-formula " alt="1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="13" width="7">, because <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_017.png" class="ql-img-inline-formula " alt="F_{outer}.Value" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="16" width="97"> is a <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_013.png" class="ql-img-inline-formula " alt="Future(int)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="93"> instead of an <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_008.png" class="ql-img-inline-formula " alt="int" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="23">.</p>
+<p>Can we implement a variant of <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_007.png" class="ql-img-inline-formula " alt="Future(T)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="83">, a <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex.png" class="ql-img-inline-formula " alt="Future^{*}(T)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="91">, that <em>does</em>
+ respect that singly-eventual should be the same as doubly-eventual? 
+This would be useful because it would mean we wouldn’t have to track the
+ level of nesting in order to write correct code (which is <em>particularly</em> useful in dynamic languages and languages without generics, where the compiler won’t catch nesting-level mistakes).</p>
+<p><em>Side note: If you think of <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_005.png" class="ql-img-inline-formula " alt="Future^{*}" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="63"> as a function that takes a type and returns a type, then calling <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_005.png" class="ql-img-inline-formula " alt="Future^{*}" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="63"> a collapsing type is equivalent to saying its function is <a href="http://en.wikipedia.org/wiki/Idempotence">idempotent</a>.</em></p>
+<p>If we try to implement <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_005.png" class="ql-img-inline-formula " alt="Future^{*}" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="63"> in C# or in Java, we’ll run into a bit of trouble when we try to specify the type of the value in a <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex.png" class="ql-img-inline-formula " alt="Future^{*}(T)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="91">. It’s a <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_020.png" class="ql-img-inline-formula " alt="T" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="13">, unless <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_020.png" class="ql-img-inline-formula " alt="T" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="13"> is a <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_011.png" class="ql-img-inline-formula " alt="Future^{*}(T_2)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="96"> in which case it’s a <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_016.png" class="ql-img-inline-formula " alt="T_2" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="15" width="17">, unless <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_016.png" class="ql-img-inline-formula " alt="T_2" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="15" width="17">
+ is… you get the idea. Their type systems can’t express these sorts of 
+conditions, although more flexible type systems can (I think you can do 
+it with templates in C++, for example), so we’re forced to give up on 
+collapsing or give up on knowing the type of value coming out of a 
+future.</p>
+<p>In a dynamic language, or in a language without generics, this 
+trade-off doesn’t exist. The language designers have made the choice for
+ us: the type of value coming out of a future can’t be specified. This 
+makes implementations in such languages feel much more natural.</p>
+<h3>Python Implementation</h3>
+<p>I implemented a collapsing future type in python, <a href="http://pythonfiddle.com/collapsing-future-demo/">which you can play with on PythonFiddle</a>. It works by checking the types of results at runtime, and flattening them when they’re also futures. Here is the type:</p>
+<pre><code class="prettyprint"><span class="com">### An eventual value that automatically flattens doubly-eventual results</span><span class="pln">
+</span><span class="kwd">class</span><span class="pln"> </span><span class="typ">Future</span><span class="pun">:</span><span class="pln">
+    </span><span class="com">### Inits a new not-yet-specified future value</span><span class="pln">
+    </span><span class="kwd">def</span><span class="pln"> __init__</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">):</span><span class="pln">
+        </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">__continuations </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[]</span><span class="pln">
+        
+    </span><span class="com">### Registers a continuation to run when the flattened future value is ready</span><span class="pln">
+    </span><span class="com">### Returns the continuation's future result</span><span class="pln">
+    </span><span class="kwd">def</span><span class="pln"> continueWith</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">,</span><span class="pln"> continuation</span><span class="pun">):</span><span class="pln">
+        </span><span class="com"># remember continuation, if result not provided yet</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">__continuations </span><span class="pun">!=</span><span class="pln"> </span><span class="kwd">None</span><span class="pun">:</span><span class="pln">
+            r </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Future</span><span class="pun">()</span><span class="pln">
+            </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">__continuations</span><span class="pun">.</span><span class="pln">append</span><span class="pun">((</span><span class="pln">continuation</span><span class="pun">,</span><span class="pln"> r</span><span class="pun">))</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> r
+        
+        </span><span class="com"># automatic flattening</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> isinstance</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">.</span><span class="pln">__result</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Future</span><span class="pun">):</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">__result</span><span class="pun">.</span><span class="pln">continueWith</span><span class="pun">(</span><span class="pln">continuation</span><span class="pun">)</span><span class="pln">
+
+        </span><span class="com"># run continuation inline when already finished        </span><span class="pln">
+        r </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Future</span><span class="pun">()</span><span class="pln">
+        v </span><span class="pun">=</span><span class="pln"> continuation</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">.</span><span class="pln">__result</span><span class="pun">)</span><span class="pln">
+        r</span><span class="pun">.</span><span class="pln">trySetResult</span><span class="pun">(</span><span class="pln">v</span><span class="pun">)</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> r
+    
+    </span><span class="com">### Sets this future's value, if it has not yet been set.</span><span class="pln">
+    </span><span class="com">### Causes all registered continuations to be run or handed off.</span><span class="pln">
+    </span><span class="kwd">def</span><span class="pln"> trySetResult</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">,</span><span class="pln"> result</span><span class="pun">):</span><span class="pln">
+        </span><span class="com"># already set?</span><span class="pln">
+        cs </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">__continuations
+        </span><span class="kwd">if</span><span class="pln"> cs </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">None</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">False</span><span class="pun">;</span><span class="pln">
+        
+        </span><span class="com"># state transition</span><span class="pln">
+        </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">__continuations </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">None</span><span class="pln">
+        </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">__result </span><span class="pun">=</span><span class="pln"> result
+        
+        </span><span class="com"># perform or hand-off registered continuations</span><span class="pln">
+        </span><span class="kwd">for</span><span class="pln"> e </span><span class="kwd">in</span><span class="pln"> cs</span><span class="pun">:</span><span class="pln">
+            continuation</span><span class="pun">,</span><span class="pln"> future </span><span class="pun">=</span><span class="pln"> e
+            r </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">continueWith</span><span class="pun">(</span><span class="pln">continuation</span><span class="pun">);</span><span class="pln">
+            future</span><span class="pun">.</span><span class="pln">trySetResult</span><span class="pun">(</span><span class="pln">r</span><span class="pun">)</span><span class="pln">
+        
+        </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">True</span></code></pre>
+<p>If you read closely, you’ll notice that the above (not particularly efficient) implementation is itself (ab)using the fact that <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_005.png" class="ql-img-inline-formula " alt="Future^{*}" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="63">
+ is a collapsing type. For example, when a future’s result is being set 
+to a a future, the results of continuations are set directly to the 
+results of handed-off continuations despite them having a different 
+level of nesting.</p>
+<p>Here’s some sample code that uses the above future type, demonstrating that you don’t have to care about the level of nesting:</p>
+<pre><code class="prettyprint"><span class="pln">f1 </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Future</span><span class="pun">()</span><span class="pln">
+f2 </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Future</span><span class="pun">()</span><span class="pln">
+f3 </span><span class="pun">=</span><span class="pln"> f1</span><span class="pun">.</span><span class="pln">continueWith</span><span class="pun">(</span><span class="kwd">lambda</span><span class="pln"> v1</span><span class="pun">:</span><span class="pln"> f2</span><span class="pun">.</span><span class="pln">continueWith</span><span class="pun">(</span><span class="kwd">lambda</span><span class="pln"> v2</span><span class="pun">:</span><span class="pln"> v1 </span><span class="pun">+</span><span class="pln"> v2</span><span class="pun">))</span><span class="pln">
+
+</span><span class="kwd">def</span><span class="pln"> </span><span class="kwd">out</span><span class="pun">(</span><span class="pln">x</span><span class="pun">):</span><span class="pln"> </span><span class="kwd">print</span><span class="pln"> x
+f1</span><span class="pun">.</span><span class="pln">continueWith</span><span class="pun">(</span><span class="kwd">lambda</span><span class="pln"> x</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">out</span><span class="pun">(</span><span class="str">"f1's result = "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> x</span><span class="pun">))</span><span class="pln">
+f2</span><span class="pun">.</span><span class="pln">continueWith</span><span class="pun">(</span><span class="kwd">lambda</span><span class="pln"> x</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">out</span><span class="pun">(</span><span class="str">"f2's result = "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> x</span><span class="pun">))</span><span class="pln">
+f3</span><span class="pun">.</span><span class="pln">continueWith</span><span class="pun">(</span><span class="kwd">lambda</span><span class="pln"> x</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">out</span><span class="pun">(</span><span class="str">"f3's result = "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> x</span><span class="pun">))</span><span class="pln">
+
+f1</span><span class="pun">.</span><span class="pln">trySetResult</span><span class="pun">(</span><span class="pln">f2</span><span class="pun">)</span><span class="pln">
+f2</span><span class="pun">.</span><span class="pln">trySetResult</span><span class="pun">(</span><span class="str">'Hello'</span><span class="pun">)</span><span class="pln">
+
+</span><span class="com"># outputs: </span><span class="pln">
+</span><span class="com"># f2's result = Hello</span><span class="pln">
+</span><span class="com"># f3's result = HelloHello</span><span class="pln">
+</span><span class="com"># f1's result = Hello</span></code></pre>
+<p>In the above code, <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_015.png" class="ql-img-inline-formula " alt="f2" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="16" width="19"> has type <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_004.png" class="ql-img-inline-formula " alt="Future^{*}(String)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="131"> because its result is set to a string. <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_014.png" class="ql-img-inline-formula " alt="f1" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="16" width="19"> has type <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_021.png" class="ql-img-inline-formula " alt="Future^{*}(Future^{*}(String))" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="209"> because its result is set to be <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_015.png" class="ql-img-inline-formula " alt="f2" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="16" width="19">. <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_019.png" class="ql-img-inline-formula " alt="f3" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="16" width="20"> has type <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_003.png" class="ql-img-inline-formula " alt="Future^{*}(Future^{*}(Future^{*}(String)))" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="288">, for reasons related to continueWith returning a <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex.png" class="ql-img-inline-formula " alt="Future^{*}(T)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="91"> when given a function that returns a <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_020.png" class="ql-img-inline-formula " alt="T" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="13">.</p>
+<p>Wait, why are we doing this complicated analysis? Because of the collapsing property, it’s dead obvious that they all have type <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_004.png" class="ql-img-inline-formula " alt="Future^{*}(String)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="131">. The fact that <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_019.png" class="ql-img-inline-formula " alt="f3" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="16" width="20">‘s result prints out as <code>"HelloHello"</code>, instead of <code>&lt;__main__.Future instance at ...&gt;</code>, confirms it.</p>
+<p>This is a level beyond having the compiler detect that you’ve made a nesting-level mistake. The mistake has been made <em>fundamentally impossible</em>, at least with respect to our future type on its own.</p>
+<h3>Mixing With Others</h3>
+<p>There are other types that can benefit from being made collapsible. 
+For example, the “MayFail” and “MayBeCancelled” types I mentioned last 
+week would work well as collapsing types, because you very rarely care 
+“at what level” a failure or cancellation occurred. On the other hand, 
+“List” would be a terrible collapsing type because you so often need to 
+have a lists of lists. Another terrible candidate is “Maybe”, because 
+you usually <em>do</em> care about “at what level” a value has been omitted.</p>
+<p>One potential obstacle to having lots of collapsing types is mixing. A <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_018.png" class="ql-img-inline-formula " alt="Future^{*}(MayFail^{*}(Future^{*}(MayFail^{*}(T))))" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="358"> won’t automatically collapse into a <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_010.png" class="ql-img-inline-formula " alt="Future^{*}(MayFail^{*}(T))" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="185">,
+ and so mixing may re-introduce the need to care about nesting level. 
+This is particularly bad in the case of futures because they often 
+represent operations that might fail, and so mixing will be endemic. 
+Maybe it would be possible to have some sort of cross-type collapsing 
+that applies in appropriate places… I really just don’t know yet.</p>
+<h3>Summary</h3>
+<p>A collapsing type transparently flattens itself when nested inside of itself. A <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_021.png" class="ql-img-inline-formula " alt="Future^{*}(Future^{*}(String))" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="209"> will act exactly identical to a <img src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex_004.png" class="ql-img-inline-formula " alt="Future^{*}(String)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="131">.</p>
+<p>Collapsing types are easy to use, because they make nesting-level 
+mistakes impossible. Collapsing types are hard to represent, because 
+their type can’t be specified in the type systems of most popular 
+languages.</p>
+<p>—</p>
+<h3>Discuss on <a href="http://www.reddit.com/r/programming/comments/1f6or3/collapsing_futures_easy_to_use_hard_to_represent/">Reddit</a></h3>
+<p>—</p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers consulting and development on high-tech interactive projects. Check out our <a href="http://twistedoakstudios.com/portfolio/">portfolio</a>, or <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2 class="endofpage">Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post3858_eventual-exceptions-vs-programming-in-a-minimal-functional-style" rel="bookmark" title="Permanent Link to Eventual Exceptions vs Programming in a Minimal Functional Style">Eventual Exceptions vs Programming in a Minimal Functional Style</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3769_the-mystery-of-flunf" rel="bookmark" title="Permanent Link to The Mystery of Flunf">The Mystery of Flunf</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3724_explain-it-like-im-five-the-socialist-millionaire-problem-and-secure-multi-party-computation" rel="bookmark" title="Permanent Link to Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation">Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3631_computer-science-blows-my-mind" rel="bookmark" title="Permanent Link to Computer Science Blows My Mind">Computer Science Blows My Mind</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3484_a-visit-to-execution-labs-in-montreal" rel="bookmark" title="Permanent Link to A visit to Execution Labs in Montréal">A visit to Execution Labs in Montréal</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3573_transmuting-dice-conserving-entropy" rel="bookmark" title="Permanent Link to Transmuting Dice, Conserving Entropy">Transmuting Dice, Conserving Entropy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3516_rule-of-thumb-ask-for-the-clock" rel="bookmark" title="Permanent Link to Rule of Thumb: Ask for the Clock">Rule of Thumb: Ask for the Clock</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3477_rule-of-thumb-use-purposefully-weakened-methods" rel="bookmark" title="Permanent Link to Rule of Thumb: Use Purposefully Weakened Methods">Rule of Thumb: Use Purposefully Weakened Methods</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3376_rule-of-thumb-preconditions-should-be-checked-explicitly" rel="bookmark" title="Permanent Link to Rule of thumb: Preconditions Should be Checked Explicitly">Rule of thumb: Preconditions Should be Checked Explicitly</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3280_intersecting-linked-lists-faster" rel="bookmark" title="Permanent Link to Intersecting Linked Lists Faster">Intersecting Linked Lists Faster</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3138_mouse-path-smoothing-for-jack-lumber" rel="bookmark" title="Permanent Link to Mouse Path Smoothing for Jack Lumber">Mouse Path Smoothing for Jack Lumber</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3044_my-bug-my-bad-2-sunk-by-float" rel="bookmark" title="Permanent Link to My Bug, My Bad #2: Sunk by Float">My Bug, My Bad #2: Sunk by Float</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2852_repeat-yourself-differently" rel="bookmark" title="Permanent Link to Repeat Yourself Differently">Repeat Yourself Differently</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm" rel="bookmark" title="Permanent Link to Grover’s Quantum Search Algorithm">Grover’s Quantum Search Algorithm</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2766_followup-to-non-nullable-types-vs-c" rel="bookmark" title="Permanent Link to Followup to Non-Nullable Types vs C#">Followup to Non-Nullable Types vs C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2540_optimizing-just-in-time-with-expression-trees" rel="bookmark" title="Permanent Link to Optimizing Just in Time with Expression Trees">Optimizing Just in Time with Expression Trees</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2353_when-one-way-latency-doesnt-matter" rel="bookmark" title="Permanent Link to When One-Way Latency Doesn’t Matter">When One-Way Latency Doesn’t Matter</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point" rel="bookmark" title="Permanent Link to Determining exactly if/when/where a moving line intersected a moving point">Determining exactly if/when/where a moving line intersected a moving point</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait" rel="bookmark" title="Permanent Link to Emulating Actors in C# with Async/Await">Emulating Actors in C# with Async/Await</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2096_making-an-immutable-queue-with-guaranteed-constant-time-operations" rel="bookmark" title="Permanent Link to Making an immutable queue with guaranteed constant time operations">Making an immutable queue with guaranteed constant time operations</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions" rel="bookmark" title="Permanent Link to Improving Checked Exceptions">Improving Checked Exceptions</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime" rel="bookmark" title="Permanent Link to Perishable Collections: The Benefits of Removal-by-Lifetime">Perishable Collections: The Benefits of Removal-by-Lifetime</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control" rel="bookmark" title="Permanent Link to Decoupling shared control">Decoupling shared control</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1694_decoupling-inlined-ui-code" rel="bookmark" title="Permanent Link to Decoupling inlined UI code">Decoupling inlined UI code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet" rel="bookmark" title="Permanent Link to Linq to Collections: Beyond IEnumerable&lt;T&gt;">Linq to Collections: Beyond IEnumerable&lt;T&gt;</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3718_polish" rel="bookmark" title="Permanent Link to Polish">Polish</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+ <div id="upprev_box" style="right: -400px;">
+	<h6>
+		More interesting posts <span class="num"> (1 of 12 articles)</span>
+	</h6>
+	<div class="upprev_excerpt">
+		<p>
+			<a href="http://twistedoakstudios.com/blog/Post3858_eventual-exceptions-vs-programming-in-a-minimal-functional-style" rel="prev">Eventual Exceptions vs Programming in a Minimal Functional Style</a>
+		</p>
+	</div>
+	
+		<p>
+Or check out our <a href="http://twistedoakstudios.com/portfolio">Portfolio</a>.		</p><button id="upprev_close" type="button">Close</button>
+</div><!-- #upprev_box -->
+<link rel="stylesheet" id="al2fb_style-css" href="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/add-link-to-facebook.css" type="text/css" media="all">
+<link rel="stylesheet" id="admin-bar-css" href="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/admin-bar.css" type="text/css" media="all">
+<link rel="stylesheet" id="upprev-css-css" href="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/upprev.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-quicklatex-format-css" href="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/quicklatex-format.css" type="text/css" media="all">
+<script type="text/javascript" src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/admin-bar.js"></script>
+<script type="text/javascript" src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/jquery_002.js"></script>
+<script type="text/javascript" src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/upprev_js.php"></script>
+<script type="text/javascript" src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/comment-reply.js"></script>
+	<script type="text/javascript">
+		(function() {
+			var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
+
+			request = true;
+
+			b[c] = b[c].replace( rcs, ' ' );
+			b[c] += ( window.postMessage && request ? ' ' : ' no-' ) + cs;
+		}());
+	</script>
+			
+
+		 
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+      <!-- home portfolio used to be here -->
+		</div>
+
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				138-1657 Barrington St.<br>
+				Halifax, NS, Canada B3J 2A1</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script>- 2013 Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<div id="wpadminbar" class="nojq " role="navigation">
+			<a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1">Skip to toolbar</a>
+			<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Top navigation toolbar." tabindex="0">
+				<ul id="wp-admin-bar-root-default" class="ab-top-menu">
+		<li id="wp-admin-bar-wp-logo" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/about.php" title="About WordPress"><span class="ab-icon"></span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-wp-logo-default" class="ab-submenu">
+		<li id="wp-admin-bar-about"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/about.php">About WordPress</a>		</li></ul><ul id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu">
+		<li id="wp-admin-bar-wporg"><a class="ab-item" href="http://wordpress.org/">WordPress.org</a>		</li>
+		<li id="wp-admin-bar-documentation"><a class="ab-item" href="http://codex.wordpress.org/">Documentation</a>		</li>
+		<li id="wp-admin-bar-support-forums"><a class="ab-item" href="http://wordpress.org/support/">Support Forums</a>		</li>
+		<li id="wp-admin-bar-feedback"><a class="ab-item" href="http://wordpress.org/support/forum/requests-and-feedback">Feedback</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-site-name" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/">twistedoakstudios.com</a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-site-name-default" class="ab-submenu">
+		<li id="wp-admin-bar-dashboard"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/">Dashboard</a>		</li></ul><ul id="wp-admin-bar-appearance" class="ab-submenu">
+		<li id="wp-admin-bar-themes"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/themes.php">Themes</a>		</li>
+		<li id="wp-admin-bar-customize" class="hide-if-no-customize"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/customize.php?url=http%3A%2F%2Ftwistedoakstudios.com%2Fblog%2FPost4008_collapsing-futures-easy-to-use-hard-to-represent">Customize</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-updates"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/update-core.php" title="2 Plugin Updates, 1 Theme Update"><span class="ab-icon"></span><span class="ab-label">3</span><span class="screen-reader-text">2 Plugin Updates, 1 Theme Update</span></a>		</li>
+		<li id="wp-admin-bar-comments"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/edit-comments.php" title="0 comments awaiting moderation"><span class="ab-icon"></span><span id="ab-awaiting-mod" class="ab-label awaiting-mod pending-count count-0">0</span></a>		</li>
+		<li id="wp-admin-bar-new-content" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php" title="Add New"><span class="ab-icon"></span><span class="ab-label">New</span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-new-content-default" class="ab-submenu">
+		<li id="wp-admin-bar-new-post"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php">Post</a>		</li>
+		<li id="wp-admin-bar-new-media"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/media-new.php">Media</a>		</li>
+		<li id="wp-admin-bar-new-link"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/link-add.php">Link</a>		</li>
+		<li id="wp-admin-bar-new-page"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php?post_type=page">Page</a>		</li>
+		<li id="wp-admin-bar-new-user"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/user-new.php">User</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-edit"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post.php?post=4008&amp;action=edit">Edit Post</a>		</li></ul><ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
+		<li id="wp-admin-bar-search" class="admin-bar-search"><div class="ab-item ab-empty-item" tabindex="-1"><form action="http://twistedoakstudios.com/blog/" method="get" id="adminbarsearch"><input class="adminbar-input" name="s" id="adminbar-search" maxlength="150" type="text"><input class="adminbar-button" value="Search" type="submit"></form></div>		</li>
+		<li id="wp-admin-bar-my-account" class="menupop with-avatar"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/profile.php" title="My Account">Howdy, Craig Gidney<img alt="" src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/31a6ce579f8f9f9d528715d1e941726e.png" class="avatar avatar-16 photo" height="16" width="16"></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-user-actions" class="ab-submenu">
+		<li id="wp-admin-bar-user-info"><a class="ab-item" tabindex="-1" href="http://twistedoakstudios.com/blog/wp-admin/profile.php"><img alt="" src="Collapsing%20Futures%20-%20Easy%20to%20Use,%20Hard%20to%20Represent_files/31a6ce579f8f9f9d528715d1e941726e_002.png" class="avatar avatar-64 photo" height="64" width="64"><span class="display-name">Craig Gidney</span><span class="username">craig</span></a>		</li>
+		<li id="wp-admin-bar-edit-profile"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/profile.php">Edit My Profile</a>		</li>
+		<li id="wp-admin-bar-logout"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=8450958ce8">Log Out</a>		</li></ul></div>		</li></ul>			</div>
+			<a class="screen-reader-shortcut" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=8450958ce8">Log Out</a>
+		</div></body></html>

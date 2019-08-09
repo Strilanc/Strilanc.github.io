@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script src="Collapsing%20Futures%20in%20Objective-C_files/Post7149_collapsing-futures-in-objective-c.htm" async=""></script><script>var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}};</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<title>Collapsing Futures in Objective-C | Twisted Oak Studios Blog</title>
+
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Collapsing%20Futures%20in%20Objective-C_files/1140.css">
+    <link rel="stylesheet" href="Collapsing%20Futures%20in%20Objective-C_files/style.css">
+    <link rel="stylesheet" href="Collapsing%20Futures%20in%20Objective-C_files/blogstyle.css">
+<link rel="stylesheet" href="Collapsing%20Futures%20in%20Objective-C_files/prettify.css" media="all">
+<link rel="stylesheet" href="Collapsing%20Futures%20in%20Objective-C_files/sunburst.css" media="all">
+<script type="text/javascript" src="Collapsing%20Futures%20in%20Objective-C_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Collapsing%20Futures%20in%20Objective-C_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Collapsing%20Futures%20in%20Objective-C_files/modernizr-2.js"></script>
+<script src="Collapsing%20Futures%20in%20Objective-C_files/embed.js" async="" type="text/javascript"></script></head>
+<body class=" customize-support" onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="http://twistedoakstudios.com/"><img class="logo" src="Collapsing%20Futures%20in%20Objective-C_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a href="http://twistedoakstudios.com/labs/">Labs</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+    <p class="big-callout">
+    <!--We're hiring! Experience with Game Dev, Unity3D, Graphics, Signal Processing, or Networking? Eligible to work in Canada? 
+      <a href="http://www.twistedoakstudios.com/jobs.php">Check it out</a>!
+-->
+		</p><section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post7149_collapsing-futures-in-objective-c" rel="bookmark" title="Permanent Link to Collapsing Futures in Objective-C">Collapsing Futures in Objective-C</a></h2>
+<div class="meta">posted by Craig Gidney on October 8, 2013</div>
+
+<p>In this post: practical examples of benefits of using collapsing futures in Objective C (<a href="https://github.com/Strilanc/ObjC-CollapsingFutures">library available on GitHub</a>).</p>
+<h3>Experimenting</h3>
+<p>Returning readers may remember I’ve posted in the past about futures. I wondered if <a href="http://twistedoakstudios.com/blog/Post3858_eventual-exceptions-vs-programming-in-a-minimal-functional-style">separating may-fail-ness from eventual-ness</a> might be fruitful, and if <a href="http://twistedoakstudios.com/blog/Post4008_collapsing-futures-easy-to-use-hard-to-represent">making futures automatically unwrap when nested</a> would be a good idea (in weakly typed languages where that didn’t violate the type system).</p>
+<p>I’ve had the chance to try these ideas out, in Objective-C. I’ve learned two things:</p>
+<ol>
+<li>Separating may-fail-ness from eventual-ness is a <strong>terrible</strong> idea. The number of times you don’t care about failure is somewhere in the neighborhood of <em>never</em>
+ (mainly because it’s so useful to be able to cancel asynchronous 
+operations, and that means a failure case). Even worse, the code tends 
+to end up as a mess of unwrap-unwrap-advance-wrap-wrap no one can keep 
+straight.
+</li><li>Collapsing futures are amazing.
+</li></ol>
+<p>Since collapsing futures worked out, I’ve extracted my implementation into a <a href="https://github.com/Strilanc/ObjC-CollapsingFutures">tiny library</a> for Objective-C. It contains just two types: <code>Future</code> and <code>FutureSource</code>. For the rest of this post I’ll be giving practical examples of using them, demonstrating how they simplify lots of tasks.</p>
+<h3>AddressBook as a Future</h3>
+<p>Our first practical problem is… requesting the address book in iOS.</p>
+<p>I consider this to be an intermediate level problem, because the API 
+for it is kind of awful. There’s lots of details you have to get right 
+all at the same time, and it’s really easy to miss a case if you don’t 
+read the documentation carefully and test things out.</p>
+<p>As an example of this not being trivial, the answers to the <a href="http://stackoverflow.com/q/12648244/52239">question on StackOverflow</a> all have flaws. The <a href="http://stackoverflow.com/a/12648938/52239">top answer</a>
+ fails to check that access was actually granted (an understandable 
+oversight when giving an answer, but any bets on how often that bug has 
+been copied now? <em>Update: <a href="http://stackoverflow.com/posts/12648938/revisions">has now been fixed</a>.</em>). The <a href="http://stackoverflow.com/a/12838224/52239">second place answer</a> recommends using a deprecated method and <em>blocks</em> on the result (<strong>Don’t block on async stuff. Ever.</strong> It makes your code <a href="http://stackoverflow.com/questions/15412985/how-can-i-get-the-address-book-permission-popup-to-display-on-top">brittle</a> and <a href="http://stackoverflow.com/questions/7950588/dispatch-semaphore-wait-stops-all-the-threads-in-iphone-app">prone to deadlock</a>.).</p>
+<p>(I was also worried that all the answers had race conditions vs the 
+user taking away authorization. Turns out your app gets sigkilled and 
+restarted when that happens. That’s… actually a pretty fail-safe way to 
+prevent apps thinking they have access when they don’t.)</p>
+<p>Our goal is to hide all of the difficulty related to using this API 
+and expose our simple method instead. It will just eventually get the 
+address book, requesting access if necessary and failing if access is 
+not granted. Here’s my implementation:</p>
+<pre><code class="prettyprint"><span class="pun">+(</span><span class="typ">Future</span><span class="pun">*)</span><span class="pln"> asyncGetAddressBook </span><span class="pun">{</span><span class="pln">
+    </span><span class="typ">CFErrorRef</span><span class="pln"> creationError </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">nil</span><span class="pun">;</span><span class="pln">
+    </span><span class="typ">ABAddressBookRef</span><span class="pln"> addressBookRef </span><span class="pun">=</span><span class="pln"> </span><span class="typ">ABAddressBookCreateWithOptions</span><span class="pun">(</span><span class="pln">NULL</span><span class="pun">,</span><span class="pln"> </span><span class="pun">&amp;</span><span class="pln">creationError</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">assert</span><span class="pun">((</span><span class="pln">addressBookRef </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">nil</span><span class="pun">)</span><span class="pln"> </span><span class="pun">==</span><span class="pln"> </span><span class="pun">(</span><span class="pln">creationError </span><span class="pun">!=</span><span class="pln"> </span><span class="kwd">nil</span><span class="pun">));</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">creationError </span><span class="pun">!=</span><span class="pln"> </span><span class="kwd">nil</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">[</span><span class="typ">Future</span><span class="pln"> futureWithFailure</span><span class="pun">:(</span><span class="pln">__bridge_transfer id</span><span class="pun">)</span><span class="pln">creationError</span><span class="pun">];</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+
+    </span><span class="typ">FutureSource</span><span class="pln"> </span><span class="pun">*</span><span class="pln">futureAddressBookSource </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="typ">FutureSource</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">];</span><span class="pln">
+    
+    id addressBook </span><span class="pun">=</span><span class="pln"> </span><span class="pun">(</span><span class="pln">__bridge_transfer id</span><span class="pun">)</span><span class="pln">addressBookRef</span><span class="pun">;</span><span class="pln">
+    </span><span class="com">// (assuming IOS 6 or higher)</span><span class="pln">
+    </span><span class="typ">ABAddressBookRequestAccessWithCompletion</span><span class="pun">(</span><span class="pln">addressBookRef</span><span class="pun">,</span><span class="pln"> </span><span class="pun">^(</span><span class="kwd">bool</span><span class="pln"> granted</span><span class="pun">,</span><span class="pln"> </span><span class="typ">CFErrorRef</span><span class="pln"> requestAccessError</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">granted</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="pun">[</span><span class="pln">futureAddressBookSource trySetResult</span><span class="pun">:</span><span class="pln">addressBook</span><span class="pun">];</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">else</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="pun">[</span><span class="pln">futureAddressBookSource trySetFailure</span><span class="pun">:(</span><span class="pln">__bridge id</span><span class="pun">)</span><span class="pln">requestAccessError</span><span class="pun">];</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">});</span><span class="pln">
+	
+    </span><span class="kwd">return</span><span class="pln"> futureAddressBookSource</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>Before I explain what this does, notice how stupid the workflow to get the address book looks:</p>
+<ul>
+<li>We have to create the address book <em>then</em> ask if creating it was a useless thing to do.
+</li><li>The two failure cases (user already denied permission, user 
+chooses to deny permission) arrive in two totally different contexts.
+</li><li>The success case is also artificially split into two success cases (succeeding inline vs succeeding later).
+</li><li>We’re tempted by being able to complete inline, but ultimately we can only actually rely on <em>eventually</em> completing.
+</li></ul>
+<p>Bleh. Anyways, on with the explanation.</p>
+<p>We start by trying to create an address book reference by calling <code>ABAddressBookCreateWithOptions</code>.
+ According to the documentation this method returns nil, and an error, 
+only when the user has already denied us access in the past. In that 
+case we immediately forward the error to the caller by giving it to the <code>futureWithFailure</code>
+ method and returning the resulting future. (We also transfer the error 
+into ARC, since we have to release it.) If there was no error creating 
+the address book, we continue to the other cases.</p>
+<p>In order to determine if user has authorized or will authorize us to access the address book, we use the <code>ABAddressBookRequestAccessWithCompletion</code> method. It’s an asynchronous method, meaning it calls us back later, so we create a <code>FutureSource</code> to set at that time. We return the source as a future for our caller to use right away.</p>
+<p>Once the user’s choice about whether or not we can have access is 
+known, the callback we’ve specified is called. If we were granted access
+ then we make our future succeed with the address book by giving it to <code>trySetResult</code>. Otherwise we were denied access, and forward the error to the caller via the future by giving the error to <code>trySetFailure</code>. (The created address book is not leaked because we transferred it into ARC earlier.)</p>
+<p>Here’s how a caller could use our method:</p>
+<pre><code class="prettyprint"><span class="typ">Future</span><span class="pun">*</span><span class="pln"> futureAddressBook </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="typ">Util</span><span class="pln"> asyncGetAddressBook</span><span class="pun">];</span><span class="pln">
+</span><span class="pun">[</span><span class="pln">futureAddressBook catchDo</span><span class="pun">:^(</span><span class="pln">id error</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="typ">NSLog</span><span class="pun">(</span><span class="str">"Oh No!"</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}];</span><span class="pln">
+</span><span class="pun">[</span><span class="pln">futureAddressBook thenDo</span><span class="pun">:^(</span><span class="pln">id addressBook</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="com">// hurray!</span><span class="pln">
+</span><span class="pun">}];</span></code></pre>
+<p>Notice how the unreliable inline cases have been folded into the 
+reliable callback cases. Instead of having to deal with a very odd API, 
+the caller deals with a <code>Future</code> that behaves just like any other <code>Future</code>.</p>
+<h3>Connect the Futures</h3>
+<p>The most useful method on <code>Future</code> is <code>then</code>. 
+It lets you specify a function to run once the future’s result is ready,
+ and returns a future for the result of that function eventually 
+finishing. If any failure occurs along the way, it just propagates the 
+failure instead of running callbacks. There’s also a variant, <code>thenDo</code>, which takes functions that don’t produce a value.</p>
+<p>The following example is adapted from an app I’ve been working on, 
+which needs to establish calls. This involves way more machinery than I 
+can cover, but here’s one of the pieces which uses <code>then</code> several times:</p>
+<pre><code class="prettyprint"><span class="com">/// Eventually connects to a call, resulting in a CallConnectResult containing</span><span class="pln">
+</span><span class="com">///    the ShortAuthString to display and the audio socket to communicate with.</span><span class="pln">
+</span><span class="com">/// The connection ends when the given cancel token is cancelled.</span><span class="pln">
+</span><span class="pun">+(</span><span class="typ">Future</span><span class="pun">*)</span><span class="pln"> asyncConnectToPhoneCallDescribedBy</span><span class="pun">:(</span><span class="typ">Session</span><span class="pun">*)</span><span class="pln">session
+                               untilCancelled</span><span class="pun">:(</span><span class="pln">id</span><canceltoken><span class="pun">)</span><span class="pln">untilCancelledToken </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">require</span><span class="pun">(</span><span class="pln">session </span><span class="pun">!=</span><span class="pln"> </span><span class="kwd">nil</span><span class="pun">);</span><span class="pln">
+    
+    </span><span class="typ">Future</span><span class="pun">*</span><span class="pln"> futureUdpSocket </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="kwd">self</span><span class="pln"> asyncRepeatedlyAttemptConnectToRelayDescribedBy</span><span class="pun">:</span><span class="pln">session
+                                                                     untilCancelled</span><span class="pun">:</span><span class="pln">untilCancelledToken</span><span class="pun">];</span><span class="pln">
+    
+    </span><span class="typ">Future</span><span class="pun">*</span><span class="pln"> futureRtpSocket </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="pln">futureUdpSocket </span><span class="kwd">then</span><span class="pun">:^(</span><span class="typ">UdpSocket</span><span class="pun">*</span><span class="pln"> udpSocket</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">[</span><span class="typ">RtpSocket</span><span class="pln"> rtpSocketOverUdp</span><span class="pun">:</span><span class="pln">udpSocket</span><span class="pun">];</span><span class="pln">
+    </span><span class="pun">}];</span><span class="pln">
+
+    </span><span class="typ">Future</span><span class="pun">*</span><span class="pln"> futureZrtpHandshakeResult </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="pln">futureRtpSocket </span><span class="kwd">then</span><span class="pun">:^(</span><span class="typ">RtpSocket</span><span class="pun">*</span><span class="pln"> rtpSocket</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">[</span><span class="typ">ZrtpManager</span><span class="pln"> asyncPerformHandshakeOver</span><span class="pun">:</span><span class="pln">rtpSocket
+                                       untilCancelled</span><span class="pun">:</span><span class="pln">untilCancelledToken</span><span class="pun">];</span><span class="pln">
+    </span><span class="pun">}];</span><span class="pln">
+    
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">[</span><span class="pln">futureZrtpHandshakeResult </span><span class="kwd">then</span><span class="pun">:^(</span><span class="typ">ZrtpHandshakeResult</span><span class="pun">*</span><span class="pln"> zrtpResult</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="typ">AudioSocket</span><span class="pun">*</span><span class="pln"> audioSocket </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="typ">AudioSocket</span><span class="pln"> audioSocketOver</span><span class="pun">:</span><span class="pln">zrtpResult</span><span class="pun">.</span><span class="pln">secureRtpSocket</span><span class="pun">];</span><span class="pln">
+        
+        </span><span class="typ">NSString</span><span class="pun">*</span><span class="pln"> sas </span><span class="pun">=</span><span class="pln"> zrtpResult</span><span class="pun">.</span><span class="pln">shortAuthenticationString</span><span class="pun">;</span><span class="pln">
+        
+        </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">[</span><span class="typ">CallConnectResult</span><span class="pln"> callConnectResultWithShortAuthenticationString</span><span class="pun">:</span><span class="pln">sas
+                                                                  andAudioSocket</span><span class="pun">:</span><span class="pln">audioSocket</span><span class="pun">];</span><span class="pln">
+    </span><span class="pun">}];</span><span class="pln">
+</span><span class="pun">}</span></canceltoken></code></pre>
+<p>The above code is basically just what you’d write if everything was synchronous, except indented inside <code>then</code> callbacks. Anyways, an overview of what’s happening:</p>
+<p>First, we need a UDP socket that has introduced itself to a relay 
+server. The mechanics of that process are complicated, with timeouts and
+ retries and cleaning up when cancelled and all that fun stuff. Luckily 
+we don’t have to care: the eventual result is represented directly by 
+the <code>Future</code> returned by <code>asyncRepeatedlyAttemptConnectToRelayDescribedBy</code>. We call the method and use its result like any other future, without a care in the world about the underlying details.</p>
+<p>Second, we wrap that eventual UDP socket into an RTP socket. When the
+ relay connecting stuff succeeds, and the UDP socket future gets a 
+result, the callback that wraps the UDP socket into an RTP socket will 
+be run. So <code>futureRtpSocket</code> ends up with an eventual RTP 
+socket. On the other hand, if we fail to connect to a relay, the UDP 
+socket future will fail and the <code>then</code> method will forward that failure into the RTP socket future without running the callback.</p>
+<p>Third, we do a ZRTP handshake over the eventual RTP socket. This is 
+another very complicated step, involving a whole sequence of packets, 
+protocol negotiation, cryptography, resend limits, and so forth. But, 
+again, we only have to care about the future result and we can use it 
+like any other future. Automatic collapsing saves us a bit of trouble 
+here, because we don’t have to think twice about the result of our 
+continuation already being a <code>Future</code>. The doubly-eventual result is just automatically a singly-eventual result.</p>
+<p>Finally, we repackage our eventual handshake result into a <code>CallConnectResult</code>
+ and return. The repackaging just involves throwing away the information
+ we don’t need and wrapping a socket for sending audio around the 
+secured RTP socket.</p>
+<p>What this method actually does is extremely complicated. Writing it 
+with ad-hoc with callbacks is likely to be a world of pain. At every 
+stage you need to deal with propagating success, propagating failure, 
+and cancellation. With collapsing futures… the code is basically just 
+what you’d write if it was synchronous.</p>
+<h3>Catching a Recursive Future</h3>
+<p>The second most useful method on futures is <code>catch</code> (and <code>catchDo</code>). It is the mirror image of <code>then</code>: instead of running when the future succeeds, it runs when the future fails.</p>
+<p>My example for <code>catch</code> is a method used indirectly by the 
+previous example. It tries to perform an operation several times, with 
+increasing timeouts, until the operation either succeeds or fails within
+ the time limit.</p>
+<p>I don’t know if you’ve ever tried to implement something like that… but it’s generally awful. <em>Especially</em> if you want to handle success, failure, and cancellation. Collapsing futures make it look easy:</p>
+<pre><code class="prettyprint"><span class="pun">+(</span><span class="typ">Future</span><span class="pun">*)</span><span class="pln"> asyncTry</span><span class="pun">:(</span><span class="typ">CancellableOperationStarter</span><span class="pun">)</span><span class="pln">operation
+         upToNTimes</span><span class="pun">:(</span><span class="typ">NSUInteger</span><span class="pun">)</span><span class="pln">maxTryCount
+    withBaseTimeout</span><span class="pun">:(</span><span class="typ">NSTimeInterval</span><span class="pun">)</span><span class="pln">baseTimeout
+     andRetryFactor</span><span class="pun">:(</span><span class="typ">NSTimeInterval</span><span class="pun">)</span><span class="pln">timeoutRetryFactor
+     untilCancelled</span><span class="pun">:(</span><span class="pln">id</span><canceltoken><span class="pun">)</span><span class="pln">untilCancelledToken </span><span class="pun">{</span><span class="pln">
+    
+    </span><span class="kwd">require</span><span class="pun">(</span><span class="pln">operation </span><span class="pun">!=</span><span class="pln"> </span><span class="kwd">nil</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">require</span><span class="pun">(</span><span class="pln">maxTryCount </span><span class="pun">&gt;=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">require</span><span class="pun">(</span><span class="pln">baseTimeout </span><span class="pun">&gt;=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">require</span><span class="pun">(</span><span class="pln">timeoutRetryFactor </span><span class="pun">&gt;=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">);</span><span class="pln">
+    
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">maxTryCount </span><span class="pun">==</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">[</span><span class="typ">Future</span><span class="pln"> futureWithFailure</span><span class="pun">:[</span><span class="typ">TimeoutFailure</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">]];</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">([</span><span class="pln">untilCancelledToken isAlreadyCancelled</span><span class="pun">])</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">[</span><span class="typ">Future</span><span class="pln"> futureWithFailure</span><span class="pun">:</span><span class="pln">untilCancelledToken</span><span class="pun">];</span><span class="pln">
+    
+    </span><span class="typ">Future</span><span class="pun">*</span><span class="pln"> futureResult </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="typ">AsyncUtil</span><span class="pln"> raceCancellableOperation</span><span class="pun">:</span><span class="pln">operation
+                                                againstTimeout</span><span class="pun">:</span><span class="pln">baseTimeout
+                                                untilCancelled</span><span class="pun">:</span><span class="pln">untilCancelledToken</span><span class="pun">];</span><span class="pln">
+    
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">[</span><span class="pln">futureResult </span><span class="kwd">catch</span><span class="pun">:^(</span><span class="pln">id error</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">bool</span><span class="pln"> operationDidNotTimeout </span><span class="pun">=</span><span class="pln"> </span><span class="pun">![</span><span class="pln">error isKindOfClass</span><span class="pun">:[</span><span class="typ">TimeoutFailure</span><span class="pln"> </span><span class="kwd">class</span><span class="pun">]];</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">operationDidNotTimeout</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">[</span><span class="typ">Future</span><span class="pln"> futureWithFailure</span><span class="pun">:</span><span class="pln">error</span><span class="pun">];</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+        
+        </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">[</span><span class="kwd">self</span><span class="pln"> asyncTry</span><span class="pun">:</span><span class="pln">operation
+                   upToNTimes</span><span class="pun">:</span><span class="pln">maxTryCount </span><span class="pun">-</span><span class="pln"> </span><span class="lit">1</span><span class="pln">
+              withBaseTimeout</span><span class="pun">:</span><span class="pln">baseTimeout </span><span class="pun">*</span><span class="pln"> timeoutRetryFactor
+               andRetryFactor</span><span class="pun">:</span><span class="pln">timeoutRetryFactor
+               untilCancelled</span><span class="pun">:</span><span class="pln">untilCancelledToken</span><span class="pun">];</span><span class="pln">
+    </span><span class="pun">}];</span><span class="pln">
+</span><span class="pun">}</span></canceltoken></code></pre>
+<p>Reading from start to finish:</p>
+<ul>
+<li>Make sure the input makes sense.
+</li><li>If you’re out of tries, fail due to a timeout.
+</li><li>If you’ve been cancelled, fail due to a cancellation.
+</li><li>Otherwise start the operation, using the current timeout.
+</li><li>If the operation succeeds, that’s your result.
+</li><li>If the operation failed, and it wasn’t due to a timeout, fail with that error.
+</li><li>Otherwise you should repeat this whole process but with a longer timeout and one fewer tries.
+</li></ul>
+<p>Notice that this method doesn’t do much except retry. Running a 
+cancellable operation with a timeout, the most complicated sub-piece, is
+ its own method. Just another example of futures not getting in the way 
+of abstracting.</p>
+<p>Another thing to notice is how this method exploits the 
+auto-collapsing property. Did you see how it forwards errors into the 
+resulting future? Instead of needing a side-channel, like raising an 
+exception, it just returns a failed future containing the error. The 
+future the failed future would have ended up in will collapse to just 
+contain the error.</p>
+<p>Also, automatic collapse is making recursing easier. If <code>asyncTry</code> has type <code>Future(T)</code>, then a continuation returning <code>asyncTry</code> should have type <code>Future(Future(T))</code>.
+ This mismatch between the type of what we’re suppose to return and what
+ we’re returning happens anytime we asynchronously recurse, but it’s of 
+no consequence thanks to collapsing making those two types equivalent.</p>
+<h3>Future after finally Animated</h3>
+<p>The final basic method on <code>Future</code> is… <code>finally</code> (and <code>finallyDo</code>). <code>finally</code>
+ runs the continuation you give it when the future completes, whether or
+ not the future succeeded or failed. It’s generally useful for 
+scheduling after-the-fact cleanup, and for transitioning out of futures 
+and into another async mechanism.</p>
+<p>The following method from some demo code I used to prompt the user, using <code>finallyDo</code>:</p>
+<pre><code class="prettyprint"><span class="pun">-(</span><span class="typ">Future</span><span class="pun">*)</span><span class="pln"> presentViewController</span><span class="pun">:(</span><span class="typ">UIViewController</span><span class="pun">*)</span><span class="pln">view
+                     untilResult</span><span class="pun">:(</span><span class="typ">Future</span><span class="pun">*)</span><span class="pln">future
+                   withAnimateIn</span><span class="pun">:(</span><span class="pln">BOOL</span><span class="pun">)</span><span class="pln">animateIn
+                   andAnimateOut</span><span class="pun">:(</span><span class="pln">BOOL</span><span class="pun">)</span><span class="pln">animateOut </span><span class="pun">{</span><span class="pln">
+    
+    </span><span class="kwd">require</span><span class="pun">(</span><span class="pln">view </span><span class="pun">!=</span><span class="pln"> </span><span class="kwd">nil</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">require</span><span class="pun">(</span><span class="pln">future </span><span class="pun">!=</span><span class="pln"> </span><span class="kwd">nil</span><span class="pun">);</span><span class="pln">
+    
+    </span><span class="typ">FutureSource</span><span class="pun">*</span><span class="pln"> futureResultSource </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="typ">FutureSource</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">];</span><span class="pln">
+    
+    </span><span class="pun">[</span><span class="kwd">self</span><span class="pln"> presentViewController</span><span class="pun">:</span><span class="pln">view
+                       animated</span><span class="pun">:</span><span class="pln">animateIn
+                     completion</span><span class="pun">:</span><span class="kwd">nil</span><span class="pun">];</span><span class="pln">
+    
+    </span><span class="pun">[</span><span class="pln">future finallyDo</span><span class="pun">:^(</span><span class="typ">Future</span><span class="pun">*</span><span class="pln"> completed</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="com">// (assuming the future completes on the main thread)</span><span class="pln">
+        </span><span class="pun">[</span><span class="kwd">self</span><span class="pln"> dismissViewControllerAnimated</span><span class="pun">:</span><span class="pln">animateOut
+                                 completion</span><span class="pun">:^{[</span><span class="pln">futureResultSource trySetResult</span><span class="pun">:</span><span class="pln">completed</span><span class="pun">];}];</span><span class="pln">
+    </span><span class="pun">}];</span><span class="pln">
+    
+    </span><span class="kwd">return</span><span class="pln"> futureResultSource</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>This method displays a view controller (i.e. a UI thingy). It 
+displays it until the given future completes. It returns a future that 
+will complete with the same result as the given future, except the 
+resulting future won’t complete before the view has animated away.</p>
+<p>It should be clear how this method works, since it’s really the simplest example so far. It uses <code>finallyDo</code>
+ to schedule dismissing the view controller. It then uses the 
+dismissal’s completion callback to propagate the completed future’s 
+result into our result. Note that the returned future uses the given 
+future as its value without having to unwrap it, which is fine thanks to
+ automatic collapsing.</p>
+<p>I used this code in some simple demo views that pop up like modal 
+dialogs and ask for information. The views expose a future that 
+completes when the user accepts what they entered, or fails if they hit 
+cancel. So asynchronously prompting for information is just a matter of 
+making the view, passing it to this method along with its completion 
+future, and continuing off of the resulting future.</p>
+<h3>Notes</h3>
+<p>I hope those four cases have been useful examples of collapsing 
+futures having practical utility. The examples really just scratch the 
+surface of what you can do. They don’t even combine multiple futures 
+together (e.g. race multiple TCP connections, to do a low latency 
+connection), demonstrate how it’s easier to fall into the pit of success
+ with futures, or really drive home how well futures and cancellation 
+tokens work together. Alas, this blog post is already well over the 
+usual size and I do need sleep to function.</p>
+<p>Note that, although I’ve been picking on callbacks a bit, it is 
+possible to use them well if you’re structured and disciplined. I do 
+dislike them, since they force you to either write your code backwards 
+(the last callback needs to be ready before the first method in a 
+chain), have monster indentation, or over-extract functions and lose the
+ benefit of closures… but there’s a large component of personal 
+preference there as well. (Also it’s harder to write general utility 
+methods like <code>catch</code> for callbacks because you end up needing a variant per function signature.)</p>
+<p>The <a href="https://github.com/Strilanc/ObjC-CollapsingFutures">collapsing future library I implemented</a>
+ is bare bones. I thought about including cancel tokens as well, but cut
+ them because I’ve been programming in Objective-C for less than a year 
+and I don’t feel confident publishing anything large. I know essentially
+ nothing about what should and shouldn’t be done when designing an 
+Objective-C library. Is it a big deal that you can’t copy a <code>Future</code>?
+ In what cases can I rely on a block being copied off of the stack, 
+instead of cargo-cult copying to be sure? Should I be prefixing <code>Future</code> and <code>FutureSource</code>
+ with something? How do I make documentation work? Should there be a 
+single public “LibraryName.h” header that consumers will include? You 
+get the idea.</p>
+<h3>Summary</h3>
+<p>Collapsing futures make asynchronous code easier. I implemented a minimal <a href="https://github.com/Strilanc/ObjC-CollapsingFutures">collapsing future in Objective-C</a> library.</p>
+<p>—</p>
+<h3><a href="http://www.reddit.com/r/programming/comments/1nzi8q/collapsing_futures_in_objectivec/">Discuss on Reddit</a></h3>
+<p>—</p>
+<h3>My Twitter: <a href="https://twitter.com/CraigGidney">@CraigGidney</a></h3>
+<p>—</p>
+
+<blockquote><p>
+
+
+</p><div id="disqus_thread"><iframe verticalscrolling="no" horizontalscrolling="no" src="Collapsing%20Futures%20in%20Objective-C_files/a.htm" style="width: 100% ! important; border: medium none ! important; overflow: hidden ! important; height: 440px ! important;" role="complementary" allowtransparency="true" data-disqus-uid="2" id="dsq2" frameborder="0" scrolling="no" width="100%"></iframe><iframe style="width: 1060px ! important; border: medium none ! important; overflow: hidden ! important; top: 0px ! important; position: fixed ! important; height: 29px ! important; display: none ! important;" role="alert" allowtransparency="true" data-disqus-uid="-indicator-north" id="dsq-indicator-north" frameborder="0" scrolling="no"></iframe><iframe style="width: 1060px ! important; border: medium none ! important; overflow: hidden ! important; bottom: 0px ! important; position: fixed ! important; height: 29px ! important; display: none ! important;" role="alert" allowtransparency="true" data-disqus-uid="-indicator-south" id="dsq-indicator-south" frameborder="0" scrolling="no"></iframe></div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://twistedoakstudios.com/blog/Post7149_collapsing-futures-in-objective-c';
+    var disqus_identifier = '7149 http://twistedoakstudios.com/blog/?p=7149';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'twistedoakstudios';
+    var disqus_title = "Collapsing Futures in Objective-C";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+        config.language = '';
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = '?cf_action=sync_comments&post_id=7149';
+
+            var firstScript = document.getElementsByTagName( "script" )[0];
+            firstScript.parentNode.insertBefore(script, firstScript);
+        });
+                    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/twistedoakstudios.com\/blog\/Post7149_collapsing-futures-in-objective-c\/trackback"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.' + 'disqus.com' + '/embed.js?pname=wordpress&pver=2.74';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+
+<h3>
+<spacer>
+</spacer></h3>
+
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers consulting and development on high-tech interactive projects. Check out our <a href="http://twistedoakstudios.com/portfolio/">portfolio</a>, or <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+<p></p></blockquote>
+
+<h2 class="endofpage">Archive</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post7254_visualizing-the-eigenvectors-of-a-rotation" rel="bookmark" title="Permanent Link to Visualizing the Eigenvectors of a Rotation">Visualizing the Eigenvectors of a Rotation</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7149_collapsing-futures-in-objective-c" rel="bookmark" title="Permanent Link to Collapsing Futures in Objective-C">Collapsing Futures in Objective-C</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7052_bug-hunting-1-garbled-audio-from-end-to-end" rel="bookmark" title="Permanent Link to Bug Hunting #1: Garbled Audio from End to End">Bug Hunting #1: Garbled Audio from End to End</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post6871_impractical-experiments-1-representing-numbers-as-polynomials" rel="bookmark" title="Permanent Link to Impractical Experiments #1: Representing Numbers as Polynomials">Impractical Experiments #1: Representing Numbers as Polynomials</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post6536_implementing-quantum-pseudo-telepathy" rel="bookmark" title="Permanent Link to Implementing Quantum Pseudo-Telepathy">Implementing Quantum Pseudo-Telepathy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post6422_turn-on-your-damn-warnings" rel="bookmark" title="Permanent Link to Turn On Your Damn Warnings">Turn On Your Damn Warnings</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5953_big-o-made-trivial" rel="bookmark" title="Permanent Link to Big-O Made Trivial">Big-O Made Trivial</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5268_unfathomable-bugs-7-the-broken-oven" rel="bookmark" title="Permanent Link to Unfathomable Bugs #7: The Broken Oven">Unfathomable Bugs #7: The Broken Oven</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5623_solomonoffs-mad-scientist" rel="bookmark" title="Permanent Link to Solomonoff’s Mad Scientist">Solomonoff’s Mad Scientist</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5753_yearly-blogging-roundup-1" rel="bookmark" title="Permanent Link to Yearly Blogging Roundup #1">Yearly Blogging Roundup #1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5485_what-isnt-a-monad" rel="bookmark" title="Permanent Link to What isn’t a Monad">What isn’t a Monad</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5365_searching-a-sorted-matrix-faster" rel="bookmark" title="Permanent Link to Searching a Sorted Matrix Faster">Searching a Sorted Matrix Faster</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5273_how-to-read-nested-ternary-operators" rel="bookmark" title="Permanent Link to How to Read Nested Ternary Operators">How to Read Nested Ternary Operators</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5204_making-sublime-text-2-jump-to-the-correct-line-with-unity-on-os-x" rel="bookmark" title="Permanent Link to Making Sublime Text 2 Jump to the Correct Line with Unity on OS X">Making Sublime Text 2 Jump to the Correct Line with Unity on OS X</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5096_my-bug-my-bad-4-reading-concurrently" rel="bookmark" title="Permanent Link to My Bug, My Bad #4: Reading Concurrently">My Bug, My Bad #4: Reading Concurrently</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5018_whole-api-testing-with-reflection" rel="bookmark" title="Permanent Link to Whole API Testing with Reflection">Whole API Testing with Reflection</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4708_optimizing-a-parser-combinator-into-a-memcpy" rel="bookmark" title="Permanent Link to Optimizing a Parser Combinator into a memcpy">Optimizing a Parser Combinator into a memcpy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4872_dont-treat-paths-like-strings" rel="bookmark" title="Permanent Link to Don’t Treat Paths Like Strings">Don’t Treat Paths Like Strings</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4706_breaking-a-toy-hash-function" rel="bookmark" title="Permanent Link to Breaking a Toy Hash Function">Breaking a Toy Hash Function</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4425_counting-iterators-lazily" rel="bookmark" title="Permanent Link to Counting Iterators Lazily">Counting Iterators Lazily</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4428_unfathomable-bugs-6-pretend-precision" rel="bookmark" title="Permanent Link to Unfathomable Bugs #6: Pretend Precision">Unfathomable Bugs #6: Pretend Precision</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4281_my-bug-my-bad-3-accidentally-attacking-warcraft-3" rel="bookmark" title="Permanent Link to My Bug, My Bad #3: Accidentally Attacking WarCraft 3">My Bug, My Bad #3: Accidentally Attacking WarCraft 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4130_collapsing-types-vs-monads-followup" rel="bookmark" title="Permanent Link to Collapsing Types vs Monads (followup)">Collapsing Types vs Monads (followup)</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4008_collapsing-futures-easy-to-use-hard-to-represent" rel="bookmark" title="Permanent Link to Collapsing Futures: Easy to Use, Hard to Represent">Collapsing Futures: Easy to Use, Hard to Represent</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3858_eventual-exceptions-vs-programming-in-a-minimal-functional-style" rel="bookmark" title="Permanent Link to Eventual Exceptions vs Programming in a Minimal Functional Style">Eventual Exceptions vs Programming in a Minimal Functional Style</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3769_the-mystery-of-flunf" rel="bookmark" title="Permanent Link to The Mystery of Flunf">The Mystery of Flunf</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3724_explain-it-like-im-five-the-socialist-millionaire-problem-and-secure-multi-party-computation" rel="bookmark" title="Permanent Link to Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation">Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3631_computer-science-blows-my-mind" rel="bookmark" title="Permanent Link to Computer Science Blows My Mind">Computer Science Blows My Mind</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3484_a-visit-to-execution-labs-in-montreal" rel="bookmark" title="Permanent Link to A visit to Execution Labs in Montréal">A visit to Execution Labs in Montréal</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3573_transmuting-dice-conserving-entropy" rel="bookmark" title="Permanent Link to Transmuting Dice, Conserving Entropy">Transmuting Dice, Conserving Entropy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3516_rule-of-thumb-ask-for-the-clock" rel="bookmark" title="Permanent Link to Rule of Thumb: Ask for the Clock">Rule of Thumb: Ask for the Clock</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3477_rule-of-thumb-use-purposefully-weakened-methods" rel="bookmark" title="Permanent Link to Rule of Thumb: Use Purposefully Weakened Methods">Rule of Thumb: Use Purposefully Weakened Methods</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3376_rule-of-thumb-preconditions-should-be-checked-explicitly" rel="bookmark" title="Permanent Link to Rule of thumb: Preconditions Should be Checked Explicitly">Rule of thumb: Preconditions Should be Checked Explicitly</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3280_intersecting-linked-lists-faster" rel="bookmark" title="Permanent Link to Intersecting Linked Lists Faster">Intersecting Linked Lists Faster</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3138_mouse-path-smoothing-for-jack-lumber" rel="bookmark" title="Permanent Link to Mouse Path Smoothing for Jack Lumber">Mouse Path Smoothing for Jack Lumber</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3044_my-bug-my-bad-2-sunk-by-float" rel="bookmark" title="Permanent Link to My Bug, My Bad #2: Sunk by Float">My Bug, My Bad #2: Sunk by Float</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2852_repeat-yourself-differently" rel="bookmark" title="Permanent Link to Repeat Yourself Differently">Repeat Yourself Differently</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm" rel="bookmark" title="Permanent Link to Grover’s Quantum Search Algorithm">Grover’s Quantum Search Algorithm</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2766_followup-to-non-nullable-types-vs-c" rel="bookmark" title="Permanent Link to Followup to Non-Nullable Types vs C#">Followup to Non-Nullable Types vs C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2540_optimizing-just-in-time-with-expression-trees" rel="bookmark" title="Permanent Link to Optimizing Just in Time with Expression Trees">Optimizing Just in Time with Expression Trees</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2353_when-one-way-latency-doesnt-matter" rel="bookmark" title="Permanent Link to When One-Way Latency Doesn’t Matter">When One-Way Latency Doesn’t Matter</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point" rel="bookmark" title="Permanent Link to Determining exactly if/when/where a moving line intersected a moving point">Determining exactly if/when/where a moving line intersected a moving point</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait" rel="bookmark" title="Permanent Link to Emulating Actors in C# with Async/Await">Emulating Actors in C# with Async/Await</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2096_making-an-immutable-queue-with-guaranteed-constant-time-operations" rel="bookmark" title="Permanent Link to Making an immutable queue with guaranteed constant time operations">Making an immutable queue with guaranteed constant time operations</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions" rel="bookmark" title="Permanent Link to Improving Checked Exceptions">Improving Checked Exceptions</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime" rel="bookmark" title="Permanent Link to Perishable Collections: The Benefits of Removal-by-Lifetime">Perishable Collections: The Benefits of Removal-by-Lifetime</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control" rel="bookmark" title="Permanent Link to Decoupling shared control">Decoupling shared control</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1694_decoupling-inlined-ui-code" rel="bookmark" title="Permanent Link to Decoupling inlined UI code">Decoupling inlined UI code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet" rel="bookmark" title="Permanent Link to Linq to Collections: Beyond IEnumerable&lt;T&gt;">Linq to Collections: Beyond IEnumerable&lt;T&gt;</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+ <div id="upprev_box" style="right: -400px;">
+	<h6>
+		More interesting posts <span class="num"> (1 of 19 articles)</span>
+	</h6>
+	<div class="upprev_excerpt">
+		<p>
+			<a href="http://twistedoakstudios.com/blog/Post6871_impractical-experiments-1-representing-numbers-as-polynomials" rel="prev">Impractical Experiments #1: Representing Numbers as Polynomials</a>
+		</p>
+	</div>
+	
+		<p>
+Or check out our <a href="http://twistedoakstudios.com/portfolio">Portfolio</a>.		</p><button id="upprev_close" type="button">Close</button>
+</div><!-- #upprev_box -->
+<link rel="stylesheet" id="al2fb_style-css" href="Collapsing%20Futures%20in%20Objective-C_files/add-link-to-facebook.css" type="text/css" media="all">
+<link rel="stylesheet" id="admin-bar-css" href="Collapsing%20Futures%20in%20Objective-C_files/admin-bar.css" type="text/css" media="all">
+<link rel="stylesheet" id="upprev-css-css" href="Collapsing%20Futures%20in%20Objective-C_files/upprev.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-quicklatex-format-css" href="Collapsing%20Futures%20in%20Objective-C_files/quicklatex-format.css" type="text/css" media="all">
+<script type="text/javascript" src="Collapsing%20Futures%20in%20Objective-C_files/admin-bar.js"></script>
+<script type="text/javascript" src="Collapsing%20Futures%20in%20Objective-C_files/jquery_002.js"></script>
+<script type="text/javascript" src="Collapsing%20Futures%20in%20Objective-C_files/upprev_js.php"></script>
+<script type="text/javascript" src="Collapsing%20Futures%20in%20Objective-C_files/comment-reply.js"></script>
+	<script type="text/javascript">
+		(function() {
+			var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
+
+			request = true;
+
+			b[c] = b[c].replace( rcs, ' ' );
+			b[c] += ( window.postMessage && request ? ' ' : ' no-' ) + cs;
+		}());
+	</script>
+			
+
+		 
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+      <!-- home portfolio used to be here -->
+		</div>
+
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				138-1657 Barrington St.<br>
+				Halifax, NS, Canada B3J 2A1</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script>- 2013 Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Collapsing%20Futures%20in%20Objective-C_files/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Collapsing%20Futures%20in%20Objective-C_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<div id="wpadminbar" class="nojq " role="navigation">
+			<a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1">Skip to toolbar</a>
+			<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Top navigation toolbar." tabindex="0">
+				<ul id="wp-admin-bar-root-default" class="ab-top-menu">
+		<li id="wp-admin-bar-wp-logo" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/about.php" title="About WordPress"><span class="ab-icon"></span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-wp-logo-default" class="ab-submenu">
+		<li id="wp-admin-bar-about"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/about.php">About WordPress</a>		</li></ul><ul id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu">
+		<li id="wp-admin-bar-wporg"><a class="ab-item" href="http://wordpress.org/">WordPress.org</a>		</li>
+		<li id="wp-admin-bar-documentation"><a class="ab-item" href="http://codex.wordpress.org/">Documentation</a>		</li>
+		<li id="wp-admin-bar-support-forums"><a class="ab-item" href="http://wordpress.org/support/">Support Forums</a>		</li>
+		<li id="wp-admin-bar-feedback"><a class="ab-item" href="http://wordpress.org/support/forum/requests-and-feedback">Feedback</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-site-name" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/">Twisted Oak Studios Blog</a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-site-name-default" class="ab-submenu">
+		<li id="wp-admin-bar-dashboard"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/">Dashboard</a>		</li></ul><ul id="wp-admin-bar-appearance" class="ab-submenu">
+		<li id="wp-admin-bar-themes"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/themes.php">Themes</a>		</li>
+		<li id="wp-admin-bar-customize" class="hide-if-no-customize"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/customize.php?url=http%3A%2F%2Ftwistedoakstudios.com%2Fblog%2FPost7149_collapsing-futures-in-objective-c">Customize</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-updates"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/update-core.php" title="3 Plugin Updates, 3 Theme Updates"><span class="ab-icon"></span><span class="ab-label">6</span><span class="screen-reader-text">3 Plugin Updates, 3 Theme Updates</span></a>		</li>
+		<li id="wp-admin-bar-comments"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/edit-comments.php" title="0 comments awaiting moderation"><span class="ab-icon"></span><span id="ab-awaiting-mod" class="ab-label awaiting-mod pending-count count-0">0</span></a>		</li>
+		<li id="wp-admin-bar-new-content" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php" title="Add New"><span class="ab-icon"></span><span class="ab-label">New</span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-new-content-default" class="ab-submenu">
+		<li id="wp-admin-bar-new-post"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php">Post</a>		</li>
+		<li id="wp-admin-bar-new-media"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/media-new.php">Media</a>		</li>
+		<li id="wp-admin-bar-new-link"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/link-add.php">Link</a>		</li>
+		<li id="wp-admin-bar-new-page"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php?post_type=page">Page</a>		</li>
+		<li id="wp-admin-bar-new-user"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/user-new.php">User</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-edit"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post.php?post=7149&amp;action=edit">Edit Post</a>		</li></ul><ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
+		<li id="wp-admin-bar-search" class="admin-bar-search"><div class="ab-item ab-empty-item" tabindex="-1"><form action="http://twistedoakstudios.com/blog/" method="get" id="adminbarsearch"><input class="adminbar-input" name="s" id="adminbar-search" maxlength="150" type="text"><input class="adminbar-button" value="Search" type="submit"></form></div>		</li>
+		<li id="wp-admin-bar-my-account" class="menupop with-avatar"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/profile.php" title="My Account">Howdy, Craig Gidney<img alt="" src="Collapsing%20Futures%20in%20Objective-C_files/31a6ce579f8f9f9d528715d1e941726e.png" class="avatar avatar-16 photo" height="16" width="16"></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-user-actions" class="ab-submenu">
+		<li id="wp-admin-bar-user-info"><a class="ab-item" tabindex="-1" href="http://twistedoakstudios.com/blog/wp-admin/profile.php"><img alt="" src="Collapsing%20Futures%20in%20Objective-C_files/31a6ce579f8f9f9d528715d1e941726e_002.png" class="avatar avatar-64 photo" height="64" width="64"><span class="display-name">Craig Gidney</span><span class="username">craig</span></a>		</li>
+		<li id="wp-admin-bar-edit-profile"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/profile.php">Edit My Profile</a>		</li>
+		<li id="wp-admin-bar-logout"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=81b5dfe333">Log Out</a>		</li></ul></div>		</li></ul>			</div>
+			<a class="screen-reader-shortcut" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=81b5dfe333">Log Out</a>
+		</div></body></html>

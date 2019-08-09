@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script>var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}};</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Unity3D Consulting | Technical Magic</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Optimizing%20a%20Parser%20Combinator%20into%20a%20memcpy_files/1140.css">
+    <link rel="stylesheet" href="Optimizing%20a%20Parser%20Combinator%20into%20a%20memcpy_files/style.css">
+    <link rel="stylesheet" href="Optimizing%20a%20Parser%20Combinator%20into%20a%20memcpy_files/blogstyle.css">
+<link rel="stylesheet" href="Optimizing%20a%20Parser%20Combinator%20into%20a%20memcpy_files/prettify.css" media="all">
+<link rel="stylesheet" href="Optimizing%20a%20Parser%20Combinator%20into%20a%20memcpy_files/sunburst.css" media="all">
+<script type="text/javascript" src="Optimizing%20a%20Parser%20Combinator%20into%20a%20memcpy_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Optimizing%20a%20Parser%20Combinator%20into%20a%20memcpy_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Optimizing%20a%20Parser%20Combinator%20into%20a%20memcpy_files/modernizr-2.js"></script>
+</head>
+<body class=" customize-support" onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="#"><img class="logo" src="Optimizing%20a%20Parser%20Combinator%20into%20a%20memcpy_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a href="http://twistedoakstudios.com/labs/">Labs</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+    <p class="big-callout">We're hiring! Experience with Game Dev, Unity3D, Graphics, Signal Processing, or Networking? Eligible to work in Canada? 
+      <a href="http://www.twistedoakstudios.com/jobs.php">Check it out</a>!
+
+    </p>
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post4708_optimizing-a-parser-combinator-into-a-memcpy" rel="bookmark" title="Permanent Link to Optimizing a Parser Combinator into a memcpy">Optimizing a Parser Combinator into a memcpy</a></h2>
+<div class="meta">posted by Craig Gidney on July 16, 2013</div>
+
+<p>In this post: I describe how to dynamically optimize high level 
+descriptions of parsing. In some cases the parsing can be optimized down
+ to a memcpy, easily crushing typical hand-rolled parsers in performance
+ without sacrificing safety or succinctness.</p>
+<p>The <a href="https://github.com/Strilanc/PickleJar">source code of a library that does these optimizations</a> is available on GitHub, though I make no guarantees about correctness in general since I mostly wrote it over the weekend.</p>
+<h3>Parser Combinators</h3>
+<p><a href="http://en.wikipedia.org/wiki/Parser_combinator">Parser combinators</a>
+ are a concept I’ve mentioned in passing several times in previous 
+posts. They allow you to combine basic parsers, using methods called 
+combinators, to create extremely elaborate parsers without having to 
+deal with the low level details.</p>
+<p>Although parser combinators are typically applied to parsing textual 
+data, I actually stumbled onto them when dealing with binary WarCraft 3 
+packets. I was getting tired of writing code to parse packets from data 
+into a usable form, and then writing the same basic thing in reverse to 
+go from the usable form back to data. Eventually I realized that a high 
+level description of a packet, like <a href="https://github.com/Strilanc/Tinker/blob/master/Warcraft3/Protocol/Game%20Action%20Protocol.vb#L498">“an int called ‘X’, then an int called ‘Y’, then a float called ‘duration’”</a> or <a href="https://github.com/Strilanc/Tinker/blob/master/Warcraft3/Protocol/Game%20Action%20Protocol.vb#L315">“a byte called ‘group index’, then a short that determines how many times a GameObjectId is repeated called ‘targets’”</a>, could be used to do both parsing and packing.</p>
+<p>(At the time I had no idea these things already existed. I just 
+noticed code duplication and realized there was a beautiful way to solve
+ it. I called the descriptions ‘jars’ since, as a pythonista would say, 
+they were used to ‘pickle’ values. Story of my life: come up with neat 
+idea, find out it was already discovered in the 70′s and given a cooler 
+name to boot.)</p>
+<p>Parsing would be done by interpreting the description as instructions
+ for reading data, and packing would be done by interpreting the 
+description as instructions for writing data. As a nice bonus, writing 
+the descriptions was a lot less error prone than writing the 
+parsing/packing code directly. Even better, the descriptions were <em>significantly</em>
+ easier to read and understand. I really can’t stress how much more 
+readable parser combinators are: I no longer needed separate notes on 
+the binary formats, because <a href="https://github.com/Strilanc/Tinker/blob/master/Warcraft3/Replay/Replay%20Format.vb#L108">the</a> <a href="https://github.com/Strilanc/Tinker/blob/master/Warcraft3/Protocol/Game%20Action%20Protocol.vb#L315">code</a> <a href="https://github.com/Strilanc/Tinker/blob/master/Warcraft3/Protocol/WC3%20Protocol.vb#L289">was</a> <a href="https://github.com/Strilanc/Tinker/blob/master/Bnet/Protocol/Bnet%20Protocol.vb#L287">clearer</a> than my notes!</p>
+<p>Parser combinators have their tradeoffs, of course. Because you’re 
+wiring them up at runtime, they tend to involve a large number of 
+virtual calls. If your compiler/jitter isn’t specialized for optimizing 
+that sort of thing (see: C#), parser combinators can easily be an order 
+of magnitude slower than the equivalent hand-written code.</p>
+<p>However… we don’t actually have to rely on the compiler to do the 
+optimization, right? I’ve mentioned before that, in .Net, you can <a href="http://twistedoakstudios.com/blog/Post2540_optimizing-just-in-time-with-expression-trees">use expression trees to perform your own optimizations</a> at runtime. Why not apply the same technique to parser combinators?</p>
+<h3>Getting Started: Linq-To-Parsers</h3>
+<p>Before we get into optimizing, it’s useful to have some really basic 
+functionality to compare against. Parsers are monads and C#’s query 
+syntax makes working with monads really nice, so lets start with just 
+parsing numbers and using the query syntax for applying parsers in a 
+sequence.</p>
+<p>We need to define what a parser is. The simplest possible thing is 
+probably “takes data, produces a value, and tells you how much data is 
+consumed”, so that’s what we’ll do:</p>
+<pre><code class="prettyprint"><span class="kwd">interface</span><span class="pln"> </span><span class="typ">IParser</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="typ">ParsedValue</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">Parse</span><span class="pun">(</span><span class="typ">ArraySegment</span><span class="str">&lt;byte&gt;</span><span class="pln"> data</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">struct</span><span class="pln"> </span><span class="typ">ParsedValue</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> T </span><span class="typ">Value</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> </span><span class="typ">Consumed</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">ParsedValue</span><span class="pun">(</span><span class="pln">T value</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> consumed</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">this</span><span class="pun">.</span><span class="typ">Value</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> value</span><span class="pun">;</span><span class="pln">
+        </span><span class="kwd">this</span><span class="pun">.</span><span class="typ">Consumed</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> consumed</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>We’ll need some basic parsers. Here’s a parser for 32-bit integers:</p>
+<pre><code class="prettyprint"><span class="kwd">struct</span><span class="pln"> </span><span class="typ">Int32Parser2</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">IParser</span><span class="pun">&lt;</span><span class="typ">Int32</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">ParsedValue</span><span class="pun">&lt;</span><span class="typ">Int32</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">Parse</span><span class="pun">(</span><span class="typ">ArraySegment</span><span class="str">&lt;byte&gt;</span><span class="pln"> data</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">data</span><span class="pun">.</span><span class="typ">Count</span><span class="pln"> </span><span class="pun">&lt;</span><span class="pln"> </span><span class="lit">4</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentException</span><span class="pun">();</span><span class="pln">
+        </span><span class="com">// warning: we're not dealing with endian-ness, but this is just an example</span><span class="pln">
+        </span><span class="kwd">var</span><span class="pln"> value </span><span class="pun">=</span><span class="pln"> </span><span class="typ">BitConverter</span><span class="pun">.</span><span class="typ">ToInt32</span><span class="pun">(</span><span class="pln">data</span><span class="pun">.</span><span class="typ">Array</span><span class="pun">,</span><span class="pln"> data</span><span class="pun">.</span><span class="typ">Offset</span><span class="pun">);</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ParsedValue</span><span class="pun">&lt;</span><span class="typ">Int32</span><span class="pun">&gt;(</span><span class="pln">value</span><span class="pun">,</span><span class="pln"> </span><span class="lit">4</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>We also need a way to combine these parsers. Since we want to use the
+ query syntax, we have to implement Select and SelectMany. Here’s an 
+implementation of the Select method, using an <a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c">anonymous implementation class</a>:</p>
+<pre><code class="prettyprint"><span class="kwd">static</span><span class="pln"> </span><span class="typ">IParser</span><span class="pun">&lt;</span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">Select</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TOut</span><span class="pun">&gt;(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">IParser</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">&gt;</span><span class="pln"> parser</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Func</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> projection</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">AnonymousParser</span><span class="pun">&lt;</span><span class="typ">TOut</span><span class="pun">&gt;(</span><span class="pln">data </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">var</span><span class="pln"> r </span><span class="pun">=</span><span class="pln"> parser</span><span class="pun">.</span><span class="typ">Parse</span><span class="pun">(</span><span class="pln">data</span><span class="pun">);</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ParsedValue</span><span class="pun">&lt;</span><span class="typ">TOut</span><span class="pun">&gt;(</span><span class="pln">projection</span><span class="pun">(</span><span class="pln">r</span><span class="pun">.</span><span class="typ">Value</span><span class="pun">),</span><span class="pln"> r</span><span class="pun">.</span><span class="typ">Consumed</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>(I’ll just link to the <a href="https://github.com/Strilanc/PickleJar/blob/f4fd540c98bcd03198db01794848bdaf9a1dd661/PickleJar/PickleJar/Jar.cs#L102">slightly more complicated SelectMany method</a>)</p>
+<p>Breather.</p>
+<p>We now have a parser for 32-bit integers, and a way to combine 
+parsers into a sequence by using the query syntax. This is enough to 
+start making, combining, and using parsers.</p>
+<p>Here’s what usage looks like right now:</p>
+<pre><code class="prettyprint"><span class="typ">IParser</span><span class="str">&lt;int&gt;</span><span class="pln"> intParser </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Int32Parser</span><span class="pun">();</span><span class="pln">
+
+</span><span class="com">// a serialized Point3 is three contiguous serialized ints in x,y,z order</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> point3Parser </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">from</span><span class="pln"> x </span><span class="kwd">in</span><span class="pln"> intParser
+                   </span><span class="kwd">from</span><span class="pln"> y </span><span class="kwd">in</span><span class="pln"> intParser
+                   </span><span class="kwd">from</span><span class="pln"> z </span><span class="kwd">in</span><span class="pln"> intParser
+                   </span><span class="kwd">select</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Point3</span><span class="pun">(</span><span class="pln">x</span><span class="pun">,</span><span class="pln"> y</span><span class="pun">,</span><span class="pln"> z</span><span class="pun">);</span><span class="pln">
+
+</span><span class="kwd">var</span><span class="pln"> data </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArraySegment</span><span class="str">&lt;byte&gt;</span><span class="pun">(</span><span class="kwd">new</span><span class="pln"> </span><span class="kwd">byte</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="lit">1</span><span class="pun">,</span><span class="lit">0</span><span class="pun">,</span><span class="lit">0</span><span class="pun">,</span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="lit">2</span><span class="pun">,</span><span class="lit">0</span><span class="pun">,</span><span class="lit">0</span><span class="pun">,</span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="lit">3</span><span class="pun">,</span><span class="lit">0</span><span class="pun">,</span><span class="lit">0</span><span class="pun">,</span><span class="lit">0</span><span class="pln"> </span><span class="pun">});</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> p </span><span class="pun">=</span><span class="pln"> point3Parser</span><span class="pun">.</span><span class="typ">Parse</span><span class="pun">(</span><span class="pln">data</span><span class="pun">).</span><span class="typ">Value</span><span class="pun">;</span><span class="pln">
+</span><span class="com">// p is now a Point3 with X=1,Y=2,Z=3 </span></code></pre>
+<p>I’d really like to benchmark parsing performance over large numbers of contiguous points, so I’m also going to define a <a href="https://github.com/Strilanc/PickleJar/blob/f4fd540c98bcd03198db01794848bdaf9a1dd661/PickleJar/PickleJar/Internal/RepetitionParsers/GreedyRepeatParser.cs">‘RepeatUntilEndOfData’ combinator</a>. When you apply it to a parser, it will parse values into a list and won’t stop until all data has been consumed.</p>
+<p>Here’s what usage of RepeatUntilEndOfData looks like:</p>
+<pre><code class="prettyprint"><span class="typ">IParser</span><span class="pun">&lt;</span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="typ">Point3</span><span class="pun">&gt;&gt;</span><span class="pln"> bulkPoint3Parser </span><span class="pun">=</span><span class="pln"> point3Parser</span><span class="pun">.</span><span class="typ">RepeatUntilEndOfData</span><span class="pun">()</span><span class="pln">
+
+</span><span class="com">// twelve bytes repeated ten thousand times</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> repeatCount </span><span class="pun">=</span><span class="pln"> </span><span class="lit">10000</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> data </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArraySegment</span><span class="str">&lt;byte&gt;</span><span class="pun">(</span><span class="pln">
+    </span><span class="typ">Enumerable</span><span class="pun">.</span><span class="typ">Repeat</span><span class="pun">(</span><span class="kwd">new</span><span class="pln"> </span><span class="kwd">byte</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="lit">1</span><span class="pun">,</span><span class="pln"> </span><span class="lit">2</span><span class="pun">,</span><span class="pln"> </span><span class="lit">3</span><span class="pun">,</span><span class="pln"> </span><span class="lit">4</span><span class="pun">,</span><span class="pln"> </span><span class="lit">5</span><span class="pun">,</span><span class="pln"> </span><span class="lit">6</span><span class="pun">,</span><span class="pln"> </span><span class="lit">7</span><span class="pun">,</span><span class="pln"> </span><span class="lit">8</span><span class="pun">,</span><span class="pln"> </span><span class="lit">9</span><span class="pun">,</span><span class="pln"> </span><span class="lit">10</span><span class="pun">,</span><span class="pln"> </span><span class="lit">11</span><span class="pun">,</span><span class="pln"> </span><span class="lit">12</span><span class="pln"> </span><span class="pun">},</span><span class="pln"> </span><span class="lit">10000</span><span class="pun">)</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">SelectMany</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> e</span><span class="pun">)</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">ToArray</span><span class="pun">());</span><span class="pln">
+
+</span><span class="kwd">var</span><span class="pln"> result </span><span class="pun">=</span><span class="pln"> bulkPoint3Parser</span><span class="pun">.</span><span class="typ">Parse</span><span class="pun">(</span><span class="pln">data</span><span class="pun">).</span><span class="typ">Value</span><span class="pun">;</span></code></pre>
+<p>The above bulk parser will be our baseline for performance. On my machine, I benchmark it as parsing at about <strong>30 MB/s</strong>. More than enough for most purposes, but let’s try to do better.</p>
+<h3>Hand rolling</h3>
+<p>How much slower is the query’d parser combinator, compared to a manually written parser? I made a hand rolled implementation:</p>
+<pre><code class="prettyprint"><span class="kwd">private</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">ParsedValue</span><span class="pun">&lt;</span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="typ">Point3</span><span class="pun">&gt;&gt;</span><span class="pln"> </span><span class="typ">HandrolledParse</span><span class="pun">(</span><span class="typ">ArraySegment</span><span class="str">&lt;byte&gt;</span><span class="pln"> data</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">data</span><span class="pun">.</span><span class="typ">Count</span><span class="pln"> </span><span class="pun">%</span><span class="pln"> </span><span class="lit">12</span><span class="pln"> </span><span class="pun">!=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentException</span><span class="pun">();</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> count </span><span class="pun">=</span><span class="pln"> data</span><span class="pun">.</span><span class="typ">Count</span><span class="pun">/</span><span class="lit">12</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> r </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Point3</span><span class="pun">[</span><span class="pln">count</span><span class="pun">];</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> j </span><span class="pun">=</span><span class="pln"> data</span><span class="pun">.</span><span class="typ">Offset</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> a </span><span class="pun">=</span><span class="pln"> data</span><span class="pun">.</span><span class="typ">Array</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">for</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">var</span><span class="pln"> i </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln"> i </span><span class="pun">&lt;</span><span class="pln"> count</span><span class="pun">;</span><span class="pln"> i</span><span class="pun">++)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        r</span><span class="pun">[</span><span class="pln">i</span><span class="pun">]</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Point3</span><span class="pun">(</span><span class="pln">
+            </span><span class="typ">BitConverter</span><span class="pun">.</span><span class="typ">ToInt32</span><span class="pun">(</span><span class="pln">a</span><span class="pun">,</span><span class="pln"> j </span><span class="pun">+</span><span class="pln"> </span><span class="lit">0</span><span class="pun">),</span><span class="pln">
+            </span><span class="typ">BitConverter</span><span class="pun">.</span><span class="typ">ToInt32</span><span class="pun">(</span><span class="pln">a</span><span class="pun">,</span><span class="pln"> j </span><span class="pun">+</span><span class="pln"> </span><span class="lit">4</span><span class="pun">),</span><span class="pln">
+            </span><span class="typ">BitConverter</span><span class="pun">.</span><span class="typ">ToInt32</span><span class="pun">(</span><span class="pln">a</span><span class="pun">,</span><span class="pln"> j </span><span class="pun">+</span><span class="pln"> </span><span class="lit">8</span><span class="pun">));</span><span class="pln">
+        j </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">12</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ParsedValue</span><span class="pun">&lt;</span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="typ">Point3</span><span class="pun">&gt;&gt;(</span><span class="pln">r</span><span class="pun">,</span><span class="pln"> data</span><span class="pun">.</span><span class="typ">Count</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>I benchmarked the above parser on the same data. It parses at about <strong>400MB/s</strong>, which is over an order of magnitude faster than the (unoptimized) query’d parser combinator.</p>
+<p>We’ve got a lot of ground to make up.</p>
+<h3>Reflection and Expression Trees</h3>
+<p>As I mentioned earlier, I’ve previously discussed optimizing at 
+runtime using expression trees. I won’t bother covering the basics again
+ here. Suffice it say that instead of using a method that parses data, 
+we’re going to use a method that generates a method to parse data. The 
+generated method can be specialized based on the parser, because all the
+ relevant information about what needs to be parsed and how to do it is 
+available to work with.</p>
+<p>One issue I have with expression tree code is that it’s gross. 
+There’s definitely a better way to do this, but this is the tool I have 
+for now. I’m tempted to just link to the relevant code, but that would 
+feel like a bit of a cop-out since the optimization is the focus of the 
+post. Thus, here is the code used to augment an item parser into a bulk 
+parser capable of (hopefully quickly) parsing many items:</p>
+<pre><code class="prettyprint"><span class="kwd">var</span><span class="pln"> dataArray </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Parameter</span><span class="pun">(</span><span class="kwd">typeof</span><span class="pun">(</span><span class="kwd">byte</span><span class="pun">[]),</span><span class="pln"> </span><span class="str">"dataArray"</span><span class="pun">);</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> dataOffset </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Parameter</span><span class="pun">(</span><span class="kwd">typeof</span><span class="pun">(</span><span class="kwd">int</span><span class="pun">),</span><span class="pln"> </span><span class="str">"dataOffset"</span><span class="pun">);</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> dataCount </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Parameter</span><span class="pun">(</span><span class="kwd">typeof</span><span class="pun">(</span><span class="kwd">int</span><span class="pun">),</span><span class="pln"> </span><span class="str">"dataCount"</span><span class="pun">);</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> itemCount </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Parameter</span><span class="pun">(</span><span class="kwd">typeof</span><span class="pun">(</span><span class="kwd">int</span><span class="pun">),</span><span class="pln"> </span><span class="str">"itemCount"</span><span class="pun">);</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> parameters </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> dataArray</span><span class="pun">,</span><span class="pln"> dataOffset</span><span class="pun">,</span><span class="pln"> dataCount</span><span class="pun">,</span><span class="pln"> itemCount </span><span class="pun">};</span><span class="pln">
+
+</span><span class="kwd">var</span><span class="pln"> resultArray </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Variable</span><span class="pun">(</span><span class="kwd">typeof</span><span class="pun">(</span><span class="pln">T</span><span class="pun">[]),</span><span class="pln"> </span><span class="str">"resultArray"</span><span class="pun">);</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> resultConsumed </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Variable</span><span class="pun">(</span><span class="kwd">typeof</span><span class="pun">(</span><span class="kwd">int</span><span class="pun">),</span><span class="pln"> </span><span class="str">"totalConsumed"</span><span class="pun">);</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> loopIndex </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Variable</span><span class="pun">(</span><span class="kwd">typeof</span><span class="pun">(</span><span class="kwd">int</span><span class="pun">),</span><span class="pln"> </span><span class="str">"i"</span><span class="pun">);</span><span class="pln">
+
+</span><span class="kwd">var</span><span class="pln"> inlinedParseInfo </span><span class="pun">=</span><span class="pln"> _itemParser</span><span class="pun">.</span><span class="typ">MakeParseFromDataExpression</span><span class="pun">(</span><span class="pln">dataArray</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Add</span><span class="pun">(</span><span class="pln">dataOffset</span><span class="pun">,</span><span class="pln"> resultConsumed</span><span class="pun">),</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Subtract</span><span class="pun">(</span><span class="pln">dataCount</span><span class="pun">,</span><span class="pln"> resultConsumed</span><span class="pun">));</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> inlinedParsePerform </span><span class="pun">=</span><span class="pln"> inlinedParseInfo</span><span class="pun">.</span><span class="typ">Item1</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> inlinedParseResultVariables </span><span class="pun">=</span><span class="pln"> inlinedParseInfo</span><span class="pun">.</span><span class="typ">Item2</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> parsedItem </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Variable</span><span class="pun">(</span><span class="pln">inlinedParsePerform</span><span class="pun">.</span><span class="typ">Type</span><span class="pun">,</span><span class="pln"> </span><span class="str">"parsed"</span><span class="pun">);</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> parsedItemValue </span><span class="pun">=</span><span class="pln"> _itemParser</span><span class="pun">.</span><span class="typ">MakeGetValueFromParsedExpression</span><span class="pun">(</span><span class="pln">parsedItem</span><span class="pun">);</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> parsedItemConsumed </span><span class="pun">=</span><span class="pln"> _itemParser</span><span class="pun">.</span><span class="typ">MakeGetConsumedFromParsedExpression</span><span class="pun">(</span><span class="pln">parsedItem</span><span class="pun">);</span><span class="pln">
+
+</span><span class="kwd">var</span><span class="pln"> locals </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> resultArray</span><span class="pun">,</span><span class="pln"> resultConsumed</span><span class="pun">,</span><span class="pln"> loopIndex</span><span class="pun">,</span><span class="pln"> parsedItem </span><span class="pun">};</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> initStatements </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Block</span><span class="pun">(</span><span class="pln">
+    </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Assign</span><span class="pun">(</span><span class="pln">resultArray</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">NewArrayBounds</span><span class="pun">(</span><span class="kwd">typeof</span><span class="pln"> </span><span class="pun">(</span><span class="pln">T</span><span class="pun">),</span><span class="pln"> itemCount</span><span class="pun">)),</span><span class="pln">
+    </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Assign</span><span class="pun">(</span><span class="pln">resultConsumed</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Constant</span><span class="pun">(</span><span class="lit">0</span><span class="pun">)),</span><span class="pln">
+    </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Assign</span><span class="pun">(</span><span class="pln">loopIndex</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Constant</span><span class="pun">(</span><span class="lit">0</span><span class="pun">)));</span><span class="pln">
+            
+</span><span class="kwd">var</span><span class="pln"> loopExit </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Label</span><span class="pun">();</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> loopStatements </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Loop</span><span class="pun">(</span><span class="pln">
+    </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Block</span><span class="pun">(</span><span class="pln">
+        inlinedParseResultVariables</span><span class="pun">,</span><span class="pln">
+        </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">IfThen</span><span class="pun">(</span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">GreaterThanOrEqual</span><span class="pun">(</span><span class="pln">loopIndex</span><span class="pun">,</span><span class="pln"> itemCount</span><span class="pun">),</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Break</span><span class="pun">(</span><span class="pln">loopExit</span><span class="pun">)),</span><span class="pln">
+        </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Assign</span><span class="pun">(</span><span class="pln">parsedItem</span><span class="pun">,</span><span class="pln"> inlinedParsePerform</span><span class="pun">),</span><span class="pln">
+        </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">AddAssign</span><span class="pun">(</span><span class="pln">resultConsumed</span><span class="pun">,</span><span class="pln"> parsedItemConsumed</span><span class="pun">),</span><span class="pln">
+        </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Assign</span><span class="pun">(</span><span class="pln">
+            </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">ArrayAccess</span><span class="pun">(</span><span class="pln">
+                resultArray</span><span class="pun">,</span><span class="pln"> 
+                </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">PostIncrementAssign</span><span class="pun">(</span><span class="pln">loopIndex</span><span class="pun">)),</span><span class="pln"> 
+            parsedItemValue</span><span class="pun">)),</span><span class="pln">
+    loopExit</span><span class="pun">);</span><span class="pln">
+
+</span><span class="kwd">var</span><span class="pln"> result </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">New</span><span class="pun">(</span><span class="pln">
+    </span><span class="kwd">typeof</span><span class="pun">(</span><span class="typ">ParsedValue</span><span class="pun">&lt;</span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;&gt;).</span><span class="typ">GetConstructor</span><span class="pun">(</span><span class="kwd">new</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">typeof</span><span class="pun">(</span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;),</span><span class="pln"> </span><span class="kwd">typeof</span><span class="pun">(</span><span class="kwd">int</span><span class="pun">)</span><span class="pln"> </span><span class="pun">}).</span><span class="typ">NotNull</span><span class="pun">(),</span><span class="pln">
+    resultArray</span><span class="pun">,</span><span class="pln">
+    resultConsumed</span><span class="pun">);</span><span class="pln">
+
+</span><span class="kwd">var</span><span class="pln"> body </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Block</span><span class="pun">(</span><span class="pln">
+    locals</span><span class="pun">,</span><span class="pln">
+    initStatements</span><span class="pun">,</span><span class="pln">
+    loopStatements</span><span class="pun">,</span><span class="pln">
+    result</span><span class="pun">);</span><span class="pln">
+
+</span><span class="kwd">var</span><span class="pln"> method </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Lambda</span><span class="pun">&lt;</span><span class="typ">Func</span><span class="pun">&lt;</span><span class="kwd">byte</span><span class="pun">[],</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">,</span><span class="pln"> </span><span class="typ">ParsedValue</span><span class="pun">&lt;</span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;&gt;&gt;&gt;(</span><span class="pln">
+    body</span><span class="pun">,</span><span class="pln">
+    parameters</span><span class="pun">);</span><span class="pln">
+
+</span><span class="kwd">return</span><span class="pln"> method</span><span class="pun">.</span><span class="typ">Compile</span><span class="pun">();</span></code></pre>
+<p>Ok, that’s a pretty long method. It’s also really hard to split 
+apart, because all the later stuff references all the earlier stuff. The
+ basic idea is that we’re creating a method that calls an item parser a 
+given number of times, with the caveat that it may inline the item 
+parser into the loop. Inlining is particularly useful when the parser 
+always consumes the same length (e.g. 32-bit integers are always 4 
+bytes), because it allows the code to avoid constantly creating and 
+disassembling instances of ParsedValue.</p>
+<p>There’s another large make-compiled-method method, but for combining 
+several parsers for the fields of a class into a parser for the class. <a href="https://github.com/Strilanc/PickleJar/blob/f4fd540c98bcd03198db01794848bdaf9a1dd661/PickleJar/PickleJar/Internal/StructuredParsers/CompiledReflectionParser.cs">CompiledReflectionParser</a>
+ is a lot more involved, since it must do things like match up named 
+parsers with fields and constructor parameters and so forth, so I’ll 
+settle for just linking it.</p>
+<p>Incidentally, it turns out that getting the names of variables out of
+ a query expression is extremely error prone and 
+dependent-on-compiler-details-that-might-change-so-don’t-do-it. In order
+ to make the names available, I switched to using the <a href="http://msdn.microsoft.com/en-us/library/vstudio/bb384062.aspx">collection initializer syntax</a>. Here’s what that looks like:</p>
+<pre><code class="prettyprint"><span class="kwd">var</span><span class="pln"> compiledParser </span><span class="pun">=</span><span class="pln">
+    </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Parse</span><span class="pun">.</span><span class="typ">Builder</span><span class="pun">&lt;</span><span class="typ">Point3</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="pun">{</span><span class="str">"y"</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Parse</span><span class="pun">.</span><span class="typ">Int32LittleEndian</span><span class="pun">},</span><span class="pln"> </span><span class="com">// &lt;-- this y is out of order to prevent a further optimization</span><span class="pln">
+        </span><span class="pun">{</span><span class="str">"x"</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Parse</span><span class="pun">.</span><span class="typ">Int32LittleEndian</span><span class="pun">},</span><span class="pln"> </span><span class="com">// &lt;-- I'll talk about it in a minute</span><span class="pln">
+        </span><span class="pun">{</span><span class="str">"z"</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Parse</span><span class="pun">.</span><span class="typ">Int32LittleEndian</span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}.</span><span class="typ">Build</span><span class="pun">()</span><span class="pln">
+     </span><span class="pun">.</span><span class="typ">RepeatUntilEndOfData</span><span class="pun">();</span></code></pre>
+<p>The Build and RepeatUntilEndOfData methods recognize when reflection 
+and expression trees can be applied, and do so. At runtime the above 
+parser combinator gets automatically optimized and its components 
+inlined to create (basically) this parsing code:</p>
+<pre><code class="prettyprint"><span class="typ">Point3</span><span class="pun">[]</span><span class="pln"> resultArray</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">int</span><span class="pln"> totalConsumed</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">int</span><span class="pln"> i</span><span class="pun">;</span><span class="pln">
+</span><span class="typ">Point3</span><span class="pln"> parsed</span><span class="pun">;</span><span class="pln">
+
+resultArray </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Point3</span><span class="pun">[</span><span class="pln">itemCount</span><span class="pun">];</span><span class="pln">
+totalConsumed </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln">
+i </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">while</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">true</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> total</span><span class="pun">,;</span><span class="pln">
+    </span><span class="typ">Point3</span><span class="pln"> result</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">i </span><span class="pun">&gt;=</span><span class="pln"> itemCount</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">break</span><span class="pun">;</span><span class="pln">
+    
+    </span><span class="kwd">int</span><span class="pln"> y</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> x</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> z</span><span class="pun">;</span><span class="pln">
+    total </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln">
+    y </span><span class="pun">=</span><span class="pln"> </span><span class="typ">BitConverter</span><span class="pun">.</span><span class="typ">ToInt32</span><span class="pun">(</span><span class="pln">dataArray</span><span class="pun">,</span><span class="pln"> dataOffset </span><span class="pun">+</span><span class="pln"> totalConsumed </span><span class="pun">+</span><span class="pln"> total</span><span class="pun">);</span><span class="pln">
+    total </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln">
+    x </span><span class="pun">=</span><span class="pln"> </span><span class="typ">BitConverter</span><span class="pun">.</span><span class="typ">ToInt32</span><span class="pun">(</span><span class="pln">dataArray</span><span class="pun">,</span><span class="pln"> dataOffset </span><span class="pun">+</span><span class="pln"> totalConsumed </span><span class="pun">+</span><span class="pln"> total</span><span class="pun">);</span><span class="pln">
+    total </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln">
+    z </span><span class="pun">=</span><span class="pln"> </span><span class="typ">BitConverter</span><span class="pun">.</span><span class="typ">ToInt32</span><span class="pun">(</span><span class="pln">dataArray</span><span class="pun">,</span><span class="pln"> dataOffset </span><span class="pun">+</span><span class="pln"> totalConsumed </span><span class="pun">+</span><span class="pln"> total</span><span class="pun">);</span><span class="pln">
+    total </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln">
+    result </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Point3</span><span class="pun">(</span><span class="pln">x</span><span class="pun">,</span><span class="pln"> y</span><span class="pun">,</span><span class="pln"> z</span><span class="pun">);</span><span class="pln">
+    
+    parsed </span><span class="pun">=</span><span class="pln"> result</span><span class="pun">;</span><span class="pln">
+    totalConsumed </span><span class="pun">+=</span><span class="pln"> total</span><span class="pun">;</span><span class="pln">
+    resultArray</span><span class="pun">[</span><span class="pln">i</span><span class="pun">++]</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> result</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ParsedValue</span><span class="pun">&lt;</span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="typ">Point3</span><span class="pun">&gt;&gt;(</span><span class="pln">resultArray</span><span class="pun">,</span><span class="pln"> totalConsumed</span><span class="pun">);</span></code></pre>
+<p>The above code looks kind of dumb in a few places, and does some 
+unnecessary additions, but is pretty close to what I wrote by hand.</p>
+<p>How fast is the compiled combinator? On my machine it parses at about <strong>300 MB/s</strong>.
+ That's an order of magnitude faster than the unoptimized query 
+combinator, and almost as fast as the hand-written parser! There's still
+ some ground to make up, but we're not done yet.</p>
+<h3>Seat Belts Off</h3>
+<p>I haven't actually shown the declaration of the Point3 type we've been parsing this whole time. Here it is:</p>
+<pre><code class="prettyprint"><span class="pun">[</span><span class="typ">StructLayout</span><span class="pun">(</span><span class="typ">LayoutKind</span><span class="pun">.</span><span class="typ">Sequential</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Pack</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">1</span><span class="pun">)]</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">struct</span><span class="pln"> </span><span class="typ">Point3</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> X</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> Y</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> Z</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Point3</span><span class="pun">(</span><span class="kwd">int</span><span class="pln"> x</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> y</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> z</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        X </span><span class="pun">=</span><span class="pln"> x</span><span class="pun">;</span><span class="pln">
+        Y </span><span class="pun">=</span><span class="pln"> y</span><span class="pun">;</span><span class="pln">
+        Z </span><span class="pun">=</span><span class="pln"> z</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>The important bit to notice is the StructLayout attribute.</p>
+<p>When you decorate a struct with StructLayout and specify 
+LayoutKind.Sequential, the struct's represention in memory is guaranteed
+ to follow the declared order of fields. Adding Pack=1 further 
+guarantees there's no padding between the fields. So the struct will be 
+represented in memory as three contiguous integers. Furthermore, arrays 
+of the struct should also place the values side by side, so that the 
+memory of the array essentially goes XYZXYZXYZXYZ...</p>
+<p>Hey, isn't that the same representation described by the following parser combinator?</p>
+<pre><code class="prettyprint"><span class="kwd">var</span><span class="pln"> blitParser </span><span class="pun">=</span><span class="pln">
+    </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Parse</span><span class="pun">.</span><span class="typ">Builder</span><point3><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="pun">{</span><span class="str">"x"</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Parse</span><span class="pun">.</span><span class="typ">Int32LittleEndian</span><span class="pun">},</span><span class="pln">
+        </span><span class="pun">{</span><span class="str">"y"</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Parse</span><span class="pun">.</span><span class="typ">Int32LittleEndian</span><span class="pun">},</span><span class="pln">
+        </span><span class="pun">{</span><span class="str">"z"</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Parse</span><span class="pun">.</span><span class="typ">Int32LittleEndian</span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}.</span><span class="typ">Build</span><span class="pun">()</span><span class="pln">
+     </span><span class="pun">.</span><span class="typ">RepeatUntilEndOfData</span><span class="pun">();</span></point3></code></pre>
+<p>It is! Furthermore, we can write code that detects when this happens:</p>
+<pre><code class="prettyprint"><span class="kwd">bool</span><span class="pln"> </span><span class="typ">CanBlitParseWith</span><span class="pun">(</span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="typ">IFieldParser</span><span class="pun">&gt;</span><span class="pln"> fieldParsers</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">fieldParsers </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentNullException</span><span class="pun">(</span><span class="str">"fieldParsers"</span><span class="pun">);</span><span class="pln">
+
+    </span><span class="com">// type has blittable representation?</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(!</span><span class="typ">Util</span><span class="pun">.</span><span class="typ">IsBlittable</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;())</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">;</span><span class="pln">
+
+    </span><span class="com">// all parsers have same constant length representation as value in memory?</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">fieldParsers</span><span class="pun">.</span><span class="typ">Any</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="pun">!</span><span class="pln">e</span><span class="pun">.</span><span class="typ">AreMemoryAndSerializedRepresentationsOfValueGuaranteedToMatch</span><span class="pun">()))</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">fieldParsers</span><span class="pun">.</span><span class="typ">Any</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="pun">!</span><span class="pln">e</span><span class="pun">.</span><span class="typ">OptionalConstantSerializedLength</span><span class="pun">().</span><span class="typ">HasValue</span><span class="pun">))</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">;</span><span class="pln">
+
+    </span><span class="com">// type has no padding?</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> structLayout </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">typeof</span><span class="pun">(</span><span class="pln">T</span><span class="pun">).</span><span class="typ">StructLayoutAttribute</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">structLayout </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">structLayout</span><span class="pun">.</span><span class="typ">Value</span><span class="pln"> </span><span class="pun">!=</span><span class="pln"> </span><span class="typ">LayoutKind</span><span class="pun">.</span><span class="typ">Sequential</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">structLayout</span><span class="pun">.</span><span class="typ">Pack</span><span class="pln"> </span><span class="pun">!=</span><span class="pln"> </span><span class="lit">1</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">;</span><span class="pln">
+
+    </span><span class="com">// parsers and struct fields have matching canonical names?</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> serialNames </span><span class="pun">=</span><span class="pln"> fieldParsers</span><span class="pun">.</span><span class="typ">Select</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> e</span><span class="pun">.</span><span class="typ">CanonicalName</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> fieldNames </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">typeof</span><span class="pun">(</span><span class="pln">T</span><span class="pun">).</span><span class="typ">GetFields</span><span class="pun">().</span><span class="typ">Select</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> e</span><span class="pun">.</span><span class="typ">CanonicalName</span><span class="pun">());</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(!</span><span class="pln">serialNames</span><span class="pun">.</span><span class="typ">HasSameSetOfItemsAs</span><span class="pun">(</span><span class="pln">fieldNames</span><span class="pun">))</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">;</span><span class="pln">
+
+    </span><span class="com">// offsets implied by parser ordering matches offsets of the struct's fields?</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> memoryOffsets </span><span class="pun">=</span><span class="pln">
+        </span><span class="kwd">typeof</span><span class="pun">(</span><span class="pln">T</span><span class="pun">).</span><span class="typ">GetFields</span><span class="pun">().</span><span class="typ">ToDictionary</span><span class="pun">(</span><span class="pln">
+            e </span><span class="pun">=&gt;</span><span class="pln"> e</span><span class="pun">.</span><span class="typ">CanonicalName</span><span class="pun">(),</span><span class="pln">
+            e </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">int</span><span class="pun">?)</span><span class="kwd">typeof</span><span class="pun">(</span><span class="pln">T</span><span class="pun">).</span><span class="typ">FieldOffsetOf</span><span class="pun">(</span><span class="pln">e</span><span class="pun">));</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> serialOffsets </span><span class="pun">=</span><span class="pln">
+        fieldParsers
+            </span><span class="pun">.</span><span class="typ">StreamZip</span><span class="pun">((</span><span class="kwd">int</span><span class="pun">?)</span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="pun">(</span><span class="pln">a</span><span class="pun">,</span><span class="pln"> e</span><span class="pun">)</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> a </span><span class="pun">+</span><span class="pln"> e</span><span class="pun">.</span><span class="typ">OptionalConstantSerializedLength</span><span class="pun">())</span><span class="pln">
+            </span><span class="pun">.</span><span class="typ">ToDictionary</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> e</span><span class="pun">.</span><span class="typ">Item1</span><span class="pun">.</span><span class="typ">CanonicalName</span><span class="pun">,</span><span class="pln"> e </span><span class="pun">=&gt;</span><span class="pln"> e</span><span class="pun">.</span><span class="typ">Item2</span><span class="pln"> </span><span class="pun">-</span><span class="pln"> e</span><span class="pun">.</span><span class="typ">Item1</span><span class="pun">.</span><span class="typ">OptionalConstantSerializedLength</span><span class="pun">());</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(!</span><span class="pln">serialOffsets</span><span class="pun">.</span><span class="typ">HasSameKeyValuesAs</span><span class="pun">(</span><span class="pln">memoryOffsets</span><span class="pun">))</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">;</span><span class="pln">
+
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>Then, after we cross our fingers and promise to be careful, we can even use <a href="http://blog.alxandr.me/2010/10/16/an-introduction-to-system-reflection-emit-and-opcodes/">ILEmit</a> to generate unsafe code that allocates an array and copies memory over its contents:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">UnsafeArrayBlitParser</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">MakeUnsafeArrayBlitParser</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> d </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">DynamicMethod</span><span class="pun">(</span><span class="pln">
+        name</span><span class="pun">:</span><span class="pln"> </span><span class="str">"BlitParseArray"</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="kwd">typeof</span><span class="pun">(</span><span class="pln">T</span><span class="pun">),</span><span class="pln">
+        returnType</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">typeof</span><span class="pun">(</span><span class="pln">T</span><span class="pun">[]),</span><span class="pln">
+        parameterTypes</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">typeof</span><span class="pun">(</span><span class="kwd">byte</span><span class="pun">[]),</span><span class="pln"> </span><span class="kwd">typeof</span><span class="pun">(</span><span class="kwd">int</span><span class="pun">),</span><span class="pln"> </span><span class="kwd">typeof</span><span class="pun">(</span><span class="kwd">int</span><span class="pun">),</span><span class="pln"> </span><span class="kwd">typeof</span><span class="pun">(</span><span class="kwd">int</span><span class="pun">)</span><span class="pln"> </span><span class="pun">},</span><span class="pln">
+        m</span><span class="pun">:</span><span class="pln"> </span><span class="typ">Assembly</span><span class="pun">.</span><span class="typ">GetExecutingAssembly</span><span class="pun">().</span><span class="typ">ManifestModule</span><span class="pun">);</span><span class="pln">
+
+    </span><span class="com">// ____(byte[] array, int count, int offset, int length)</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> g </span><span class="pun">=</span><span class="pln"> d</span><span class="pun">.</span><span class="typ">GetILGenerator</span><span class="pun">();</span><span class="pln">
+
+    </span><span class="com">// T[] result;</span><span class="pln">
+    g</span><span class="pun">.</span><span class="typ">DeclareLocal</span><span class="pun">(</span><span class="kwd">typeof</span><span class="pun">(</span><span class="pln">T</span><span class="pun">[]));</span><span class="pln">
+
+    </span><span class="com">// void* resultPtr;</span><span class="pln">
+    g</span><span class="pun">.</span><span class="typ">DeclareLocal</span><span class="pun">(</span><span class="kwd">typeof</span><span class="pun">(</span><span class="kwd">void</span><span class="pun">*),</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">);</span><span class="pln">
+
+    </span><span class="com">// result = new T[count];</span><span class="pln">
+    g</span><span class="pun">.</span><span class="typ">Emit</span><span class="pun">(</span><span class="typ">OpCodes</span><span class="pun">.</span><span class="typ">Ldarg_1</span><span class="pun">);</span><span class="pln">
+    g</span><span class="pun">.</span><span class="typ">Emit</span><span class="pun">(</span><span class="typ">OpCodes</span><span class="pun">.</span><span class="typ">Newarr</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">typeof</span><span class="pun">(</span><span class="pln">T</span><span class="pun">));</span><span class="pln">
+    g</span><span class="pun">.</span><span class="typ">Emit</span><span class="pun">(</span><span class="typ">OpCodes</span><span class="pun">.</span><span class="typ">Stloc_0</span><span class="pun">);</span><span class="pln">
+
+    </span><span class="com">// fixed (void* resultPtr = result)</span><span class="pln">
+    g</span><span class="pun">.</span><span class="typ">Emit</span><span class="pun">(</span><span class="typ">OpCodes</span><span class="pun">.</span><span class="typ">Ldloc_0</span><span class="pun">);</span><span class="pln">
+    g</span><span class="pun">.</span><span class="typ">Emit</span><span class="pun">(</span><span class="typ">OpCodes</span><span class="pun">.</span><span class="typ">Ldc_I4_0</span><span class="pun">);</span><span class="pln">
+    g</span><span class="pun">.</span><span class="typ">Emit</span><span class="pun">(</span><span class="typ">OpCodes</span><span class="pun">.</span><span class="typ">Ldelema</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">typeof</span><span class="pun">(</span><span class="pln">T</span><span class="pun">));</span><span class="pln">
+    g</span><span class="pun">.</span><span class="typ">Emit</span><span class="pun">(</span><span class="typ">OpCodes</span><span class="pun">.</span><span class="typ">Stloc_1</span><span class="pun">);</span><span class="pln">
+
+    </span><span class="com">// Marshal.Copy(array, offset, (IntPtr)resultPtr, length);</span><span class="pln">
+    g</span><span class="pun">.</span><span class="typ">Emit</span><span class="pun">(</span><span class="typ">OpCodes</span><span class="pun">.</span><span class="typ">Ldarg_0</span><span class="pun">);</span><span class="pln">
+    g</span><span class="pun">.</span><span class="typ">Emit</span><span class="pun">(</span><span class="typ">OpCodes</span><span class="pun">.</span><span class="typ">Ldarg_2</span><span class="pun">);</span><span class="pln">
+    g</span><span class="pun">.</span><span class="typ">Emit</span><span class="pun">(</span><span class="typ">OpCodes</span><span class="pun">.</span><span class="typ">Ldloc_1</span><span class="pun">);</span><span class="pln">
+    g</span><span class="pun">.</span><span class="typ">Emit</span><span class="pun">(</span><span class="typ">OpCodes</span><span class="pun">.</span><span class="typ">Conv_I</span><span class="pun">);</span><span class="pln">
+    g</span><span class="pun">.</span><span class="typ">EmitCall</span><span class="pun">(</span><span class="typ">OpCodes</span><span class="pun">.</span><span class="typ">Call</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">typeof</span><span class="pun">(</span><span class="typ">IntPtr</span><span class="pun">).</span><span class="typ">GetMethod</span><span class="pun">(</span><span class="str">"op_Explicit"</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">typeof</span><span class="pun">(</span><span class="kwd">void</span><span class="pun">*)</span><span class="pln"> </span><span class="pun">}),</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">);</span><span class="pln">
+    g</span><span class="pun">.</span><span class="typ">Emit</span><span class="pun">(</span><span class="typ">OpCodes</span><span class="pun">.</span><span class="typ">Ldarg_3</span><span class="pun">);</span><span class="pln">
+    g</span><span class="pun">.</span><span class="typ">EmitCall</span><span class="pun">(</span><span class="typ">OpCodes</span><span class="pun">.</span><span class="typ">Call</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">typeof</span><span class="pun">(</span><span class="typ">Marshal</span><span class="pun">).</span><span class="typ">GetMethod</span><span class="pun">(</span><span class="str">"Copy"</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">typeof</span><span class="pun">(</span><span class="kwd">byte</span><span class="pun">[]),</span><span class="pln"> </span><span class="kwd">typeof</span><span class="pun">(</span><span class="kwd">int</span><span class="pun">),</span><span class="pln"> </span><span class="kwd">typeof</span><span class="pun">(</span><span class="typ">IntPtr</span><span class="pun">),</span><span class="pln"> </span><span class="kwd">typeof</span><span class="pun">(</span><span class="kwd">int</span><span class="pun">)</span><span class="pln"> </span><span class="pun">}),</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">);</span><span class="pln">
+
+    </span><span class="com">// return result</span><span class="pln">
+    g</span><span class="pun">.</span><span class="typ">Emit</span><span class="pun">(</span><span class="typ">OpCodes</span><span class="pun">.</span><span class="typ">Ldloc_0</span><span class="pun">);</span><span class="pln">
+    g</span><span class="pun">.</span><span class="typ">Emit</span><span class="pun">(</span><span class="typ">OpCodes</span><span class="pun">.</span><span class="typ">Ret</span><span class="pun">);</span><span class="pln">
+
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">(</span><span class="typ">UnsafeArrayBlitParser</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;)</span><span class="pln">d</span><span class="pun">.</span><span class="typ">CreateDelegate</span><span class="pun">(</span><span class="kwd">typeof</span><span class="pun">(</span><span class="typ">UnsafeArrayBlitParser</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;));</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>I think you see where this is going.</p>
+<p>When the memory representation of the array is guaranteed to match 
+the representation of the serialized data, we can steal a trick from C 
+programmers and 'parse' by just bliting the bits. This is <em>fast</em>, and it works despite the fact that the fields are 'readonly'.</p>
+<p>How fast is a blit parser? Instead of parsing at the baseline 30 MB/s
+ set by the unoptimized query'd parser, the blit parser proceeds at <strong>3 GB/s</strong>. That's <em>two orders of magnitude faster</em>
+ and, despite the fact that we started from a high level description, an
+ order of magnitude faster than the hand written C# parser!</p>
+<p>This is an example of the benefits of abstraction. Parser combinators
+ describe things at such a high level that we can easily optimize them 
+and, suddenly, making a super-efficient parser is as easy as applying an
+ attribute and being careful about the order of your fields. Plus, if 
+you get things wrong, it doesn't all blow up in your face: the 
+optimization is simply not applied. (Well.. depending on the application
+ that might count as blowing up in your face, but at least it doesn't 
+give wrong results or scribble over random bits of memory.)</p>
+<h3>Summary</h3>
+<p>Parser combinators describe how to parse data at a high level. 
+Normally they incur a speed penalty but, by optimizing and compiling 
+them at runtime (analogous to the typical usage of regular expressions),
+ we can regain most of that loss. In some cases, we can even end up with
+ a parser that runs faster than anything safe you'd write by hand.</p>
+<p>If you want to delve into the details or try things out, <a href="https://github.com/Strilanc/PickleJar">relevant source code</a> is available on GitHub.</p>
+<p>If you're interesting in using parser combinators in practice, you can check out <a href="http://nuget.org/packages/FParsec/">FParseq</a> for F#, <a href="http://hackage.haskell.org/package/attoparsec-0.10.4.0">attoparsec</a> for Haskell, or Scala's <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">Parsers</a>. Unfortunately, I don't know a well established library for C# (<em>Update</em>: a commenter mentioned <a href="http://jparsec.codehaus.org/NParsec+Tutorial">NParsec</a> and <a href="https://github.com/sprache/sprache">Sprache</a> for C#).</p>
+<p><em>Update</em>: Fixed links to source. They now point to the blob instead of the path, so me renaming things shouldn't break them again.</p>
+<p>---</p>
+<h3>Discuss on <a href="http://www.reddit.com/r/programming/comments/1iejmm/optimizing_a_parser_combinator_into_a_memcpy/">Reddit</a></h3>
+<p>---</p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers consulting and development on high-tech interactive projects. Check out our <a href="http://twistedoakstudios.com/portfolio/">portfolio</a>, or <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2 class="endofpage">Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post5365_searching-a-sorted-matrix-faster" rel="bookmark" title="Permanent Link to Searching a Sorted Matrix Faster">Searching a Sorted Matrix Faster</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5273_how-to-read-nested-ternary-operators" rel="bookmark" title="Permanent Link to How to Read Nested Ternary Operators">How to Read Nested Ternary Operators</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5204_making-sublime-text-2-jump-to-the-correct-line-with-unity-on-os-x" rel="bookmark" title="Permanent Link to Making Sublime Text 2 Jump to the Correct Line with Unity on OS X">Making Sublime Text 2 Jump to the Correct Line with Unity on OS X</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5096_my-bug-my-bad-4-reading-concurrently" rel="bookmark" title="Permanent Link to My Bug, My Bad #4: Reading Concurrently">My Bug, My Bad #4: Reading Concurrently</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5018_whole-api-testing-with-reflection" rel="bookmark" title="Permanent Link to Whole API Testing with Reflection">Whole API Testing with Reflection</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4872_dont-treat-paths-like-strings" rel="bookmark" title="Permanent Link to Don’t Treat Paths Like Strings">Don’t Treat Paths Like Strings</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4706_breaking-a-toy-hash-function" rel="bookmark" title="Permanent Link to Breaking a Toy Hash Function">Breaking a Toy Hash Function</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4425_counting-iterators-lazily" rel="bookmark" title="Permanent Link to Counting Iterators Lazily">Counting Iterators Lazily</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4428_unfathomable-bugs-6-pretend-precision" rel="bookmark" title="Permanent Link to Unfathomable Bugs #6: Pretend Precision">Unfathomable Bugs #6: Pretend Precision</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4281_my-bug-my-bad-3-accidentally-attacking-warcraft-3" rel="bookmark" title="Permanent Link to My Bug, My Bad #3: Accidentally Attacking WarCraft 3">My Bug, My Bad #3: Accidentally Attacking WarCraft 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4130_collapsing-types-vs-monads-followup" rel="bookmark" title="Permanent Link to Collapsing Types vs Monads (followup)">Collapsing Types vs Monads (followup)</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4008_collapsing-futures-easy-to-use-hard-to-represent" rel="bookmark" title="Permanent Link to Collapsing Futures: Easy to Use, Hard to Represent">Collapsing Futures: Easy to Use, Hard to Represent</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3858_eventual-exceptions-vs-programming-in-a-minimal-functional-style" rel="bookmark" title="Permanent Link to Eventual Exceptions vs Programming in a Minimal Functional Style">Eventual Exceptions vs Programming in a Minimal Functional Style</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3769_the-mystery-of-flunf" rel="bookmark" title="Permanent Link to The Mystery of Flunf">The Mystery of Flunf</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3724_explain-it-like-im-five-the-socialist-millionaire-problem-and-secure-multi-party-computation" rel="bookmark" title="Permanent Link to Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation">Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3631_computer-science-blows-my-mind" rel="bookmark" title="Permanent Link to Computer Science Blows My Mind">Computer Science Blows My Mind</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3484_a-visit-to-execution-labs-in-montreal" rel="bookmark" title="Permanent Link to A visit to Execution Labs in Montréal">A visit to Execution Labs in Montréal</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3573_transmuting-dice-conserving-entropy" rel="bookmark" title="Permanent Link to Transmuting Dice, Conserving Entropy">Transmuting Dice, Conserving Entropy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3516_rule-of-thumb-ask-for-the-clock" rel="bookmark" title="Permanent Link to Rule of Thumb: Ask for the Clock">Rule of Thumb: Ask for the Clock</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3477_rule-of-thumb-use-purposefully-weakened-methods" rel="bookmark" title="Permanent Link to Rule of Thumb: Use Purposefully Weakened Methods">Rule of Thumb: Use Purposefully Weakened Methods</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3376_rule-of-thumb-preconditions-should-be-checked-explicitly" rel="bookmark" title="Permanent Link to Rule of thumb: Preconditions Should be Checked Explicitly">Rule of thumb: Preconditions Should be Checked Explicitly</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3280_intersecting-linked-lists-faster" rel="bookmark" title="Permanent Link to Intersecting Linked Lists Faster">Intersecting Linked Lists Faster</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3138_mouse-path-smoothing-for-jack-lumber" rel="bookmark" title="Permanent Link to Mouse Path Smoothing for Jack Lumber">Mouse Path Smoothing for Jack Lumber</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3044_my-bug-my-bad-2-sunk-by-float" rel="bookmark" title="Permanent Link to My Bug, My Bad #2: Sunk by Float">My Bug, My Bad #2: Sunk by Float</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2852_repeat-yourself-differently" rel="bookmark" title="Permanent Link to Repeat Yourself Differently">Repeat Yourself Differently</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm" rel="bookmark" title="Permanent Link to Grover’s Quantum Search Algorithm">Grover’s Quantum Search Algorithm</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2766_followup-to-non-nullable-types-vs-c" rel="bookmark" title="Permanent Link to Followup to Non-Nullable Types vs C#">Followup to Non-Nullable Types vs C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2540_optimizing-just-in-time-with-expression-trees" rel="bookmark" title="Permanent Link to Optimizing Just in Time with Expression Trees">Optimizing Just in Time with Expression Trees</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2353_when-one-way-latency-doesnt-matter" rel="bookmark" title="Permanent Link to When One-Way Latency Doesn’t Matter">When One-Way Latency Doesn’t Matter</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point" rel="bookmark" title="Permanent Link to Determining exactly if/when/where a moving line intersected a moving point">Determining exactly if/when/where a moving line intersected a moving point</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait" rel="bookmark" title="Permanent Link to Emulating Actors in C# with Async/Await">Emulating Actors in C# with Async/Await</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2096_making-an-immutable-queue-with-guaranteed-constant-time-operations" rel="bookmark" title="Permanent Link to Making an immutable queue with guaranteed constant time operations">Making an immutable queue with guaranteed constant time operations</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions" rel="bookmark" title="Permanent Link to Improving Checked Exceptions">Improving Checked Exceptions</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime" rel="bookmark" title="Permanent Link to Perishable Collections: The Benefits of Removal-by-Lifetime">Perishable Collections: The Benefits of Removal-by-Lifetime</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control" rel="bookmark" title="Permanent Link to Decoupling shared control">Decoupling shared control</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1694_decoupling-inlined-ui-code" rel="bookmark" title="Permanent Link to Decoupling inlined UI code">Decoupling inlined UI code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet" rel="bookmark" title="Permanent Link to Linq to Collections: Beyond IEnumerable&lt;T&gt;">Linq to Collections: Beyond IEnumerable&lt;T&gt;</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+ <div id="upprev_box" style="right: -400px;">
+	<h6>
+		More interesting posts <span class="num"> (3 of 17 articles)</span>
+	</h6>
+	<div class="upprev_excerpt">
+		<p>
+			<a href="http://twistedoakstudios.com/blog/Post4706_breaking-a-toy-hash-function" rel="prev">Breaking a Toy Hash Function</a>
+		</p>
+	</div>
+	
+		<p>
+Or check out our <a href="http://twistedoakstudios.com/portfolio">Portfolio</a>.		</p><button id="upprev_close" type="button">Close</button>
+</div><!-- #upprev_box -->
+<link rel="stylesheet" id="al2fb_style-css" href="Optimizing%20a%20Parser%20Combinator%20into%20a%20memcpy_files/add-link-to-facebook.css" type="text/css" media="all">
+<link rel="stylesheet" id="admin-bar-css" href="Optimizing%20a%20Parser%20Combinator%20into%20a%20memcpy_files/admin-bar.css" type="text/css" media="all">
+<link rel="stylesheet" id="upprev-css-css" href="Optimizing%20a%20Parser%20Combinator%20into%20a%20memcpy_files/upprev.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-quicklatex-format-css" href="Optimizing%20a%20Parser%20Combinator%20into%20a%20memcpy_files/quicklatex-format.css" type="text/css" media="all">
+<script type="text/javascript" src="Optimizing%20a%20Parser%20Combinator%20into%20a%20memcpy_files/admin-bar.js"></script>
+<script type="text/javascript" src="Optimizing%20a%20Parser%20Combinator%20into%20a%20memcpy_files/jquery_002.js"></script>
+<script type="text/javascript" src="Optimizing%20a%20Parser%20Combinator%20into%20a%20memcpy_files/upprev_js.php"></script>
+<script type="text/javascript" src="Optimizing%20a%20Parser%20Combinator%20into%20a%20memcpy_files/comment-reply.js"></script>
+	<script type="text/javascript">
+		(function() {
+			var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
+
+			request = true;
+
+			b[c] = b[c].replace( rcs, ' ' );
+			b[c] += ( window.postMessage && request ? ' ' : ' no-' ) + cs;
+		}());
+	</script>
+			
+
+		 
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+      <!-- home portfolio used to be here -->
+		</div>
+
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				138-1657 Barrington St.<br>
+				Halifax, NS, Canada B3J 2A1</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script>- 2013 Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Optimizing%20a%20Parser%20Combinator%20into%20a%20memcpy_files/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Optimizing%20a%20Parser%20Combinator%20into%20a%20memcpy_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<div id="wpadminbar" class="nojq " role="navigation">
+			<a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1">Skip to toolbar</a>
+			<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Top navigation toolbar." tabindex="0">
+				<ul id="wp-admin-bar-root-default" class="ab-top-menu">
+		<li id="wp-admin-bar-wp-logo" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/about.php" title="About WordPress"><span class="ab-icon"></span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-wp-logo-default" class="ab-submenu">
+		<li id="wp-admin-bar-about"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/about.php">About WordPress</a>		</li></ul><ul id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu">
+		<li id="wp-admin-bar-wporg"><a class="ab-item" href="http://wordpress.org/">WordPress.org</a>		</li>
+		<li id="wp-admin-bar-documentation"><a class="ab-item" href="http://codex.wordpress.org/">Documentation</a>		</li>
+		<li id="wp-admin-bar-support-forums"><a class="ab-item" href="http://wordpress.org/support/">Support Forums</a>		</li>
+		<li id="wp-admin-bar-feedback"><a class="ab-item" href="http://wordpress.org/support/forum/requests-and-feedback">Feedback</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-site-name" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/">twistedoakstudios.com</a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-site-name-default" class="ab-submenu">
+		<li id="wp-admin-bar-dashboard"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/">Dashboard</a>		</li></ul><ul id="wp-admin-bar-appearance" class="ab-submenu">
+		<li id="wp-admin-bar-themes"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/themes.php">Themes</a>		</li>
+		<li id="wp-admin-bar-customize" class="hide-if-no-customize"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/customize.php?url=http%3A%2F%2Ftwistedoakstudios.com%2Fblog%2FPost4708_optimizing-a-parser-combinator-into-a-memcpy">Customize</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-updates"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/update-core.php" title="3 Plugin Updates, 1 Theme Update"><span class="ab-icon"></span><span class="ab-label">4</span><span class="screen-reader-text">3 Plugin Updates, 1 Theme Update</span></a>		</li>
+		<li id="wp-admin-bar-comments"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/edit-comments.php" title="0 comments awaiting moderation"><span class="ab-icon"></span><span id="ab-awaiting-mod" class="ab-label awaiting-mod pending-count count-0">0</span></a>		</li>
+		<li id="wp-admin-bar-new-content" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php" title="Add New"><span class="ab-icon"></span><span class="ab-label">New</span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-new-content-default" class="ab-submenu">
+		<li id="wp-admin-bar-new-post"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php">Post</a>		</li>
+		<li id="wp-admin-bar-new-media"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/media-new.php">Media</a>		</li>
+		<li id="wp-admin-bar-new-link"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/link-add.php">Link</a>		</li>
+		<li id="wp-admin-bar-new-page"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php?post_type=page">Page</a>		</li>
+		<li id="wp-admin-bar-new-user"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/user-new.php">User</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-edit"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post.php?post=4708&amp;action=edit">Edit Post</a>		</li></ul><ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
+		<li id="wp-admin-bar-search" class="admin-bar-search"><div class="ab-item ab-empty-item" tabindex="-1"><form action="http://twistedoakstudios.com/blog/" method="get" id="adminbarsearch"><input class="adminbar-input" name="s" id="adminbar-search" maxlength="150" type="text"><input class="adminbar-button" value="Search" type="submit"></form></div>		</li>
+		<li id="wp-admin-bar-my-account" class="menupop with-avatar"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/profile.php" title="My Account">Howdy, Craig Gidney<img alt="" src="Optimizing%20a%20Parser%20Combinator%20into%20a%20memcpy_files/31a6ce579f8f9f9d528715d1e941726e.png" class="avatar avatar-16 photo" height="16" width="16"></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-user-actions" class="ab-submenu">
+		<li id="wp-admin-bar-user-info"><a class="ab-item" tabindex="-1" href="http://twistedoakstudios.com/blog/wp-admin/profile.php"><img alt="" src="Optimizing%20a%20Parser%20Combinator%20into%20a%20memcpy_files/31a6ce579f8f9f9d528715d1e941726e_002.png" class="avatar avatar-64 photo" height="64" width="64"><span class="display-name">Craig Gidney</span><span class="username">craig</span></a>		</li>
+		<li id="wp-admin-bar-edit-profile"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/profile.php">Edit My Profile</a>		</li>
+		<li id="wp-admin-bar-logout"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=535624defb">Log Out</a>		</li></ul></div>		</li></ul>			</div>
+			<a class="screen-reader-shortcut" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=535624defb">Log Out</a>
+		</div></body></html>

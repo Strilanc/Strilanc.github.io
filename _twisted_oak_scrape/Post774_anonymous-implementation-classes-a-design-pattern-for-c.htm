@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script id="bug.surrogate">var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}}; if (document.location.host == 'www.salon.com') {var _ga_ = document.querySelectorAll('script[src$=ga\\.js]')[0], ga_e = document.createEvent('Event'); ga_e.initEvent('load', true, true);_ga_.dispatchEvent(ga_e);}</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Game Developers | Unity 3D Development</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Post774_anonymous-implementation-classes-a-design-pattern-for-c_files/1140.css">
+    <link rel="stylesheet" href="Post774_anonymous-implementation-classes-a-design-pattern-for-c_files/style.css">
+    <link rel="stylesheet" href="Post774_anonymous-implementation-classes-a-design-pattern-for-c_files/blogstyle.css">
+<link rel="stylesheet" href="Post774_anonymous-implementation-classes-a-design-pattern-for-c_files/prettify.css" media="all">
+<link rel="stylesheet" href="Post774_anonymous-implementation-classes-a-design-pattern-for-c_files/sunburst.css" media="all">
+<script type="text/javascript" src="Post774_anonymous-implementation-classes-a-design-pattern-for-c_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Post774_anonymous-implementation-classes-a-design-pattern-for-c_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Post774_anonymous-implementation-classes-a-design-pattern-for-c_files/modernizr-2.js"></script>
+</head>
+<body onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="#"><img class="logo" src="Post774_anonymous-implementation-classes-a-design-pattern-for-c_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></h2>
+<div class="meta">posted by Craig Gidney on October 9, 2012</div>
+
+<p>Some interfaces have many simple implementations. IEnumerable is 
+implemented so much that a language feature was introduced to make it 
+easier (iterator methods). However, there are plenty of other interfaces
+ that I often find myself implementing: IDisposable, IComparer&lt;T&gt;,
+ IEqualityComparer&lt;T&gt;, IReadOnlyList&lt;T&gt;, 
+IObservable&lt;T&gt;, etc. But, unfortunately for me, implementing an 
+interface in C# is not concise. You need to define a named class and 
+that class will be mostly boilerplate code. You need to repeat the 
+signatures of the methods you’re implementing, repeat the names of 
+fields multiple times in the constructor, locate the use-once class away
+ from where it is used, etc, etc. Implementing a “single line” method 
+that returns an interface requires a dozen lines of class definition!</p>
+<p>In Java this cost would be mitigated by <a href="http://docstore.mik.ua/orelly/java-ent/jnut/ch03_12.htm">Anonymous Classes</a>,
+ but C# doesn’t have anonymous classes that can implement interfaces 
+(and even in Java they require repeating a lot of signature 
+boilerplate). Luckily, we can use a pattern that I am calling an 
+“Anonymous Implementation Class” that takes advantage of lambdas and 
+closures to implement interfaces very concisely. The idea is simple: 
+create a class that implements interface methods via delegates, then 
+“implement” interfaces by passing in the right delegates.</p>
+<p>Note that this pattern is not a new idea. Existing libraries already 
+use it. In fact, I am basing the name on some classes from the <a href="http://msdn.microsoft.com/en-us/data/gg577609.aspx">Reactive Extensions</a> library (AnonymousObservable/Observer).</p>
+<h3>Concrete Example: Linq-to-Lists</h3>
+<p>The latest version of .Net (4.5) includes a new interface: IReadOnlyList (more aptly called a read<em>able</em>
+ list, but I digress), which represents a collection that supports 
+random access to its elements. A readable list must support enumeration,
+ counting, and random access:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">interface</span><span class="pln"> </span><span class="typ">IReadOnlyList</span><out t=""><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">IReadOnlyCollection</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    T </span><span class="kwd">this</span><span class="pun">[</span><span class="kwd">int</span><span class="pln"> index</span><span class="pun">]</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">get</span><span class="pun">;</span><span class="pln"> </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">interface</span><span class="pln"> </span><span class="typ">IReadOnlyCollection</span><out t=""><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">IEnumerable</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> </span><span class="typ">Count</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">get</span><span class="pun">;</span><span class="pln"> </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">interface</span><span class="pln"> </span><span class="typ">IEnumerable</span><out t=""><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">IEnumerable</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="typ">IEnumerator</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">GetEnumerator</span><span class="pun">();</span><span class="pln">
+</span><span class="pun">}</span></out></out></out></code></pre>
+<p>It so happens that many of the operations we perform on enumerables can be performed on readable lists <em>without losing random access</em>.
+ For example, consider Enumerable.Select, which lazily projects the 
+items in an underlying enumerable (e.g. new[] {1,2,3}.Select(e =&gt; e *
+ 2) will enumerate 2 then 4 then 6). But the result of Enumerable.Select
+ is an IEnumerable, not an IReadOnlyList, so if we wanted to see the 
+1001′th item in a projected list, we’d be forced to enumerate and 
+project the preceding thousand items. To avoid that unnecessary cost, we
+ can implement a readable list variant of Select:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">Select</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TOut</span><span class="pun">&gt;(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">&gt;</span><span class="pln"> list</span><span class="pun">,</span><span class="pln">
+                                                    </span><span class="typ">Func</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> projection</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ReadOnlyListProjection</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TOut</span><span class="pun">&gt;(</span><span class="pln">list</span><span class="pun">,</span><span class="pln"> projection</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">sealed</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">ReadOnlyListProjection</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">&gt;</span><span class="pln"> _list</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="typ">Func</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> _projection</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">ReadOnlyListProjection</span><span class="pun">(</span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">&gt;</span><span class="pln"> list</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Func</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> projection</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        _list </span><span class="pun">=</span><span class="pln"> list</span><span class="pun">;</span><span class="pln">
+        _projection </span><span class="pun">=</span><span class="pln"> projection</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">TOut</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">[</span><span class="kwd">int</span><span class="pln"> index</span><span class="pun">]</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">get</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> _projection</span><span class="pun">(</span><span class="pln">_list</span><span class="pun">[</span><span class="pln">index</span><span class="pun">]);</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> </span><span class="typ">Count</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">get</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> _list</span><span class="pun">.</span><span class="typ">Count</span><span class="pun">;</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">IEnumerator</span><span class="pun">&lt;</span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">GetEnumerator</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> _list</span><span class="pun">.</span><span class="typ">AsEnumerable</span><span class="pun">().</span><span class="typ">Select</span><span class="pun">(</span><span class="pln">_projection</span><span class="pun">).</span><span class="typ">GetEnumerator</span><span class="pun">();</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="typ">IEnumerator</span><span class="pln"> </span><span class="typ">IEnumerable</span><span class="pun">.</span><span class="typ">GetEnumerator</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> </span><span class="typ">GetEnumerator</span><span class="pun">();</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>You might notice that 90% of our implementation of Select is defining
+ the class that implements the interface we want to return. Even worse, 
+most of the class is boilerplate: every implementation of 
+IReadOnlyList&lt;T&gt; is going to implement the non-generic 
+GetEnumerator in the same way, every implementing is going to repeat its
+ field names four times (field declarations, constructor parameter, left
+ and right hand sides of initialization in constructor), and most 
+implementations will delegate methods in a very simple way to an 
+underlying list.</p>
+<p>Boilerplate code is bad, because it introduces a lot of opportunities
+ to make a typo or introduce a bug. We can use an anonymous 
+implementation class to reduce the amount of boilerplate code:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">sealed</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">AnonymousReadOnlyList</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="typ">Func</span><span class="str">&lt;int&gt;</span><span class="pln"> _count</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="typ">Func</span><span class="pun">&lt;</span><span class="kwd">int</span><span class="pun">,</span><span class="pln"> T</span><span class="pun">&gt;</span><span class="pln"> _item</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="typ">IEnumerable</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> _iterator</span><span class="pun">;</span><span class="pln">
+
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">AnonymousReadOnlyList</span><span class="pun">(</span><span class="typ">Func</span><span class="str">&lt;int&gt;</span><span class="pln"> count</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Func</span><span class="pun">&lt;</span><span class="kwd">int</span><span class="pun">,</span><span class="pln"> T</span><span class="pun">&gt;</span><span class="pln"> item</span><span class="pun">,</span><span class="pln"> </span><span class="typ">IEnumerable</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> iterator </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">count </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentNullException</span><span class="pun">(</span><span class="str">"count"</span><span class="pun">);</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">item </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentNullException</span><span class="pun">(</span><span class="str">"item"</span><span class="pun">);</span><span class="pln">
+        </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">_count </span><span class="pun">=</span><span class="pln"> count</span><span class="pun">;</span><span class="pln">
+        </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">_item </span><span class="pun">=</span><span class="pln"> item</span><span class="pun">;</span><span class="pln">
+        </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">_iterator </span><span class="pun">=</span><span class="pln"> iterator </span><span class="pun">??</span><span class="pln"> </span><span class="typ">DefaultIterator</span><span class="pun">(</span><span class="pln">count</span><span class="pun">,</span><span class="pln"> item</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">IEnumerable</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">DefaultIterator</span><span class="pun">(</span><span class="typ">Func</span><span class="str">&lt;int&gt;</span><span class="pln"> count</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Func</span><span class="pun">&lt;</span><span class="kwd">int</span><span class="pun">,</span><span class="pln"> T</span><span class="pun">&gt;</span><span class="pln"> item</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">var</span><span class="pln"> n </span><span class="pun">=</span><span class="pln"> count</span><span class="pun">();</span><span class="pln">
+        </span><span class="kwd">for</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">var</span><span class="pln"> i </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln"> i </span><span class="pun">&lt;</span><span class="pln"> n</span><span class="pun">;</span><span class="pln"> i</span><span class="pun">++)</span><span class="pln">
+            </span><span class="kwd">yield</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> item</span><span class="pun">(</span><span class="pln">i</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> </span><span class="typ">Count</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">get</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> _count</span><span class="pun">();</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> T </span><span class="kwd">this</span><span class="pun">[</span><span class="kwd">int</span><span class="pln"> index</span><span class="pun">]</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">get</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> _item</span><span class="pun">(</span><span class="pln">index</span><span class="pun">);</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">IEnumerator</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">GetEnumerator</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> _iterator</span><span class="pun">.</span><span class="typ">GetEnumerator</span><span class="pun">();</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="typ">System</span><span class="pun">.</span><span class="typ">Collections</span><span class="pun">.</span><span class="typ">IEnumerator</span><span class="pln"> </span><span class="typ">System</span><span class="pun">.</span><span class="typ">Collections</span><span class="pun">.</span><span class="typ">IEnumerable</span><span class="pun">.</span><span class="typ">GetEnumerator</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> </span><span class="typ">GetEnumerator</span><span class="pun">();</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>Note that this class is not purely "give delegates for each method to
+ be implemented", although in most cases that's what anonymous 
+implementation classes are. This class provides conveniences like 
+implementing GetEnumerator in terms of the counter/getter (although you 
+can still provide a specialized one if desired because, for example, 
+many collection enumerators have checks to prevent you from accidentally
+ enumerating them while modifying them, so we'd want to use their 
+enumerator instead of a custom one).</p>
+<p>With our anonymous implementation class in hand, we can easily and concisely implement many useful linq-to-lists methods:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">Select</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TOut</span><span class="pun">&gt;(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">&gt;</span><span class="pln"> list</span><span class="pun">,</span><span class="pln">
+                                                    </span><span class="typ">Func</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> projection</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">AnonymousReadOnlyList</span><span class="pun">&lt;</span><span class="typ">TOut</span><span class="pun">&gt;(</span><span class="pln">
+        count</span><span class="pun">:</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> list</span><span class="pun">.</span><span class="typ">Count</span><span class="pun">,</span><span class="pln">
+        item</span><span class="pun">:</span><span class="pln"> i </span><span class="pun">=&gt;</span><span class="pln"> projection</span><span class="pun">(</span><span class="pln">list</span><span class="pun">[</span><span class="pln">i</span><span class="pun">]),</span><span class="pln">
+        iterator</span><span class="pun">:</span><span class="pln"> list</span><span class="pun">.</span><span class="typ">AsEnumerable</span><span class="pun">().</span><span class="typ">Select</span><span class="pun">(</span><span class="pln">projection</span><span class="pun">));</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">Select</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TOut</span><span class="pun">&gt;(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">&gt;</span><span class="pln"> list</span><span class="pun">,</span><span class="pln">
+                                                    </span><span class="typ">Func</span><span class="pun">&lt;</span><span class="typ">TIn</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> projection</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">AnonymousReadOnlyList</span><span class="pun">&lt;</span><span class="typ">TOut</span><span class="pun">&gt;(</span><span class="pln">
+        count</span><span class="pun">:</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> list</span><span class="pun">.</span><span class="typ">Count</span><span class="pun">,</span><span class="pln">
+        item</span><span class="pun">:</span><span class="pln"> i </span><span class="pun">=&gt;</span><span class="pln"> projection</span><span class="pun">(</span><span class="pln">list</span><span class="pun">[</span><span class="pln">i</span><span class="pun">],</span><span class="pln"> i</span><span class="pun">),</span><span class="pln">
+        iterator</span><span class="pun">:</span><span class="pln"> list</span><span class="pun">.</span><span class="typ">AsEnumerable</span><span class="pun">().</span><span class="typ">Select</span><span class="pun">(</span><span class="pln">projection</span><span class="pun">));</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">Reverse</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> list</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">AnonymousReadOnlyList</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;(</span><span class="pln">
+        count</span><span class="pun">:</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> list</span><span class="pun">.</span><span class="typ">Count</span><span class="pun">,</span><span class="pln">
+        item</span><span class="pun">:</span><span class="pln"> i </span><span class="pun">=&gt;</span><span class="pln"> list</span><span class="pun">[</span><span class="pln">list</span><span class="pun">.</span><span class="typ">Count</span><span class="pln"> </span><span class="pun">-</span><span class="pln"> </span><span class="lit">1</span><span class="pln"> </span><span class="pun">-</span><span class="pln"> i</span><span class="pun">]);</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">Zip</span><span class="pun">&lt;</span><span class="typ">TIn1</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TIn2</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TOut</span><span class="pun">&gt;(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="typ">TIn1</span><span class="pun">&gt;</span><span class="pln"> list1</span><span class="pun">,</span><span class="pln">
+                                                        </span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="typ">TIn2</span><span class="pun">&gt;</span><span class="pln"> list2</span><span class="pun">,</span><span class="pln">
+                                                        </span><span class="typ">Func</span><span class="pun">&lt;</span><span class="typ">TIn1</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TIn2</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TOut</span><span class="pun">&gt;</span><span class="pln"> projection</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">AnonymousReadOnlyList</span><span class="pun">&lt;</span><span class="typ">TOut</span><span class="pun">&gt;(</span><span class="pln">
+        count</span><span class="pun">:</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="typ">Math</span><span class="pun">.</span><span class="typ">Min</span><span class="pun">(</span><span class="pln">list1</span><span class="pun">.</span><span class="typ">Count</span><span class="pun">,</span><span class="pln"> list2</span><span class="pun">.</span><span class="typ">Count</span><span class="pun">),</span><span class="pln">
+        item</span><span class="pun">:</span><span class="pln"> i </span><span class="pun">=&gt;</span><span class="pln"> projection</span><span class="pun">(</span><span class="pln">list1</span><span class="pun">[</span><span class="pln">i</span><span class="pun">],</span><span class="pln"> list2</span><span class="pun">[</span><span class="pln">i</span><span class="pun">]),</span><span class="pln">
+        iterator</span><span class="pun">:</span><span class="pln"> list1</span><span class="pun">.</span><span class="typ">AsEnumerable</span><span class="pun">().</span><span class="typ">Zip</span><span class="pun">(</span><span class="pln">list2</span><span class="pun">,</span><span class="pln"> projection</span><span class="pun">));</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">IReadOnlyList</span><span class="str">&lt;int&gt;</span><span class="pln"> </span><span class="typ">Range</span><span class="pun">(</span><span class="kwd">this</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> count</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">AnonymousReadOnlyList</span><span class="str">&lt;int&gt;</span><span class="pun">(</span><span class="pln">
+        count</span><span class="pun">:</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> count</span><span class="pun">,</span><span class="pln">
+        item</span><span class="pun">:</span><span class="pln"> i </span><span class="pun">=&gt;</span><span class="pln"> i</span><span class="pun">,</span><span class="pln">
+        iterator</span><span class="pun">:</span><span class="pln"> </span><span class="typ">Enumerable</span><span class="pun">.</span><span class="typ">Range</span><span class="pun">(</span><span class="lit">0</span><span class="pun">,</span><span class="pln"> count</span><span class="pun">));</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>Each of these methods is very simple, and congruently their 
+implementation is very small. However, note that anonymous 
+implementation classes can handle much more complicated cases thanks to 
+the beauty of closures. For example, mutable state can be in locals 
+instead of fields, as shown in this method that implements an 
+IObservable using AnonymousObservable:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">IObservable</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">WhenDifferent</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">IObservable</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> observable</span><span class="pun">,</span><span class="pln">
+                                              </span><span class="typ">IEqualityComparer</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> equality </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> eq </span><span class="pun">=</span><span class="pln"> equality </span><span class="pun">??</span><span class="pln"> </span><span class="typ">EqualityComparer</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;.</span><span class="typ">Default</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">AnonymousObservable</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;(</span><span class="pln">observer </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">var</span><span class="pln"> hasPrev </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">;</span><span class="pln">
+        </span><span class="kwd">var</span><span class="pln"> prev </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">default</span><span class="pun">(</span><span class="pln">T</span><span class="pun">);</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> observable</span><span class="pun">.</span><span class="typ">Observe</span><span class="pun">(</span><span class="pln">
+            newValue </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+                </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">hasPrev </span><span class="pun">&amp;&amp;</span><span class="pln"> eq</span><span class="pun">.</span><span class="typ">Equals</span><span class="pun">(</span><span class="pln">prev</span><span class="pun">,</span><span class="pln"> newValue</span><span class="pun">))</span><span class="pln"> </span><span class="kwd">return</span><span class="pun">;</span><span class="pln">
+                hasPrev </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">;</span><span class="pln">
+                prev </span><span class="pun">=</span><span class="pln"> newValue</span><span class="pun">;</span><span class="pln">
+                observer</span><span class="pun">.</span><span class="typ">OnNext</span><span class="pun">(</span><span class="pln">prev</span><span class="pun">);</span><span class="pln">
+            </span><span class="pun">},</span><span class="pln">
+            observer</span><span class="pun">.</span><span class="typ">OnCompleted</span><span class="pun">,</span><span class="pln">
+            observer</span><span class="pun">.</span><span class="typ">OnError</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">});</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>There are lots of other opportunities out there for this pattern. For
+ example... every interface I listed in the first paragraph of this 
+post. I can see why Java has it as a language feature (although, 
+humorously, the C# usage I've shown is more concise even though it's not
+ a language feature...).</p>
+<h3>Tradeoffs</h3>
+<p>Now that you understand what an anonymous implementation class is 
+(just a class that uses custom delegates to implement an interface), I 
+can discuss the costs of using one instead of defining a new class.</p>
+<p>Anonymous implementation classes have an additional layer of 
+indirection when invoking their interface methods. As a result, an 
+additional virtual call is performed and this increases execution time a
+ bit. Also, each instance stores a reference to each delegate it uses to
+ implement an interface (instead of just a single reference to a static 
+vtable of its implementing methods). This means a higher per-instance 
+memory cost, which can be a significant proportional increase depending 
+on the interface and implementation (e.g. ReadOnlyList.Range technically
+ needs only a count, but its anonymous implementation class stores 3 
+delegate references and the delegates reference a closure containing the
+ count). Finally, note that it's harder to inspect the contents of an 
+anonymous implementation class (visual studio does a mediocre job 
+visualizing delegates/closures) so debugging methods using them takes 
+some getting used to.</p>
+<h3>Summary</h3>
+<p>Anonymous implementation classes are a classic "programmer time vs 
+program efficiency" trade-off. They make your life easier, like using C#
+ instead of C or C instead of assembly. Use them unless you <em>measure</em> that you need the performance (hopefully, in the future, there will be more language and optimization support for them).</p>
+<p><a href="http://www.reddit.com/r/programming/comments/117pm8/anonymous_implementation_classes_a_design_pattern/"><em>View comments on Reddit.</em></a></p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers efficient, flexible remote and on-the-floor 
+development and consulting without any middle-man or excessive 
+administrivia. <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2>Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+			<nav>
+				<ul class="primary-nav clearfix">
+					<li><a href="http://www.twistedoakstudios.com/">Home</a></li>
+					<li><a href="http://twistedoakstudios.com/portfolio">Portfolio</a></li>
+				</ul>
+			</nav>
+		</div>
+		
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				6082 Shirley Street<br>
+				Halifax, NS, Canada B3H 2M8</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+		
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script> Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Post774_anonymous-implementation-classes-a-design-pattern-for-c_files/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Post774_anonymous-implementation-classes-a-design-pattern-for-c_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script></body></html>

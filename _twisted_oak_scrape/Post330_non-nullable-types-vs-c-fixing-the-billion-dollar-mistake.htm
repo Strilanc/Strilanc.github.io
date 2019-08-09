@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script id="bug.surrogate">var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}}; if (document.location.host == 'www.salon.com') {var _ga_ = document.querySelectorAll('script[src$=ga\\.js]')[0], ga_e = document.createEvent('Event'); ga_e.initEvent('load', true, true);_ga_.dispatchEvent(ga_e);}</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Game Developers | Unity 3D Development</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake_files/1140.css">
+    <link rel="stylesheet" href="Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake_files/style.css">
+    <link rel="stylesheet" href="Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake_files/blogstyle.css">
+<link rel="stylesheet" href="Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake_files/prettify.css" media="all">
+<link rel="stylesheet" href="Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake_files/sunburst.css" media="all">
+<script type="text/javascript" src="Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake_files/modernizr-2.js"></script>
+</head>
+<body onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="#"><img class="logo" src="Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></h2>
+<div class="meta">posted by Craig Gidney on September 24, 2012</div>
+
+<p>One of the top suggestions (<a href="http://visualstudio.uservoice.com/forums/121579-visual-studio/category/30931-languages-c-">currently #15 on uservoice</a>)
+ for improving C# is the addition of non-nullable reference types. This 
+is not surprising, considering the number of functions that start with a
+ block of ‘if (x == null) throw new ArgumentNullException(“x”)’ lines. 
+Not to mention the head-slapping bugs null pointers cause. There’s a 
+reason Tony Hoare calls the null pointer <a href="http://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare">his billion dollar mistake</a>.</p>
+<p>In this post I will talk about the obstacles that make adding non-nullable types to C# difficult, and propose a way forward.</p>
+<h3>Obstacles</h3>
+<p>Adding non-nullable types to C# seems, on the surface, easy. Put a 
+“!” at the end of the type to mean non-nullable, add some 
+nullable/non-nullable conversation operators, implement a few compiler 
+checks and you’re done… right? Oops, we just broke the cohesiveness of 
+the language. The compiler keeps refusing to compile “new object![10]” 
+(it can’t figure out what to fill the array with initially). Naturally, 
+all of the generic classes that happen to use arrays also refuse to work
+ for the same reason (goodbye List&lt;T&gt;) but some generic class that
+ don’t use arrays like TaskCompletionSource&lt;T&gt; also fail. Bleh.</p>
+<p>I should note at this point that C# is a mature language with 
+mountains of already-written code that we aren’t allowed to break. If 
+adding non-null types to the language breaks existing code, then 
+non-null types won’t get added. We have to work within the constraints 
+of backwards compatibility, which is tricky when removing widely-used 
+assumptions. To give an idea of the sorts of code we can’t break, I’ve 
+put together a list of the cases I think are important. Before reading 
+on, you may want to spend a minute imagining how you would add 
+non-nullability to C#. See if your idea meshes with each case in an 
+elegant way:</p>
+<ul>
+<li>Existing generic code allocates arrays:
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> T</span><span class="pun">[]</span><span class="pln"> </span><span class="typ">ToArray</span><span class="pun">(</span><span class="typ">IReadOnlyCollection</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> items</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> r </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> T</span><span class="pun">[</span><span class="pln">items</span><span class="pun">.</span><span class="typ">Count</span><span class="pun">];</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> r</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+</li><li>Existing generic code uses default(T):
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> T </span><span class="typ">FirstOrDefault</span><span class="pun">(</span><span class="typ">IEnumerable</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> items</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">using</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">var</span><span class="pln"> e </span><span class="pun">=</span><span class="pln"> items</span><span class="pun">.</span><span class="typ">GetEnumerator</span><span class="pun">())</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> e</span><span class="pun">.</span><span class="typ">MoveNext</span><span class="pun">()</span><span class="pln"> </span><span class="pun">?</span><span class="pln"> e</span><span class="pun">.</span><span class="typ">Current</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="kwd">default</span><span class="pun">(</span><span class="pln">T</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+</li><li>Existing generic code propagates generic parameters:
+<pre><code class="prettyprint"><span class="kwd">default</span><span class="pun">(</span><span class="typ">KeyValuePair</span><span class="pun">&lt;</span><span class="pln">K</span><span class="pun">,</span><span class="pln"> V</span><span class="pun">&gt;)</span><span class="pln"> </span><span class="com">// if K or V has no default value...</span></code></pre>
+</li><li>Existing generic classes that intuitively should accept 
+non-nullable types (a.k.a. are “non-null safe”) may use constructs that 
+assume a default value exists:
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">List</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+        _items </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> T</span><span class="pun">[</span><span class="pln">capacity</span><span class="pun">];</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+</li><li>Classes that are intuitively non-null safe may not always 
+initialize fields, implicitly assuming a default value is used (and you 
+may be able to access that value via reflection):
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">struct</span><span class="pln"> </span><span class="typ">Maybe</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> T _value</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="kwd">bool</span><span class="pln"> </span><span class="typ">HasValue</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> T </span><span class="typ">Value</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">get</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(!</span><span class="typ">HasValue</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">InvalidOperationException</span><span class="pun">();</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> _value</span><span class="pun">;</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="com">// default constructor creates a 'no value' instance where _value = default(T)</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Maybe</span><span class="pun">(</span><span class="pln">T value</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="typ">HasValue</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">;</span><span class="pln"> _value </span><span class="pun">=</span><span class="pln"> value</span><span class="pun">;</span><span class="pln"> </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+</li><li>A common pattern, ‘bool TryX(out T result)’, assumes a default value to assign to ‘result’ when failing:
+<pre><code class="prettyprint"><span class="kwd">bool</span><span class="pln"> </span><span class="typ">TryParseValue</span><span class="pun">(</span><span class="kwd">out</span><span class="pln"> T value</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(...)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="pun">...</span><span class="pln">
+        value </span><span class="pun">=</span><span class="pln"> </span><span class="pun">...</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    value </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">default</span><span class="pun">(</span><span class="pln">T</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+</li><li>Some interfaces are intuitively non-null safe, but use the TryX pattern:
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">interface</span><span class="pln"> </span><span class="typ">IReadOnlyDictionary</span><span class="pun">&lt;</span><span class="typ">TKey</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TValue</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">IReadOnlyCollection</span><span class="pun">&lt;</span><span class="typ">KeyValuePair</span><span class="pun">&lt;</span><span class="typ">TKey</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TValue</span><span class="pun">&gt;&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+    </span><span class="kwd">bool</span><span class="pln"> </span><span class="typ">TryGetValue</span><span class="pun">(</span><span class="typ">TKey</span><span class="pln"> key</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">out</span><span class="pln"> </span><span class="typ">TValue</span><span class="pln"> value</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+</li><li>Most interfaces happen to be (somewhat) naively non-null safe 
+(although implementations may not be), but it’s possible to create ones 
+that aren’t:
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">interface</span><span class="pln"> </span><span class="typ">IMustHaveDefault</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">DoIt</span><span class="pun">(</span><span class="pln">T value </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">default</span><span class="pun">(</span><span class="pln">T</span><span class="pun">));</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+</li><li>Analogously, most delegates happen to be non-null safe, but it’s not guaranteed:
+<pre><code class="prettyprint"><span class="kwd">delegate</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">MustHaveDefault</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;(</span><span class="pln">T value </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">default</span><span class="pun">(</span><span class="pln">T</span><span class="pun">))</span></code></pre>
+</li><li>Existing code may extend legacy code that won’t be updated for non-nullability:
+<pre><code class="prettyprint"><span class="kwd">interface</span><span class="pln"> </span><span class="typ">IBloomFilter</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">SomeOldUnmaintainedLibrary</span><span class="pun">.</span><span class="typ">IHeuristicSet</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+</li></ul>
+<p>How did your impromptu idea do?</p>
+<p>The fundamental problem here is an assumption deeply ingrained into 
+C#: the assumption that every type has a default value. Consider: if T 
+doesn’t (or might not have) a default value then the compiler has 
+nothing to use when evaluating default(T), initializing a field of type 
+T, or initializing the items in a new array of T. This is a problem when
+ it comes to non-null reference types because, although some reference 
+types have a decent non-null default value (e.g. the default non-null 
+String could be the empty string), most do not. Consider: what is the 
+default non-null value of IEnumerator&lt;int&gt;? 
+IObservable&lt;bool&gt;? UserControl? NetworkStream? The simple answer 
+is that they don’t have one. The “best” you can do is give a mock 
+instance that fails if you try to use it… but we already have that and 
+it’s called null.</p>
+<p>Note that there may be important cases I’ve missed here. C# is a very
+ large language and I don’t have experience with all of its parts, 
+particularly native interop things like unsafe and pinned. There are 
+surely plenty of complications with respect to type inference and 
+lambdas that I’m not exploring. I’m also going to gloss over the 
+implications on reflection, other than to note that the result of 
+GetType will be unable to indicate non-nullability and that this may be 
+counter-intuitive to users. (Hopefully whatever I’ve overlooked won’t 
+make what I propose in the next section utterly useless.)</p>
+<h3>Proposed Solution</h3>
+<p>All the obstacles I’ve mentioned can be overcome. The way I’ve 
+approached the problem is by adding three bits of syntax to C#: an ‘is 
+non-null’ type modifier, a ‘may be non-null’ type parameter modifier, 
+and a ‘withdefault’ keyword to undo making a type non-nullable. The 
+basic idea for making code non-null safe it to wrap T! into 
+withdefault(T!) on the way in and cast back to T! on the way out.</p>
+<p>I find it difficult to succinctly explain what I mean in prose, so 
+I’m just going to go with a list. These are the semantic changes I would
+ make to C# to allow non-nullable types:</p>
+<ul>
+<li>Appending “!” to a (nullable) reference type means “is 
+non-nullable”. A variable of type “object!” can reference an object, but
+ may not be a null reference.
+</li><li>Appending “!” to a generic type parameter means “is potentially
+ non-nullable”. The type parameter T in “class C&lt;T&gt;” can’t be 
+“object!”, but it could be if the declaration was “class C&lt;T!&gt;”.
+</li><li>Invoking “withdefault” on a non-nullable reference type returns
+ the associated nullable reference type but otherwise returns the same 
+type. withdefault(object!) = object = withdefault(object), 
+withdefault(int) = int, withdefault(int?) = int?.
+</li><li>For any (nullable) reference type T there is an explicit cast operator from T to T! that throws when given null.
+</li><li>A T! “is a” T. Consequently, for example, an IEnumerable&lt;T!&gt; is an IEnumerable&lt;T&gt; by covariance.
+</li><li>The expression “default(T)” is a compile error when T is potentially non-nullable.
+</li><li>The expression “new T[n]” is a compile error when T is 
+potentially non-nullable and n is not a constant zero. Note that new T[]
+ { … } may still work.
+</li><li>Using a potentially non-nullable type as the argument to a 
+generic type parameter that is not marked as potentially non-nullable is
+ a compile error.
+</li><li>A struct or class containing a field with a potentially 
+non-nullable type is not given a default empty constructor by the 
+compiler.
+</li><li>In a constructor, all fields with a potentially non-nullable type must be initialized before ‘this’ can be used.
+</li><li>The type of a constructor invocation expression is now non-null
+ when the constructed type is a reference type. For example, “new 
+object()” has type “object!”.
+</li><li>A few existing compiler errors, like disallowing constraining a
+ generic parameter by a sealed type, need to be removed or rethought 
+(because T! is a T, even if T is sealed).
+</li></ul>
+<p>Additionally, the following things should not be breaking changes, when done by the user:</p>
+<ul>
+<li>Changing usage of a type T to withdefault(T) or vice versa, unless T
+ is potentially non-nullable. This allows tweaking the return types of 
+generic methods to make sense when T is non-nullable, without breaking 
+existing code.
+</li><li>Changing a type argument from withdefault(T) to T when the type
+ parameter is covariant, or vice versa when the type parameter is 
+contra-variant. This is useful for interop with legacy code because we 
+can expose non-nullability right away without painting ourselves into a 
+corner. For example, suppose IEnumerable&lt;T&gt; has not been marked 
+non-null safe. A non-null safe class can implement 
+IEnumerable&lt;withdefault(T)&gt; in the interim and, once IEnumerable 
+is made non-null safe, implementing IEnumerable&lt;T&gt; instead will 
+not break existing code because a T! is a T.
+</li></ul>
+<p>Finally, some useful additions to the .Net base class library that I would recommend, although they aren’t necessary:</p>
+<ul>
+<li>A special method to create an array of a non-null type from an IReadOnlyCollection&lt;T!&gt;.
+</li><li>A non-null safe array type that can be initialized incrementally (perhaps a better name would be CappedList&lt;T!&gt;).
+</li><li>A standard maybe/option type that is non-null safe.
+</li></ul>
+<p>Given these language changes, it is relatively simple to 
+update/implement code with non-null safety. As I’ve already mentioned, 
+you just abuse withdefault(T!) and casting from T to T! to assert to the
+ compiler that you’ve done things right (if you haven’t, you’ll get an 
+exception during the cast at runtime). I’ll go over some examples in a 
+moment. As more code is made non-null safe, the amount of casting and 
+withdefault-ing you need should go down.</p>
+<p>The changes to make code non-null safe are so simple that you might 
+expect the conversion to be automatable. Unfortunately, human judgement 
+is necessary in a some cases. For example, the return type of 
+FirstOrDefault&lt;T!&gt; is withdefault(T!) but the return type of 
+First&lt;T!&gt; is just T!. Doing the conversion automatically would 
+require analyzing the implementations of those methods to figure out 
+that default(T) might flow out of FirstOrDefault&lt;T&gt; but not 
+First&lt;T&gt;. But even with a magical halt-problem-avoiding analysis, 
+we’d find it impossible to infer the non-nullability of interfaces and 
+abstract classes, because their implementing code may not even be in the
+ same assembly! We must update the code by hand.</p>
+<h3>Examples</h3>
+<p>In order to give you a more concrete taste of how non-nullable types 
+would work in practice, given that this proposal were implemented, I’ve 
+prepared two examples. The first is a simple maybe/option type that is 
+non-null safe:</p>
+<pre><code class="prettyprint"><span class="com">///May contain a value or no value. Non-null safe.</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">struct</span><span class="pln"> </span><span class="typ">Maybe</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">!&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> withdefault</span><span class="pun">(</span><span class="pln">T</span><span class="pun">)</span><span class="pln"> _value</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="kwd">bool</span><span class="pln"> </span><span class="typ">HasValue</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> T </span><span class="typ">Value</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">get</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(!</span><span class="typ">HasValue</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">InvalidOperationException</span><span class="pun">();</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">(</span><span class="pln">T</span><span class="pun">)</span><span class="pln">_value</span><span class="pun">;</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="com">// note: has default constructor for 'no value'</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Maybe</span><span class="pun">(</span><span class="pln">T value</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="typ">HasValue</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">;</span><span class="pln"> _value </span><span class="pun">=</span><span class="pln"> value</span><span class="pun">;</span><span class="pln"> </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>As you can see, the _value field is of type “withdefault(T)” but 
+exposed as type T by using a cast inside the Value property. Note that 
+if you tried to change the field to type T, the compiler would omit the 
+default constructor. As a result, you would need to implement it 
+explicitly (otherwise you can’t create the No Value instance) and, in 
+doing so, would discover it to be impossible to satisfy the requirement 
+that _value be initialized before ‘this’ can be accessed. Most classes 
+would be updated in the same way: withdefault in, cast out.</p>
+<p>The second example I have is more involved, because it uses a real existing class. I call it “how to make <a href="http://msdn.microsoft.com/en-us/library/xfhwa508.aspx">System.Collections.Generic.Dictionary</a> non-null safe (in spirit)”. I used <a href="http://www.reflector.net/">reflector</a> to get source code for Dictionary (and cleaned it up a bit with <a href="http://www.jetbrains.com/resharper/">ReSharper</a>).
+ However, to keep the example short, I am only including the notable 
+changes necessary to upgrade the important public methods (Add, Remove, 
+this[]) and the implementation of the IReadOnlyDictionary interface. 
+Additions are highlighted in green, deletions are struck-through and 
+highlighted in red:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">interface</span><span class="pln"> </span><span class="typ">IEnumerable</span><span class="pun">&lt;</span><span class="kwd">out</span><span class="pln"> T</span><strong><span style="background-color: #008000;"><span class="pun">!</span></span></strong><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">IEnumerable</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+</span><span class="pun">...</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">interface</span><span class="pln"> </span><span class="typ">IReadOnlyCollection</span><span class="pun">&lt;</span><span class="kwd">out</span><span class="pln"> T</span><strong><span style="background-color: #008000;"><span class="pun">!</span></span></strong><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">IEnumerable</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+</span><span class="pun">...</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">interface</span><span class="pln"> </span><span class="typ">IReadOnlyDictionary</span><span class="pun">&lt;</span><span class="typ">TKey</span><strong><span style="background-color: #008000;"><span class="pun">!</span></span></strong><span class="pun">,</span><span class="pln"> </span><span class="typ">TValue</span><strong><span style="background-color: #008000;"><span class="pun">!</span></span></strong><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">IReadOnlyCollection</span><span class="pun">&lt;</span><span class="typ">KeyValuePair</span><span class="pun">&lt;</span><span class="typ">TKey</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TValue</span><span class="pun">&gt;&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">bool</span><span class="pln"> </span><span class="typ">ContainsKey</span><span class="pun">(</span><span class="typ">TKey</span><span class="pln"> key</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">bool</span><span class="pln"> </span><span class="typ">TryGetValue</span><span class="pun">(</span><span class="typ">TKey</span><span class="pln"> key</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">out</span><span class="pln"> </span><strong><span style="background-color: #008000;"><span class="pln">withdefault</span><span class="pun">(</span></span></strong><span class="typ">TValue</span><strong><span style="background-color: #008000;"><span class="pun">)</span></span></strong><span class="pln"> value</span><span class="pun">);</span><span class="pln">
+    </span><span class="typ">TValue</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">[</span><span class="typ">TKey</span><span class="pln"> key</span><span class="pun">]</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">get</span><span class="pun">;</span><span class="pln"> </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">...</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">Dictionary</span><span class="pun">&lt;</span><span class="typ">TKey</span><strong><span style="background-color: #008000;"><span class="pun">!</span></span></strong><span class="pun">,</span><span class="pln"> </span><span class="typ">TValue</span><strong><span style="background-color: #008000;"><span class="pun">!</span></span></strong><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">IReadOnlyDictionary</span><span class="pun">&lt;</span><span class="typ">TKey</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TValue</span><span class="pun">&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">[]</span><span class="pln"> _buckets</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> _count</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="typ">Entry</span><span class="pun">[]</span><span class="pln"> _entries</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> _freeCount</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+            </span><span class="kwd">for</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">var</span><span class="pln"> j </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln"> j </span><span class="pun">&lt;</span><span class="pln"> _count</span><span class="pun">;</span><span class="pln"> j</span><span class="pun">++)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+                </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">((</span><span class="pln">_entries</span><span class="pun">[</span><span class="pln">j</span><span class="pun">].</span><span class="typ">HashCode</span><span class="pln"> </span><span class="pun">&gt;=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="pun">&amp;&amp;</span><span class="pln"> comparer</span><span class="pun">.</span><span class="typ">Equals</span><span class="pun">(</span><strong><span style="background-color: #008000;"><span class="pun">(</span><span class="typ">TValue</span><span class="pun">)</span></span></strong><span class="pln">_entries</span><span class="pun">[</span><span class="pln">j</span><span class="pun">].</span><span class="typ">Value</span><span class="pun">,</span><span class="pln"> value</span><span class="pun">))</span><span class="pln">
+                    </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">;</span><span class="pln">
+            </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+            </span><span class="kwd">for</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">var</span><span class="pln"> i </span><span class="pun">=</span><span class="pln"> _buckets</span><span class="pun">[</span><span class="pln">num</span><span class="pun">%</span><span class="pln">_buckets</span><span class="pun">.</span><span class="typ">Length</span><span class="pun">];</span><span class="pln"> i </span><span class="pun">&gt;=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln"> i </span><span class="pun">=</span><span class="pln"> _entries</span><span class="pun">[</span><span class="pln">i</span><span class="pun">].</span><span class="typ">Next</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+                </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">_entries</span><span class="pun">[</span><span class="pln">i</span><span class="pun">].</span><span class="typ">HashCode</span><span class="pln"> </span><span class="pun">==</span><span class="pln"> num </span><span class="pun">&amp;&amp;</span><span class="pln"> </span><span class="typ">Comparer</span><span class="pun">.</span><span class="typ">Equals</span><span class="pun">(</span><strong><span style="background-color: #008000;"><span class="pun">(</span><span class="typ">TKey</span><span class="pun">)</span></span></strong><span class="pln">_entries</span><span class="pun">[</span><span class="pln">i</span><span class="pun">].</span><span class="typ">Key</span><span class="pun">,</span><span class="pln"> key</span><span class="pun">))</span><span class="pln">
+                    </span><span class="kwd">return</span><span class="pln"> i</span><span class="pun">;</span><span class="pln">
+            </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+    </span><span class="kwd">internal</span><span class="pln"> </span><strong><span style="background-color: #008000;"><span class="pln">withdefault</span><span class="pun">(</span></span></strong><span class="typ">TValue</span><strong><span style="background-color: #008000;"><span class="pun">)</span></span></strong><span class="pln"> </span><span class="typ">GetValueOrDefault</span><span class="pun">(</span><span class="typ">TKey</span><span class="pln"> key</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">var</span><span class="pln"> index </span><span class="pun">=</span><span class="pln"> </span><span class="typ">FindEntry</span><span class="pun">(</span><span class="pln">key</span><span class="pun">);</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">index </span><span class="pun">&gt;=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> _entries</span><span class="pun">[</span><span class="pln">index</span><span class="pun">].</span><span class="typ">Value</span><span class="pun">;</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">default</span><span class="pun">(</span><strong><span style="background-color: #008000;"><span class="pln">withdefault</span><span class="pun">(</span></span></strong><span class="typ">TValue</span><strong><span style="background-color: #008000;"><span class="pun">)</span></span></strong><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+        </span><span class="kwd">for</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">var</span><span class="pln"> i </span><span class="pun">=</span><span class="pln"> _buckets</span><span class="pun">[</span><span class="pln">index</span><span class="pun">];</span><span class="pln"> i </span><span class="pun">&gt;=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln"> i </span><span class="pun">=</span><span class="pln"> _entries</span><span class="pun">[</span><span class="pln">i</span><span class="pun">].</span><span class="typ">Next</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">((</span><span class="pln">_entries</span><span class="pun">[</span><span class="pln">i</span><span class="pun">].</span><span class="typ">HashCode</span><span class="pln"> </span><span class="pun">==</span><span class="pln"> num</span><span class="pun">)</span><span class="pln"> </span><span class="pun">&amp;&amp;</span><span class="pln"> </span><span class="typ">Comparer</span><span class="pun">.</span><span class="typ">Equals</span><span class="pun">(</span><strong><span style="background-color: #008000;"><span class="pun">(</span><span class="typ">TKey</span><span class="pun">)</span></span></strong><span class="pln">_entries</span><span class="pun">[</span><span class="pln">i</span><span class="pun">].</span><span class="typ">Key</span><span class="pun">,</span><span class="pln"> key</span><span class="pun">))</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+                </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">add</span><span class="pun">)</span><span class="pln">
+	</span><span class="pun">...</span><span class="pln">
+            </span><span class="kwd">for</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">var</span><span class="pln"> i </span><span class="pun">=</span><span class="pln"> _buckets</span><span class="pun">[</span><span class="pln">index</span><span class="pun">];</span><span class="pln"> i </span><span class="pun">&gt;=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln"> i </span><span class="pun">=</span><span class="pln"> _entries</span><span class="pun">[</span><span class="pln">i</span><span class="pun">].</span><span class="typ">Next</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+                </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">((</span><span class="pln">_entries</span><span class="pun">[</span><span class="pln">i</span><span class="pun">].</span><span class="typ">HashCode</span><span class="pln"> </span><span class="pun">==</span><span class="pln"> num</span><span class="pun">)</span><span class="pln"> </span><span class="pun">&amp;&amp;</span><span class="pln"> </span><span class="typ">Comparer</span><span class="pun">.</span><span class="typ">Equals</span><span class="pun">(</span><strong><span style="background-color: #008000;"><span class="pun">(</span><span class="typ">TKey</span><span class="pun">)</span></span></strong><span class="pln">_entries</span><span class="pun">[</span><span class="pln">i</span><span class="pun">].</span><span class="typ">Key</span><span class="pun">,</span><span class="pln"> key</span><span class="pun">))</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+                    </span><span class="pun">...</span><span class="pln">
+                    _entries</span><span class="pun">[</span><span class="pln">i</span><span class="pun">].</span><span class="typ">HashCode</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="pun">-</span><span class="lit">1</span><span class="pun">;</span><span class="pln">
+                    _entries</span><span class="pun">[</span><span class="pln">i</span><span class="pun">].</span><span class="typ">Next</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> _freeList</span><span class="pun">;</span><span class="pln">
+                    _entries</span><span class="pun">[</span><span class="pln">i</span><span class="pun">].</span><span class="typ">Key</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">default</span><span class="pun">(</span><strong><span style="background-color: #008000;"><span class="pln">withdefault</span><span class="pun">(</span></span></strong><span class="typ">TKey</span><strong><span style="background-color: #008000;"><span class="pun">)</span></span></strong><span class="pun">);</span><span class="pln">
+                    _entries</span><span class="pun">[</span><span class="pln">i</span><span class="pun">].</span><span class="typ">Value</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">default</span><span class="pun">(</span><strong><span style="background-color: #008000;"><span class="pln">withdefault</span><span class="pun">(</span></span></strong><span class="typ">TValue</span><strong><span style="background-color: #008000;"><span class="pun">)</span></span></strong><span class="pun">);</span><span class="pln">
+                    _freeList </span><span class="pun">=</span><span class="pln"> i</span><span class="pun">;</span><span class="pln">
+                    _freeCount</span><span class="pun">++;</span><span class="pln">
+                    _version</span><span class="pun">++;</span><span class="pln">
+                    </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+            </span><span class="kwd">for</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">var</span><span class="pln"> k </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln"> k </span><span class="pun">&lt;</span><span class="pln"> _count</span><span class="pun">;</span><span class="pln"> k</span><span class="pun">++)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+                </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">destArray</span><span class="pun">[</span><span class="pln">k</span><span class="pun">].</span><span class="typ">HashCode</span><span class="pln"> </span><span class="pun">!=</span><span class="pln"> </span><span class="pun">-</span><span class="lit">1</span><span class="pun">)</span><span class="pln">
+                    destArray</span><span class="pun">[</span><span class="pln">k</span><span class="pun">].</span><span class="typ">HashCode</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Comparer</span><span class="pun">.</span><span class="typ">GetHashCode</span><span class="pun">(</span><strong><span style="background-color: #008000;"><span class="pun">(</span><span class="typ">TKey</span><span class="pun">)</span></span></strong><span class="pln">destArray</span><span class="pun">[</span><span class="pln">k</span><span class="pun">].</span><span class="typ">Key</span><span class="pun">)</span><span class="pln"> </span><span class="pun">&amp;</span><span class="pln"> </span><span class="lit">0x7fffffff</span><span class="pun">;</span><span class="pln">
+            </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">bool</span><span class="pln"> </span><span class="typ">TryGetValue</span><span class="pun">(</span><span class="typ">TKey</span><span class="pln"> key</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">out</span><span class="pln"> </span><strong><span style="background-color: #008000;"><span class="pln">withdefault</span><span class="pun">(</span></span></strong><span class="typ">TValue</span><strong><span style="background-color: #008000;"><span class="pun">)</span></span></strong><span class="pln"> value</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">var</span><span class="pln"> index </span><span class="pun">=</span><span class="pln"> </span><span class="typ">FindEntry</span><span class="pun">(</span><span class="pln">key</span><span class="pun">);</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">index </span><span class="pun">&gt;=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            value </span><span class="pun">=</span><span class="pln"> _entries</span><span class="pun">[</span><span class="pln">index</span><span class="pun">].</span><span class="typ">Value</span><span class="pun">;</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">;</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+        value </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">default</span><span class="pun">(</span><strong><span style="background-color: #008000;"><span class="pln">withdefault</span><span class="pun">(</span></span></strong><span class="typ">TValue</span><strong><span style="background-color: #008000;"><span class="pun">)</span></span></strong><span class="pun">);</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">TValue</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">[</span><span class="typ">TKey</span><span class="pln"> key</span><span class="pun">]</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="pun">...</span><span class="pln">
+                </span><span class="kwd">return</span><span class="pln"> </span><strong><span style="background-color: #008000;"><span class="pun">(</span><span class="typ">TValue</span><span class="pun">)</span></span></strong><span class="pln">_entries</span><span class="pun">[</span><span class="pln">index</span><span class="pun">].</span><span class="typ">Value</span><span class="pun">;</span><span class="pln">
+	</span><span class="pun">...</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">struct</span><span class="pln"> </span><span class="typ">Entry</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> </span><span class="typ">HashCode</span><span class="pun">;</span><span class="pln">
+        </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> </span><span class="typ">Next</span><span class="pun">;</span><span class="pln">
+        </span><span class="kwd">public</span><span class="pln"> </span><strong><span style="background-color: #008000;"><span class="pln">withdefault</span><span class="pun">(</span></span></strong><span class="typ">TKey</span><strong><span style="background-color: #008000;"><span class="pun">)</span></span></strong><span class="pln"> </span><span class="typ">Key</span><span class="pun">;</span><span class="pln">
+        </span><span class="kwd">public</span><span class="pln"> </span><strong><span style="background-color: #008000;"><span class="pln">withdefault</span><span class="pun">(</span></span></strong><span class="typ">TValue</span><strong><span style="background-color: #008000;"><span class="pun">)</span></span></strong><span class="pln"> </span><span class="typ">Value</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">struct</span><span class="pln"> </span><span class="typ">Enumerator</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">IEnumerator</span><span class="pun">&lt;</span><span class="typ">KeyValuePair</span><span class="pun">&lt;</span><span class="typ">TKey</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TValue</span><span class="pun">&gt;&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="pun">...</span><span class="pln">
+        </span><span class="kwd">private</span><span class="pln"> </span><strong><span style="background-color: #008000;"><span class="pln">withdefault</span><span class="pun">(</span></span></strong><span class="typ">KeyValuePair</span><span class="pun">&lt;</span><span class="typ">TKey</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TValue</span><span class="pun">&gt;</span><strong><span style="background-color: #008000;"><span class="pun">)</span></span></strong><span class="pln"> _current</span><span class="pun">;</span><span class="pln">
+        </span><span class="pun">...</span><span class="pln">
+        </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">bool</span><span class="pln"> </span><span class="typ">MoveNext</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="kwd">while</span><span class="pln"> </span><span class="pun">(</span><span class="pln">_index </span><span class="pun">&lt;</span><span class="pln"> _dictionary</span><span class="pun">.</span><span class="pln">_count</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+                </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">_dictionary</span><span class="pun">.</span><span class="pln">_entries</span><span class="pun">[</span><span class="pln">_index</span><span class="pun">].</span><span class="typ">HashCode</span><span class="pln"> </span><span class="pun">&gt;=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+                    _current </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">KeyValuePair</span><span class="pun">&lt;</span><span class="typ">TKey</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TValue</span><span class="pun">&gt;(</span><span class="pln">
+                        </span><strong><span style="background-color: #008000;"><span class="pun">(</span><span class="typ">TKey</span><span class="pun">)</span></span></strong><span class="pln">_dictionary</span><span class="pun">.</span><span class="pln">_entries</span><span class="pun">[</span><span class="pln">_index</span><span class="pun">].</span><span class="typ">Key</span><span class="pun">,</span><span class="pln">
+                        </span><strong><span style="background-color: #008000;"><span class="pun">(</span><span class="typ">TValue</span><span class="pun">)</span></span></strong><span class="pln">_dictionary</span><span class="pun">.</span><span class="pln">_entries</span><span class="pun">[</span><span class="pln">_index</span><span class="pun">].</span><span class="typ">Value</span><span class="pun">);</span><span class="pln">
+                    _index</span><span class="pun">++;</span><span class="pln">
+                    </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">;</span><span class="pln">
+                </span><span class="pun">}</span><span class="pln">
+                </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">_index</span><span class="pun">++;</span><span class="pln">
+            </span><span class="pun">}</span><span class="pln">
+            </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">_index </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">_dictionary</span><span class="pun">.</span><span class="pln">_count </span><span class="pun">+</span><span class="pln"> </span><span class="lit">1</span><span class="pun">;</span><span class="pln">
+            </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">_current </span><span class="pun">=</span><span class="pln"> </span><strong><span style="background-color: #008000;"><span class="kwd">default</span><span class="pun">(</span><span class="pln">withdefault</span><span class="pun">(</span><span class="typ">KeyValuePair</span><span class="pun">&lt;</span><span class="typ">TKey</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TValue</span><span class="pun">&gt;))</span></span></strong><span style="background-color: #800000;"><del><span class="kwd">new</span><span class="pln"> </span><span class="typ">KeyValuePair</span><span class="pun">&lt;</span><span class="typ">TKey</span><span class="pun">,</span><span class="pln"> </span><span class="typ">TValue</span><span class="pun">&gt;()</span></del></span><span class="pun">;</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">;</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">...</span></code></pre>
+<p>Once again you can see the “write withdefault(T), read T by casting” 
+technique, except it is used in several places. Otherwise the only 
+notable change is to the signature of TryGetValue: the out parameter now
+ has type withdefault(TValue). You might expect this to break existing 
+code, because we’re changing the signature, but it works out that we 
+only change the signature in new cases. TValue couldn’t be a 
+non-nullable reference type before, and withdefault(T) = T in that case.</p>
+<h3>Summary</h3>
+<p>Adding non-null types to C# is do-able, but not simple and not cheap. I’m sure it overcomes the <a href="http://blogs.msdn.com/b/ericgu/archive/2004/01/12/57985.aspx">features start at -100 points</a>
+ threshold, but that’s before considering the implementation costs. Even
+ if the feature was already implemented in the language, there are 
+mountains of existing classes that need to be updated.</p>
+<p>We may never see non-null types in C#, but I hope we do.</p>
+<p><a href="http://www.reddit.com/r/programming/comments/10eq96/nonnullable_types_vs_c_fixing_the_billion_dollar/"><em>View comments on reddit</em></a></p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers efficient, flexible remote and on-the-floor 
+development and consulting without any middle-man or excessive 
+administrivia. <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2>Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+			<nav>
+				<ul class="primary-nav clearfix">
+					<li><a href="http://www.twistedoakstudios.com/">Home</a></li>
+					<li><a href="http://twistedoakstudios.com/portfolio">Portfolio</a></li>
+				</ul>
+			</nav>
+		</div>
+		
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				6082 Shirley Street<br>
+				Halifax, NS, Canada B3H 2M8</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+		
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script> Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake_files/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script></body></html>

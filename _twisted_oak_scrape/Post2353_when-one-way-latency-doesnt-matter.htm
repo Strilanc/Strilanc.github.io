@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script id="bug.surrogate">var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}}; if (document.location.host == 'www.salon.com') {var _ga_ = document.querySelectorAll('script[src$=ga\\.js]')[0], ga_e = document.createEvent('Event'); ga_e.initEvent('load', true, true);_ga_.dispatchEvent(ga_e);}</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Unity3D Consulting | Technical Magic</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Post2353_when-one-way-latency-doesnt-matter_files/1140.css">
+    <link rel="stylesheet" href="Post2353_when-one-way-latency-doesnt-matter_files/style.css">
+    <link rel="stylesheet" href="Post2353_when-one-way-latency-doesnt-matter_files/blogstyle.css">
+<link rel="stylesheet" href="Post2353_when-one-way-latency-doesnt-matter_files/prettify.css" media="all">
+<link rel="stylesheet" href="Post2353_when-one-way-latency-doesnt-matter_files/sunburst.css" media="all">
+<script type="text/javascript" src="Post2353_when-one-way-latency-doesnt-matter_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Post2353_when-one-way-latency-doesnt-matter_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Post2353_when-one-way-latency-doesnt-matter_files/modernizr-2.js"></script>
+</head>
+<body class=" customize-support" onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="#"><img class="logo" src="Post2353_when-one-way-latency-doesnt-matter_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post2353_when-one-way-latency-doesnt-matter" rel="bookmark" title="Permanent Link to When One-Way Latency Doesn’t Matter">When One-Way Latency Doesn’t Matter</a></h2>
+<div class="meta">posted by Craig Gidney on February 12, 2013</div>
+
+<p>Recently, two of my coworkers <a href="http://duaeliststudios.com/blog/a-game-worth-making/">started workin</a>g
+ on an MMO. Naturally, this led to discussion about networking. The 
+discussion reminded me of a puzzle I came up with a few years ago, that 
+changed how I think about networks and time.</p>
+<h3>Puzzle: Timely Robots</h3>
+<p>Suppose there are two robots, each isolated in a separate room. The 
+robots can track time, but they don’t have access to synchronized clocks
+ (their internal clocks differ by an unknown amount). Furthermore, the 
+only way for the robots to communicate is by sending signals down two 
+(very long) cables connecting the two rooms in a cycle.</p>
+<p>The cables are <a href="http://en.wikipedia.org/wiki/Diode">one-way-only</a>
+ and may or may not have the same length. As a result, the communication
+ latencies may not be equal: either both latencies will be 2 seconds, or
+ one latency will be 3 seconds and the opposite latency will be 1 
+second. The puzzle is: create a network protocol that the robots can 
+execute to determine which case they are in (2s:2s or 3s:1s), or prove 
+that no such protocol exists.</p>
+<p>If you want to solve the puzzle for yourself, pause and think now. Spoilers follow the puzzle diagram.</p>
+<p><img src="Post2353_when-one-way-latency-doesnt-matter_files/csaeF4V.png" alt="Robot puzzle"> </p>
+<h3>Solution: Skewing the Asymmetry</h3>
+<p>My initial intuition, and the initial intuition of everyone else I’ve
+ told the puzzle to (so far), has been that there should be a protocol 
+to distinguish the two cases. This intuition is wrong. There is no such 
+protocol.</p>
+<p>There are three parameters relevant to the puzzle: the delay from the
+ robot in room A (which I will arbitrarily call the ‘client’) to the 
+robot in room B (the ‘server’), the opposite delay from room B to room 
+A, and the unknown <a href="http://en.wikipedia.org/wiki/Clock_skew#On_a_network">skew</a> between their clocks.</p>
+<p>Here’s a sequence diagram where each parameter is varied in turn, to give an intuitive idea of what they do:</p>
+<p><img src="Post2353_when-one-way-latency-doesnt-matter_files/p2OtXKi.gif" alt="Varying one way delays and skew, one by one."> </p>
+<p>Notice how, as each parameter changes, the message arrival times (as 
+measured by the receiver) change. Changing one of the parameters creates
+ <em>observable</em> differences, and these differences can be used to determine the value of said parameter when the other two are known.</p>
+<p>If two of the parameters are varying/unknown, it’s still possible to 
+solve for them by using the observed differences. For example, given 
+synchronized clocks (a clock skew of 0 seconds), the delay from the 
+server to the client can be determined with a single time-stamped 
+packet.</p>
+<p>Unfortunately, solving for two parameters is the limit. There’s not 
+enough measurable information present to solve a third parameter. The 
+effects of changing the clock skew are indistinguishable from the 
+effects of changing the asymmetry in the latencies (while keeping the 
+round trip time constant).</p>
+<p>Here’s a sequence diagram varying the parameters in sync, cancelling all observable effects:</p>
+<p><img src="Post2353_when-one-way-latency-doesnt-matter_files/fWwuSjk.gif" alt="Varying skew against delays. Same observable results, even with negative one way delays."> </p>
+<p>In the above diagram, even though the underlying parameters are 
+changing, the times that messages are sent and received is never 
+changing. Even when we bend the rules and make one of the delays 
+negative, sending packets backwards in time, there are no observable 
+differences. (Which suggests an intuitive reason for there to be no 
+solution: imagine talking through a time portal to someone in the year 
+2000. The conversation works exactly like a normal conversation, despite
+ the one-way latencies being radically different.)</p>
+<p>Any protocol that correctly reports “We’re in the 3s:1s case!” or 
+“We’re in the 2s:2s case!” in one situation can be fooled into giving 
+the wrong answer by switching to the other case and adjusting the 
+unknown skew between the two robots’ clocks by one second. Everything 
+about what happens as the protocol runs, that the robots can measure, 
+will remain identical. They will report the same result as before, 
+except now they’re quite wrong.</p>
+<p>So there is no protocol that solves the puzzle. We can always find an
+ incorrectly categorized case by picking a clock skew that counters the 
+latency asymmetry.</p>
+<h3>Consequences</h3>
+<p>The (lack of) solution to the puzzle suggests a useful trick for 
+thinking about networked code. Does having two different one-way delays 
+make things more confusing? No problem! Go ahead and assume they’re 
+equal, or that one of them is zero! As long as you don’t change the 
+round trip time, or accidentally sneak in some synchronized clocks, the 
+analysis will give exactly identical results.</p>
+<p>For example, when thinking about the lock-step protocol that a game 
+like WarCraft 3 uses, I find it easiest to imagine that messages from 
+the server to the client (which determine when actions actually occur) 
+travel instantaneously. This ensures that all clients apply actions at 
+the same time, and thus are seeing the exact same game state at the 
+exact same time. In reality each player will be seeing slightly older or
+ newer game times, but (as I’ve been explaining) that has no observable 
+effect within the game or on the analysis.</p>
+<p>Before considering the puzzle I hadn’t truly understood the fact 
+that, in an online game, different players would be seeing slightly 
+different times. Good thing that assuming they’re seeing the same time 
+is a perfectly valid way of modelling what’s happening!</p>
+<p>The limitations exemplified in the puzzle also have unfortunate real world consequences. For example, consider the <a href="http://en.wikipedia.org/wiki/Network_time_protocol">Network Time Protocol</a>,
+ for synchronizing computer clocks. If the NTP protocol works correctly 
+when the delays are even, then it will be off by up to half of the round
+ trip time when the delays are almost all in one direction. Without 
+knowledge about the one way latencies (beyond the fact that they aren’t 
+negative), it’s impossible for the error bars on synchronized times to 
+be reduced below the round trip time.</p>
+<p>Luckily, in the real world, there are reasonable assumptions about 
+latencies that can be used to reduce the amount of error. Especially if 
+you’re querying multiple servers multiple times. On the other hand, 
+these assumptions can be broken. For example, a malicious router might 
+add one second of delay only to outgoing packets and thus skew the 
+synchronized time by a half second. On the <em>other</em> other hand, 
+the “malicious” router is technically fixing the clock skew via the same
+ asymmetric delay that causes it, so… not a particularly terrifying 
+scenario.</p>
+<h3>Bigger Networks</h3>
+<p>Things get more complicated when there are more participants in the 
+network. In a network with three participants (A, B and C) there are six
+ one-way latencies: A to B, B to A, B to C, C to B, A to C, and C to A. 
+These one way latencies determine the round trip times of the five 
+possible cycles: A to B to A, A to C to A, B to C to B, A to B to C to 
+A, and A to C to B to A. Of these five, only four are actually necessary
+ to measure (the round trip time of the fifth one can be computed in 
+terms of the other round trip times). Other measurable values include 
+the difference-between-two-paths times, such as A to C vs A to B to C, 
+but these can be derived from the round trip times.</p>
+<p>So, the space of measurable values has four dimensions, but the 
+underlying space  of possible one-way latencies has six dimensions. Six 
+variables and four constraints. That leaves two degrees of freedom. Just
+ what we need to give each node an arbitrary unobservable clock skew:</p>
+<p><img src="Post2353_when-one-way-latency-doesnt-matter_files/E6Hr04J.gif" alt="Varying skew against delays with three participants."></p>
+<p>This ‘extra degrees of freedom’ problem happens in networks of any size. The delays in a network with <img src="Post2353_when-one-way-latency-doesnt-matter_files/quicklatex_002.png" class="ql-img-inline-formula" alt="n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> participants are parametrized by <img src="Post2353_when-one-way-latency-doesnt-matter_files/quicklatex_003.png" class="ql-img-inline-formula" alt="n \cdot (n-1)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;">
+ one-way delays. Round trip and path-difference times based on these 
+delays can be observed, but the many different cycles and pairs of paths
+ do not all give orthogonal results. We’re always left with <img src="Post2353_when-one-way-latency-doesnt-matter_files/quicklatex.png" class="ql-img-inline-formula" alt="n-1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;"> degrees of freedom, corresponding to <img src="Post2353_when-one-way-latency-doesnt-matter_files/quicklatex.png" class="ql-img-inline-formula" alt="n-1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;">
+ unknown relative clock skews. The case with 2 participants, with a 
+single clock skew between the two, is just the simplest non-trivial 
+case.</p>
+<p>In a sense, the inability to measure clock skews is more a 
+fundamental problem than the inability to measure one-way latencies. 
+Each relative clock skew corresponds exactly to one of the dimensions of
+ the unmeasurable space. The uncertainties that prevent us from 
+measuring the one-way latencies all reduce to uncertainties in how well 
+clocks can be synchronized. Clock synchronization is hard.</p>
+<h3>Variation</h3>
+<p>One thing that makes it a bit clearer that it’s the clock skews that 
+are fundamentally unobservable, as opposed to the one-way latencies, is 
+that we can measure variations in one-way latencies.</p>
+<p>In practice, latencies are not constant. Different packets may take 
+different routes, or be queued for different amounts of time, creating 
+small variations. Also, these variations may not be symmetric. For 
+example, your roommate might saturate your upload bandwidth, creating 
+intermittent delays on your outgoing packets, without saturating your 
+download bandwidth. These variations have unique observable artifacts, 
+typically in the form of stuttering, that depend on the direction.</p>
+<p>When your roommate saturates your upload bandwidth, and you’re making
+ a voip call, then data sent to you will arrive at a steady rate but 
+data sent by you will leave in bursts. You won’t directly notice any 
+problem, but the person you are talking to will hear audio cutting in 
+and out. The variations have observable consequences, depending on their
+ direction.</p>
+<p>In the following diagram, two peers (A and B) can determine that it 
+is the A to B path that is varying by measuring the difference in 
+arrival times between periodic ticks:</p>
+<p><img src="Post2353_when-one-way-latency-doesnt-matter_files/aSdtDrO.gif" alt="Variation in one-way latencies can be detected."></p>
+<p>Given the assumption that the magnitude of the variation was related 
+to the magnitude of the one-way latency, we could estimate the mean of 
+the one-way latency based on the sampled variation. Without this 
+assumption, the variation gives no information about the means of the 
+one-way latencies, which is what we’d need in order to do clock 
+synchronization.</p>
+<p>The difficulty of clock synchronization, combined with the fact that 
+latencies can vary, is why distributed algorithms use concepts like <a href="http://en.wikipedia.org/wiki/Lamport_timestamps">Lamport timestamps</a> and <a href="http://en.wikipedia.org/wiki/Vector_clocks">vector clocks</a>.</p>
+<h3>Summary</h3>
+<p>One-way latencies are inherently difficult to measure, due to the 
+difficulty of synchronizing clocks. This actually makes it easier to 
+think about many networked protocols, because you can imagine the 
+latency wherever it is most convenient (as long as you don’t change any 
+round trip times).</p>
+<p>—</p>
+<h3>Discuss on <a href="http://news.ycombinator.com/item?id=5205333">Hacker News</a>, <a href="http://www.reddit.com/r/programming/comments/18d109/when_oneway_latency_doesnt_matter/">Reddit</a></h3>
+<p>—</p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers efficient, flexible remote and on-the-floor 
+development and consulting without any middle-man or excessive 
+administrivia. <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2 class="endofpage">Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm" rel="bookmark" title="Permanent Link to Grover’s Quantum Search Algorithm">Grover’s Quantum Search Algorithm</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2766_followup-to-non-nullable-types-vs-c" rel="bookmark" title="Permanent Link to Followup to Non-Nullable Types vs C#">Followup to Non-Nullable Types vs C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2540_optimizing-just-in-time-with-expression-trees" rel="bookmark" title="Permanent Link to Optimizing Just in Time with Expression Trees">Optimizing Just in Time with Expression Trees</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point" rel="bookmark" title="Permanent Link to Determining exactly if/when/where a moving line intersected a moving point">Determining exactly if/when/where a moving line intersected a moving point</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait" rel="bookmark" title="Permanent Link to Emulating Actors in C# with Async/Await">Emulating Actors in C# with Async/Await</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2096_making-an-immutable-queue-with-guaranteed-constant-time-operations" rel="bookmark" title="Permanent Link to Making an immutable queue with guaranteed constant time operations">Making an immutable queue with guaranteed constant time operations</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions" rel="bookmark" title="Permanent Link to Improving Checked Exceptions">Improving Checked Exceptions</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime" rel="bookmark" title="Permanent Link to Perishable Collections: The Benefits of Removal-by-Lifetime">Perishable Collections: The Benefits of Removal-by-Lifetime</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control" rel="bookmark" title="Permanent Link to Decoupling shared control">Decoupling shared control</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1694_decoupling-inlined-ui-code" rel="bookmark" title="Permanent Link to Decoupling inlined UI code">Decoupling inlined UI code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet" rel="bookmark" title="Permanent Link to Linq to Collections: Beyond IEnumerable&lt;T&gt;">Linq to Collections: Beyond IEnumerable&lt;T&gt;</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+ <link rel="stylesheet" id="admin-bar-css" href="Post2353_when-one-way-latency-doesnt-matter_files/admin-bar.css" type="text/css" media="all">
+<link rel="stylesheet" id="upprev-css-css" href="Post2353_when-one-way-latency-doesnt-matter_files/upprev.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-quicklatex-format-css" href="Post2353_when-one-way-latency-doesnt-matter_files/quicklatex-format.css" type="text/css" media="all">
+<script type="text/javascript" src="Post2353_when-one-way-latency-doesnt-matter_files/admin-bar.js"></script>
+<script type="text/javascript" src="Post2353_when-one-way-latency-doesnt-matter_files/jquery_002.js"></script>
+<script type="text/javascript" src="Post2353_when-one-way-latency-doesnt-matter_files/upprev_js.php"></script>
+<script type="text/javascript" src="Post2353_when-one-way-latency-doesnt-matter_files/comment-reply.js"></script>
+	<script type="text/javascript">
+		(function() {
+			var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
+
+			request = true;
+
+			b[c] = b[c].replace( rcs, ' ' );
+			b[c] += ( window.postMessage && request ? ' ' : ' no-' ) + cs;
+		}());
+	</script>
+			
+
+		 
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+			<nav>
+				<ul class="primary-nav clearfix">
+					<li><a href="http://www.twistedoakstudios.com/">Home</a></li>
+					<li><a href="http://twistedoakstudios.com/portfolio">Portfolio</a></li>
+				</ul>
+			</nav>
+		</div>
+		
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				6082 Shirley Street<br>
+				Halifax, NS, Canada B3H 2M8</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+		
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script>- 2013 Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Post2353_when-one-way-latency-doesnt-matter_files/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Post2353_when-one-way-latency-doesnt-matter_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script><div id="wpadminbar" class="nojq " role="navigation">
+			<a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1">Skip to toolbar</a>
+			<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Top navigation toolbar." tabindex="0">
+				<ul id="wp-admin-bar-root-default" class="ab-top-menu">
+		<li id="wp-admin-bar-wp-logo" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/about.php" title="About WordPress"><span class="ab-icon"></span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-wp-logo-default" class="ab-submenu">
+		<li id="wp-admin-bar-about"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/about.php">About WordPress</a>		</li></ul><ul id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu">
+		<li id="wp-admin-bar-wporg"><a class="ab-item" href="http://wordpress.org/">WordPress.org</a>		</li>
+		<li id="wp-admin-bar-documentation"><a class="ab-item" href="http://codex.wordpress.org/">Documentation</a>		</li>
+		<li id="wp-admin-bar-support-forums"><a class="ab-item" href="http://wordpress.org/support/">Support Forums</a>		</li>
+		<li id="wp-admin-bar-feedback"><a class="ab-item" href="http://wordpress.org/support/forum/requests-and-feedback">Feedback</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-site-name" class="menupop "><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/">twistedoakstudios.com</a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-site-name-default" class="ab-submenu">
+		<li id="wp-admin-bar-dashboard"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/">Dashboard</a>		</li></ul><ul id="wp-admin-bar-appearance" class="ab-submenu">
+		<li id="wp-admin-bar-themes"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/themes.php">Themes</a>		</li>
+		<li id="wp-admin-bar-customize" class="hide-if-no-customize"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/customize.php?url=http%3A%2F%2Ftwistedoakstudios.com%2Fblog%2FPost2353_when-one-way-latency-doesnt-matter">Customize</a>		</li></ul></div>		</li>
+		<li class="" id="wp-admin-bar-updates"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/update-core.php" title="1 Plugin Update, 1 Theme Update"><span class="ab-icon"></span><span class="ab-label">2</span><span class="screen-reader-text">1 Plugin Update, 1 Theme Update</span></a>		</li>
+		<li class="" id="wp-admin-bar-comments"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/edit-comments.php" title="0 comments awaiting moderation"><span class="ab-icon"></span><span id="ab-awaiting-mod" class="ab-label awaiting-mod pending-count count-0">0</span></a>		</li>
+		<li id="wp-admin-bar-new-content" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php" title="Add New"><span class="ab-icon"></span><span class="ab-label">New</span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-new-content-default" class="ab-submenu">
+		<li id="wp-admin-bar-new-post"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php">Post</a>		</li>
+		<li id="wp-admin-bar-new-media"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/media-new.php">Media</a>		</li>
+		<li id="wp-admin-bar-new-link"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/link-add.php">Link</a>		</li>
+		<li id="wp-admin-bar-new-page"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php?post_type=page">Page</a>		</li>
+		<li id="wp-admin-bar-new-user"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/user-new.php">User</a>		</li></ul></div>		</li>
+		<li class="" id="wp-admin-bar-edit"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post.php?post=2353&amp;action=edit">Edit Post</a>		</li></ul><ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
+		<li id="wp-admin-bar-search" class="admin-bar-search"><div class="ab-item ab-empty-item" tabindex="-1"><form action="http://twistedoakstudios.com/blog/" method="get" id="adminbarsearch"><input class="adminbar-input" name="s" id="adminbar-search" maxlength="150" type="text"><input class="adminbar-button" value="Search" type="submit"></form></div>		</li>
+		<li id="wp-admin-bar-my-account" class="menupop with-avatar"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/profile.php" title="My Account">Howdy, Craig Gidney<img alt="" src="Post2353_when-one-way-latency-doesnt-matter_files/31a6ce579f8f9f9d528715d1e941726e.png" class="avatar avatar-16 photo" height="16" width="16"></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-user-actions" class="ab-submenu">
+		<li id="wp-admin-bar-user-info"><a class="ab-item" tabindex="-1" href="http://twistedoakstudios.com/blog/wp-admin/profile.php"><img alt="" src="Post2353_when-one-way-latency-doesnt-matter_files/31a6ce579f8f9f9d528715d1e941726e_002.png" class="avatar avatar-64 photo" height="64" width="64"><span class="display-name">Craig Gidney</span><span class="username">craig</span></a>		</li>
+		<li id="wp-admin-bar-edit-profile"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/profile.php">Edit My Profile</a>		</li>
+		<li id="wp-admin-bar-logout"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=4684ead381">Log Out</a>		</li></ul></div>		</li></ul>			</div>
+			<a class="screen-reader-shortcut" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=4684ead381">Log Out</a>
+		</div></body></html>

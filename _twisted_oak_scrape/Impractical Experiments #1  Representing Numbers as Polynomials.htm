@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/Post6871_impractical-experiments-1-representing-numbers-as-p.htm" async=""></script><script>var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}};</script><script>var COMSCORE={beacon:function(){},purge:function(){},__noSuchMethod__:function(){}}</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<title>Impractical Experiments #1: Representing Numbers as Polynomials | Twisted Oak Studios Blog</title>
+
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/1140.css">
+    <link rel="stylesheet" href="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/style.css">
+    <link rel="stylesheet" href="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/blogstyle.css">
+<link rel="stylesheet" href="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/prettify.css" media="all">
+<link rel="stylesheet" href="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/sunburst.css" media="all">
+<script type="text/javascript" src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/modernizr-2.js"></script>
+<script src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/embed.js" async="" type="text/javascript"></script></head>
+<body class=" customize-support" onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="http://twistedoakstudios.com/"><img class="logo" src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a href="http://twistedoakstudios.com/labs/">Labs</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+    <p class="big-callout">
+    <!--We're hiring! Experience with Game Dev, Unity3D, Graphics, Signal Processing, or Networking? Eligible to work in Canada? 
+      <a href="http://www.twistedoakstudios.com/jobs.php">Check it out</a>!
+-->
+		</p><section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post6871_impractical-experiments-1-representing-numbers-as-polynomials" rel="bookmark" title="Permanent Link to Impractical Experiments #1: Representing Numbers as Polynomials">Impractical Experiments #1: Representing Numbers as Polynomials</a></h2>
+<div class="meta">posted by Craig Gidney on September 24, 2013</div>
+
+<p>In this post: trying to represent numbers like <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_067.png" class="ql-img-inline-formula " alt="\sqrt[3]{2 + \sqrt{3} \cdot 5}" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="22" width="93"> in a nice way.</p>
+<h3>Roots and Numbers</h3>
+<p>I like <a href="http://en.wikipedia.org/wiki/Arbitrary_precision_arithmetic">arbitrary precision arithmetic</a>. I don’t end up using it that much, but I like having the option of doing things with <em>perfect</em> accuracy. Not having to care about overflow, not having to care about rounding error, just… being correct by default.</p>
+<p>That is, until I have to compute a square root and am invariably 
+forced to sacrifice my nice correctness properties. I want all the 
+following properties, but square roots come along and ruin everything:</p>
+<ul>
+<li><strong>Exact</strong>: Most square roots are irrational. This makes
+ it difficult to represent them exactly, without introducing any error. 
+You’ll never find integers <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_049.png" class="ql-img-inline-formula " alt="n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="11"> and <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_021.png" class="ql-img-inline-formula " alt="d" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="10"> such that <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_059.png" class="ql-img-inline-formula " alt="\frac{n}{d} = \sqrt{2}" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;" height="22" width="58">, so forget about using a BigRational.
+</li><li><strong>Closed</strong>: It’s not enough to represent simple 
+roots, you have to be able to add and multiply without moving to a 
+different type. For example, a naive representation like <code>{ base: Rational, root: Int }</code> is exact but not closed. It can represent 1 as <code>{ base:1, root:1 }</code> and <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_077.png" class="ql-img-inline-formula " alt="\sqrt{2}" title="Rendered by QuickLaTeX.com" style="vertical-align: -2px;" height="18" width="23"> as <code>{ base:2, root:2 }</code>, but it can’t represent <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_008.png" class="ql-img-inline-formula " alt="1 + \sqrt{2}" title="Rendered by QuickLaTeX.com" style="vertical-align: -2px;" height="18" width="53">.
+</li><li><strong>Rigid Equality</strong>: Number representations 
+flexible enough to represent square roots tend to be so flexible that 
+you can’t actually compute equality. For example, suppose you’re 
+representing numbers as functions that output more and more digits of 
+their corresponding number. Given functions <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_007.png" class="ql-img-inline-formula " alt="f" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="16" width="10"> and <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_061.png" class="ql-img-inline-formula " alt="g" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="12" width="9">, corresponding to numbers <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_031.png" class="ql-img-inline-formula " alt="x_f" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;" height="14" width="18"> and <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_060.png" class="ql-img-inline-formula " alt="x_g" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;" height="14" width="17">, how do you determine if <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_064.png" class="ql-img-inline-formula " alt="x_f = x_g" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;" height="14" width="60">?
+ If they’re not equal you can just find a digit that differs, but 
+showing they’re equal requires showing all of the digits are the same. 
+This will either get you stuck in a loop or require a halting oracle to 
+analyze the functions (i.e. the problem is incomputable). I’d prefer to 
+wait <em>not forever</em> to discover that, yes, <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_075.png" class="ql-img-inline-formula " alt="\sqrt{3} = \sqrt{5 + \sqrt{24}} - \sqrt{2}" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="22" width="172">.
+</li><li><strong>Minimal</strong>: One way to represent roots is to use a
+ full computer algebra system. For the purposes of this post, I’m going 
+to consider that massive overkill. Is there a simpler representation, 
+that can handle roots?
+</li></ul>
+<p>A couple months ago, I came up with an idea for a number 
+representation that seemed to satisfy each of these properties: the 
+roots of polynomials with integer coefficients. Consider: if you solve 
+for <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_084.png" class="ql-img-inline-formula " alt="x" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="10"> in <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_028.png" class="ql-img-inline-formula " alt="x^3 - 2 = 0" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="15" width="81">, what do you get? The only real solution is the cube root of 2. That’s kind of interesting: we can think of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_028.png" class="ql-img-inline-formula " alt="x^3 - 2 = 0" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="15" width="81"> as an indirect representation of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_079.png" class="ql-img-inline-formula " alt="\sqrt[3]{2}" title="Rendered by QuickLaTeX.com" style="vertical-align: -2px;" height="18" width="23">.</p>
+<p>In fact, a wide class of numbers can appear as the roots of a 
+polynomial and this has been investigated mathematically by plenty of 
+people. The so-called <a href="http://en.wikipedia.org/wiki/Algebraic_numbers">algebraic numbers</a>
+ include not just roots but “Any expression formed using any combination
+ of the basic arithmetic operations and extraction of nth roots gives an
+ algebraic number” (and more). That sounds like <strong>exact</strong> and <strong>closed</strong> to me.</p>
+<p>You can also check if polynomials share a root using <a href="http://en.wikipedia.org/wiki/Polynomial_greatest_common_divisor">polynomial gcd</a> (<strong>rigid equality</strong>!).
+ It’s a bit disappointing that transcendental numbers like euler’s 
+constant can’t appear as polynomial roots, but from another point of 
+view that’s just being <strong>minimal</strong>.</p>
+<p>Roots of integer polynomials seem to have the properties I want. On the other hand, because <a href="http://en.wikipedia.org/wiki/Root_finding_algorithm">computing polynomials roots</a> involves approximating, I’ll need to somehow work with the roots without actually computing them. Time to experiment.</p>
+<h3>Basic Arithmetic</h3>
+<p>Let’s start by figuring out how to represent simple numbers, and do arithmetic on them involving other simple numbers.</p>
+<h5>Conversion</h5>
+<p>How do we represent an integer <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_049.png" class="ql-img-inline-formula " alt="n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="11"> as the root of a polynomial? Easy: it’s the root of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_073.png" class="ql-img-inline-formula " alt="x - n = 0" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="75">. If we’re representing polynomials as a little-endian list of integer coefficients, that means our representation of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_042.png" class="ql-img-inline-formula " alt="5" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="8"> will be <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_052.png" class="ql-img-inline-formula " alt="[-5, 1]" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;" height="18" width="45">.</p>
+<p>Representing a rational number <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_029.png" class="ql-img-inline-formula " alt="\frac{n}{d}" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;" height="19" width="9"> is one small step further. The polynomial <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_032.png" class="ql-img-inline-formula " alt="x-\frac{n}{d} = 0" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;" height="19" width="77"> doesn’t have integer coefficients, but we can multiply both sides by <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_021.png" class="ql-img-inline-formula " alt="d" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="10"> to get the equivalent <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_071.png" class="ql-img-inline-formula " alt="d \cdot x - n = 0" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="97"> which does. That’s <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex.png" class="ql-img-inline-formula " alt="[-n, d]" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;" height="18" width="47">.</p>
+<h5>Shifting</h5>
+<p>How do we increase the root(s) of a polynomial by <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_046.png" class="ql-img-inline-formula " alt="1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="13" width="7">? We use the fact that, to shift a function <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_019.png" class="ql-img-inline-formula " alt="p(x)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="33"> to the right, you just use <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_041.png" class="ql-img-inline-formula " alt="p'(x) = p(x-1)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="125">.</p>
+<p>More precisely, to increase the roots of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_030.png" class="ql-img-inline-formula " alt="c_n x^n + ... + c_2 x^2 + c_1 x + c_0" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="19" width="211"> by <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_046.png" class="ql-img-inline-formula " alt="1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="13" width="7"> we must subtract <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_046.png" class="ql-img-inline-formula " alt="1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="13" width="7"> from each <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_084.png" class="ql-img-inline-formula " alt="x" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="10"> like so: <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_053.png" class="ql-img-inline-formula " alt="c_n (x-1)^n + ... + c_2 (x-1)^2 + c_1 (x-1) + c_0" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="19" width="344">. We then need to expand the terms (using the <a href="http://en.wikipedia.org/wiki/Binomial_theorem">binomial theorem</a>) and simplify the result (I didn’t say we had to be <em>fast</em>…).</p>
+<p>For example, <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_043.png" class="ql-img-inline-formula " alt="x^2 - 3x + 2" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="16" width="88"> has roots <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_046.png" class="ql-img-inline-formula " alt="1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="13" width="7"> and <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_080.png" class="ql-img-inline-formula " alt="2" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="8">. To add 1 we expand <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_004.png" class="ql-img-inline-formula " alt="(x-1)^2 - 3(x-1) + 2" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="19" width="176"> to <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_011.png" class="ql-img-inline-formula " alt="x^2 - 5x + 6" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="16" width="89"> and find that it does in fact have the roots <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_081.png" class="ql-img-inline-formula " alt="1+1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="13" width="38"> and <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_010.png" class="ql-img-inline-formula " alt="2+1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="13" width="39">.</p>
+<p>Actually, the technique of “do the opposite to x” lets us do a whole bunch of operations. To add <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_038.png" class="ql-img-inline-formula " alt="c" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="8"> to the roots of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_016.png" class="ql-img-inline-formula " alt="p" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="12" width="10"> we use <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_018.png" class="ql-img-inline-formula " alt="p(x-c)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="63">. To subtract <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_038.png" class="ql-img-inline-formula " alt="c" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="8"> from the roots of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_016.png" class="ql-img-inline-formula " alt="p" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="12" width="10"> we use <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_024.png" class="ql-img-inline-formula " alt="p(x+c)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="63">.</p>
+<h5>Scaling</h5>
+<p>To multiply the roots of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_016.png" class="ql-img-inline-formula " alt="p" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="12" width="10"> by <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_038.png" class="ql-img-inline-formula " alt="c" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="8"> we just do the opposite to x and use <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_066.png" class="ql-img-inline-formula " alt="p(x/c)" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;" height="19" width="50">. This just divides the coefficient of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_034.png" class="ql-img-inline-formula " alt="x^i" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="15" width="15"> by <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_044.png" class="ql-img-inline-formula " alt="c^i" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="15" width="13"> for each <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_056.png" class="ql-img-inline-formula " alt="i" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="6">. The resulting coefficients may no longer be integers, but we can fix that by scaling the coefficients by the <a href="http://en.wikipedia.org/wiki/Least_common_multiple">least common multiple</a> of the denominators.</p>
+<p>For example, multiplying the roots of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_043.png" class="ql-img-inline-formula " alt="x^2 - 3x + 2" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="16" width="88"> by <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_042.png" class="ql-img-inline-formula " alt="5" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="8"> gives <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_022.png" class="ql-img-inline-formula " alt="\frac{1}{25}x^2 - \frac{3}{5}x + 2" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;" height="22" width="106">. We cancel the denominators by multiplying by <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_068.png" class="ql-img-inline-formula " alt="25" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="17">, giving <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_039.png" class="ql-img-inline-formula " alt="x^2 - 15x + 50" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="16" width="107"> which has roots <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_002.png" class="ql-img-inline-formula " alt="1 \cdot 5" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="14" width="29"> and <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_057.png" class="ql-img-inline-formula " alt="2 \cdot 5" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="30">.</p>
+<p>When the scaling factor is <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_072.png" class="ql-img-inline-formula " alt="-1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="13" width="21">, meaning we’re just negating our input, dividing <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_034.png" class="ql-img-inline-formula " alt="x^i" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="15" width="15"> by <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_044.png" class="ql-img-inline-formula " alt="c^i" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="15" width="13"> corresponds to just flipping the coefficients of odd powers of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_084.png" class="ql-img-inline-formula " alt="x" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="10">.</p>
+<h5>Division</h5>
+<p>The multiplicative inverse of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_084.png" class="ql-img-inline-formula " alt="x" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="10"> is <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_027.png" class="ql-img-inline-formula " alt="\frac{1}{x}" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;" height="22" width="8">. When we try to get the multiplicative inverse roots of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_019.png" class="ql-img-inline-formula " alt="p(x)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="33"> by doing the opposite to x, we end up with <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_078.png" class="ql-img-inline-formula " alt="p(\frac{1}{x}" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;" height="22" width="27">). That’s not a polynomial, but we can fix it.</p>
+<p>For example, <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_043.png" class="ql-img-inline-formula " alt="x^2 - 3x + 2" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="16" width="88"> turns into <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_045.png" class="ql-img-inline-formula " alt="\frac{1}{x^2} - \frac{3}{x} + 2" title="Rendered by QuickLaTeX.com" style="vertical-align: -7px;" height="23" width="79">. We fix it not being a polynomial by multiplying both sides by <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_006.png" class="ql-img-inline-formula " alt="x^2" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="15" width="17">. The result is <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_065.png" class="ql-img-inline-formula " alt="1 - 3x + 2x^2" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="16" width="96">, which has roots that are the multiplicative inverses of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_046.png" class="ql-img-inline-formula " alt="1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="13" width="7"> and <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_080.png" class="ql-img-inline-formula " alt="2" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="8">: <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_046.png" class="ql-img-inline-formula " alt="1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="13" width="7"> and <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_025.png" class="ql-img-inline-formula " alt="\frac{1}{2}" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;" height="22" width="7">.</p>
+<p>The multiplicative inverse of roots operation has a much simpler formulation. Did you catch it? <em>Just reverse the coefficients</em>.</p>
+<p>Division works exactly like multiplication when <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_019.png" class="ql-img-inline-formula " alt="p(x)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="33"> is used for the numerator. When <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_019.png" class="ql-img-inline-formula " alt="p(x)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="33"> is used in the denominator, we just use the multiplicative inverse operation before multiplying.</p>
+<p>For example, to represent the result of dividing <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_042.png" class="ql-img-inline-formula " alt="5" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="8"> by the roots of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_043.png" class="ql-img-inline-formula " alt="x^2 - 3x + 2" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="16" width="88"> we just take the multiplicative inverse, which is <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_050.png" class="ql-img-inline-formula " alt="2x^2 - 3x + 1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="16" width="97">, and multiply its roots by <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_042.png" class="ql-img-inline-formula " alt="5" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="8"> to get <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_055.png" class="ql-img-inline-formula " alt="2x^2 - 15x + 25" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="16" width="115">. The result has the right roots: <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_026.png" class="ql-img-inline-formula " alt="\frac{5}{1}" title="Rendered by QuickLaTeX.com" style="vertical-align: -7px;" height="23" width="7"> and <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_015.png" class="ql-img-inline-formula " alt="\frac{5}{2}" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;" height="22" width="7">.</p>
+<h5>N’th Roots</h5>
+<p>To take the <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_049.png" class="ql-img-inline-formula " alt="n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="11">‘th root of the roots of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_016.png" class="ql-img-inline-formula " alt="p" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="12" width="10"> we do the opposite to x and use <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_037.png" class="ql-img-inline-formula " alt="p(x^n)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="42">. This is equivalent to scaling each exponent by a factor of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_049.png" class="ql-img-inline-formula " alt="n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="11">.</p>
+<p>That’s right, to cube root the roots of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_043.png" class="ql-img-inline-formula " alt="x^2 - 3x + 2" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="16" width="88"> we only need to multiply the exponents by <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_040.png" class="ql-img-inline-formula " alt="3" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="9"> to get <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_047.png" class="ql-img-inline-formula " alt="x^6 - 3x^3 + 2" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="16" width="96">. It has roots <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_046.png" class="ql-img-inline-formula " alt="1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="13" width="7"> and <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_079.png" class="ql-img-inline-formula " alt="\sqrt[3]{2}" title="Rendered by QuickLaTeX.com" style="vertical-align: -2px;" height="18" width="23">, which is exactly what we wanted.</p>
+<h5>Equality</h5>
+<p>To determine if a rational <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_029.png" class="ql-img-inline-formula " alt="\frac{n}{d}" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;" height="19" width="9"> is a root of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_019.png" class="ql-img-inline-formula " alt="p(x)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="33">, we just evaluate <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_036.png" class="ql-img-inline-formula " alt="p(\frac{n}{d})" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;" height="20" width="35">
+ and check if the result is 0. You can use a BigRational to do the 
+evaluation, since all the relevant quantities (the input and the 
+coefficients) are integers or rationals.</p>
+<h5>Summary of Operations</h5>
+<p>When only one of the arguments to an operation is represented 
+implicitly as the roots of a polynomial, you can get an implicit 
+polynomial result as follows:</p>
+<ul>
+<li><strong>Conversion</strong>: A rational <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_029.png" class="ql-img-inline-formula " alt="\frac{n}{d}" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;" height="19" width="9"> becomes the polynomial <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_071.png" class="ql-img-inline-formula " alt="d \cdot x - n = 0" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="97">.
+</li><li><strong>Equality</strong>: Check <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_009.png" class="ql-img-inline-formula " alt="p(c) = 0" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="64">.
+</li><li><strong>Addition</strong>: Expand and simplify <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_013.png" class="ql-img-inline-formula " alt="p(x - c)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="63">.
+</li><li><strong>Subtraction</strong>: Expand and simplify <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_035.png" class="ql-img-inline-formula " alt="p(x + c)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="63">.
+</li><li><strong>Negation</strong>: Flip coefficients of odd powers.
+</li><li><strong>Multiplicative Inverse</strong>: Reverse coefficients.
+</li><li><strong>Multiplication</strong>: Scale coefficient of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_034.png" class="ql-img-inline-formula " alt="x^i" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="15" width="15"> by <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_003.png" class="ql-img-inline-formula " alt="c^{-i}" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="15" width="24"> for each <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_056.png" class="ql-img-inline-formula " alt="i" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="6">. Cancel common denominator.
+</li><li><strong>N’th root</strong>: Scale exponents by <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_049.png" class="ql-img-inline-formula " alt="n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="11">.
+</li><li><strong>Division</strong> (<img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_016.png" class="ql-img-inline-formula " alt="p" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="12" width="10"> as numerator): Scale coefficient of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_034.png" class="ql-img-inline-formula " alt="x^i" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="15" width="15"> by <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_044.png" class="ql-img-inline-formula " alt="c^i" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="15" width="13"> for each <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_056.png" class="ql-img-inline-formula " alt="i" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="6">.
+</li><li><strong>Division</strong> (<img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_016.png" class="ql-img-inline-formula " alt="p" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="12" width="10"> as denominator): Combine the multiplicative inverse and multiplication operations.
+</li><li><strong>Exponentation</strong>: Unsure…
+</li></ul>
+<p>I hope this has given you a sense of how operations work on the 
+roots, without actually computing the roots. Things are about to get 
+more complicated.</p>
+<h3>Operations on Roots of Two Polynomials</h3>
+<p>The real challenge to using polynomials to represent numbers is 
+operating on two at once. I know, because I filled pages and pages of 
+notebook trying to rewrite the coefficients of the polynomial you get by
+ adding or multiplying the roots of two polynomials in terms of the 
+coefficients of the other two. This turned out to be the wrong approach,
+ but I’ll go over it briefly.</p>
+<p>A polynomial can be written as the product of its roots <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_070.png" class="ql-img-inline-formula " alt="r_i" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="11" width="13"> like this: <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_048.png" class="ql-img-inline-formula " alt="(x-r_1)(x-r_2)...(x-r_n)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="198">. More compactly, given the list of roots <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_076.png" class="ql-img-inline-formula " alt="R" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="14">, you can write <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_054.png" class="ql-img-inline-formula " alt="\prod_{r \in R}(x-r)" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;" height="20" width="97">.</p>
+<p>A polynomial’s coefficient <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_083.png" class="ql-img-inline-formula " alt="c_i" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="11" width="13">, which would be multiplied by <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_082.png" class="ql-img-inline-formula " alt="x_i" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="11" width="15"> in the standard sum-of-powers form, can be computed by adding up all the ways you can choose <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_056.png" class="ql-img-inline-formula " alt="i" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="6"> factors of <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_084.png" class="ql-img-inline-formula " alt="x" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="10"> when expanding the product form of the polynomial. More exactly, <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_005.png" class="ql-img-inline-formula " alt="c_i = \sum_{S \in \binom{R}{|R| - i}} (\prod S)" title="Rendered by QuickLaTeX.com" style="vertical-align: -14px;" height="28" width="163">, where <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_020.png" class="ql-img-inline-formula " alt="\binom{R}{n}" title="Rendered by QuickLaTeX.com" style="vertical-align: -7px;" height="24" width="23"> is the list of all the ways you can choose <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_049.png" class="ql-img-inline-formula " alt="n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="11"> elements from the list of roots <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_076.png" class="ql-img-inline-formula " alt="R" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="14">.</p>
+<p>If the roots of our input polynomials are <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_012.png" class="ql-img-inline-formula " alt="R_1" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="16" width="19"> and <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_063.png" class="ql-img-inline-formula " alt="R_2" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="15" width="20"> respectively, and we want to add the roots, then the resulting polynomial must have the root <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_069.png" class="ql-img-inline-formula " alt="r_3 = r_1+r_2" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="15" width="92"> whenever <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_023.png" class="ql-img-inline-formula " alt="r_1 \in R_1" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="16" width="56"> and <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_062.png" class="ql-img-inline-formula " alt="r_2 \in R_2" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="15" width="57">. Formally, <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_058.png" class="ql-img-inline-formula " alt="R_3 = \biguplus_{r_1,r_2 \in R_1 \times R_2}(r1 + r2)" title="Rendered by QuickLaTeX.com" style="vertical-align: -8px;" height="22" width="214">, where <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_051.png" class="ql-img-inline-formula " alt="\biguplus" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;" height="19" width="14"> is “make a list of these items” in the same sense that <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_074.png" class="ql-img-inline-formula " alt="\sum" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;" height="18" width="18"> is “sum up these items”.</p>
+<p>Given <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_014.png" class="ql-img-inline-formula " alt="R_3" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="15" width="20">, we can compute its coefficients <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_017.png" class="ql-img-inline-formula " alt="c_i = \sum_{S \in \binom{R_3}{i}} (\prod S)" title="Rendered by QuickLaTeX.com" style="vertical-align: -12px;" height="26" width="149">. All we need to do is rewrite that equation for <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_083.png" class="ql-img-inline-formula " alt="c_i" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="11" width="13"> into a form that only mentions the coefficients derived from <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_012.png" class="ql-img-inline-formula " alt="R_1" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="16" width="19"> and <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_063.png" class="ql-img-inline-formula " alt="R_2" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="15" width="20">, instead of directly using <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_012.png" class="ql-img-inline-formula " alt="R_1" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="16" width="19">, <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_063.png" class="ql-img-inline-formula " alt="R_2" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="15" width="20">, or <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_014.png" class="ql-img-inline-formula " alt="R_3" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;" height="15" width="20">.</p>
+<p>Easy!… Not so much.</p>
+<p>I did make progress, using this approach. I managed to separate the 
+effects of the two lists of roots, but got stuck at a point where I was 
+dot-producting all the decreasing sequences that sum up to whatever into
+ the exponents of …</p>
+<p>You know what, nevermind the details of how I was failing. The point is that <em>eventually</em> I <a href="http://math.stackexchange.com/q/489630/3820">asked for help from the math stack exchange</a>. Within an hour, the problem was solved. Three different ways.</p>
+<p>The solution I implemented is based on creating and solving a linear 
+system. Unfortunately, despite implementing it and even tweaking it to 
+work for addition, I don’t understand it well enough to explain it. The <a href="http://math.stackexchange.com/a/489660/3820">answer I was given</a> is quite good, though.</p>
+<p>Normally I’d work at understanding the code until I could know it was
+ correct. In this case there are more serious issues that make the point
+ a bit moot.</p>
+<h3>In Practice</h3>
+<p>I realized ahead of time that representing numbers as polynomials was going to have issues. That’s why it was an <em>impractical</em> experiment. Regardless, once I finished implementing <a href="https://github.com/Strilanc/PolyNumber">the code</a>, I could finally try out my numbers-as-polynomials and confirm that the expected problems were present.</p>
+<p>The approach works fine on simple cases:</p>
+<pre><code class="prettyprint"><span class="typ">PolyNumber</span><span class="pln"> n </span><span class="pun">=</span><span class="pln"> </span><span class="lit">5</span><span class="pun">;</span><span class="pln"> </span><span class="com">// x - 5 = 0</span><span class="pln">
+</span><span class="typ">PolyNumber</span><span class="pln"> v </span><span class="pun">=</span><span class="pln"> n</span><span class="pun">.</span><span class="typ">Root</span><span class="pun">(</span><span class="lit">3</span><span class="pun">);</span><span class="pln"> </span><span class="com">// x^3 - 5 = 0</span><span class="pln">
+</span><span class="kwd">double</span><span class="pun">[]</span><span class="pln"> roots </span><span class="pun">=</span><span class="pln"> v</span><span class="pun">.</span><span class="typ">Approximates</span><span class="pun">();</span><span class="pln"> </span><span class="com">// { 1.7099757194519043 }</span></code></pre>
+<p>But things can get quite slow, as the degrees of polynomials multiply together as you operate:</p>
+<pre><code class="prettyprint"><span class="typ">PolyNumber</span><span class="pln"> n </span><span class="pun">=</span><span class="pln"> </span><span class="lit">5</span><span class="pun">;</span><span class="pln"> </span><span class="com">// x - 5 = 0</span><span class="pln">
+</span><span class="typ">PolyNumber</span><span class="pln"> v </span><span class="pun">=</span><span class="pln"> n</span><span class="pun">.</span><span class="typ">Root</span><span class="pun">(</span><span class="lit">5</span><span class="pun">)</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> n</span><span class="pun">.</span><span class="typ">Root</span><span class="pun">(</span><span class="lit">7</span><span class="pun">);</span><span class="pln"> </span><span class="com">// takes MULTIPLE SECONDS</span><span class="pln">
+</span><span class="com">// x^35 + -35x^30 + -25x^28 + 525x^25 + -56875x^23 + 250x^21 + -4375x^20 + -2996875x^18 </span><span class="pln">
+</span><span class="com">// + -1242500x^16 + 21875x^15 + -1250x^14 + -24609375x^13 + 48365625x^11 + -65625x^10 </span><span class="pln">
+</span><span class="com">// + -2800000x^9 + -37734375x^8 + 3125x^7 + -64421875x^6 + 109375x^5 + -9406250x^4 </span><span class="pln">
+</span><span class="com">// + -6562500x³ + -328125x² + 546875x + -81250</span><span class="pln">
+</span><span class="kwd">double</span><span class="pun">[]</span><span class="pln"> roots </span><span class="pun">=</span><span class="pln"> v</span><span class="pun">.</span><span class="typ">Approximates</span><span class="pun">();</span><span class="pln"> </span><span class="com">// { 2.6382288932800293 }</span></code></pre>
+<p>And don’t forget that numbers have <em>two</em> square roots, meaning we end up tracking multiple solutions a lot:</p>
+<pre><code class="prettyprint"><span class="typ">PolyNumber</span><span class="pln"> n </span><span class="pun">=</span><span class="pln"> </span><span class="lit">2</span><span class="pun">;</span><span class="pln"> </span><span class="com">// x - 2 = 0</span><span class="pln">
+</span><span class="typ">PolyNumber</span><span class="pln"> v </span><span class="pun">=</span><span class="pln"> n</span><span class="pun">.</span><span class="typ">Root</span><span class="pun">(</span><span class="lit">2</span><span class="pun">)</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="lit">1</span><span class="pun">;</span><span class="pln"> </span><span class="com">// x² + -2x + -1</span><span class="pln">
+</span><span class="kwd">double</span><span class="pun">[]</span><span class="pln"> roots </span><span class="pun">=</span><span class="pln"> v</span><span class="pun">.</span><span class="typ">Approximates</span><span class="pun">();</span><span class="pln"> </span><span class="com">// { 0.41421365737915039, 2.4142136573791504 }</span></code></pre>
+<p>It’s also possible to end up with multiple solutions despite never 
+using an operation with two real results. For example, computing <img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex_033.png" class="ql-img-inline-formula " alt="\sqrt[3]{2} + \sqrt[9]{8}" title="Rendered by QuickLaTeX.com" style="vertical-align: -2px;" height="18" width="69">:</p>
+<pre><code class="prettyprint"><span class="kwd">var</span><span class="pln"> two </span><span class="pun">=</span><span class="pln"> </span><span class="pun">(</span><span class="typ">PolyNumber</span><span class="pun">)</span><span class="lit">2</span><span class="pun">;</span><span class="pln"> </span><span class="com">// x - 2</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> eight </span><span class="pun">=</span><span class="pln"> </span><span class="pun">(</span><span class="typ">PolyNumber</span><span class="pun">)</span><span class="lit">8</span><span class="pun">;</span><span class="pln"> </span><span class="com">// x - 8</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> p </span><span class="pun">=</span><span class="pln"> two</span><span class="pun">.</span><span class="typ">Root</span><span class="pun">(</span><span class="lit">3</span><span class="pun">)</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> eight</span><span class="pun">.</span><span class="typ">Root</span><span class="pun">(</span><span class="lit">9</span><span class="pun">);</span><span class="pln"> </span><span class="com">// x^24 + -20x^21 + 184x^18 + -1064x^15 + -3344x^12 + -146528x^9 + -304064x^6 + -25472x³ + -2048</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> roots </span><span class="pun">=</span><span class="pln"> p</span><span class="pun">.</span><span class="typ">Approximates</span><span class="pun">()</span><span class="pln"> </span><span class="com">// { -1.2599220275878906, 2.5198402404785156 }</span></code></pre>
+<p>Where did that second root come from? Well, the <a href="http://www.wolframalpha.com/input/?i=x%5E24+%2B+-20x%5E21+%2B+184x%5E18+%2B+-1064x%5E15+%2B+-3344x%5E12+%2B+-146528x%5E9+%2B+-304064x%5E6+%2B+-25472x%C2%B3+%2B+-2048">root diagram shown on wolfram alpha gives a clue</a>:</p>
+<p><img src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/HkqSa9C.png" alt="complex roots"></p>
+<p>Oh right, polynomials have complex roots and our addition operation 
+adds roots together. This is inconvenient, despite being kind of magical
+ since I didn’t try to deal with the complex case at any point. 
+Sometimes adding two complex roots cancels their imaginary parts and <em>poof</em> you get a brand new real root you didn’t want!</p>
+<p>Well, so much for that idea.</p>
+<h3>Summary</h3>
+<p>It’s possible to represent numbers implicitly as the roots of 
+polynomials, and you get a lot of nice properties doing so, but 
+ultimately the result is slow and has a nasty tendency to introduce 
+“bonus” solutions.</p>
+<p>You can <a href="https://github.com/Strilanc/PolyNumber">browse my implementation on github</a>.</p>
+<p>—</p>
+<h3><a href="http://www.reddit.com/r/programming/comments/1n146d/representing_numbers_as_polynomials/">Discuss on Reddit</a></h3>
+<p>—</p>
+<h3>My Twitter: <a href="https://twitter.com/CraigGidney">@CraigGidney</a></h3>
+<p>—</p>
+
+<blockquote><p>
+
+
+</p><div id="disqus_thread"><iframe verticalscrolling="no" horizontalscrolling="no" src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/a.htm" style="width: 100% ! important; border: medium none ! important; overflow: hidden ! important; height: 340px ! important;" role="complementary" allowtransparency="true" data-disqus-uid="2" id="dsq2" frameborder="0" scrolling="no" width="100%"></iframe><iframe style="width: 1060px ! important; border: medium none ! important; overflow: hidden ! important; top: 0px ! important; position: fixed ! important; height: 29px ! important; display: none ! important;" role="alert" allowtransparency="true" data-disqus-uid="-indicator-north" id="dsq-indicator-north" frameborder="0" scrolling="no"></iframe><iframe style="width: 1060px ! important; border: medium none ! important; overflow: hidden ! important; bottom: 0px ! important; position: fixed ! important; height: 29px ! important; display: none ! important;" role="alert" allowtransparency="true" data-disqus-uid="-indicator-south" id="dsq-indicator-south" frameborder="0" scrolling="no"></iframe></div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://twistedoakstudios.com/blog/Post6871_impractical-experiments-1-representing-numbers-as-polynomials';
+    var disqus_identifier = '6871 http://twistedoakstudios.com/blog/?p=6871';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'twistedoakstudios';
+    var disqus_title = "Impractical Experiments #1: Representing Numbers as Polynomials";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+        config.language = '';
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = '?cf_action=sync_comments&post_id=6871';
+
+            var firstScript = document.getElementsByTagName( "script" )[0];
+            firstScript.parentNode.insertBefore(script, firstScript);
+        });
+                    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/twistedoakstudios.com\/blog\/Post6871_impractical-experiments-1-representing-numbers-as-polynomials\/trackback"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.' + 'disqus.com' + '/embed.js?pname=wordpress&pver=2.74';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+
+<h3>
+<spacer>
+</spacer></h3>
+
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers consulting and development on high-tech interactive projects. Check out our <a href="http://twistedoakstudios.com/portfolio/">portfolio</a>, or <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+<p></p></blockquote>
+
+<h2 class="endofpage">Archive</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post6871_impractical-experiments-1-representing-numbers-as-polynomials" rel="bookmark" title="Permanent Link to Impractical Experiments #1: Representing Numbers as Polynomials">Impractical Experiments #1: Representing Numbers as Polynomials</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post6536_implementing-quantum-pseudo-telepathy" rel="bookmark" title="Permanent Link to Implementing Quantum Pseudo-Telepathy">Implementing Quantum Pseudo-Telepathy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post6422_turn-on-your-damn-warnings" rel="bookmark" title="Permanent Link to Turn On Your Damn Warnings">Turn On Your Damn Warnings</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5953_big-o-made-trivial" rel="bookmark" title="Permanent Link to Big-O Made Trivial">Big-O Made Trivial</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5268_unfathomable-bugs-7-the-broken-oven" rel="bookmark" title="Permanent Link to Unfathomable Bugs #7: The Broken Oven">Unfathomable Bugs #7: The Broken Oven</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5623_solomonoffs-mad-scientist" rel="bookmark" title="Permanent Link to Solomonoff’s Mad Scientist">Solomonoff’s Mad Scientist</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5753_yearly-blogging-roundup-1" rel="bookmark" title="Permanent Link to Yearly Blogging Roundup #1">Yearly Blogging Roundup #1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5485_what-isnt-a-monad" rel="bookmark" title="Permanent Link to What isn’t a Monad">What isn’t a Monad</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5365_searching-a-sorted-matrix-faster" rel="bookmark" title="Permanent Link to Searching a Sorted Matrix Faster">Searching a Sorted Matrix Faster</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5273_how-to-read-nested-ternary-operators" rel="bookmark" title="Permanent Link to How to Read Nested Ternary Operators">How to Read Nested Ternary Operators</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5204_making-sublime-text-2-jump-to-the-correct-line-with-unity-on-os-x" rel="bookmark" title="Permanent Link to Making Sublime Text 2 Jump to the Correct Line with Unity on OS X">Making Sublime Text 2 Jump to the Correct Line with Unity on OS X</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5096_my-bug-my-bad-4-reading-concurrently" rel="bookmark" title="Permanent Link to My Bug, My Bad #4: Reading Concurrently">My Bug, My Bad #4: Reading Concurrently</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5018_whole-api-testing-with-reflection" rel="bookmark" title="Permanent Link to Whole API Testing with Reflection">Whole API Testing with Reflection</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4708_optimizing-a-parser-combinator-into-a-memcpy" rel="bookmark" title="Permanent Link to Optimizing a Parser Combinator into a memcpy">Optimizing a Parser Combinator into a memcpy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4872_dont-treat-paths-like-strings" rel="bookmark" title="Permanent Link to Don’t Treat Paths Like Strings">Don’t Treat Paths Like Strings</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4706_breaking-a-toy-hash-function" rel="bookmark" title="Permanent Link to Breaking a Toy Hash Function">Breaking a Toy Hash Function</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4425_counting-iterators-lazily" rel="bookmark" title="Permanent Link to Counting Iterators Lazily">Counting Iterators Lazily</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4428_unfathomable-bugs-6-pretend-precision" rel="bookmark" title="Permanent Link to Unfathomable Bugs #6: Pretend Precision">Unfathomable Bugs #6: Pretend Precision</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4281_my-bug-my-bad-3-accidentally-attacking-warcraft-3" rel="bookmark" title="Permanent Link to My Bug, My Bad #3: Accidentally Attacking WarCraft 3">My Bug, My Bad #3: Accidentally Attacking WarCraft 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4130_collapsing-types-vs-monads-followup" rel="bookmark" title="Permanent Link to Collapsing Types vs Monads (followup)">Collapsing Types vs Monads (followup)</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4008_collapsing-futures-easy-to-use-hard-to-represent" rel="bookmark" title="Permanent Link to Collapsing Futures: Easy to Use, Hard to Represent">Collapsing Futures: Easy to Use, Hard to Represent</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3858_eventual-exceptions-vs-programming-in-a-minimal-functional-style" rel="bookmark" title="Permanent Link to Eventual Exceptions vs Programming in a Minimal Functional Style">Eventual Exceptions vs Programming in a Minimal Functional Style</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3769_the-mystery-of-flunf" rel="bookmark" title="Permanent Link to The Mystery of Flunf">The Mystery of Flunf</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3724_explain-it-like-im-five-the-socialist-millionaire-problem-and-secure-multi-party-computation" rel="bookmark" title="Permanent Link to Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation">Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3631_computer-science-blows-my-mind" rel="bookmark" title="Permanent Link to Computer Science Blows My Mind">Computer Science Blows My Mind</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3484_a-visit-to-execution-labs-in-montreal" rel="bookmark" title="Permanent Link to A visit to Execution Labs in Montréal">A visit to Execution Labs in Montréal</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3573_transmuting-dice-conserving-entropy" rel="bookmark" title="Permanent Link to Transmuting Dice, Conserving Entropy">Transmuting Dice, Conserving Entropy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3516_rule-of-thumb-ask-for-the-clock" rel="bookmark" title="Permanent Link to Rule of Thumb: Ask for the Clock">Rule of Thumb: Ask for the Clock</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3477_rule-of-thumb-use-purposefully-weakened-methods" rel="bookmark" title="Permanent Link to Rule of Thumb: Use Purposefully Weakened Methods">Rule of Thumb: Use Purposefully Weakened Methods</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3376_rule-of-thumb-preconditions-should-be-checked-explicitly" rel="bookmark" title="Permanent Link to Rule of thumb: Preconditions Should be Checked Explicitly">Rule of thumb: Preconditions Should be Checked Explicitly</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3280_intersecting-linked-lists-faster" rel="bookmark" title="Permanent Link to Intersecting Linked Lists Faster">Intersecting Linked Lists Faster</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3138_mouse-path-smoothing-for-jack-lumber" rel="bookmark" title="Permanent Link to Mouse Path Smoothing for Jack Lumber">Mouse Path Smoothing for Jack Lumber</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3044_my-bug-my-bad-2-sunk-by-float" rel="bookmark" title="Permanent Link to My Bug, My Bad #2: Sunk by Float">My Bug, My Bad #2: Sunk by Float</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2852_repeat-yourself-differently" rel="bookmark" title="Permanent Link to Repeat Yourself Differently">Repeat Yourself Differently</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm" rel="bookmark" title="Permanent Link to Grover’s Quantum Search Algorithm">Grover’s Quantum Search Algorithm</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2766_followup-to-non-nullable-types-vs-c" rel="bookmark" title="Permanent Link to Followup to Non-Nullable Types vs C#">Followup to Non-Nullable Types vs C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2540_optimizing-just-in-time-with-expression-trees" rel="bookmark" title="Permanent Link to Optimizing Just in Time with Expression Trees">Optimizing Just in Time with Expression Trees</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2353_when-one-way-latency-doesnt-matter" rel="bookmark" title="Permanent Link to When One-Way Latency Doesn’t Matter">When One-Way Latency Doesn’t Matter</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point" rel="bookmark" title="Permanent Link to Determining exactly if/when/where a moving line intersected a moving point">Determining exactly if/when/where a moving line intersected a moving point</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait" rel="bookmark" title="Permanent Link to Emulating Actors in C# with Async/Await">Emulating Actors in C# with Async/Await</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2096_making-an-immutable-queue-with-guaranteed-constant-time-operations" rel="bookmark" title="Permanent Link to Making an immutable queue with guaranteed constant time operations">Making an immutable queue with guaranteed constant time operations</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions" rel="bookmark" title="Permanent Link to Improving Checked Exceptions">Improving Checked Exceptions</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime" rel="bookmark" title="Permanent Link to Perishable Collections: The Benefits of Removal-by-Lifetime">Perishable Collections: The Benefits of Removal-by-Lifetime</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control" rel="bookmark" title="Permanent Link to Decoupling shared control">Decoupling shared control</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1694_decoupling-inlined-ui-code" rel="bookmark" title="Permanent Link to Decoupling inlined UI code">Decoupling inlined UI code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet" rel="bookmark" title="Permanent Link to Linq to Collections: Beyond IEnumerable&lt;T&gt;">Linq to Collections: Beyond IEnumerable&lt;T&gt;</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+ <div id="upprev_box" style="right: -400px;">
+	<h6>
+		More interesting posts <span class="num"> (1 of 23 articles)</span>
+	</h6>
+	<div class="upprev_excerpt">
+		<p>
+			<a href="http://twistedoakstudios.com/blog/Post6536_implementing-quantum-pseudo-telepathy" rel="prev">Implementing Quantum Pseudo-Telepathy</a>
+		</p>
+	</div>
+	
+		<p>
+Or check out our <a href="http://twistedoakstudios.com/portfolio">Portfolio</a>.		</p><button id="upprev_close" type="button">Close</button>
+</div><!-- #upprev_box -->
+<link rel="stylesheet" id="al2fb_style-css" href="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/add-link-to-facebook.css" type="text/css" media="all">
+<link rel="stylesheet" id="admin-bar-css" href="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/admin-bar.css" type="text/css" media="all">
+<link rel="stylesheet" id="upprev-css-css" href="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/upprev.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-quicklatex-format-css" href="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/quicklatex-format.css" type="text/css" media="all">
+<script type="text/javascript" src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/admin-bar.js"></script>
+<script type="text/javascript" src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/jquery.js"></script>
+<script type="text/javascript" src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/upprev_js.php"></script>
+<script type="text/javascript" src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/comment-reply.js"></script>
+	<script type="text/javascript">
+		(function() {
+			var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
+
+			request = true;
+
+			b[c] = b[c].replace( rcs, ' ' );
+			b[c] += ( window.postMessage && request ? ' ' : ' no-' ) + cs;
+		}());
+	</script>
+			
+
+		 
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+      <!-- home portfolio used to be here -->
+		</div>
+
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				138-1657 Barrington St.<br>
+				Halifax, NS, Canada B3J 2A1</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script>- 2013 Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/jquery_002.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<div id="wpadminbar" class="nojq " role="navigation">
+			<a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1">Skip to toolbar</a>
+			<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Top navigation toolbar." tabindex="0">
+				<ul id="wp-admin-bar-root-default" class="ab-top-menu">
+		<li id="wp-admin-bar-wp-logo" class="menupop   "><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/about.php" title="About WordPress"><span class="ab-icon"></span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-wp-logo-default" class="ab-submenu">
+		<li id="wp-admin-bar-about"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/about.php">About WordPress</a>		</li></ul><ul id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu">
+		<li id="wp-admin-bar-wporg"><a class="ab-item" href="http://wordpress.org/">WordPress.org</a>		</li>
+		<li id="wp-admin-bar-documentation"><a class="ab-item" href="http://codex.wordpress.org/">Documentation</a>		</li>
+		<li id="wp-admin-bar-support-forums"><a class="ab-item" href="http://wordpress.org/support/">Support Forums</a>		</li>
+		<li id="wp-admin-bar-feedback"><a class="ab-item" href="http://wordpress.org/support/forum/requests-and-feedback">Feedback</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-site-name" class="menupop "><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/">Twisted Oak Studios Blog</a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-site-name-default" class="ab-submenu">
+		<li id="wp-admin-bar-dashboard"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/">Dashboard</a>		</li></ul><ul id="wp-admin-bar-appearance" class="ab-submenu">
+		<li id="wp-admin-bar-themes"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/themes.php">Themes</a>		</li>
+		<li id="wp-admin-bar-customize" class="hide-if-no-customize"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/customize.php?url=http%3A%2F%2Ftwistedoakstudios.com%2Fblog%2FPost6871_impractical-experiments-1-representing-numbers-as-polynomials">Customize</a>		</li></ul></div>		</li>
+		<li class="" id="wp-admin-bar-updates"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/update-core.php" title="3 Plugin Updates, 3 Theme Updates"><span class="ab-icon"></span><span class="ab-label">6</span><span class="screen-reader-text">3 Plugin Updates, 3 Theme Updates</span></a>		</li>
+		<li class="" id="wp-admin-bar-comments"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/edit-comments.php" title="0 comments awaiting moderation"><span class="ab-icon"></span><span id="ab-awaiting-mod" class="ab-label awaiting-mod pending-count count-0">0</span></a>		</li>
+		<li id="wp-admin-bar-new-content" class="menupop  "><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php" title="Add New"><span class="ab-icon"></span><span class="ab-label">New</span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-new-content-default" class="ab-submenu">
+		<li id="wp-admin-bar-new-post"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php">Post</a>		</li>
+		<li id="wp-admin-bar-new-media"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/media-new.php">Media</a>		</li>
+		<li id="wp-admin-bar-new-link"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/link-add.php">Link</a>		</li>
+		<li id="wp-admin-bar-new-page"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php?post_type=page">Page</a>		</li>
+		<li id="wp-admin-bar-new-user"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/user-new.php">User</a>		</li></ul></div>		</li>
+		<li class="" id="wp-admin-bar-edit"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post.php?post=6871&amp;action=edit">Edit Post</a>		</li></ul><ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
+		<li id="wp-admin-bar-search" class="admin-bar-search"><div class="ab-item ab-empty-item" tabindex="-1"><form action="http://twistedoakstudios.com/blog/" method="get" id="adminbarsearch"><input class="adminbar-input" name="s" id="adminbar-search" maxlength="150" type="text"><input class="adminbar-button" value="Search" type="submit"></form></div>		</li>
+		<li id="wp-admin-bar-my-account" class="menupop with-avatar"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/profile.php" title="My Account">Howdy, Craig Gidney<img alt="" src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/31a6ce579f8f9f9d528715d1e941726e.png" class="avatar avatar-16 photo" height="16" width="16"></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-user-actions" class="ab-submenu">
+		<li id="wp-admin-bar-user-info"><a class="ab-item" tabindex="-1" href="http://twistedoakstudios.com/blog/wp-admin/profile.php"><img alt="" src="Impractical%20Experiments%20%231%20%20Representing%20Numbers%20as%20Polynomials_files/31a6ce579f8f9f9d528715d1e941726e_002.png" class="avatar avatar-64 photo" height="64" width="64"><span class="display-name">Craig Gidney</span><span class="username">craig</span></a>		</li>
+		<li id="wp-admin-bar-edit-profile"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/profile.php">Edit My Profile</a>		</li>
+		<li id="wp-admin-bar-logout"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=464a33fdbb">Log Out</a>		</li></ul></div>		</li></ul>			</div>
+			<a class="screen-reader-shortcut" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=464a33fdbb">Log Out</a>
+		</div></body></html>

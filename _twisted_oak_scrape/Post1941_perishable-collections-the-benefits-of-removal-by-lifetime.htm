@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<!-- saved from url=(0101)http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime -->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Unity3D Consulting | Technical Magic</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="http://www.twistedoakstudios.com/css/1140.css">
+    <link rel="stylesheet" href="http://www.twistedoakstudios.com/css/style.css?v=1.1">
+    <link rel="stylesheet" href="http://www.twistedoakstudios.com/css/blogstyle.css?v=1.1">
+<link rel="stylesheet" href="http://twistedoakstudios.com/blog/prettify.css" media="all">
+<link rel="stylesheet" href="http://twistedoakstudios.com/blog/sunburst.css" media="all">
+<script type="text/javascript" async="" src="./Post1941_perishable-collections-the-benefits-of-removal-by-lifetime_files/ga.js"></script><script type="text/javascript" src="./Post1941_perishable-collections-the-benefits-of-removal-by-lifetime_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="./Post1941_perishable-collections-the-benefits-of-removal-by-lifetime_files/css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="./Post1941_perishable-collections-the-benefits-of-removal-by-lifetime_files/modernizr-2.0.6.min.js"></script>
+<style type="text/css"></style></head>
+<body onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime#"><img class="logo" src="./Post1941_perishable-collections-the-benefits-of-removal-by-lifetime_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a class="scroll" href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="./Post1941_perishable-collections-the-benefits-of-removal-by-lifetime_files/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime.htm" rel="bookmark" title="Permanent Link to Perishable Collections: The Benefits of Removal-by-Lifetime">Perishable Collections: The Benefits of Removal-by-Lifetime</a></h2>
+<div class="meta">posted by Craig Gidney on January 8, 2013</div>
+
+<p>Last week I talked about using lenses to decouple shared control. However, the example I gave was so simple that a “collection” of lenses could be represented with a single integer. This was on purpose, because having such a collection hints at this week’s content. So, this week, I’ll be starting with a collection-of-lenses example in order to lead into what I call a perishable collection, that automatically removes its items based on lifetime tokens, and discuss how such a collection affords transformed views of itself.</p>
+<h3>Add/Remove</h3>
+<p>Suppose we want to create a controller, to be used by multiple unknown components, for a music player’s volume. We decide to do this with lenses that apply maximum volumes (as opposed to scaling), effectively exposing the ability to invoke “That’s too loud! Don’t play it louder than X!”. Assuming volume goes from 0 to 100, here is such a controller:</p>
+<pre><code class="prettyprint"><span class="kwd">class</span><span class="pln"> </span><span class="typ">VolumeController</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="typ">List</span><span class="str">&lt;double&gt;</span><span class="pln"> _maxVolumes </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">List</span><span class="str">&lt;double&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="lit">100</span><span class="pln"> </span><span class="com">// default volume</span><span class="pln">
+    </span><span class="pun">};</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">double</span><span class="pln"> </span><span class="typ">Volume</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">get</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> _maxVolumes</span><span class="pun">.</span><span class="typ">Min</span><span class="pun">();</span><span class="pln"> </span><span class="pun">}</span><span class="pln"> </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">AddMax</span><span class="pun">(</span><span class="kwd">double</span><span class="pln"> max</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">max </span><span class="pun">&lt;</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> </span><span class="pun">||</span><span class="pln"> max </span><span class="pun">&gt;</span><span class="pln"> </span><span class="lit">100</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentOutOfRangeException</span><span class="pun">(</span><span class="str">"max"</span><span class="pun">);</span><span class="pln">
+        _maxVolumes</span><span class="pun">.</span><span class="typ">Add</span><span class="pun">(</span><span class="pln">max</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">RemoveMax</span><span class="pun">(</span><span class="kwd">double</span><span class="pln"> max</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(!</span><span class="pln">_maxVolumes</span><span class="pun">.</span><span class="typ">Remove</span><span class="pun">(</span><span class="pln">max</span><span class="pun">))</span><span class="pln">
+            </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">InvalidOperationException</span><span class="pun">(</span><span class="str">"No such max was added"</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>There are three problems with this controller: usability, efficiency, and thread safety.</p>
+<p>Usability. Every AddMax call must be followed by an eventual RemoveMax, every RemoveMax must be preceded by an AddMax, and the same maximum must be given to both. Failing to meet these constraints creates a bug. This is not a mountain of responsibility, but it’s easy to get wrong. Making it as easy as possible to get things right will decrease the chances of a bug permanently clamping the volume to 0.</p>
+<p>Efficiency. The collection of lenses is a list. Removing a lens requires scanning through the list, which takes linear time. We can do (much) better than this.</p>
+<p>Thread safety. When you intend to be exposed to multiple unknown components, it’s reasonable to expect some of them to be calling you from other threads. It’s not necessary to provide thread safety, but it’s a good idea in this sort of situation. At the moment, one thread removing while another thread adds can put the list into a permanently inconsistent state.</p>
+<p>All three of these problems are solvable.</p>
+<h3>Implicit Removal</h3>
+<p>Here’s a standard trick for simplifying add+remove: get rid of the remove method, and have the add method return an <a href="http://msdn.microsoft.com/en-us/library/system.idisposable.aspx">IDisposable</a> or take a <a href="http://msdn.microsoft.com/en-us/library/system.threading.cancellationtoken.aspx">CancellationToken</a>. Disposing the result or cancelling the given token corresponds to asking for what was added to be removed. This inherently solves two aspects of the usability problems: it’s no longer possible to remove before adding, and it’s no longer necessary to worry about giving the same value to both calls.</p>
+<p>A <a href="http://msdn.microsoft.com/en-us/library/system.threading.cancellationtoken.aspx">CancellationToken</a> is a thing that can become cancelled, and allows you to register actions that run when it occurs. You call “token.Register(action)”, and the token will run your action when it is cancelled. If the token is already cancelled then the action runs right away. If the token is not yet cancelled then the action will be run as soon as it is. If the token is never cancelled, then the action will never be run. Sortof like a task, but without return values or exceptions.</p>
+<p>In general, I prefer asking for a cancellation token, as opposed to returning an IDisposable. A method taking a token can support being stopped before it completes, can return a result, and can pass along the token to methods that it happens to call (without additional wiring code). There’s also the nice detail that CancellationToken is a struct, so you don’t need to deal with null (the default token is immortal instead of unusable). IDisposable certainly has its own advantages, but I can’t think of any compelling ones.</p>
+<p>Here’s the result of modifying the volume controller to ask for a cancellation token:</p>
+<pre><code class="prettyprint"><span class="kwd">class</span><span class="pln"> </span><span class="typ">VolumeController</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="typ">List</span><span class="str">&lt;double&gt;</span><span class="pln"> _maxVolumes </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">List</span><double><span class="pln"> </span><span class="pun">{</span><span class="lit">100</span><span class="pun">};</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">double</span><span class="pln"> </span><span class="typ">Volume</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">get</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> _maxVolumes</span><span class="pun">.</span><span class="typ">Min</span><span class="pun">();</span><span class="pln"> </span><span class="pun">}</span><span class="pln"> </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">AddMax</span><span class="pun">(</span><span class="kwd">double</span><span class="pln"> max</span><span class="pun">,</span><span class="pln"> </span><span class="typ">CancellationToken</span><span class="pln"> lifetimeOfLimit</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">max </span><span class="pun">&lt;</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> </span><span class="pun">||</span><span class="pln"> max </span><span class="pun">&gt;</span><span class="pln"> </span><span class="lit">100</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentOutOfException</span><span class="pun">(</span><span class="str">"max"</span><span class="pun">);</span><span class="pln">
+        _maxVolumes</span><span class="pun">.</span><span class="typ">Add</span><span class="pun">(</span><span class="pln">max</span><span class="pun">);</span><span class="pln">
+        lifetimeOfLimit</span><span class="pun">.</span><span class="typ">Register</span><span class="pun">(()</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> _maxVolumes</span><span class="pun">.</span><span class="typ">Remove</span><span class="pun">(</span><span class="pln">max</span><span class="pun">));</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></double></code></pre>
+<p>This fixes the usability problem (while reducing the amount of code!). Callers no longer have to track the maximum they added in order to later remove it. It’s now impossible to remove before adding. Callers can manage their own tokens, with a CancellationTokenSource, or use tokens provided by something else. The same token can be used multiple times. Basically, the ‘pairing-remove-with-add’ work has been reduced and abstracted into a form that allows re-use, sharing, and delegation.</p>
+<p>However, I must point out that making this change increases the severity of the thread safety issue. Cancellation tokens could come from anywhere, and may be cancelled asynchronously and/or concurrently. But fixing the efficiency problems is going to change important details, so we’ll get to thread safety as part of that.</p>
+<h3>Using a Doubly Linked List</h3>
+<p>The second problem I mentioned was efficiency: removing items is taking linear time. You might be expecting the removal time to improve to logarithmic (with a search tree) or expected sorta-constant time (with a hash table), but we can actually get <em>guaranteed</em> constant time removal by using the much simpler <a href="http://en.wikipedia.org/wiki/Doubly_linked_list">doubly linked list</a>. We don’t need to search for what to remove, because we can just remember nodes as we add them.</p>
+<p>Here’s an implementation that uses a cyclic doubly linked list:</p>
+<pre><code class="prettyprint"><span class="kwd">class</span><span class="pln"> </span><span class="typ">VolumeController</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">Node</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">double</span><span class="pln"> </span><span class="typ">Value</span><span class="pun">;</span><span class="pln">
+        </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Node</span><span class="pln"> </span><span class="typ">Prev</span><span class="pun">;</span><span class="pln">
+        </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Node</span><span class="pln"> </span><span class="typ">Next</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="typ">Node</span><span class="pln"> _head</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">VolumeController</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        _head </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Node</span><span class="pun">();</span><span class="pln">
+        _head</span><span class="pun">.</span><span class="typ">Next</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> _head</span><span class="pun">.</span><span class="typ">Prev</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> _head</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">double</span><span class="pln"> </span><span class="typ">Volume</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">get</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="kwd">var</span><span class="pln"> result </span><span class="pun">=</span><span class="pln"> </span><span class="lit">100.0</span><span class="pun">;</span><span class="pln"> </span><span class="com">// default volume</span><span class="pln">
+            </span><span class="kwd">for</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">var</span><span class="pln"> n </span><span class="pun">=</span><span class="pln"> _head</span><span class="pun">.</span><span class="typ">Next</span><span class="pun">;</span><span class="pln"> n </span><span class="pun">!=</span><span class="pln"> _head</span><span class="pun">;</span><span class="pln"> n </span><span class="pun">=</span><span class="pln"> n</span><span class="pun">.</span><span class="typ">Next</span><span class="pun">)</span><span class="pln">
+                result </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Math</span><span class="pun">.</span><span class="typ">Min</span><span class="pun">(</span><span class="pln">result</span><span class="pun">,</span><span class="pln"> n</span><span class="pun">.</span><span class="typ">Value</span><span class="pun">);</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> result</span><span class="pun">;</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">AddMax</span><span class="pun">(</span><span class="kwd">double</span><span class="pln"> max</span><span class="pun">,</span><span class="pln"> </span><span class="typ">CancellationToken</span><span class="pln"> lifetimeOfLimit</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">max </span><span class="pun">&lt;</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> </span><span class="pun">||</span><span class="pln"> max </span><span class="pun">&gt;</span><span class="pln"> </span><span class="lit">100</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentOutOfRangeException</span><span class="pun">(</span><span class="str">"max"</span><span class="pun">);</span><span class="pln">
+        </span><span class="kwd">var</span><span class="pln"> n </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Node</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="typ">Value</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> max</span><span class="pun">,</span><span class="pln">
+            </span><span class="typ">Next</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> _head
+        </span><span class="pun">};</span><span class="pln">
+        </span><span class="kwd">lock</span><span class="pln"> </span><span class="pun">(</span><span class="pln">_head</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="com">// link new maximum into list (before _head), stashing the node</span><span class="pln">
+            n</span><span class="pun">.</span><span class="typ">Prev</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> _head</span><span class="pun">.</span><span class="typ">Prev</span><span class="pun">;</span><span class="pln">
+            n</span><span class="pun">.</span><span class="typ">Prev</span><span class="pun">.</span><span class="typ">Next</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> n</span><span class="pun">;</span><span class="pln">
+            _head</span><span class="pun">.</span><span class="typ">Prev</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> n</span><span class="pun">;</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+        lifetimeOfLimit</span><span class="pun">.</span><span class="typ">Register</span><span class="pun">(()</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="kwd">lock</span><span class="pln"> </span><span class="pun">(</span><span class="pln">_head</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+                </span><span class="com">// unlink node from list</span><span class="pln">
+                n</span><span class="pun">.</span><span class="typ">Next</span><span class="pun">.</span><span class="typ">Prev</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> n</span><span class="pun">.</span><span class="typ">Prev</span><span class="pun">;</span><span class="pln">
+                n</span><span class="pun">.</span><span class="typ">Prev</span><span class="pun">.</span><span class="typ">Next</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> n</span><span class="pun">.</span><span class="typ">Next</span><span class="pun">;</span><span class="pln">
+            </span><span class="pun">}</span><span class="pln">
+        </span><span class="pun">});</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>The amount of code has expanded a lot (I’ll deal with that in a minute), but we now have guaranteed constant time addition and guaranteed constant time removal. When an item is added, its node is stored in the closure of the lambda registered to the cancellation token. So, when the token is cancelled, there’s no need to search for the node to remove.</p>
+<p>This code is also thread safe (erm, I think), due to the lock blocks around the insertion and removal of nodes. Interestingly, it’s not strictly necessary to synchronize access to the list when computing the maximum volume. The ‘Next’ pointer is guaranteed to be valid and never cleared, so all paths lead to the head node. There are potential data races but, on the scope of an individual race, grabbing a lock just moves the race around. Consider what can happen during an iteration as the collection is modified:</p>
+<ol>
+<li><strong>The iteration is on a node c that is being removed</strong>: The removal’s completion has no effect on the iteration. c.Next is not modified by the removal, so the iteration ‘escapes’ the same way whether or not the removal completes first.
+</li><li><strong>The iteration is on a node c whose next node is being removed</strong>: Whether or not the next node will be included in the iteration is determined by a read/write race on c.Next. Grabbing the lock beforehand would just change the race to a write/write race on the lock, not remove the race. (Also, pointer assignment is <a href="http://stackoverflow.com/a/9788/52239">guaranteed to be atomic</a> in .Net so the iterator won’t read a invalid half-changed pointer.)
+</li><li><strong>The iteration is on a node c whose next node is head and a node is being inserted (before head)</strong>: Whether or not the next node will be included is determined by a read/write race on c.Next. (Note that the node being inserted has valid Value and Next fields before the lock is acquired to add it, ensuring things can’t re-ordered so that it is in the chain before those details are valid.) Holding the lock would just change the race to a write/write race on the lock, not remove the race.
+</li></ol>
+<p>(Side note: actually I would appreciate input on this. This sort of thread safety is depressingly hard to get right. Have I actually prevented the iterator from seeing invalid ‘Next’ values by initializing them before acquiring the lock? Is there some possible re-ordering or optimization that makes everything fall apart?)</p>
+<p>So, the iteration should always advance and eventually terminate and each race <em>individually</em> can only be moved around by a lock. However, different races might be moved differently. We lose <a href="http://en.wikipedia.org/wiki/Linearizability">linearizability</a>. The collection seen by the iteration may contain <a href="http://en.wikipedia.org/wiki/Anachronism">anachronisms</a> (to borrow a term), where you see a later change but not an earlier one. For example, consider this scenario:</p>
+<pre>             &gt;---&gt; time &gt;---&gt;
+Thread1:        add:1              add:2             remove:1   add:3
+Thread2:    iterate:start    iterate:1     iterate:2                   iterate:3    iterate:done
+</pre>
+<p>The iterator saw the sequence [1,2,3] even though the value 1 was removed before the value 3 was added. The inclusion of 1 at the same time as 3 is an anachronism. If the iterator respected linearizability, then the result would have been [], [1], [1,2], [2] or [2,3].</p>
+<p>Note that anachronisms are not necessarily a problem. Usually you can ignore them, because you won’t miss any items that stay put through the iteration. Also, since items are added at the end of the list, the anachronisms you can see are more limited (Exercise: Can the computed volume spike upward at random? Find a situation where an anachronistic minimum volume is 100, without including a 100 in the collection, or prove that it’s impossible.). It’s not a big deal if the volume is limited to 20 for a moment as the collection transitions from [20, 10, 30] to [10, 30] to [30]. The benefit you get, not having to lock the collection while all of its contents are enumerated, is very compelling.</p>
+<p>In any case, now that we know to use a doubly linked list with automatic removal, we can abstract it into its own type.</p>
+<h3>Using a Perishable Collection</h3>
+<p>Perishable collections implement the idea of “added until a lifetime expires”. Instead of having a remove method, items are removed automatically when the lifetime they are paired with ends (i.e. when they perish). I stumbled into this idea, and implemented it, as part of the Element project. My implementation is available as <a href="https://github.com/TwistedOakStudios/PerishableCollection">source code from github</a> and as a <a href="https://nuget.org/packages/TwistedOak.Collections.PerishableCollection">NuGet package</a>.</p>
+<p>The main benefit of a perishable collection is its affinity for transformed views, but lets start by rewriting our starting example to use one:</p>
+<pre><code class="prettyprint"><span class="kwd">class</span><span class="pln"> </span><span class="typ">VolumeController</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">readonly</span><span class="pln"> </span><span class="typ">PerishableCollection</span><span class="str">&lt;double&gt;</span><span class="pln"> _maxVolumes </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">PerishableCollection</span><span class="str">&lt;double&gt;</span><span class="pun">();</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">VolumeController</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        _maxVolumes</span><span class="pun">.</span><span class="typ">Add</span><span class="pun">(</span><span class="lit">100</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Lifetime</span><span class="pun">.</span><span class="typ">Immortal</span><span class="pun">);</span><span class="pln"> </span><span class="com">// default volume</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">double</span><span class="pln"> </span><span class="typ">Volume</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">get</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> _maxVolumes</span><span class="pun">.</span><span class="typ">Min</span><span class="pun">();</span><span class="pln"> </span><span class="pun">}</span><span class="pln"> </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">AddMax</span><span class="pun">(</span><span class="kwd">double</span><span class="pln"> max</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Lifetime</span><span class="pln"> lifetime</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">max </span><span class="pun">&lt;</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> </span><span class="pun">||</span><span class="pln"> max </span><span class="pun">&gt;</span><span class="pln"> </span><span class="lit">100</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentOutOfRangeException</span><span class="pun">(</span><span class="str">"max"</span><span class="pun">);</span><span class="pln">
+        _maxVolumes</span><span class="pun">.</span><span class="typ">Add</span><span class="pun">(</span><span class="pln">max</span><span class="pun">,</span><span class="pln"> lifetime</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>This implementation improves on all three problems I mentioned earlier (usability, efficiency, thread-safety). There’s no need to pair removes with adds anymore (the work has been abstracted into the lifetime). Addition and (implicit) removal are now both constant time. It’s still possible to reduce the cost of computing the current volume (currently linear), by caching and updating, but that’s outside of the scope of what I want to address in this post. The class is even thread-safe, assuming intermediate anachronistic volumes are allowed.</p>
+<p><a href="./Post1941_perishable-collections-the-benefits-of-removal-by-lifetime_files/687474703a2f2f692e696d6775722e636f6d2f47626839442e706e67"> <img class="alignright size-full wp-image-653" width="300" src="./Post1941_perishable-collections-the-benefits-of-removal-by-lifetime_files/687474703a2f2f692e696d6775722e636f6d2f47626839442e706e67" alt="Lifetime Library Diagram"> </a> Side note: you may have noticed that the code is now using a Lifetime instead of a CancellationToken. Lifetime, another <a href="https://github.com/TwistedOakStudios/Lifetime">open source library</a> with a <a href="https://nuget.org/packages/TwistedOak.Util.Lifetime/">NuGet package</a>, fixes a small problem: when a CancellationTokenSource is garbage collected, holding onto its (now immortal) token prevents the garbage collection of its registered callbacks (which will never be run) and what they reference. Lifetime also supports temporary registrations (so they don’t accumulate over time in some corner cases) and the library includes some extra utility classes and methods. I intended to make a whole post about the library, and maybe I will, but for now all of its functionality is summarized on a small thrown-together diagram (to the right).</p>
+<p>So an observable collection fits our example use case nicely. But the items in a perishable collections can also be <em>observed</em> over time, by using the CurrentAndFutureItems method. This returns an IObservable&lt;Perishable&lt;T&gt;&gt;, which an observer can be subscribed to in order to be given item/lifetime pairs in the collection. When an item is added, observers are given the item and its lifetime. When an item perishes, observers know about it because they have the lifetime.</p>
+<p>Notice that, to determine which item was removed, an observer does not have to really do anything. The lifetime was already paired with the item. Contrast this with an observable collection that has ItemAdded/ItemRemoved events. When an observer receives an ItemRemoved event, they have to match it against a previous ItemAdded event (in some way). For example, if you want to show a UI control for each item in a collection, then you must maintain a dictionary matching each item to a list of controls (an item may appear multiple times). With lifetimes you just make the collection of controls perishable, propagate the lifetimes along, and never even think about dealing with dictionaries of lists (ugh..).</p>
+<p>Without the need to match later removals, we can do something interesting: impure transformations. For example, augmenting items to include a unique id:</p>
+<pre><code class="prettyprint"><span class="com">// create a new perishable collection</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> collection </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">PerishableCollection</span><span class="str">&lt;string&gt;</span><span class="pun">();</span><span class="pln">
+
+</span><span class="com">// add some items to the collection</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> mortalLife </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">LifetimeSource</span><span class="pun">();</span><span class="pln">
+collection</span><span class="pun">.</span><span class="typ">Add</span><span class="pun">(</span><span class="str">"mortal"</span><span class="pun">,</span><span class="pln"> mortalLife</span><span class="pun">.</span><span class="typ">Lifetime</span><span class="pun">);</span><span class="pln"> </span><span class="com">//"mortal" will be removed when mortalLife is ended</span><span class="pln">
+collection</span><span class="pun">.</span><span class="typ">Add</span><span class="pun">(</span><span class="str">"forever"</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Lifetime</span><span class="pun">.</span><span class="typ">Immortal</span><span class="pun">);</span><span class="pln"> </span><span class="com">//"forever" will never be removed</span><span class="pln">
+
+</span><span class="com">// get an observable that can be used to track the collection's items</span><span class="pln">
+</span><span class="typ">IObservable</span><span class="pun">&lt;</span><span class="typ">Perishable</span><span class="str">&lt;string&gt;</span><span class="pun">&gt;</span><span class="pln"> itemsObservable </span><span class="pun">=</span><span class="pln"> collection</span><span class="pun">.</span><span class="typ">CurrentAndFutureItems</span><span class="pun">();</span><span class="pln">
+
+</span><span class="com">// pair observed perishable items to a unique id</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> id </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln">
+</span><span class="typ">IObservable</span><span class="pun">&lt;</span><span class="typ">Perishable</span><span class="pun">&lt;</span><span class="typ">Tuple</span><span class="pun">&lt;</span><span class="kwd">string</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">&gt;&gt;&gt;</span><span class="pln"> itemsWithIds </span><span class="pun">=</span><span class="pln"> itemsObservable</span><span class="pun">.</span><span class="typ">LiftSelect</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="typ">Tuple</span><span class="pun">.</span><span class="typ">Create</span><span class="pun">(</span><span class="pln">e</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Interlocked</span><span class="pun">.</span><span class="typ">Increment</span><span class="pun">(</span><span class="kwd">ref</span><span class="pln"> id</span><span class="pun">)));</span><span class="pln">
+
+</span><span class="com">// observe id'd items back into a separate new perishable collection</span><span class="pln">
+</span><span class="typ">PerishableCollection</span><span class="pun">&lt;</span><span class="typ">Tuple</span><span class="pun">&lt;</span><span class="kwd">string</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">&gt;&gt;</span><span class="pln"> collectionWithIds </span><span class="pun">=</span><span class="pln"> itemsWithIds</span><span class="pun">.</span><span class="typ">ToPerishableCollection</span><span class="pun">();</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> peek1 </span><span class="pun">=</span><span class="pln"> collectionWithIds</span><span class="pun">.</span><span class="typ">CurrentItems</span><span class="pun">().</span><span class="typ">ToArray</span><span class="pun">();</span><span class="pln"> </span><span class="com">// {("mortal", 1), ("forever", 2)}</span><span class="pln">
+
+</span><span class="com">// modify the original collection, checking that changes propagate to the transformed collection</span><span class="pln">
+collection</span><span class="pun">.</span><span class="typ">Add</span><span class="pun">(</span><span class="str">"late"</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Lifetime</span><span class="pun">.</span><span class="typ">Immortal</span><span class="pun">);</span><span class="pln"> </span><span class="com">//</span><span class="pln">
+mortalLife</span><span class="pun">.</span><span class="typ">EndLifetime</span><span class="pun">();</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> peek2 </span><span class="pun">=</span><span class="pln"> collectionWithIds</span><span class="pun">.</span><span class="typ">CurrentItems</span><span class="pun">().</span><span class="typ">ToArray</span><span class="pun">();</span><span class="pln"> </span><span class="com">//{("forever", 2), ("late", 3)}</span></code></pre>
+<p>In the above example, each item from a perishable collection is transformed into a new form, which has a unique id, and then fed into a new separate perishable collection. It uses the ‘LiftSelect’ method, which transforms the values inside perishables instead of the perishables themselves, which is defined in the perishable collections library. The library also defines ‘ListWhere’, to filter using the value inside perishables, and ‘ObserveNonPerishedCount’, to track the number of items in a perishable collection.</p>
+<p>Note that the resulting transformed collection, from the example, has no trouble staying in sync. Even though it would have no way of matching a hypothetical RemovedItem event to an item it had seen before (because the projection never gives the same result twice). It’s impossible to do this sort of thing with ItemAdded/ItemRemoved events, without additional brittle wiring code to cache or undo the projection. This is what I mean when I say perishable collections “afford transformation”. They sidestep issues that shouldn’t be problems in the first place, so that you can just do what you want.</p>
+<p>The <a href="https://github.com/TwistedOakStudios/PerishableCollection/tree/master/PerishableCollectionExample">example project</a> for perishable collections takes this sort of concept and runs with it. The architecture is a bit over-the-top silly, actually, and drawing is done in a dumb naive way. But the game is kinda fun, or at least relaxing, and it has some interesting geometry code I’ll discuss at some point.</p>
+<p><a href="./Post1941_perishable-collections-the-benefits-of-removal-by-lifetime_files/vl7kl.png"> <img width="400" src="./Post1941_perishable-collections-the-benefits-of-removal-by-lifetime_files/vl7kl.png" alt="Snip Snap Screen Shot"></a></p>
+<h3>Summary</h3>
+<p>Perishable collections have constant-time addition and automatic constant-time removal. They can be iterated and observed concurrently (but be aware of potential anachronisms). Transformed views of a perishable collection can naturally match removals to additions, without dealing with item equality.</p>
+<p>My implementation of a perishable collection is available as <a href="https://github.com/TwistedOakStudios/PerishableCollection">source code</a> and as a <a href="https://nuget.org/packages/TwistedOak.Collections.PerishableCollection">NuGet package</a>. I would appreciate any comments about the thread-safety of the code. Lifetimes (improved cancellation tokens) are also available as <a href="https://github.com/TwistedOakStudios/Lifetime">source code</a> and as a <a href="https://nuget.org/packages/TwistedOak.Util.Lifetime/">NuGet package</a>.</p>
+<p>(I hope anachronism catches on as a technical term.)</p>
+<p>—</p>
+<h3>Discuss on <a href="http://www.reddit.com/r/programming/comments/166e7g/perishable_collections_the_benefits_of/">Reddit</a>, <a href="http://news.ycombinator.com/item?id=5025594">Hacker News</a></h3>
+<p>—</p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia. <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2 class="endofpage">Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait" rel="bookmark" title="Permanent Link to Emulating Actors in C# with Async/Await">Emulating Actors in C# with Async/Await</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2096_making-an-immutable-queue-with-guaranteed-constant-time-operations" rel="bookmark" title="Permanent Link to Making an immutable queue with guaranteed constant time operations">Making an immutable queue with guaranteed constant time operations</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions" rel="bookmark" title="Permanent Link to Improving Checked Exceptions">Improving Checked Exceptions</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control" rel="bookmark" title="Permanent Link to Decoupling shared control">Decoupling shared control</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1694_decoupling-inlined-ui-code" rel="bookmark" title="Permanent Link to Decoupling inlined UI code">Decoupling inlined UI code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet" rel="bookmark" title="Permanent Link to Linq to Collections: Beyond IEnumerable&lt;T&gt;">Linq to Collections: Beyond IEnumerable&lt;T&gt;</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+ <div id="upprev_box" style="right: -400px;">
+	<h6>
+		More interesting posts <span class="num"> (3 of 4 articles)</span>
+	</h6>
+	<div class="upprev_excerpt">
+		<p>
+			<a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control" rel="prev">Decoupling shared control</a>
+		</p>
+	</div>
+	
+		<p>
+Or check out our <a href="http://twistedoakstudios.com/portfolio">Portfolio</a>.		</p><button id="upprev_close" type="button">Close</button>
+</div><!-- #upprev_box -->
+<link rel="stylesheet" id="upprev-css-css" href="./Post1941_perishable-collections-the-benefits-of-removal-by-lifetime_files/upprev.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-quicklatex-format-css" href="./Post1941_perishable-collections-the-benefits-of-removal-by-lifetime_files/quicklatex-format.css" type="text/css" media="all">
+<script type="text/javascript" src="./Post1941_perishable-collections-the-benefits-of-removal-by-lifetime_files/jquery.js"></script>
+<script type="text/javascript" src="./Post1941_perishable-collections-the-benefits-of-removal-by-lifetime_files/upprev_js.php"></script>
+<script type="text/javascript" src="./Post1941_perishable-collections-the-benefits-of-removal-by-lifetime_files/comment-reply.min.js"></script>
+ 
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+			<nav>
+				<ul class="primary-nav clearfix">
+					<li><a href="http://www.twistedoakstudios.com/">Home</a></li>
+					<li><a href="http://twistedoakstudios.com/portfolio">Portfolio</a></li>
+				</ul>
+			</nav>
+		</div>
+		
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				6082 Shirley Street<br>
+				Halifax, NS, Canada B3H 2M8</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+		
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script>- 2013 Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="./Post1941_perishable-collections-the-benefits-of-removal-by-lifetime_files/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="./Post1941_perishable-collections-the-benefits-of-removal-by-lifetime_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script></body></html>

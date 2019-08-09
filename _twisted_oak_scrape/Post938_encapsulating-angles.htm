@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script id="bug.surrogate">var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}}; if (document.location.host == 'www.salon.com') {var _ga_ = document.querySelectorAll('script[src$=ga\\.js]')[0], ga_e = document.createEvent('Event'); ga_e.initEvent('load', true, true);_ga_.dispatchEvent(ga_e);}</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Game Developers | Unity 3D Development</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Post938_encapsulating-angles_files/1140.css">
+    <link rel="stylesheet" href="Post938_encapsulating-angles_files/style.css">
+    <link rel="stylesheet" href="Post938_encapsulating-angles_files/blogstyle.css">
+<link rel="stylesheet" href="Post938_encapsulating-angles_files/prettify.css" media="all">
+<link rel="stylesheet" href="Post938_encapsulating-angles_files/sunburst.css" media="all">
+<script type="text/javascript" src="Post938_encapsulating-angles_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Post938_encapsulating-angles_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Post938_encapsulating-angles_files/modernizr-2.js"></script>
+</head>
+<body onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="#"><img class="logo" src="Post938_encapsulating-angles_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></h2>
+<div class="meta">posted by Craig Gidney on November 13, 2012</div>
+
+<p>This post is about making a simple problem <em>actually simple</em>: dealing with angles in 2d. As part of writing this post, I implemented a library for working with angles. The <a href="https://github.com/Strilanc/Angle">source code</a> is available on github, or you can reference the <a href="https://nuget.org/packages/Strilanc.Angle">nuget package</a> with visual studio’s package manager.</p>
+<h3>Problems and Obstacles</h3>
+<p>Lets start with a motivating problem. You have a tank, it has a 
+turret with a restricted range of motion, and you want the tank and 
+turret to rotate towards the mouse pointer. Like this:</p>
+<p><img src="Post938_encapsulating-angles_files/0wi10.gif" alt="Angle Clamping Example"></p>
+<p>This is not a complicated task, but the angle math makes it <em>tricky</em>.
+ If you approach it in the wrong way then you will end up with code 
+containing a lot of cases, meaning lots of opportunities for sign errors
+ and off-by-one errors. As a result, you’re likely to see bugs isolated 
+to one quadrant or bugs on the transitions between quadrants 
+(particularly -1° to +1° and +179° to +181°).</p>
+<p>What is it that makes angle code tricky to write? I can think of three good reasons.</p>
+<ol>
+<li>The arithmetic of angles is very close to, but not quite the same as, the arithmetic of <a href="http://en.wikipedia.org/wiki/Real_numbers">real numbers</a>. It’s so tempting to just tack a “modulo 360°” after everything, and expect it to work:
+<ul>
+<li>|A-B| mod 360° is the distance between two angles… half of the time.
+</li><li>In the equation x*3 = 6°, you solve for x by computing (6°/3) mod 360° = 2°… except x might also be 122° or 242°.
+</li><li>Increase a rotation of 180° by 10% by computing 180°*1.1 (mod 
+360°) = 191°… except -180° is the “same” rotation and (-180°)*1.1 (mod 
+360°) = 169° != 191°.
+</li></ul>
+</li><li>Angles actually represent two distinct types of thing: 
+directions (where something is facing) and turns (how much to rotate 
+something). These two types support different operations. It makes sense
+ to sum and scale turns, but not directions (What’s going north plus 
+going south? Forwards times two? You can define answers to these 
+questions, typically by representing directions as turns, but the 
+results are meaningless in practical terms.). A very easy way to create a
+ bug is to treat a direction like a turn, or a turn like a direction 
+(The only case I can think of where adding directions makes sense, 
+averaging by computing (A + B) / 2, is wrong because it misses one of 
+the averages [there are two, separated by 180°] and the one it picks 
+isn’t invariant with respect to rotation.).
+</li><li>There’s not a universal agreed-upon system pairing directions 
+and angles. Does 0 point rightward or upward? Is the numeric value of a 
+half rotation equal to 180, pi, or 200? Often, software isn’t even 
+consistent within itself with respect to what angles mean. For example, 
+in .Net radians are expected by System.Math but degrees are expected by 
+System.Windows.Media.MatrixTransform.
+</li></ol>
+<p>Math Trivia: A thing where you distinguish between absolute position and relative deltas is called an <a href="http://en.wikipedia.org/wiki/Affine_space">Affine Space</a>. Another example of an affine space is the combination of points and vectors. <a href="http://en.wikipedia.org/wiki/Modular_arithmetic">Modular arithmetic</a>
+ is the arithmetic of ‘looping back around numbers’ like angles. 
+Unfortunately, although there’s lots of online resources about integer 
+modular arithmetic, there’s doesn’t seem to be much for real/continuous 
+modular arithmetic.</p>
+<h3>Encapsulating the Problems</h3>
+<p>A proper angle library needs to make it natural to solve common tasks correctly. Examples of common tasks are:</p>
+<ul>
+<li>Are these two angles the same? Are they close?
+</li><li>Rotate your facing by this much.
+</li><li>Do these different rotations have the same effect? Is it close?
+</li><li>Adjust rotation speed by X%. Limit rotation speed to Y.
+</li><li>Is this angle close to that one? Make this angle be close to that one.
+</li><li>What’s the angle of this vector? The vector pointing along this angle?
+</li><li>The file format spec says that 0 degrees is up, and 90 degrees is towards the right, but Math.Sin expects something different.
+</li></ul>
+<p>To make solving these tasks easy, my approach is to divide the space into four types of thing: Basis, Dir, Turn, and Range.</p>
+<p>A “Basis” is a system of angles, defining how to convert from raw 
+angle values into encapsulated directions/rotations (and back). For 
+example, the <a href="http://en.wikipedia.org/wiki/Radians">natural angle basis</a>
+ pairs the angle value 0 with the rightward direction and the angle 
+value pi/2 with the upward direction. The natural basis is very common, 
+so it makes sense to have it included by default and even to have 
+specialized methods that use it. The Basis type is also a nice place to 
+define constants like the number of radians/degrees/gradians per 
+rotation. Note that users sometimes want signed angles [-180° to +180°) 
+and sometimes want unsigned angles [0° to 360°), so it's important to 
+support both cases.</p>
+<p>A "Dir" is a direction, equivalent to a line starting at the origin 
+and passing through a point on the unit circle. Directions have both 
+exact and approximate equality that respects that 1° = 361° and that 
+359.999° is close to 0.001°. Being able to convert to and from X/Y 
+vector components allows work independent of any angle basis. Arithmetic
+ operators are also useful: adding/subtracting a turn from a direction 
+rotates the direction, and taking the difference between to directions 
+gives the turn that rotates between them. The Dir type is a great place 
+to define constants for the cardinal directions.</p>
+<p>A "Turn" is a non-normalized rotation. The lack of normalization 
+(meaning -180° != +180° != +540°) is a trade-off to allow intuitive 
+comparisons and scaling (normalizing would create ambiguities in those 
+cases, as I mentioned earlier). Instead of automatic normalization, 
+turns have manual normalization as well as specialized method that 
+nicely handle "congruence" (a turn of +15° is <em>congruent</em> to a 
+turn of -345°). Another trade-off made by Turn is encapsulation of the 
+sign of clockwise-ness. Some systems of angles pick counter-clockwise to
+ be the "positive" direction and some pick clockwise, so that 
+information should be part of the angle basis and not redundantly 
+specified in Turn. As a consequence, the user must specify which 
+direction is positive in order to compare turns. Turn arithmetic is 
+almost identical to real arithmetic: summing, scaling, and dividing are 
+all allowed and behave nicely thanks to the lack of automatic 
+normalization. The Turn type is the place for common rotation constants 
+(1°, 1 radian, 360°).</p>
+<p>A "Range" is a contiguous set of directions. The Range type is 
+probably the hardest to implement correctly (see the 'example awful 
+code' at the end of the post). That also makes it the most valuable to 
+users. Providing several safe ways to create it, and implementing the 
+all-important clamp method, basically solves the toy problem I opened 
+with. The Range type is a good place to define constants for the four 
+quadrants and four half-planes.</p>
+<h3>Example Usage</h3>
+<p>With all of these types implemented, creating a tank with a 
+constraint turret is easy. I spent significantly more time tweaking the 
+art positioning and movement constants than this code:</p>
+<pre><code class="prettyprint"><span class="com">// --- move the tank ---</span><span class="pln">
+</span><span class="com">// measurements</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> dx </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">_lastMousePosition</span><span class="pun">.</span><span class="pln">X </span><span class="pun">-</span><span class="pln"> tankPos</span><span class="pun">.</span><span class="pln">X</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> dy </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">_lastMousePosition</span><span class="pun">.</span><span class="pln">Y </span><span class="pun">-</span><span class="pln"> tankPos</span><span class="pun">.</span><span class="pln">Y</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> dist </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Math</span><span class="pun">.</span><span class="typ">Sqrt</span><span class="pun">(</span><span class="pln">dx </span><span class="pun">*</span><span class="pln"> dx </span><span class="pun">+</span><span class="pln"> dy </span><span class="pun">*</span><span class="pln"> dy</span><span class="pun">);</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> dirTowardsMouseFromTank </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Dir</span><span class="pun">.</span><span class="typ">FromVector</span><span class="pun">(</span><span class="pln">dx</span><span class="pun">,</span><span class="pln"> dy</span><span class="pun">);</span><span class="pln">
+
+</span><span class="com">// rotate tank towards target</span><span class="pln">
+tankDir </span><span class="pun">+=</span><span class="pln">
+    </span><span class="com">// determine the turn necessary to rotate the tank to face the target</span><span class="pln">
+    </span><span class="pun">(</span><span class="pln">dirTowardsMouseFromTank </span><span class="pun">-</span><span class="pln"> tankDir</span><span class="pun">)</span><span class="pln">
+    </span><span class="com">// force the turn to be within the allowed tank rotation rate</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">ClampMagnitude</span><span class="pun">(</span><span class="typ">MaxTankTurnPerSec</span><span class="pln"> </span><span class="pun">*</span><span class="pln"> dt</span><span class="pun">.</span><span class="typ">TotalSeconds</span><span class="pun">);</span><span class="pln"> 
+
+</span><span class="com">// rotate turret towards target</span><span class="pln">
+turretTurn </span><span class="pun">+=</span><span class="pln">
+    </span><span class="com">// determine the amount of turning necessary to rotate the turret to face the target</span><span class="pln">
+    </span><span class="pun">(</span><span class="pln">dirTowardsMouseFromTank </span><span class="pun">-</span><span class="pln"> tankDir </span><span class="pun">-</span><span class="pln"> turretTurn</span><span class="pun">)</span><span class="pln">
+    </span><span class="com">// force the turn to be within the allowed turret rotation rate</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">ClampMagnitude</span><span class="pun">(</span><span class="typ">MaxTurretTurnPerSec</span><span class="pln"> </span><span class="pun">*</span><span class="pln"> dt</span><span class="pun">.</span><span class="typ">TotalSeconds</span><span class="pun">);</span><span class="pln">
+
+</span><span class="com">// force turret to stay within its allowed turning radius</span><span class="pln">
+turretTurn </span><span class="pun">=</span><span class="pln"> turretTurn</span><span class="pun">.</span><span class="typ">ClampMagnitude</span><span class="pun">(</span><span class="typ">MaxTurretTurn</span><span class="pun">);</span></code></pre>
+<p>The example project in the <a href="https://github.com/Strilanc/Angle">source code</a> on github includes the above code.</p>
+<h3>Summary</h3>
+<p>Angles can be tricky to work with, but we can reduce the problem by encapsulating them into a library.</p>
+<p>Also, you can make an adequate animated gif by writing an example program, recording it with <a href="http://camstudio.org/">CamStudio</a>, editing the video with Windows Movie Maker, uploading the video to <a href="http://benderconverter.com/">benderconverter.com</a>, cropping the result with <a href="http://www.gimp.org/">Gimp</a>, then uploading the result to <a href="http://imgur.com/">imgur</a>. I wouldn't recommend this process, though.</p>
+<h3>Bonus: Example Awful Code</h3>
+<p>What does it look like when a programmer who doesn't really know what
+ they're doing tries to implement angle math? Well, when I started 
+programming (14 years ago) I had only QBasic's built-in documentation to
+ guide me. I didn't know about variables, loops, arrays, indentation. 
+Nothing. In the process of teaching myself, I naturally wrote some truly
+ bad code. Now I get to put that bad code to use as an example of what 
+not to do when trying to clamp an angle:</p>
+<pre><code class="prettyprint"><span class="com">//[Hindsight: this is an inlined atan2 function]</span><span class="pln">
+</span><span class="typ">Horizontal</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> ABS</span><span class="pun">(</span><span class="typ">StartX</span><span class="pln"> </span><span class="pun">–</span><span class="pln"> </span><span class="typ">DestX</span><span class="pun">)</span><span class="pln">
+</span><span class="typ">Vertical</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> ABS</span><span class="pun">(</span><span class="typ">StartY</span><span class="pln"> </span><span class="pun">–</span><span class="pln"> </span><span class="typ">DestY</span><span class="pun">)</span><span class="pln">
+IF </span><span class="typ">Horizontal</span><span class="pln"> AND </span><span class="typ">Vertical</span><span class="pln"> </span><span class="pun">&lt;&gt;</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> THEN
+	</span><span class="typ">Diagonal</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> SQR</span><span class="pun">((</span><span class="typ">Horizontal</span><span class="pln"> </span><span class="pun">^</span><span class="pln"> </span><span class="lit">2</span><span class="pun">)</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="pun">(</span><span class="typ">Vertical</span><span class="pln"> </span><span class="pun">^</span><span class="pln"> </span><span class="lit">2</span><span class="pun">))</span><span class="pln">
+	</span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="pun">(</span><span class="typ">Arcsin</span><span class="pun">(</span><span class="typ">Vertical</span><span class="pln"> </span><span class="pun">/</span><span class="pln"> </span><span class="typ">Diagonal</span><span class="pun">))</span><span class="pln">
+	IF </span><span class="typ">DestX</span><span class="pln"> </span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">StartX</span><span class="pln"> AND </span><span class="typ">DestY</span><span class="pln"> </span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">StartY</span><span class="pln"> THEN </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> </span><span class="pun">–</span><span class="pln"> </span><span class="typ">Angle</span><span class="pun">:</span><span class="pln"> </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="lit">90</span><span class="pln">
+	IF </span><span class="typ">DestX</span><span class="pln"> </span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">StartX</span><span class="pln"> AND </span><span class="typ">DestY</span><span class="pln"> </span><span class="pun">&lt;</span><span class="pln"> </span><span class="typ">StartY</span><span class="pln"> THEN </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="lit">90</span><span class="pln">
+	IF </span><span class="typ">DestX</span><span class="pln"> </span><span class="pun">&lt;</span><span class="pln"> </span><span class="typ">StartX</span><span class="pln"> AND </span><span class="typ">DestY</span><span class="pln"> </span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">StartY</span><span class="pln"> THEN </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="lit">270</span><span class="pln">
+	IF </span><span class="typ">DestX</span><span class="pln"> </span><span class="pun">&lt;</span><span class="pln"> </span><span class="typ">StartX</span><span class="pln"> AND </span><span class="typ">DestY</span><span class="pln"> </span><span class="pun">&lt;</span><span class="pln"> </span><span class="typ">StartY</span><span class="pln"> THEN </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">180</span><span class="pln"> </span><span class="pun">-</span><span class="pln"> </span><span class="typ">Angle</span><span class="pun">:</span><span class="pln"> </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="lit">90</span><span class="pln">
+ELSE
+	IF </span><span class="typ">Horizontal</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> AND </span><span class="typ">DestY</span><span class="pln"> </span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">StartY</span><span class="pln"> THEN </span><span class="typ">Vector</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pln">
+	IF </span><span class="typ">Horizontal</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> AND </span><span class="typ">DestY</span><span class="pln"> </span><span class="pun">&lt;</span><span class="pln"> </span><span class="typ">StartY</span><span class="pln"> THEN </span><span class="typ">Vector</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">180</span><span class="pln">
+	IF </span><span class="typ">Vertical</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> AND </span><span class="typ">DestX</span><span class="pln"> </span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">StartX</span><span class="pln"> THEN </span><span class="typ">Vector</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">90</span><span class="pln">
+	IF </span><span class="typ">Vertical</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> AND </span><span class="typ">DestX</span><span class="pln"> </span><span class="pun">&lt;</span><span class="pln"> </span><span class="typ">StartX</span><span class="pln"> THEN </span><span class="typ">Vector</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">270</span><span class="pln">
+	IF </span><span class="typ">Vertical</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> AND </span><span class="typ">Horizontal</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> THEN </span><span class="typ">Vector</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> INT</span><span class="pun">(</span><span class="pln">RND </span><span class="pun">*</span><span class="pln"> </span><span class="lit">360</span><span class="pun">)</span><span class="pln">
+</span><span class="kwd">END</span><span class="pln"> IF
+</span><span class="com">//[Hindsight: an awkward modulus, forcing the remainder to be in -180 to +180]</span><span class="pln">
+DO UNTIL </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="lit">180</span><span class="pln"> </span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">Star</span><span class="pln"> AND </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">–</span><span class="pln"> </span><span class="lit">180</span><span class="pln"> </span><span class="pun">&lt;</span><span class="pln"> </span><span class="typ">Start</span><span class="pln">
+	IF </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="lit">180</span><span class="pln"> </span><span class="pun">&lt;</span><span class="pln"> </span><span class="typ">Start</span><span class="pln"> THEN </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="lit">360</span><span class="pln">
+	IF </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">-</span><span class="pln"> </span><span class="lit">180</span><span class="pln"> </span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">Start</span><span class="pln"> THEN </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">–</span><span class="pln"> </span><span class="lit">360</span><span class="pln">
+LOOP
+</span><span class="com">//[Hindsight: clamping the angle towards the start]‘</span><span class="pln">
+IF </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">Start</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="typ">Limit</span><span class="pln"> THEN </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Start</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="typ">Limit</span><span class="pln">
+IF </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">&lt;</span><span class="pln"> </span><span class="typ">Start</span><span class="pln"> </span><span class="pun">-</span><span class="pln"> </span><span class="typ">Limit</span><span class="pln"> THEN </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Start</span><span class="pln"> </span><span class="pun">-</span><span class="pln"> </span><span class="typ">Limit</span><span class="pln">
+</span><span class="com">//[Hindsight: another awkward modulus, forcing the remainder to be in 0 to 360]</span><span class="pln">
+DO UNTIL </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">&lt;=</span><span class="pln"> </span><span class="lit">360</span><span class="pln"> AND </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">&gt;=</span><span class="pln"> </span><span class="lit">0</span><span class="pln">
+	IF </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">&lt;</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> THEN </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="lit">360</span><span class="pln">
+	IF </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">&gt;</span><span class="pln"> </span><span class="lit">360</span><span class="pln"> THEN </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Angle</span><span class="pln"> </span><span class="pun">–</span><span class="pln"> </span><span class="lit">360</span><span class="pln">
+LOOP</span></code></pre>
+<p>As you can see: lots of cases, lots of constants, and lots of fiddly 
+bits. I was probably "adjusting" it constantly, because it's a breeding 
+ground for bugs. There's even still some serious ones in there! For 
+starters, I see a mistakenly semi-bitwise comparison, a potentially 
+infinite loop, and a stupid typo.</p>
+<p>---</p>
+<p>Embarrassing... Although, not quite as brain-dead as this code, from the seems-fine-otherwise <a href="https://nuget.org/packages/HydraMF.Math">HydraMF package</a>, that I came across when looking through other math libraries on NuGet:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="kwd">float</span><span class="pln"> </span><span class="typ">Sin</span><span class="pun">(</span><span class="typ">AngleSingle</span><span class="pln"> angle</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">float</span><span class="pun">)</span><span class="typ">Math</span><span class="pun">.</span><span class="typ">Sin</span><span class="pun">((</span><span class="kwd">int</span><span class="pun">)</span><span class="pln">angle</span><span class="pun">.</span><span class="typ">Degrees</span><span class="pun">)</span><span class="pln"> </span><span class="pun">/</span><span class="pln"> </span><span class="lit">1000f</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="kwd">float</span><span class="pln"> </span><span class="typ">Cos</span><span class="pun">(</span><span class="typ">AngleSingle</span><span class="pln"> angle</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">float</span><span class="pun">)</span><span class="typ">Math</span><span class="pun">.</span><span class="typ">Cos</span><span class="pun">((</span><span class="kwd">int</span><span class="pun">)</span><span class="pln">angle</span><span class="pun">.</span><span class="typ">Degrees</span><span class="pun">)</span><span class="pln"> </span><span class="pun">/</span><span class="pln"> </span><span class="lit">1000f</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>I'm guessing these two particular methods have never been used. They 
+pass degrees to a function expecting radians, unnecessarily round that 
+input, and then confusingly transform the output to be from -0.001 to 
++0.001 instead of -1 to +1. Why? Who knows.</p>
+<p>---</p>
+<h3><a href="http://www.reddit.com/r/programming/comments/1347pi/encapsulating_angles/">Discuss on Reddit.</a></h3>
+<p>---</p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers efficient, flexible remote and on-the-floor 
+development and consulting without any middle-man or excessive 
+administrivia. <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2>Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+			<nav>
+				<ul class="primary-nav clearfix">
+					<li><a href="http://www.twistedoakstudios.com/">Home</a></li>
+					<li><a href="http://twistedoakstudios.com/portfolio">Portfolio</a></li>
+				</ul>
+			</nav>
+		</div>
+		
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				6082 Shirley Street<br>
+				Halifax, NS, Canada B3H 2M8</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+		
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script> Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Post938_encapsulating-angles_files/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Post938_encapsulating-angles_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script></body></html>
