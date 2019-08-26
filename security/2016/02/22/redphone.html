@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Catching a Crypto Bug in RedPhone</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Catching a Crypto Bug in RedPhone</h1>
+<p class="meta">22 Feb 2016</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>RedPhone, now called Signal, is a <a href="https://youtu.be/vILAlhwUgIU?t=38m43s">well regarded</a> open-source cryptographic phone-call/text-message app for iOS and Android.
+I use it all the time; it&#39;s great.
+RedPhone / Signal is developed and maintained by <a href="https://whispersystems.org/">Open Whisper Systems</a>.</p>
+
+<p>Back in 2013, I was working on porting RedPhone to iOS.
+While doing that, I caught a head-slapper crypto bug in the Android version&#39;s <a href="https://en.wikipedia.org/wiki/ZRTP">ZRTP</a> handshake.
+The bug didn&#39;t create any serious attacks, and was promptly fixed.</p>
+
+<p>In this post: how I stumbled onto the bug, what it was, and lessons I learned from the experience.</p>
+
+<h1>Discovery</h1>
+
+<p>I found the bug because I was testing my implementation of the ZRTP handshake (which I&#39;d written as part of the porting process).
+I&#39;d captured a trace of the packets sent by the Android code, and I was writing unit tests asserting that the iOS code (when fed the same entropy) was generating packets bit-for-bit identical to the captured packet data.</p>
+
+<p>The first thing I noticed wasn&#39;t a security bug, it was a spec compliance bug.
+Packets created by the android code had data 12 bytes to the right of where <a href="https://tools.ietf.org/html/rfc6189">the spec</a> said it should be.
+The Android code generates packets by manipulating a raw byte buffer, and apparently someone made a mistake when adding up one of the first few offset constants.
+That initial mistake spread to all the other offset constants.</p>
+
+<p>Accidental shifting highlights a risk of doing parsing/packing via direct buffer manipulation, and of only testing your implementation against itself instead of a reference implementation, but it isn&#39;t a security issue.
+Ultimately, the exact same information was being communicated.
+Fixing the off-by-12 bug required writing gross legacy interop code, but that&#39;s all.</p>
+
+<p>The real shock happened when I got around to testing the <a href="https://tools.ietf.org/html/rfc6189#section-5.7">Confirm messages</a>.
+The Android and iOS code disagreed on what the correct payload was:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>computed (iOS):     ... f3 9e cc cc 9b 3d 3a cf fe 86 62 b7 ca 7b 18 d2 69 80 8c 8f 7b 9d ...
+expected (Android): ... f3 9e 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8c 8f 7b 9d ...
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+computed (iOS):     ... 9b 83 a0 a0 81 05 3c 77 4c 78 bd 88 de c3 87 cd a4 a9 7e d2 bf c2 ...
+expected (Android): ... 9b 83 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 7e d2 bf c2 ...
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+</code></pre></div>
+<p>This particular mismatch confused me.
+At first I misread it; I thought the iOS code was failing to fill in a field.
+But actually the error is indicating that the iOS version has a bunch of gibberish in a place where the data we captured from the Android version says there should be zeroes.</p>
+
+<p>I figured my code was accidentally mangling some data, and started figuring out which field was affected.
+At which point I probably said something like &quot;Oh FUCK!&quot;.
+The affected field was an <strong>IV</strong> field; those are <em>supposed</em> to contain gibberish.
+<a href="https://en.wikipedia.org/wiki/Initialization_vector">Initialization vectors</a> should <em>never</em> be re-used, but the Android version is merrily using zero every time!
+That is a seriously disturbing mistake to find in a well-regarded crypto app.</p>
+
+<p>At first, it wasn&#39;t clear where the mistake was in the Android code.
+The ConfirmPacket code (from 2013) did generate a random iv and write it into the packet, but somehow the iv was disappearing before the packet was written to the network.
+Very confusing... until I noticed this:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span></span><span class="kd">private</span> <span class="kt">byte</span><span class="o">[]</span> <span class="nf">getIv</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kt">byte</span><span class="o">[]</span> <span class="n">iv</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[</span><span class="mi">16</span><span class="o">];</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">arraycopy</span><span class="o">(</span><span class="n">iv</span><span class="o">,</span> <span class="n">IV_OFFSET</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">data</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">iv</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">iv</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>See it?</p>
+
+<p>The parameters for <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/System.html#arraycopy%28java.lang.Object,%20int,%20java.lang.Object,%20int,%20int%29">System.arrayCopy</a> are src, srcPos, dest, destPos, and length.
+In that order.
+(A nice trap for anyone used to <a href="http://man7.org/linux/man-pages/man3/memcpy.3.html">memcpy</a>.)</p>
+
+<p><code>getIv</code> is supposed to extract the IV by copying the bytes corresponding to the IV out of the packet buffer and into a fresh buffer.
+What <code>getIv</code> is <em>actually</em> doing is the opposite: copying a fresh buffer over the packet buffer&#39;s IV.
+And <code>getIv</code> happens to be called even when creating a packet to send.
+So the iv always ends up zeroed.</p>
+
+<p>(The fact that it&#39;s so easy to copy in the wrong direction, and not notice, is another reason direct buffer manipulation is a risky way to do parsing/packing.
+This is what happens when you write C in Java: you get C-style mistakes.)</p>
+
+<h1>Cause</h1>
+
+<p>It&#39;s easy to see how this bug could make it into the code.
+Programmers make dumb mistakes all the time, although some of us don&#39;t like to admit it.
+We transpose arguments, forget semicolons, go off by one... (thank cute kittens for testing).
+So the real question isn&#39;t how did this bug happen, it&#39;s <em>how did this bug survive</em>?
+Why didn&#39;t someone notice?</p>
+
+<p>My personal opinion is that this bug survived because, once it&#39;s established, it&#39;s invisible to integration tests.
+Sure, the call initiator and the call responder are both making a mistake.
+But they&#39;re making the <em>same</em> mistake.
+And this is a case where two wrongs make a right.
+The participants just end up agreeing that the Confirm messages&#39; IVs were zero (and that everyone should be shifted 12 bytes to the right).</p>
+
+<p>The bug would have been (and <em>was</em>) caught by minimal unit testing, but <a href="https://en.wikipedia.org/wiki/Moxie_Marlinspike">Moxie</a> doesn&#39;t (didn&#39;t?) value unit tests.
+Open Whisper Systems put their efforts into integration testing instead.
+(It&#39;s one of the things we clashed over.)
+Integration testing would have caught the bug being <em>introduced</em>, since the new buggy version wouldn&#39;t have been able to call existing non-buggy versions, but would never have caught the bug if it was there from the start.</p>
+
+<p>(So the fact that the bug wasn&#39;t caught actually tells us something: it probably <em>was</em> there from the start.
+As opposed to being surreptitiously introduced by a certain government agency, since that would have caused calls to existing clients to fail during testing.)</p>
+
+<h1>Outcome</h1>
+
+<p>Transposing those two arguments was a bone-headed mistake, but fortunately it wasn&#39;t a disaster.
+There&#39;s two reasons for that.</p>
+
+<p>First, the affected IV wasn&#39;t crucial to RedPhone.
+The Confirm message IV exists to provide <a href="https://en.wikipedia.org/wiki/Ciphertext_indistinguishability#Indistinguishability_under_chosen-plaintext_attack_.28IND-CPA.29">indistinguishability under chosen plaintext attacks (ind-cpa)</a>, but I have no idea how someone could have used distinguishability to hurt a RedPhone user (especially since <a href="https://tools.ietf.org/html/rfc6189#section-4.4.2">preshared mode</a> wasn&#39;t implemented).</p>
+
+<p>Second, the problem was fixed as soon as I reported it.
+I can&#39;t link to the commit on github, since the RedPhone-iOS repository was merged into the Signal-iOS repository without preserving history, but here&#39;s the relevant diff <a href="https://git.geekli.st/frrp/red-phone-study-and-improvment-and-redo/commit/0a21f78aaba5a909eebec17048cc5baa6629748a">according to some random commit caching site</a>:</p>
+
+<blockquote>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>[...]
+
+src/org/thoughtcrime/redphone/crypto/zrtp/ConfirmPacket.java :
+    [...]
+    private byte[] getIv() {
+       byte[] iv = new byte[16];
+    -  System.arraycopy(iv, 0, this.data, IV_OFFSET, iv.length);
+    +  System.arraycopy(this.data, IV_OFFSET, iv, 0, iv.length);
+       return iv;
+    }
+    [...]
+
+[...]
+</code></pre></div></blockquote>
+
+<p>And here&#39;s the commit message:</p>
+
+<blockquote>
+<p>[Moxie Marlinspike (March 23, 2013)]</p>
+
+<p>Fix for Commit packet protocol error. (aka, System.arraycopy is not memcpy)</p>
+
+<p>@Strilanc pointed out that the arguments for a System.arraycopy call
+are transposed, such that the commit packet was miscalculating the IV
+for CFB encryption.</p>
+
+<p>This doesn&#39;t look immediately exploitable, but it&#39;s definitely wrong.
+The problem is that fixing it will break compatibility with clients
+that haven&#39;t yet received the fix.</p>
+
+<p>This fix checks the client ID of the communicating client to see if
+it contains the fix, in which case it calculates the IV properly.
+Otherwise, it intentionally miscalculates the IV in order to maintain
+compatibility.  In a few months, we&#39;ll phase out the backwards compat
+support.</p>
+</blockquote>
+
+<p>So in the end everything turned out okay.</p>
+
+<p>(If you want to make a contribution to Signal, I recommend finding and deleting the interop code alluded to by this post.
+Now that the affected legacy clients are gone, there&#39;s no need to keep the code that detects them and then zeroes the confirm IV and shifts packet payloads 12 bytes to the right.)</p>
+
+<h1>Lessons Learned</h1>
+
+<p>Don&#39;t only test entire protocol handshakes, also test individual packets.</p>
+
+<p>Don&#39;t only test against your own implementation, also test against a reference implementation.</p>
+
+<p>Direct buffer manipulation is an error-prone way to do serialization.
+(I recommend using parser combinators instead.)</p>
+
+<p>It doesn&#39;t matter that the bug is shallow if <em>nobody looks</em>. (<a href="https://github.com/WhisperSystems/Signal-Android">*cough*</a> <a href="https://github.com/WhisperSystems/Signal-iOS">*cough*</a>)</p>
+
+</div>
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/quantum/2016/01/30/quantum-pigeonhole.html">&laquo; [Un]popular Qubits #3: The Quantum Pigeonhole Principle</a>
+        </td>
+        <td align="right">
+          <a href="/meta/2016/02/25/Github-Pages-Breaks-Compatibility.html">Don't Use Github Pages' Jekyll Support &raquo;</a>
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
