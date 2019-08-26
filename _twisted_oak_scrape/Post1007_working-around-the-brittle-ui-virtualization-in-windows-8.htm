@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script id="bug.surrogate">var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}}; if (document.location.host == 'www.salon.com') {var _ga_ = document.querySelectorAll('script[src$=ga\\.js]')[0], ga_e = document.createEvent('Event'); ga_e.initEvent('load', true, true);_ga_.dispatchEvent(ga_e);}</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Game Developers | Unity 3D Development</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Post1007_working-around-the-brittle-ui-virtualization-in-windows-8_files/1140.css">
+    <link rel="stylesheet" href="Post1007_working-around-the-brittle-ui-virtualization-in-windows-8_files/style.css">
+    <link rel="stylesheet" href="Post1007_working-around-the-brittle-ui-virtualization-in-windows-8_files/blogstyle.css">
+<link rel="stylesheet" href="Post1007_working-around-the-brittle-ui-virtualization-in-windows-8_files/prettify.css" media="all">
+<link rel="stylesheet" href="Post1007_working-around-the-brittle-ui-virtualization-in-windows-8_files/sunburst.css" media="all">
+<script type="text/javascript" src="Post1007_working-around-the-brittle-ui-virtualization-in-windows-8_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Post1007_working-around-the-brittle-ui-virtualization-in-windows-8_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Post1007_working-around-the-brittle-ui-virtualization-in-windows-8_files/modernizr-2.js"></script>
+</head>
+<body onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="#"><img class="logo" src="Post1007_working-around-the-brittle-ui-virtualization-in-windows-8_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></h2>
+<div class="meta">posted by Craig Gidney on November 20, 2012</div>
+
+<p>When doing UI programming, having to show a lot of results fast is 
+not uncommon. I recently ran into this show-many-results-fast problem as
+ part of implementing the search functionality for the Element music 
+player. I found that although search results could be computed quickly, 
+getting those results <em>displayed</em> quickly (within a <a href="http://msdn.microsoft.com/en-us/windows/apps">windows store app</a>)
+ was a huge challenge. This post explains the obstacles that make 
+showing a lot of results difficult in windows store apps, and also 
+outlines the solution I ended up using. I’ve also uploaded an <a href="https://github.com/Strilanc/Example-Custom-Virtualizing-Search-for-Windows-Store-Apps">example solution</a> to github.</p>
+<h3>The Solution that is the Problem: UI Virtualization</h3>
+<p>There is a “correct” (huge emphasis on those quotes) way to show 
+large collections of controls in windows store apps, recommended by 
+msdn: <a href="http://msdn.microsoft.com/en-us/library/windows/apps/xaml/hh780657.aspx">UI virtualization</a>. UI virtualization is a feature inherited from <a href="http://en.wikipedia.org/wiki/Windows_Presentation_Foundation">WPF</a>,
+ and you can try it out by creating a new C# WPF project called 
+‘LayoutTest’ and pasting the following code into the appropriate files:</p>
+<pre><code class="prettyprint"><span class="com">&lt;!--MainWindow.xaml--&gt;</span><span class="pln">
+</span><span class="tag">&lt;Window</span><span class="pln"> </span><span class="atn">x:Class</span><span class="pun">=</span><span class="atv">"LayoutTest.MainWindow"</span><span class="pln">
+        </span><span class="atn">xmlns</span><span class="pun">=</span><span class="atv">"http://schemas.microsoft.com/winfx/2006/xaml/presentation"</span><span class="pln">
+        </span><span class="atn">xmlns:x</span><span class="pun">=</span><span class="atv">"http://schemas.microsoft.com/winfx/2006/xaml"</span><span class="pln">
+        </span><span class="atn">Title</span><span class="pun">=</span><span class="atv">"MainWindow"</span><span class="pln"> </span><span class="atn">Height</span><span class="pun">=</span><span class="atv">"350"</span><span class="pln"> </span><span class="atn">Width</span><span class="pun">=</span><span class="atv">"525"</span><span class="tag">&gt;</span><span class="pln">
+    </span><span class="tag">&lt;ListView</span><span class="pln"> </span><span class="atn">x:Name</span><span class="pun">=</span><span class="atv">"items"</span><span class="tag">&gt;</span><span class="pln">
+        </span><span class="tag">&lt;ItemsControl.ItemTemplate&gt;</span><span class="pln">
+            </span><span class="tag">&lt;DataTemplate&gt;</span><span class="pln">
+                </span><span class="tag">&lt;Slider</span><span class="pln"> </span><span class="atn">Value</span><span class="pun">=</span><span class="atv">"{Binding Mode=OneWay}"</span><span class="pln"> </span><span class="atn">Minimum</span><span class="pun">=</span><span class="atv">"0"</span><span class="pln"> </span><span class="atn">Maximum</span><span class="pun">=</span><span class="atv">"1"</span><span class="pln"> </span><span class="atn">Width</span><span class="pun">=</span><span class="atv">"300"</span><span class="tag">/&gt;</span><span class="pln">
+            </span><span class="tag">&lt;/DataTemplate&gt;</span><span class="pln">
+        </span><span class="tag">&lt;/ItemsControl.ItemTemplate&gt;</span><span class="pln">
+        </span><span class="tag">&lt;ItemsControl.ItemsPanel&gt;</span><span class="pln">
+            </span><span class="tag">&lt;ItemsPanelTemplate&gt;</span><span class="pln">
+                </span><span class="tag">&lt;VirtualizingStackPanel</span><span class="pln"> </span><span class="tag">/&gt;</span><span class="pln">
+            </span><span class="tag">&lt;/ItemsPanelTemplate&gt;</span><span class="pln">
+        </span><span class="tag">&lt;/ItemsControl.ItemsPanel&gt;</span><span class="pln">
+    </span><span class="tag">&lt;/ListView&gt;</span><span class="pln">
+</span><span class="tag">&lt;/Window&gt;</span></code></pre>
+<pre><code class="prettyprint"><span class="com">//MainWindow.xaml.cs</span><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">System</span><span class="pun">.</span><span class="typ">Collections</span><span class="pun">.</span><span class="typ">ObjectModel</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">System</span><span class="pun">.</span><span class="typ">Linq</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">System</span><span class="pun">.</span><span class="typ">Threading</span><span class="pun">.</span><span class="typ">Tasks</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">System</span><span class="pun">.</span><span class="typ">Windows</span><span class="pun">;</span><span class="pln">
+
+</span><span class="kwd">namespace</span><span class="pln"> </span><span class="typ">LayoutTest</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">partial</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">MainWindow</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">Window</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">MainWindow</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="typ">InitializeComponent</span><span class="pun">();</span><span class="pln">
+            </span><span class="kwd">this</span><span class="pun">.</span><span class="typ">Loaded</span><span class="pln"> </span><span class="pun">+=</span><span class="pln"> async </span><span class="pun">(</span><span class="pln">sender</span><span class="pun">,</span><span class="pln"> arg</span><span class="pun">)</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+                </span><span class="kwd">var</span><span class="pln"> data </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ObservableCollection</span><double><span class="pun">();</span><span class="pln">
+                </span><span class="kwd">const</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> n </span><span class="pun">=</span><span class="pln"> </span><span class="lit">10000</span><span class="pun">;</span><span class="pln">
+                items</span><span class="pun">.</span><span class="typ">ItemsSource</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> data</span><span class="pun">;</span><span class="pln">
+                </span><span class="kwd">foreach</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">var</span><span class="pln"> i </span><span class="kwd">in</span><span class="pln"> </span><span class="typ">Enumerable</span><span class="pun">.</span><span class="typ">Range</span><span class="pun">(</span><span class="lit">0</span><span class="pun">,</span><span class="pln"> n</span><span class="pun">))</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+                    data</span><span class="pun">.</span><span class="typ">Insert</span><span class="pun">(</span><span class="lit">0</span><span class="pun">,</span><span class="pln"> i</span><span class="pun">/(</span><span class="kwd">double</span><span class="pun">)</span><span class="pln">n</span><span class="pun">);</span><span class="pln">
+                    await </span><span class="typ">Task</span><span class="pun">.</span><span class="typ">Delay</span><span class="pun">(</span><span class="lit">1</span><span class="pun">);</span><span class="pln">
+                </span><span class="pun">}</span><span class="pln">
+            </span><span class="pun">};</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></double></code></pre>
+<p>When you run the project containing the above code, you should see a 
+list of sliders that updates smoothly as values are streamed into the 
+observable collection being used as a data source. Very nice. Very easy.</p>
+<p><strong>But things are not so nice in a windows store project.</strong>
+ Doing the exact same thing results in something best described as 
+“completely broken and useless”. Basically, you get a screen full of 
+non-responsive teleporting sliders:</p>
+<p><img src="Post1007_working-around-the-brittle-ui-virtualization-in-windows-8_files/aHvwR.gif" alt="Virtualizing gone wrong"></p>
+<p>It really can’t be stressed enough how unusable this is.  Inserting 
+new items at the start or in the middle of a virtualizing control (like 
+what you do when streaming sorted results) in quick succession is 
+currently a <strong>very bad</strong> idea. Even appending results to the end is far too slow, although at least it doesn’t have such erratic behavior.</p>
+<h3>Approaching the Problem</h3>
+<p>I lost a lot of time because of UI virtualization being broken. 
+Enough that we actually had to publish a version of Element with a 
+search that slowly streamed results and truncated them after 250 items 
+because anything more was simply non-responsive (the corrected version 
+is still in never-ending approval limbo at the moment).</p>
+<p>Because the recommended approach did not work, I ended up trying a 
+lot of different approaches. The obstacle that consistently thwarted 
+these attempts is the fact that many UI operations are extremely 
+expensive. For example, constructing user controls is expensive 
+(especially sliders), adding or removing controls from a container 
+control like a grid is expensive, and even re-assigning the content of a
+ blank user control is expensive. Profiling showed that it took up to a 
+second to do ten thousand simple content changes.</p>
+<p><img src="Post1007_working-around-the-brittle-ui-virtualization-in-windows-8_files/qzrC7.png" alt="Profiling ten thousand UserControl content changes"></p>
+<p>If you do any of these expensive operations more than a few hundred 
+times without yielding the UI context, you’ve just created a very 
+noticeable pause (&gt;50ms). Of course all of these operations are 
+things you tend to do a lot when trying to show lots of sorted items. As
+ a result, searches took too long to get all the results on screen and 
+there were hiccups (small pauses) as users typed to refine them. 
+Eventually I realized it was time to stop trying to play nice and start 
+blatantly cheating.</p>
+<h3>Implementing a Solution</h3>
+<p>Two UI operations that happen to be cheap are repositioning controls 
+and changing the visibility of controls. If a control is already 
+constructed and invisibly added to a container, we can quickly move it 
+into a desired position and make it visible. This is useful because 
+controls in a list often all have the same type. Since only a subset are
+ visible at any one time, we can re-use controls as they exit the 
+viewable area. In other words, we can implement our own specialized but 
+limited UI virtualization. We just need to keep a cache of invisible 
+already-in-the-container controls ready to go, and be able to 
+efficiently determine where they need to be positioned. (I call this 
+“cheating” because it’s likely to break functionality that would 
+normally be implicitly supported, like accessibility or tabbing through 
+results.)</p>
+<p>Efficiently determining where controls need to be positioned is not 
+trivial. It requires fast insertion of new items, deletion of stale 
+items, aggregation of layout positions, and querying of ranges of items 
+by those layout position. Just storing the items in a list won’t work 
+here, because we’ll end up visiting half the list every time an item is 
+changed just to reposition items or update the layout positions. We need
+ something better, with guaranteed fast insertion, deletion, 
+aggregation, and querying. If only there was some construct with all of 
+these properties, covered in every data structures course ever… like <a href="http://en.wikipedia.org/wiki/Balanced_binary_search_tree">balanced binary search trees</a>.</p>
+<p>A search tree can do all of the operations I’ve mentioned in <a href="http://en.wikipedia.org/wiki/Time_complexity#Logarithmic_time">logarithmic</a> (plus <a href="http://en.wikipedia.org/wiki/Output-sensitive_algorithm">output size</a>
+ for queries) time. Squaring the number of items in a search tree only 
+doubles the amount of processing time. In more concrete terms that 
+means, after the data is in the tree, laying out a million items will 
+only be four times as expensive as laying out thirty three items 
+(ignoring factors like locality and caching).</p>
+<p>Unfortunately, as far as I know, .Net does not include a search tree 
+that supports aggregation or querying against those aggregates. 
+Implementing a custom balanced search tree might be a well-defined task,
+ but they’re notoriously tricky to get right. Fortunately, I happened to
+ have previously almost finished implementing and testing a <a href="http://en.wikipedia.org/wiki/Red_black_tree">red black tree</a> with <a href="http://en.wikipedia.org/wiki/Persistent_data_structure">persistence</a>
+ in C# in my spare time. I had to modify it to add support for 
+aggregation and querying, but that was trivial compared to getting the 
+insertion/deletion cases right. The <a href="https://github.com/Strilanc/Example-Custom-Virtualizing-Search-for-Windows-Store-Apps/blob/master/VirtualizingSearchExample/Searching/PersistentAggregatingRedBlackTree.cs">source code for the persistent aggregating red black tree</a> is in the example project (note that it’s not optimized for raw speed, because that ended up not being necessary).</p>
+<p>The search tree is really the hardest part of doing your own IO 
+virtualization. The remainder is boring to describe because it’s so 
+straightforward: define some <a href="https://github.com/Strilanc/Example-Custom-Virtualizing-Search-for-Windows-Store-Apps/blob/master/VirtualizingSearchExample/Searching/FastVerticallyScrollingItemViewer.xaml.cs#L173">interfaces to represent virtual controls</a>, implement a <a href="https://github.com/Strilanc/Example-Custom-Virtualizing-Search-for-Windows-Store-Apps/blob/master/VirtualizingSearchExample/Searching/FastVerticallyScrollingItemViewer.xaml.cs#L126">simple cache that avoids adding or removing controls from a container</a>, have a method to <a href="https://github.com/Strilanc/Example-Custom-Virtualizing-Search-for-Windows-Store-Apps/blob/master/VirtualizingSearchExample/Searching/FastVerticallyScrollingItemViewer.xaml.cs#L74">position the controls based on the tree’s state</a>, and package it all up into a <a href="https://github.com/Strilanc/Example-Custom-Virtualizing-Search-for-Windows-Store-Apps/blob/master/VirtualizingSearchExample/Searching/FastVerticallyScrollingItemViewer.xaml.cs">user control</a>.</p>
+<p>With our custom virtualizing control, we can finally do some fast searching. We just have to wire it all up, as is done in the <a href="https://github.com/Strilanc/Example-Custom-Virtualizing-Search-for-Windows-Store-Apps/blob/master/VirtualizingSearchExample/MainPage.xaml.cs">main page</a> of the example project. If you run the example project, you should see something that behaves like this:</p>
+<p><img src="Post1007_working-around-the-brittle-ui-virtualization-in-windows-8_files/33tI0.gif" alt="Example searching with custom virtualizing"></p>
+<p><strong>This</strong> is actually usable. Even though I’ve omitted a 
+few tweaks I later added (like showing stale search results for 100ms 
+when the user types in order to avoid a flicker of ‘no results’) and the
+ search tree is in no way optimized, both scrolling and refining 
+searches are fast and responsive. No hiccups. No pauses. Usable.</p>
+<h3>Summary</h3>
+<p>The UI virtualizing in windows store apps is broken, or at least 
+brittle. You have to implement your own instead, while avoiding many 
+operations that seem promising but are too expensive. I did it by 
+aggregating and querying layout heights with a search tree, and re-using
+ controls that had already been invisibly added to a container. The 
+result is quite nice, in my opinion (see the <a href="https://github.com/Strilanc/Example-Custom-Virtualizing-Search-for-Windows-Store-Apps">example project</a> on github).</p>
+<p>Hopefully, I haven’t made a fool of myself by completely missing the <em>actual</em>
+ right way to show lots of controls. Clearly there are apps out there 
+that already show lots of controls. But, even if the comments are 
+embarrassing, they’ll at least be enlightening.</p>
+<p>—</p>
+<h3><a href="http://www.reddit.com/r/programming/comments/13hzsy/working_around_the_brittle_ui_virtualization_in/">Discuss on Reddit</a></h3>
+<p>—</p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers efficient, flexible remote and on-the-floor 
+development and consulting without any middle-man or excessive 
+administrivia. <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2>Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+			<nav>
+				<ul class="primary-nav clearfix">
+					<li><a href="http://www.twistedoakstudios.com/">Home</a></li>
+					<li><a href="http://twistedoakstudios.com/portfolio">Portfolio</a></li>
+				</ul>
+			</nav>
+		</div>
+		
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				6082 Shirley Street<br>
+				Halifax, NS, Canada B3H 2M8</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+		
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script> Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Post1007_working-around-the-brittle-ui-virtualization-in-windows-8_files/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Post1007_working-around-the-brittle-ui-virtualization-in-windows-8_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script></body></html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script id="bug.surrogate">var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}}; if (document.location.host == 'www.salon.com') {var _ga_ = document.querySelectorAll('script[src$=ga\\.js]')[0], ga_e = document.createEvent('Event'); ga_e.initEvent('load', true, true);_ga_.dispatchEvent(ga_e);}</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Game Developers | Unity 3D Development</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Post822_useful-methods-1-observable-wheneach_files/1140.css">
+    <link rel="stylesheet" href="Post822_useful-methods-1-observable-wheneach_files/style.css">
+    <link rel="stylesheet" href="Post822_useful-methods-1-observable-wheneach_files/blogstyle.css">
+<link rel="stylesheet" href="Post822_useful-methods-1-observable-wheneach_files/prettify.css" media="all">
+<link rel="stylesheet" href="Post822_useful-methods-1-observable-wheneach_files/sunburst.css" media="all">
+<script type="text/javascript" src="Post822_useful-methods-1-observable-wheneach_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Post822_useful-methods-1-observable-wheneach_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Post822_useful-methods-1-observable-wheneach_files/modernizr-2.js"></script>
+</head>
+<body onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="#"><img class="logo" src="Post822_useful-methods-1-observable-wheneach_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></h2>
+<div class="meta">posted by Craig Gidney on October 23, 2012</div>
+
+<p>This series of posts is inspired by a <a href="http://msmvps.com/blogs/jon_skeet/archive/2012/01/16/eduasync-part-19-ordering-by-completion-ahead-of-time.aspx">post by Jon Skeet</a>,
+ where he explains a method I suggested and called “OrderByCompletion”. 
+Each post will be about some conceptually simple and interesting 
+function that I implemented as part of my day to day programming.</p>
+<p>Code and tests for each method in the series will be published to the GitHub repository <a href="https://github.com/Strilanc/Methods">Strilanc/Methods</a>.</p>
+<p>—</p>
+<p>Reactive Extensions for .Net is great, and I’ve been using it more 
+and more in the UI code I write. It’s just downright better than events,
+ especially with respect to keeping the code for a feature or 
+functionality isolated to a single place. Recently, I found myself with 
+an observable sequence of observables representing mouse drags, and I 
+wanted to observe the drop points. Basically this situation:</p>
+<pre><code class="prettyprint"><span class="kwd">static</span><span class="pln"> </span><span class="typ">IObservable</span><span class="pun">&lt;</span><span class="typ">Point</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">GetDragDropPoints</span><span class="pun">(</span><span class="typ">IObservable</span><span class="pun">&lt;</span><span class="typ">IObservable</span><span class="pun">&lt;</span><span class="typ">Point</span><span class="pun">&gt;&gt;</span><span class="pln"> drags</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="typ">IObservable</span><span class="pun">&lt;</span><span class="typ">Task</span><span class="pun">&lt;</span><span class="typ">Point</span><span class="pun">&gt;&gt;</span><span class="pln"> eventualDropPoints </span><span class="pun">=</span><span class="pln"> drags</span><span class="pun">.</span><span class="typ">Select</span><span class="pun">(</span><span class="pln">pts </span><span class="pun">=&gt;</span><span class="pln"> pts</span><span class="pun">.</span><span class="typ">LastAsync</span><span class="pun">().</span><span class="typ">ToTask</span><span class="pun">());</span><span class="pln">
+    </span><span class="typ">IObservable</span><span class="pun">&lt;</span><span class="typ">Point</span><span class="pun">&gt;</span><span class="pln"> result </span><span class="pun">=</span><span class="pln"> </span><span class="pun">???</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> result</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>Keep in mind that drags can overlap (e.g. consider a multi-touch screen) and can be cancelled (e.g. another app steals focus).</p>
+<p>I’m reasonably sure the method I want doesn’t exist, although there 
+are a lot of methods in the Rx library that almost do what I need. The 
+closest is Observable.Concat, which takes an observable sequence of 
+tasks and observes their results. However, the results are forced to be 
+in the same order as the tasks are received, meaning overlapping drags 
+would work incorrectly. Also, Observable.Concat (and almost all of the 
+other candidates) combine <em>awaiting completion</em> with <em>unwrapping the result</em>,
+ forcing exceptions and cancellation to be propagated into the 
+observable (killing it). Actually, even if it does already exist, I want
+ to implement something fun so lets dive in.</p>
+<p>The method I want to implement is a lot like the 
+Enumerable.OrderByCompletion method from Jon Skeet’s post. Both 
+conceptually take a streams of tasks and “re-order” the streams to make 
+consuming the tasks easier. However, an Observable.OrderByCompletion 
+method is basically a waste of time to write because users using it end 
+up in the same situation as before. They still have to await the tasks 
+before using the result. The fact that the tasks will happen to complete
+ in order accomplishes basically nothing in terms of code differences. I
+ want a bit more: a method that takes advantage of the asynchronous 
+nature of observables to delay forwarding observed tasks until they’re 
+actually completed.</p>
+<h3>Implementation</h3>
+<p>First, the hardest part: naming. Existing task methods that operate 
+on collections are called “WhenAll” and “WhenAny”. The method I want is 
+conceptually similar, but it forwards observed tasks when each is ready.
+ To make it sound similar to the other task methods and also somewhat 
+self-descriptive, I will call it “WhenEach”. With name in hand, we can 
+move on to the actual implementation.</p>
+<p>When implementing or consuming an observable there’s two important 
+considerations to be conscious of. First, observables may be concurrent 
+(in Rx 2.0). Multiple results may be arriving concurrently (and in our 
+case those results are tasks that may also be completing concurrently) 
+and we should try to forward them concurrently as well. Second, 
+observables must never send more items after sending completion/faulted.
+ In the context of WhenEach, these two considerations are what force the
+ most code. We must delay completing/faulting until all the tasks we’ve 
+seen have completed and been forwarded, and ideally we should do it 
+without synchronizing the forwarding of results.</p>
+<p>Alright, that’s enough summarizing and preparing. Code:</p>
+<pre><code class="prettyprint"><span class="com">///&lt;summary&gt;Forwards tasks from the underlying observable, after they've completed, potentially out of order.&lt;/summary&gt;</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">IObservable</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">WhenEach</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">IObservable</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> observable</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">where</span><span class="pln"> T </span><span class="pun">:</span><span class="pln"> </span><span class="typ">Task</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">observable </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentNullException</span><span class="pun">(</span><span class="str">"observable"</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">AnonymousObservable</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;(</span><span class="pln">observer </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">observer </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ArgumentNullException</span><span class="pun">(</span><span class="str">"observer"</span><span class="pun">);</span><span class="pln">
+
+        </span><span class="com">// what to do when last task finishes</span><span class="pln">
+        </span><span class="typ">Action</span><span class="pln"> sendDone </span><span class="pun">=</span><span class="pln"> observer</span><span class="pun">.</span><span class="typ">OnCompleted</span><span class="pun">;</span><span class="pln">
+        </span><span class="com">// number of 'pendings', including the unfinished observable and unfinished tasks</span><span class="pln">
+        </span><span class="kwd">var</span><span class="pln"> pendingCount </span><span class="pun">=</span><span class="pln"> </span><span class="lit">1</span><span class="pun">;</span><span class="pln">
+        </span><span class="typ">Action</span><span class="pln"> markOnePendingCompleted </span><span class="pun">=</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="typ">Interlocked</span><span class="pun">.</span><span class="typ">Decrement</span><span class="pun">(</span><span class="kwd">ref</span><span class="pln"> pendingCount</span><span class="pun">)</span><span class="pln"> </span><span class="pun">==</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln">
+                sendDone</span><span class="pun">();</span><span class="pln">
+        </span><span class="pun">};</span><span class="pln">
+
+        </span><span class="kwd">return</span><span class="pln"> observable</span><span class="pun">.</span><span class="typ">Subscribe</span><span class="pun">(</span><span class="pln">
+            task </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+                </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">task </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+                    observer</span><span class="pun">.</span><span class="typ">OnNext</span><span class="pun">(</span><span class="kwd">null</span><span class="pun">);</span><span class="pln">
+                    </span><span class="kwd">return</span><span class="pun">;</span><span class="pln">
+                </span><span class="pun">}</span><span class="pln">
+                </span><span class="typ">Interlocked</span><span class="pun">.</span><span class="typ">Increment</span><span class="pun">(</span><span class="kwd">ref</span><span class="pln"> pendingCount</span><span class="pun">);</span><span class="pln">
+                task</span><span class="pun">.</span><span class="typ">ContinueWith</span><span class="pun">(</span><span class="pln">x </span><span class="pun">=&gt;</span><span class="pln"> observer</span><span class="pun">.</span><span class="typ">OnNext</span><span class="pun">(</span><span class="pln">task</span><span class="pun">),</span><span class="pln">
+                         </span><span class="typ">TaskContinuationOptions</span><span class="pun">.</span><span class="typ">ExecuteSynchronously</span><span class="pun">)</span><span class="pln">
+                    </span><span class="pun">.</span><span class="typ">ContinueWith</span><span class="pun">(</span><span class="pln">x </span><span class="pun">=&gt;</span><span class="pln"> markOnePendingCompleted</span><span class="pun">(),</span><span class="pln">
+                         </span><span class="typ">TaskContinuationOptions</span><span class="pun">.</span><span class="typ">ExecuteSynchronously</span><span class="pun">);</span><span class="pln">
+            </span><span class="pun">},</span><span class="pln">
+            ex </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+                sendDone </span><span class="pun">=</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> observer</span><span class="pun">.</span><span class="typ">OnError</span><span class="pun">(</span><span class="pln">ex</span><span class="pun">);</span><span class="pln">
+                markOnePendingCompleted</span><span class="pun">();</span><span class="pln">
+            </span><span class="pun">},</span><span class="pln">
+            markOnePendingCompleted</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">});</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>As the code hints at but does not really explain, completion is 
+tracked/delayed by using a ‘pending count’ modified with atomic 
+operations. The underlying observable contributes 1 pending count, which
+ is taken away when it completes or faults. Each observed task also 
+contributes a pending count, and then takes it away after the task 
+completes and has been forwarded. When the pending count hits 0, we 
+forward the underlying observable’s completion (or fault). Otherwise the
+ code is boring null precondition checks, a special case to forward null
+ tasks, a re-assign-action trick to avoid duplicate code in the OnError 
+and OnComplete callbacks, and ensuring observer.OnNext incorrectly 
+throwing an exception doesn’t ruin the pending count.</p>
+<h3>Example</h3>
+<p>To demonstrate how the method works, consider this example code:</p>
+<pre><code class="prettyprint"><span class="kwd">var</span><span class="pln"> r </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Random</span><span class="pun">();</span><span class="pln">
+</span><span class="typ">Enumerable</span><span class="pun">.</span><span class="typ">Range</span><span class="pun">(</span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="lit">100</span><span class="pun">)</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">Select</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="typ">Task</span><span class="pun">.</span><span class="typ">Delay</span><span class="pun">(</span><span class="typ">TimeSpan</span><span class="pun">.</span><span class="typ">FromSeconds</span><span class="pun">(</span><span class="pln">e </span><span class="pun">*</span><span class="pln"> </span><span class="lit">0.1</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> r</span><span class="pun">.</span><span class="typ">NextDouble</span><span class="pun">()))</span><span class="pln">
+                        </span><span class="pun">.</span><span class="typ">ContinueWith</span><span class="pun">(</span><span class="pln">x </span><span class="pun">=&gt;</span><span class="pln"> e</span><span class="pun">))</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">ToObservable</span><span class="pun">()</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">WhenEach</span><span class="pun">()</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">Where</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> e</span><span class="pun">.</span><span class="typ">IsCompleted</span><span class="pun">)</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">Select</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> e</span><span class="pun">.</span><span class="typ">Result</span><span class="pun">)</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">Subscribe</span><span class="pun">(</span><span class="typ">Console</span><span class="pun">.</span><span class="typ">WriteLine</span><span class="pun">);</span></code></pre>
+<p>What do we expect this to do? Well, it generates 100 tasks with 
+delayed results. The base delay increases linearly, but a random offset 
+is included to cause some of the tasks to be out of order with respect 
+to the duration of their delay. Those tasks are observed by WhenEach, 
+which forwards them as they complete to a filter that verifiers they’ve 
+completed, and then their result is forwarded to the console. We expect 
+the output to be the numbers from 0 to 99 in a globally increasing but 
+locally random order. I ran this code and…</p>
+<pre>1
+4
+0
+2
+9
+3
+7
+5
+6
+8
+11
+14
+10
+13
+15
+12
+18
+17
+23
+*snip*
+...
+</pre>
+<p>Cool! It seems to work.</p>
+<h3>Summary</h3>
+<p>Observable.WhenEach doesn’t have quite the same “that’s impossible!” 
+vibe as OrderByCompletion. The implementation is straightforward, 
+without any conceptual leaps. But… I like it all the same. I hope you 
+find it useful. I certainly did:</p>
+<pre><code class="prettyprint"><span class="kwd">return</span><span class="pln"> drags
+    </span><span class="pun">.</span><span class="typ">Select</span><span class="pun">(</span><span class="pln">pts </span><span class="pun">=&gt;</span><span class="pln"> pts</span><span class="pun">.</span><span class="typ">LastAsync</span><span class="pun">().</span><span class="typ">ToTask</span><span class="pun">());</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">WhenEach</span><span class="pun">()</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">Where</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="pun">!</span><span class="pln">e</span><span class="pun">.</span><span class="typ">IsCancelled</span><span class="pun">)</span><span class="pln"> </span><span class="com">// note: should never be faulted, fail in that case</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">Select</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> e</span><span class="pun">.</span><span class="typ">Result</span><span class="pun">);</span></code></pre>
+<p>If this method or a better variant already exists, please tell me. Rx
+ is a gigantic library and I often find myself reinventing the wheel 
+when I’m not careful. For awhile I even assumed Rx didn’t work in 
+windows store projects, because windows store projects can’t referencing
+ normal class libraries, but naturally the Rx devs are good at their job
+ so it’s a portable library.</p>
+<p>—</p>
+<h3><em><a href="http://www.reddit.com/r/programming/comments/11xlz2/usefulinteresting_method_observablewheneach/">Comments on Reddit</a></em></h3>
+<p>—</p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers efficient, flexible remote and on-the-floor 
+development and consulting without any middle-man or excessive 
+administrivia. <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2>Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+			<nav>
+				<ul class="primary-nav clearfix">
+					<li><a href="http://www.twistedoakstudios.com/">Home</a></li>
+					<li><a href="http://twistedoakstudios.com/portfolio">Portfolio</a></li>
+				</ul>
+			</nav>
+		</div>
+		
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				6082 Shirley Street<br>
+				Halifax, NS, Canada B3H 2M8</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+		
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script> Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Post822_useful-methods-1-observable-wheneach_files/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Post822_useful-methods-1-observable-wheneach_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script></body></html>

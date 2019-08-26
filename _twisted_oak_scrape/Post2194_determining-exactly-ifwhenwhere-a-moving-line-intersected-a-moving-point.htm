@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script id="bug.surrogate">var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}}; if (document.location.host == 'www.salon.com') {var _ga_ = document.querySelectorAll('script[src$=ga\\.js]')[0], ga_e = document.createEvent('Event'); ga_e.initEvent('load', true, true);_ga_.dispatchEvent(ga_e);}</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Unity3D Consulting | Technical Magic</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/1140.css">
+    <link rel="stylesheet" href="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/style.css">
+    <link rel="stylesheet" href="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/blogstyle.css">
+<link rel="stylesheet" href="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/prettify.css" media="all">
+<link rel="stylesheet" href="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/sunburst.css" media="all">
+<script type="text/javascript" src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/modernizr-2.js"></script>
+</head>
+<body class=" customize-support" onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="#"><img class="logo" src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point" rel="bookmark" title="Permanent Link to Determining exactly if/when/where a moving line intersected a moving point">Determining exactly if/when/where a moving line intersected a moving point</a></h2>
+<div class="meta">posted by Craig Gidney on February 5, 2013</div>
+
+<p>I try to include sample projects when I publish libraries. In the case of <a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime">perishable collections</a>, the sample project was actually a simple game based on cutting lines with the mouse pointer:</p>
+<p><iframe src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/e4PDQUC3SuA.htm" allowfullscreen="" frameborder="0" height="315" width="420"></iframe></p>
+<p>As part of writing the sample, I had to solve the problem of 
+determining if, when, and where the mouse pointer was swept across a 
+line (or vice versa). My <a href="http://geomalgorithms.com/">usual reference</a> for geometry algorithms didn’t contain a solution, so I developed one myself.</p>
+<p>In this post I’ll be explaining an analytical solution to the problem. The solution is implemented in a small amount of <a href="https://github.com/Strilanc/Methods/tree/master/Methods/Methods/LineSweepPoint">source code</a> (about 150 lines, counting comments and supporting methods/types), also available on github.</p>
+<h3>Destination</h3>
+<p>It turns out that “did the mouse pointer cut the moving line?” is one
+ of those magical math problems that starts out with some relatively 
+simple constraints, then appears to become quite complicated as you 
+solve it, but then almost everything cancels or combines in the last few
+ steps and you end up with something absurdly simple. (Then, when you go
+ back to look over the solution, it turns out there was an easy path the
+ whole time.)</p>
+<p>For reference and motivation, I’m just going to dump the meat of the 
+implementation right here, before explaining it. Underlined words are 
+links to the corresponding code on github.</p>
+<pre><code class="prettyprint lang-cs"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">IEnumerable</span><span class="pun">&lt;</span><a href="https://github.com/Strilanc/Methods/blob/master/Methods/Methods/LineSweepPoint/GeometryUtil.cs#L29"><span class="typ">Sweep</span></a><span class="pun">&gt;</span><span class="pln"> </span><a href="https://github.com/Strilanc/Methods/blob/master/Methods/Methods/LineSweepPoint/GeometryUtil.cs#L7"><span class="typ">WhenLineSweepsPoint</span></a><span class="pun">(</span><a href="https://github.com/Strilanc/Methods/blob/master/Methods/Methods/LineSweepPoint/LineSegment.cs"><span class="typ">LineSegment</span></a><span class="pln"> pathOfLineStartPoint</span><span class="pun">,</span><span class="pln">
+                                                     </span><span class="typ">LineSegment</span><span class="pln"> pathOfLineEndPoint</span><span class="pun">,</span><span class="pln">
+                                                     </span><a href="https://github.com/Strilanc/Methods/blob/master/Methods/Methods/LineSweepPoint/Point.cs"><span class="typ">Point</span></a><span class="pln"> point</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> a </span><span class="pun">=</span><span class="pln"> point </span><span class="pun">-</span><span class="pln"> pathOfLineStartPoint</span><span class="pun">.</span><span class="typ">Start</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> b </span><span class="pun">=</span><span class="pln"> </span><span class="pun">-</span><span class="pln">pathOfLineStartPoint</span><span class="pun">.</span><span class="typ">Delta</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> c </span><span class="pun">=</span><span class="pln"> pathOfLineEndPoint</span><span class="pun">.</span><span class="typ">Start</span><span class="pln"> </span><span class="pun">-</span><span class="pln"> pathOfLineStartPoint</span><span class="pun">.</span><span class="typ">Start</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> d </span><span class="pun">=</span><span class="pln"> pathOfLineEndPoint</span><span class="pun">.</span><span class="typ">Delta</span><span class="pln"> </span><span class="pun">-</span><span class="pln"> pathOfLineStartPoint</span><span class="pun">.</span><span class="typ">Delta</span><span class="pun">;</span><span class="pln">
+
+</span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">from</span><span class="pln"> t </span><span class="kwd">in</span><span class="pln"> </span><a href="https://github.com/Strilanc/Methods/blob/master/Methods/Methods/LineSweepPoint/GeometryUtil.cs#L48"><span class="typ">QuadraticRoots</span></a><span class="pun">(</span><span class="pln">b</span><span class="pun">.</span><a href="https://github.com/Strilanc/Methods/blob/master/Methods/Methods/LineSweepPoint/Vector.cs#L26"><span class="typ">Cross</span></a><span class="pun">(</span><span class="pln">d</span><span class="pun">),</span><span class="pln"> a</span><span class="pun">.</span><span class="typ">Cross</span><span class="pun">(</span><span class="pln">d</span><span class="pun">)</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> b</span><span class="pun">.</span><span class="typ">Cross</span><span class="pun">(</span><span class="pln">c</span><span class="pun">),</span><span class="pln"> a</span><span class="pun">.</span><span class="typ">Cross</span><span class="pun">(</span><span class="pln">c</span><span class="pun">))</span><span class="pln">
+       where t </span><span class="pun">&gt;=</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> </span><span class="pun">&amp;&amp;</span><span class="pln"> t </span><span class="pun">&lt;=</span><span class="pln"> </span><span class="lit">1</span><span class="pln">
+       let start </span><span class="pun">=</span><span class="pln"> pathOfLineStartPoint</span><span class="pun">.</span><a href="https://github.com/Strilanc/Methods/blob/master/Methods/Methods/LineSweepPoint/LineSegment.cs#L11"><span class="typ">LerpAcross</span></a><span class="pun">(</span><span class="pln">t</span><span class="pun">)</span><span class="pln">
+       let end </span><span class="pun">=</span><span class="pln"> pathOfLineEndPoint</span><span class="pun">.</span><span class="typ">LerpAcross</span><span class="pun">(</span><span class="pln">t</span><span class="pun">)</span><span class="pln">
+       let s </span><span class="pun">=</span><span class="pln"> point</span><span class="pun">.</span><a href="https://github.com/Strilanc/Methods/blob/master/Methods/Methods/LineSweepPoint/GeometryUtil.cs#L38"><span class="typ">LerpProjectOnto</span></a><span class="pun">(</span><span class="kwd">new</span><span class="pln"> </span><span class="typ">LineSegment</span><span class="pun">(</span><span class="pln">start</span><span class="pun">,</span><span class="pln"> end</span><span class="pun">))</span><span class="pln">
+       where s </span><span class="pun">&gt;=</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> </span><span class="pun">&amp;&amp;</span><span class="pln"> s </span><span class="pun">&lt;=</span><span class="pln"> </span><span class="lit">1</span><span class="pln">
+       </span><span class="kwd">orderby</span><span class="pln"> t
+       </span><span class="kwd">select</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Sweep</span><span class="pun">(</span><span class="pln">timeProportion</span><span class="pun">:</span><span class="pln"> t</span><span class="pun">,</span><span class="pln"> acrossProportion</span><span class="pun">:</span><span class="pln"> s</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>I don’t know about you, but the fact that the above code solves the 
+problem amazes me. It seems too straightforward, and yet too unrelated. 
+Shouldn’t there be, like, corner cases? Plus, where did those simple 
+cross products come from? How does feeding them into a quadratic 
+polynomial help? This… is going to need to be explained.</p>
+<h3>Intuition</h3>
+<p>Lets start by considering some of the cases we might encounter, in 
+order to get an intuitive feel for the problem. The animation below 
+shows several different possible line motions:</p>
+<ul>
+<li><strong>Simple</strong>: both endpoints move at the same velocity, and only along the line’s normal vector.
+</li><li><strong>Sideways</strong>: a degenerate case where the line is moving along its own length.
+</li><li><strong>Raise</strong>: one endpoint moves horizontally while the other moves vertically (‘raising’ and lowering the line).
+</li><li><strong>Dive</strong>: one endpoint moves diagonally (‘diving’ through the middle) while the other moves vertically.
+</li></ul>
+<p><img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/Qv5OCAN.gif" alt="Various sweep cases"></p>
+<p>Notice that a line can sweep a point 0, 1, or 2 times as its 
+endpoints move at a constant rate from one position to another. The 
+‘Raise’ case conveniently contains all three possibilities. This, 
+intuitively, is why the solution involves a quadratic equation (which 
+can have 0, 1, or 2 distinct real roots).</p>
+<p>Another useful realization is that some of the cases, like the line 
+moving at a constant rate or standing still, will correspond to 
+degenerate quadratic equations where the highest order coefficient is 
+zero (i.e. <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_025.png" class="ql-img-inline-formula" alt="0 x^2 + b x + c = 0" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;"> or even <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_021.png" class="ql-img-inline-formula" alt="0 x^2 + 0 x + c = 0" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;">). We need to include these sorts of cases in the <a href="https://github.com/Strilanc/Methods/blob/master/MethodsTest/Methods/LineSweepPoint/LineSweepPointTest.cs#L51">tests</a>.</p>
+<h3>Model</h3>
+<p>In order for a line segment from <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_008.png" class="ql-img-inline-formula" alt="p" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;"> to <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_019.png" class="ql-img-inline-formula" alt="q" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;"> to contain a point <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_028.png" class="ql-img-inline-formula" alt="c" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">, two conditions must be satisfied. First, the ‘offset’ vector from <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_008.png" class="ql-img-inline-formula" alt="p" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;"> to <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_028.png" class="ql-img-inline-formula" alt="c" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> must be parallel to the ‘delta’ vector from <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_008.png" class="ql-img-inline-formula" alt="p" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;"> to <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_019.png" class="ql-img-inline-formula" alt="q" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;">. We can represent this mathematically by requiring that their cross product be zero: <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_027.png" class="ql-img-inline-formula" alt="(c-p) \times (q-p) = 0" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;">. This guarantees that <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_028.png" class="ql-img-inline-formula" alt="c" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">
+ is on the line you get by extending the line segment in both directions
+ (or that you have a degenerate single-point line segment). Second, the 
+scalar projection <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex.png" class="ql-img-inline-formula" alt="s" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> of the offset vector onto the delta vector must be in the right range: <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_015.png" class="ql-img-inline-formula" alt="0 \leq s = \frac{(c-p) \cdot (q-p)}{(q-p)^2} \leq 1" title="Rendered by QuickLaTeX.com" style="vertical-align: -10px;">. This guarantees that <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_028.png" class="ql-img-inline-formula" alt="c" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> is not past either of the segment’s end points.</p>
+<p>As time goes from <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_012.png" class="ql-img-inline-formula" alt="t=0" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> to <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_020.png" class="ql-img-inline-formula" alt="t=1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;">, our line segment will have swept a point <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_028.png" class="ql-img-inline-formula" alt="c" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> if and only if there is a time <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_005.png" class="ql-img-inline-formula" alt="t" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> where the current line segment contains <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_028.png" class="ql-img-inline-formula" alt="c" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">.
+ Because the endpoints of our line segment are moving at a constant 
+rate, the path they follow is also a line segment. An endpoint moving 
+from <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_006.png" class="ql-img-inline-formula" alt="p_0" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;"> to <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_007.png" class="ql-img-inline-formula" alt="p_1" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;"> will be at the linearly interpolated point <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_004.png" class="ql-img-inline-formula" alt="lerp(p_0, p_1, t) = p_0 + (p_1 - p_0) \cdot t" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;"> at time <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_005.png" class="ql-img-inline-formula" alt="t" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">. Note that I’m going to abbreviate <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_023.png" class="ql-img-inline-formula" alt="p_1-p_0" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;"> as <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_018.png" class="ql-img-inline-formula" alt="p_d" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;"> to save space. Plugging our moving points into our ‘line segment contains point’ formulas tells us that we must find <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_005.png" class="ql-img-inline-formula" alt="t" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> satisfying <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_026.png" class="ql-img-inline-formula" alt="0 \leq t \leq 1" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;"> and <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_011.png" class="ql-img-inline-formula" alt="(c - (p_0 + p_d \cdot t)) \times ((q_0 + q_d \cdot t)-(p_0 + p_d \cdot t)) = 0" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;"> and <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_014.png" class="ql-img-inline-formula" alt="0 \leq s = \frac{(c-(p_0 + p_d \cdot t)) \cdot ((q_0 + q_d \cdot t)-(p_0 + p_d \cdot t))}{((q_0 + q_d \cdot t)-(p_0 + p_d \cdot t))^2} \leq 1" title="Rendered by QuickLaTeX.com" style="vertical-align: -10px;">.</p>
+<p>Note that “some cross product must equal 0″ is not the only way to 
+frame the problem. It also makes sense to think of it as finding a <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_005.png" class="ql-img-inline-formula" alt="t" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> and <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex.png" class="ql-img-inline-formula" alt="s" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">, both in the range <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_017.png" class="ql-img-inline-formula" alt="[0, 1]" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;">, such that <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_028.png" class="ql-img-inline-formula" alt="c" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> is the result of lerping both endpoints across their path by <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_005.png" class="ql-img-inline-formula" alt="t" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> and then lerping between the endpoints by <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex.png" class="ql-img-inline-formula" alt="s" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">. Mathematically, that means <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_003.png" class="ql-img-inline-formula" alt="c = lerp(lerp(p_0, p_1, t), lerp(q_0, q_1, t), s)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;">. The variables <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_005.png" class="ql-img-inline-formula" alt="t" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> and <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex.png" class="ql-img-inline-formula" alt="s" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">
+ roughly correspond to “when” and “where” an intersection occurs. 
+However, it’s harder to solve the problem in this form, because <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_005.png" class="ql-img-inline-formula" alt="t" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> isn’t initially isolated, so I’ll be using the cross product framing (unlike I did the first time…).</p>
+<h3>Solution</h3>
+<p>The cross product and dot product have some very nice properties that will make it easier to isolate <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_005.png" class="ql-img-inline-formula" alt="t" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">. First, they distribute addition, meaning <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_013.png" class="ql-img-inline-formula" alt="u \times (v + w) = u \times v + u \times w" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;"> and <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_024.png" class="ql-img-inline-formula" alt="u \cdot (v + w) = u \cdot v + u \cdot w" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;">. Second, scaling can be done before or after either product, meaning <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_016.png" class="ql-img-inline-formula" alt="(c \cdot u) \times v = c \cdot (u \times v)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;"> and <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_029.png" class="ql-img-inline-formula" alt="(c \cdot u) \cdot v = c \cdot (u \cdot v)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;">, where <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_028.png" class="ql-img-inline-formula" alt="c" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> is a real number. Finally, the dot product is commutative, meaning <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_022.png" class="ql-img-inline-formula" alt="u \cdot v = v \cdot u" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">, whereas the cross product is anti-commutative, meaning <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_010.png" class="ql-img-inline-formula" alt="u \times v = -v \times u" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">.</p>
+<p>Applying this product knowledge, and using some hindsight to know to 
+treat particular sub-expressions as individual variables, we can 
+transform our cross-product-is-zero equation into a quadratic equation:</p>
+<p class="ql-center-displayed-equation" style="line-height: 234px;"><span class="ql-right-eqno"> &nbsp; </span><span class="ql-left-eqno"> &nbsp; </span><img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_009.png" class="ql-img-displayed-equation" alt="\begin{align*} 0   &amp;=(c - (p_0 + p_d \cdot t)) \times ((q_0 + q_d \cdot t)-(p_0 + p_d \cdot t)) \\&amp;= ((c - p_0) - p_d \cdot t) \times ((q_0 - p_0) - (q_d - p_d) \cdot t) \\&amp;= (a + b \cdot t) \times (c + d \cdot t)   \\&amp;\;\;\;\;\;\;\;\;where\;\; a = c - p_0   \\&amp;\;\;\;\;\;\;\;\;where\;\; b = -p_d   \\&amp;\;\;\;\;\;\;\;\;where\;\; c = q_0 - p_0   \\&amp;\;\;\;\;\;\;\;\;where\;\; d = -(q_d - p_d) \\&amp;= a \times c + a \times d \cdot t + b \times c \cdot t + b \times d \cdot t \cdot t \\&amp;= t^2 \cdot (b \times d) + t \cdot (a \times d + b \times c) + (a \times c) \end{align*}" title="Rendered by QuickLaTeX.com"></p>
+<p>(This is hilariously simpler than the route I took the first time.)</p>
+<p>Ah, now it’s clear where the form of the code solution came from. We 
+started with a cross product equaling zero (asserting that the vector 
+from the line to the point was parallel with the line) and had to split 
+up the product in order to isolate sums of terms involving different 
+powers of <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_005.png" class="ql-img-inline-formula" alt="t" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">. This naturally yields a quadratic equation with coefficients involving cross products. Neat!</p>
+<p>Note that this is a very “sturdy” equation, because we never assumed 
+anything about the vectors or scalars along the way. For example, we 
+never divide (or implicitly cancel) by a variable, so we haven’t 
+introduced any lurking non-zero conditions.</p>
+<p>With the simplified equation, determining the possible values of <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_005.png" class="ql-img-inline-formula" alt="t" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">
+ is just standard “solve quadratic polynomial” stuff. We have to handle 
+corner cases with zeroes, which makes the code a bit more complicated, 
+but it’s just boring case by case stuff so I’ll <a href="https://github.com/Strilanc/Methods/blob/master/Methods/Methods/LineSweepPoint/GeometryUtil.cs#L48">just link to it</a>.</p>
+<p>Once we know a possible value of <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_005.png" class="ql-img-inline-formula" alt="t" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">,
+ we can find out exactly where the collision occurred by using the 
+plug-t-into-line-segment-point-containment formula mentioned a ways 
+back: <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_002.png" class="ql-img-inline-formula" alt="s = \frac{(c-(p_0 + p_d \cdot t)) \cdot ((q_0 + q_d \cdot t)-(p_0 + p_d \cdot t))}{((q_0 + q_d \cdot t)-(p_0 + p_d \cdot t))^2}" title="Rendered by QuickLaTeX.com" style="vertical-align: -10px;">. I call this formula the “lerp projection” of <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_028.png" class="ql-img-inline-formula" alt="c" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> onto the line at time <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_005.png" class="ql-img-inline-formula" alt="t" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">, because it returns the proportion <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex.png" class="ql-img-inline-formula" alt="s" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> to lerp by, from the line’s start point to its end point, in order to get <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_028.png" class="ql-img-inline-formula" alt="c" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> back. It’s a handy little method to extract:</p>
+<pre><code class="prettyprint lang-cs"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="kwd">double</span><span class="pln"> </span><span class="typ">LerpProjectOnto</span><span class="pun">(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">Point</span><span class="pln"> point</span><span class="pun">,</span><span class="pln"> </span><span class="typ">LineSegment</span><span class="pln"> line</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> b </span><span class="pun">=</span><span class="pln"> point </span><span class="pun">-</span><span class="pln"> line</span><span class="pun">.</span><span class="typ">Start</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> d </span><span class="pun">=</span><span class="pln"> line</span><span class="pun">.</span><span class="typ">Delta</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">(</span><span class="pln">b </span><span class="pun">*</span><span class="pln"> d</span><span class="pun">)</span><span class="pln"> </span><span class="pun">/</span><span class="pln"> </span><span class="pun">(</span><span class="pln">d </span><span class="pun">*</span><span class="pln"> d</span><span class="pun">);</span><span class="pln"> </span><span class="com">// when d == 0, result is +-infinity or NaN</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>Finally, once we have <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_005.png" class="ql-img-inline-formula" alt="t" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> and <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex.png" class="ql-img-inline-formula" alt="s" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">, we need to check that they’re in the range <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_017.png" class="ql-img-inline-formula" alt="[0, 1]" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;">. If <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_005.png" class="ql-img-inline-formula" alt="t" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> is out of range then the collision won’t occur during the current time step. If <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex.png" class="ql-img-inline-formula" alt="s" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> is out of range then the collision will occur on the extended line, but not the line segment. Since <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex.png" class="ql-img-inline-formula" alt="s" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> and <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_005.png" class="ql-img-inline-formula" alt="t" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">
+ describe how much to lerp in order to find when/where the collision 
+occurred, it’s also useful information to return to the caller.</p>
+<h3>Generalizing</h3>
+<p>An important detail I haven’t mentioned yet is that a moving mouse 
+pointer obviously doesn’t correspond to a point. Luckily, we can just 
+cancel out the mouse pointer’s motion over the last time step (assuming 
+it is linear) by deducting it from the line segment’s motion. Not only 
+does this reduce the system to a solvable one, but the resulting <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex_005.png" class="ql-img-inline-formula" alt="t" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> and <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex.png" class="ql-img-inline-formula" alt="s" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> values are valid without any sort of inverse transformation. Usage looks like this:</p>
+<pre><code class="prettyprint lang-cs"><span class="com">// time goes from t0 to t1</span><span class="pln">
+</span><span class="com">// line segment endpoint 1 moves from p0 to p1</span><span class="pln">
+</span><span class="com">// line segment endpoint 2 moves from q0 to q1</span><span class="pln">
+</span><span class="com">// point moves from c0 to c1</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> results </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">from</span><span class="pln"> hit </span><span class="kwd">in</span><span class="pln"> </span><span class="typ">WhenLineSweepsPoint</span><span class="pun">(</span><span class="kwd">new</span><span class="pln"> </span><span class="typ">LineSegment</span><span class="pun">(</span><span class="pln">p0 </span><span class="pun">-</span><span class="pln"> c0</span><span class="pun">,</span><span class="pln"> p1 </span><span class="pun">-</span><span class="pln"> c1</span><span class="pun">),</span><span class="pln">
+                                              </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">LineSegment</span><span class="pun">(</span><span class="pln">q0 </span><span class="pun">-</span><span class="pln"> c0</span><span class="pun">,</span><span class="pln"> q1 </span><span class="pun">-</span><span class="pln"> c1</span><span class="pun">),</span><span class="pln">
+                                              </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Point</span><span class="pun">(</span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="lit">0</span><span class="pun">))</span><span class="pln">
+              let hitPos </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">LineSegment</span><span class="pun">(</span><span class="pln">c0</span><span class="pun">,</span><span class="pln"> c1</span><span class="pun">).</span><span class="typ">LerpAcross</span><span class="pun">(</span><span class="pln">hit</span><span class="pun">.</span><span class="typ">TimeProportion</span><span class="pun">)</span><span class="pln">
+              let hitTime </span><span class="pun">=</span><span class="pln"> t0 </span><span class="pun">+</span><span class="pln"> </span><span class="pun">(</span><span class="pln">t1</span><span class="pun">-</span><span class="pln">t0</span><span class="pun">)*</span><span class="pln">hit</span><span class="pun">.</span><span class="typ">TimeProportion</span><span class="pln">
+              </span><span class="kwd">select</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> p </span><span class="pun">=</span><span class="pln"> hitPos</span><span class="pun">,</span><span class="pln"> t </span><span class="pun">=</span><span class="pln"> hitTime </span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">foreach</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">var</span><span class="pln"> result </span><span class="kwd">in</span><span class="pln"> results</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="typ">System</span><span class="pun">.</span><span class="typ">Diagnostics</span><span class="pun">.</span><span class="typ">Debug</span><span class="pun">.</span><span class="typ">WriteLine</span><span class="pun">(</span><span class="kwd">string</span><span class="pun">.</span><span class="typ">Format</span><span class="pun">(</span><span class="str">"Hit at p={0}, t={1}"</span><span class="pun">,</span><span class="pln"> result</span><span class="pun">.</span><span class="pln">p</span><span class="pun">,</span><span class="pln"> result</span><span class="pun">.</span><span class="pln">t</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>A potential complication is degenerate line segments that have no 
+length (where both endpoints are equal). The code does not explicitly 
+handle this case, but will act as if cutting a 
+line-that-is-actually-a-point is impossible. The computation of <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex.png" class="ql-img-inline-formula" alt="s" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">, if it’s reached, will divide by zero. The result (either -infinity, +infinity, or NaN) will fail the range check.</p>
+<p>Another aspect I haven’t covered is the ‘cut angle’. In the animation
+ showing the various cases, the red cuts are oriented by lerping between
+ the velocities of the two endpoints by <img src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex.png" class="ql-img-inline-formula" alt="s" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">
+ (when the resulting velocity is 0, a random angle is chosen). But I’ve 
+also used alternate approaches like “the cut angle is the point’s 
+velocity”. Basically, it’s a case of using whatever looks good and feels
+ natural instead of trying to figure out the true meaning of “cut 
+angle”.</p>
+<h3>Summary</h3>
+<p>This problem becomes trivial as soon as you apply some knowledge from
+ linear algebra. I guess that’s not too surprising, since linear algebra
+ (and polynomials) show up everywhere, especially in geometry.</p>
+<p>A natural generalization of this problem is to include thicknesses. 
+Lines drawn on screens are not infinitely thin, after all. Having a 
+thickness is also a good way to reduce the effect of floating point 
+errors rounding in different directions during different time steps. 
+Another useful change would be the ability to handle parabolic paths, 
+since game objects are often in free fall. On the other hand, I guess 
+it’s probably easier to just treat ‘thick lines’ as polygons with 
+constant-speed time steps.</p>
+<p>—</p>
+<h3><a href="http://www.reddit.com/r/programming/comments/17wwv9/determining_exactly_ifwhenwhere_a_moving_line/">Discuss on Reddit</a></h3>
+<p>—</p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers efficient, flexible remote and on-the-floor 
+development and consulting without any middle-man or excessive 
+administrivia. <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2 class="endofpage">Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait" rel="bookmark" title="Permanent Link to Emulating Actors in C# with Async/Await">Emulating Actors in C# with Async/Await</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2096_making-an-immutable-queue-with-guaranteed-constant-time-operations" rel="bookmark" title="Permanent Link to Making an immutable queue with guaranteed constant time operations">Making an immutable queue with guaranteed constant time operations</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions" rel="bookmark" title="Permanent Link to Improving Checked Exceptions">Improving Checked Exceptions</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime" rel="bookmark" title="Permanent Link to Perishable Collections: The Benefits of Removal-by-Lifetime">Perishable Collections: The Benefits of Removal-by-Lifetime</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control" rel="bookmark" title="Permanent Link to Decoupling shared control">Decoupling shared control</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1694_decoupling-inlined-ui-code" rel="bookmark" title="Permanent Link to Decoupling inlined UI code">Decoupling inlined UI code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet" rel="bookmark" title="Permanent Link to Linq to Collections: Beyond IEnumerable&lt;T&gt;">Linq to Collections: Beyond IEnumerable&lt;T&gt;</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+ <div id="upprev_box" style="right: -400px;">
+	<h6>
+		More interesting posts <span class="num"> (1 of 2 articles)</span>
+	</h6>
+	<div class="upprev_excerpt">
+		<p>
+			<a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait" rel="prev">Emulating Actors in C# with Async/Await</a>
+		</p>
+	</div>
+	
+		<p>
+Or check out our <a href="http://twistedoakstudios.com/portfolio">Portfolio</a>.		</p><button id="upprev_close" type="button">Close</button>
+</div><!-- #upprev_box -->
+<link rel="stylesheet" id="admin-bar-css" href="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/admin-bar.css" type="text/css" media="all">
+<link rel="stylesheet" id="upprev-css-css" href="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/upprev.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-quicklatex-format-css" href="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/quicklatex-format.css" type="text/css" media="all">
+<script type="text/javascript" src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/admin-bar.js"></script>
+<script type="text/javascript" src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/jquery.js"></script>
+<script type="text/javascript" src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/upprev_js.php"></script>
+<script type="text/javascript" src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/comment-reply.js"></script>
+	<script type="text/javascript">
+		(function() {
+			var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
+
+			request = true;
+
+			b[c] = b[c].replace( rcs, ' ' );
+			b[c] += ( window.postMessage && request ? ' ' : ' no-' ) + cs;
+		}());
+	</script>
+			
+
+		 
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+			<nav>
+				<ul class="primary-nav clearfix">
+					<li><a href="http://www.twistedoakstudios.com/">Home</a></li>
+					<li><a href="http://twistedoakstudios.com/portfolio">Portfolio</a></li>
+				</ul>
+			</nav>
+		</div>
+		
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				6082 Shirley Street<br>
+				Halifax, NS, Canada B3H 2M8</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+		
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script>- 2013 Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/jquery_002.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script><div id="wpadminbar" class="nojq " role="navigation">
+			<a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1">Skip to toolbar</a>
+			<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Top navigation toolbar." tabindex="0">
+				<ul id="wp-admin-bar-root-default" class="ab-top-menu">
+		<li id="wp-admin-bar-wp-logo" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/about.php" title="About WordPress"><span class="ab-icon"></span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-wp-logo-default" class="ab-submenu">
+		<li id="wp-admin-bar-about"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/about.php">About WordPress</a>		</li></ul><ul id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu">
+		<li id="wp-admin-bar-wporg"><a class="ab-item" href="http://wordpress.org/">WordPress.org</a>		</li>
+		<li id="wp-admin-bar-documentation"><a class="ab-item" href="http://codex.wordpress.org/">Documentation</a>		</li>
+		<li id="wp-admin-bar-support-forums"><a class="ab-item" href="http://wordpress.org/support/">Support Forums</a>		</li>
+		<li id="wp-admin-bar-feedback"><a class="ab-item" href="http://wordpress.org/support/forum/requests-and-feedback">Feedback</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-site-name" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/">twistedoakstudios.com</a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-site-name-default" class="ab-submenu">
+		<li id="wp-admin-bar-dashboard"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/">Dashboard</a>		</li></ul><ul id="wp-admin-bar-appearance" class="ab-submenu">
+		<li id="wp-admin-bar-themes"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/themes.php">Themes</a>		</li>
+		<li id="wp-admin-bar-customize" class="hide-if-no-customize"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/customize.php?url=http%3A%2F%2Ftwistedoakstudios.com%2Fblog%2FPost2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point">Customize</a>		</li></ul></div>		</li>
+		<li class="" id="wp-admin-bar-updates"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/update-core.php" title="1 Plugin Update, 1 Theme Update"><span class="ab-icon"></span><span class="ab-label">2</span><span class="screen-reader-text">1 Plugin Update, 1 Theme Update</span></a>		</li>
+		<li class="" id="wp-admin-bar-comments"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/edit-comments.php" title="0 comments awaiting moderation"><span class="ab-icon"></span><span id="ab-awaiting-mod" class="ab-label awaiting-mod pending-count count-0">0</span></a>		</li>
+		<li id="wp-admin-bar-new-content" class="menupop "><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php" title="Add New"><span class="ab-icon"></span><span class="ab-label">New</span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-new-content-default" class="ab-submenu">
+		<li id="wp-admin-bar-new-post"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php">Post</a>		</li>
+		<li id="wp-admin-bar-new-media"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/media-new.php">Media</a>		</li>
+		<li id="wp-admin-bar-new-link"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/link-add.php">Link</a>		</li>
+		<li id="wp-admin-bar-new-page"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php?post_type=page">Page</a>		</li>
+		<li id="wp-admin-bar-new-user"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/user-new.php">User</a>		</li></ul></div>		</li>
+		<li class="" id="wp-admin-bar-edit"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post.php?post=2194&amp;action=edit">Edit Post</a>		</li></ul><ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
+		<li id="wp-admin-bar-search" class="admin-bar-search"><div class="ab-item ab-empty-item" tabindex="-1"><form action="http://twistedoakstudios.com/blog/" method="get" id="adminbarsearch"><input class="adminbar-input" name="s" id="adminbar-search" maxlength="150" type="text"><input class="adminbar-button" value="Search" type="submit"></form></div>		</li>
+		<li id="wp-admin-bar-my-account" class="menupop with-avatar"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/profile.php" title="My Account">Howdy, Craig Gidney<img alt="" src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/31a6ce579f8f9f9d528715d1e941726e.png" class="avatar avatar-16 photo" height="16" width="16"></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-user-actions" class="ab-submenu">
+		<li id="wp-admin-bar-user-info"><a class="ab-item" tabindex="-1" href="http://twistedoakstudios.com/blog/wp-admin/profile.php"><img alt="" src="Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point_files/31a6ce579f8f9f9d528715d1e941726e_002.png" class="avatar avatar-64 photo" height="64" width="64"><span class="display-name">Craig Gidney</span><span class="username">craig</span></a>		</li>
+		<li id="wp-admin-bar-edit-profile"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/profile.php">Edit My Profile</a>		</li>
+		<li id="wp-admin-bar-logout"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=003d1bc4d4">Log Out</a>		</li></ul></div>		</li></ul>			</div>
+			<a class="screen-reader-shortcut" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=003d1bc4d4">Log Out</a>
+		</div></body></html>

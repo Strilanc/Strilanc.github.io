@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<!-- saved from url=(0082)http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet -->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Unity3D Consulting | Technical Magic</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="http://www.twistedoakstudios.com/css/1140.css">
+    <link rel="stylesheet" href="http://www.twistedoakstudios.com/css/style.css?v=1.1">
+    <link rel="stylesheet" href="http://www.twistedoakstudios.com/css/blogstyle.css?v=1.1">
+<link rel="stylesheet" href="http://twistedoakstudios.com/blog/prettify.css" media="all">
+<link rel="stylesheet" href="http://twistedoakstudios.com/blog/sunburst.css" media="all">
+<script type="text/javascript" async="" src="./Post1585_linq-to-collections-beyond-ienumerablet_files/ga.js"></script><script type="text/javascript" src="./Post1585_linq-to-collections-beyond-ienumerablet_files/prettify.js"></script><style type="text/css"></style>
+
+	<!-- Webfonts! -->
+	<link href="./Post1585_linq-to-collections-beyond-ienumerablet_files/css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="./Post1585_linq-to-collections-beyond-ienumerablet_files/modernizr-2.0.6.min.js"></script>
+</head>
+<body onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet#"><img class="logo" src="./Post1585_linq-to-collections-beyond-ienumerablet_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a class="scroll" href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="./Post1585_linq-to-collections-beyond-ienumerablet_files/Post1585_linq-to-collections-beyond-ienumerablet.htm" rel="bookmark" title="Permanent Link to Linq to Collections: Beyond IEnumerable&lt;T&gt;">Linq to Collections: Beyond IEnumerable&lt;T&gt;</a></h2>
+<div class="meta">posted by Craig Gidney on December 18, 2012</div>
+
+<p>The latest version of the .Net framework (4.5) includes several new interfaces representing readonly collections: <a href="http://msdn.microsoft.com/en-us/library/hh881542.aspx">IReadOnlyCollection&lt;T&gt;</a>, <a href="http://msdn.microsoft.com/en-us/library/hh192385.aspx">IReadOnlyList&lt;T&gt;</a>, and <a href="http://msdn.microsoft.com/en-us/library/hh136548.aspx">IReadOnlyDictionary&lt;T&gt;</a>. In this post I’ll be explaining how to use these types to improve the ease-of-reasoning-about and efficiency (particularly with respect to memory usage).</p>
+<p>The methods and types I’ll be describing are available as a software library (called “LinqToCollections”, in the public domain). You can view the library’s <a href="https://github.com/Strilanc/LinqToCollections">source code on GitHub</a> or directly reference its <a href="https://nuget.org/packages/Strilanc.LinqToCollections">NuGet package</a>.</p>
+<h3>Motivation</h3>
+<p>Before I start talking about really taking advantage of the new readonly collection interfaces, I want to justify why it’s worth bothering with them in the first place. Why not just use the array or IList&lt;T&gt; types? Why not just use the more general IEnumerable&lt;T&gt; type? It’s worked in the past, so why not continue doing so?</p>
+<p>First, it is better to ask for an IReadOnlyList&lt;T&gt;, as opposed to an IList&lt;T&gt; or an array, when you don’t need the ability to mutate. Doing so obeys the principle of <em>asking only for what you need</em>. If you don’t need the ability to mutate what you’re given, don’t ask for a thing with that ability. This increases the number of cases where your method can be used and makes reasoning about it easier. If you ask for an IReadOnlyList&lt;T&gt;, then a user (or automated tool) can trivially determine that their precious list won’t be mangled by your method. But, if you ask for an IList&lt;T&gt;, they have to dig through documentation, inspect the source code, or (more commonly) guess in order to make the same determination. For example, you’re less likely to mistakenly reverse the arguments to a memcpy-like method that asks for a readonly source because the wrong ordering can fail type checking.</p>
+<p>Second, it is better to expose an IReadOnlyList&lt;T&gt;, instead of an IList&lt;T&gt; or an array, when you don’t allow the ability to mutate. This follows the principle of <em>providing what you promise</em>. If you return an IList&lt;T&gt; (that happens to be readonly at runtime) instead of an IReadOnlyList&lt;T&gt;, users will be mislead into trying to modify the result. For example, before following the link to the documentation, tell me whether <a href="http://msdn.microsoft.com/en-us/library/cc672951.aspx">Dictionary&lt;K, V&gt;.KeyCollection.Remove</a> does the same thing as <a href="http://msdn.microsoft.com/en-us/library/kabs04ac.aspx">Dictionary&lt;K, V&gt;.Remove</a> or else fails with a NotSupportedException. The operation makes sense, implying it should do the same thing is Dictionary.Remove, but it’s a bit odd to have a collection you can remove from but not add to, implying it should fail. This question wouldn’t even come up if KeyCollection implemented IReadOnlyCollection&lt;T&gt; instead of ICollection&lt;T&gt;.</p>
+<p>Finally, asking for an IReadOnlyList&lt;T&gt;, instead of an IEnumerable&lt;T&gt; that you immediately transform into an IReadOnlyList&lt;T&gt;, is more efficient. You should be <em>asking for what you actually need</em>, so that callers that happen to already have it can avoid unnecessary transformation costs (asking for what you actually need also helps with unit testing). Note that the overload taking IEnumerable&lt;T&gt; can still exist, but it becomes a mere convenience method that delegates to the overload taking an IReadOnlyList&lt;T&gt;. A good example of this optimization is the Enumerable.Reverse method. Consider this slightly-simplified implementation:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">IEnumerable</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">Reverse</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">IEnumerable</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> source</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> buffer </span><span class="pun">=</span><span class="pln"> source</span><span class="pun">.</span><span class="typ">ToArray</span><span class="pun">();</span><span class="pln">
+    </span><span class="kwd">for</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">int</span><span class="pln"> i </span><span class="pun">=</span><span class="pln"> buffer</span><span class="pun">.</span><span class="typ">Length</span><span class="pln"> </span><span class="pun">-</span><span class="pln"> </span><span class="lit">1</span><span class="pun">;</span><span class="pln"> i </span><span class="pun">&gt;=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln"> </span><span class="pun">--</span><span class="pln">i</span><span class="pun">)</span><span class="pln">
+        </span><span class="kwd">yield</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> buffer</span><span class="pun">[</span><span class="pln">i</span><span class="pun">];</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>Enumerable.Reverse has to make a copy of the input sequence, using <em>linear</em> time and consuming <em>linear</em> memory before it can even yield the first item! However, if callers have an IReadOnlyList&lt;T&gt;, the expensive step can be omitted altogether:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">IEnumerable</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">Reverse</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> source</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">for</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">int</span><span class="pln"> i </span><span class="pun">=</span><span class="pln"> source</span><span class="pun">.</span><span class="typ">Count</span><span class="pln"> </span><span class="pun">-</span><span class="pln"> </span><span class="lit">1</span><span class="pun">;</span><span class="pln"> i </span><span class="pun">&gt;=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln"> </span><span class="pun">--</span><span class="pln">i</span><span class="pun">)</span><span class="pln">
+        </span><span class="kwd">yield</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> source</span><span class="pun">[</span><span class="pln">i</span><span class="pun">];</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>Asking for a list instead of an enumerable reduces both the memory usage and time-to-first-item from linear to <em>constant</em>. Calling this a big improvement is a bit of an understatement. This is not an isolated case either: the cost of lots of other operations drops from linear to constant when working on a list instead of an enumerable. For example: “pick a random item”, “skip the first/last N items”, “take the last N items”, “give me every N’th item”, “partition items into adjacent groups of size N”, not to mention things like <a href="http://en.wikipedia.org/wiki/Binary_search">binary search</a> and <a href="http://en.wikipedia.org/wiki/Graph_traversal">graph traversal</a> (when using an <a href="http://en.wikipedia.org/wiki/Adjacency_matrix">adjacency matrix</a>).</p>
+<p>Again, readonly interfaces help you ask for what you actually need, not ask for more than you need, and not promise more than you provide. Just refactoring existing parameter/return/getter types to be readonly types has understandability and (in some cases) performance benefits.</p>
+<h3>Implicit Savings</h3>
+<p>One of the useful ideas present in Linq (and functional programming in general) is to representing things implicitly, via a computational process. This idea applies well to readonly collections. If you’ve used Linq extensively, you’re already familiar with this concept via enumerables:</p>
+<pre><code class="prettyprint"><span class="com">// "contains" 0,1,4,9,16,...,(10^9-1)^2 but doesn't use gigabytes of memory</span><span class="pln">
+</span><span class="typ">IEnumerable</span><span class="str">&lt;int&gt;</span><span class="pln"> squares </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Enumerable</span><span class="pun">.</span><span class="typ">Range</span><span class="pun">(</span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="lit">1000000000</span><span class="pun">).</span><span class="typ">Select</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">long</span><span class="pun">)</span><span class="pln">e </span><span class="pun">*</span><span class="pln"> e</span><span class="pun">);</span></code></pre>
+<p>The above code creates an enumerable containing a <em>billion</em> items, but consumes less than a hundred bytes of memory. This is possible because the enumerable’s items are defined by a computation instead of being stored explicitly. The range enumerator doesn’t store an array containing the numbers 0 through a billion and iterate over it, it stores a counter that is yielded and incremented each time an item is requested. The squaring projection also isn’t storing all of its results anywhere: it just squares and yields the next result from the range enumerator whenever the next projected item is requested.</p>
+<p>The same trick can be applied to lists. We don’t have the benefit of iterator methods to keep the code compact, but we can use an <a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c">anonymous implementation class</a> for the same effect. For example, here is a Range method that returns an IReadOnlyList&lt;int&gt; instead of an IEnumerable&lt;int&gt;:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">IReadOnlyList</span><span class="str">&lt;int&gt;</span><span class="pln"> </span><span class="typ">Range</span><span class="pun">(</span><span class="kwd">this</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> count</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">AnonymousReadOnlyList</span><span class="str">&lt;int&gt;</span><span class="pun">(</span><span class="pln">count</span><span class="pun">,</span><span class="pln"> getter</span><span class="pun">:</span><span class="pln"> index </span><span class="pun">=&gt;</span><span class="pln"> index</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>AnonymousReadOnlyList&lt;T&gt; implements IReadOnlyList&lt;T&gt; by using the count and item-getter being provided. When a caller evaluates “someRange[2]“, AnonymousReadOnlyList will check that 0 &lt;= 2 &lt; count and then pass 2 into the anonymous function “index =&gt; index” in order to get the result (also 2) to pass back to the caller. Because the list is defined by a computational process (instead of being stored as an array), it takes ~80 bytes (instead of billions) to store. The benefit of having a list range instead of an enumerable range is that it supports random access:</p>
+<pre><code class="prettyprint"><span class="typ">IEnumerable</span><span class="str">&lt;long&gt;</span><span class="pln"> enumRange </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Enumerable</span><span class="pun">.</span><span class="typ">Range</span><span class="pun">(</span><span class="lit">1000000000</span><span class="pun">);</span><span class="pln">
+</span><span class="typ">IReadOnlyList</span><span class="str">&lt;long&gt;</span><span class="pln"> listRange </span><span class="pun">=</span><span class="pln"> </span><span class="typ">ReadOnlyList</span><span class="pun">.</span><span class="typ">Range</span><span class="pun">(</span><span class="lit">1000000000</span><span class="pun">);</span><span class="pln">
+</span><span class="com">// takes nanoseconds to evaluate</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> s1 </span><span class="pun">=</span><span class="pln"> listRange</span><span class="pun">[</span><span class="lit">999999999</span><span class="pun">];</span><span class="pln">
+</span><span class="com">// takes SECONDS to evaluate</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> s2 </span><span class="pun">=</span><span class="pln"> enumRange</span><span class="pun">.</span><span class="typ">ElementAt</span><span class="pun">(</span><span class="lit">999999999</span><span class="pun">);</span></code></pre>
+<p>Many more methods can be lifted from enumerable-land to list-land. The Reverse method, mentioned earlier, is a great example:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">Reverse</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> source</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">AnonymousReadOnlyList</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;(</span><span class="pln">
+        counter</span><span class="pun">:</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> source</span><span class="pun">.</span><span class="typ">Count</span><span class="pun">,</span><span class="pln">
+        getter</span><span class="pun">:</span><span class="pln"> index </span><span class="pun">=&gt;</span><span class="pln"> source</span><span class="pun">[</span><span class="pln">source</span><span class="pun">.</span><span class="typ">Count</span><span class="pln"> </span><span class="pun">-</span><span class="pln"> </span><span class="lit">1</span><span class="pln"> </span><span class="pun">-</span><span class="pln"> index</span><span class="pun">]);</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>Now when we reverse a list we don’t lose random-access capabilities. We even get all the standard benefits of <a href="http://www.dotnetcurry.com/ShowArticle.aspx?ID=750">deferred execution</a>. For example, if you store “var rev = list.Reverse()” then execute “list.Add(-3)”, you’ll find that rev has been prepended with -3.</p>
+<p>Another good example is the Select method, which enables writing query expressions that take and return lists:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="pln">R</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">Select</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">,</span><span class="pln"> R</span><span class="pun">&gt;(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> list</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Func</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">,</span><span class="pln"> R</span><span class="pun">&gt;</span><span class="pln"> projection</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">AnonymousReadOnlyList</span><span class="pun">&lt;</span><span class="pln">R</span><span class="pun">&gt;(</span><span class="pln">
+        counter</span><span class="pun">:</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> list</span><span class="pun">.</span><span class="typ">Count</span><span class="pun">,</span><span class="pln">
+        getter</span><span class="pun">:</span><span class="pln"> index </span><span class="pun">=&gt;</span><span class="pln"> projection</span><span class="pun">(</span><span class="pln">list</span><span class="pun">[</span><span class="pln">index</span><span class="pun">]));</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<pre><code class="prettyprint"><span class="typ">IReadOnlyList</span><span class="str">&lt;bool&gt;</span><span class="pln"> x </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">from</span><span class="pln"> i </span><span class="kwd">in</span><span class="pln"> </span><span class="lit">10000000.Range</span><span class="pun">()</span><span class="pln">
+                        </span><span class="kwd">select</span><span class="pln"> i </span><span class="pun">&lt;</span><span class="pln"> </span><span class="lit">5000</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">bool</span><span class="pln"> b </span><span class="pun">=</span><span class="pln"> x</span><span class="pun">[</span><span class="lit">5000</span><span class="pun">];</span><span class="pln"> </span><span class="com">// evaluates to false in time independent of the index</span></code></pre>
+<p>Implicit-definition can be performed with readonly collections and dictionaries, too:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">IReadOnlyDictionary</span><span class="pun">&lt;</span><span class="pln">K</span><span class="pun">,</span><span class="pln"> R</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">Select</span><span class="pun">&lt;</span><span class="pln">K</span><span class="pun">,</span><span class="pln"> V</span><span class="pun">,</span><span class="pln"> R</span><span class="pun">&gt;(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">IReadOnlyDictionary</span><span class="pun">&lt;</span><span class="pln">K</span><span class="pun">,</span><span class="pln"> V</span><span class="pun">&gt;</span><span class="pln"> dictionary</span><span class="pun">,</span><span class="pln">
+                                                        </span><span class="typ">Func</span><span class="pun">&lt;</span><span class="typ">KeyValuePair</span><span class="pun">&lt;</span><span class="pln">K</span><span class="pun">,</span><span class="pln"> V</span><span class="pun">&gt;,</span><span class="pln"> R</span><span class="pun">&gt;</span><span class="pln"> projection</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">AnonymousReadOnlyDictionary</span><span class="pun">&lt;</span><span class="pln">K</span><span class="pun">,</span><span class="pln"> R</span><span class="pun">&gt;(</span><span class="pln">
+        counter</span><span class="pun">:</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> dictionary</span><span class="pun">.</span><span class="typ">Count</span><span class="pun">,</span><span class="pln">
+        keys</span><span class="pun">:</span><span class="pln"> dictionary</span><span class="pun">.</span><span class="typ">Keys</span><span class="pun">,</span><span class="pln">
+        getter</span><span class="pun">:</span><span class="pln"> </span><span class="pun">(</span><span class="pln">K k</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">out</span><span class="pln"> R r</span><span class="pun">)</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            V v</span><span class="pun">;</span><span class="pln">
+            </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(!</span><span class="pln">dictionary</span><span class="pun">.</span><span class="typ">TryGetValue</span><span class="pun">(</span><span class="pln">k</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">out</span><span class="pln"> v</span><span class="pun">))</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+                r </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">default</span><span class="pun">(</span><span class="pln">R</span><span class="pun">);</span><span class="pln">
+                </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">;</span><span class="pln">
+            </span><span class="pun">}</span><span class="pln">
+            r </span><span class="pun">=</span><span class="pln"> projection</span><span class="pun">(</span><span class="kwd">new</span><span class="pln"> </span><span class="typ">KeyValuePair</span><span class="pun">&lt;</span><span class="pln">K</span><span class="pun">,</span><span class="pln"> V</span><span class="pun">&gt;(</span><span class="pln">k</span><span class="pun">,</span><span class="pln"> v</span><span class="pun">));</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">;</span><span class="pln">
+        </span><span class="pun">});</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>Again, although these implicit collections may be “large”, they are created and stored using only constant time and memory. The downside is that their items are individually more expensive to access, especially if you have implicitness stacked on implicitness a hundred levels deep. Usually you can avoid these costs with a well-placed “ToArray”, but it’s important to keep them in mind. (Technically the compiler could <a href="http://stackoverflow.com/a/12657991/52239">optimize many of the costs away</a>, but don’t rely on that <a href="http://c2.com/cgi/wiki?SufficientlySmartCompiler">before it actually exists</a>.)</p>
+<h3>Library</h3>
+<p>As I mentioned near the start of this post, I’ve <a href="https://nuget.org/packages/Strilanc.LinqToCollections">packaged</a> an <a href="https://github.com/Strilanc/LinqToCollections">implementation</a> of these concepts into a “LinqToCollections” library. This section just describes what’s in the library, so it’s a bit dry (sorry).</p>
+<p>Most of the library is devoted to working with readonly lists, because that is the case I have run into the most often. You can create a custom readonly list by constructing an instance of <a href="https://github.com/Strilanc/LinqToCollections/blob/master/LinqToCollections/List/AnonymousReadOnlyList.cs">AnonymousReadOnlyList</a>, or use the factory and extension methods in the <a href="https://github.com/Strilanc/LinqToCollections/blob/master/LinqToCollections/List/ReadOnlyList.cs">ReadOnlyList class</a>. Amongst the list methods there are two substantial groups: sublist methods and range methods.</p>
+<p>Sublist methods include Take, TakeLast, Skip, SkipLast, TakeRequire, TakeLastRequire, SkipRequire, and SkipLastRequire. The ‘Require’ variants check that the list is large enough to take or skip the given number of items. There are several optimizations that these methods guarantee, in order to avoid quadratic behavior in use cases like “iteratively parse N bytes and skip N bytes”. Sequences of Take, sequences of TakeLast, and sequences of Skip/SkipLast are all collapsed automatically (e.g. list.Skip(2).Skip(2) is optimized into list.Skip(4)). The ‘Require’ check is also collapsed automatically across all the Skip/Take transformations (e.g. list.SkipRequire(2).TakeLastRequire(2) is optimized into list.PrivateRequire(4).Skip(2).TakeLast(2)). In many cases a requested operation will be entirely omitted at runtime, based on knowledge of the collection’s size (e.g. if x = new int[10], then x.Skip(20) returns ReadOnlyList.Empty() and x.SkipRequire(5) returns x.Skip(5)). Most of the library’s methods try to preserve ‘bounds on size’ information, in order to make these optimizations more effective.</p>
+<p>Range methods include int.Range, byte.Range, sbyte.Range, ushort.Range, short.Range, AllBytes, AllSignedBytes, AllUnsigned16BitIntegers, and AllSigned16BitIntegers. They’re trivial, but nice to have around. I personally strongly prefer “foreach (var i in n.Range())” to “for (var i = 0; i &lt; n; i++)", because foreach loops <a href="http://blogs.msdn.com/b/ericlippert/archive/2009/11/12/closing-over-the-loop-variable-considered-harmful.aspx">scope the iterator variable inside the loop</a>, you’re less likely to make an off-by-one typo, and I can refactor transformations into the thing-being-iterated very easily. (If I was going to pick a part of the library as “controversial”, it would be the int.Range method.)</p>
+<p>The remaining list methods each have different purposes, but are mostly self-descriptive: AsIList, IList.AsReadOnlyList (<a href="http://stackoverflow.com/a/12838306/52239">IList doesn’t inherit from IReadOnlyList</a> for backwards compatibility reasons), Select, Zip, Reverse, Last, LastOrDefault, Empty, Singleton, Repeat, Stride, Deinterleave, and Partition. All of these transformations uses constant memory and take constant time to create. Also, their enumerators use the collection’s enumerator when possible so that functionality like lists detecting if they are modified while being enumerated continues to work.</p>
+<p>The remainder of the library, devoted to readonly dictionaries and collections, is just equivalents of Empty, AnonymousReadOnlyList, AsIlist, and IList.AsReadOnlyList (and a Select method for readonly dictionaries). A lot more methods could be implemented for readonly dictionaries and collections, I just haven’t encountered enough situations where I needed them in order to justify their inclusion.</p>
+<h3>Usage</h3>
+<p>There are several usage examples in the <a href="https://github.com/Strilanc/LinqToCollections/blob/master/LinqToCollectionsExample/MainWindow.xaml.cs#L10">main window of the example project</a>.</p>
+<p><img src="./Post1585_linq-to-collections-beyond-ienumerablet_files/ArEJH.png" alt="Example Project Screenshot"></p>
+<p>In practice you use Linq to Collections in exactly the same ways you would use Linq to Enumerables, but with the benefit of a more flexible type. A simple use case is initializing an array:</p>
+<pre><code class="prettyprint"><span class="typ">TaskCompletionSource</span><int><span class="pun">[]</span><span class="pln"> sources </span><span class="pun">=</span><span class="pln"> </span><span class="lit">100.Range</span><span class="pun">()</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">Select</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">TaskCompletionSource</span><int><span class="pun">())</span><span class="pln">
+    </span><span class="pun">.</span><span class="typ">ToArray</span><span class="pun">();</span><span class="pln"> </span><span class="com">// construct all of the sources once and only once</span></int></int></code></pre>
+<p>This is more compact than creating the array and then iterating over its range while filling it in. A more complicated example is massaging a <a href="http://en.wikipedia.org/wiki/Fourier_transform">Fourier transform’s</a> output:</p>
+<pre><code class="prettyprint"><span class="kwd">static</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">GraphMagnitudesAsFrequencies</span><span class="pun">(</span><span class="typ">IReadOnlyList</span><span class="str">&lt;float&gt;</span><span class="pln"> magnitudes</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="com">// this method happens to interleave the real and imaginary components of its result</span><span class="pln">
+    </span><span class="typ">IReadOnlyList</span><span class="str">&lt;float&gt;</span><span class="pln"> frequenciesCompact </span><span class="pun">=</span><span class="pln"> magnitudes</span><span class="pun">.</span><span class="typ">FastFourierTransformWithInterleavedOutput</span><span class="pun">();</span><span class="pln">
+    </span><span class="com">// de-interleave the result into complex numbers</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> realImag </span><span class="pun">=</span><span class="pln"> frequenciesCompact</span><span class="pun">.</span><span class="typ">Deinterleave</span><span class="pun">(</span><span class="lit">2</span><span class="pun">);</span><span class="pln">
+    </span><span class="typ">IReadOnlyList</span><span class="pun">&lt;</span><span class="typ">Complex</span><span class="pun">&gt;</span><span class="pln"> frequencies </span><span class="pun">=</span><span class="pln"> realImag</span><span class="pun">[</span><span class="lit">0</span><span class="pun">].</span><span class="typ">Zip</span><span class="pun">(</span><span class="pln">realImag</span><span class="pun">[</span><span class="lit">1</span><span class="pun">],</span><span class="pln"> </span><span class="pun">(</span><span class="pln">r</span><span class="pun">,</span><span class="pln"> i</span><span class="pun">)</span><span class="pln"> </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Complex</span><span class="pun">(</span><span class="pln">r</span><span class="pun">,</span><span class="pln"> i</span><span class="pun">));</span><span class="pln">
+    </span><span class="com">// get the frequency amplitudes</span><span class="pln">
+    </span><span class="typ">IReadOnlyList</span><span class="str">&lt;double&gt;</span><span class="pln"> amplitudes </span><span class="pun">=</span><span class="pln"> frequencies</span><span class="pun">.</span><span class="typ">Select</span><span class="pun">(</span><span class="pln">e </span><span class="pun">=&gt;</span><span class="pln"> e</span><span class="pun">.</span><span class="typ">Magnitude</span><span class="pun">);</span><span class="pln">
+    </span><span class="com">// graph it, omitting the "mirrored" second half of frequency space</span><span class="pln">
+    </span><span class="typ">DrawMagicalGraph</span><span class="pun">(</span><span class="pln">amplitudes</span><span class="pun">.</span><span class="typ">Take</span><span class="pun">(</span><span class="pln">amplitudes</span><span class="pun">.</span><span class="typ">Count</span><span class="pln"> </span><span class="pun">/</span><span class="pln"> </span><span class="lit">2</span><span class="pun">));</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>In this example, a wave specified as a list over the time domain is transformed into a list of amplitudes over the frequency domain before being passed along. The passed-along list is actually a nicer view of the output of the transform, computed on-demand as its items are accessed. For example, when a caller accesses “amplitudes[2]” this causes “frequencies[2].Magnitude” to be evaluated, which causes “new Complex(realImag[0][2], realImag[1][2]).Magnitude” to be evaluated, which causes “new Complex(frequenciesCompact[4], frequenciesCompact[5]).Magnitude” to be evaluated.</p>
+<h3>Summary</h3>
+<p>You can make code easier to understand by asking for exactly what you want and promising exactly what you provide. The readonly collection interfaces allow you to do this in more situations. Asking for what you want, instead of creating it from an enumerable, can save a lot of execution time and memory.</p>
+<p>Readonly collections can be defined implicitly, typically by projecting or otherwise transforming existing instances. Huge implicit collections can be created in constant time and stored in constant additional memory. You pay for this benefit with overhead when items are accessed.</p>
+<p>All of this is <a href="https://github.com/Strilanc/LinqToCollections">implemented</a> and <a href="https://nuget.org/packages/Strilanc.LinqToCollections">ready to be referenced</a>.</p>
+<h3>Appendix</h3>
+<p>—</p>
+<h3><a href="http://www.reddit.com/r/programming/comments/151hxa/linq_to_collections_beyond_ienumerablet/">Discuss on Reddit</a></h3>
+<p>—</p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia. <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2 class="endofpage">Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait" rel="bookmark" title="Permanent Link to Emulating Actors in C# with Async/Await">Emulating Actors in C# with Async/Await</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2096_making-an-immutable-queue-with-guaranteed-constant-time-operations" rel="bookmark" title="Permanent Link to Making an immutable queue with guaranteed constant time operations">Making an immutable queue with guaranteed constant time operations</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions" rel="bookmark" title="Permanent Link to Improving Checked Exceptions">Improving Checked Exceptions</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime" rel="bookmark" title="Permanent Link to Perishable Collections: The Benefits of Removal-by-Lifetime">Perishable Collections: The Benefits of Removal-by-Lifetime</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control" rel="bookmark" title="Permanent Link to Decoupling shared control">Decoupling shared control</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1694_decoupling-inlined-ui-code" rel="bookmark" title="Permanent Link to Decoupling inlined UI code">Decoupling inlined UI code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+ <div id="upprev_box" style="right: -400px;">
+	<h6>
+		More interesting posts <span class="num"> (2 of 31 articles)</span>
+	</h6>
+	<div class="upprev_excerpt">
+		<p>
+			<a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="prev">Publish your .Net library as a NuGet package</a>
+		</p>
+	</div>
+	
+		<p>
+Or check out our <a href="http://twistedoakstudios.com/portfolio">Portfolio</a>.		</p><button id="upprev_close" type="button">Close</button>
+</div><!-- #upprev_box -->
+<link rel="stylesheet" id="upprev-css-css" href="./Post1585_linq-to-collections-beyond-ienumerablet_files/upprev.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-quicklatex-format-css" href="./Post1585_linq-to-collections-beyond-ienumerablet_files/quicklatex-format.css" type="text/css" media="all">
+<script type="text/javascript" src="./Post1585_linq-to-collections-beyond-ienumerablet_files/jquery.js"></script>
+<script type="text/javascript" src="./Post1585_linq-to-collections-beyond-ienumerablet_files/upprev_js.php"></script>
+<script type="text/javascript" src="./Post1585_linq-to-collections-beyond-ienumerablet_files/comment-reply.min.js"></script>
+ 
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+			<nav>
+				<ul class="primary-nav clearfix">
+					<li><a href="http://www.twistedoakstudios.com/">Home</a></li>
+					<li><a href="http://twistedoakstudios.com/portfolio">Portfolio</a></li>
+				</ul>
+			</nav>
+		</div>
+		
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				6082 Shirley Street<br>
+				Halifax, NS, Canada B3H 2M8</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+		
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script>- 2013 Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="./Post1585_linq-to-collections-beyond-ienumerablet_files/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="./Post1585_linq-to-collections-beyond-ienumerablet_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script></body></html>

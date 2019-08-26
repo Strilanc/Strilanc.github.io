@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script id="bug.surrogate">var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}}; if (document.location.host == 'www.salon.com') {var _ga_ = document.querySelectorAll('script[src$=ga\\.js]')[0], ga_e = document.createEvent('Event'); ga_e.initEvent('load', true, true);_ga_.dispatchEvent(ga_e);}</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Unity3D Consulting | Technical Magic</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Post2644_grovers-quantum-search-algorithm_files/1140.css">
+    <link rel="stylesheet" href="Post2644_grovers-quantum-search-algorithm_files/style.css">
+    <link rel="stylesheet" href="Post2644_grovers-quantum-search-algorithm_files/blogstyle.css">
+<link rel="stylesheet" href="Post2644_grovers-quantum-search-algorithm_files/prettify.css" media="all">
+<link rel="stylesheet" href="Post2644_grovers-quantum-search-algorithm_files/sunburst.css" media="all">
+<script type="text/javascript" src="Post2644_grovers-quantum-search-algorithm_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Post2644_grovers-quantum-search-algorithm_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Post2644_grovers-quantum-search-algorithm_files/modernizr-2.js"></script>
+</head>
+<body class=" customize-support" onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="#"><img class="logo" src="Post2644_grovers-quantum-search-algorithm_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm" rel="bookmark" title="Permanent Link to Grover’s Quantum Search Algorithm">Grover’s Quantum Search Algorithm</a></h2>
+<div class="meta">posted by Craig Gidney on March 5, 2013</div>
+
+<p><a href="http://en.wikipedia.org/wiki/Grover%27s_algorithm">Grover’s algorithm</a>
+ is a quantum search algorithm that runs quadratically faster than any 
+equivalent classical algorithm. With a budget of a million operations, a
+ classical algorithm is limited to searching through about a million 
+(unsorted, unstructured) possibilities. Grover’s algorithm, on the other
+ hand, can use those million operations to search through hundreds of <strong>billions</strong> of possibilities.</p>
+<p>Describing how Grover’s algorithm pulls this trick is difficult, 
+because it uses concepts fundamental to quantum mechanics. Instead of 
+checking possibilities one by one, it (warning: incoming jargon) creates
+ a uniform <a href="http://en.wikipedia.org/wiki/Quantum_superposition">superposition</a> over all possibilities and repeatedly destructively <a href="http://en.wikipedia.org/wiki/Quantum_interference#Quantum_interference">interferes</a> states that are not solutions.</p>
+<p>Hopefully, by the end of this post, you’ll understand <a href="http://en.wikipedia.org/wiki/Qubit">qubits</a>, <a href="http://en.wikipedia.org/wiki/Quantum_circuit">quantum circuits</a>, maybe a little bit of quantum mechanics, and (of course) Grover’s algorithm.</p>
+<h3>Search a Function</h3>
+<p>Jumping ahead a bit, I need to make one important concept clear right
+ away: Grover’s algorithm doesn’t search through lists, it searches 
+through <em>functions</em>. Grover’s algorithm takes a function, searches through the <em>implicit</em> list of possible inputs to that function, and (with high probability) returns the <em>single</em>
+ input that causes the function to return true. (To deal with cases with
+ more than one satisfying input, we need a variant of Grover’s 
+algorithm.)</p>
+<p>The following C# code solves a problem equivalent, in spirit, to what
+ Grover’s algorithm solves. It uses an entirely different approach, but 
+solves the same basic problem:</p>
+<pre><code class="prettyprint"><span class="kwd">int</span><span class="pln"> </span><span class="typ">FindSingleSatisfyingInput</span><span class="pun">(</span><span class="typ">Func</span><span class="pun">&lt;</span><span class="kwd">int</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">bool</span><span class="pun">&gt;</span><span class="pln"> predicate</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> inputRange</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> solution </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> resultCount </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">for</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">int</span><span class="pln"> i </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln"> i </span><span class="pun">&lt;</span><span class="pln"> inputRange</span><span class="pun">;</span><span class="pln"> i</span><span class="pun">++)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">predicate</span><span class="pun">(</span><span class="pln">i</span><span class="pun">))</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            solution </span><span class="pun">=</span><span class="pln"> i</span><span class="pun">;</span><span class="pln">
+            resultCount </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">1</span><span class="pun">;</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">resultCount </span><span class="pun">!=</span><span class="pln"> </span><span class="lit">1</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="com">// Violated the 'exactly one solution' constraint</span><span class="pln">
+        </span><span class="com">// Garbage in, probable garbage out</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> </span><span class="typ">RandomResult</span><span class="pun">(</span><span class="lit">0</span><span class="pun">,</span><span class="pln"> inputRange</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> solution</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>I really can't stress this point enough: Grover's algorithm searches a
+ function for a single satisfying input. If you want to search through 
+an explicit list of items, then you need a function backed by said list.
+ Understanding how to do that is outside the scope of this post, so I'm 
+going to stick to searching functions.</p>
+<p>So, if Grover's algorithm searches a function, how is that function represented? Good question. I'll get back to that.</p>
+<h3>Like probability theory, but over the complex numbers</h3>
+<p>My favorite summary of quantum computing, from a talk called <a href="http://videolectures.net/nips2012_aaronson_quantum_information/">Quantum information and the Brain</a> by <a href="http://www.scottaaronson.com/blog/">Scott Aaronson</a>, goes as follows: <a href="http://carbon.videolectures.net/v00c/2a/fiejbaktjucg5rhjhv66mbm7b426pjem.jpg">"Like probability theory, but over the complex numbers"</a>.
+ It is my favorite summary because, unlike misleading 
+oversimplifications like "it tries every possibility", you can actually 
+use "Like probability theory, but over the complex numbers" to make a 
+reasonable guess at how quantum algorithms will work.</p>
+<p>For example, how do we describe the state of a probabilistic system? 
+Well, each possible state is associated with a real number between 0 and
+ 1 (the probability), with the constraint that if we add up all of the 
+probabilities we will get 1. Flip a coin and, before the coin lands, the
+ result of the flip is in the state <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_037.png" class="ql-img-inline-formula" alt="[\text{heads:}\frac{1}{2}, \text{tails:}\frac{1}{2}]" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;">. If the coin lands on heads then the result of the flip is in the state <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_002.png" class="ql-img-inline-formula" alt="[\text{heads:}1, \text{tails:}0]" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;">.</p>
+<p>How do we describe the state of a quantum system? Like probabilities,
+ but complex. Each possible state is associated with a complex number 
+with <a href="http://en.wikipedia.org/wiki/Complex_number#Polar_form">magnitude</a> (absolute value) between 0 and 1 (the <a href="http://en.wikipedia.org/wiki/Probability_amplitude">amplitude</a>).
+ The squared magnitude of a state's amplitude is the probability of that
+ state, so we have the constraint that the squared magnitudes of the 
+amplitudes must add up to 1. Because many different amplitudes can 
+result in the same probabilities, our coin flip example no longer has a 
+unique representation. Before the coin is flipped, the result of the 
+flip could be represented as the state <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_019.png" class="ql-img-inline-formula" alt="[\text{heads:}\frac{1}{\sqrt{2}}, \text{tails:}\frac{1}{\sqrt{2}}]" title="Rendered by QuickLaTeX.com" style="vertical-align: -11px;">, the state <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_021.png" class="ql-img-inline-formula" alt="[\text{heads:}\frac{1}{\sqrt{-2}}, \text{tails:}-\frac{1}{\sqrt{2}}]" title="Rendered by QuickLaTeX.com" style="vertical-align: -11px;">, or many other possibilities.</p>
+<p>For another example of summary goodness, consider how transitions 
+between states can be represented. Probabilistic systems allow 
+operations like "If in state 2 then go to state 3 with 50% chance". It 
+turns out that these operations can always be represented as linear 
+transformations: multiplying the vector of 
+states-weighted-by-probabilities against a matrix. There's actually a 
+name for the type of matrix that corresponds to a probabilistic 
+operation: <a href="http://en.wikipedia.org/wiki/Stochastic_matrix">stochastic</a>.</p>
+<p>How are quantum transitions represented? Like stochastic matrices, but complex. All quantum operations are equivalent to a <a href="http://en.wikipedia.org/wiki/Unitary_matrix">unitary matrix</a>. (Knowing that, we can derive further properties like "operations must be reversible".)</p>
+<p>So a quantum algorithm will necessarily look like... a bunch of 
+carefully chosen matrix multiplications (involving imaginary numbers) to
+ make 'solution' states have large amplitudes. Hurray. The larger the 
+amplitudes of the solution states, the more likely it will be that the 
+problem is solved when the quantum computer's state is un-isolated and 
+reported.</p>
+<h3>Working with Complex Numbers</h3>
+<p>If you're completely unfamiliar with complex numbers, they're introduced very well during <a href="http://acko.net/blog/how-to-fold-a-julia-fractal/">How to Fold a Julia Fractal</a>, by Steve Wittens (creator of <a href="https://github.com/unconed/MathBox.js">MathBox</a>). He starts with <em>rotations</em>
+ of normal numbers (with a 180° turn being equivalent to multiplying by 
+-1) and then notes that a 90° turn is suspiciously similar to the result
+ of a negative square root...</p>
+<p>The overall state of a quantum computation is made up of complex 
+numbers referred to as amplitudes. I'll often be representing amplitudes
+ using what I call a "square diagram", which visually represents the 
+various components of a complex number:</p>
+<p><img src="Post2644_grovers-quantum-search-algorithm_files/TV5yI9W.gif" alt="Square Diagram of Complex Number"></p>
+<p>The arrow rooted in the center of the diagram points to the complex 
+value of the amplitude. The real part is the X offset of the arrow, the 
+imaginary part is the Y offset, the magnitude is the length of the 
+arrow, and the phase is related to the direction of the arrow. Because 
+the squared magnitude of an amplitude is also an important value, since 
+it determines the probability of a state, it is represented by the 
+proportion of filled-in area of the unit radius square (width=height=2) 
+surrounding the arrow.</p>
+<p>Treating complex numbers as arrows is a useful intuition. When Richard Feynman gave a <a href="http://www.youtube.com/watch?v=xdZMXWmlp9g">lecture on quantum mechanics intended for non-physicists</a>,
+ he took advantage of this and only mentioned in passing that these 
+'spinning arrows' were equivalent to complex numbers. After all, adding 
+is as easy as placing arrows end to end:</p>
+<p><img src="Post2644_grovers-quantum-search-algorithm_files/AVoliWw.gif" alt="Adding Complex Numbers"></p>
+<p>The fact that arrows clearly show magnitude and phase also makes 
+multiplication easier to visualize, because the effect on the phases is 
+independent of the effect on the magnitudes. To multiply two complex 
+numbers, you add their phases and multiply their magnitudes:</p>
+<p><img src="Post2644_grovers-quantum-search-algorithm_files/BLagBNq.gif" alt="Multiplying Complex Numbers"></p>
+<p>To represent what happens during a linear transformation / matrix 
+multiplication, I combine the above multiplication and addition 
+animations. In the following animation, a vector of two state amplitudes
+ (each amplitude corresponds to a possible state) is transformed by a 
+unitary matrix, using a combination of the multiplying and summing 
+animations:</p>
+<p><img src="Post2644_grovers-quantum-search-algorithm_files/lcg3oUu.gif" alt="Matrix Multiplication with Complex Numbers"></p>
+<p>Notice how the matrix multiplication mixes both input state 
+amplitudes (the blue values initially on the left) into the two output 
+state amplitudes (the eventual blue values on the right) through the 
+operation of the matrix (the yellow values in the middle). Each input 
+may reinforce or counteract the effect of other inputs due to 
+differences in phase. This ability to create interference may seem like a
+ bad thing, but it's actually what gives quantum computers their power 
+compared to a probabilistic or classical computer with no phase 
+information.</p>
+<h3>Quantum Circuits</h3>
+<p>How do we represent a quantum computation? One way is <a href="http://en.wikipedia.org/wiki/Quantum_circuit">quantum circuits</a>, which are made up of a fixed number of wires going through a sequence of gates.</p>
+<p>The wires of a quantum circuit correspond to qubits, and store the 
+state of the system. I say qubits, instead of bits, because the system 
+can be placed into superpositions of the various possible classical 
+states. A system with <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_030.png" class="ql-img-inline-formula" alt="n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> bits has <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_013.png" class="ql-img-inline-formula" alt="2^n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> possible classical states, but a system with <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_030.png" class="ql-img-inline-formula" alt="n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> qubits has a continuum of <a href="http://en.wikipedia.org/wiki/Quantum_state">quantum states</a> corresponding to various amplitude-weightings (superpositions) of the <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_013.png" class="ql-img-inline-formula" alt="2^n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> classical states.</p>
+<p>The state space of <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_030.png" class="ql-img-inline-formula" alt="n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> bits can be visualized as the corners of an <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_030.png" class="ql-img-inline-formula" alt="n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> dimensional <a href="http://en.wikipedia.org/wiki/Hypercube">cube</a> (maybe "visualized" is the wrong word), whereas the state space of <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_030.png" class="ql-img-inline-formula" alt="n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> qubits can be imagined abstractly as the points in the volume of a <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_035.png" class="ql-img-inline-formula" alt="2^n-1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;"> dimensional <a href="http://en.wikipedia.org/wiki/Hypersphere">sphere</a> (e.g. the <a href="http://en.wikipedia.org/wiki/Bloch_sphere">Bloch sphere</a>).</p>
+<p>For example, if there are two wires then the quantum system can be in a pure classical state like <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_048.png" class="ql-img-inline-formula" alt="[\text{OnOn:}1,\text{OnOff:}0,\text{OffOn:}0,\text{OffOff:}0]" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;">, corresponding to both wires definitely being on, or in a mixed state like <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_006.png" class="ql-img-inline-formula" alt="[\text{OnOn:}0,\text{OnOff:}\frac{1}{\sqrt{2}},\text{OffOn:}\frac{i}{\sqrt{2}},\text{OffOff:}0]" title="Rendered by QuickLaTeX.com" style="vertical-align: -11px;">, corresponding to knowing exactly one wire is on but not which one it is. (These states can be represented more compactly in <a href="http://en.wikipedia.org/wiki/Bra-ket">bra-ket notation</a> as <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_010.png" class="ql-img-inline-formula" alt="|\text{OnOn}\rangle" title="Rendered by QuickLaTeX.com" style="vertical-align: -5px;"> and <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_028.png" class="ql-img-inline-formula" alt="\frac{1}{\sqrt{2}} (i|\text{OffOn} \rangle + |\text{OnOff}\rangle)" title="Rendered by QuickLaTeX.com" style="vertical-align: -11px;">, respectively.) The phases of the states matter when interference occurs.</p>
+<p>The gates of a quantum circuit correspond to operations to perform on
+ the wires' state. Each one is equivalent to a multiplication of the 
+state by a unitary matrix.</p>
+<p>Lets start with a nice simple example of a quantum circuit. The 
+simplest gate I can think of is the NOT gate, which flips the On/Off 
+state of a single wire:</p>
+<p><img src="Post2644_grovers-quantum-search-algorithm_files/8oMGNCU.gif" alt="Not Gate"></p>
+<p>In the above diagram, you can see that applying a NOT gate 
+corresponds to multiplying the state of the system by the unitary matrix
+ <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_042.png" class="ql-img-inline-formula" alt="\left( \begin{array}{cccc} 0 &amp; 1 \\ 1 &amp; 0 \end{array} \right)" title="Rendered by QuickLaTeX.com" style="vertical-align: -17px;">.
+ The input is in the On state, which effectively selects the first 
+column of the matrix as the output, resulting in an Off output state. If
+ the input had been in the Off state, then the second column would have 
+been selected and the output would have been in the On state.</p>
+<p>The NOT gate is pretty boring. It can be performed in non-quantum 
+computers, after all. How about a simple quantum gate with no classical 
+equivalent? Enter the <a href="http://en.wikipedia.org/wiki/Hadamard_gate">Hadamard Gate</a>, corresponding to the matrix <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_026.png" class="ql-img-inline-formula" alt="\frac{1}{\sqrt{2}} \left( \begin{array}{cccc} 1 &amp; 1 \\ 1 &amp; -1 \end{array} \right)" title="Rendered by QuickLaTeX.com" style="vertical-align: -17px;">
+ and used for creating uniform mixes. Shown below: an initially-On state
+ (blue) and an initially-Off state (red) are mixed and unmixed by 
+Hadamard gates.</p>
+<p><img src="Post2644_grovers-quantum-search-algorithm_files/hVZ2zzg.gif" alt="Hadamard Gate"></p>
+<p>The Hadamard Gate is interesting because it transforms both On and 
+Off states into a mixed 50% On/Off state but, when applied again, undoes
+ its own effects and restores the original state. This would be 
+impossible with a classical or probabilistic computer, because the 
+50%/50% input would have to give the same result in both cases. If you 
+pay close attention to the above animation, you can see how the magic 
+works: the original value is encoded into the phases of the 50%/50% 
+state (the phases agree if the original state was On and disagree if it 
+was Off).</p>
+<h3>More Wires</h3>
+<p>Things get a bit more complicated when there are more wires present. 
+Suppose we want to apply a Hadamard gate to a single wire in an <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_030.png" class="ql-img-inline-formula" alt="n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> wire circuit. We have a <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_040.png" class="ql-img-inline-formula" alt="2" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">-by-<img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_040.png" class="ql-img-inline-formula" alt="2" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> matrix, but any operation on an <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_030.png" class="ql-img-inline-formula" alt="n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> wire circuit must be represented by <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_013.png" class="ql-img-inline-formula" alt="2^n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">-by-<img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_013.png" class="ql-img-inline-formula" alt="2^n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> matrices. How do we convert it, to simulate what nature does automatically?</p>
+<p>Keep in mind that the state of the wire we want to affect isn't confined to <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_040.png" class="ql-img-inline-formula" alt="2" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> out of the <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_013.png" class="ql-img-inline-formula" alt="2^n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">
+ possible states-of-all-wires (the possible global states). Every 
+possible global state includes the state of the wire we want to affect. 
+If we want to touch one wire, we must touch every global state.</p>
+<p>The basic idea of what needs to be done, which is a bit tricky to write down mathematically, is to repeat our <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_040.png" class="ql-img-inline-formula" alt="2" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">-by-<img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_040.png" class="ql-img-inline-formula" alt="2" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">
+ matrix for every combination of states of the other wires. If there are
+ two wires then we need one copy for when the other wire is On and one 
+copy for when the other wire is Off.</p>
+<p>The following diagram shows a 2-wire circuit that applies a Hadamard 
+gate on one wire and then on the other. Notice how the repeated entries 
+of the <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_040.png" class="ql-img-inline-formula" alt="2" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">-by-<img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_040.png" class="ql-img-inline-formula" alt="2" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> Hadamard matrix are placed differently based on the wire being affected:</p>
+<p><img src="Post2644_grovers-quantum-search-algorithm_files/Z1gvp0j.gif" alt="Hadamard Gates on Separate Wires"></p>
+<p>An interesting property of Hadamard gates, which you might have 
+noticed in the above diagram, is that applying them to multiple wires 
+has the same mixing effect as the single-wire case. Every pure input 
+state will become a uniformly mixed output state, with the original 
+state encoded into the phases, and applying the gates again will unmix 
+the mixed state back into the original pure state.</p>
+<p>Since applying a Hadamard gate to each of <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_030.png" class="ql-img-inline-formula" alt="n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> wires acts so much like applying a Hadamard gate to <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_045.png" class="ql-img-inline-formula" alt="1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;">
+ wire, it makes a lot of sense to pretend we have Hadamard gates that 
+operate on any number of wires. The following diagram shows an example 
+of a <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_040.png" class="ql-img-inline-formula" alt="2" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">-wire Hadamard gate in action, which is actually (under the hood) a Hadamard gate on each wire:</p>
+<p><img src="Post2644_grovers-quantum-search-algorithm_files/1PFaVTv.gif" alt="Combined Hadamard Gate"></p>
+<p>Shown above: an initially-OnOn state (blue) and an initially-OffOff 
+state (red) are mixed and unmixed by a combined 2-wire Hadamard gate. 
+The matrix representing the operation of a combined gate is obtained by 
+multiplying the matrices of the underlying gates together.</p>
+<p>There are many other <a href="http://en.wikipedia.org/wiki/Quantum_gate#Commonly_used_gates">common quantum gates</a>. However, since Grover's algorithm is almost entirely made up of Hadamard gates, I won't be covering them here.</p>
+<h3>Detour: Simulating a Physical System</h3>
+<p>We can simulate real physical systems with quantum circuits, and 
+doing so can be useful for grounding our understanding in concrete 
+examples. For example, consider the <a href="http://en.wikipedia.org/wiki/Mach%E2%80%93Zehnder_interferometer">Mach-Zehnder interferometer</a>:</p>
+<p><img src="Post2644_grovers-quantum-search-algorithm_files/SftiID6.png" alt="Mach-Zehnder interferometer"></p>
+<p>The Mach-Zehnder interferometer is an interesting optical system. It 
+uses a beam splitter to split an incoming photon along two paths, and 
+then uses a second beam splitter to recombine the two paths into a 
+single output path. Send a photon in from the left (on path A) and it 
+will always exit towards the right (on path H), never towards the bottom
+ (on path G). The reason this occurs is that contributions to G from E 
+and from F destructively interfere.</p>
+<p>We can represent the Mach-Zehnder interferometer as a quantum circuit
+ using only a single wire. The state of the wire represents whether the 
+photon is on the upper path (A,C,E,G) or the lower path (B,D,F,H). We 
+will use gates to simulate the beam splitters and mirrors. A mirror 
+rotates a photon's phase by 90°, and since both paths have a mirror at 
+the same position we can use the matrix <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_047.png" class="ql-img-inline-formula" alt="\left( \begin{array}{cccc} i &amp; 0 \\ 0 &amp; i \end{array} \right)" title="Rendered by QuickLaTeX.com" style="vertical-align: -17px;">
+ to represent their effects. Each beam splitter reflects the photon onto
+ the opposite path (also rotating its phase by 90°) or lets it through 
+unaffected, and can be represented by the matrix <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_004.png" class="ql-img-inline-formula" alt="\frac{1}{\sqrt{2}} \left( \begin{array}{cccc} 1 &amp; i \\ i &amp; 1 \end{array} \right)" title="Rendered by QuickLaTeX.com" style="vertical-align: -17px;">:</p>
+<p><img src="Post2644_grovers-quantum-search-algorithm_files/XOJKPSo.gif" alt="Mach-Zehnder interferometer circuit"></p>
+<p>Notice how the above animation shows an input of A giving a definite 
+output of H. Our circuit predicts the result of the physical system. The
+ destructive interference from E and F's contributions can be clearly 
+seen in the summation of the top row of the matrix of the last splitter.</p>
+<p>Now to make things a bit more interesting.</p>
+<p>One of the counter-intuitive things about Mach-Zehnder 
+interferometers is what happens when you use a detector to determine 
+whether the photon "really" took the upper or lower path. The 
+interference goes away (!):</p>
+<p><img src="Post2644_grovers-quantum-search-algorithm_files/kEAnZXq.png" alt="Mach-Zehnder interferometer with Detector"></p>
+<p>In the above diagram a detector has been placed on path E. Notice the
+ appearance of opposing waves traveling along G, instead of no wave. Why
+ aren't the opposing waves interfering destructively anymore? Can we use
+ a quantum circuit to shed light on this? Yup.</p>
+<p>To represent the state of the detector (on path E), we need to add a 
+second wire to our circuit. The operation of the detector will be 
+performed by a <a href="http://en.wikipedia.org/wiki/Controlled_NOT_gate">controlled-NOT gate</a>: when a photon passes through E (i.e. the first wire is On), the state of the detector (second wire) is flipped:</p>
+<p><img src="Post2644_grovers-quantum-search-algorithm_files/EmSlW1u.gif" alt="Mach-Zehnder interferometer circuit with Detector"></p>
+<p>Good: the above diagram shows the output of our circuit also isn't 
+showing any interference, matching the physical system. Each possibility
+ (G, G+detect, H, H+detect) has an equal 25% chance of being observed.</p>
+<p>The reason we don't get interference anymore comes down to the 
+necessary addition of the second wire, increasing the number of possible
+ states from <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_040.png" class="ql-img-inline-formula" alt="2" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> to <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_023.png" class="ql-img-inline-formula" alt="4" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;">.
+ We no longer need to jam four possible paths into just two output 
+states, creating interference effects. Instead, we're effectively using 
+the detector to send each possible path to its own output state. Photons
+ from different states don't interfere, even if they happen to be at the
+ same position, because only entire states interfere.</p>
+<p>I hope this detour has been helpful. We now return to Grover's algorithm.</p>
+<h3>The Unknown Gate</h3>
+<p>I mentioned earlier that I would get to how the 
+function-to-be-searched-by-Grover was represented. Now that I've covered
+ the basics of a quantum circuit, I can finally explain it.</p>
+<p>The input to Grover's algorithm is actually a gate, or combination of
+ gates, whose function is unknown. For example, if we wanted to solve a 
+large instance of the <a href="http://en.wikipedia.org/wiki/3-SAT">boolean satisfiability</a>
+ problem, then the unknown gate(s) given to Grover's search algorithm 
+would compute whether an input satisfies a boolean equation. Given a 
+pure state that is not a solution, the gates must pass it along 
+unchanged. Given a pure state that <em>is</em> a solution, the gates must rotate the state's amplitude's phase by 180°.</p>
+<p>For <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_009.png" class="ql-img-inline-formula" alt="n=2" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> wires, there are <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_012.png" class="ql-img-inline-formula" alt="N=2^n=4" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;"> allowed possibilities for the effect of the unknown gate(s):</p>
+<p><img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_016.png" class="ql-img-inline-formula" alt="\left( \begin{array}{cccc} -1 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; 1 \end{array} \right),  \left( \begin{array}{cccc} 1 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; -1 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; 1 \end{array} \right),  \left( \begin{array}{cccc} 1 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; -1 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; 1 \end{array} \right), \text{or} \left( \begin{array}{cccc} 1 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; -1 \end{array} \right)" title="Rendered by QuickLaTeX.com" style="vertical-align: -39px;"></p>
+<p>Grover's algorithm will distinguish between these four possibilities.
+ This might sound pointless, but remember that as the number of wires 
+goes up the matrices become exponentially huge. With <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_043.png" class="ql-img-inline-formula" alt="40" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;"> wires, there's about a trillion places for that <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_044.png" class="ql-img-inline-formula" alt="-1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;"> to hide. Also, remember that in practice we wouldn't be explicitly picking the position of the <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_044.png" class="ql-img-inline-formula" alt="-1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;">. Instead, we'd be implicitly constraining its position by providing gates that solve a problem when given the right input.</p>
+<p>The technical term for the unknown/unspecified gate is "<a href="http://mathoverflow.net/questions/102779/how-much-does-a-quantum-oracle-to-find-a-needle-in-a-haystack-really-cost">quantum oracle</a>". I'm just going to keep calling it the unknown gate/gates/operation/whatever.</p>
+<h3>Grover's Gates</h3>
+<p>The soul of Grover's algorithm is an operation that computes the 
+average of all the amplitudes, and then inverts all of the amplitudes 
+through that average (and additionally negates all the amplitudes). This
+ operation is referred to as the "Grover Diffusion Operator", and it is 
+built out of Hadamard gates surrounding an operation that inverts the 
+phase of the first state.</p>
+<p>Shown below: an OnOn state, the only one with opposite phase in the 
+initial uniformly mixed input state, is 'found' by the diffusion 
+operator.</p>
+<p><img src="Post2644_grovers-quantum-search-algorithm_files/JDEpSYB.gif" alt="Grover Diffusion Operator"></p>
+<p>The input state in the above diagram has three states with an amplitude of <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_018.png" class="ql-img-inline-formula" alt="\frac{1}{2}" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;"> and one state with an amplitude of <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_008.png" class="ql-img-inline-formula" alt="-\frac{1}{2}" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;">. The average of these four amplitudes is <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_038.png" class="ql-img-inline-formula" alt="\mu = \frac{1}{4}" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;">. The states with amplitude <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_018.png" class="ql-img-inline-formula" alt="\frac{1}{2}" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;"> go from <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_025.png" class="ql-img-inline-formula" alt="\mu + \frac{1}{4}" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;"> to <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_027.png" class="ql-img-inline-formula" alt="-(\mu-\frac{1}{4}) = 0" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;">. The state with amplitude <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_008.png" class="ql-img-inline-formula" alt="-\frac{1}{2}" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;"> goes from <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_036.png" class="ql-img-inline-formula" alt="\mu - \frac{3}{4}" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;"> to <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_029.png" class="ql-img-inline-formula" alt="-(\mu+\frac{3}{4}) = -1" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;">.</p>
+<p>For an explanation of why the diffusion operator is an inversion-about-the-mean, see <a href="http://www.cs.berkeley.edu/%7Evazirani/f04quantum/notes/lec10/lec11.pdf">these lecture notes</a>.</p>
+<p>As the above diagram demonstrated, the diffusion operator can enhance
+ the amplitude of a single discordant phase. Combine this knowledge with
+ the fact that the unknown gate rotates the phase of the solution state 
+by 180°, making it different from the other states, and suddenly the 
+mechanism of Grover's algorithm becomes clear. Use the unknown gate to 
+make the solution state's amplitude different from the other states' 
+amplitudes, then use the diffusion operator to amplify the difference, 
+and repeat until the difference is non-negligible.</p>
+<p>I call the repeated part of Grover's algorithm the 'Grover Step':</p>
+<p><img src="Post2644_grovers-quantum-search-algorithm_files/aeTDCNZ.gif" alt="Grover Step"></p>
+<p>Above: the unknown gate flips the phase of the "On,Off" state of a 
+uniformly mixed input, and then the diffusion operation 'finds' this 
+flipped phase. Only a single iteration is needed to find the solution 
+when there are two wires.</p>
+<p>Now we have all the elements needed to put the full algorithm 
+together. The input to the circuit is all-wires-on. The first thing the 
+circuit does is apply a Hadamard gate that, because of the input state 
+we choose, will create a uniform mix where every state has an amplitude 
+of <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_046.png" class="ql-img-inline-formula" alt="\frac{1}{\sqrt{2^n}}" title="Rendered by QuickLaTeX.com" style="vertical-align: -11px;">.
+ Then the circuit applies the Grover Step (that contains the unknown 
+gate that determines what we're looking for) an appropriate number of 
+times, amplifying the sought-after solution state until the probability 
+of observing it when the wire states are measured is maximized.</p>
+<p>Below: finding the solution "Off,On,On,On,On", out of a space of size <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_020.png" class="ql-img-inline-formula" alt="32" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">, in <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_023.png" class="ql-img-inline-formula" alt="4" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;"> Grover Steps. The matrix multiplications and underlying states are not shown in the diagram because they're too large (<img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_020.png" class="ql-img-inline-formula" alt="32" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">-by-<img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_020.png" class="ql-img-inline-formula" alt="32" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">) to fit comfortably.</p>
+<p><img src="Post2644_grovers-quantum-search-algorithm_files/tPI3Xlh.gif" alt="Grover's Algorithm"></p>
+<p>Notice that the correct solution is the most likely answer after just
+ one step, but it takes three more steps before the solution is 
+near-certain to be observed. (Warning: the probabilities shown for each 
+individual wire being in the correct state are partially dependent. The 
+probability of actually observing the solution, i.e. every wire being in
+ the right state, progresses as follows: <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_017.png" class="ql-img-inline-formula" alt="3.1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;">%, <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex.png" class="ql-img-inline-formula" alt="25.8" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">%, <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_003.png" class="ql-img-inline-formula" alt="60.2" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">%, <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_007.png" class="ql-img-inline-formula" alt="89.7" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">%, <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_039.png" class="ql-img-inline-formula" alt="99.9" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">%.)</p>
+<h3>Counting Steps</h3>
+<p>How did I know to apply four iterations when there were five wires? 
+How many iterations of the Grover step do we need to apply, in general? 
+Lets do a bit of math.</p>
+<p>Suppose we're searching through a state space of size <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_005.png" class="ql-img-inline-formula" alt="N" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">, requiring <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_041.png" class="ql-img-inline-formula" alt="n=log_2(N)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;"> wires (assume <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_005.png" class="ql-img-inline-formula" alt="N" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;"> is a power of 2). Before the first Grover step, all the amplitudes will be equal to <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_022.png" class="ql-img-inline-formula" alt="\sqrt{\frac{1}{2^n}}" title="Rendered by QuickLaTeX.com" style="vertical-align: -11px;">. Let <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_032.png" class="ql-img-inline-formula" alt="a_s" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;"> be the amplitude of the state we want to find, after step <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_015.png" class="ql-img-inline-formula" alt="s" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">, and <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_034.png" class="ql-img-inline-formula" alt="b_s" title="Rendered by QuickLaTeX.com" style="vertical-align: -3px;"> be the amplitude of the other <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_035.png" class="ql-img-inline-formula" alt="2^n-1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;">
+ states. Within the Grover Step, the unknown operation will negate the 
+target amplitude and then the diffusion operator will invert about the 
+mean amplitude <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_024.png" class="ql-img-inline-formula" alt="c_s = \frac{-a_s+b_s \cdot (2^n-1)}{2^n}" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;">. The next amplitudes are <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_031.png" class="ql-img-inline-formula" alt="a_{s+1} = c_s - (-a_s - c_s)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;"> and <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_011.png" class="ql-img-inline-formula" alt="b_{s+1} =c_s - (b_s - c_s)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;">.</p>
+<p>The probability that the measured result will be the target state, after a given step, is <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_014.png" class="ql-img-inline-formula" alt="|a_s|^2" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;">.
+ Shove the above equations into Excel, graph the chance of success 
+against various numbers of steps and problem sizes, and you get:</p>
+<p><img src="Post2644_grovers-quantum-search-algorithm_files/PdddkJJ.png" alt="Period effect of Grover Steps"></p>
+<p>One interesting thing to note here is the periodic behavior. If we 
+apply too many steps, the chance of success starts going back down (and 
+then back up, and back down, and...)! Also, the achievable probability 
+of success is not always 100%. The best number of steps is, presumably, 
+just shy of things going downhill for the first time.</p>
+<p>Visually, I can tell from the graph that the best number of steps is going up slower than <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_005.png" class="ql-img-inline-formula" alt="N" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">. More analysis of the math will show <a href="http://twistedoakstudios.com/blog/en.wikipedia.org/wiki/Grover%27s_algorithm#Geometric_proof_of_correctness">it takes approximately <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_033.png" class="ql-img-inline-formula" alt="\frac{\pi}{4}\sqrt{N}" title="Rendered by QuickLaTeX.com" style="vertical-align: -6px;"> steps</a>
+ to reach the first maximal chance of success. Thus classical algorithms
+ are comparatively slower and slower, as the problem gets larger and 
+larger, because they must take a linear number of steps with respect to <img src="Post2644_grovers-quantum-search-algorithm_files/quicklatex_005.png" class="ql-img-inline-formula" alt="N" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;">.</p>
+<h3>Summary</h3>
+<p>Grover's algorithm searches for satisfying inputs to a function by 
+creating a uniform quantum superposition of states, and then cancelling 
+out non-solutions. It repeatedly applies an operation (representing the 
+problem to solve) that only inverts the phase of the solution, and then 
+an operation that amplifies amplitudes that are different, until the 
+most likely result-to-measure is the solution.</p>
+<p>---</p>
+<h3>Discuss on <a href="http://news.ycombinator.com/item?id=5322897">Hacker News</a>, <a href="http://www.reddit.com/r/programming/comments/19orbd/an_explanation_of_grovers_quantum_search_algorithm/">Reddit</a></h3>
+<p>---</p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers efficient, flexible remote and on-the-floor 
+development and consulting without any middle-man or excessive 
+administrivia. <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2 class="endofpage">Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post2766_followup-to-non-nullable-types-vs-c" rel="bookmark" title="Permanent Link to Followup to Non-Nullable Types vs C#">Followup to Non-Nullable Types vs C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2540_optimizing-just-in-time-with-expression-trees" rel="bookmark" title="Permanent Link to Optimizing Just in Time with Expression Trees">Optimizing Just in Time with Expression Trees</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2353_when-one-way-latency-doesnt-matter" rel="bookmark" title="Permanent Link to When One-Way Latency Doesn’t Matter">When One-Way Latency Doesn’t Matter</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point" rel="bookmark" title="Permanent Link to Determining exactly if/when/where a moving line intersected a moving point">Determining exactly if/when/where a moving line intersected a moving point</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait" rel="bookmark" title="Permanent Link to Emulating Actors in C# with Async/Await">Emulating Actors in C# with Async/Await</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2096_making-an-immutable-queue-with-guaranteed-constant-time-operations" rel="bookmark" title="Permanent Link to Making an immutable queue with guaranteed constant time operations">Making an immutable queue with guaranteed constant time operations</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions" rel="bookmark" title="Permanent Link to Improving Checked Exceptions">Improving Checked Exceptions</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime" rel="bookmark" title="Permanent Link to Perishable Collections: The Benefits of Removal-by-Lifetime">Perishable Collections: The Benefits of Removal-by-Lifetime</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control" rel="bookmark" title="Permanent Link to Decoupling shared control">Decoupling shared control</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1694_decoupling-inlined-ui-code" rel="bookmark" title="Permanent Link to Decoupling inlined UI code">Decoupling inlined UI code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet" rel="bookmark" title="Permanent Link to Linq to Collections: Beyond IEnumerable&lt;T&gt;">Linq to Collections: Beyond IEnumerable&lt;T&gt;</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+ <div id="upprev_box" style="right: -400px;">
+	<h6>
+		More interesting posts <span class="num"> (1 of 2 articles)</span>
+	</h6>
+	<div class="upprev_excerpt">
+		<p>
+			<a href="http://twistedoakstudios.com/blog/Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point" rel="prev">Determining exactly if/when/where a moving line intersected a moving point</a>
+		</p>
+	</div>
+	
+		<p>
+Or check out our <a href="http://twistedoakstudios.com/portfolio">Portfolio</a>.		</p><button id="upprev_close" type="button">Close</button>
+</div><!-- #upprev_box -->
+<link rel="stylesheet" id="admin-bar-css" href="Post2644_grovers-quantum-search-algorithm_files/admin-bar.css" type="text/css" media="all">
+<link rel="stylesheet" id="upprev-css-css" href="Post2644_grovers-quantum-search-algorithm_files/upprev.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-quicklatex-format-css" href="Post2644_grovers-quantum-search-algorithm_files/quicklatex-format.css" type="text/css" media="all">
+<script type="text/javascript" src="Post2644_grovers-quantum-search-algorithm_files/admin-bar.js"></script>
+<script type="text/javascript" src="Post2644_grovers-quantum-search-algorithm_files/jquery_002.js"></script>
+<script type="text/javascript" src="Post2644_grovers-quantum-search-algorithm_files/upprev_js.php"></script>
+<script type="text/javascript" src="Post2644_grovers-quantum-search-algorithm_files/comment-reply.js"></script>
+	<script type="text/javascript">
+		(function() {
+			var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
+
+			request = true;
+
+			b[c] = b[c].replace( rcs, ' ' );
+			b[c] += ( window.postMessage && request ? ' ' : ' no-' ) + cs;
+		}());
+	</script>
+			
+
+		 
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+			<nav>
+				<ul class="primary-nav clearfix">
+					<li><a href="http://www.twistedoakstudios.com/">Home</a></li>
+					<li><a href="http://twistedoakstudios.com/portfolio">Portfolio</a></li>
+				</ul>
+			</nav>
+		</div>
+		
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				6082 Shirley Street<br>
+				Halifax, NS, Canada B3H 2M8</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+		
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script>- 2013 Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Post2644_grovers-quantum-search-algorithm_files/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Post2644_grovers-quantum-search-algorithm_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script><div id="wpadminbar" class="nojq " role="navigation">
+			<a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1">Skip to toolbar</a>
+			<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Top navigation toolbar." tabindex="0">
+				<ul id="wp-admin-bar-root-default" class="ab-top-menu">
+		<li id="wp-admin-bar-wp-logo" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/about.php" title="About WordPress"><span class="ab-icon"></span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-wp-logo-default" class="ab-submenu">
+		<li id="wp-admin-bar-about"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/about.php">About WordPress</a>		</li></ul><ul id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu">
+		<li id="wp-admin-bar-wporg"><a class="ab-item" href="http://wordpress.org/">WordPress.org</a>		</li>
+		<li id="wp-admin-bar-documentation"><a class="ab-item" href="http://codex.wordpress.org/">Documentation</a>		</li>
+		<li id="wp-admin-bar-support-forums"><a class="ab-item" href="http://wordpress.org/support/">Support Forums</a>		</li>
+		<li id="wp-admin-bar-feedback"><a class="ab-item" href="http://wordpress.org/support/forum/requests-and-feedback">Feedback</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-site-name" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/">twistedoakstudios.com</a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-site-name-default" class="ab-submenu">
+		<li id="wp-admin-bar-dashboard"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/">Dashboard</a>		</li></ul><ul id="wp-admin-bar-appearance" class="ab-submenu">
+		<li id="wp-admin-bar-themes"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/themes.php">Themes</a>		</li>
+		<li id="wp-admin-bar-customize" class="hide-if-no-customize"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/customize.php?url=http%3A%2F%2Ftwistedoakstudios.com%2Fblog%2FPost2644_grovers-quantum-search-algorithm">Customize</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-updates"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/update-core.php" title="1 Plugin Update, 1 Theme Update"><span class="ab-icon"></span><span class="ab-label">2</span><span class="screen-reader-text">1 Plugin Update, 1 Theme Update</span></a>		</li>
+		<li id="wp-admin-bar-comments"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/edit-comments.php" title="0 comments awaiting moderation"><span class="ab-icon"></span><span id="ab-awaiting-mod" class="ab-label awaiting-mod pending-count count-0">0</span></a>		</li>
+		<li id="wp-admin-bar-new-content" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php" title="Add New"><span class="ab-icon"></span><span class="ab-label">New</span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-new-content-default" class="ab-submenu">
+		<li id="wp-admin-bar-new-post"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php">Post</a>		</li>
+		<li id="wp-admin-bar-new-media"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/media-new.php">Media</a>		</li>
+		<li id="wp-admin-bar-new-link"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/link-add.php">Link</a>		</li>
+		<li id="wp-admin-bar-new-page"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php?post_type=page">Page</a>		</li>
+		<li id="wp-admin-bar-new-user"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/user-new.php">User</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-edit"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post.php?post=2644&amp;action=edit">Edit Post</a>		</li></ul><ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
+		<li id="wp-admin-bar-search" class="admin-bar-search"><div class="ab-item ab-empty-item" tabindex="-1"><form action="http://twistedoakstudios.com/blog/" method="get" id="adminbarsearch"><input class="adminbar-input" name="s" id="adminbar-search" maxlength="150" type="text"><input class="adminbar-button" value="Search" type="submit"></form></div>		</li>
+		<li id="wp-admin-bar-my-account" class="menupop with-avatar"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/profile.php" title="My Account">Howdy, Craig Gidney<img alt="" src="Post2644_grovers-quantum-search-algorithm_files/31a6ce579f8f9f9d528715d1e941726e.png" class="avatar avatar-16 photo" height="16" width="16"></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-user-actions" class="ab-submenu">
+		<li id="wp-admin-bar-user-info"><a class="ab-item" tabindex="-1" href="http://twistedoakstudios.com/blog/wp-admin/profile.php"><img alt="" src="Post2644_grovers-quantum-search-algorithm_files/31a6ce579f8f9f9d528715d1e941726e_002.png" class="avatar avatar-64 photo" height="64" width="64"><span class="display-name">Craig Gidney</span><span class="username">craig</span></a>		</li>
+		<li id="wp-admin-bar-edit-profile"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/profile.php">Edit My Profile</a>		</li>
+		<li id="wp-admin-bar-logout"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=4684ead381">Log Out</a>		</li></ul></div>		</li></ul>			</div>
+			<a class="screen-reader-shortcut" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=4684ead381">Log Out</a>
+		</div></body></html>

@@ -3,6 +3,7 @@ layout: post
 title: "A Classical Delayed Choice Experiment"
 date: 2017-12-12 5:10:20 am PST
 permalink: post/1720
+highlight_in_list: true
 ---
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}

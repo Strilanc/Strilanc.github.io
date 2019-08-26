@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script id="bug.surrogate">var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}}; if (document.location.host == 'www.salon.com') {var _ga_ = document.querySelectorAll('script[src$=ga\\.js]')[0], ga_e = document.createEvent('Event'); ga_e.initEvent('load', true, true);_ga_.dispatchEvent(ga_e);}</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Unity3D Consulting | Technical Magic</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Post2540_optimizing-just-in-time-with-expression-trees_files/1140.css">
+    <link rel="stylesheet" href="Post2540_optimizing-just-in-time-with-expression-trees_files/style.css">
+    <link rel="stylesheet" href="Post2540_optimizing-just-in-time-with-expression-trees_files/blogstyle.css">
+<link rel="stylesheet" href="Post2540_optimizing-just-in-time-with-expression-trees_files/prettify.css" media="all">
+<link rel="stylesheet" href="Post2540_optimizing-just-in-time-with-expression-trees_files/sunburst.css" media="all">
+<script type="text/javascript" src="Post2540_optimizing-just-in-time-with-expression-trees_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Post2540_optimizing-just-in-time-with-expression-trees_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Post2540_optimizing-just-in-time-with-expression-trees_files/modernizr-2.js"></script>
+</head>
+<body class=" customize-support" onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="#"><img class="logo" src="Post2540_optimizing-just-in-time-with-expression-trees_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post2540_optimizing-just-in-time-with-expression-trees" rel="bookmark" title="Permanent Link to Optimizing Just in Time with Expression Trees">Optimizing Just in Time with Expression Trees</a></h2>
+<div class="meta">posted by Craig Gidney on February 19, 2013</div>
+
+<p>One of the steps for logging into <a href="http://en.wikipedia.org/wiki/Battle.net">Battle.net</a> involves the client hashing some game files in a basic challenge-response (a.k.a. <a href="http://en.wikipedia.org/wiki/Proof_of_knowledge">proof of knowledge</a>) scheme referred to as the “revision check”. I implemented this functionality, years ago, as part of working on <a href="https://github.com/Strilanc/Tinker">Tinker</a> (a WarCraft 3 game hosting bot) and optimized my implementation by generating specialized code at runtime.</p>
+<p>What’s interesting about WarCraft 3′s revision check is that the challenge sent by the server is <em>the hash function itself</em>, as opposed to a prefix/suffix (Blizzard’s crypto is always “interesting”, sometimes with <a href="https://github.com/Strilanc/MpqLibrary/blob/master/Cryptography/Cryptography.vb#L103">hilarious</a> <a href="http://www.wc3c.net/showthread.php?t=101742">results</a>).
+ Each time a client connects, the server sends a description of a 
+different hash function to apply. For example, you might receive the 
+challenge “A=443747131 B=3328179921 C=1040998290 4 A=A^S B=B-C C=C^A 
+A=A+B”, which describes how to initialize the hash function’s state 
+(A,B,C) and the four operations to apply for each value of S read from 
+the game files.</p>
+<p>There’s other details relevant to computing the revision check… but 
+this isn’t a post about the peculiarities of WarCraft 3 (though I could 
+talk a lot about that).</p>
+<p>In this post I’ll discuss how I used .Net’s <a href="http://msdn.microsoft.com/en-us/library/bb397951.aspx">expression trees</a>
+ to dynamically generate optimized code for hash functions not known 
+until runtime (cutting multiple seconds off of Tinker’s login time).</p>
+<h3>Switch Inside</h3>
+<p>The simplest way to evaluate a hash function described at runtime is 
+by interpreting each instruction. When you have to apply an operation, 
+switch over the possible types of operation, and apply the right thing 
+in each case. That is to say, you implement a super-basic interpreter.</p>
+<p>For example, suppose we have a hash function described by the following <a href="https://github.com/Strilanc/Methods/blob/master/Methods/Methods/ExpressionHash/DynamicHasher.cs#L6">structure</a>:</p>
+<pre><code class="prettyprint"><span class="kwd">struct</span><span class="pln"> </span><span class="typ">DynamicHasher</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">int</span><span class="pun">[]</span><span class="pln"> </span><span class="typ">InitialState</span><span class="pun">;</span><span class="pln"> </span><span class="com">// first index (0) used for input, last index used for output</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Step</span><span class="pun">[]</span><span class="pln"> </span><span class="typ">Steps</span><span class="pun">;</span><span class="pln">
+    
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">enum</span><span class="pln"> </span><span class="typ">Operation</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="typ">Add</span><span class="pun">,</span><span class="pln">
+        </span><span class="typ">Multiply</span><span class="pun">,</span><span class="pln">
+        </span><span class="typ">Subtract</span><span class="pun">,</span><span class="pln">
+        </span><span class="typ">Xor</span><span class="pun">,</span><span class="pln">
+        </span><span class="typ">Or</span><span class="pun">,</span><span class="pln">
+        </span><span class="typ">And</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">struct</span><span class="pln"> </span><span class="typ">Step</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> </span><span class="typ">LeftInputIndex</span><span class="pun">;</span><span class="pln">
+        </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> </span><span class="typ">RightInputIndex</span><span class="pun">;</span><span class="pln">
+        </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> </span><span class="typ">OutputIndex</span><span class="pun">;</span><span class="pln">
+        </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Operation</span><span class="pln"> </span><span class="typ">Operation</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>To compute the result of the hash function, we loop over the input 
+data, feeding it into the first value of the state array. For each input
+ value, we loop over each operation to apply, determine what to do, and 
+apply their effects. Once we’re done, the result is the last value in 
+the state array. For reference, the inner loop of the <a href="https://github.com/Strilanc/Methods/blob/master/Methods/Methods/ExpressionHash/DynamicHasher.cs#L36">full interpret method</a> looks like this:</p>
+<pre><code class="prettyprint"><span class="com">// read</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> lhs </span><span class="pun">=</span><span class="pln"> state</span><span class="pun">[</span><span class="pln">step</span><span class="pun">.</span><span class="typ">LeftInputId</span><span class="pun">];</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> rhs </span><span class="pun">=</span><span class="pln"> state</span><span class="pun">[</span><span class="pln">step</span><span class="pun">.</span><span class="typ">RightInputId</span><span class="pun">];</span><span class="pln">
+
+</span><span class="com">// eval</span><span class="pln">
+</span><span class="kwd">int</span><span class="pln"> result</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">switch</span><span class="pln"> </span><span class="pun">(</span><span class="pln">step</span><span class="pun">.</span><span class="typ">Operation</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+</span><span class="kwd">case</span><span class="pln"> </span><span class="typ">Operation</span><span class="pun">.</span><span class="typ">Add</span><span class="pun">:</span><span class="pln">
+    </span><span class="kwd">unchecked</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        result </span><span class="pun">=</span><span class="pln"> lhs </span><span class="pun">+</span><span class="pln"> rhs</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">break</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">case</span><span class="pln"> </span><span class="typ">Operation</span><span class="pun">.</span><span class="typ">Multiply</span><span class="pun">:</span><span class="pln">
+    </span><span class="kwd">unchecked</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        result </span><span class="pun">=</span><span class="pln"> lhs </span><span class="pun">*</span><span class="pln"> rhs</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">break</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">case</span><span class="pln"> </span><span class="typ">Operation</span><span class="pun">.</span><span class="typ">Subtract</span><span class="pun">:</span><span class="pln">
+    </span><span class="kwd">unchecked</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        result </span><span class="pun">=</span><span class="pln"> lhs </span><span class="pun">-</span><span class="pln"> rhs</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">break</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">case</span><span class="pln"> </span><span class="typ">Operation</span><span class="pun">.</span><span class="typ">Xor</span><span class="pun">:</span><span class="pln">
+    result </span><span class="pun">=</span><span class="pln"> lhs </span><span class="pun">^</span><span class="pln"> rhs</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">break</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">case</span><span class="pln"> </span><span class="typ">Operation</span><span class="pun">.</span><span class="typ">Or</span><span class="pun">:</span><span class="pln">
+    result </span><span class="pun">=</span><span class="pln"> lhs </span><span class="pun">|</span><span class="pln"> rhs</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">break</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">case</span><span class="pln"> </span><span class="typ">Operation</span><span class="pun">.</span><span class="typ">And</span><span class="pun">:</span><span class="pln">
+    result </span><span class="pun">=</span><span class="pln"> lhs </span><span class="pun">&amp;</span><span class="pln"> rhs</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">break</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">default</span><span class="pun">:</span><span class="pln">
+    </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">InvalidOperationException</span><span class="pun">();</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+
+</span><span class="com">// write</span><span class="pln">
+state</span><span class="pun">[</span><span class="pln">step</span><span class="pun">.</span><span class="typ">OutputId</span><span class="pun">]</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> result</span><span class="pun">;</span></code></pre>
+<p>The above code applies each operation by switching to the appropriate
+ code to apply. This is the strategy I initially used to compute WC3′s 
+revision check. Unfortunately, at the time, the equivalent of the above 
+code took several seconds to compute (dominating the time required to 
+login).</p>
+<p>The problem here is the inner loop. We’re branching many times, 
+unnecessarily, for every single input value. The jit compiler is smart 
+enough to optimize the switch statement into a <a href="http://en.wikipedia.org/wiki/Jump_table">jump table</a> (I checked. See <a href="https://github.com/Strilanc/Methods/blob/master/Methods/Methods/ExpressionHash/Interpreted.x86Disassembly.txt#L86">the disassembly</a>.),
+ but not smart enough to take advantage of the fact that the same 
+branches will be taken again and again and again in an exploitable 
+pattern.</p>
+<p>If the number of possible branches in the inner loop was small, we 
+could pull the branching outside of the loop. Instead of switching over 
+possible operations inside the loop, we would switch over each possible 
+operation (outside of the loop) and then, within each case, loop over 
+the data while applying the right operations. We can’t do this here 
+because there’s too many branch possibilities in the inner loop. We’d 
+need hundreds of loops to cover all the combinations of, say, four 
+operations. Writing them all out ahead of time would be absurd. Instead,
+ we will wait until the operations are known (at runtime) and then write
+ them out just in time.</p>
+<h3>Using Expression Trees</h3>
+<p>.Net has always supported emitting code at runtime (At least, I think it has. The documentation for <a href="http://msdn.microsoft.com/en-us/library/3y322t50.aspx">Using Reflection Emit</a> goes back to v1.1). However, things got a lot easier in .Net 3.5 with the introduction of <a href="http://msdn.microsoft.com/en-us/library/bb397951.aspx">expression trees</a>. Instead of directly emitting instructions in the <a href="http://en.wikipedia.org/wiki/Common_Intermediate_Language">Common Intermediate Language</a>, you could now describe higher level constructs and have the framework emit appropriate CIL for you.</p>
+<p>Most of the types related to expression trees are in the 
+System.Linq.Expressions namespace, although you’ll also use types from 
+System.Reflection. Expressions are created via the static factory 
+methods on the <a href="http://twistedoakstudios.com/blog/System.Linq.Expressions.Expression">System.Linq.Expressions.Expression</a>
+ class (instead of with constructors), so that’s by far the best place 
+to start ‘dotting around’. Still, there’s a lot of little details that 
+are useful to know:</p>
+<ul>
+<li>Use Expression.Constant to convert a ‘normal’ value into an expression.
+</li><li>The value of an expression block is the last expression in the block.
+</li><li>The value returned from a function is the last expression in its body.
+</li><li>You can define variables/parameters with 
+Expression.Variable/Parameter, but remember to pass then into the scope 
+of an enclosing block or lambda if you want to actually use them.
+</li><li>Exiting a loop requires an Expression.Label (pass it to the loop expression and also to the break statement expression).
+</li><li>Calling a method requires getting its <a href="http://msdn.microsoft.com/en-us/library/system.reflection.methodinfo.aspx">MethodInfo</a> via the standard reflection API.
+</li><li>Use Expression.Lambda&lt;DelegateType&gt; to create an expression you can compile into a delegate.
+</li></ul>
+<p>Lets create an expression that pulls that switch statement out of the
+ loop. This is easy: just return the right type of expression, based on 
+the type of operation. Instead of describing how to branch over each 
+possible operation type, we’re describing how to apply only the exact 
+operation that will be used:</p>
+<pre><code class="prettyprint"><span class="kwd">switch</span><span class="pln"> </span><span class="pun">(</span><span class="pln">step</span><span class="pun">.</span><span class="typ">Operation</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+</span><span class="kwd">case</span><span class="pln"> </span><span class="typ">Operation</span><span class="pun">.</span><span class="typ">Add</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Add</span><span class="pun">(</span><span class="pln">lhs</span><span class="pun">,</span><span class="pln"> rhs</span><span class="pun">);</span><span class="pln">
+</span><span class="kwd">case</span><span class="pln"> </span><span class="typ">Operation</span><span class="pun">.</span><span class="typ">Multiply</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Multiply</span><span class="pun">(</span><span class="pln">lhs</span><span class="pun">,</span><span class="pln"> rhs</span><span class="pun">);</span><span class="pln">
+</span><span class="kwd">case</span><span class="pln"> </span><span class="typ">Operation</span><span class="pun">.</span><span class="typ">Subtract</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Subtract</span><span class="pun">(</span><span class="pln">lhs</span><span class="pun">,</span><span class="pln"> rhs</span><span class="pun">);</span><span class="pln">
+</span><span class="kwd">case</span><span class="pln"> </span><span class="typ">Operation</span><span class="pun">.</span><span class="typ">Xor</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">ExclusiveOr</span><span class="pun">(</span><span class="pln">lhs</span><span class="pun">,</span><span class="pln"> rhs</span><span class="pun">);</span><span class="pln">
+</span><span class="kwd">case</span><span class="pln"> </span><span class="typ">Operation</span><span class="pun">.</span><span class="typ">Or</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Or</span><span class="pun">(</span><span class="pln">lhs</span><span class="pun">,</span><span class="pln"> rhs</span><span class="pun">);</span><span class="pln">
+</span><span class="kwd">case</span><span class="pln"> </span><span class="typ">Operation</span><span class="pun">.</span><span class="typ">And</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">And</span><span class="pun">(</span><span class="pln">lhs</span><span class="pun">,</span><span class="pln"> rhs</span><span class="pun">);</span><span class="pln">
+</span><span class="kwd">default</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">InvalidOperationException</span><span class="pun">();</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>This is a neat trick, and we can take it even further. We know 
+exactly what operations need to be applied, so why should we loop over a
+ collection of them? We can just hard code the operators to apply in 
+each iteration. This unrolls the loop into a <a href="https://github.com/Strilanc/Methods/blob/master/Methods/Methods/ExpressionHash/DynamicHasher.cs#L103">statement block without any branches</a>:</p>
+<pre><code class="prettyprint"><span class="kwd">var</span><span class="pln"> runAllStepsBlock </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Block</span><span class="pun">(</span><span class="typ">Steps</span><span class="pun">.</span><span class="typ">Select</span><span class="pun">(</span><span class="pln">step </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> lhs </span><span class="pun">=</span><span class="pln"> stateVars</span><span class="pun">[</span><span class="pln">step</span><span class="pun">.</span><span class="typ">LeftInputIndex</span><span class="pun">];</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> rhs </span><span class="pun">=</span><span class="pln"> stateVars</span><span class="pun">[</span><span class="pln">step</span><span class="pun">.</span><span class="typ">RightInputIndex</span><span class="pun">];</span><span class="pln">
+    </span><span class="typ">Expression</span><span class="pln"> result </span><span class="pun">=</span><span class="pln"> 
+	    </span><span class="pun">...</span><span class="pln"> </span><span class="com">//switch over operation types;</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Assign</span><span class="pun">(</span><span class="pln">stateVars</span><span class="pun">[</span><span class="pln">step</span><span class="pun">.</span><span class="typ">OutputIndex</span><span class="pun">],</span><span class="pln"> result</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}));</span></code></pre>
+<p>We’ve transformed our inner loop from a large set of switch cases to <em>not even being a loop</em>.</p>
+<p>You might have noticed that the lhs/rhs expressions were determined 
+by accessing an array, instead of describing an access to an array. This
+ is another optimization, made possible because we know the size of the 
+hash function’s state when generating the expression. There’s no need to
+ use an array anymore, because we can define exactly the right number of
+ local variables. This optimization will elide almost all the 
+dereferences occurring in the inner loop (and looks a bit like “pulling 
+out the call to ToArray”):</p>
+<pre><code class="prettyprint"><span class="kwd">var</span><span class="pln"> stateVars </span><span class="pun">=</span><span class="pln"> hash</span><span class="pun">.</span><span class="typ">InitialState</span><span class="pun">.</span><span class="typ">Select</span><span class="pun">(</span><span class="pln">_ </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="typ">Expression</span><span class="pun">.</span><span class="typ">Variable</span><span class="pun">(</span><span class="kwd">typeof</span><span class="pun">(</span><span class="kwd">int</span><span class="pun">))).</span><span class="typ">ToArray</span><span class="pun">();</span></code></pre>
+<p>With these optimizations in hand, we can implement the rest of the 
+‘run hash’ method expression. This is relatively straightforward, at 
+least in hindsight, involving describing the loops and method 
+invocations without any clever optimizations at all. The <a href="https://github.com/Strilanc/Methods/blob/master/Methods/Methods/ExpressionHash/DynamicHasher.cs#L96">Specialize method</a> is a bit too long to comfortably inline here, but does make a good example of how to create a delegate via an expression tree.</p>
+<h3>Benchmarking</h3>
+<p>When I originally performed this optimization, the benefits were 
+significant. Unfortunately, I don’t remember exactly how much 
+improvement (somewhere around 2x as fast). To actually demonstrate the 
+benefits of this optimization, lets measure how long it takes to 
+interpret a simple hash function vs compiling and running a specialized 
+method. In fact, lets use the hash function I mentioned as an example at
+ the start of the post as our test case (which I actually did receive 
+from Battle.net):</p>
+<pre><code class="prettyprint"><span class="kwd">var</span><span class="pln"> example </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">DynamicHasher</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="typ">InitialState</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="lit">443747131</span><span class="pun">,</span><span class="pln"> </span><span class="lit">332817992</span><span class="pun">,</span><span class="pln"> </span><span class="lit">1040998290</span><span class="pln"> </span><span class="pun">},</span><span class="pln">
+    </span><span class="typ">Steps</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="com">// A += input</span><span class="pln">
+        </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">DynamicHasher</span><span class="pun">.</span><span class="typ">Step</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="typ">LeftInputIndex</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">1</span><span class="pun">,</span><span class="pln"> 
+            </span><span class="typ">RightInputIndex</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln"> 
+            </span><span class="typ">Operation</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="typ">DynamicHasher</span><span class="pun">.</span><span class="typ">Operation</span><span class="pun">.</span><span class="typ">Xor</span><span class="pun">,</span><span class="pln"> 
+            </span><span class="typ">OutputIndex</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">1</span><span class="pln">
+        </span><span class="pun">},</span><span class="pln">
+        </span><span class="com">// B -= C</span><span class="pln">
+        </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">DynamicHasher</span><span class="pun">.</span><span class="typ">Step</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="typ">LeftInputIndex</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">2</span><span class="pun">,</span><span class="pln"> 
+            </span><span class="typ">RightInputIndex</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">3</span><span class="pun">,</span><span class="pln"> 
+            </span><span class="typ">Operation</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="typ">DynamicHasher</span><span class="pun">.</span><span class="typ">Operation</span><span class="pun">.</span><span class="typ">Subtract</span><span class="pun">,</span><span class="pln"> 
+            </span><span class="typ">OutputIndex</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">2</span><span class="pln">
+        </span><span class="pun">},</span><span class="pln">
+        </span><span class="com">// C ^= A</span><span class="pln">
+        </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">DynamicHasher</span><span class="pun">.</span><span class="typ">Step</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="typ">LeftInputIndex</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">3</span><span class="pun">,</span><span class="pln"> 
+            </span><span class="typ">RightInputIndex</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">1</span><span class="pun">,</span><span class="pln"> 
+            </span><span class="typ">Operation</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="typ">DynamicHasher</span><span class="pun">.</span><span class="typ">Operation</span><span class="pun">.</span><span class="typ">Xor</span><span class="pun">,</span><span class="pln"> 
+            </span><span class="typ">OutputIndex</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">3</span><span class="pln">
+        </span><span class="pun">},</span><span class="pln">
+        </span><span class="com">// A += B</span><span class="pln">
+        </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">DynamicHasher</span><span class="pun">.</span><span class="typ">Step</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="typ">LeftInputIndex</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">1</span><span class="pun">,</span><span class="pln"> 
+            </span><span class="typ">RightInputIndex</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">2</span><span class="pun">,</span><span class="pln"> 
+            </span><span class="typ">Operation</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="typ">DynamicHasher</span><span class="pun">.</span><span class="typ">Operation</span><span class="pun">.</span><span class="typ">Add</span><span class="pun">,</span><span class="pln"> 
+            </span><span class="typ">OutputIndex</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">1</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">};</span></code></pre>
+<p>Running the specialize method on this hash function (and then writing
+ the resulting expression to an assembly and decompiling it with 
+resharper) produces very compact code:</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> </span><span class="typ">RunExample</span><span class="pun">(</span><span class="typ">IntStream</span><span class="pln"> stream1</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> num2 </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> num3 </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0x1a730b3b</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> num4 </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0x13d66648</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> num5 </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0x3e0c5f92</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> buffer </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="lit">0x1000</span><span class="pun">};</span><span class="pln">
+    </span><span class="kwd">while</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">true</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">var</span><span class="pln"> num </span><span class="pun">=</span><span class="pln"> stream1</span><span class="pun">.</span><span class="typ">Read</span><span class="pun">(</span><span class="pln">buffer</span><span class="pun">);</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">num </span><span class="pun">==</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> num5</span><span class="pun">;</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+        </span><span class="kwd">var</span><span class="pln"> num6 </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln">
+        </span><span class="kwd">while</span><span class="pln"> </span><span class="pun">(</span><span class="pln">num6 </span><span class="pun">&lt;</span><span class="pln"> num</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="kwd">var</span><span class="pln"> index </span><span class="pun">=</span><span class="pln"> num6</span><span class="pun">;</span><span class="pln">
+            num6 </span><span class="pun">=</span><span class="pln"> index </span><span class="pun">+</span><span class="pln"> </span><span class="lit">1</span><span class="pun">;</span><span class="pln">
+            num2 </span><span class="pun">=</span><span class="pln"> buffer</span><span class="pun">[</span><span class="pln">index</span><span class="pun">];</span><span class="pln">
+            num3 </span><span class="pun">^=</span><span class="pln"> num2</span><span class="pun">;</span><span class="pln">
+            num4 </span><span class="pun">-=</span><span class="pln"> num5</span><span class="pun">;</span><span class="pln">
+            num5 </span><span class="pun">^=</span><span class="pln"> num3</span><span class="pun">;</span><span class="pln">
+            num3 </span><span class="pun">+=</span><span class="pln"> num4</span><span class="pun">;</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>Well… that’s definitely simpler than the sixty line <a href="https://github.com/Strilanc/Methods/blob/master/Methods/Methods/ExpressionHash/DynamicHasher.cs#L35">interpret function</a>! It’s not <em>perfect</em>,
+ but it’s definitely going to be faster. The question is, will the 
+difference in speed be enough to offset the time spent compiling it? 
+Also, how long did it take to compile this method?</p>
+<p>To answer those questions, I fed the numbers in [0, 2^24) through the
+ interpreted function and through the specialized function. I captured 
+the x86 <a href="https://github.com/Strilanc/Methods/blob/master/Methods/Methods/ExpressionHash/Interpreted.x86Disassembly.txt">disassembly of the interpreted function</a> and the <a href="https://github.com/Strilanc/Methods/blob/master/Methods/Methods/ExpressionHash/Specialized.x86Disassembly.txt">disassembly of the specialized function</a>, and of course timed how long operations took:</p>
+<pre>Generating dynamically specialized code...
+Done after 45ms
+Timing interpretation vs dynamically generated code of example hash...
+Interpreted: 1622ms, Specialized: 1109ms
+Interpreted: 1536ms, Specialized: 1106ms
+Interpreted: 1532ms, Specialized: 1104ms
+Interpreted: 1538ms, Specialized: 1105ms
+Interpreted: 1540ms, Specialized: 1103ms
+Interpreted: 1531ms, Specialized: 1105ms
+Interpreted: 1542ms, Specialized: 1104ms
+Interpreted: 1534ms, Specialized: 1105ms
+Interpreted: 1547ms, Specialized: 1103ms
+Interpreted: 1545ms, Specialized: 1102ms</pre>
+<p>Note that the 45ms delay to generate the code is misleading. It includes a ton of static initialization and warmup costs. The <em>next</em>
+ function to be compiled takes less than a millisecond to complete. 
+However, since I cared about time-to-first-login at the time, I’m going 
+to count the inflated value.</p>
+<p>The time taken to compute when interpreting is approximately 1550ms, 
+and the time taken to compute the specialization (including compiling 
+it) is about 1150ms. That’s an approximately 25% reduction in cost (the 
+benefit increases as the number of hashing steps increases).</p>
+<p>Interestingly, a 25% reduction is significantly less than I remember 
+(~50%) from applying this optimization to Tinker. There are a few 
+reasons this might have happened:</p>
+<ul>
+<li>Different optimizations applied by C# now vs VB then. The C# 
+compiler optimizes the switch block into a multi-way branch. Maybe the 
+VB compiler didn’t, since the Select Case block is more general, 
+resulting in the interpreted version paying for many branches.
+</li><li>C# makes it easy to ask for unchecked addition, with an 
+unchecked block, whereas VB requires either turning off checks for the 
+entire assembly or placing the operation in another assembly (which is 
+what I did). That cost doesn’t apply to the language-independent 
+expressions.
+</li><li>Different computer, different version of visual studio, 
+different version of .Net, different build settings (optimizations 
+enabled? release mode? lack of code contracts?).
+</li><li>Faulty human memory.
+</li></ul>
+<p>In any case, a 25% reduction is nothing to laugh at.</p>
+<h3>Other Applications</h3>
+<p>Runtime code generation is a very widely applicable optimization. 
+Whenever you’re doing things conditionally and repeatedly, based on 
+data, you can benefit from generating code specialized to the task.</p>
+<p>For example, consider <a href="http://en.wikipedia.org/wiki/Parser_combinator">parser combinators</a>,
+ a concept I also stumbled on as part of working on Tinker. A parser 
+combinator replaces explicit code, used to parse various packets and 
+protocols, with a description of the format. The parsing/serialization 
+is then done by interpreting the format description. This creates much 
+clearer code (I’m pretty sure my <em>code</em> is still the best reference for the <a href="https://github.com/Strilanc/Tinker/blob/master/Warcraft3/Protocol/Game%20Action%20Protocol.vb#L315">in-game protocol</a>),
+ but of course is slower than hand rolled parsing methods. That speed 
+penalty can be significantly reduced by generating specialized parsing 
+code at runtime.</p>
+<p>Another good example is Linq-to-SQL. When you write a query like 
+“from x in someDatabaseTable where x.id == someArgument”, you are not 
+pulling all values from the table in order to filter them through the 
+Enumerable.Where method. That would be horribly inefficient. Instead, 
+the C# compiler turns the linq query into an expression tree. At 
+runtime, the tree will be optimized into SQL to be sent to the database,
+ so that it can take advantage of indexes and other optimizations before
+ returning only matching results.</p>
+<h3>Summary</h3>
+<p>Generating code at runtime allows you to make optimizations that would otherwise be impossible. Expression trees (and, soon, <a href="http://en.wikipedia.org/wiki/Microsoft_Roslyn">Roslyn</a>) make this relatively easy to do.</p>
+<p>—</p>
+<h3>Discuss on <a href="http://news.ycombinator.com/item?id=5242583">Hacker News</a>, <a href="http://www.reddit.com/r/programming/comments/18srm3/optimizing_just_in_time_with_expression_trees/">Reddit</a></h3>
+<p>—</p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers efficient, flexible remote and on-the-floor 
+development and consulting without any middle-man or excessive 
+administrivia. <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2 class="endofpage">Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm" rel="bookmark" title="Permanent Link to Grover’s Quantum Search Algorithm">Grover’s Quantum Search Algorithm</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2766_followup-to-non-nullable-types-vs-c" rel="bookmark" title="Permanent Link to Followup to Non-Nullable Types vs C#">Followup to Non-Nullable Types vs C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2353_when-one-way-latency-doesnt-matter" rel="bookmark" title="Permanent Link to When One-Way Latency Doesn’t Matter">When One-Way Latency Doesn’t Matter</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point" rel="bookmark" title="Permanent Link to Determining exactly if/when/where a moving line intersected a moving point">Determining exactly if/when/where a moving line intersected a moving point</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait" rel="bookmark" title="Permanent Link to Emulating Actors in C# with Async/Await">Emulating Actors in C# with Async/Await</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2096_making-an-immutable-queue-with-guaranteed-constant-time-operations" rel="bookmark" title="Permanent Link to Making an immutable queue with guaranteed constant time operations">Making an immutable queue with guaranteed constant time operations</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions" rel="bookmark" title="Permanent Link to Improving Checked Exceptions">Improving Checked Exceptions</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime" rel="bookmark" title="Permanent Link to Perishable Collections: The Benefits of Removal-by-Lifetime">Perishable Collections: The Benefits of Removal-by-Lifetime</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control" rel="bookmark" title="Permanent Link to Decoupling shared control">Decoupling shared control</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1694_decoupling-inlined-ui-code" rel="bookmark" title="Permanent Link to Decoupling inlined UI code">Decoupling inlined UI code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet" rel="bookmark" title="Permanent Link to Linq to Collections: Beyond IEnumerable&lt;T&gt;">Linq to Collections: Beyond IEnumerable&lt;T&gt;</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+ <div id="upprev_box" style="right: -400px;">
+	<h6>
+		More interesting posts <span class="num"> (2 of 4 articles)</span>
+	</h6>
+	<div class="upprev_excerpt">
+		<p>
+			<a href="http://twistedoakstudios.com/blog/Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point" rel="prev">Determining exactly if/when/where a moving line intersected a moving point</a>
+		</p>
+	</div>
+	
+		<p>
+Or check out our <a href="http://twistedoakstudios.com/portfolio">Portfolio</a>.		</p><button id="upprev_close" type="button">Close</button>
+</div><!-- #upprev_box -->
+<link rel="stylesheet" id="admin-bar-css" href="Post2540_optimizing-just-in-time-with-expression-trees_files/admin-bar.css" type="text/css" media="all">
+<link rel="stylesheet" id="upprev-css-css" href="Post2540_optimizing-just-in-time-with-expression-trees_files/upprev.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-quicklatex-format-css" href="Post2540_optimizing-just-in-time-with-expression-trees_files/quicklatex-format.css" type="text/css" media="all">
+<script type="text/javascript" src="Post2540_optimizing-just-in-time-with-expression-trees_files/admin-bar.js"></script>
+<script type="text/javascript" src="Post2540_optimizing-just-in-time-with-expression-trees_files/jquery_002.js"></script>
+<script type="text/javascript" src="Post2540_optimizing-just-in-time-with-expression-trees_files/upprev_js.php"></script>
+<script type="text/javascript" src="Post2540_optimizing-just-in-time-with-expression-trees_files/comment-reply.js"></script>
+	<script type="text/javascript">
+		(function() {
+			var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
+
+			request = true;
+
+			b[c] = b[c].replace( rcs, ' ' );
+			b[c] += ( window.postMessage && request ? ' ' : ' no-' ) + cs;
+		}());
+	</script>
+			
+
+		 
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+			<nav>
+				<ul class="primary-nav clearfix">
+					<li><a href="http://www.twistedoakstudios.com/">Home</a></li>
+					<li><a href="http://twistedoakstudios.com/portfolio">Portfolio</a></li>
+				</ul>
+			</nav>
+		</div>
+		
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				6082 Shirley Street<br>
+				Halifax, NS, Canada B3H 2M8</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+		
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script>- 2013 Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Post2540_optimizing-just-in-time-with-expression-trees_files/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Post2540_optimizing-just-in-time-with-expression-trees_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script><div id="wpadminbar" class="nojq " role="navigation">
+			<a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1">Skip to toolbar</a>
+			<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Top navigation toolbar." tabindex="0">
+				<ul id="wp-admin-bar-root-default" class="ab-top-menu">
+		<li id="wp-admin-bar-wp-logo" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/about.php" title="About WordPress"><span class="ab-icon"></span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-wp-logo-default" class="ab-submenu">
+		<li id="wp-admin-bar-about"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/about.php">About WordPress</a>		</li></ul><ul id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu">
+		<li id="wp-admin-bar-wporg"><a class="ab-item" href="http://wordpress.org/">WordPress.org</a>		</li>
+		<li id="wp-admin-bar-documentation"><a class="ab-item" href="http://codex.wordpress.org/">Documentation</a>		</li>
+		<li id="wp-admin-bar-support-forums"><a class="ab-item" href="http://wordpress.org/support/">Support Forums</a>		</li>
+		<li id="wp-admin-bar-feedback"><a class="ab-item" href="http://wordpress.org/support/forum/requests-and-feedback">Feedback</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-site-name" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/">twistedoakstudios.com</a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-site-name-default" class="ab-submenu">
+		<li id="wp-admin-bar-dashboard"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/">Dashboard</a>		</li></ul><ul id="wp-admin-bar-appearance" class="ab-submenu">
+		<li id="wp-admin-bar-themes"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/themes.php">Themes</a>		</li>
+		<li id="wp-admin-bar-customize" class="hide-if-no-customize"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/customize.php?url=http%3A%2F%2Ftwistedoakstudios.com%2Fblog%2FPost2540_optimizing-just-in-time-with-expression-trees">Customize</a>		</li></ul></div>		</li>
+		<li class="" id="wp-admin-bar-updates"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/update-core.php" title="1 Plugin Update, 1 Theme Update"><span class="ab-icon"></span><span class="ab-label">2</span><span class="screen-reader-text">1 Plugin Update, 1 Theme Update</span></a>		</li>
+		<li class=" " id="wp-admin-bar-comments"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/edit-comments.php" title="0 comments awaiting moderation"><span class="ab-icon"></span><span id="ab-awaiting-mod" class="ab-label awaiting-mod pending-count count-0">0</span></a>		</li>
+		<li id="wp-admin-bar-new-content" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php" title="Add New"><span class="ab-icon"></span><span class="ab-label">New</span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-new-content-default" class="ab-submenu">
+		<li id="wp-admin-bar-new-post"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php">Post</a>		</li>
+		<li id="wp-admin-bar-new-media"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/media-new.php">Media</a>		</li>
+		<li id="wp-admin-bar-new-link"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/link-add.php">Link</a>		</li>
+		<li id="wp-admin-bar-new-page"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php?post_type=page">Page</a>		</li>
+		<li id="wp-admin-bar-new-user"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/user-new.php">User</a>		</li></ul></div>		</li>
+		<li class="" id="wp-admin-bar-edit"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post.php?post=2540&amp;action=edit">Edit Post</a>		</li></ul><ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
+		<li id="wp-admin-bar-search" class="admin-bar-search"><div class="ab-item ab-empty-item" tabindex="-1"><form action="http://twistedoakstudios.com/blog/" method="get" id="adminbarsearch"><input class="adminbar-input" name="s" id="adminbar-search" maxlength="150" type="text"><input class="adminbar-button" value="Search" type="submit"></form></div>		</li>
+		<li id="wp-admin-bar-my-account" class="menupop with-avatar "><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/profile.php" title="My Account">Howdy, Craig Gidney<img alt="" src="Post2540_optimizing-just-in-time-with-expression-trees_files/31a6ce579f8f9f9d528715d1e941726e.png" class="avatar avatar-16 photo" height="16" width="16"></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-user-actions" class="ab-submenu">
+		<li id="wp-admin-bar-user-info"><a class="ab-item" tabindex="-1" href="http://twistedoakstudios.com/blog/wp-admin/profile.php"><img alt="" src="Post2540_optimizing-just-in-time-with-expression-trees_files/31a6ce579f8f9f9d528715d1e941726e_002.png" class="avatar avatar-64 photo" height="64" width="64"><span class="display-name">Craig Gidney</span><span class="username">craig</span></a>		</li>
+		<li id="wp-admin-bar-edit-profile"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/profile.php">Edit My Profile</a>		</li>
+		<li id="wp-admin-bar-logout"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=4684ead381">Log Out</a>		</li></ul></div>		</li></ul>			</div>
+			<a class="screen-reader-shortcut" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=4684ead381">Log Out</a>
+		</div></body></html>

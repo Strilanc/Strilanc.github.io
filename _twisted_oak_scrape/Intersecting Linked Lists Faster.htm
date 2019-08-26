@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script id="bug.surrogate">var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}}; if (document.location.host == 'www.salon.com') {var _ga_ = document.querySelectorAll('script[src$=ga\\.js]')[0], ga_e = document.createEvent('Event'); ga_e.initEvent('load', true, true);_ga_.dispatchEvent(ga_e);}</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Unity3D Consulting | Technical Magic</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Intersecting%20Linked%20Lists%20Faster_files/1140.css">
+    <link rel="stylesheet" href="Intersecting%20Linked%20Lists%20Faster_files/style.css">
+    <link rel="stylesheet" href="Intersecting%20Linked%20Lists%20Faster_files/blogstyle.css">
+<link rel="stylesheet" href="Intersecting%20Linked%20Lists%20Faster_files/prettify.css" media="all">
+<link rel="stylesheet" href="Intersecting%20Linked%20Lists%20Faster_files/sunburst.css" media="all">
+<script type="text/javascript" src="Intersecting%20Linked%20Lists%20Faster_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Intersecting%20Linked%20Lists%20Faster_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Intersecting%20Linked%20Lists%20Faster_files/modernizr-2.js"></script>
+</head>
+<body class=" customize-support" onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="#"><img class="logo" src="Intersecting%20Linked%20Lists%20Faster_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a href="http://twistedoakstudios.com/labs/">Labs</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post3280_intersecting-linked-lists-faster" rel="bookmark" title="Permanent Link to Intersecting Linked Lists Faster">Intersecting Linked Lists Faster</a></h2>
+<div class="meta">posted by Craig Gidney on March 26, 2013</div>
+
+<p>Yesterday, I read the post “<a href="http://fulmicoton.com/posts/intersecting_link_list/">Of intersecting linked lists</a>”
+ by one Paul Masurel. In it, he discusses the problem of determining the
+ first node that is common to two linked lists. He ends with a solution 
+that takes <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_004.png" class="ql-img-inline-formula " alt="O(d)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="36"> time and <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_009.png" class="ql-img-inline-formula " alt="O(\log{d})" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="62"> space, where <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_018.png" class="ql-img-inline-formula " alt="d" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="10">
+ is the maximum distance to the first common node from the head of 
+either list. I would inline the solution here, but it’s fifty lines of 
+carefully chosen branches (euphemism: “branch noise”).</p>
+<p>There is actually a solution much simpler than Paul’s. One just as time efficient, but requiring only constant space.</p>
+<h3>From n to d</h3>
+<p>The <a href="http://www.reddit.com/r/programming/comments/1axmt4/detecting_intersection_of_two_linked_list/">comments about the post on reddit</a>
+ almost came up with the right algorithm. People realized that if you 
+computed the lists’ lengths then you could line up the heads so they 
+advanced to the common node in sync. This removes the need for any sort 
+of collection of seen nodes, reducing the space requirements to 
+constant.</p>
+<p>The problem is that computing the lengths of the lists takes <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_002.png" class="ql-img-inline-formula " alt="O(n)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="38"> time, instead of <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_004.png" class="ql-img-inline-formula " alt="O(d)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="36"> time. As people realized: although <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_002.png" class="ql-img-inline-formula " alt="O(n)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="38"> is good, <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_004.png" class="ql-img-inline-formula " alt="O(d)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="36"> is better. <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_018.png" class="ql-img-inline-formula " alt="d" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="10"> may be as large as <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_015.png" class="ql-img-inline-formula " alt="n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="11">, but may also be significantly less. For example, we might be dealing with a class of lists that satisfy <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_019.png" class="ql-img-inline-formula " alt="d &lt; log(n)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="80"> because they tend to intersect very quickly.</p>
+<p>(Even worse, we might be dealing with implicit lists that never end, so <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_007.png" class="ql-img-inline-formula " alt="n=\infty" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="51">. I’d prefer not to wait an infinite amount of time to discover that [<img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_003.png" class="ql-img-inline-formula " alt="0 \rightarrow 1 \rightarrow 2 \rightarrow ..." title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="13" width="123">] starts intersecting [<img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_014.png" class="ql-img-inline-formula " alt="1 \rightarrow 2 \rightarrow 3 \rightarrow ..." title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="13" width="122">] at <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_011.png" class="ql-img-inline-formula " alt="1" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="13" width="7">.)</p>
+<p>Luckily, we don’t need to know the lengths of the lists. Any pair of 
+distances to any common node will work, because we only care about the 
+difference between the two distances. If we can find <em>any</em> common
+ node then we can compute the difference in distance and easily find the
+ earliest common node. Realize this, and you’re halfway there.</p>
+<h3>Algorithm: Alternating Anchors</h3>
+<p>A strategy I often use when dealing with linked lists is “dropping 
+anchors”, and it applies here. The idea is to assign a local variable 
+(the anchor) to be the current node, and watch for the current node 
+matching the anchor again as you progress. Each time you drop the anchor
+ you multiply the number of steps to take, before dropping it again, by a
+ constant factor.</p>
+<p>I recommend trying dropping anchors on the classic “Does this linked 
+list end in a cycle?” problem. The result (apparently called <a href="http://en.wikipedia.org/wiki/Cycle_detection#Brent%27s_algorithm">Brent’s Algorithm</a>) is three times as fast as the more commonly known <a href="http://twistedoakstudios.com/blog/en.wikipedia.org/wiki/Cycle_detection#Tortoise_and_hare">Tortoise and Hare</a> solution.</p>
+<p>In the case of linked list intersection, we need two anchors: one for
+ each list head. We’ll alternate between the two lists, advancing 
+further and further while watching for the anchor of the other list. 
+Once the other anchor is spotted, we’ve found a common node. We’ll also 
+track the number of steps on both lists as we go, so that we know the 
+distances to the common node without having to retrace our steps. Given 
+the distances, it’s just a matter of synchronizing the heads and then 
+advancing them at the same rate.</p>
+<p>Here’s a diagram of the algorithm:</p>
+<p><img src="Intersecting%20Linked%20Lists%20Faster_files/FHDbhEb.gif" alt="Intersection of Two Linked Lists"></p>
+<p>In the above diagram, the number of steps between alternations keeps increasing by a factor of <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_006.png" class="ql-img-inline-formula " alt="1.5" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="14" width="21">. As soon as the number of steps exceeds <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_018.png" class="ql-img-inline-formula " alt="d" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="10">, which is <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_012.png" class="ql-img-inline-formula " alt="11" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="13" width="16"> in the case shown in the diagram, a common node is found. (In general, when using a growth factor of <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_006.png" class="ql-img-inline-formula " alt="1.5" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="14" width="21">, two more alternations will be sufficient after exceeding <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_018.png" class="ql-img-inline-formula " alt="d" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="10">).
+ The distances to the node are then used to line the heads up, so they 
+can advance in sync until the first common node is found.</p>
+<p>Notice that the linked list is so large it runs off the side of the diagram, but its long length (whether it be <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_013.png" class="ql-img-inline-formula " alt="30" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="12" width="18"> or <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex.png" class="ql-img-inline-formula " alt="10^{30}" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="16" width="31">) doesn’t affect the running time. It takes <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_010.png" class="ql-img-inline-formula " alt="O(log_{1.5} d)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="77">
+ alternations for the number of steps to become large enough to 
+guarantee a common node is found, and the last alternation dominates the
+ running time because the number of steps per alternation is increasing 
+exponentially. Thus the running time is <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_008.png" class="ql-img-inline-formula " alt="O(1.5^{log_{1.5}d}) = O(d)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="19" width="152">, independent of <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_015.png" class="ql-img-inline-formula " alt="n" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="11">, and we’ve only used a constant amount of space.</p>
+<p>This algorithm (which I call ‘alternating anchors’) is actually 
+somewhat similar to Paul Masurel’s. The main differences are that his 
+keeps adding anchors to a set, instead of picking them up and dropping 
+them again, and that he tries to do some sort of backtracking, instead 
+of using the relative distances to sync up and rescan in the lists. Not 
+having to deal with hash sets and such makes alternating anchors faster,
+ although it has the same asymptotic time complexity.</p>
+<h3>Code</h3>
+<p>Assuming you don’t have cycles in your linked lists, this <a href="https://github.com/Strilanc/Methods/blob/master/MethodsTest/Methods/LinkedListIntersection/LinkedListIntersectionTest.cs">well-tested</a> C# code will find the first common node:</p>
+<pre><code class="prettyprint"><span class="com">///Finds the first common node between two non-cyclical linked lists.</span><span class="pln">
+</span><span class="com">///All lists are treated as if they end with a null node.</span><span class="pln">
+</span><span class="com">///The null node is treated as a valid node.</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">Link</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> </span><span class="typ">FindEarliestIntersection</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;(</span><span class="kwd">this</span><span class="pln"> </span><span class="typ">Link</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> h0</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Link</span><span class="pun">&lt;</span><span class="pln">T</span><span class="pun">&gt;</span><span class="pln"> h1</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="com">// find *any* common node, and the distances to it</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> node </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="pln">h0</span><span class="pun">,</span><span class="pln"> h1</span><span class="pun">};</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> dist </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="lit">0</span><span class="pun">};</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> stepSize </span><span class="pun">=</span><span class="pln"> </span><span class="lit">1</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">while</span><span class="pln"> </span><span class="pun">(</span><span class="pln">node</span><span class="pun">[</span><span class="lit">0</span><span class="pun">]</span><span class="pln"> </span><span class="pun">!=</span><span class="pln"> node</span><span class="pun">[</span><span class="lit">1</span><span class="pun">])</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="com">// advance each node progressively farther, watching for the other node</span><span class="pln">
+        </span><span class="kwd">foreach</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">var</span><span class="pln"> i </span><span class="kwd">in</span><span class="pln"> </span><span class="typ">Enumerable</span><span class="pun">.</span><span class="typ">Range</span><span class="pun">(</span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="lit">2</span><span class="pun">))</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="kwd">foreach</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">var</span><span class="pln"> repeat </span><span class="kwd">in</span><span class="pln"> </span><span class="typ">Enumerable</span><span class="pun">.</span><span class="typ">Range</span><span class="pun">(</span><span class="lit">0</span><span class="pun">,</span><span class="pln"> stepSize</span><span class="pun">))</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+                </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">node</span><span class="pun">[</span><span class="pln">i</span><span class="pun">]</span><span class="pln"> </span><span class="pun">==</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">break</span><span class="pun">;</span><span class="pln">
+                </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">node</span><span class="pun">[</span><span class="lit">0</span><span class="pun">]</span><span class="pln"> </span><span class="pun">==</span><span class="pln"> node</span><span class="pun">[</span><span class="lit">1</span><span class="pun">])</span><span class="pln"> </span><span class="kwd">break</span><span class="pun">;</span><span class="pln">
+                node</span><span class="pun">[</span><span class="pln">i</span><span class="pun">]</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> node</span><span class="pun">[</span><span class="pln">i</span><span class="pun">].</span><span class="typ">Next</span><span class="pun">;</span><span class="pln">
+                dist</span><span class="pun">[</span><span class="pln">i</span><span class="pun">]</span><span class="pln"> </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">1</span><span class="pun">;</span><span class="pln">
+            </span><span class="pun">}</span><span class="pln">
+            stepSize </span><span class="pun">*=</span><span class="pln"> </span><span class="lit">2</span><span class="pun">;</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+
+    </span><span class="com">// align heads to be an equal distance from the first common node</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> r </span><span class="pun">=</span><span class="pln"> dist</span><span class="pun">[</span><span class="lit">1</span><span class="pun">]</span><span class="pln"> </span><span class="pun">-</span><span class="pln"> dist</span><span class="pun">[</span><span class="lit">0</span><span class="pun">];</span><span class="pln">
+    </span><span class="kwd">while</span><span class="pln"> </span><span class="pun">(</span><span class="pln">r </span><span class="pun">&lt;</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        h0 </span><span class="pun">=</span><span class="pln"> h0</span><span class="pun">.</span><span class="typ">Next</span><span class="pun">;</span><span class="pln">
+        r </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">1</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">while</span><span class="pln"> </span><span class="pun">(</span><span class="pln">r </span><span class="pun">&gt;</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        h1 </span><span class="pun">=</span><span class="pln"> h1</span><span class="pun">.</span><span class="typ">Next</span><span class="pun">;</span><span class="pln">
+        r </span><span class="pun">-=</span><span class="pln"> </span><span class="lit">1</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+
+    </span><span class="com">// advance heads until they meet at the first common node</span><span class="pln">
+    </span><span class="kwd">while</span><span class="pln"> </span><span class="pun">(</span><span class="pln">h0 </span><span class="pun">!=</span><span class="pln"> h1</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        h0 </span><span class="pun">=</span><span class="pln"> h0</span><span class="pun">.</span><span class="typ">Next</span><span class="pun">;</span><span class="pln">
+        h1 </span><span class="pun">=</span><span class="pln"> h1</span><span class="pun">.</span><span class="typ">Next</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+
+    </span><span class="kwd">return</span><span class="pln"> h0</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>If you <em>do</em> have cycles, things are more complicated.</p>
+<h3>Dealing with Cycles</h3>
+<p>When cycles are present the above code might compute the wrong 
+relative distance, due to one side going around a cycle more times than 
+the other. It can even go into an infinite loop, if the lists share no 
+common nodes and one (or both) has a cycle.</p>
+<p>Why didn’t I bother with cycles? Because they’re not well behaved 
+with respect to the problem, especially if we want to keep that <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_004.png" class="ql-img-inline-formula " alt="O(d)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="36"> time bound.</p>
+<p>Suppose we have the cycle [<img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_016.png" class="ql-img-inline-formula " alt="a \rightleftharpoons b" title="Rendered by QuickLaTeX.com" style="vertical-align: -1px;" height="14" width="45">]. What’s the first common node of <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_005.png" class="ql-img-inline-formula " alt="a" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="8" width="9"> and <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_017.png" class="ql-img-inline-formula " alt="b" title="Rendered by QuickLaTeX.com" style="vertical-align: 0px;" height="13" width="8">? Both? Neither? Either? An error? How are we going to consistently detect that error, without spending <img src="Intersecting%20Linked%20Lists%20Faster_files/quicklatex_002.png" class="ql-img-inline-formula " alt="O(n)" title="Rendered by QuickLaTeX.com" style="vertical-align: -4px;" height="18" width="38"> time proving/disproving that there’s a cycle?</p>
+<p>That being said, let’s assume that when the linked lists only 
+intersect inside a cycle you’re willing to get back some arbitrary 
+unspecified node from the cycle. A node that might change haphazardly 
+under trivial changes like swapping the argument order or decreasing the
+ growth factor. If you’re willing to bite that bullet, then two simple 
+changes will make the algorithm “work” with cycles.</p>
+<p>First, you need to detect getting stuck in a cycle. It’s pretty easy 
+to inline Brent’s Algorithm into the existing code, so I recommend doing
+ that. If both sides have detected a cycle, or one side has detected a 
+cycle and the other has ended, then the lists are disjoint and the 
+algorithm should terminate with failure.</p>
+<p>Second, once a common node is found, you need to retrace the 
+distances to that node in order to be sure no nodes were double counted 
+due to cycling. This ensures you get the right result if the lists meet 
+before the cycle, or if they enter the cycle at the same place.</p>
+<h3>Summary</h3>
+<p>You can find the first common node in two linked lists in time 
+proportional to the distance to the common node, using only a constant 
+amount of space.</p>
+<p>When the lists end in a cycle, the result may not be well defined.</p>
+<p>Dropping anchors is a good strategy to keep in mind when working with linked lists.</p>
+<p>I’m an <a href="http://xkcd.com/356/">easy target for snipers</a>.</p>
+<p>—</p>
+<h3>Discuss on <a href="http://www.reddit.com/r/programming/comments/1b180m/intersecting_linked_lists_faster/">Reddit</a></h3>
+<p>—</p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers consulting and development on high-tech interactive projects. Check out our <a href="http://twistedoakstudios.com/portfolio/">portfolio</a>, or <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2 class="endofpage">Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post4008_collapsing-futures-easy-to-use-hard-to-represent" rel="bookmark" title="Permanent Link to Collapsing Futures: Easy to Use, Hard to Represent">Collapsing Futures: Easy to Use, Hard to Represent</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3858_eventual-exceptions-vs-programming-in-a-minimal-functional-style" rel="bookmark" title="Permanent Link to Eventual Exceptions vs Programming in a Minimal Functional Style">Eventual Exceptions vs Programming in a Minimal Functional Style</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3769_the-mystery-of-flunf" rel="bookmark" title="Permanent Link to The Mystery of Flunf">The Mystery of Flunf</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3724_explain-it-like-im-five-the-socialist-millionaire-problem-and-secure-multi-party-computation" rel="bookmark" title="Permanent Link to Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation">Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3631_computer-science-blows-my-mind" rel="bookmark" title="Permanent Link to Computer Science Blows My Mind">Computer Science Blows My Mind</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3484_a-visit-to-execution-labs-in-montreal" rel="bookmark" title="Permanent Link to A visit to Execution Labs in Montréal">A visit to Execution Labs in Montréal</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3573_transmuting-dice-conserving-entropy" rel="bookmark" title="Permanent Link to Transmuting Dice, Conserving Entropy">Transmuting Dice, Conserving Entropy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3516_rule-of-thumb-ask-for-the-clock" rel="bookmark" title="Permanent Link to Rule of Thumb: Ask for the Clock">Rule of Thumb: Ask for the Clock</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3477_rule-of-thumb-use-purposefully-weakened-methods" rel="bookmark" title="Permanent Link to Rule of Thumb: Use Purposefully Weakened Methods">Rule of Thumb: Use Purposefully Weakened Methods</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3376_rule-of-thumb-preconditions-should-be-checked-explicitly" rel="bookmark" title="Permanent Link to Rule of thumb: Preconditions Should be Checked Explicitly">Rule of thumb: Preconditions Should be Checked Explicitly</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3138_mouse-path-smoothing-for-jack-lumber" rel="bookmark" title="Permanent Link to Mouse Path Smoothing for Jack Lumber">Mouse Path Smoothing for Jack Lumber</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3044_my-bug-my-bad-2-sunk-by-float" rel="bookmark" title="Permanent Link to My Bug, My Bad #2: Sunk by Float">My Bug, My Bad #2: Sunk by Float</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2852_repeat-yourself-differently" rel="bookmark" title="Permanent Link to Repeat Yourself Differently">Repeat Yourself Differently</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm" rel="bookmark" title="Permanent Link to Grover’s Quantum Search Algorithm">Grover’s Quantum Search Algorithm</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2766_followup-to-non-nullable-types-vs-c" rel="bookmark" title="Permanent Link to Followup to Non-Nullable Types vs C#">Followup to Non-Nullable Types vs C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2540_optimizing-just-in-time-with-expression-trees" rel="bookmark" title="Permanent Link to Optimizing Just in Time with Expression Trees">Optimizing Just in Time with Expression Trees</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2353_when-one-way-latency-doesnt-matter" rel="bookmark" title="Permanent Link to When One-Way Latency Doesn’t Matter">When One-Way Latency Doesn’t Matter</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point" rel="bookmark" title="Permanent Link to Determining exactly if/when/where a moving line intersected a moving point">Determining exactly if/when/where a moving line intersected a moving point</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait" rel="bookmark" title="Permanent Link to Emulating Actors in C# with Async/Await">Emulating Actors in C# with Async/Await</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2096_making-an-immutable-queue-with-guaranteed-constant-time-operations" rel="bookmark" title="Permanent Link to Making an immutable queue with guaranteed constant time operations">Making an immutable queue with guaranteed constant time operations</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions" rel="bookmark" title="Permanent Link to Improving Checked Exceptions">Improving Checked Exceptions</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime" rel="bookmark" title="Permanent Link to Perishable Collections: The Benefits of Removal-by-Lifetime">Perishable Collections: The Benefits of Removal-by-Lifetime</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control" rel="bookmark" title="Permanent Link to Decoupling shared control">Decoupling shared control</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1694_decoupling-inlined-ui-code" rel="bookmark" title="Permanent Link to Decoupling inlined UI code">Decoupling inlined UI code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet" rel="bookmark" title="Permanent Link to Linq to Collections: Beyond IEnumerable&lt;T&gt;">Linq to Collections: Beyond IEnumerable&lt;T&gt;</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3718_polish" rel="bookmark" title="Permanent Link to Polish">Polish</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+ <div id="upprev_box" style="right: -400px;">
+	<h6>
+		More interesting posts <span class="num"> (8 of 11 articles)</span>
+	</h6>
+	<div class="upprev_excerpt">
+		<p>
+			<a href="http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm" rel="prev">Grover’s Quantum Search Algorithm</a>
+		</p>
+	</div>
+	
+		<p>
+Or check out our <a href="http://twistedoakstudios.com/portfolio">Portfolio</a>.		</p><button id="upprev_close" type="button">Close</button>
+</div><!-- #upprev_box -->
+<link rel="stylesheet" id="al2fb_style-css" href="Intersecting%20Linked%20Lists%20Faster_files/add-link-to-facebook.css" type="text/css" media="all">
+<link rel="stylesheet" id="admin-bar-css" href="Intersecting%20Linked%20Lists%20Faster_files/admin-bar.css" type="text/css" media="all">
+<link rel="stylesheet" id="upprev-css-css" href="Intersecting%20Linked%20Lists%20Faster_files/upprev.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-quicklatex-format-css" href="Intersecting%20Linked%20Lists%20Faster_files/quicklatex-format.css" type="text/css" media="all">
+<script type="text/javascript" src="Intersecting%20Linked%20Lists%20Faster_files/admin-bar.js"></script>
+<script type="text/javascript" src="Intersecting%20Linked%20Lists%20Faster_files/jquery_002.js"></script>
+<script type="text/javascript" src="Intersecting%20Linked%20Lists%20Faster_files/upprev_js.php"></script>
+<script type="text/javascript" src="Intersecting%20Linked%20Lists%20Faster_files/comment-reply.js"></script>
+	<script type="text/javascript">
+		(function() {
+			var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
+
+			request = true;
+
+			b[c] = b[c].replace( rcs, ' ' );
+			b[c] += ( window.postMessage && request ? ' ' : ' no-' ) + cs;
+		}());
+	</script>
+			
+
+		 
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+      <!-- home portfolio used to be here -->
+		</div>
+
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				138-1657 Barrington St.<br>
+				Halifax, NS, Canada B3J 2A1</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script>- 2013 Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Intersecting%20Linked%20Lists%20Faster_files/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Intersecting%20Linked%20Lists%20Faster_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<div id="wpadminbar" class="nojq " role="navigation">
+			<a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1">Skip to toolbar</a>
+			<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Top navigation toolbar." tabindex="0">
+				<ul id="wp-admin-bar-root-default" class="ab-top-menu">
+		<li id="wp-admin-bar-wp-logo" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/about.php" title="About WordPress"><span class="ab-icon"></span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-wp-logo-default" class="ab-submenu">
+		<li id="wp-admin-bar-about"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/about.php">About WordPress</a>		</li></ul><ul id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu">
+		<li id="wp-admin-bar-wporg"><a class="ab-item" href="http://wordpress.org/">WordPress.org</a>		</li>
+		<li id="wp-admin-bar-documentation"><a class="ab-item" href="http://codex.wordpress.org/">Documentation</a>		</li>
+		<li id="wp-admin-bar-support-forums"><a class="ab-item" href="http://wordpress.org/support/">Support Forums</a>		</li>
+		<li id="wp-admin-bar-feedback"><a class="ab-item" href="http://wordpress.org/support/forum/requests-and-feedback">Feedback</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-site-name" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/">twistedoakstudios.com</a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-site-name-default" class="ab-submenu">
+		<li id="wp-admin-bar-dashboard"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/">Dashboard</a>		</li></ul><ul id="wp-admin-bar-appearance" class="ab-submenu">
+		<li id="wp-admin-bar-themes"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/themes.php">Themes</a>		</li>
+		<li id="wp-admin-bar-customize" class="hide-if-no-customize"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/customize.php?url=http%3A%2F%2Ftwistedoakstudios.com%2Fblog%2FPost3280_intersecting-linked-lists-faster">Customize</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-updates"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/update-core.php" title="2 Plugin Updates, 1 Theme Update"><span class="ab-icon"></span><span class="ab-label">3</span><span class="screen-reader-text">2 Plugin Updates, 1 Theme Update</span></a>		</li>
+		<li id="wp-admin-bar-comments"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/edit-comments.php" title="0 comments awaiting moderation"><span class="ab-icon"></span><span id="ab-awaiting-mod" class="ab-label awaiting-mod pending-count count-0">0</span></a>		</li>
+		<li id="wp-admin-bar-new-content" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php" title="Add New"><span class="ab-icon"></span><span class="ab-label">New</span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-new-content-default" class="ab-submenu">
+		<li id="wp-admin-bar-new-post"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php">Post</a>		</li>
+		<li id="wp-admin-bar-new-media"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/media-new.php">Media</a>		</li>
+		<li id="wp-admin-bar-new-link"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/link-add.php">Link</a>		</li>
+		<li id="wp-admin-bar-new-page"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php?post_type=page">Page</a>		</li>
+		<li id="wp-admin-bar-new-user"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/user-new.php">User</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-edit"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post.php?post=3280&amp;action=edit">Edit Post</a>		</li></ul><ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
+		<li id="wp-admin-bar-search" class="admin-bar-search"><div class="ab-item ab-empty-item" tabindex="-1"><form action="http://twistedoakstudios.com/blog/" method="get" id="adminbarsearch"><input class="adminbar-input" name="s" id="adminbar-search" maxlength="150" type="text"><input class="adminbar-button" value="Search" type="submit"></form></div>		</li>
+		<li id="wp-admin-bar-my-account" class="menupop with-avatar"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/profile.php" title="My Account">Howdy, Craig Gidney<img alt="" src="Intersecting%20Linked%20Lists%20Faster_files/31a6ce579f8f9f9d528715d1e941726e_002.png" class="avatar avatar-16 photo" height="16" width="16"></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-user-actions" class="ab-submenu">
+		<li id="wp-admin-bar-user-info"><a class="ab-item" tabindex="-1" href="http://twistedoakstudios.com/blog/wp-admin/profile.php"><img alt="" src="Intersecting%20Linked%20Lists%20Faster_files/31a6ce579f8f9f9d528715d1e941726e.png" class="avatar avatar-64 photo" height="64" width="64"><span class="display-name">Craig Gidney</span><span class="username">craig</span></a>		</li>
+		<li id="wp-admin-bar-edit-profile"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/profile.php">Edit My Profile</a>		</li>
+		<li id="wp-admin-bar-logout"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=8450958ce8">Log Out</a>		</li></ul></div>		</li></ul>			</div>
+			<a class="screen-reader-shortcut" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=8450958ce8">Log Out</a>
+		</div></body></html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<!-- saved from url=(0068)http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control -->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Twisted Oak Studios | Unity3D Consulting | Technical Magic</title>
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="http://www.twistedoakstudios.com/css/1140.css">
+    <link rel="stylesheet" href="http://www.twistedoakstudios.com/css/style.css?v=1.1">
+    <link rel="stylesheet" href="http://www.twistedoakstudios.com/css/blogstyle.css?v=1.1">
+<link rel="stylesheet" href="http://twistedoakstudios.com/blog/prettify.css" media="all">
+<link rel="stylesheet" href="http://twistedoakstudios.com/blog/sunburst.css" media="all">
+<script type="text/javascript" async="" src="./Post1823_decoupling-shared-control_files/ga.js"></script><script type="text/javascript" src="./Post1823_decoupling-shared-control_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="./Post1823_decoupling-shared-control_files/css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="./Post1823_decoupling-shared-control_files/modernizr-2.0.6.min.js"></script>
+<style type="text/css"></style></head>
+<body onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control#"><img class="logo" src="./Post1823_decoupling-shared-control_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a class="scroll" href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+		<section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="./Post1823_decoupling-shared-control_files/Post1823_decoupling-shared-control.htm" rel="bookmark" title="Permanent Link to Decoupling shared control">Decoupling shared control</a></h2>
+<div class="meta">posted by Craig Gidney on January 1, 2013</div>
+
+<p>Last week I ended on a question: how can multiple unknown components share control of something, without having to worry about trampling on each others’ toes? In this post I’ll talk about where the obvious approach falls short, and outline a solution my coworker calls “lenses”.</p>
+<p>To introduce the problem: a tongue-in-cheek parable.</p>
+<h3>Parable</h3>
+<p><em>Setting: large conference room. Craig steps out onto the stage, to give his <strong>bold</strong> daring insights into the benefits of simplicity and just doing things the obvious way. He begins speaking.</em></p>
+<p>“Hello, everyone. Welcome to ConferenceCon ++2012! My talk is about simple shared control.”</p>
+<p>“Sometimes multiple parts of a program all need to affect a single part. The most straightforward way to do so is: make the thing-to-be-controlled publicly mutable. Want control? Just mutate the value. Easy!”</p>
+<p>“Suppose you have a background video player object. Lots of things might want to pause video playback, so we’ll want a public ‘paused’ field. Doesn’t get simpler than that! Here’s some samples.”</p>
+<p><em>Code samples swoosh onto the screen behind Craig, using the finest combination of scaling, rotating and shearing animation effects available.</em></p>
+<pre><code class="prettyprint"><span class="com">// code for a play-pause toggle button</span><span class="pln">
+</span><span class="kwd">void</span><span class="pln"> </span><span class="typ">OnTogglePlayPause</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    videoPlayer</span><span class="pun">.</span><span class="typ">Paused</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="pun">!</span><span class="pln">videoPlayer</span><span class="pun">.</span><span class="typ">Paused</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+
+</span><span class="com">// code to pause while a settings dialog is open</span><span class="pln">
+</span><span class="kwd">void</span><span class="pln"> </span><span class="typ">OnOpenSettingsDialog</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    videoPlayer</span><span class="pun">.</span><span class="typ">Paused</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">void</span><span class="pln"> </span><span class="typ">OnCloseSettingsDialog</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    videoPlayer</span><span class="pun">.</span><span class="typ">Paused</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+
+</span><span class="com">// code to pause while buffering data</span><span class="pln">
+</span><span class="kwd">void</span><span class="pln"> </span><span class="typ">OnNeedMoreStreamedVideoData</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    videoPlayer</span><span class="pun">.</span><span class="typ">Paused</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">void</span><span class="pln"> </span><span class="typ">OnHaveNeededVideoData</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    videoPlayer</span><span class="pun">.</span><span class="typ">Paused</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>“Of course, people will tell you that you should control public mutability but clearly— erm… wait, the settings dialog and buffering examples are wrong. My mistake. Opening and closing the settings shouldn’t unpause playback, of course! We’ll have to stash the previous state and restore it after…”</p>
+<p><em>The faint sound of furious typing on a Model M keyboard is heard from backstage, until a new slide appears.</em></p>
+<pre><code class="prettyprint"><span class="kwd">bool</span><span class="pln"> wasPausedBeforeOpeningSettings</span><span class="pun">,</span><span class="pln"> wasPausedBeforeBuffering</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">void</span><span class="pln"> </span><span class="typ">OnOpenSettingsDialog</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    wasPausedBeforeOpeningSettings </span><span class="pun">=</span><span class="pln"> videoPlayer</span><span class="pun">.</span><span class="typ">Paused</span><span class="pun">;</span><span class="pln">
+    videoPlayer</span><span class="pun">.</span><span class="typ">Paused</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">void</span><span class="pln"> </span><span class="typ">OnCloseSettingsDialog</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    videoPlayer</span><span class="pun">.</span><span class="typ">Paused</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> wasPausedBeforeOpeningSettings</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">void</span><span class="pln"> </span><span class="typ">OnNeedMoreStreamedVideoData</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    wasPausedBeforeButtering </span><span class="pun">=</span><span class="pln"> videoPlayer</span><span class="pun">.</span><span class="typ">Paused</span><span class="pun">;</span><span class="pln">
+    videoPlayer</span><span class="pun">.</span><span class="typ">Paused</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">void</span><span class="pln"> </span><span class="typ">OnHaveNeededVideoData</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    videoPlayer</span><span class="pun">.</span><span class="typ">Paused</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> wasPausedBeforeBuffering</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>“Anyways, like I was saying, raw direct access is the easiest way to— Yes?”</p>
+<p><em>An audience member in the front row interrupts the presentation to ask a question. Craig begins answering.</em></p>
+<p>“What happens if the user opens the settings during buffering? Well, wasPausedBeforeBuffering would be set to true and wasPausedBeforeOpeningSettings would be … …”</p>
+<p>“Crap.”</p>
+<p>“Ok, so we don’t actually want the video to start playing while the settings dialog is open, only for it to pause when dialog is closed. We can fix that by uh… hmmm…”</p>
+<p>…</p>
+<p>“No, that won’t work…”</p>
+<p>“Maybe…”</p>
+<p>“But that’s an <em>abstraction</em> (ugh!)…”</p>
+<p>…</p>
+<p><em>Craig stands limp, staring at the audience. The room is dead silent. Nothing left to do but calmly sprint off stage and never return.</em></p>
+<p><em>End Scene</em></p>
+<h3>Bad: Direct Access</h3>
+<p>Alright, alright, I’ll stop. No one promised that adequate technical writing skills would imply any humor writing skills!</p>
+<p>The underlying problem with the code in the parable is that, although whether or not a video player is paused can be described with a single boolean flag, the various reasons for it to be paused can’t. The video player code only cares about being paused or not, but the settings dialog code needs to affect user-paused differently from buffering-paused. Giving direct access to the internal state just isn’t enough to do shared control properly.</p>
+<p>A possible quick and dirty fix is to split the single paused flag into multiple paused flags: Paused_User, Paused_NeedData, and Paused_ShowingDialog. Playback is paused when one or more of them is set. Why is this quick and dirty? First, it’s breaking encapsulation and scrambling your architecture. You shouldn’t be learning things about the <em>front-end</em> settings dialog when reading the <em>back-end</em> video player code. Second, it doesn’t solve the underlying problem. We want to work with <em>unknown</em> components that don’t exist yet, but you have to keep adding more fields whenever more reasons to be paused (e.g. lost focus) come along.</p>
+<p>Actually solving the problem requires a slightly more general fix.</p>
+<h3>Good: Lenses</h3>
+<p>This type of shared control problem can be solved with “lenses”, where a lens is a temporary modification to how a value is viewed. For example, instead of directly setting “Paused” to true, you push an “appear true” lens over it. To unpause, you remove the lens you added. Whenever there’s one or more “appear true” lenses present, playback is paused. Similarly, to allow shared control of a damage statistic, you would add/remove lenses with effects like “plus 10″ and “times 2″ (but note that <a href="http://en.wikipedia.org/wiki/Commutativity">ordering matters</a> in that case).</p>
+<p>Lets actually implement this for the ‘pausing video playback’ scenario. In a more general situation we would need to track a list of lenses and apply them each whenever someone queried the value, but “appear true” is so simple we can just keep a count (because it’s <a href="http://en.wikipedia.org/wiki/Idempotent">idempotent</a>):</p>
+<pre><code class="prettyprint"><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">VideoPlayer</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> _pauseCount</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">bool</span><span class="pln"> </span><span class="typ">IsPaused</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">get</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">return</span><span class="pln"> _pauseCount </span><span class="pun">&gt;</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln"> </span><span class="pun">}</span><span class="pln"> </span><span class="pun">}</span><span class="pln">
+    
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">AddPause</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        _pauseCount </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">1</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">RemovePause</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">_pauseCount </span><span class="pun">&lt;=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throw</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">InvalidOperationException</span><span class="pun">(</span><span class="str">"uh oh..."</span><span class="pun">);</span><span class="pln">
+        _pauseCount </span><span class="pun">-=</span><span class="pln"> </span><span class="lit">1</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>Now anything anywhere can pause playback temporarily, without having to worry about later restoring previous states that couldn't be inspected to begin with. As long as each individual component handles pauses correctly within itself, everything will work fine. Those components look like this:</p>
+<pre><code class="prettyprint"><span class="com">// code for a play-pause toggle button</span><span class="pln">
+</span><span class="kwd">bool</span><span class="pln"> isManuallyPaused </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">void</span><span class="pln"> </span><span class="typ">OnTogglePlayPause</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    isManuallyPaused </span><span class="pun">=</span><span class="pln"> </span><span class="pun">!</span><span class="pln">isManuallyPaused</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">isManuallyPaused</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        videoPlayer</span><span class="pun">.</span><span class="typ">AddPause</span><span class="pun">();</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">else</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        videoPlayer</span><span class="pun">.</span><span class="typ">RemovePause</span><span class="pun">();</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+
+</span><span class="com">// code to pause while a settings dialog is open</span><span class="pln">
+</span><span class="kwd">void</span><span class="pln"> </span><span class="typ">OnStartSeek</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    videoPlayer</span><span class="pun">.</span><span class="typ">AddPause</span><span class="pun">();</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">void</span><span class="pln"> </span><span class="typ">OnEndSeek</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    videoPlayer</span><span class="pun">.</span><span class="typ">RemovePause</span><span class="pun">();</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+
+</span><span class="com">// code to pause while buffering data</span><span class="pln">
+</span><span class="kwd">void</span><span class="pln"> </span><span class="typ">OnNeedMoreStreamedVideoData</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    videoPlayer</span><span class="pun">.</span><span class="typ">AddPause</span><span class="pun">();</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="kwd">void</span><span class="pln"> </span><span class="typ">OnHaveNeededVideoData</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    videoPlayer</span><span class="pun">.</span><span class="typ">RemovePause</span><span class="pun">();</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>We're forced to have a boolean representing the user's desired playback state, but we can locate it where it belongs (in the UI code).</p>
+<p>Notice that more features that involve pausing can be added later, without changing or even thinking about the settings dialog code. The scope of verifying "is it pausing correctly?" has been reduced, so that we can do it component by component, instead of having to consider everything that touches the field at once. The runtime state still depends on all of the components, but they can be analyzed independently. We've decoupled the shared control over pausing.</p>
+<p>I don't mean to imply that every instance of shared control ever can be solved with lenses. That's not the case. But there's plenty of simple ones, like being paused or setting maximum volumes, that it applies to.</p>
+<h3>Summary</h3>
+<p>Giving direct access to internal state is not good enough to enable proper shared control. It forces anything that touches the state to consider everything else that touches the state, lest they interfere with each other. An alternative approach is to expose an API for stacking lenses (temporary modifications) over the state.</p>
+<p>Using lenses reduces coupling, but does have the downside of having to match Add calls with Remove calls. This can be helped a bit by using <a href="http://msdn.microsoft.com/en-us/library/system.threading.cancellationtoken.aspx">CancellationTokens</a>, but I'll be exploring that idea next week.</p>
+<p>---</p>
+<h3>Discuss on <a href="http://www.reddit.com/r/programming/comments/15rh2x/decoupling_shared_control/">Reddit</a>, <a href="http://news.ycombinator.com/item?id=4992023">Hacker News</a></h3>
+<p>---</p>
+
+<blockquote><p>
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia. <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+</p></blockquote>
+<h2 class="endofpage">Older Posts</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait" rel="bookmark" title="Permanent Link to Emulating Actors in C# with Async/Await">Emulating Actors in C# with Async/Await</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2096_making-an-immutable-queue-with-guaranteed-constant-time-operations" rel="bookmark" title="Permanent Link to Making an immutable queue with guaranteed constant time operations">Making an immutable queue with guaranteed constant time operations</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions" rel="bookmark" title="Permanent Link to Improving Checked Exceptions">Improving Checked Exceptions</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime" rel="bookmark" title="Permanent Link to Perishable Collections: The Benefits of Removal-by-Lifetime">Perishable Collections: The Benefits of Removal-by-Lifetime</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1694_decoupling-inlined-ui-code" rel="bookmark" title="Permanent Link to Decoupling inlined UI code">Decoupling inlined UI code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet" rel="bookmark" title="Permanent Link to Linq to Collections: Beyond IEnumerable&lt;T&gt;">Linq to Collections: Beyond IEnumerable&lt;T&gt;</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+ <link rel="stylesheet" id="upprev-css-css" href="./Post1823_decoupling-shared-control_files/upprev.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-quicklatex-format-css" href="./Post1823_decoupling-shared-control_files/quicklatex-format.css" type="text/css" media="all">
+<script type="text/javascript" src="./Post1823_decoupling-shared-control_files/jquery.js"></script>
+<script type="text/javascript" src="./Post1823_decoupling-shared-control_files/upprev_js.php"></script>
+<script type="text/javascript" src="./Post1823_decoupling-shared-control_files/comment-reply.min.js"></script>
+ 
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+			<nav>
+				<ul class="primary-nav clearfix">
+					<li><a href="http://www.twistedoakstudios.com/">Home</a></li>
+					<li><a href="http://twistedoakstudios.com/portfolio">Portfolio</a></li>
+				</ul>
+			</nav>
+		</div>
+		
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				6082 Shirley Street<br>
+				Halifax, NS, Canada B3H 2M8</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+		
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script>- 2013 Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="./Post1823_decoupling-shared-control_files/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="./Post1823_decoupling-shared-control_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script></body></html>

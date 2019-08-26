@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en"><script src="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/Post7391_cancellation-tokens-and-collapsing-futures-for-obje.htm" async=""></script><script id="bug.surrogate.1">var urchinTracker=function(){},_gaq={push:function(){try {if(arguments[0][0]=='_link')window.location.href=arguments[0][1]}catch(er){}}},_gat={_createTracker:function(){}, _getTracker:function(){return{__noSuchMethod__:function(){},_link:function(o){if(o)location.href=o;},_linkByPost:function(){return true;},_getLinkerUrl:function(o){return o;},_trackEvent:function(){}}}};</script><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+   <!-- blog feed link -->
+  <link href="http://twistedoakstudios.com/blog/?feed=rss" rel="alternate" type="application/rss+xml" title="Twisted Oak Studios Blog">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<title>Cancellation Tokens (and Collapsing Futures) for Objective-C | Twisted Oak Studios Blog</title>
+
+  <meta name="description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  <meta name="author" content="/humans.txt">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" href="http://twistedoakstudios.com/blog/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="http://twistedoakstudios.com/blog/apple-touch-icon-precomposed.png">
+
+  	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/1140.css">
+    <link rel="stylesheet" href="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/style.css">
+    <link rel="stylesheet" href="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/blogstyle.css">
+<link rel="stylesheet" href="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/prettify.css" media="all">
+<link rel="stylesheet" href="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/sunburst.css" media="all">
+<script type="text/javascript" src="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/prettify.js"></script>
+
+	<!-- Webfonts! -->
+	<link href="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/css.css" rel="stylesheet" type="text/css">
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="Twisted Oak Studios">
+	<meta property="og:type" content="company">
+	<meta property="og:url" content="http://www.twistedoakstudios.com/">
+	<meta property="og:image" content="http://www.twistedoakstudios.com/images/logo.png">
+	<meta property="og:description" content="As a lean co-operative team of seasoned developers, Twisted Oak is able to offer efficient, flexible remote and on-the-floor development and consulting without any middle-man or excessive administrivia.">
+  
+  <script src="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/modernizr-2.js"></script>
+<script src="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/embed.js" async="" type="text/javascript"></script></head>
+<body class=" customize-support" onload="prettyPrint()">
+<!-- begin header -->
+<div class="container header-container">
+	<div class="row">
+		<header>
+			<div class="threecol">
+				<a href="http://twistedoakstudios.com/"><img class="logo" src="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/logo.png"></a>
+			</div><!-- .threecol -->
+		
+			<div class="fourcol navcol">
+				<nav>
+					<ul class="primary-nav clearfix">
+						<li><a href="http://twistedoakstudios.com/">Home</a></li>
+						<li><a href="http://twistedoakstudios.com/portfolio/">Portfolio</a></li>
+						<li><a href="http://twistedoakstudios.com/labs/">Labs</a></li>
+						<li><a class="scroll" href="#contact">Contact</a></li>
+						<li><a href="http://twistedoakstudios.com/blog/">Blog</a></li>
+					</ul>
+				</nav>
+			</div>    
+
+    	</header>
+	</div><!-- .row -->
+</div><!-- .container -->
+
+
+	<div id="main">
+<span class="blog">
+<div class="container home-container" id="home">
+	<div class="row">
+    <p class="big-callout">
+    <!--We're hiring! Experience with Game Dev, Unity3D, Graphics, Signal Processing, or Networking? Eligible to work in Canada? 
+      <a href="http://www.twistedoakstudios.com/jobs.php">Check it out</a>!
+-->
+		</p><section>
+			
+			<div class="ninecol">
+
+
+<h2><a href="http://twistedoakstudios.com/blog/Post7391_cancellation-tokens-and-collapsing-futures-for-objective-c" rel="bookmark" title="Permanent Link to Cancellation Tokens (and Collapsing Futures) for Objective-C">Cancellation Tokens (and Collapsing Futures) for Objective-C</a></h2>
+<div class="meta">posted by Craig Gidney on October 22, 2013</div>
+
+<p>In this post: benefits of cancellation tokens, and updates about the <a href="https://github.com/Strilanc/ObjC-CollapsingFutures">Collapsing Futures library</a>.</p>
+<h3>Cancellation Tokens</h3>
+<p>Sometimes you want to cancel asynchronous operations. For example, 
+when a user closes a browser tab before it finishes loading a web page, 
+it is expected that the browser will <em>immediately</em> stop fetching 
+that page (as opposed to letting the fetch finish and discarding the 
+result, which is often simpler to implement).</p>
+<p>There are many techniques for cancelling operations, but my preferred
+ mechanism is cancellation tokens. A cancellation token is an object 
+that propagates cancellation notifications. To be cancelled by a 
+cancellation token, an asynchronous method registers cleanup callbacks 
+to run when cancellation has occurred (or manually checks if the token 
+has been cancelled at the appropriate times). To cancel an asynchronous 
+method, the caller of that method just cancels the token they passed to 
+it. </p>
+<p>The main strength of cancellation tokens over other cancellation 
+mechanisms, such as returning a cancellable result, is that they make 
+‘wiring’ easier. Usually you can just pass along the token you were 
+given by your caller to the methods you call, and they will cancel at 
+the appropriate time.</p>
+<p>For example, suppose you’re writing a method that crawls a website. 
+The crawling continues until the cancellation token given to it is 
+cancelled. How does the crawling operation ensure that, when it’s 
+cancelled, any outstanding page loads are also cancelled? By just 
+passing along the cancellation token, like this:</p>
+<pre><code class="prettyprint"><span class="pun">-(</span><span class="kwd">void</span><span class="pun">)</span><span class="pln"> crawl</span><span class="pun">:(</span><span class="typ">NSString</span><span class="pun">*)</span><span class="pln">site </span><span class="kwd">until</span><span class="pun">:(</span><span class="typ">TOCCancelToken</span><span class="pun">*)</span><span class="pln">untilCancelledToken </span><span class="pun">{</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+        </span><span class="typ">Future</span><span class="pun">*</span><span class="pln"> futurePage </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="kwd">self</span><span class="pln"> asyncLoadPage</span><span class="pun">:</span><span class="pln">page </span><span class="kwd">unless</span><span class="pun">:</span><span class="pln">untilCancelledToken</span><span class="pun">];</span><span class="pln">
+        </span><span class="pun">...</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>Now compare the above snippet with the following snippet, showing 
+what needs to be done if cancellation is instead attached to the result 
+of the method:</p>
+<pre><code class="prettyprint"><span class="pun">-(</span><span class="typ">Cancellable</span><span class="pun">*)</span><span class="pln"> crawl</span><span class="pun">:(</span><span class="typ">NSString</span><span class="pun">*)</span><span class="pln">site </span><span class="pun">{</span><span class="pln">
+    </span><span class="typ">NSMutableSet</span><span class="pun">*</span><span class="pln"> activeCancellables </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="typ">NSMutableSet</span><span class="pln"> </span><span class="kwd">set</span><span class="pun">];</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+        </span><span class="typ">CancellableFuture</span><span class="pun">*</span><span class="pln"> cancellableFuturePage </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="kwd">self</span><span class="pln"> asyncLoadPage</span><span class="pun">:</span><span class="pln">page</span><span class="pun">];</span><span class="pln">
+        </span><span class="pun">[</span><span class="pln">activeCancellables addObject</span><span class="pun">:</span><span class="pln">cancellableFuturePage</span><span class="pun">];</span><span class="pln">
+        </span><span class="pun">...</span><span class="pln">
+            </span><span class="pun">[</span><span class="pln">activeCancellables removeObject</span><span class="pun">:</span><span class="pln">cancellableFuturePage</span><span class="pun">];</span><span class="pln">
+            </span><span class="pun">...</span><span class="pln">
+        </span><span class="pun">...</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">^{</span><span class="pln">
+        </span><span class="pun">...</span><span class="pln">
+        </span><span class="kwd">for</span><span class="pln"> </span><span class="pun">(</span><span class="typ">Cancellable</span><span class="pun">*</span><span class="pln"> cancellable </span><span class="kwd">in</span><span class="pln"> activeCancellables</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="pun">[</span><span class="pln">cancellable cancel</span><span class="pun">];</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">};</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>That’s a pretty significant difference. With cancellation tokens, 
+each method takes care of its own cancellation. With cancellable 
+results, the cancellation duties are leaking into the caller (because it
+ needs to track where to propagate cancellations to).</p>
+<p>Another situation, where cancellation tokens provide a benefit over 
+the alternative, is removing event handlers. I discussed this more 
+generally in my post on <a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime">perishable collections</a>. Using an <code>IncludeHandlerUntil</code> method, instead of <code>AddHandler</code> and <code>RemoveHandler</code> methods, makes it a lot harder to forget to remove a handler and impossible to accidentally remove a handler twice.</p>
+<p>I’ve implemented cancellation tokens as part of the <a href="https://github.com/Strilanc/ObjC-CollapsingFutures">Collapsing Futures library</a> I’ve been working on. In the library, cancellation tokens are represented by instances of <code>TOCCancelToken</code> and controlled by corresponding instances of <code>TOCCancelTokenSource</code>.</p>
+<h3>Cancelling Timeouts</h3>
+<p>Let’s try to perform a simple task using cancellation tokens: calling
+ a method after a delay, unless cancelled first. Perhaps we want to show
+ a notification that auto-dismisses after a few minutes, but if the user
+ manually dismisses it we don’t want to hog resources we don’t need 
+(like whatever the delayed callback is referencing and thus keeping 
+alive).</p>
+<p>Objective-C has existing ways to run code after a delay, so we just need to translate:</p>
+<pre><code class="prettyprint"><span class="pun">+(</span><span class="kwd">void</span><span class="pun">)</span><span class="pln"> runBlock</span><span class="pun">:(</span><span class="typ">VoidBlock</span><span class="pun">)</span><span class="pln">callback
+      afterDelay</span><span class="pun">:(</span><span class="typ">NSTimeInterval</span><span class="pun">)</span><span class="pln">delayInSeconds
+          </span><span class="kwd">unless</span><span class="pun">:(</span><span class="typ">TOCCancelToken</span><span class="pun">*)</span><span class="pln">unlessCancelledToken </span><span class="pun">{</span><span class="pln">
+
+    </span><span class="typ">BlockToSelectorAdapter</span><span class="pun">*</span><span class="pln"> blockAsRunObject </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="typ">BlockToSelectorAdapter</span><span class="pln"> runBlock</span><span class="pun">:</span><span class="pln">callback</span><span class="pun">];</span><span class="pln">
+    </span><span class="typ">NSTimer</span><span class="pun">*</span><span class="pln"> timer </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="typ">NSTimer</span><span class="pln"> timerWithTimeInterval</span><span class="pun">:</span><span class="pln">delayInSeconds
+                                             target</span><span class="pun">:</span><span class="pln">blockAsRunObject
+                                           selector</span><span class="pun">:</span><span class="lit">@selector</span><span class="pun">(</span><span class="pln">run</span><span class="pun">)</span><span class="pln">
+                                           userInfo</span><span class="pun">:</span><span class="kwd">nil</span><span class="pln">
+                                            repeats</span><span class="pun">:</span><span class="pln">NO</span><span class="pun">];</span><span class="pln">
+    </span><span class="com">// Simplification: assuming the current run loop is being run</span><span class="pln">
+    </span><span class="pun">[[</span><span class="typ">NSRunLoop</span><span class="pln"> currentRunLoop</span><span class="pun">]</span><span class="pln"> addTimer</span><span class="pun">:</span><span class="pln">timer forMode</span><span class="pun">:</span><span class="typ">NSDefaultRunLoopMode</span><span class="pun">];</span><span class="pln">
+    
+    </span><span class="com">// Simplification: assuming the cancellation token is not long lived (will discuss)</span><span class="pln">
+    </span><span class="pun">[</span><span class="pln">unlessCancelledToken whenCancelledDo</span><span class="pun">:^{</span><span class="pln">
+        </span><span class="pun">[</span><span class="pln">timer invalidate</span><span class="pun">];</span><span class="pln">
+    </span><span class="pun">}];</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>The above method is straightforward: setup an <code>NSTimer</code> in
+ the usual way, using a helper class that allows us to call the callback
+ block as a selector, but invalidate the timer if the token is 
+cancelled. It uses the <code>whenCancelledDo</code> method of <code>TOCCancelToken</code>
+ to make the block that invalidates the timer run when the token is 
+cancelled. (If the token starts off cancelled, the block is just run 
+right away.)</p>
+<p>(We can also use Grand Central Dispatch to do the delay but, as far 
+as I know, it doesn’t have any mechanism to cancel a delayed callback. 
+At best we can do a <a href="https://gist.github.com/Strilanc/7094527">hacky partial cancel</a>.)</p>
+<p>The hypothetical notification-showing problem I mentioned at the top 
+of this section can be solved with our delayed-callback method as 
+follows:</p>
+<pre><code class="prettyprint"><span class="com">// in NotificationViewController.m</span><span class="pln">
+</span><span class="pun">+(</span><span class="kwd">void</span><span class="pun">)</span><span class="pln"> show </span><span class="pun">{</span><span class="pln">
+    </span><span class="typ">NotificationViewController</span><span class="pun">*</span><span class="pln"> view </span><span class="pun">=</span><span class="pln"> </span><span class="pun">...</span><span class="pln"> init view </span><span class="pun">...;</span><span class="pln">
+    view</span><span class="pun">-&gt;</span><span class="pln">cancelledWhenDismissedSource </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="typ">TOCCancelTokenSource</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">];</span><span class="pln">
+    </span><span class="pun">...</span><span class="pln"> show view </span><span class="pun">...</span><span class="pln">
+    </span><span class="pun">[</span><span class="typ">TimeUtil</span><span class="pln"> runBlock</span><span class="pun">:^{</span><span class="pln"> </span><span class="pun">[</span><span class="pln">view goAway</span><span class="pun">];</span><span class="pln"> </span><span class="pun">}</span><span class="pln"> 
+            afterDelay</span><span class="pun">:</span><span class="lit">120.0</span><span class="pln"> </span><span class="com">//seconds</span><span class="pln">
+                </span><span class="kwd">unless</span><span class="pun">:</span><span class="pln">cancelledWhenDismissedSource</span><span class="pun">.</span><span class="pln">token</span><span class="pun">];</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="pun">-(</span><span class="kwd">void</span><span class="pun">)</span><span class="pln"> onManuallyDismissed </span><span class="pun">{</span><span class="pln">
+    </span><span class="pun">[</span><span class="pln">cancelledWhenDismissedSource cancel</span><span class="pun">];</span><span class="pln">
+    </span><span class="pun">[</span><span class="kwd">self</span><span class="pln"> goAway</span><span class="pun">];</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="pun">...</span></code></pre>
+<p>Note that, given how we implemented our delayed-call method, the above snippet is assuming it’s safe to call <code>goAway</code> twice. The delay might finish just as <code>onManuallyDismissed</code> is about to cancel it, resulting in an extra call to <code>goAway</code>
+ being queued into the run loop. We could improve our delayed-call 
+method by wrapping the callback to check the cancellation token’s <code>isAlreadyCancelled</code> property one last time before running, which would fix these ‘races despite being on same thread’ issues.</p>
+<p>There’s also another issue with our delayed-call method: it has a space leak.</p>
+<h3>Cancelling Cancellation</h3>
+<p>Consider what happens to the ‘invalidate timer’ block our 
+delayed-call method registers when cancellation doesn’t occur. We’re not
+ doing anything to get rid of that block if it isn’t used, so it just 
+sticks around in the cancellation token’s array of cancel handlers to 
+call. If we keep conditioning delayed callbacks on the same cancellation
+ token, but never get around to cancelling the token, we’ll accumulate 
+arbitrarily many of these blocks. We’ve got a space leak!</p>
+<p>To fix this space leak, we need the ability to remove the handlers we
+ registered to be called upon cancellation. We need to be able to cancel
+ cancellation.</p>
+<p><code>TOCCancelToken</code> supports exactly this functionality. The method <code>whenCancelledDo:unless:</code>
+ takes a cancel handler to run, and a second cancel token that removes 
+that handler if the second token is cancelled before the receiving 
+token.</p>
+<p>(Incidentally, <code>whenCancelledDo:unless:</code> is line for line 
+one of the hardest methods I’ve ever written. I’m not sure why, since it
+ doesn’t look that hard… But if you’re looking for a challenge: clone 
+the repo, paste <a href="https://gist.github.com/Strilanc/7094786">this redacted version of TOCCancelTokenAndSource.m</a> over the actual TOCCancelTokenAndSource.m, and try to get the tests passing again.)</p>
+<p>With our cancelled-unless-other-cancelled method in hand, we can fix 
+our space leak. Let’s go a bit further, and take advantage of the 
+convenient <code>cancelledOnCompletionToken</code> property on <code>TOCFuture</code>
+ (returns a token that becomes cancelled once the future completes), and
+ modify our delayed-callback method into a delayed-result method:</p>
+<pre><code class="prettyprint"><span class="pun">+(</span><span class="typ">TOCFuture</span><span class="pun">*)</span><span class="pln"> futureWithResult</span><span class="pun">:(</span><span class="pln">id</span><span class="pun">)</span><span class="pln">resultValue
+                    afterDelay</span><span class="pun">:(</span><span class="typ">NSTimeInterval</span><span class="pun">)</span><span class="pln">delayInSeconds
+                        </span><span class="kwd">unless</span><span class="pun">:(</span><span class="typ">TOCCancelToken</span><span class="pun">*)</span><span class="pln">unlessCancelledToken </span><span class="pun">{</span><span class="pln">
+    
+    </span><span class="typ">TOCFutureSource</span><span class="pun">*</span><span class="pln"> resultSource </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="typ">TOCFutureSource</span><span class="pln"> </span><span class="kwd">new</span><span class="pun">];</span><span class="pln">
+    </span><span class="typ">BlockToSelectorAdapter</span><span class="pun">*</span><span class="pln"> blockAsRunObject </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="typ">BlockToSelectorAdapter</span><span class="pln"> runBlock</span><span class="pun">:^{</span><span class="pln">
+        </span><span class="pun">[</span><span class="pln">resultSource trySetResult</span><span class="pun">:</span><span class="pln">resultValue</span><span class="pun">];</span><span class="pln">
+    </span><span class="pun">}];</span><span class="pln">
+    </span><span class="typ">NSTimer</span><span class="pun">*</span><span class="pln"> timer </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="typ">NSTimer</span><span class="pln"> timerWithTimeInterval</span><span class="pun">:</span><span class="pln">delayInSeconds
+                                             target</span><span class="pun">:</span><span class="pln">blockAsRunObject
+                                           selector</span><span class="pun">:</span><span class="lit">@selector</span><span class="pun">(</span><span class="pln">run</span><span class="pun">)</span><span class="pln">
+                                           userInfo</span><span class="pun">:</span><span class="kwd">nil</span><span class="pln">
+                                            repeats</span><span class="pun">:</span><span class="pln">NO</span><span class="pun">];</span><span class="pln">
+    </span><span class="pun">[[</span><span class="typ">NSRunLoop</span><span class="pln"> currentRunLoop</span><span class="pun">]</span><span class="pln"> addTimer</span><span class="pun">:</span><span class="pln">timer forMode</span><span class="pun">:</span><span class="typ">NSDefaultRunLoopMode</span><span class="pun">];</span><span class="pln">
+    
+    </span><span class="pun">[</span><span class="pln">unlessCancelledToken whenCancelledDo</span><span class="pun">:^{</span><span class="pln">
+        </span><span class="pun">[</span><span class="pln">timer invalidate</span><span class="pun">];</span><span class="pln">
+        </span><span class="pun">[</span><span class="pln">resultSource trySetFailedWithCancel</span><span class="pun">];</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">unless</span><span class="pun">:</span><span class="pln">resultSource</span><span class="pun">.</span><span class="pln">future</span><span class="pun">.</span><span class="pln">cancelledOnCompletionToken</span><span class="pun">];</span><span class="pln">
+    
+    </span><span class="kwd">return</span><span class="pln"> resultSource</span><span class="pun">.</span><span class="pln">future</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>We can easily run callbacks after a delay by <code>thenDo</code>‘ing 
+off of the future produced by this method. We can also determine whether
+ or not the delay finished without being cancelled based on the future 
+containing the result we specified, or a cancellation failure.</p>
+<h3>Until Cancellation</h3>
+<p>So far I’ve only been talking about cancelling ongoing operations, or
+ undoing operations, but we can also use cancellation tokens to clean up
+ objects.</p>
+<p>For example, I have socket classes where the ‘start’ methods (or the 
+constructor methods) ask for a cancellation token. When the token is 
+cancelled, the socket is closed. That way, when an asynchronous 
+operation uses a socket, the entirety of making sure things get cleaned 
+up is… passing along a token.</p>
+<p>By cleaning up objects with cancel tokens, you can re-use the same 
+token that was going to cancel an operation to instead dispose its 
+result. Instead of an operation producing a result <em>unless</em> we cancel a token beforehand, an operation can produce a result that lasts <em>until</em>
+ we cancel a token. I call these operations ‘unless-style’ and 
+‘until-style’, and in the library I always distinguish between them by 
+the name of the cancel token parameter.</p>
+<p>For example, the method <code>asyncRaceOperationsWithWinningResultLastingUntil</code> that I added to <code>NSArray</code>
+ is an ‘until’-style method (that’s why it has ‘until’ instead of 
+‘unless’ in the name). This drastically simplifies how it’s implemented 
+and how it’s used.</p>
+<p><code>asyncRaceOperationsWithWinningResultLastingUntil</code> takes 
+an array of blocks corresponding to ‘until’-style asynchronous 
+operations, runs them all to get the futures representing their results,
+ and propagates the first finished result into the future it returned to
+ its own caller. Once a race has a winner, all the losers can be 
+cancelled without worrying if they’ve finished or not (because the 
+operations are ‘until’). The winning result lasts until the caller 
+cancels the token they originally passed in.</p>
+<p>How is this method useful? Well, I wrote it as part of implementing 
+‘low latency connecting’, where you start several connections at the 
+same time and only keep the first to finish. Assuming you have a class 
+for handling tcp streams, designed with cancel tokens in mind, you can 
+do a low latency tcp connection in under ten lines of code:</p>
+<pre><code class="prettyprint"><span class="pun">+(</span><span class="typ">TOCFuture</span><span class="pun">*)</span><span class="pln"> asyncLowLatencyConnectAmong</span><span class="pun">:(</span><span class="typ">NSArray</span><span class="pun">*)</span><span class="pln">ips </span><span class="kwd">until</span><span class="pun">:(</span><span class="typ">TOCCancelToken</span><span class="pun">*)</span><span class="pln">untilCancelledToken </span><span class="pun">{</span><span class="pln">
+    </span><span class="typ">NSArray</span><span class="pun">*</span><span class="pln"> streamStarters </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="pln">ips forEachEval</span><span class="pun">:^(</span><span class="typ">IPAddress</span><span class="pun">*</span><span class="pln"> ip</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">^(</span><span class="typ">TOCCancelToken</span><span class="pun">*</span><span class="pln"> racerUntilCancelledToken</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            </span><span class="typ">TcpStream</span><span class="pun">*</span><span class="pln"> tcpStream </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[</span><span class="typ">TcpStream</span><span class="pln"> tcpStreamTo</span><span class="pun">:</span><span class="pln">ip </span><span class="kwd">until</span><span class="pun">:</span><span class="pln">racerUntilCancelledToken</span><span class="pun">];</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> tcpStream</span><span class="pun">.</span><span class="pln">futureSelfWhenHandshakeCompleted</span><span class="pun">;</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}];</span><span class="pln">
+
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">[</span><span class="pln">streamStarters asyncRaceUntilCancelled</span><span class="pun">:</span><span class="pln">untilCancelledToken</span><span class="pun">];</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p>That’s pretty sweet. Also, since the racing bit has been separated from the networking bit, it’s a whole lot easier to test.</p>
+<h3>Timing Out Unless and Until</h3>
+<p>Another benefit of having a method with <em>until</em> cancellation semantics, instead of <em>unless</em> semantics, is that timing out works a bit better.</p>
+<p>The constructor method <code>futureWithResultFromAsyncCancellableOperation:withTimeout:unless:</code>
+ returns the result of an asynchronous operation, but cancels the 
+operation if it takes too long. Unfortunately, it can’t assume the 
+caller doesn’t need to clean up the result of the operation and it 
+doesn’t know how to clean up the result itself. So, when timeout occurs,
+ it can’t immediately report that timeout. It needs to wait for the 
+asynchronous operation it started to confirm it was cancelled (i.e. for 
+its future to fail). Otherwise it would be possible for the operation’s 
+success to race the cancellation, ending with a result that can’t be 
+reported to the caller to be cleaned up because a timeout was already 
+reported.</p>
+<p>So, if you happen to pass in a badly written operation that hangs 
+instead of cancelling, the timeout operation will hang too! I might 
+actually cut this method from the library (before v1.0), because of this
+ stupid failure case.</p>
+<p>There’s another timeout method in the library: <code>futureWithResultFromAsyncOperationWithResultLastingUntilCancelled:withOperationTimeout:until:</code>.
+ This one actually does immediately fail when it times out, which it can
+ do safely because it knows how to clean up any spurious result: cancel 
+the token given to the operation that created the result.</p>
+<h3>Dependent Cancellation</h3>
+<p>Sometimes an asynchronous operation will do more than just pass along
+ a cancellation token. It’s somewhat common to want to add new ways for 
+sub-operations to be cancelled. For example, <code>asyncRaceOperationsWithWinningResultLastingUntil</code> will cancel sub-operations when the token you give it is cancelled <em>or</em> one of the operations has won.</p>
+<p>This is common enough that the library includes the constructor method <code>cancelTokenSourceUntil</code> for <code>TOKCancelTokenSource</code>. The cancel token source returned by <code>cancelTokenSourceUntil</code>
+ will be automatically cancelled if the token given to the constructor 
+method is cancelled. The created token source’s token lifetime is thus 
+dependent on the given token not being cancelled.</p>
+<h3>Library News</h3>
+<p>That about covers the high level view of cancellation tokens, so on to news about the library.</p>
+<p>Two weeks ago the <a href="https://github.com/Strilanc/ObjC-CollapsingFutures">Collapsing Futures library</a>
+ had bare bones futures and nothing. I was a bit surprised there was any
+ feedback at all, let alone positive feedback with useful suggestions. 
+Now the library is something I’ve put some serious design and 
+implementation effort into (also it has a podspec now). I’ve worried 
+about more details than I can list, and I’m looking for more feedback:</p>
+<ul>
+<li>What features are missing? (e.g. it still needs a nice way to get back on the main thread)
+</li><li>Is the auto-complete documentation (e.g. <a href="https://github.com/Strilanc/ObjC-CollapsingFutures/blob/master/src/TOCCancelTokenAndSource.h">what’s on cancel token</a>) sufficient? Useful? Confusing?
+</li><li>Is the API easy to discover and intuit? Are things where they should be? What would make it clearer?
+</li><li>Have you encountered any bugs? Any mis-features?
+</li><li>What are your use cases?
+</li><li>What async tasks should the library translate into future-style? (e.g. should the library implement asyncGetAddressBook)
+</li></ul>
+<p>It’s okay if you just <a href="http://en.wikipedia.org/wiki/Parkinson%27s_law_of_triviality">care deeply about the color of a bike shed</a>.
+ I’ll still take it under consideration. I’m new enough to the 
+conventions of Objective-C that I might legitimately not know some 
+trivial expectation.</p>
+<p>You can leave feedback here, on github, on reddit, or send it by email. Whatever works best.</p>
+<p>I have a couple more posts planned that are related to the collapsing
+ futures library. Next week I’ll talk about how I used immortality 
+states to prevent self-sustaining reference cycles.</p>
+<h3>Summary</h3>
+<p>Cancellation tokens make cleaning up a lot easier, allowing each 
+method/component to deal with just its own cancellation while passing 
+along the token to things it uses.</p>
+<p>Cancellation tokens are implemented, in Objective-C, by the <a href="https://github.com/Strilanc/ObjC-CollapsingFutures">Collapsing Futures library</a>.</p>
+<p>—</p>
+<h3><a href="http://www.reddit.com/r/programming/comments/1oykey/cancellation_tokens_and_collapsing_futures_for/">Discuss on Reddit</a></h3>
+<p>—</p>
+<h3>My Twitter: <a href="https://twitter.com/CraigGidney">@CraigGidney</a></h3>
+<p>—</p>
+
+<blockquote><p>
+
+
+</p><div id="disqus_thread"><iframe verticalscrolling="no" horizontalscrolling="no" src="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/a.htm" style="width: 100% ! important; border: medium none ! important; overflow: hidden ! important; height: 346px ! important;" role="complementary" allowtransparency="true" data-disqus-uid="2" id="dsq-2" scrolling="no" width="100%" frameborder="0"></iframe></div>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var disqus_url = 'http://twistedoakstudios.com/blog/Post7391_cancellation-tokens-and-collapsing-futures-for-objective-c';
+    var disqus_identifier = '7391 http://twistedoakstudios.com/blog/?p=7391';
+    var disqus_container_id = 'disqus_thread';
+    var disqus_domain = 'disqus.com';
+    var disqus_shortname = 'twistedoakstudios';
+    var disqus_title = "Cancellation Tokens (and Collapsing Futures) for Objective-C";
+        var disqus_config = function () {
+        var config = this; // Access to the config object
+        config.language = '';
+
+        /*
+           All currently supported events:
+            * preData — fires just before we request for initial data
+            * preInit - fires after we get initial data but before we load any dependencies
+            * onInit  - fires when all dependencies are resolved but before dtpl template is rendered
+            * afterRender - fires when template is rendered but before we show it
+            * onReady - everything is done
+         */
+
+        config.callbacks.preData.push(function() {
+            // clear out the container (its filled for SEO/legacy purposes)
+            document.getElementById(disqus_container_id).innerHTML = '';
+        });
+                config.callbacks.onReady.push(function() {
+            // sync comments in the background so we don't block the page
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = '?cf_action=sync_comments&post_id=7391';
+
+            var firstScript = document.getElementsByTagName( "script" )[0];
+            firstScript.parentNode.insertBefore(script, firstScript);
+        });
+                    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var DsqLocal = {
+        'trackbacks': [
+        ],
+        'trackback_url': "http:\/\/twistedoakstudios.com\/blog\/Post7391_cancellation-tokens-and-collapsing-futures-for-objective-c\/trackback"    };
+/* ]]> */
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.' + 'disqus.com' + '/embed.js?pname=wordpress&pver=2.74';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+/* ]]> */
+</script>
+
+<h3>
+<spacer>
+</spacer></h3>
+
+<span style="color:#4A9EC2"><em><br>
+Twisted Oak Studios offers consulting and development on high-tech interactive projects. Check out our <a href="http://twistedoakstudios.com/portfolio/">portfolio</a>, or <a href="mailto:contact@twistedoakstudios.com">Give us a shout</a> if you have anything you think some really rad engineers should help you with.<br>
+</em></span>
+<p></p></blockquote>
+
+<h2 class="endofpage">Archive</h2>
+<p></p><ul>
+     <li><a href="http://twistedoakstudios.com/blog/Post8147_referencing-substrings-faster-without-leaking-memory" rel="bookmark" title="Permanent Link to Referencing Substrings Faster, without Leaking Memory">Referencing Substrings Faster, without Leaking Memory</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post8000_not-crying-over-old-code" rel="bookmark" title="Permanent Link to Not Crying Over Old Code">Not Crying Over Old Code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7878_exploring-universal-ternary-gates" rel="bookmark" title="Permanent Link to Exploring Universal Ternary Gates">Exploring Universal Ternary Gates</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7748_impractical-experiments-2-securing-peer-to-peer-fog-of-war-against-map-hacks" rel="bookmark" title="Permanent Link to Impractical Experiments #2: Securing Peer to Peer Fog of War against Map Hacks">Impractical Experiments #2: Securing Peer to Peer Fog of War against Map Hacks</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7694_achieving-exponential-slowdown-by-enumerating-twice" rel="bookmark" title="Permanent Link to Achieving Exponential Slowdown by Enumerating Twice">Achieving Exponential Slowdown by Enumerating Twice</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7525_using-immortality-to-kill-accidental-callback-cycles" rel="bookmark" title="Permanent Link to Using Immortality to Kill Accidental Callback Cycles">Using Immortality to Kill Accidental Callback Cycles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7391_cancellation-tokens-and-collapsing-futures-for-objective-c" rel="bookmark" title="Permanent Link to Cancellation Tokens (and Collapsing Futures) for Objective-C">Cancellation Tokens (and Collapsing Futures) for Objective-C</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7254_visualizing-the-eigenvectors-of-a-rotation" rel="bookmark" title="Permanent Link to Visualizing the Eigenvectors of a Rotation">Visualizing the Eigenvectors of a Rotation</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7149_collapsing-futures-in-objective-c" rel="bookmark" title="Permanent Link to Collapsing Futures in Objective-C">Collapsing Futures in Objective-C</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post7052_bug-hunting-1-garbled-audio-from-end-to-end" rel="bookmark" title="Permanent Link to Bug Hunting #1: Garbled Audio from End to End">Bug Hunting #1: Garbled Audio from End to End</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post6871_impractical-experiments-1-representing-numbers-as-polynomials" rel="bookmark" title="Permanent Link to Impractical Experiments #1: Representing Numbers as Polynomials">Impractical Experiments #1: Representing Numbers as Polynomials</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post6536_implementing-quantum-pseudo-telepathy" rel="bookmark" title="Permanent Link to Implementing Quantum Pseudo-Telepathy">Implementing Quantum Pseudo-Telepathy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post6422_turn-on-your-damn-warnings" rel="bookmark" title="Permanent Link to Turn On Your Damn Warnings">Turn On Your Damn Warnings</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5953_big-o-made-trivial" rel="bookmark" title="Permanent Link to Big-O Made Trivial">Big-O Made Trivial</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5268_unfathomable-bugs-7-the-broken-oven" rel="bookmark" title="Permanent Link to Unfathomable Bugs #7: The Broken Oven">Unfathomable Bugs #7: The Broken Oven</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5623_solomonoffs-mad-scientist" rel="bookmark" title="Permanent Link to Solomonoff’s Mad Scientist">Solomonoff’s Mad Scientist</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5753_yearly-blogging-roundup-1" rel="bookmark" title="Permanent Link to Yearly Blogging Roundup #1">Yearly Blogging Roundup #1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5485_what-isnt-a-monad" rel="bookmark" title="Permanent Link to What isn’t a Monad">What isn’t a Monad</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5365_searching-a-sorted-matrix-faster" rel="bookmark" title="Permanent Link to Searching a Sorted Matrix Faster">Searching a Sorted Matrix Faster</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5273_how-to-read-nested-ternary-operators" rel="bookmark" title="Permanent Link to How to Read Nested Ternary Operators">How to Read Nested Ternary Operators</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5204_making-sublime-text-2-jump-to-the-correct-line-with-unity-on-os-x" rel="bookmark" title="Permanent Link to Making Sublime Text 2 Jump to the Correct Line with Unity on OS X">Making Sublime Text 2 Jump to the Correct Line with Unity on OS X</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5096_my-bug-my-bad-4-reading-concurrently" rel="bookmark" title="Permanent Link to My Bug, My Bad #4: Reading Concurrently">My Bug, My Bad #4: Reading Concurrently</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post5018_whole-api-testing-with-reflection" rel="bookmark" title="Permanent Link to Whole API Testing with Reflection">Whole API Testing with Reflection</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4708_optimizing-a-parser-combinator-into-a-memcpy" rel="bookmark" title="Permanent Link to Optimizing a Parser Combinator into a memcpy">Optimizing a Parser Combinator into a memcpy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4872_dont-treat-paths-like-strings" rel="bookmark" title="Permanent Link to Don’t Treat Paths Like Strings">Don’t Treat Paths Like Strings</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4706_breaking-a-toy-hash-function" rel="bookmark" title="Permanent Link to Breaking a Toy Hash Function">Breaking a Toy Hash Function</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4425_counting-iterators-lazily" rel="bookmark" title="Permanent Link to Counting Iterators Lazily">Counting Iterators Lazily</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4428_unfathomable-bugs-6-pretend-precision" rel="bookmark" title="Permanent Link to Unfathomable Bugs #6: Pretend Precision">Unfathomable Bugs #6: Pretend Precision</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4281_my-bug-my-bad-3-accidentally-attacking-warcraft-3" rel="bookmark" title="Permanent Link to My Bug, My Bad #3: Accidentally Attacking WarCraft 3">My Bug, My Bad #3: Accidentally Attacking WarCraft 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4130_collapsing-types-vs-monads-followup" rel="bookmark" title="Permanent Link to Collapsing Types vs Monads (followup)">Collapsing Types vs Monads (followup)</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post4008_collapsing-futures-easy-to-use-hard-to-represent" rel="bookmark" title="Permanent Link to Collapsing Futures: Easy to Use, Hard to Represent">Collapsing Futures: Easy to Use, Hard to Represent</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3858_eventual-exceptions-vs-programming-in-a-minimal-functional-style" rel="bookmark" title="Permanent Link to Eventual Exceptions vs Programming in a Minimal Functional Style">Eventual Exceptions vs Programming in a Minimal Functional Style</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3769_the-mystery-of-flunf" rel="bookmark" title="Permanent Link to The Mystery of Flunf">The Mystery of Flunf</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3724_explain-it-like-im-five-the-socialist-millionaire-problem-and-secure-multi-party-computation" rel="bookmark" title="Permanent Link to Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation">Explain it like I’m Five: The Socialist Millionaire Problem and Secure Multi-Party Computation</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3631_computer-science-blows-my-mind" rel="bookmark" title="Permanent Link to Computer Science Blows My Mind">Computer Science Blows My Mind</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3484_a-visit-to-execution-labs-in-montreal" rel="bookmark" title="Permanent Link to A visit to Execution Labs in Montréal">A visit to Execution Labs in Montréal</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3573_transmuting-dice-conserving-entropy" rel="bookmark" title="Permanent Link to Transmuting Dice, Conserving Entropy">Transmuting Dice, Conserving Entropy</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3516_rule-of-thumb-ask-for-the-clock" rel="bookmark" title="Permanent Link to Rule of Thumb: Ask for the Clock">Rule of Thumb: Ask for the Clock</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3477_rule-of-thumb-use-purposefully-weakened-methods" rel="bookmark" title="Permanent Link to Rule of Thumb: Use Purposefully Weakened Methods">Rule of Thumb: Use Purposefully Weakened Methods</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3376_rule-of-thumb-preconditions-should-be-checked-explicitly" rel="bookmark" title="Permanent Link to Rule of thumb: Preconditions Should be Checked Explicitly">Rule of thumb: Preconditions Should be Checked Explicitly</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3280_intersecting-linked-lists-faster" rel="bookmark" title="Permanent Link to Intersecting Linked Lists Faster">Intersecting Linked Lists Faster</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3138_mouse-path-smoothing-for-jack-lumber" rel="bookmark" title="Permanent Link to Mouse Path Smoothing for Jack Lumber">Mouse Path Smoothing for Jack Lumber</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post3044_my-bug-my-bad-2-sunk-by-float" rel="bookmark" title="Permanent Link to My Bug, My Bad #2: Sunk by Float">My Bug, My Bad #2: Sunk by Float</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2852_repeat-yourself-differently" rel="bookmark" title="Permanent Link to Repeat Yourself Differently">Repeat Yourself Differently</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2644_grovers-quantum-search-algorithm" rel="bookmark" title="Permanent Link to Grover’s Quantum Search Algorithm">Grover’s Quantum Search Algorithm</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2766_followup-to-non-nullable-types-vs-c" rel="bookmark" title="Permanent Link to Followup to Non-Nullable Types vs C#">Followup to Non-Nullable Types vs C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2540_optimizing-just-in-time-with-expression-trees" rel="bookmark" title="Permanent Link to Optimizing Just in Time with Expression Trees">Optimizing Just in Time with Expression Trees</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2353_when-one-way-latency-doesnt-matter" rel="bookmark" title="Permanent Link to When One-Way Latency Doesn’t Matter">When One-Way Latency Doesn’t Matter</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2194_determining-exactly-ifwhenwhere-a-moving-line-intersected-a-moving-point" rel="bookmark" title="Permanent Link to Determining exactly if/when/where a moving line intersected a moving point">Determining exactly if/when/where a moving line intersected a moving point</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2061_emulating-actors-in-c-with-asyncawait" rel="bookmark" title="Permanent Link to Emulating Actors in C# with Async/Await">Emulating Actors in C# with Async/Await</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post2096_making-an-immutable-queue-with-guaranteed-constant-time-operations" rel="bookmark" title="Permanent Link to Making an immutable queue with guaranteed constant time operations">Making an immutable queue with guaranteed constant time operations</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post399_improving-checked-exceptions" rel="bookmark" title="Permanent Link to Improving Checked Exceptions">Improving Checked Exceptions</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1941_perishable-collections-the-benefits-of-removal-by-lifetime" rel="bookmark" title="Permanent Link to Perishable Collections: The Benefits of Removal-by-Lifetime">Perishable Collections: The Benefits of Removal-by-Lifetime</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1823_decoupling-shared-control" rel="bookmark" title="Permanent Link to Decoupling shared control">Decoupling shared control</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1694_decoupling-inlined-ui-code" rel="bookmark" title="Permanent Link to Decoupling inlined UI code">Decoupling inlined UI code</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1585_linq-to-collections-beyond-ienumerablet" rel="bookmark" title="Permanent Link to Linq to Collections: Beyond IEnumerable&lt;T&gt;">Linq to Collections: Beyond IEnumerable&lt;T&gt;</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1295_publish-your-net-library-as-a-nuget-package" rel="bookmark" title="Permanent Link to Publish your .Net library as a NuGet package">Publish your .Net library as a NuGet package</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c" rel="bookmark" title="Permanent Link to When null is not enough: an option type for C#">When null is not enough: an option type for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1473_unfathomable-bugs-5-readonly-or-not" rel="bookmark" title="Permanent Link to Unfathomable Bugs #5: Readonly or not">Unfathomable Bugs #5: Readonly or not</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post667_minkowski-sums-examples" rel="bookmark" title="Permanent Link to Minkowski sums: examples">Minkowski sums: examples</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1080_my-bug-my-bad-1-fractal-spheres" rel="bookmark" title="Permanent Link to My Bug, My Bad #1: Fractal Spheres">My Bug, My Bad #1: Fractal Spheres</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post1007_working-around-the-brittle-ui-virtualization-in-windows-8" rel="bookmark" title="Permanent Link to Working around the brittle UI Virtualization in Windows 8">Working around the brittle UI Virtualization in Windows 8</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post938_encapsulating-angles" rel="bookmark" title="Permanent Link to Encapsulating Angles">Encapsulating Angles</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post925_unfathomable-bugs-4-keys-that-arent" rel="bookmark" title="Permanent Link to Unfathomable Bugs #4: Keys that aren’t">Unfathomable Bugs #4: Keys that aren’t</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post867_how-would-i-even-use-a-monad-in-c" rel="bookmark" title="Permanent Link to How would I even use a monad (in C#)?">How would I even use a monad (in C#)?</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post822_useful-methods-1-observable-wheneach" rel="bookmark" title="Permanent Link to Useful/Interesting Methods #1: Observable.WhenEach">Useful/Interesting Methods #1: Observable.WhenEach</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post818_unfathomable-bugs-3-stringing-you-along" rel="bookmark" title="Permanent Link to Unfathomable Bugs #3: Stringing you along">Unfathomable Bugs #3: Stringing you along</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post774_anonymous-implementation-classes-a-design-pattern-for-c" rel="bookmark" title="Permanent Link to Anonymous Implementation Classes – A Design Pattern for C#">Anonymous Implementation Classes – A Design Pattern for C#</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post532_tasks-for-action-script-3" rel="bookmark" title="Permanent Link to Tasks for ActionScript 3 – Improving on Event-Driven Programming">Tasks for ActionScript 3 – Improving on Event-Driven Programming</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post554_minkowski-sums-and-differences" rel="bookmark" title="Permanent Link to Minkowski sums and differences">Minkowski sums and differences</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post330_non-nullable-types-vs-c-fixing-the-billion-dollar-mistake" rel="bookmark" title="Permanent Link to Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake">Non-Nullable Types vs C#: Fixing the Billion Dollar Mistake</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post384_unfathomable-bugs-2-slashing-out" rel="bookmark" title="Permanent Link to Unfathomable Bugs #2: Slashing Out">Unfathomable Bugs #2: Slashing Out</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post404_script-templates-and-base-classes" rel="bookmark" title="Permanent Link to Script templates and base classes">Script templates and base classes</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post373_unity-font-extraction" rel="bookmark" title="Permanent Link to Unity font extraction">Unity font extraction</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post341_abusing-phantom-types-to-encode-list-lengths-into-their-type" rel="bookmark" title="Permanent Link to Abusing “Phantom Types” to Encode List Lengths Into Their Type">Abusing “Phantom Types” to Encode List Lengths Into Their Type</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post261_constructive-criticism-of-the-reactive-extensions-api" rel="bookmark" title="Permanent Link to Constructive Criticism of the Reactive Extensions API">Constructive Criticism of the Reactive Extensions API</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post241_quaternions-part-3-2" rel="bookmark" title="Permanent Link to Quaternions part 3">Quaternions part 3</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post204_quaternions-part-2" rel="bookmark" title="Permanent Link to Quaternions part 2">Quaternions part 2</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post144_quaternions-part-1" rel="bookmark" title="Permanent Link to Quaternions part 1">Quaternions part 1</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post157_unfathomable-bugs-1-you-can-have-things-you-can-have-things-in-things-you-can-have" rel="bookmark" title="Permanent Link to Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …">Unfathomable Bugs #1: You can have things! You can have things IN things! You can have …</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post83_coroutines-more-than-you-want-to-know" rel="bookmark" title="Permanent Link to Coroutines – More than you want to know">Coroutines – More than you want to know</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post74_asset-bundle-helper" rel="bookmark" title="Permanent Link to Asset Bundle Helper">Asset Bundle Helper</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post60_the-visual-studio-goes-away" rel="bookmark" title="Permanent Link to The Visual Studio goes away">The Visual Studio goes away</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post57_nets-time-traveling-stopwatch" rel="bookmark" title="Permanent Link to .Net’s time traveling StopWatch">.Net’s time traveling StopWatch</a></li>
+     <li><a href="http://twistedoakstudios.com/blog/Post29_introducing-catalyst" rel="bookmark" title="Permanent Link to Introducing Catalyst">Introducing Catalyst</a></li>
+  </ul>
+<p></p>
+
+
+			</div><!-- #content -->
+			</section>
+
+			</div>
+		</div><!-- #container -->
+
+
+</span></div><!-- .container -->
+
+ <div id="upprev_box" style="right: -400px;">
+	<h6>
+		More interesting posts <span class="num"> (2 of 25 articles)</span>
+	</h6>
+	<div class="upprev_excerpt">
+		<p>
+			<a href="http://twistedoakstudios.com/blog/Post7254_visualizing-the-eigenvectors-of-a-rotation" rel="prev">Visualizing the Eigenvectors of a Rotation</a>
+		</p>
+	</div>
+	
+		<p>
+Or check out our <a href="http://twistedoakstudios.com/portfolio">Portfolio</a>.		</p><button id="upprev_close" type="button">Close</button>
+</div><!-- #upprev_box -->
+<link rel="stylesheet" id="al2fb_style-css" href="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/add-link-to-facebook.css" type="text/css" media="all">
+<link rel="stylesheet" id="admin-bar-css" href="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/admin-bar.css" type="text/css" media="all">
+<link rel="stylesheet" id="upprev-css-css" href="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/upprev.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-quicklatex-format-css" href="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/quicklatex-format.css" type="text/css" media="all">
+<script type="text/javascript" src="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/admin-bar.js"></script>
+<script type="text/javascript" src="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/jquery_002.js"></script>
+<script type="text/javascript" src="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/upprev_js.php"></script>
+<script type="text/javascript" src="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/comment-reply.js"></script>
+	<script type="text/javascript">
+		(function() {
+			var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
+
+			request = true;
+
+			b[c] = b[c].replace( rcs, ' ' );
+			b[c] += ( window.postMessage && request ? ' ' : ' no-' ) + cs;
+		}());
+	</script>
+			
+
+		 
+<!-- BEGIN footer-type stuff -->
+<div class="container footer-container">
+	<div class="row">
+		
+		<div class="fourcol last"><!-- .last b/c it's floated right -->
+      <!-- home portfolio used to be here -->
+		</div>
+
+		<div class="eightcol" id="contact">
+			<p>Twisted Oak Studios<br>
+				138-1657 Barrington St.<br>
+				Halifax, NS, Canada B3J 2A1</p>
+			
+			<p>001-902-237-7326<br>
+			<a href="mailto:contact@twistedoakstudios.com">contact@twistedoakstudios.com</a></p>
+		</div>
+
+		<div class="twelvecol">
+			<footer>
+				<small>©2012
+					<script>
+						var d=new Date(); 
+						yr=d.getFullYear();
+						if (yr!=2012)
+						document.write("- "+yr);
+					</script>- 2013 Twisted Oak Studios Ltd. -- All Rights Reserved -- All images and logos are property of their respective owners.
+				</small>
+			</footer>
+		</div>
+		
+		
+	</div><!-- .row -->
+</div><!-- .container -->
+<!-- END footer stuff-->
+
+<!-- jQuery and scrolly script for contact link -->
+<script src="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<script src="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/scrolly.js"></script>
+
+
+  <!-- Don't forget Analytics! -->
+
+
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31441525-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<div id="wpadminbar" class="nojq " role="navigation">
+			<a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1">Skip to toolbar</a>
+			<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Top navigation toolbar." tabindex="0">
+				<ul id="wp-admin-bar-root-default" class="ab-top-menu">
+		<li id="wp-admin-bar-wp-logo" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/about.php" title="About WordPress"><span class="ab-icon"></span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-wp-logo-default" class="ab-submenu">
+		<li id="wp-admin-bar-about"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/about.php">About WordPress</a>		</li></ul><ul id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu">
+		<li id="wp-admin-bar-wporg"><a class="ab-item" href="http://wordpress.org/">WordPress.org</a>		</li>
+		<li id="wp-admin-bar-documentation"><a class="ab-item" href="http://codex.wordpress.org/">Documentation</a>		</li>
+		<li id="wp-admin-bar-support-forums"><a class="ab-item" href="http://wordpress.org/support/">Support Forums</a>		</li>
+		<li id="wp-admin-bar-feedback"><a class="ab-item" href="http://wordpress.org/support/forum/requests-and-feedback">Feedback</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-site-name" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/">Twisted Oak Studios Blog</a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-site-name-default" class="ab-submenu">
+		<li id="wp-admin-bar-dashboard"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/">Dashboard</a>		</li></ul><ul id="wp-admin-bar-appearance" class="ab-submenu">
+		<li id="wp-admin-bar-themes"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/themes.php">Themes</a>		</li>
+		<li id="wp-admin-bar-customize" class="hide-if-no-customize"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/customize.php?url=http%3A%2F%2Ftwistedoakstudios.com%2Fblog%2FPost7391_cancellation-tokens-and-collapsing-futures-for-objective-c">Customize</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-updates"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/update-core.php" title="3 Plugin Updates, 3 Theme Updates"><span class="ab-icon"></span><span class="ab-label">6</span><span class="screen-reader-text">3 Plugin Updates, 3 Theme Updates</span></a>		</li>
+		<li id="wp-admin-bar-comments"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/edit-comments.php" title="0 comments awaiting moderation"><span class="ab-icon"></span><span id="ab-awaiting-mod" class="ab-label awaiting-mod pending-count count-0">0</span></a>		</li>
+		<li id="wp-admin-bar-new-content" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php" title="Add New"><span class="ab-icon"></span><span class="ab-label">New</span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-new-content-default" class="ab-submenu">
+		<li id="wp-admin-bar-new-post"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php">Post</a>		</li>
+		<li id="wp-admin-bar-new-media"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/media-new.php">Media</a>		</li>
+		<li id="wp-admin-bar-new-link"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/link-add.php">Link</a>		</li>
+		<li id="wp-admin-bar-new-page"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post-new.php?post_type=page">Page</a>		</li>
+		<li id="wp-admin-bar-new-user"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/user-new.php">User</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-edit"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/post.php?post=7391&amp;action=edit">Edit Post</a>		</li></ul><ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
+		<li id="wp-admin-bar-search" class="admin-bar-search"><div class="ab-item ab-empty-item" tabindex="-1"><form action="http://twistedoakstudios.com/blog/" method="get" id="adminbarsearch"><input class="adminbar-input" name="s" id="adminbar-search" maxlength="150" type="text"><input class="adminbar-button" value="Search" type="submit"></form></div>		</li>
+		<li id="wp-admin-bar-my-account" class="menupop with-avatar"><a class="ab-item" aria-haspopup="true" href="http://twistedoakstudios.com/blog/wp-admin/profile.php" title="My Account">Howdy, Craig Gidney<img alt="" src="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/31a6ce579f8f9f9d528715d1e941726e.png" class="avatar avatar-16 photo" width="16" height="16"></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-user-actions" class="ab-submenu">
+		<li id="wp-admin-bar-user-info"><a class="ab-item" tabindex="-1" href="http://twistedoakstudios.com/blog/wp-admin/profile.php"><img alt="" src="Cancellation%20Tokens%20%28and%20Collapsing%20Futures%29%20for%20Objective-C_files/31a6ce579f8f9f9d528715d1e941726e_002.png" class="avatar avatar-64 photo" width="64" height="64"><span class="display-name">Craig Gidney</span><span class="username">craig</span></a>		</li>
+		<li id="wp-admin-bar-edit-profile"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-admin/profile.php">Edit My Profile</a>		</li>
+		<li id="wp-admin-bar-logout"><a class="ab-item" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=8f8dfa30f4">Log Out</a>		</li></ul></div>		</li></ul>			</div>
+			<a class="screen-reader-shortcut" href="http://twistedoakstudios.com/blog/wp-login.php?action=logout&amp;_wpnonce=8f8dfa30f4">Log Out</a>
+		</div></body></html>
