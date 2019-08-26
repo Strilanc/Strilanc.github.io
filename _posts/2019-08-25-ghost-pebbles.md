@@ -234,3 +234,5 @@ People often say that, in principle, quantum computation can be performed using 
 But in the real world, where we can't get anywhere near the Laundauer limit, the way to minimize energy usage is to reduce operation count.
 Measurement based uncomputation intrinsically generates entropy (due to the X basis measurements), but it uses significantly fewer operations.
 So, ironically, we will optimize the energy usage of quantum computations not by staying pure to our reversible Landauer-less roots but instead by using an irreversible form of uncomputation that generates entropy.
+
+[View r/algassert comment thread](https://www.reddit.com/r/algassert/comments/cvk6z1/comment_thread_spooky_pebble_games_and/)
