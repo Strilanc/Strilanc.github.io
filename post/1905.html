@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Spooky Pebble Games and Irreversible Uncomputation</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Spooky Pebble Games and Irreversible Uncomputation</h1>
+<p class="meta">25 Aug 2019</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>In this post: extending pebble games to include measurement based uncomputation.</p>
+
+<p>A <a href="https://en.wikipedia.org/wiki/Pebble_game">pebble game</a> is a simplified abstraction of a reversible computation.
+A pebble game is played on a directed acyclic graph.
+Every node of the graph represents some intermediate value that can be computed and uncomputed.
+At any given time the value is either computed (in which case the node has a pebble) or not (in which case the node is empty).
+Introducing a pebble onto a node corresponds to computing its intermediate value.
+Removing the pebble corresponds to uncomputing that value.
+If all of a node&#39;s incoming neighbors have a pebble, you can toggle whether or not that node has a pebble.
+The goal is to go from the initial state (no pebbles) to the state where the output node(s) have a pebble, while minimizing operations (number of times you add/remove a pebble), space (maximum number of pebbles simultaneously present), etc.</p>
+
+<p>Quantum computations can often be modelled as pebble games, because maintaining coherence typically requires reversibility.
+A notable exception to this rule of thumb is measurement based uncomputation.
+The goal of an uncomputation is to reduce the redundant state $\sum_k \alpha_k |k,f(k)\rangle$ to the compressed state $\sum_k \alpha_k |k\rangle$.
+A measurement based uncomputation is a probabilistic method for performing this operation.
+It starts by measuring the redundant qubit $q=|f(k)\rangle$ in the X basis and discarding $q$.
+If the measurement result was False (meaning $|+\rangle$), then the uncomputation succeeded; the system returned to the desired state.
+If the measurement result was True (meaning $|-\rangle$), then the system ended up in the state $\sum_k \alpha_k |k\rangle (-1)^{f(k)}$ instead of the desired state (note the extra phase factor of $(-1)^{f(k)}$).
+In this case the uncomputation is finished by applying operations that cancel the unwanted phase:</p>
+
+<p><img src="/assets/2019-08-25-ghost-pebbles/uncomputation.png" title="measurement based uncomputation"  style="max-width: 100%"/></p>
+
+<p>(Note that it&#39;s usually trivial to take a method for computing $f$ <a href="/post/1719">and derive a slightly cheaper method</a> to phase by $(-1)^{f}$.
+Sometimes there are non-trivial optimizations that make it significantly cheaper.)</p>
+
+<p>Because the uncomputed qubit is a function of other qubits in the computational basis, measuring it in the X basis will generate one bit of entropy.
+The measurement has a 50/50 random result.
+This means that, when uncomputing a single qubit, half of the time you don&#39;t have to do anything and half of the time you do the work that&#39;s slightly easier than the work you&#39;d have had to if uncomputing by exactly reversing the computation.
+(When uncomputing large multi-qubit registers, the benefit may be less because the chance of having to do nothing becomes exponentially small.)</p>
+
+<h1>Measurement Based Uncomputation in Pebble Games</h1>
+
+<p>In the context of a pebble game, there are two things that make measurement based uncomputation interesting.
+First, even if you can&#39;t <em>currently</em> compute or uncompute $f$, you can remove $f$&#39;s output from memory by measuring the output in the X basis.
+You will eventually need to correct any resulting phase error, but that can be done at a later time.
+Second, there is a chance that just doing the X basis measurements is enough to uncompute $f$.
+Both of these facts have large consequences on the cost of uncomputation.</p>
+
+<p>Before we go into examples of how measurement based uncomputation can save space and time in pebble games, we need to extend pebble games to include the concept.
+Basically we no longer require all of a pebble&#39;s dependencies to be present in order to remove the pebble.
+You can remove a pebble at any time.
+However, if a dependency is missing when you remove a pebble from a node, then there is a 50/50 chance that the node will now contain a <em>ghost</em>.
+A ghost can be removed from a node if all of its dependencies are present, and the pebbling task is not complete until all ghosts have been removed from the graph.
+I&#39;ll refer to pebble games that allow uncomputation ghosts as <em>spooky pebble games</em>.</p>
+
+<p>Let $S(G)$ be the space required to pebble the graph $G$.
+That is to say, $S(G)$ is the maximum number of pebbles that will be simultaneously present when pebbling across the graph $G$ using an optimal strategy.
+Let $T(G)$ be the time required to pebble $G$.
+That is to say, $T(G)$ is the total number of steps (adding a pebble, ghosting a pebble, or removing a pebble/ghost) used when pebbling across the graph $G$ using an optimal strategy.</p>
+
+<p>Consider the line graph $L_n$ of $n$ nodes arranged into a directed path.
+Our goal is to reach the state where there is a pebble on the node at the end of path, and no pebbles or ghosts anywhere else in the graph.
+I will now show how having access to ghosts makes this task less expensive.</p>
+
+<h1>Saving space when pebbling the line graph</h1>
+
+<p>In a normal pebble game, $S(L_n)$ is at least $\Omega(\lg n)$.
+The number of pebbles needed to travel across the line graph grows as the length of the line grows.
+(Exercise for the reader: prove it.)
+An example of a strategy that pebbles $L_n$ using $\Theta(\lg n)$ space is the following divide and conquer approach.
+Recurse on the first half to place a pebble at position $n/2$, then recurse on the second half to place a pebble at position $n$, then recurse on the first half to remove the pebble at position $n/2$.
+This simple strategy has a time complexity of $T(n) = 3T(n/2) = \Theta(n^{\log_2 3}) \approx \Theta(n^{1.58})$.</p>
+
+<p><img src="/assets/2019-08-25-ghost-pebbles/DivideAndConquerNormal.gif" title="Minimum space divide and conquer strategy for normal pebble game over line graph" style="max-width: 100%"/></p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">function</span> <span class="nx">normalDivideAndConquer</span><span class="p">(</span><span class="nx">offset</span><span class="p">,</span> <span class="nx">length</span><span class="p">,</span> <span class="nx">action</span><span class="o">=</span><span class="nx">ADD_PEBBLE</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Base cases.</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">act</span><span class="p">(</span><span class="nx">action</span><span class="p">,</span> <span class="nx">offset</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">let</span> <span class="nx">h</span> <span class="o">=</span> <span class="p">(</span><span class="nx">length</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="c1">// Recursively place pebble at midpoint.</span>
+    <span class="nx">normalDivideAndConquer</span><span class="p">(</span><span class="nx">offset</span><span class="p">,</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">ADD_PEBBLE</span><span class="p">);</span>
+    <span class="c1">// Recursively place pebble at endpoint from midpoint.</span>
+    <span class="nx">normalDivideAndConquer</span><span class="p">(</span><span class="nx">offset</span> <span class="o">+</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">length</span> <span class="o">-</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">action</span><span class="p">);</span>
+    <span class="c1">// Recursively clear midpoint.</span>
+    <span class="nx">normalDivideAndConquer</span><span class="p">(</span><span class="nx">offset</span><span class="p">,</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">CLEAR_PEBBLE</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>In a spooky pebble game, the space <em>doesn&#39;t</em> have to grow with $n$.
+In fact, $S(L_n) = 3$.
+The strategy that achieves this is quite simple:
+you can slide a pebble across the graph by adding a pebble in front of the current position $k$ and then ghosting the pebble at $k$.
+This allows you to get the required pebble to position $n$ using only two pebbles, but leaves behind ghosts at potentially all positions less than $n$.
+You remove the ghosts by iteratively sliding a pebble up to the point just before the furthest ghost, using the pebble to remove the ghost, then ghosting the pebble.
+Repeat until complete.</p>
+
+<p><img src="/assets/2019-08-25-ghost-pebbles/ConstantSpaceSpooky.gif" title="Constant space strategy for spooky pebble game over line graph" style="max-width: 100%"/></p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">function</span> <span class="nx">constantSpace</span><span class="p">(</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">remaining</span> <span class="o">=</span> <span class="nx">length</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="nx">remaining</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Slide pebble to just before the furthest space that needs to be modified.</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">remaining</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">act</span><span class="p">(</span><span class="nx">ADD_PEBBLE</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">act</span><span class="p">(</span><span class="nx">GHOST</span><span class="p">,</span> <span class="nx">i</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Fix furthest space.</span>
+        <span class="nx">act</span><span class="p">(</span><span class="nx">remaining</span> <span class="o">===</span> <span class="nx">length</span> <span class="o">?</span> <span class="nx">ADD_PEBBLE</span> <span class="o">:</span> <span class="nx">CLEAR_PEBBLE</span><span class="p">,</span> <span class="nx">remaining</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>        
+        <span class="nx">remaining</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+
+        <span class="c1">// Ghost earlier pebble and find next space that needs to be fixed.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">remaining</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">act</span><span class="p">(</span><span class="nx">GHOST</span><span class="p">,</span> <span class="nx">remaining</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">while</span> <span class="p">(</span><span class="nx">remaining</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">state</span><span class="p">[</span><span class="nx">remaining</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">remaining</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This solves the graph using three pebbles (one to leave at position $n$, one to slide across the graph, and one to assist with the sliding).
+The time complexity is quadratic, which is not very good, but the space complexity is amazing.</p>
+
+<h1>Saving time when pebbling the line graph</h1>
+
+<p>The divide and conquer strategy used to solve the normal pebble game in minimal space can have its time complexity lowered by using ghosts.
+Instead of always recursing to remove the middle pebble, we ghost it and then recurse only if necessary (meaning the third recursive call is needed half as often).</p>
+
+<p><img src="/assets/2019-08-25-ghost-pebbles/DivideAndConquerSpooky.gif" title="Divide and conquer strategy for spooky pebble game over line graph" style="max-width: 100%"/></p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">function</span> <span class="nx">divideGhostAndConquer</span><span class="p">(</span><span class="nx">offset</span><span class="p">,</span> <span class="nx">length</span><span class="p">,</span> <span class="nx">action</span><span class="o">=</span><span class="nx">ADD_PEBBLE</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Base cases.</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">act</span><span class="p">(</span><span class="nx">action</span><span class="p">,</span> <span class="nx">offset</span><span class="p">);</span>
+      <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">let</span> <span class="nx">h</span> <span class="o">=</span> <span class="p">(</span><span class="nx">length</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="c1">// Recursively place pebble at midpoint.</span>
+    <span class="nx">divideGhostAndConquer</span><span class="p">(</span><span class="nx">offset</span><span class="p">,</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">ADD_PEBBLE</span><span class="p">);</span>
+    <span class="c1">// Recursively place pebble at endpoint from midpoint.</span>
+    <span class="nx">divideGhostAndConquer</span><span class="p">(</span><span class="nx">offset</span> <span class="o">+</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">length</span> <span class="o">-</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">action</span><span class="p">);</span>
+    <span class="c1">// Ghost the midpoint.</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">act</span><span class="p">(</span><span class="nx">GHOST</span><span class="p">,</span> <span class="nx">offset</span> <span class="o">+</span> <span class="nx">h</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="p">{</span>
+        <span class="c1">// Recursively clean up ghost only if needed.</span>
+        <span class="nx">divideGhostAndConquer</span><span class="p">(</span><span class="nx">offset</span><span class="p">,</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">CLEAR_PEBBLE</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Ghosting the midpoint pebble reduces the expected time complexity from $\approx \Theta(n^{1.58})$ to $T(n) = 2.5 T(n/2) = \Theta(n^{\log_2 2.5}) \approx \Theta(n^{1.32})$.
+Note that the time complexity improved asymptotically, even though we didn&#39;t really do anything particularly different.
+We didn&#39;t even use additional workspace.
+(Often we use slightly less!)</p>
+
+<p>We can improve the time even more by noticing that a ghost produced during the first recursive call doesn&#39;t have to be cleaned up right away.
+It can be cleaned up during the third recursive call.
+This suggests a strategy where we always perform the third recursive call but, during the first recursive call, we set a flag that says &quot;don&#39;t bother cleaning up ghosts&quot;.
+In effect, this is a new strategy where we slide a single pebble across half of the graph, recurse on the second half, then recursively clean up the first half.</p>
+
+<p><img src="/assets/2019-08-25-ghost-pebbles/SweepAndCleanSpooky.gif" title="Sweep and clean strategy for spooky pebble game over line graph" style="max-width: 100%"/></p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">function</span> <span class="nx">sweepAndClean</span><span class="p">(</span><span class="nx">offset</span><span class="p">,</span> <span class="nx">length</span><span class="p">,</span> <span class="nx">action</span><span class="o">=</span><span class="nx">ADD_PEBBLE</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Base cases.</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">act</span><span class="p">(</span><span class="nx">action</span><span class="p">,</span> <span class="nx">offset</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">act</span><span class="p">(</span><span class="nx">ADD_PEBBLE</span><span class="p">,</span> <span class="nx">offset</span><span class="p">);</span>
+        <span class="nx">act</span><span class="p">(</span><span class="nx">action</span><span class="p">,</span> <span class="nx">offset</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="nx">act</span><span class="p">(</span><span class="nx">CLEAR_PEBBLE</span><span class="p">,</span> <span class="nx">offset</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Slide pebble to mid point.</span>
+    <span class="kd">let</span> <span class="nx">h</span> <span class="o">=</span> <span class="p">(</span><span class="nx">length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">h</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">act</span><span class="p">(</span><span class="nx">ADD_PEBBLE</span><span class="p">,</span> <span class="nx">offset</span><span class="o">+</span><span class="nx">i</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">act</span><span class="p">(</span><span class="nx">GHOST</span><span class="p">,</span> <span class="nx">offset</span><span class="o">+</span><span class="nx">i</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Recursively solve second half.</span>
+    <span class="nx">sweepAndClean</span><span class="p">(</span><span class="nx">offset</span><span class="o">+</span><span class="nx">h</span><span class="p">,</span> <span class="nx">length</span><span class="o">-</span><span class="nx">h</span><span class="p">,</span> <span class="nx">action</span><span class="p">);</span>
+
+    <span class="c1">// Ghost the midpoint pebble.</span>
+    <span class="nx">act</span><span class="p">(</span><span class="nx">GHOST</span><span class="p">,</span> <span class="nx">offset</span><span class="o">+</span><span class="nx">h</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+
+    <span class="c1">// Recursively clean up the first half.</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nx">h</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">state</span><span class="p">[</span><span class="nx">offset</span><span class="o">+</span><span class="nx">h</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">h</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">sweepAndClean</span><span class="p">(</span><span class="nx">offset</span><span class="p">,</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">CLEAR_PEBBLE</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This gives the much better time complexity of $T(n) = \Theta(n) + 2 T(n/2) = \Theta(n \lg n)$, while still using $\lg n$ space.</p>
+
+<p>I could give lots more examples (e.g. involving linear time strategies for $L_n$, or involving other graphs), but I hope these simple ones get the point across.
+Having access to measurement based uncomputation can result not just in constant factor time savings when uncomputing, but in asymptotic space and time savings when both computing and uncomputing.</p>
+
+<h1>Summary</h1>
+
+<p>Spooky pebble games are pebble games augmented with the ability to model measurement based uncomputation.
+A measurement based uncomputation can remove any pebble at any time, but has some probability of leaving behind a ghost.
+Ghosts can&#39;t fulfill a dependency and have to be cleaned up, but don&#39;t take up space and can be removed in the same way that a pebble would be.
+Spooky pebble games often have more efficient solutions than normal pebble games, because they allow space to be reclaimed before an uncomputation starts instead of after it ends.</p>
+
+<p>People often say that, in principle, quantum computation can be performed using zero energy because it is reversible and therefore bypasses the <a href="https://en.wikipedia.org/wiki/Landauer%27s_principle">Landauer limit</a>.
+But in the real world, where we can&#39;t get anywhere near the Laundauer limit, the way to minimize energy usage is to reduce operation count.
+Measurement based uncomputation intrinsically generates entropy (due to the X basis measurements), but it uses significantly fewer operations.
+So, ironically, we will optimize the energy usage of quantum computations not by staying pure to our reversible Landauer-less roots but instead by using an irreversible form of uncomputation that generates entropy.</p>
+
+</div>
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1904">&laquo; The Frauchiger-Renner Paradox is a Sleeping Beauty Problem</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
