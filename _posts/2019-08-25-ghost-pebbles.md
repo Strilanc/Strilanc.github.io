@@ -222,6 +222,10 @@ This gives the much better time complexity of $T(n) = \Theta(n) + 2 T(n/2) = \Th
 I could give lots more examples (e.g. involving linear time strategies for $L\_n$, or involving other graphs), but I hope these simple ones get the point across.
 Having access to measurement based uncomputation can result not just in constant factor time savings when uncomputing, but in asymptotic space and time savings when both computing and uncomputing.
 
+Spooky challenges for the reader:
+
+- Pebble $L\_n$ in less than quadratic time using a constant number of pebbles.
+- Pebble $L\_n$ in linear time using less than $\Omega(\sqrt{n})$ space.
 
 # Summary
 
