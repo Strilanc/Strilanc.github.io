@@ -135,7 +135,7 @@ async function sweepAndClean(offset, length, action=ADD_PEBBLE) {
     await sweepAndClean(offset, h, CLEAR_PEBBLE);
 }
 
-async function constantSpace(length) {
+async function constantSpace(_, length) {
     let remaining = length;
 
     while (remaining > 0) {
