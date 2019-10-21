@@ -52,5 +52,6 @@ Apparently the authors had discussed the trick and how to reply at length, but h
 They weren't quite sure how to incorporate the result into the paper.
 In fact, that's the main reason I'm making this blog post: so they have something they can cite.
 
+[View r/algassert comment thread](https://reddit.com/r/algassert/comments/dl3v28/comment_thread_producing_an_n1_qubit_ccz_state/)
 
 [1]: https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22inputA4%22%2C1%2C1%2C1%2C%22%2B%3DA4%22%5D%2C%5B%22%3E%3E4%22%5D%2C%5B1%2C1%2C1%2C1%2C%22X%22%2C%22X%22%2C%22X%22%2C%22H%22%5D%2C%5B1%2C1%2C1%2C%22Amps5%22%5D%2C%5B%5D%2C%5B%5D%2C%5B1%2C1%2C1%2C%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22Z%22%5D%2C%5B1%2C1%2C1%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B1%2C1%2C1%2C%22Amps5%22%5D%5D%2C%22init%22%3A%5B%22%2B%22%2C0%2C0%2C0%2C%22%2B%22%2C%22%2B%22%2C%22%2B%22%5D%7D
