@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Producing an N+1 Qubit CCZ State with an N Qubit Adder</title>
+                <description>&lt;p&gt;Back in April, I read the pre-print &lt;a href=&quot;https://arxiv.org/abs/1904.01124&quot;&gt;&amp;quot;Lower bounds on the non-Clifford resources for quantum computations&amp;quot; by Beverland et al.&lt;/a&gt;. It defines an amazingly simple metric, the &amp;quot;stabilizer nullity&amp;quot; of a state, which is the number of qubits in the state minus the number of Pauli product stabilizers of...</description>
+                <pubDate>Sun, 20 Oct 2019 11:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/1906</link>
+                <guid isPermaLink="true">http://algassert.com/post/1906</guid>
+            </item>
+            <item>
                 <title>Spooky Pebble Games and Irreversible Uncomputation</title>
                 <description>&lt;p&gt;In this post: extending pebble games to include measurement based uncomputation.&lt;/p&gt; &lt;p&gt;A &lt;a href=&quot;https://en.wikipedia.org/wiki/Pebble_game&quot;&gt;pebble game&lt;/a&gt; is a simplified abstraction of a reversible computation. A pebble game is played on a directed acyclic graph. Every node of the graph represents some intermediate value that can be computed and uncomputed. At any...</description>
                 <pubDate>Sun, 25 Aug 2019 11:10:10 -0700</pubDate>
@@ -68,13 +75,6 @@
                 <pubDate>Sun, 20 May 2018 11:10:10 -0700</pubDate>
                 <link>http://algassert.com/post/1805</link>
                 <guid isPermaLink="true">http://algassert.com/post/1805</guid>
-            </item>
-            <item>
-                <title>A Slightly Larger S Gate</title>
-                <description>&lt;p&gt;This is a followup to a post from last year, &lt;a href=&quot;/post/1715&quot;&gt;&amp;quot;A Slightly Smaller Surface Code S Gate&amp;quot;&lt;/a&gt;, where I showed that the S gate construction from &lt;a href=&quot;https://arxiv.org/abs/1208.0928&quot;&gt;here&lt;/a&gt; could be simplified by replacing a Hadamard operation with a Pauli operation. (It&amp;#39;s better because Hadamards need spacetime volume, but Paulis...</description>
-                <pubDate>Mon, 23 Apr 2018 14:10:20 -0700</pubDate>
-                <link>http://algassert.com/post/1804</link>
-                <guid isPermaLink="true">http://algassert.com/post/1804</guid>
             </item>
     </channel>
 </rss>
