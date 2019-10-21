@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Producing an N+1 Qubit CCZ State with an N Qubit Adder</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Producing an N+1 Qubit CCZ State with an N Qubit Adder</h1>
+<p class="meta">20 Oct 2019</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Back in April, I read the pre-print <a href="https://arxiv.org/abs/1904.01124">&quot;Lower bounds on the non-Clifford resources for quantum computations&quot; by Beverland et al.</a>.
+It defines an amazingly simple metric, the &quot;stabilizer nullity&quot; of a state, which is the number of qubits in the state minus the number of Pauli product stabilizers of the state.
+The authors of the pre-print then use this metric to prove tight lower bounds on the number of magic states needed to produce/perform certain states/operations.</p>
+
+<p>For example, the pre-print proves that you need to consume at least $N-2$ three-qubit CCZ states to produce one $N$ qubit CCZ state.
+By &quot;$N$ qubit CCZ state&quot; I mean the uniform superposition over all computational basis values of $N$ qubits, except the all-ones state has a negated phase.
+Algebraically, the state $\sum_{k=0}^{2^N-1} (-1)^{\left(k = 2^{N-1}\right)} |k\rangle$.</p>
+
+<p>The pre-print also proves that at least $N-2$ three qubit CCZ states are needed to perform an $N$ qubit adder, and conjectures that this lower bound could be improved to $N-1$.
+Which brings us to the subject of this post because, as soon as I saw that conjecture, right next to the lower bound on the CCZ state, I had an idea for how to solve one using the other.</p>
+
+<p>Every $N$-qubit adder secretly has an $N+1$ qubit CCZ operation hiding inside of it.
+An adder can be decomposed into a series of controlled increments: for eack $k$, increment the $N-k$ high bits of the target controlled by the $k$&#39;th bit of the input.
+An $N$ qubit controlled increment can be decomposed into an uncontrolled $N+1$ qubit increment and a bit flip.
+An $N+1$ qubit increment can be decomposed into a triangle of C..CNOT gates, with the largest covering $N+1$ qubits.
+Conjugate the largest C..CNOT by Hadamards, and you have your $N+1$ qubit CCZ.
+So basically my idea was to try to find some way to avoid everything within the adder except for this one huge $N+1$ qubit $CCZ$ operation, and thereby produce an $N+1$ qubit CCZ state.</p>
+
+<p>With my half-thought-out intuition in hand, I set to work.
+I openned up Quirk, plopped down an adder, made a guess at what separable input states the adder would entangle the most, noticed the guess was wrong but looked close, then tweaked for a few minutes.
+I know that&#39;s not a particularly, uh, &quot;reproducible&quot; description.
+I&#39;m sure I could give a more reproducible-by-others explanation... but then that explanation wouldn&#39;t really be how I solved the problem.
+Sometimes quickly iterating on half-thought-out intuitions really is the right strategy.</p>
+
+<p>Anyways, <a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22inputA4%22%2C1%2C1%2C1%2C%22%2B%3DA4%22%5D%2C%5B%22%3E%3E4%22%5D%2C%5B1%2C1%2C1%2C1%2C%22X%22%2C%22X%22%2C%22X%22%2C%22H%22%5D%2C%5B1%2C1%2C1%2C%22Amps5%22%5D%2C%5B%5D%2C%5B%5D%2C%5B1%2C1%2C1%2C%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22Z%22%5D%2C%5B1%2C1%2C1%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B1%2C1%2C1%2C%22Amps5%22%5D%5D%2C%22init%22%3A%5B%22%2B%22%2C0%2C0%2C0%2C%22%2B%22%2C%22%2B%22%2C%22%2B%22%5D%7D">here is the circuit I found</a>:</p>
+
+<p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22inputA4%22%2C1%2C1%2C1%2C%22%2B%3DA4%22%5D%2C%5B%22%3E%3E4%22%5D%2C%5B1%2C1%2C1%2C1%2C%22X%22%2C%22X%22%2C%22X%22%2C%22H%22%5D%2C%5B1%2C1%2C1%2C%22Amps5%22%5D%2C%5B%5D%2C%5B%5D%2C%5B1%2C1%2C1%2C%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22Z%22%5D%2C%5B1%2C1%2C1%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B1%2C1%2C1%2C%22Amps5%22%5D%5D%2C%22init%22%3A%5B%22%2B%22%2C0%2C0%2C0%2C%22%2B%22%2C%22%2B%22%2C%22%2B%22%5D%7D"><img src="/assets/2019-10-20-adder-cost/circuit.png" title="producing CCZ state from Adder" style="max-width: 100%"/></a></p>
+
+<p>Prepare the input register into the (big endian) state $|0\rangle^{\otimes N-1} |+\rangle$ and the target register into the (big endian) state $|+\rangle^{\otimes N-1} |0\rangle$.
+Apply the adder.
+Apply an X gate to every qubit of the target register, except for the most significant qubit where you apply a Hadamard gate instead.
+The result is an $N+1$ qubit CCZ state over the qubits of the target register and the least significant qubit of the input register.</p>
+
+<p>Because we produced an $N+1$ qubit CCZ state using one $N$ qubit adder, and Beverland et al proved you need at least $N+1-2=N-1$ three qubit CCZ states to produce an $N+1$ qubit CCZ state, performing an $N$ qubit adder using three qubit CCZ states must consume at least $N-1$ three qubit CCZ states.</p>
+
+<h1>Closing Remarks</h1>
+
+<p>After figuring this out way back in April, I sent an email to the authors.
+There was no response, so I assumed they didn&#39;t think much of it.
+But then I met Michael Beverland at QEC2019 and he brought it up immediately.
+He even <a href="https://youtu.be/dztngvY_sb4?t=2559">mentioned it in his presentation</a>!
+Apparently the authors had discussed the trick and how to reply at length, but had ultimately forgotten to (oops) actually reply.
+They weren&#39;t quite sure how to incorporate the result into the paper.
+In fact, that&#39;s the main reason I&#39;m making this blog post: so they have something they can cite.</p>
+
+</div>
+
+
+    </div>
+
+    <table style="width: 100%;">
+      <tr>
+        <td align="left">
+          <a href="/post/1905">&laquo; Spooky Pebble Games and Irreversible Uncomputation</a>
+        </td>
+        <td align="right">
+          
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
