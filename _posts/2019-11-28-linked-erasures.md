@@ -147,4 +147,4 @@ Strings can't do that.
 You can "error correct" erasures by simply using observables that don't touch the erasures.
 The only erasure that can destroy a logical qubit is a contiguous erasure connecting two logically disconnected boundaries.
 
-
+[View r/algassert comment thread](https://reddit.com/r/algassert/comments/e4bmy1/comment_thread_surviving_chain_link_erasures/)
