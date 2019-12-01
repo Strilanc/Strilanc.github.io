@@ -7,9 +7,9 @@ permalink: post/1906
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
 
-Back in April, I read the pre-print ["Lower bounds on the non-Clifford resources for quantum computations" by Beverland et al.](https://arxiv.org/abs/1904.01124).
+Back in April, I read the pre-print ["Lower bounds on the non-Clifford resources for quantum computations" by Beverland, Campbell, Howard, and Kliuchnikov](https://arxiv.org/abs/1904.01124).
 It defines an amazingly simple metric, the "stabilizer nullity" of a state, which is the number of qubits in the state minus the number of Pauli product stabilizers of the state.
-The authors of the pre-print then use this metric to prove tight lower bounds on the number of magic states needed to produce/perform certain states/operations.
+The authors of the pre-print then use this metric (and some others) to prove tight lower bounds on the number of magic states needed to produce/perform certain states/operations.
 
 For example, the pre-print proves that you need to consume at least $N-2$ three-qubit CCZ states to produce one $N$ qubit CCZ state.
 By "$N$ qubit CCZ state" I mean the uniform superposition over all computational basis values of $N$ qubits, except the all-ones state has a negated phase.
@@ -26,7 +26,7 @@ Conjugate the largest C..CNOT by Hadamards, and you have your $N+1$ qubit CCZ.
 So basically my idea was to try to find some way to avoid everything within the adder except for this one huge $N+1$ qubit $CCZ$ operation, and thereby produce an $N+1$ qubit CCZ state.
 
 With my half-thought-out intuition in hand, I set to work.
-I openned up Quirk, plopped down an adder, made a guess at what separable input states the adder would entangle the most, noticed the guess was wrong but looked close, then tweaked for a few minutes.
+I opened up Quirk, plopped down an adder, made a guess at what separable input states the adder would entangle the most, noticed the guess was wrong but looked close, then tweaked for a few minutes.
 I know that's not a particularly, uh, "reproducible" description.
 I'm sure I could give a more reproducible-by-others explanation... but then that explanation wouldn't really be how I solved the problem.
 Sometimes quickly iterating on half-thought-out intuitions really is the right strategy.
@@ -35,7 +35,7 @@ Anyways, [here is the circuit I found][1]:
 
 [<img src="/assets/{{ loc }}/circuit.png" title="producing CCZ state from Adder" style="max-width: 100%"/>][1]
 
-Prepare the input register into the (big endian) state $|0\rangle^{\otimes N-1} |+\rangle$ and the target register into the (big endian) state $|+\rangle^{\otimes N-1} |0\rangle$.
+Prepare the input register into the (little endian) state $|0\rangle^{\otimes N-1} |+\rangle$ and the target register into the (little endian) state $|+\rangle^{\otimes N-1} |0\rangle$.
 Apply the adder.
 Apply an X gate to every qubit of the target register, except for the most significant qubit where you apply a Hadamard gate instead.
 The result is an $N+1$ qubit CCZ state over the qubits of the target register and the least significant qubit of the input register.
