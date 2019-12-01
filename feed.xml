@@ -7,8 +7,15 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Surviving Chain Link Erasures</title>
+                <description>&lt;p&gt;An &amp;quot;erasure&amp;quot; is a quantum error where you accidentally lose a qubit (or reset a qubit), but realize that this happened. Erasures are common in quantum computers based on photons, for example. Although it sounds really bad to lose a qubit, the fact that you &lt;em&gt;know&lt;/em&gt; when erasures happen actually...</description>
+                <pubDate>Thu, 28 Nov 2019 10:10:10 -0800</pubDate>
+                <link>http://algassert.com/post/1907</link>
+                <guid isPermaLink="true">http://algassert.com/post/1907</guid>
+            </item>
+            <item>
                 <title>Producing an N+1 Qubit CCZ State with an N Qubit Adder</title>
-                <description>&lt;p&gt;Back in April, I read the pre-print &lt;a href=&quot;https://arxiv.org/abs/1904.01124&quot;&gt;&amp;quot;Lower bounds on the non-Clifford resources for quantum computations&amp;quot; by Beverland et al.&lt;/a&gt;. It defines an amazingly simple metric, the &amp;quot;stabilizer nullity&amp;quot; of a state, which is the number of qubits in the state minus the number of Pauli product stabilizers of...</description>
+                <description>&lt;p&gt;Back in April, I read the pre-print &lt;a href=&quot;https://arxiv.org/abs/1904.01124&quot;&gt;&amp;quot;Lower bounds on the non-Clifford resources for quantum computations&amp;quot; by Beverland, Campbell, Howard, and Kliuchnikov&lt;/a&gt;. It defines an amazingly simple metric, the &amp;quot;stabilizer nullity&amp;quot; of a state, which is the number of qubits in the state minus the number of Pauli product...</description>
                 <pubDate>Sun, 20 Oct 2019 11:10:10 -0700</pubDate>
                 <link>http://algassert.com/post/1906</link>
                 <guid isPermaLink="true">http://algassert.com/post/1906</guid>
@@ -68,13 +75,6 @@
                 <pubDate>Tue, 12 Jun 2018 11:10:10 -0700</pubDate>
                 <link>http://algassert.com/post/1806</link>
                 <guid isPermaLink="true">http://algassert.com/post/1806</guid>
-            </item>
-            <item>
-                <title>Roulette Selection fit for a Quantum Computer</title>
-                <description>&lt;p&gt;This post will cover two things. First, we&amp;#39;ll go over a particularly nice way of performing classical &lt;a href=&quot;https://en.wikipedia.org/wiki/Fitness_proportionate_selection&quot;&gt;roulette selection&lt;/a&gt;. Second, we&amp;#39;ll enter quantum land and I&amp;#39;ll explain how the improved roulette selection method allowed me and some collaborators to make a key element of quantum chemistry simulations a lot...</description>
-                <pubDate>Sun, 20 May 2018 11:10:10 -0700</pubDate>
-                <link>http://algassert.com/post/1805</link>
-                <guid isPermaLink="true">http://algassert.com/post/1805</guid>
             </item>
     </channel>
 </rss>
