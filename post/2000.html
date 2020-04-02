@@ -128,7 +128,11 @@ This means that we can precompile the whole controlled modular exponentiation pr
 All the other qubits in the exponent make period 2 contributions to the result, which are irrelevant and can be omitted.
 What you&#39;re left with after that precompilation is the tiny little circuit I listed.</p>
 
-<p>If you run that quantum circuit on a quantum computer, you will get one of two possible results: 0 or 1.
+<p>Oh?
+How did I find the magic number?
+Uh...</p>
+
+<p>Anyways, if you run that quantum circuit on a quantum computer, you will get one of two possible results: 0 or 1.
 Getting 0 is bad; it causes the denominator extraction part of Shor&#39;s algorithm to return a useless result.
 When dealing with larger periods, the chance of this happening is totally negligible.
 In our case... there&#39;s a 50/50 chance.</p>
@@ -156,6 +160,8 @@ I quickly fed this result into my Shor&#39;s algorithm post-processing code, whi
 <p>Smolin, Smith, and Vargo were not able to get their hands on a quantum computer while writing their paper.
 They had to resort to flipping coins as a substitute.
 I can only hope that this blog post completes their work, cementing their rightful place in history.</p>
+
+<p><a href="https://reddit.com/r/algassert/comments/ftht3s/factoring_the_largest_number_ever_with_a_quantum/">View r/algassert comment thread</a></p>
 
 </div>
 
