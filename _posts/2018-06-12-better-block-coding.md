@@ -21,7 +21,7 @@ Part 3: [Rebraiding the factory](/post/1900)
 
 When I read papers describing quantum circuits, I like to test them out in my [drag-and-drop quantum circuit simulator Quirk](/quirk).
 Quirk affords fast iterative experimentation.
-It allows allows me to push the circuits around, try random ideas to make them smaller, see what makes them break, and maybe even understand what makes them work.
+It allows me to push the circuits around, try random ideas to make them smaller, see what makes them break, and maybe even understand what makes them work.
 
 I was experimenting on circuits from the paper ["Surface code implementation of block code state distillation"](https://arxiv.org/abs/1301.7107) when I found a problem: the circuits didn't work as advertised.
 The mistake happens right near the beginning of the paper, in figure 1:
