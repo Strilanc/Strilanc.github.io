@@ -179,3 +179,5 @@ Any depolarizing error (that depolarizes by at most the amount needed to maximal
 
 If we could probabilistically apply the non-physical ["Universal Not" gate](https://physics.stackexchange.com/a/247178/911), this would fix the problem preventing us from describing maximum strength depolarization using independent error terms.
 However, it would introduce other problems.
+
+[View r/algassert comment thread](https://www.reddit.com/r/algassert/comments/hvooyq/decorrelated_depolarization/)
