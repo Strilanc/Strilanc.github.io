@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Decorrelated Depolarization</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Decorrelated Depolarization</h1>
+<p class="meta">21 Jul 2020</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>There are a variety of ways of defining depolarizing errors out there.
+A common definition, used when analyzing error correction circuits, is that when a depolarizing error occurs to a set of qubits,
+a random Pauli ($I$, $X$, $Y$, or $Z$) is applied to each qubit.
+Every combination of Paulis is equally likely, except that the all-identity case is omitted.
+For example, a single-qubit depolarizing error would apply one of $X$, $Y$, or $Z$ chosen uniformly at random.
+A two qubit depolarizing error would apply one of
+$IX$, $IY$, $IZ$, $XI$, $XX$, $XY$, $XZ$, $YI$, $YX$, $YY$, $YZ$, $ZI$, $ZX$, $ZY$, or $ZZ$
+chosen uniformly at random.</p>
+
+<p>I just defined a depolarizing error using a set of individual disjoint error cases.
+Because the individual cases are disjoint, they are not applied independently.
+The lack of independence between the various cases can cause complications when attempting to analyze the effects of depolarizing noise on a quantum circuit.
+Our goal in this post is to fix that problem.
+To attempt to rewrite the definition of a depolarizing error in terms of <em>independent</em> error cases.</p>
+
+<h1>Solving the single qubit case</h1>
+
+<p>We want to model a depolarizing error that is going to occur with probability $d$ by using independent random $X$, $Y$, and $Z$ errors that occur with probabilities $p_x, p_y, p_z$.
+Although it&#39;s conceivable that each error would have a different probability, we might as well start by assuming that $p_x = p_y = p_z = p$ and see if that works.</p>
+
+<p>Let&#39;s start by getting at least one of the cases working.
+The probability that the net effect of applying the independent errors is equal to $X$ (up to global phase) should be $d/3$.
+There are two ways that the net effect of applying the independent errors can equal a net $X$ error.
+First, the $X$ error can occur without the $Y$ or $Z$ errors.
+This happens with probability $p(1-p)^2$.
+Alternatively, the $Y$ and $Z$ errors can occur without the X error.
+This happens with probability $p^2(1-p)$.
+Therefore it must be the case that:</p>
+
+<p>$$p(1-p)^2 + p^2(1-p) = d/3$$</p>
+
+<p>Solving for $p$, we find that:</p>
+
+<p>$$p = \frac{1}{2} \pm \frac{1}{2} \sqrt{1 - \frac{4}{3}d}$$</p>
+
+<p>I know I said we were going to start by doing just one case, but we actually just solved the entire problem.
+Because this value of $p$ works for the net X error, and the whole situation is symmetric with respect to permuting $X$, $Y$, and $Z$, this value of $p$ must also work for the $Y$ and $Z$ cases.
+And because we&#39;re reasoning about the <em>net</em> effect of the errors, the probabilities of producing net $X$, $Y$, and $Z$ errors are all correctly disjoint.</p>
+
+<p>Note that the above formula only works when $d \leq \frac{3}{4}$.
+This actually kind of makes sense, because $d=3/4$ is the threshold where a depolarizing error completely randomizes a qubit.
+Going beyond that value of $d$ makes the depolarizing error <em>less</em> severe, assuming you know it was applied.
+This is analogous to how, classically, if you are told a bit flip error was applied with probability $b$, the worst case scenario for recovering the bit is not at $b=1$ but rather at $b=0.5$.
+Basically the $d \leq \frac{3}{4}$ limit is saying that, if you want to use independent errors to model a depolarizing error, the depolarization can&#39;t be so strong that it shoots past the maximally mixed state and starts unmixing the qubit.</p>
+
+<h1>Verifying the single qubit solution</h1>
+
+<p>I just gave some quick, but vague, mathematical arguments that independently applying $X$, $Y$, and $Z$ errors each with probability $\frac{1}{2} - \frac{1}{2} \sqrt(1 - \frac{4}{3}d)$ is equivalent to applying a depolarizing error with probability $d$.
+How can we verify this claim in a more direct way?</p>
+
+<p>Well, one simple way to verify the equivalence of two quantum channels is to use the <a href="https://en.wikipedia.org/wiki/Channel-state_duality">state channel duality</a>.
+If applying a quantum channel $A$ to one half of an EPR pair results in a system whose density matrix is exactly equal to the density matrix that would have been produced by applying some other channel $B$ instead, then applying $A$ is always equivalent to applying $B$.
+So all we need to do is pick some values of $d$ to try, prepare an EPR pair, apply the indendent errors to one of the qubits in the pair, and see if the resulting density matrix of the two qubit system is equal to the density matrix that would have resulted from applying a depolarizing error instead.</p>
+
+<p>Here is some python code that does that, using numpy and cirq:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">verify_random_d</span><span class="p">():</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">*</span> <span class="mf">0.75</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">4</span><span class="o">/</span><span class="mi">3</span> <span class="o">*</span> <span class="n">d</span><span class="p">)</span>
+
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">LineQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">actual_density_matrix</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">final_density_matrix</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">(</span>
+        <span class="c1"># Make EPR pair.</span>
+        <span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="p">(</span><span class="n">a</span><span class="p">),</span>
+        <span class="n">cirq</span><span class="o">.</span><span class="n">CNOT</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span>
+        <span class="c1"># Independent errors.</span>
+        <span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">with_probability</span><span class="p">(</span><span class="n">p</span><span class="p">),</span>
+        <span class="n">cirq</span><span class="o">.</span><span class="n">Y</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">with_probability</span><span class="p">(</span><span class="n">p</span><span class="p">),</span>
+        <span class="n">cirq</span><span class="o">.</span><span class="n">Z</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">with_probability</span><span class="p">(</span><span class="n">p</span><span class="p">),</span>
+    <span class="p">))</span>
+    <span class="n">expected_density_matrix</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">final_density_matrix</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">(</span>
+        <span class="c1"># Make EPR pair.</span>
+        <span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="p">(</span><span class="n">a</span><span class="p">),</span>
+        <span class="n">cirq</span><span class="o">.</span><span class="n">CNOT</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span>
+        <span class="c1"># Depolarizing error.</span>
+        <span class="n">cirq</span><span class="o">.</span><span class="n">depolarize</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">a</span><span class="p">),</span>
+    <span class="p">))</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">actual_density_matrix</span><span class="p">,</span> <span class="n">expected_density_matrix</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
+</code></pre></div>
+<p>Running this code a few times produces no assertion errors, and so the solution should be correct.</p>
+
+<h1>Solving the two qubit case</h1>
+
+<p>We can solve the two qubit case the same way we solved the one qubit case.
+First, assume that all 15 possible will errors occur independently with the same probability $p$.
+Second, pick any one of the errors, and compute the probability that applying the independent errors will produce the chosen error as a net effect.
+This will be some polynomial function of $p$, and this function must equal $d/15$ (the desired disjoint chance of the chosen error term occuring).
+Then we just solve for $p$ in terms of $d$.</p>
+
+<p>Unfortunately, there is a complicating factor: this is massively tedious.
+There are just too many ways for the 15 possible errors to produce some desired net effect.
+Fortunately, this is why people invented computers.
+Instead of attempting to solve the equation ourselves, we can delegate to the machine:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">import</span> <span class="nn">sympy</span>
+
+
+<span class="k">def</span> <span class="nf">pauli_product</span><span class="p">(</span><span class="n">paulis</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">PauliString</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">cirq</span><span class="o">.</span><span class="n">PauliString</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">PauliString</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paulis</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">*=</span> <span class="n">p</span>
+    <span class="n">result</span> <span class="o">/=</span> <span class="n">result</span><span class="o">.</span><span class="n">coefficient</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="k">def</span> <span class="nf">problem_polynomial</span><span class="p">(</span><span class="n">qubit_count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Basic</span><span class="p">:</span>
+    <span class="c1"># Find all the combinations of Paulis that can happen, omitting the all-identity case.</span>
+    <span class="n">qs</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">LineQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">qubit_count</span><span class="p">)</span>
+    <span class="n">paulis</span> <span class="o">=</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">I</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Z</span><span class="p">]</span>
+    <span class="n">errors</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">pauli_product</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span> <span class="n">qs</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">ps</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">paulis</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="n">qubit_count</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="n">errors</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">PauliString</span><span class="p">())</span>
+
+    <span class="n">arbitrary_error</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">errors</span><span class="p">))</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Symbol</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Symbol</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Add up the various probabilities of achieving the target error.</span>
+    <span class="n">zero_polynomial</span> <span class="o">=</span> <span class="o">-</span><span class="n">d</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">**</span> <span class="n">qubit_count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">hits</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">combo</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">errors</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">PauliString</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">combo</span><span class="p">:</span>
+                <span class="n">t</span> <span class="o">*=</span> <span class="n">e</span>
+            <span class="n">t</span> <span class="o">/=</span> <span class="n">t</span><span class="o">.</span><span class="n">coefficient</span>
+            <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="n">arbitrary_error</span><span class="p">:</span>
+                <span class="n">hits</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">zero_polynomial</span> <span class="o">+=</span> <span class="n">hits</span> <span class="o">*</span> <span class="n">p</span> <span class="o">**</span> <span class="n">n</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span> <span class="o">-</span> <span class="n">n</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">zero_polynomial</span><span class="o">.</span><span class="n">expand</span><span class="p">()</span>
+
+
+<span class="k">print</span><span class="p">(</span><span class="n">problem_polynomial</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="c1"># -d/3 - p**2 + p</span>
+<span class="k">print</span><span class="p">(</span><span class="n">problem_polynomial</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="c1"># -d/15 - 16*p**8 + 64*p**7 - 112*p**6 + 112*p**5 - 70*p**4 + 28*p**3 - 7*p**2 + p</span>
+</code></pre></div>
+<p>So the polynomial for the two qubit case is:</p>
+
+<p>$$-16p_2^8 + 64p_2^7 - 112p_2^6 + 112p_2^5 - 70p_2^4 + 28p_2^3 - 7p_2^2 + p_2 = d_2/15$$</p>
+
+<p>With the polynomial in hand, we can symbolically solve it using almost any computer algebra system (since I&#39;m sure as hell not going to do it by hand).
+We can then inspect the various solutions and pick one corresponding to valid probabilities (as opposed to negative or imaginary solutions).
+One such root is:</p>
+
+<p>$$p_2 = \frac{1}{2} - \frac{1}{2} \sqrt{\sqrt{\sqrt{1 - \frac{16}{15} d_2}}}$$</p>
+
+<p>The above formula will work for any $d_2 \leq \frac{15}{16}$.
+Note that, once again, the threshold where we can no longer describe the depolarizing error in an independent fashion occurs at the maximal mixing point.</p>
+
+<p>I&#39;ll leave verifying that the two qubit formula works, and generalizing to larger numbers of qubits, as exercises for the reader.</p>
+
+<h1>Closing Remarks</h1>
+
+<p>Any depolarizing error (that depolarizes by at most the amount needed to maximally mix states) can be described as a series of independently applied Pauli product errors, instead of as a series of disjoint errors.</p>
+
+<p>If we could probabilistically apply the non-physical <a href="https://physics.stackexchange.com/a/247178/911">&quot;Universal Not&quot; gate</a>, this would fix the problem preventing us from describing maximum strength depolarization using independent error terms.
+However, it would introduce other problems.</p>
+
+</div>
+
+
+    </div>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -7,11 +7,39 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Decorrelated Depolarization</title>
+                <description>&lt;p&gt;There are a variety of ways of defining depolarizing errors out there. A common definition, used when analyzing error correction circuits, is that when a depolarizing error occurs to a set of qubits, a random Pauli ($I$, $X$, $Y$, or $Z$) is applied to each qubit. Every combination of Paulis...</description>
+                <pubDate>Tue, 21 Jul 2020 11:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/2001</link>
+                <guid isPermaLink="true">http://algassert.com/post/2001</guid>
+            </item>
+            <item>
+                <title>[Paper] Compilation of Fault-Tolerant Quantum Heuristics for Combinatorial Optimization</title>
+                <description></description>
+                <pubDate>Tue, 14 Jul 2020 05:10:10 -0700</pubDate>
+                <link>http://algassert.com/2020/07/14/paper-compile-optimization.html</link>
+                <guid isPermaLink="true">http://algassert.com/2020/07/14/paper-compile-optimization.html</guid>
+            </item>
+            <item>
+                <title>[Talk at QCTIP2020] How to factor 2048 bit RSA integers in 8 hours using 20 million noisy qubits</title>
+                <description></description>
+                <pubDate>Mon, 06 Apr 2020 09:10:10 -0700</pubDate>
+                <link>http://algassert.com/2020/04/06/qctip-talk.html</link>
+                <guid isPermaLink="true">http://algassert.com/2020/04/06/qctip-talk.html</guid>
+            </item>
+            <item>
                 <title>Factoring the largest number ever with a quantum computer</title>
-                <description>&lt;p&gt;Ever since Shor&amp;#39;s great discovery, quantum computers have been factoring larger and larger numbers. In 2001, the number 15 was factored using 8 qubits. This record was tied, but not beaten, until 2012 when the number 21 was factored using 10 qubits. And frankly this is where the story would...</description>
+                <description>&lt;p&gt;&lt;strong&gt;(Update (April 4): I&amp;#39;ve seen several tweets thinking this post was serious. It&amp;#39;s not. Check the publication date.)&lt;/strong&gt;&lt;/p&gt; &lt;p&gt;Ever since Shor&amp;#39;s great discovery, quantum computers have been factoring larger and larger numbers. In 2001, the number 15 was factored using 8 qubits. This record was tied many times, but not...</description>
                 <pubDate>Wed, 01 Apr 2020 11:10:10 -0700</pubDate>
                 <link>http://algassert.com/post/2000</link>
                 <guid isPermaLink="true">http://algassert.com/post/2000</guid>
+            </item>
+            <item>
+                <title>[Talk at Simons Institute] Estimating the Fault Tolerant Cost of Classically Intractable Quantum Computations</title>
+                <description></description>
+                <pubDate>Thu, 27 Feb 2020 04:10:10 -0800</pubDate>
+                <link>http://algassert.com/2020/02/27/simons-talk.html</link>
+                <guid isPermaLink="true">http://algassert.com/2020/02/27/simons-talk.html</guid>
             </item>
             <item>
                 <title>Surviving Chain Link Erasures</title>
@@ -28,6 +56,13 @@
                 <guid isPermaLink="true">http://algassert.com/post/1906</guid>
             </item>
             <item>
+                <title>[Paper] Surface code dislocations have code distance L+O(1)</title>
+                <description></description>
+                <pubDate>Mon, 30 Sep 2019 05:10:10 -0700</pubDate>
+                <link>http://algassert.com/2019/09/30/paper-dislocation-distance.html</link>
+                <guid isPermaLink="true">http://algassert.com/2019/09/30/paper-dislocation-distance.html</guid>
+            </item>
+            <item>
                 <title>Spooky Pebble Games and Irreversible Uncomputation</title>
                 <description>&lt;p&gt;In this post: extending pebble games to include measurement based uncomputation.&lt;/p&gt; &lt;p&gt;A &lt;a href=&quot;https://en.wikipedia.org/wiki/Pebble_game&quot;&gt;pebble game&lt;/a&gt; is a simplified abstraction of a reversible computation. A pebble game is played on a directed acyclic graph. Every node of the graph represents some intermediate value that can be computed and uncomputed. At any...</description>
                 <pubDate>Sun, 25 Aug 2019 11:10:10 -0700</pubDate>
@@ -40,41 +75,6 @@
                 <pubDate>Thu, 08 Aug 2019 11:10:10 -0700</pubDate>
                 <link>http://algassert.com/post/1904</link>
                 <guid isPermaLink="true">http://algassert.com/post/1904</guid>
-            </item>
-            <item>
-                <title>Verifying Measurement Based Uncomputation</title>
-                <description>&lt;p&gt;Often, when uncomputing intermediate values produced during a quantum computation, it is possible to save resources by using measurement operations in ways that don&amp;#39;t work when computing those values in the first place. For example, computing the AND of two qubits requires non-stabilizer operations such as T gates, but you...</description>
-                <pubDate>Wed, 07 Aug 2019 09:30:00 -0700</pubDate>
-                <link>http://algassert.com/post/1903</link>
-                <guid isPermaLink="true">http://algassert.com/post/1903</guid>
-            </item>
-            <item>
-                <title>Weakening the Born Rule</title>
-                <description>&lt;p&gt;Recently I read the blog post &lt;a href=&quot;http://blog.rongarret.info/2019/07/the-trouble-with-many-worlds.html&quot;&gt;&amp;quot;The Trouble with Many Worlds&amp;quot;&lt;/a&gt;. I liked the post, but I always find it a bit strange reading this kind of content. People seem so very philosophically upset/confused/fascinated by &amp;quot;the measurement problem&amp;quot; and the Born rule, but I have to admit that deep...</description>
-                <pubDate>Tue, 06 Aug 2019 09:30:00 -0700</pubDate>
-                <link>http://algassert.com/post/1902</link>
-                <guid isPermaLink="true">http://algassert.com/post/1902</guid>
-            </item>
-            <item>
-                <title>Constant Depth Encoded Addition</title>
-                <description>&lt;p&gt;Additions circuits compute output bits that depend on a linear number of input bits. This kind of dependence forces &lt;a href=&quot;https://cs.stackexchange.com/questions/19468/what-circuit-depth-is-required-to-add&quot;&gt;addition circuits to have $\Omega(\lg n)$ depth&lt;/a&gt;. This is a proven theorem. There is no such thing as a constant depth adder.&lt;/p&gt; &lt;p&gt;...&lt;/p&gt; &lt;p&gt;...&lt;/p&gt; &lt;p&gt;Or is there?&lt;/p&gt; &lt;strong&gt;Paradox&lt;/strong&gt; &lt;p&gt;There are...</description>
-                <pubDate>Wed, 22 May 2019 05:10:10 -0700</pubDate>
-                <link>http://algassert.com/post/1901</link>
-                <guid isPermaLink="true">http://algassert.com/post/1901</guid>
-            </item>
-            <item>
-                <title>Improving Block Code Distillation (Part 3)</title>
-                <description>&lt;p&gt;This series of posts began with the discovery a mistake, and an attempt to fix the problem. In this post, the series finishes with the production of optimized braiding diagrams.&lt;/p&gt; &lt;p&gt;Part 1: &lt;a href=&quot;/post/1806&quot;&gt;Resynthesizing the circuits&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Part 2: &lt;a href=&quot;/post/1807&quot;&gt;Reconceptualizing the distillation&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Part 3: (this post) Rebraiding the factory&lt;/p&gt; &lt;strong&gt;Starting...</description>
-                <pubDate>Wed, 13 Feb 2019 10:10:10 -0800</pubDate>
-                <link>http://algassert.com/post/1900</link>
-                <guid isPermaLink="true">http://algassert.com/post/1900</guid>
-            </item>
-            <item>
-                <title>Improving Block Code Distillation (Part 2)</title>
-                <description>&lt;p&gt;This series of posts began with the discovery a mistake, and an attempt to fix the problem. In this post, I give an insight into the problem that improves on the original result.&lt;/p&gt; &lt;p&gt;Part 1: &lt;a href=&quot;/post/1806&quot;&gt;Resynthesizing the circuits&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Part 2: (this post) Reconceptualizing the distillation&lt;/p&gt; &lt;p&gt;Part 3: &lt;a href=&quot;/post/1900&quot;&gt;Rebraiding...</description>
-                <pubDate>Mon, 09 Jul 2018 11:10:10 -0700</pubDate>
-                <link>http://algassert.com/post/1807</link>
-                <guid isPermaLink="true">http://algassert.com/post/1807</guid>
             </item>
     </channel>
 </rss>
