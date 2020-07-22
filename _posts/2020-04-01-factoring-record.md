@@ -5,9 +5,13 @@ date: 2020-04-01 10:10:10 am PST
 permalink: post/2000
 ---
 
+**(Update (April 4): I've seen several tweets thinking this post was serious.
+It's not.
+Check the publication date.)**
+
 Ever since Shor's great discovery, quantum computers have been factoring larger and larger numbers.
 In 2001, the number 15 was factored using 8 qubits.
-This record was tied, but not beaten, until 2012 when the number 21 was factored using 10 qubits.
+This record was tied many times, but not beaten until 2012 when the number 21 was factored using 10 qubits.
 And frankly this is where the story would end... if humans weren't quite so clever.
 Instead of waiting for the hardware to improve by yet further orders of magnitude, researchers began inventing better and better tricks for factoring numbers by exploiting their hidden structure.
 
@@ -17,7 +21,7 @@ That's fewer qubits!
 This was done by exploiting special structure in the number 143 to precompile the quantum part of the factoring problem down into something smaller and easier to manage.
 Then, in 2014, another huge breakthrough was made.
 There were numbers larger than 143 whose factoring problem precompiled down into the *same quantum part as 143's factoring problem*.
-It turned out that 2012 factoring of 143 was *actually* the 2012 factoring of 56153!
+It turned out that the 2012 factoring of 143 was *actually* the 2012 factoring of 56153!
 Truly amazing.
 
 I have to apologize for so quickly glossing over the rich history here.
