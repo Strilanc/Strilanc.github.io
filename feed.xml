@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>Algorithmic Assertions - Craig Gidney's Computer Science Blog</title>
+        <title>Algorithmic Assertions - Craig Gidney&#39;s Computer Science Blog</title>
         <description>A blog about computer science, software engineering, quantum computing, mathematical puzzles, and so forth.</description>
         <link>http://algassert.com</link>
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
+            <item>
+                <title>Inverting Clifford Tableaus</title>
+                <description>&lt;p&gt;In quantum computing, the Cliffords are an extremely important class of operations. Cliffords are simple enough to &lt;a href=&quot;https://arxiv.org/abs/quant-ph/0406196&quot;&gt;simulate&lt;/a&gt; &lt;a href=&quot;https://arxiv.org/abs/quant-ph/0504117&quot;&gt;cheaply&lt;/a&gt;, but expressive enough to represent important quantum protocols like error correction and teleportation.&lt;/p&gt; &lt;p&gt;A quantum operation $C$ is a Clifford operation if, for any operation $P$ from the Pauli...</description>
+                <pubDate>Sun, 30 Aug 2020 11:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/2002</link>
+                <guid isPermaLink="true">http://algassert.com/post/2002</guid>
+            </item>
             <item>
                 <title>Decorrelated Depolarization</title>
                 <description>&lt;p&gt;There are a variety of ways of defining depolarizing errors out there. A common definition, used when analyzing error correction circuits, is that when a depolarizing error occurs to a set of qubits, a random Pauli ($I$, $X$, $Y$, or $Z$) is applied to each qubit. Every combination of Paulis...</description>
@@ -68,13 +75,6 @@
                 <pubDate>Sun, 25 Aug 2019 11:10:10 -0700</pubDate>
                 <link>http://algassert.com/post/1905</link>
                 <guid isPermaLink="true">http://algassert.com/post/1905</guid>
-            </item>
-            <item>
-                <title>The Frauchiger-Renner Paradox is a Sleeping Beauty Problem</title>
-                <description>&lt;p&gt;Last year, Frauchiger and Renner published the paper &lt;a href=&quot;https://www.nature.com/articles/s41467-018-05739-8&quot;&gt;&amp;quot;Quantum theory cannot consistently describe the use of itself&amp;quot;&lt;/a&gt;. The paper describes a paradox of reasoning, where deductions involving rational agents under superposition end up being wrong. In this post, I want to discuss a possible resolution to the paradox. Basically...</description>
-                <pubDate>Thu, 08 Aug 2019 11:10:10 -0700</pubDate>
-                <link>http://algassert.com/post/1904</link>
-                <guid isPermaLink="true">http://algassert.com/post/1904</guid>
             </item>
     </channel>
 </rss>

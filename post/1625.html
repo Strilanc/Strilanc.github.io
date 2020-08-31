@@ -107,7 +107,7 @@ However, to test the float-into-byte behavior on the devices I cared about, I ne
 <p>The <em>correct</em> way to get floats into a shader is uniforms.
 But the idea I went with was to just directly embed the floats within the generated source of a shader.
 Like this:</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="nx">suite</span><span class="p">.</span><span class="nx">testUsingWebGL</span><span class="p">(</span><span class="s1">&#39;encodeEmbeddedFloats&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="nx">suite</span><span class="p">.</span><span class="nx">testUsingWebGL</span><span class="p">(</span><span class="s1">&#39;encodeEmbeddedFloats&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
     <span class="kd">let</span> <span class="nx">inFloats</span> <span class="o">=</span> <span class="nx">randomFloats</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span>
 
     <span class="kd">let</span> <span class="nx">shader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WglShader</span><span class="p">(</span>
@@ -117,7 +117,7 @@ Like this:</p>
 <span class="sb">            float k = xy.y * 4.0 + xy.x;</span>
 <span class="sb">            float f = 0.0;</span>
 <span class="sb">            </span><span class="si">${</span><span class="nx">seq</span><span class="p">(</span><span class="nx">inFloats</span><span class="p">).</span>
-                <span class="nx">mapWithIndex</span><span class="p">((</span><span class="nx">e</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="sb">`if (k == </span><span class="si">${</span><span class="nx">i</span><span class="si">}</span><span class="sb">.0) f = float(</span><span class="si">${</span><span class="nx">e</span><span class="si">}</span><span class="sb">);`</span><span class="p">).</span>
+                <span class="nx">mapWithIndex</span><span class="p">((</span><span class="nx">e</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="sb">`if (k == </span><span class="si">${</span><span class="nx">i</span><span class="si">}</span><span class="sb">.0) f = float(</span><span class="si">${</span><span class="nx">e</span><span class="si">}</span><span class="sb">);`</span><span class="p">).</span>
                 <span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n            &#39;</span><span class="p">)</span><span class="si">}</span><span class="sb"></span>
 <span class="sb">            gl_FragColor = packFloatIntoBytes(f);</span>
 <span class="sb">        }`</span><span class="p">);</span>
@@ -168,7 +168,7 @@ Even on the machine affected by the bug we&#39;ve been discussing.</p>
 We have one value equal to two unequal values.
 Our next step is clear: turn it into a dead simple test case that can&#39;t possibly fail.
 Here it is:</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="nx">suite</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">&quot;mySanity&quot;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="nx">suite</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">&quot;mySanity&quot;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
     <span class="kd">let</span> <span class="nx">shader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WglShader</span><span class="p">(</span><span class="sb">`</span>
 <span class="sb">        bool neverTrue(float val) {</span>
 <span class="sb">            return 16211.8955 == val &amp;&amp;</span>

@@ -193,7 +193,7 @@ It then creates a modified version of the object, with field keys defined by the
 </code></pre></div>
 <p>Finally, we want a convenience method for wrapping <code>decomp</code> and <code>recomp</code> around arbitrary batched functions:</p>
 <div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">function</span> <span class="nx">structure</span><span class="p">(</span><span class="nx">batchedFunc</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">obj</span> <span class="o">=&gt;</span> <span class="nx">recomp</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">batchedFunc</span><span class="p">(</span><span class="nx">decomp</span><span class="p">(</span><span class="nx">obj</span><span class="p">)));</span>
+    <span class="k">return</span> <span class="nx">obj</span> <span class="p">=&gt;</span> <span class="nx">recomp</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">batchedFunc</span><span class="p">(</span><span class="nx">decomp</span><span class="p">(</span><span class="nx">obj</span><span class="p">)));</span>
 <span class="p">}</span>
 </code></pre></div>
 <p>That&#39;s it!

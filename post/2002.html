@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Inverting Clifford Tableaus</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Inverting Clifford Tableaus</h1>
+<p class="meta">30 Aug 2020</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>In quantum computing, the Cliffords are an extremely important class of operations.
+Cliffords are simple enough to <a href="https://arxiv.org/abs/quant-ph/0406196">simulate</a> <a href="https://arxiv.org/abs/quant-ph/0504117">cheaply</a>,
+but expressive enough to represent important quantum protocols like error correction and teleportation.</p>
+
+<p>A quantum operation $C$ is a Clifford operation if, for any operation $P$ from the Pauli group,
+conjugating $P$ by $C$ produces an operation $P_2 = C^\dagger P C^-1$ that is still in the Pauli group.
+A quantum operation is in the Pauli group if it decomposes into applying only Pauli gates ($X$, $Y$, or $Z$) to qubits.
+For example, $H$ is a Clifford operation, so conjugating $X$ by $H$ should produce a Pauli operation (or product of Pauli operations).
+In fact it does: $H^\dagger X H = Z$.
+Similarly, $CNOT$ is a Clifford operation and for example $CNOT_{0 \rightarrow 1}^\dagger \cdot X_0 \cdot CNOT_{0 \rightarrow 1} = X_0 X_1$ is a product of Pauli operations.</p>
+
+<p>Clifford operations don&#39;t just guarantee that they conjugate Pauli products into Pauli products, individual Cliffords are <em>defined</em> by how they conjugate Pauli products into Pauli products.
+If I tell you I have a secret three qubit Clifford operation $C$, and I tell you how it conjugates a set of generators for the Pauli group over three qubits (e.g. $X_0$, $Z_0$, $X_1$, $Z_1$, $X_2$, and $Z_2$),
+then you can figure out exactly which operation I&#39;m talking about.
+Putting the conjugated Paulis into a table produces a &quot;Clifford tableau&quot;.
+This tableau, this list of what the Pauli product generators get mapped to, defines the Clifford operation.</p>
+
+<p>For example, here is the Clifford tableau of the $S$ gate:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>      | q
+------+-xz-
+ q    | YZ
+ sign | ++
+</code></pre></div>
+<p>The rightmost column (the $q_z$ column) says that conjugating a $Z$ by an $S$ on the qubit $q$ will produce the Pauli operation $+Z$.
+The column to the left of that one (the $q_x$ column) says $X$ conjugated by $S$ is $+Y$.</p>
+
+<p>The inverse $S$ gate has a very similar Clifford tableau, except that $X$ gets mapped to $-Y$ instead of $+Y$:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>      | q
+------+-xz-
+ q    | YZ
+ sign | -+
+</code></pre></div>
+<p>One more example.
+Here is the Clifford tableau of the $CNOT_{a \rightarrow b}$ gate:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>      | a  b
+------+-xz-xz-
+ a    | XZ _Z
+ b    | X_ XZ
+ sign | ++ ++
+</code></pre></div>
+<p>This time the rightmost column of the table says that the $CNOT$ operation will conjugate a $Z$ on the target qubit into a $Z$ on both qubits.</p>
+
+<p>When you&#39;re given a compound Pauli operation that&#39;s not explicitly listed in the Clifford tableau, you can decompose it into a product of columns that are in the tableau.
+For example, you can figure out what CNOT does to $X_a Z_b$ by multiplying the columns for $X_a$ and $Z_b$.
+Similarly, you can figure out what the $S$ gate conjugates $Y$ into by decomposing $Y = iXZ$.
+In detail: $S^\dagger Y S = S^\dagger (iXZ) S = i S^\dagger X (S^\dagger S) Z S = i (S^\dagger X S) (S^\dagger Z S) = iYZ = -X$.</p>
+
+<h1>Operating on Tableaus</h1>
+
+<p>If we&#39;re given two tableaus $A$ and $B$, we can compose them by creating a new tableau $T = BA$ where each column is what you get when conjugating by $A$&#39;s operation then by $B$&#39;s operation.</p>
+
+<p>Here is some pythonic pseudocode showing the general idea:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rhs</span><span class="p">:</span> <span class="s1">&#39;CliffordTableau&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;CliffordTableau&#39;</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">CliffordTableau</span><span class="p">(</span><span class="n">mapping</span><span class="o">=</span><span class="p">{</span>
+        <span class="n">generator</span><span class="p">:</span> <span class="bp">self</span><span class="p">(</span><span class="n">rhs</span><span class="p">(</span><span class="n">generator</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">qubits</span><span class="p">()</span> <span class="o">|</span> <span class="n">other</span><span class="o">.</span><span class="n">qubits</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">generator</span> <span class="ow">in</span> <span class="p">[</span><span class="n">X</span><span class="p">(</span><span class="n">qubit</span><span class="p">),</span> <span class="n">Z</span><span class="p">(</span><span class="n">qubit</span><span class="p">)]</span>
+    <span class="p">})</span>
+</code></pre></div>
+<p>A more interesting problem is computing the inverse of a tableau.
+When I first ran into this Clifford-tableau-inverse-computing problem, I found it rather tricky.
+Ultimately, the solution was much simpler than I expected.
+Instead of being similar to inverting an arbitrary complex matrix, inverting a Clifford tableau is like inverting a unitary matrix.
+It&#39;s just a transpose with a few tweaks!</p>
+
+<p>To see how this can possibly be, consider that conjugating two operations by a common Clifford operation will preserve commutation relationships between the operations.
+If $A$ commutes with $B$, and $C$ is a Clifford operation, then $C^\dagger AC$ commutes with $C^\dagger BC$.
+If $A$ anti-commutes with $B$, then $C^\dagger AC$ anti-commutes with $C^\dagger BC$.
+(This is just a specific case of unitary operations <a href="http://vergil.chemistry.gatech.edu/notes/quantrev/node17.html">preserving the angle between states</a>.)</p>
+
+<p>Now let&#39;s suppose that the operations $A$ and $B$ are single-qubit Pauli operations.
+Suppose that the result of conjugating $A$ by $C$ commutes with $B$ in a particular way, i.e. the commutator $\{C^\dagger A C, B\} = rI$ for some scalar $r$.
+Conjugating both sides of that commutator by $C^\dagger$ won&#39;t change its value, therefore $\{A, C B C^\dagger\} = rI = \{C^\dagger A C, B\}$.</p>
+
+<p>We can specialize this commutation relationship to the generators of the Pauli group over two qubits $a, b$:</p>
+
+<p>$$\{X_a, C^\dagger X_b C\} = \{C X_a C^\dagger, X_b\}$$</p>
+
+<p>$$\{X_a, C^\dagger Z_b C\} = \{C X_a C^\dagger, Z_b\}$$</p>
+
+<p>$$\{Z_a, C^\dagger X_b C\} = \{C Z_a C^\dagger, X_b\}$$</p>
+
+<p>$$\{Z_a, C^\dagger Z_b C\} = \{C Z_a C^\dagger, Z_b\}$$</p>
+
+<p>These four equalities are extremely useful to us.
+The left hand side values can easily be determined using the Clifford tableau.
+We can check in constant time if the column for $X_a$ and/or $Z_a$ has a term on $b$ that anti-commutes with $X_b$ and/or $Z_b$.
+The right hand side values form a set of constraints that completely determine what the $a$ part of the output for the $X_b$ and $Z_b$ columns of the inverse tableau must be.
+So, looking at only how $C$ turns Paulis on $a$ into Paulis on $b$ (ignoring the Paulis on other qubits), we can determine how the inverse of $C$ must turn Paulis on $b$ into Paulis on $a$ (ignoring Paulis on other qubits).
+This &quot;locality&quot; property of the inverting operation was very surprising to me!
+Even though the Clifford operation we&#39;re talking about may touch many qubits in a non-local entangling-the-qubits sort of way, local information about how Pauli terms flow between pairs of qubits is still local when switching to its inverse.</p>
+
+<p>I wrote some python code that solves for the backward-flowing Pauli terms given the forward-flowing Pauli terms:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="nn">cirq</span>
+
+<span class="k">def</span> <span class="nf">_inverse_flow</span><span class="p">(</span><span class="n">image_x</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Pauli</span><span class="p">,</span> <span class="n">image_z</span><span class="p">:</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Pauli</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">Pauli</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Pauli</span><span class="p">]:</span>
+    <span class="n">c_xx</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">commutes</span><span class="p">(</span><span class="n">image_x</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">c_xz</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">commutes</span><span class="p">(</span><span class="n">image_x</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span>
+    <span class="n">c_zx</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">commutes</span><span class="p">(</span><span class="n">image_z</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">c_zz</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">commutes</span><span class="p">(</span><span class="n">image_z</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span>
+
+    <span class="n">matches_x</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">px</span>
+        <span class="k">for</span> <span class="n">px</span> <span class="ow">in</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">I</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Z</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">c_xx</span> <span class="o">==</span> <span class="n">cirq</span><span class="o">.</span><span class="n">commutes</span><span class="p">(</span><span class="n">px</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">c_zx</span> <span class="o">==</span> <span class="n">cirq</span><span class="o">.</span><span class="n">commutes</span><span class="p">(</span><span class="n">px</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="n">matches_z</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">pz</span>
+        <span class="k">for</span> <span class="n">pz</span> <span class="ow">in</span> <span class="p">[</span><span class="n">cirq</span><span class="o">.</span><span class="n">I</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Z</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">c_xz</span> <span class="o">==</span> <span class="n">cirq</span><span class="o">.</span><span class="n">commutes</span><span class="p">(</span><span class="n">pz</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">c_zz</span> <span class="o">==</span> <span class="n">cirq</span><span class="o">.</span><span class="n">commutes</span><span class="p">(</span><span class="n">pz</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">matches_x</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">matches_z</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">matches_x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">matches_z</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre></div>
+<p>Using this code, we can print out the substitution to apply (the local tweaks to use) after transposing when computing the inverse:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="nn">itertools</span>
+<span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">([</span><span class="n">cirq</span><span class="o">.</span><span class="n">I</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Z</span><span class="p">],</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">a2</span><span class="p">,</span> <span class="n">b2</span> <span class="o">=</span> <span class="n">_inverse_flow</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="s1">&#39;-&gt;&#39;</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">b2</span><span class="p">)</span>
+<span class="c1"># I I -&gt; I I</span>
+<span class="c1"># I X -&gt; I X</span>
+<span class="c1"># I Y -&gt; X X</span>
+<span class="c1"># I Z -&gt; X I</span>
+<span class="c1"># X I -&gt; I Z</span>
+<span class="c1"># X X -&gt; I Y</span>
+<span class="c1"># X Y -&gt; X Y</span>
+<span class="c1"># X Z -&gt; X Z</span>
+<span class="c1"># Y I -&gt; Z Z</span>
+<span class="c1"># Y X -&gt; Z Y</span>
+<span class="c1"># Y Y -&gt; Y Y</span>
+<span class="c1"># Y Z -&gt; Y Z</span>
+<span class="c1"># Z I -&gt; Z I</span>
+<span class="c1"># Z X -&gt; Z X</span>
+<span class="c1"># Z Y -&gt; Y X</span>
+<span class="c1"># Z Z -&gt; Y I</span>
+</code></pre></div>
+<p>Using the above information, can you figure out what the inverse of this Clifford tableau is?</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>      | 0  1  2  3
+------+-xz-xz-xz-xz-
+ 0    | ZY ZY XZ _X
+ 1    | _Y ZY Z_ ZZ
+ 2    | Y_ YX XX XX
+ 3    | ZZ ZZ _X XZ
+ sign | -- -- -+ +-
+</code></pre></div>
+<p>It&#39;s quite easy.
+First, you transpose the entries, then you go over each term and apply the Pauli pair mapping printed out above.
+The result is:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>      | 0  1  2  3
+------+-xz-xz-xz-xz-
+ 0    | YX XX ZZ Y_
+ 1    | YX YX ZY Y_
+ 2    | XZ Z_ _Y _X
+ 3    | _X Y_ _Y XZ
+ sign | ?? ?? ?? ??
+</code></pre></div>
+<p>However, note the question marks in the sign row.
+How do we determine the signs of the inverted Pauli products?</p>
+
+<p>Well... maybe there&#39;s some clever way to do it.
+But what I do is just start by assuming the sign of a column is <code>+</code>, then check whether or not sending that colum through the original Clifford operation unpacks it back into the columns&#39; input (or else its negation).
+If it got negated, then I know the sign was wrong so I flip it:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span># Correct the signs.
+for generator, output in list(columns.items()):
+    columns[generator] *= original_operation(output).coefficient
+</code></pre></div>
+<p>Using this process, we can determine the signs:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>      | 0  1  2  3
+------+-xz-xz-xz-xz-
+ 0    | YX XX ZZ Y_
+ 1    | YX YX ZY Y_
+ 2    | XZ Z_ _Y _X
+ 3    | _X Y_ _Y XZ
+ sign | ++ -+ +- -+
+</code></pre></div>
+<p>The method I just described for computing the signs has a time cost of $O(n^3)$ where $n$ is the number of qubits operated on by the Clifford operation.
+The rest of the inversions process, the transposing-and-tweaking, has cost $O(n^2)$.
+Is there an overall $O(n^2)$ algorithm, similar to how unitary matrices can be inverted in $O(n^2)$?
+I don&#39;t know.</p>
+
+<h1>Simple Python Implementation</h1>
+
+<p>As part of writing this post, I implemented a <code>CliffordTableau</code> class in python.
+You can find it <a href="https://github.com/Strilanc/CliffordTableau">on github at Strilanc/CliffordTableau</a>.</p>
+
+<p>Here&#39;s an example of using the code:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="nn">cirq</span>
+<span class="kn">from</span> <span class="nn">clifford_tableau</span> <span class="kn">import</span> <span class="n">CliffordTableau</span>
+
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">LineQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">cirq</span><span class="o">.</span><span class="n">CNOT</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+<span class="n">tableau</span> <span class="o">=</span> <span class="n">CliffordTableau</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">tableau</span><span class="p">)</span>
+<span class="c1">#       | 0  1</span>
+<span class="c1"># ------+-xz-xz-</span>
+<span class="c1">#  0    | XZ Z_</span>
+<span class="c1">#  1    | Z_ XZ</span>
+<span class="c1">#  sign | ++ ++</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">tableau</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="n">a</span><span class="p">)))</span>
+<span class="c1"># X(0)*Z(1)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">tableau</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Y</span><span class="p">(</span><span class="n">b</span><span class="p">)))</span>
+<span class="c1"># -Y(0)*X(1)</span>
+
+<span class="k">assert</span> <span class="n">tableau</span> <span class="o">==</span> <span class="n">CliffordTableau</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">CZ</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">CliffordTableau</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">S</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+<span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">inverse</span><span class="p">()</span> <span class="o">==</span> <span class="n">CliffordTableau</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">S</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">**-</span><span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="n">s</span>
+<span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="n">CliffordTableau</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">Z</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+</code></pre></div>
+<p><strong>Caution</strong>: the code is not performant, because a) it&#39;s in Python and b) there are quadratic overheads due to the internal use of immutable data structures.</p>
+
+<h1>Closing remarks</h1>
+
+<p>If you often need the inverse of your Clifford operations, a workaround for the sign inversion costing $O(n^3)$ is to include a sign <em>column</em> in the tableau, corresponding to the sign row of the inverse tableau.
+The new sign column can be kept up to date when composing tableaus at no additional cost (asymptotically speaking), and reduces the cost of inversion to $O(n^2)$.
+Perhaps this indicates that Clifford tableaus are &quot;supposed&quot; to have a sign column, and one is left wondering what the new cell common to both the sign row and sign column is for.</p>
+
+<p>If you include a sign column, and turn each Pauli pair term into four bits
+(and arrange those four bits into a 2x2 square with just the right ordering),
+the Clifford tableau becomes a boolean matrix where inverting is <em>exactly</em> transposing (no local tweaks needed).
+Unfortunately, &quot;just the right ordering&quot; means the XZ ordering of the rows must be opposite to the XZ ordering of the columns.
+It&#39;s so painfully close to being elegant.</p>
+
+</div>
+
+
+    </div>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
