@@ -267,3 +267,5 @@ If you include a sign column, and turn each Pauli pair term into four bits
 the Clifford tableau becomes a boolean matrix where inverting is *exactly* transposing (no local tweaks needed).
 Unfortunately, "just the right ordering" means the XZ ordering of the rows must be opposite to the XZ ordering of the columns.
 It's so painfully close to being elegant.
+
+[View r/algassert comment thread](https://www.reddit.com/r/algassert/comments/ijpxm6/inverting_clifford_tableaus/)
