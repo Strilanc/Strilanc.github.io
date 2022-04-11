@@ -1,80 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>Algorithmic Assertions - Craig Gidney&#39;s Computer Science Blog</title>
+        <title>Algorithmic Assertions - Craig Gidney's Computer Science Blog</title>
         <description>A blog about computer science, software engineering, quantum computing, mathematical puzzles, and so forth.</description>
         <link>http://algassert.com</link>
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
-                <title>Inverting Clifford Tableaus</title>
-                <description>&lt;p&gt;In quantum computing, the Cliffords are an extremely important class of operations. Cliffords are simple enough to &lt;a href=&quot;https://arxiv.org/abs/quant-ph/0406196&quot;&gt;simulate&lt;/a&gt; &lt;a href=&quot;https://arxiv.org/abs/quant-ph/0504117&quot;&gt;cheaply&lt;/a&gt;, but expressive enough to represent important quantum protocols like error correction and teleportation.&lt;/p&gt; &lt;p&gt;A quantum operation $C$ is a Clifford operation if, for any operation $P$ from the Pauli...</description>
-                <pubDate>Sun, 30 Aug 2020 11:10:10 -0700</pubDate>
-                <link>http://algassert.com/post/2002</link>
-                <guid isPermaLink="true">http://algassert.com/post/2002</guid>
+                <title>Briskly Biased Bits</title>
+                <description>&lt;p&gt;Last year, I wrote a high performance simulator (&lt;a href=&quot;github.com/quantumlib/stim/&quot;&gt;stim&lt;/a&gt;) for noisy stabilizer circuits. One of the major bottlenecks on the speed of simulation was generating noise. Ultimately, I fixed this bottleneck. I wrote code that can produce streams of noisy bits, with each bit being independently true with probability...</description>
+                <pubDate>Sun, 10 Apr 2022 11:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/2200</link>
+                <guid isPermaLink="true">http://algassert.com/post/2200</guid>
             </item>
             <item>
-                <title>Decorrelated Depolarization</title>
-                <description>&lt;p&gt;There are a variety of ways of defining depolarizing errors out there. A common definition, used when analyzing error correction circuits, is that when a depolarizing error occurs to a set of qubits, a random Pauli ($I$, $X$, $Y$, or $Z$) is applied to each qubit. Every combination of Paulis...</description>
-                <pubDate>Tue, 21 Jul 2020 11:10:10 -0700</pubDate>
-                <link>http://algassert.com/post/2001</link>
-                <guid isPermaLink="true">http://algassert.com/post/2001</guid>
-            </item>
-            <item>
-                <title>[Paper] Compilation of Fault-Tolerant Quantum Heuristics for Combinatorial Optimization</title>
+                <title>[Paper] Benchmarking the Planar Honeycomb Code</title>
                 <description></description>
-                <pubDate>Tue, 14 Jul 2020 05:10:10 -0700</pubDate>
-                <link>http://algassert.com/2020/07/14/paper-compile-optimization.html</link>
-                <guid isPermaLink="true">http://algassert.com/2020/07/14/paper-compile-optimization.html</guid>
+                <pubDate>Thu, 24 Feb 2022 04:10:10 -0800</pubDate>
+                <link>http://algassert.com/2022/02/24/planar-honeycomb-paper.html</link>
+                <guid isPermaLink="true">http://algassert.com/2022/02/24/planar-honeycomb-paper.html</guid>
             </item>
             <item>
-                <title>[Talk at QCTIP2020] How to factor 2048 bit RSA integers in 8 hours using 20 million noisy qubits</title>
+                <title>[Talk at iQuHACK] Ideas for quantum computing projects</title>
                 <description></description>
-                <pubDate>Mon, 06 Apr 2020 09:10:10 -0700</pubDate>
-                <link>http://algassert.com/2020/04/06/qctip-talk.html</link>
-                <guid isPermaLink="true">http://algassert.com/2020/04/06/qctip-talk.html</guid>
+                <pubDate>Mon, 07 Feb 2022 08:10:10 -0800</pubDate>
+                <link>http://algassert.com/2022/02/07/iquhack-talk.html</link>
+                <guid isPermaLink="true">http://algassert.com/2022/02/07/iquhack-talk.html</guid>
             </item>
             <item>
-                <title>Factoring the largest number ever with a quantum computer</title>
-                <description>&lt;p&gt;&lt;strong&gt;(Update (April 4): I&amp;#39;ve seen several tweets thinking this post was serious. It&amp;#39;s not. Check the publication date.)&lt;/strong&gt;&lt;/p&gt; &lt;p&gt;Ever since Shor&amp;#39;s great discovery, quantum computers have been factoring larger and larger numbers. In 2001, the number 15 was factored using 8 qubits. This record was tied many times, but not...</description>
-                <pubDate>Wed, 01 Apr 2020 11:10:10 -0700</pubDate>
-                <link>http://algassert.com/post/2000</link>
-                <guid isPermaLink="true">http://algassert.com/post/2000</guid>
-            </item>
-            <item>
-                <title>[Talk at Simons Institute] Estimating the Fault Tolerant Cost of Classically Intractable Quantum Computations</title>
+                <title>[Talk] Software and the Honeycomb Code</title>
                 <description></description>
-                <pubDate>Thu, 27 Feb 2020 04:10:10 -0800</pubDate>
-                <link>http://algassert.com/2020/02/27/simons-talk.html</link>
-                <guid isPermaLink="true">http://algassert.com/2020/02/27/simons-talk.html</guid>
+                <pubDate>Thu, 30 Sep 2021 09:10:10 -0700</pubDate>
+                <link>http://algassert.com/2021/09/30/honeycomb-talk.html</link>
+                <guid isPermaLink="true">http://algassert.com/2021/09/30/honeycomb-talk.html</guid>
             </item>
             <item>
-                <title>Surviving Chain Link Erasures</title>
-                <description>&lt;p&gt;An &amp;quot;erasure&amp;quot; is a quantum error where you accidentally lose a qubit (or reset a qubit), but realize that this happened. Erasures are common in quantum computers based on photons, for example. Although it sounds really bad to lose a qubit, the fact that you &lt;em&gt;know&lt;/em&gt; when erasures happen actually...</description>
-                <pubDate>Thu, 28 Nov 2019 10:10:10 -0800</pubDate>
-                <link>http://algassert.com/post/1907</link>
-                <guid isPermaLink="true">http://algassert.com/post/1907</guid>
-            </item>
-            <item>
-                <title>Producing an N+1 Qubit CCZ State with an N Qubit Adder</title>
-                <description>&lt;p&gt;Back in April, I read the pre-print &lt;a href=&quot;https://arxiv.org/abs/1904.01124&quot;&gt;&amp;quot;Lower bounds on the non-Clifford resources for quantum computations&amp;quot; by Beverland, Campbell, Howard, and Kliuchnikov&lt;/a&gt;. It defines an amazingly simple metric, the &amp;quot;stabilizer nullity&amp;quot; of a state, which is the number of qubits in the state minus the number of Pauli product...</description>
-                <pubDate>Sun, 20 Oct 2019 11:10:10 -0700</pubDate>
-                <link>http://algassert.com/post/1906</link>
-                <guid isPermaLink="true">http://algassert.com/post/1906</guid>
-            </item>
-            <item>
-                <title>[Paper] Surface code dislocations have code distance L+O(1)</title>
+                <title>[Video] Qubits vs Bits: The Kickback Effect</title>
                 <description></description>
-                <pubDate>Mon, 30 Sep 2019 05:10:10 -0700</pubDate>
-                <link>http://algassert.com/2019/09/30/paper-dislocation-distance.html</link>
-                <guid isPermaLink="true">http://algassert.com/2019/09/30/paper-dislocation-distance.html</guid>
+                <pubDate>Wed, 22 Sep 2021 09:10:10 -0700</pubDate>
+                <link>http://algassert.com/2021/09/22/honeycomb-video-2.html</link>
+                <guid isPermaLink="true">http://algassert.com/2021/09/22/honeycomb-video-2.html</guid>
             </item>
             <item>
-                <title>Spooky Pebble Games and Irreversible Uncomputation</title>
-                <description>&lt;p&gt;In this post: extending pebble games to include measurement based uncomputation.&lt;/p&gt; &lt;p&gt;A &lt;a href=&quot;https://en.wikipedia.org/wiki/Pebble_game&quot;&gt;pebble game&lt;/a&gt; is a simplified abstraction of a reversible computation. A pebble game is played on a directed acyclic graph. Every node of the graph represents some intermediate value that can be computed and uncomputed. At any...</description>
-                <pubDate>Sun, 25 Aug 2019 11:10:10 -0700</pubDate>
-                <link>http://algassert.com/post/1905</link>
-                <guid isPermaLink="true">http://algassert.com/post/1905</guid>
+                <title>[Paper] A Fault-Tolerant Honeycomb Memory</title>
+                <description></description>
+                <pubDate>Tue, 24 Aug 2021 05:10:10 -0700</pubDate>
+                <link>http://algassert.com/2021/08/24/period-honeycomb-paper.html</link>
+                <guid isPermaLink="true">http://algassert.com/2021/08/24/period-honeycomb-paper.html</guid>
+            </item>
+            <item>
+                <title>[Talk at DEF CON Crypto and Privacy Village] How expensive is quantum factoring, really?</title>
+                <description></description>
+                <pubDate>Fri, 06 Aug 2021 09:10:10 -0700</pubDate>
+                <link>http://algassert.com/2021/08/06/defcon-talk.html</link>
+                <guid isPermaLink="true">http://algassert.com/2021/08/06/defcon-talk.html</guid>
+            </item>
+            <item>
+                <title>[Talk at QPL] Stim: A fast stabilizer circuit simulator</title>
+                <description></description>
+                <pubDate>Thu, 05 Aug 2021 09:10:10 -0700</pubDate>
+                <link>http://algassert.com/2021/08/05/qpl-talk.html</link>
+                <guid isPermaLink="true">http://algassert.com/2021/08/05/qpl-talk.html</guid>
+            </item>
+            <item>
+                <title>[Video] Discussing Honeycomb code code with Michael Newman</title>
+                <description></description>
+                <pubDate>Thu, 22 Jul 2021 09:10:10 -0700</pubDate>
+                <link>http://algassert.com/2021/07/22/honeycomb-video-2.html</link>
+                <guid isPermaLink="true">http://algassert.com/2021/07/22/honeycomb-video-2.html</guid>
+            </item>
+            <item>
+                <title>[Video] Estimating the threshold of a new quantum code using stim and pymatching</title>
+                <description></description>
+                <pubDate>Sun, 11 Jul 2021 09:10:10 -0700</pubDate>
+                <link>http://algassert.com/2021/07/11/honeycomb-video.html</link>
+                <guid isPermaLink="true">http://algassert.com/2021/07/11/honeycomb-video.html</guid>
             </item>
     </channel>
 </rss>
