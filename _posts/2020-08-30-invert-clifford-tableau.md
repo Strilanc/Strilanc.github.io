@@ -57,7 +57,7 @@ Here is the Clifford tableau of the $CNOT\_{a \rightarrow b}$ gate:
 This time the rightmost column of the table says that the $CNOT$ operation will conjugate a $Z$ on the target qubit into a $Z$ on both qubits.
 
 When you're given a compound Pauli operation that's not explicitly listed in the Clifford tableau, you can decompose it into a product of columns that are in the tableau.
-For example, you can figure out what CNOT does to $X\_a Z\_b$ by multiplying the columns for $X\_a$ and $Z\_b$.
+For example, you can figure out what $CNOT$ does to $X\_a Z\_b$ by multiplying the columns for $X\_a$ and $Z\_b$.
 Similarly, you can figure out what the $S$ gate conjugates $Y$ into by decomposing $Y = iXZ$.
 In detail: $S^\dagger Y S = S^\dagger (iXZ) S = i S^\dagger X (S^\dagger S) Z S = i (S^\dagger X S) (S^\dagger Z S) = iYZ = -X$.
 
@@ -197,7 +197,7 @@ Well... maybe there's some clever way to do it.
 But what I do is just start by assuming the sign of a column is `+`, then check whether or not sending that colum through the original Clifford operation unpacks it back into the columns' input (or else its negation).
 If it got negated, then I know the sign was wrong so I flip it:
 
-```
+```python
 # Correct the signs.
 for generator, output in list(columns.items()):
     columns[generator] *= original_operation(output).coefficient
