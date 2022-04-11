@@ -117,7 +117,7 @@ Here is the Clifford tableau of the $CNOT_{a \rightarrow b}$ gate:</p>
 <p>This time the rightmost column of the table says that the $CNOT$ operation will conjugate a $Z$ on the target qubit into a $Z$ on both qubits.</p>
 
 <p>When you&#39;re given a compound Pauli operation that&#39;s not explicitly listed in the Clifford tableau, you can decompose it into a product of columns that are in the tableau.
-For example, you can figure out what CNOT does to $X_a Z_b$ by multiplying the columns for $X_a$ and $Z_b$.
+For example, you can figure out what $CNOT$ does to $X_a Z_b$ by multiplying the columns for $X_a$ and $Z_b$.
 Similarly, you can figure out what the $S$ gate conjugates $Y$ into by decomposing $Y = iXZ$.
 In detail: $S^\dagger Y S = S^\dagger (iXZ) S = i S^\dagger X (S^\dagger S) Z S = i (S^\dagger X S) (S^\dagger Z S) = iYZ = -X$.</p>
 
@@ -241,9 +241,9 @@ How do we determine the signs of the inverted Pauli products?</p>
 <p>Well... maybe there&#39;s some clever way to do it.
 But what I do is just start by assuming the sign of a column is <code>+</code>, then check whether or not sending that colum through the original Clifford operation unpacks it back into the columns&#39; input (or else its negation).
 If it got negated, then I know the sign was wrong so I flip it:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span># Correct the signs.
-for generator, output in list(columns.items()):
-    columns[generator] *= original_operation(output).coefficient
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># Correct the signs.</span>
+<span class="k">for</span> <span class="n">generator</span><span class="p">,</span> <span class="n">output</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">columns</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+    <span class="n">columns</span><span class="p">[</span><span class="n">generator</span><span class="p">]</span> <span class="o">*=</span> <span class="n">original_operation</span><span class="p">(</span><span class="n">output</span><span class="p">)</span><span class="o">.</span><span class="n">coefficient</span>
 </code></pre></div>
 <p>Using this process, we can determine the signs:</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>      | 0  1  2  3

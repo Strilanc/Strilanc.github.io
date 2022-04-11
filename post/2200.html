@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Briskly Biased Bits</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+
+    <!-- Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48771413-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Briskly Biased Bits</h1>
+<p class="meta">10 Apr 2022</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+<p>Last year, I wrote a high performance simulator (<a href="github.com/quantumlib/stim/">stim</a>) for noisy stabilizer circuits.
+One of the major bottlenecks on the speed of simulation was generating noise.
+Ultimately, I fixed this bottleneck.
+I wrote code that can produce streams of noisy bits, with each bit being independently true with probability $p$, at gigahertz rates, for any value of $p$.
+This blog post is an explanation of how to do that.</p>
+
+<p>To structure the post, I will divide the problem into three cases:
+max entropy bits (probability exactly 50%),
+low entropy bits (probability below 1%),
+and mid entropy bits (probability between 1% and 50%).
+After explaining how to produce high rates of each of these types of bits,
+I&#39;ll finish by showing how to measure their quality.</p>
+
+<h1>Producing Max Entropy Bits</h1>
+
+<p>Producing max entropy bits at a high rate is something that I would describe as a solved problem.
+Or at least, solved enough for our purposes here.
+Doing this effectively is not about solving the problem for yourself, it&#39;s about finding a good pre-existing solution to use.</p>
+
+<p>First, you need to pick a language that doesn&#39;t have a lot of runtime overhead.
+If you picked Python, you&#39;ve already thrown away 10x or even 100x performance.
+For example, on my machine, Python takes tens of nanoseconds to increment a single integer (instead of tenths of nanoseconds).
+Second, you need to pick a pseudo random number generator that has good performance and meets whatever quality requirements you have.
+There&#39;s lots of options out there, with various tradeoffs between quantity and quality, so make sure to look around.</p>
+
+<p>In this post, I&#39;ll be using C++ as the language and the 64 bit mersenne twister
+<a href="http://www.cplusplus.com/reference/random/mt19937_64/"><code>std::mt19937_64</code></a> as the pseudo random number generator.
+I made these choices because a) the mersenne twister is well established as a decent PRNG, and b) I measured that the standard C++
+implementation was capable of producing output fast enough to meet my needs.
+These choices would be different if e.g. I needed more guarantees about memory safety or if I needed cryptographically secure entropy.</p>
+
+<p>Here is example code showing how to produce random bits with this generator.
+<a href="https://codingnest.com/generating-random-numbers-using-c-standard-library-the-problems/">Correctly seeding <code>std::mt19937_64</code> can be a bit tricky</a>,
+so to avoid that whole thing the example code I&#39;m providing is always going to take a reference to some already-initialized instance:</p>
+<div class="highlight"><pre><code class="language-C++" data-lang="C++"><span></span><span class="cp">#include</span> <span class="cpf">&lt;cstdint&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;random&gt;</span><span class="cp"></span>
+
+<span class="c1">/// Randomize the bits from out_start (inclusive) to out_end (exclusive).</span>
+<span class="kt">void</span> <span class="nf">generate_max_entropy_bits</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="o">*</span><span class="n">out_start</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="o">*</span><span class="n">out_end</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">mt19937_64</span> <span class="o">&amp;</span><span class="n">rng</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">uint64_t</span> <span class="o">*</span><span class="n">cur</span> <span class="o">=</span> <span class="n">out_start</span><span class="p">;</span> <span class="n">cur</span> <span class="o">!=</span> <span class="n">out_end</span><span class="p">;</span> <span class="n">cur</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">*</span><span class="n">cur</span> <span class="o">=</span> <span class="n">rng</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The above code is simple (just iterate over the memory that the caller asked you to randomize, writing the output of the prng into that memory)
+and sufficiently performant (on my machine it writes 20 gigabits of entropy per second).</p>
+
+<h1>Producing Low Entropy Bits</h1>
+
+<p>Usually when you&#39;re simulating error processes, the errors have a pretty small chance of occurring.
+For example, the threshold error rate of the surface code is roughly 1%,
+so if you&#39;re doing surface code simulations most of your simulated errors are going to occur less than 1% of the time.
+In this section, we want to produce bits that decide whether or not these errors occur.
+We want to produce a lot of biased random bits that are ON with independent probability $p &lt; 1\%$.</p>
+
+<p>The easy way to produce a biased random bit that&#39;s ON with probability $p$ is to generate a uniform random real number $r$ over the range $[0, 1)$,
+and return the value of the expression $r &lt; p$ as your biased random bit.
+Equivalently, you can produce a uniform random $b$-bit integer $i$ over the range $[0, 2^b)$ and return the value of the expression $i &lt; \lfloor p 2^b \rfloor$.
+Note that this truncates $p$ to $b$ bits of precision, distorting the output; we&#39;ll come back to that later.</p>
+
+<p>The easy method for producing biased bits that I just described is very inefficient.
+This is perhaps most obvious if you look at how much entropy is being consumed versus how much entropy is being produced.
+Suppose that $p=0.1\%$ and that $b=32$.
+The entropy of a bit that is ON with probability $0.1\%$ is $-0.001 \log_2 0.001 \approx 0.01 \text{bits}$.
+The easy method is consuming 32 bits of entropy to produce one hundredth of a bit of entropy; a loss of more than 1000x.
+Recall that we can produce max entropy bits at 20GHz, and that these are the input bits into the biasing process.
+Having an input rate of 20GHz and a loss factor larger than 1000 means that the output rate cannot be faster than 20MHz, which is too slow.</p>
+
+<p>There are a variety of ways of being more efficient with the entropy that we&#39;re given.
+For example, we could use an <a href="https://en.wikipedia.org/wiki/Arithmetic_coding">arithmetic coder</a>.
+However, making arithmetic coding fast requires precomputing Huffman tables, and I happen to know that
+for Stim there isn&#39;t really time for that (it tends to generate 1000 bits for one noise process using some probability $p_1$ and then move on to some other process with a different probability $p_2$).
+Instead, I&#39;ve found that a very effective strategy is to switch from directly sampling each output bit to sampling the
+<em>length of the gaps between the 1s</em>.
+This changes the amount of work we&#39;re doing, so that instead of scaling with the number of output bits,
+we&#39;re scaling with the number of ON output bits.
+This is great because we know we&#39;re working in a context where ON output bits are rare.</p>
+
+<p>Let&#39;s work out what the distribution of gaps between ON bits is.
+We&#39;re flipping a coin heavily biased towards HEADS and we&#39;re sampling how many times we need to flip before we get a TAILS.
+The probability that we immediately get a TAILS is $p$,
+the probability we get HEADS then TAILS is $(1-p)p$,
+and in general the probability of getting $k$ HEADS until finally landing that TAILS is $(1-p)^k p$.
+So our distribution is $P(k) = p (1-p)^k$.
+That&#39;s the <a href="https://en.wikipedia.org/wiki/Binomial_distribution">geometric distribution</a>.</p>
+
+<p>C++ includes a built-in utility <a href="https://en.cppreference.com/w/cpp/numeric/random/geometric_distribution"><code>std::geometric_distribution</code></a>
+for sampling from the geometric distribution.
+Using it, we can write some low entropy biased bit sampler code:</p>
+<div class="highlight"><pre><code class="language-C++" data-lang="C++"><span></span><span class="cp">#include</span> <span class="cpf">&lt;cstdint&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;random&gt;</span><span class="cp"></span>
+
+<span class="c1">/// Randomize the bits from out_start (inclusive) to out_end (exclusive) with bias probability p.</span>
+<span class="c1">/// Assumes that the output range is zero&#39;d.</span>
+<span class="kt">void</span> <span class="nf">generate_low_entropy_bits</span><span class="p">(</span>
+        <span class="kt">double</span> <span class="n">probability</span><span class="p">,</span>
+        <span class="kt">uint64_t</span> <span class="o">*</span><span class="n">out_start</span><span class="p">,</span>
+        <span class="kt">uint64_t</span> <span class="o">*</span><span class="n">out_end</span><span class="p">,</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">mt19937_64</span> <span class="o">&amp;</span><span class="n">rng</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">geometric_distribution</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">&gt;</span> <span class="n">geo</span><span class="p">(</span><span class="n">probability</span><span class="p">);</span>
+    <span class="kt">size_t</span> <span class="n">n</span> <span class="o">=</span> <span class="p">(</span><span class="n">out_end</span> <span class="o">-</span> <span class="n">out_start</span><span class="p">)</span> <span class="o">*</span> <span class="mi">64</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">k</span> <span class="o">=</span> <span class="n">geo</span><span class="p">(</span><span class="n">rng</span><span class="p">);</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">k</span> <span class="o">+=</span> <span class="n">gen</span><span class="p">(</span><span class="n">rng</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">out_start</span><span class="p">[</span><span class="n">k</span> <span class="o">/</span> <span class="mi">64</span><span class="p">]</span> <span class="o">|=</span> <span class="kt">uint64_t</span><span class="p">{</span><span class="mi">1</span><span class="p">}</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">k</span> <span class="o">%</span> <span class="mi">64</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>On my machine, with $p=0.1\%$, this method produces output bits at a few GHz.
+As $p$ gets smaller, the runtime also gets smaller.
+This is because, under the hood, the geometric distribution is using a single sample and some algebra to produce its output.
+Note that the cumulative geometric distribution has a simple expression $C(k) = \sum_{i=0}^{k-1} p (1-p)^i = 1 - (1-p)^k$.
+We can isolate $k$ in this expression to get $k = \log(1 - C(k)) / \log(1 - p)$.
+If we replace the $C(k)$ with a uniformly random real sample from 0 to 1, then that expression is a sample from the
+geometric distribution:</p>
+<div class="highlight"><pre><code class="language-C++" data-lang="C++"><span></span><span class="kt">uint64_t</span> <span class="nf">convert_uniform_sample_to_geometric_sample</span><span class="p">(</span><span class="kt">double</span> <span class="n">probability</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">sample</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">double</span> <span class="n">u</span> <span class="o">=</span> <span class="p">((</span><span class="kt">double</span><span class="p">)</span><span class="n">sample</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">/</span> <span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">64</span><span class="p">);</span>
+    <span class="k">return</span> <span class="p">(</span><span class="kt">uint64_t</span><span class="p">)</span><span class="n">floor</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="n">log1p</span><span class="p">(</span><span class="o">-</span><span class="n">probability</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>(This code makes a few tweaks to the algebra to avoid some rounding issues.
+It adds 0.5 to the sample to get the midpoints of the $2^{64}$ buckets, and uses $u$ instead of $1-u$, so that the argument to $\log$
+is never 0.
+Note that this code does introduce some distortion.
+For example, a real geometric distribution has a non-zero probability of sampling $2^{64}+1$ whereas the above code obviously will not ever return that result.
+We&#39;ll come back to the issue of quality later.)</p>
+
+<p>Now that we have some insight into what&#39;s going on behind the scenes, we can see why this method is capable of going so much faster.
+First, the entropy usage is much more efficient.
+We&#39;re consuming 64 bits of entropy per geometric sample, and each geometric sample gives us (on average) $1/p$ output samples.
+For $p=0.1\%$ that means we&#39;re consuming $0.064$ input bits per output bit.
+Compared to the easy method, that&#39;s over two orders of magnitude closer to the $0.01$ bit limit at $p=0.1\%$.
+Second, although we are calling some pretty heavy weight functions like $\log$, the cost of these calls is amortized over hundreds of output bits.
+That is to say, we&#39;re in a pretty good place in the space of possible tradeoffs between entropy efficiency and compute efficiency.</p>
+
+<h1>Producing Mid Entropy Bits</h1>
+
+<p>At last we come to what I consider the hardest case: bits whose probability is between 1% and 49%.
+I don&#39;t particularly want to go through a list of everthing I tried, most of which had pretty mediocre results.
+I&#39;m just going to explain the thing I did that worked the best.</p>
+
+<p>The key underlying idea I used was to truncate the probability, to make the sampling easier to do, and then to fix the distortion from the truncation
+using a refinement involving low entropy bits.
+Instead of sampling bits with probability $p$, we&#39;ll sample the bitwise-or of bits with probability $p^\prime = \lfloor p \cdot 2^8 \rfloor / 2^8$
+and bits with probability $(p^\prime - p) / (1 - p^\prime)$.
+(Exercise for the reader: check that this in fact produces bits that are ON with probability $p$.)</p>
+
+<p>To sample from the truncated probability, which had 8 bits of precision, I initially grouped the bits coming out of the random number generator
+into random bytes and used the easy &quot;is it less than 256p&quot; conversion.
+I used vectorized instructions to do many of these comparisons with fewer instructions.
+However, surprisingly, I found that this was slower than using bit-level parallelism.
+Instead of using the CPU&#39;s built-in comparison instructions, I took the circuit for a ripple carry comparator and ran a bitwise instruction for each gate from the circuit.
+This is of course slower than the native comparison, but it turns out it&#39;s not 64 times slower; so the 64 times speedup of using bit-level parallelism on 64 bit words ultimately wins the day.</p>
+
+<p>Here&#39;s simplified code for generating mid entropy bits:</p>
+<div class="highlight"><pre><code class="language-C++" data-lang="C++"><span></span><span class="cp">#include</span> <span class="cpf">&lt;random&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstdint&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cassert&gt;</span><span class="cp"></span>
+
+<span class="kt">void</span> <span class="nf">or_low_probability_bits</span><span class="p">(</span>
+        <span class="kt">double</span> <span class="n">probability</span><span class="p">,</span>
+        <span class="kt">uint64_t</span> <span class="o">*</span><span class="n">start</span><span class="p">,</span>
+        <span class="kt">uint64_t</span> <span class="o">*</span><span class="n">end</span><span class="p">,</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">mt19937_64</span> <span class="o">&amp;</span><span class="n">rng</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">probability</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+       <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">double</span> <span class="n">d</span> <span class="o">=</span> <span class="n">log1p</span><span class="p">(</span><span class="o">-</span><span class="n">probability</span><span class="p">);</span>
+    <span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">size_t</span> <span class="n">n</span> <span class="o">=</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">*</span> <span class="mi">64</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">double</span> <span class="n">u</span> <span class="o">=</span> <span class="p">((</span><span class="kt">double</span><span class="p">)</span><span class="n">rng</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">/</span> <span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">64</span><span class="p">);</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="p">(</span><span class="kt">uint64_t</span><span class="p">)</span><span class="n">floor</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="n">d</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">start</span><span class="p">[</span><span class="n">i</span> <span class="o">/</span> <span class="mi">64</span><span class="p">]</span> <span class="o">|=</span> <span class="mi">1ULL</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">i</span> <span class="o">&amp;</span> <span class="mi">63</span><span class="p">);</span>
+        <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">generate_biased_random_bits</span><span class="p">(</span>
+        <span class="kt">double</span> <span class="n">probability</span><span class="p">,</span>
+        <span class="kt">uint64_t</span> <span class="o">*</span><span class="n">start</span><span class="p">,</span>
+        <span class="kt">uint64_t</span> <span class="o">*</span><span class="n">end</span><span class="p">,</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">mt19937_64</span> <span class="o">&amp;</span><span class="n">rng</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">probability</span> <span class="o">&lt;=</span> <span class="mf">0.5</span><span class="p">);</span>
+    <span class="k">constexpr</span> <span class="kt">size_t</span> <span class="n">COIN_FLIPS</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+    <span class="k">constexpr</span> <span class="kt">double</span> <span class="n">BUCKETS</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">COIN_FLIPS</span><span class="p">);</span>
+    <span class="kt">double</span> <span class="n">raised</span> <span class="o">=</span> <span class="n">probability</span> <span class="o">*</span> <span class="n">BUCKETS</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">raised_floor</span> <span class="o">=</span> <span class="n">floor</span><span class="p">(</span><span class="n">raised</span><span class="p">);</span>
+    <span class="kt">double</span> <span class="n">raised_leftover</span> <span class="o">=</span> <span class="n">raised</span> <span class="o">-</span> <span class="n">raised_floor</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">p_truncated</span> <span class="o">=</span> <span class="n">raised_floor</span> <span class="o">/</span> <span class="n">BUCKETS</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">p_leftover</span> <span class="o">=</span> <span class="n">raised_leftover</span> <span class="o">/</span> <span class="n">BUCKETS</span><span class="p">;</span>
+    <span class="kt">uint64_t</span> <span class="n">p_top_bits</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint64_t</span><span class="p">)</span><span class="n">raised_floor</span><span class="p">;</span>
+
+    <span class="c1">// Flip 8 coins for each output bit, using the position of the first HEADS</span>
+    <span class="c1">// result to select a bit from the probability&#39;s binary representation.</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">uint64_t</span> <span class="o">*</span><span class="n">cur</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span> <span class="n">cur</span> <span class="o">!=</span> <span class="n">end</span><span class="p">;</span> <span class="n">cur</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">uint64_t</span> <span class="n">alive</span> <span class="o">=</span> <span class="n">rng</span><span class="p">();</span>
+        <span class="kt">uint64_t</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">k_bit</span> <span class="o">=</span> <span class="n">COIN_FLIPS</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">k_bit</span><span class="o">--</span><span class="p">;)</span> <span class="p">{</span>
+            <span class="kt">uint64_t</span> <span class="n">shoot</span> <span class="o">=</span> <span class="n">rng</span><span class="p">();</span>
+            <span class="n">result</span> <span class="o">^=</span> <span class="n">shoot</span> <span class="o">&amp;</span> <span class="n">alive</span> <span class="o">&amp;</span> <span class="o">-</span><span class="p">((</span><span class="n">p_top_bits</span> <span class="o">&gt;&gt;</span> <span class="n">k_bit</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="n">alive</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">shoot</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="o">*</span><span class="n">cur</span> <span class="o">=</span> <span class="n">result</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// De-truncate the probability by refining the output.</span>
+    <span class="n">or_low_probability_bits</span><span class="p">(</span>
+        <span class="n">p_leftover</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p_truncated</span><span class="p">),</span>
+        <span class="n">start</span><span class="p">,</span>
+        <span class="n">end</span><span class="p">,</span>
+        <span class="n">rng</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>You can also view the <a href="https://github.com/quantumlib/Stim/blob/8d56132e31a3ea39cc15def2758859b0faf85f10/src/stim/probability_util.cc#L80">production code in stim</a>.</p>
+
+<p>On my machine, this code produces output bits at a rate of 1-2 GHz.
+Note that, just by focusing on entropy conversion efficiency, we can see that this speed makes sense.
+We&#39;re consuming ~8 bits of entropy per output bit,
+and the output rate is ~8 times slower than the rate that we can produce max entropy bits.
+In principle, it should be possible to do better by reducing the amount of waste in the entropy conversion.
+Unfortunately, I don&#39;t know how to do that without increasing the computational cost of the conversion so much that it erases the gains.</p>
+
+<h1>Quality</h1>
+
+<p>Throughout the post I&#39;ve mentioned that there are distortations in the output.
+In this section, I want to quantify how big those distortions are.
+The metric that I&#39;ll be using is &quot;expected bits of evidence per sample&quot;.</p>
+
+<p>Basically, suppose we are generating samples that are being given to an ideal Bayesian reasoner
+and that reasoner is attempting to determine whether those samples are coming from an ideal
+distribution or our code approximation that ideal distribution.
+How quickly is that reasoner able to distringuish between those two cases
+(assuming they have access to our source code)?
+Well, for each possible sample $s$, there will be an ideal probability $P(s)$ and an actual achieved probability $P^\prime(s)$.
+Upon seeing $s$, a Bayesian reasoner that currently assigns $a:b$ odds will perform a Bayesian update $a:b \rightarrow a P(s) : b P^\prime(s)$.
+We&#39;re trying to quantify the rate at which the odds on the left and right hand sides diverge from each other.</p>
+
+<p>Understanding the divergence of the odds is simpler when using log odds.
+We can rewrite the update process into the following form: $1:2^x \rightarrow 2^{x + \log_2 \frac{P^\prime(s)}{P(s)}}$.
+Now instead of having to understand two multiplications, we only have to understand one addition.
+The value being added, $\log_2 \frac{P^\prime(s)}{P(s)}$, is the &quot;bits of evidence&quot; of an observation.
+Its magnitude represents how much the Bayesian reasoner will update based on seeing the sample $s$.
+If a sample is twice is as likely to be produced by our implementation than by an ideal process, then upon seeing that sample
+the Bayesian updater will shift by one bit (one factor of 2 in the odds) towards the generator in question being our implementation
+instead of the ideal process.</p>
+
+<p>When observing samples produced by our implementation,
+the expected bits of evidence that the Bayesian reasoner will gain per sample is $P^\prime(s) \log_2 \frac{P^\prime(s)}{P(s)}$.
+If this value was equal to 0, our implementation would be exactly perfect.
+In practice our implementation is never perfect, and so the expected bits of evidence per sample is non-zero, and so the Bayesian reasoner will slowly become confident that they are using our generator instead of an ideal generator.
+If the expected evidence per sample is $10^{-9}$, then it would be reasonable for us to say that our bit producing process is safe to use
+for a billion samples, but if you use it for a trillion samples you&#39;ve gone too far and are perhaps measuring properties of the
+distortions between the idealized process and the actual process rather than properties of the idealized process.</p>
+
+<p>Here is code that computes the expected evidence per sample for the low entropy sampling code
+(assuming that the input entropy is ideal):</p>
+<div class="highlight"><pre><code class="language-C++" data-lang="C++"><span></span><span class="cp">#include</span> <span class="cpf">&lt;functional&gt;</span><span class="cp"></span>
+
+<span class="kt">uint64_t</span> <span class="nf">convert_uniform_sample_to_geometric_sample</span><span class="p">(</span><span class="kt">double</span> <span class="n">probability</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">sample</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">double</span> <span class="n">u</span> <span class="o">=</span> <span class="p">((</span><span class="kt">double</span><span class="p">)</span><span class="n">sample</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">/</span> <span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">64</span><span class="p">);</span>
+    <span class="k">return</span> <span class="p">(</span><span class="kt">uint64_t</span><span class="p">)</span><span class="n">floor</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="n">log1p</span><span class="p">(</span><span class="o">-</span><span class="n">probability</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="n">T</span> <span class="n">binary_search_first</span><span class="p">(</span><span class="n">T</span> <span class="n">target</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="n">T</span><span class="p">(</span><span class="n">T</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">f</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">T</span> <span class="n">min</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">T</span> <span class="n">max</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">min</span> <span class="o">&lt;</span> <span class="n">max</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">T</span> <span class="n">dif</span> <span class="o">=</span> <span class="p">(</span><span class="n">max</span> <span class="o">-</span> <span class="n">min</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">T</span> <span class="n">med</span> <span class="o">=</span> <span class="n">min</span> <span class="o">+</span> <span class="n">dif</span><span class="p">;</span>
+        <span class="n">T</span> <span class="n">a</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">med</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&gt;=</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">max</span> <span class="o">=</span> <span class="n">med</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">min</span> <span class="o">=</span> <span class="n">med</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">min</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">double</span> <span class="n">expected_evidence_per_low_entropy_bit</span><span class="p">(</span><span class="kt">double</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">double</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">uint64_t</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">f</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="kt">uint64_t</span> <span class="n">s</span><span class="p">){</span> <span class="k">return</span> <span class="n">convert_uniform_sample_to_geometric_sample</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="o">~</span><span class="n">s</span><span class="p">);</span> <span class="p">};</span>
+        <span class="kt">uint64_t</span> <span class="n">v0</span> <span class="o">=</span> <span class="n">binary_search_first</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">f</span><span class="p">);</span>
+        <span class="kt">uint64_t</span> <span class="n">v1</span> <span class="o">=</span> <span class="n">binary_search_first</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">f</span><span class="p">);</span>
+        <span class="kt">double</span> <span class="n">actual</span> <span class="o">=</span> <span class="p">(</span><span class="n">v1</span> <span class="o">-</span> <span class="n">v0</span><span class="p">)</span> <span class="o">/</span> <span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">64</span><span class="p">);</span>
+        <span class="kt">double</span> <span class="n">ideal</span> <span class="o">=</span> <span class="n">p</span> <span class="o">*</span> <span class="n">pow</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">,</span> <span class="n">k</span><span class="p">);</span>
+        <span class="kt">double</span> <span class="n">rtol</span> <span class="o">=</span> <span class="n">actual</span> <span class="o">/</span> <span class="n">ideal</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">actual</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">log2</span><span class="p">(</span><span class="n">actual</span> <span class="o">/</span> <span class="n">ideal</span><span class="p">)</span> <span class="o">*</span> <span class="n">actual</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>According to this code, for $p=0.001$, the expected evidence per sample is $10^{-15}$ bits.
+Basically, you can produce a million billion samples from the low entropy sampling process before you have to start worrying about
+distortions due to numerical imprecision.</p>
+
+<p>I also checked what happened if the input samples were 32 bit numbers instead of 64 bit numbers ($10^{-8}$ evidence bits per sample) and what happened if I used
+single precision floats insteasd of double precision floats ($10^{-6}$ evidence bits per sample).</p>
+
+<h1>Closing Remarks</h1>
+
+<p>You can see the sampling code <a href="https://github.com/quantumlib/Stim/blob/8d56132e31a3ea39cc15def2758859b0faf85f10/src/stim/probability_util.cc#L80">in stim on github</a>.</p>
+
+<p>I used the evidence-per-sample estimates when deciding whether to use double or single precision floats in stim&#39;s code.
+I decided to go with single precision.
+This is probably a bit surprising to you, since it means a few million samples is enough to betray that the sampling is approximate and a million samples is not that many.
+There are three factors that made me decide this way.
+First, using single precision floats is faster and stim is very <em>very</em> speed focused.
+There needs to be a good reason <em>not</em> to go fast.
+Second, the ideal Bayesian reasoner is a worst case scenario.
+Stim is instended for use cases like estimating how often a syndrome decoder makes a bad prediction.
+That kind of process should be much less sensitive to the distortions introduced by these approximations.
+Third (and, honestly, the actual deciding factor) we don&#39;t know the error rates of actual quantum hardware to <em>anywhere near</em> &quot;million samples to tell apart&quot; levels of precision.
+Physical error rates drift orders of magnitude more than that from day to day.
+Any result that was ruined by distortion this small would have to be laughably disconnected from practice.</p>
+
+</div>
+
+
+    </div>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
