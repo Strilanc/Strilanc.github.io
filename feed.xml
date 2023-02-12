@@ -7,6 +7,41 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>[Paper] Relaxing Hardware Requirements for Surface Code Circuits using Time-dynamics</title>
+                <description></description>
+                <pubDate>Sat, 04 Feb 2023 04:10:10 -0800</pubDate>
+                <link>http://algassert.com/2023/02/04/midout-surface-code-paper.html</link>
+                <guid isPermaLink="true">http://algassert.com/2023/02/04/midout-surface-code-paper.html</guid>
+            </item>
+            <item>
+                <title>[Talk at Quantum Summer Symposium] A short history of the honeycomb code</title>
+                <description></description>
+                <pubDate>Wed, 07 Sep 2022 09:10:10 -0700</pubDate>
+                <link>http://algassert.com/2022/09/07/history-of-honeycomb-talk.html</link>
+                <guid isPermaLink="true">http://algassert.com/2022/09/07/history-of-honeycomb-talk.html</guid>
+            </item>
+            <item>
+                <title>[Paper] A Pair Measurement Surface Code on Pentagons</title>
+                <description></description>
+                <pubDate>Sun, 26 Jun 2022 05:10:10 -0700</pubDate>
+                <link>http://algassert.com/2022/06/26/pentagon-surface-code-paper.html</link>
+                <guid isPermaLink="true">http://algassert.com/2022/06/26/pentagon-surface-code-paper.html</guid>
+            </item>
+            <item>
+                <title>[Paper] Stability Experiments: The Overlooked Dual of Memory Experiments</title>
+                <description></description>
+                <pubDate>Fri, 29 Apr 2022 06:10:10 -0700</pubDate>
+                <link>http://algassert.com/2022/04/29/stability-paper.html</link>
+                <guid isPermaLink="true">http://algassert.com/2022/04/29/stability-paper.html</guid>
+            </item>
+            <item>
+                <title>[Paper] Quantum Dictionaries without QRAM</title>
+                <description></description>
+                <pubDate>Fri, 29 Apr 2022 05:10:10 -0700</pubDate>
+                <link>http://algassert.com/2022/04/29/quantum-dicts-paper.html</link>
+                <guid isPermaLink="true">http://algassert.com/2022/04/29/quantum-dicts-paper.html</guid>
+            </item>
+            <item>
                 <title>Briskly Biased Bits</title>
                 <description>&lt;p&gt;Last year, I wrote a high performance simulator (&lt;a href=&quot;github.com/quantumlib/stim/&quot;&gt;stim&lt;/a&gt;) for noisy stabilizer circuits. One of the major bottlenecks on the speed of simulation was generating noise. Ultimately, I fixed this bottleneck. I wrote code that can produce streams of noisy bits, with each bit being independently true with probability...</description>
                 <pubDate>Sun, 10 Apr 2022 11:10:10 -0700</pubDate>
@@ -40,41 +75,6 @@
                 <pubDate>Wed, 22 Sep 2021 09:10:10 -0700</pubDate>
                 <link>http://algassert.com/2021/09/22/honeycomb-video-2.html</link>
                 <guid isPermaLink="true">http://algassert.com/2021/09/22/honeycomb-video-2.html</guid>
-            </item>
-            <item>
-                <title>[Paper] A Fault-Tolerant Honeycomb Memory</title>
-                <description></description>
-                <pubDate>Tue, 24 Aug 2021 05:10:10 -0700</pubDate>
-                <link>http://algassert.com/2021/08/24/period-honeycomb-paper.html</link>
-                <guid isPermaLink="true">http://algassert.com/2021/08/24/period-honeycomb-paper.html</guid>
-            </item>
-            <item>
-                <title>[Talk at DEF CON Crypto and Privacy Village] How expensive is quantum factoring, really?</title>
-                <description></description>
-                <pubDate>Fri, 06 Aug 2021 09:10:10 -0700</pubDate>
-                <link>http://algassert.com/2021/08/06/defcon-talk.html</link>
-                <guid isPermaLink="true">http://algassert.com/2021/08/06/defcon-talk.html</guid>
-            </item>
-            <item>
-                <title>[Talk at QPL] Stim: A fast stabilizer circuit simulator</title>
-                <description></description>
-                <pubDate>Thu, 05 Aug 2021 09:10:10 -0700</pubDate>
-                <link>http://algassert.com/2021/08/05/qpl-talk.html</link>
-                <guid isPermaLink="true">http://algassert.com/2021/08/05/qpl-talk.html</guid>
-            </item>
-            <item>
-                <title>[Video] Discussing Honeycomb code code with Michael Newman</title>
-                <description></description>
-                <pubDate>Thu, 22 Jul 2021 09:10:10 -0700</pubDate>
-                <link>http://algassert.com/2021/07/22/honeycomb-video-2.html</link>
-                <guid isPermaLink="true">http://algassert.com/2021/07/22/honeycomb-video-2.html</guid>
-            </item>
-            <item>
-                <title>[Video] Estimating the threshold of a new quantum code using stim and pymatching</title>
-                <description></description>
-                <pubDate>Sun, 11 Jul 2021 09:10:10 -0700</pubDate>
-                <link>http://algassert.com/2021/07/11/honeycomb-video.html</link>
-                <guid isPermaLink="true">http://algassert.com/2021/07/11/honeycomb-video.html</guid>
             </item>
     </channel>
 </rss>
