@@ -14,6 +14,27 @@
                 <guid isPermaLink="true">http://algassert.com/post/2300</guid>
             </item>
             <item>
+                <title>[Paper] Sparse Blossom: correcting a million errors per core second with minimum-weight matching</title>
+                <description></description>
+                <pubDate>Tue, 28 Mar 2023 05:10:10 -0700</pubDate>
+                <link>http://algassert.com/2023/03/28/pymatching2-paper.html</link>
+                <guid isPermaLink="true">http://algassert.com/2023/03/28/pymatching2-paper.html</guid>
+            </item>
+            <item>
+                <title>[Paper] Cleaner magic states with hook injection</title>
+                <description></description>
+                <pubDate>Thu, 23 Feb 2023 04:10:10 -0800</pubDate>
+                <link>http://algassert.com/2023/02/23/hook-injection-paper.html</link>
+                <guid isPermaLink="true">http://algassert.com/2023/02/23/hook-injection-paper.html</guid>
+            </item>
+            <item>
+                <title>[Paper] Inplace Access to the Surface Code Y Basis</title>
+                <description></description>
+                <pubDate>Tue, 14 Feb 2023 04:10:10 -0800</pubDate>
+                <link>http://algassert.com/2023/02/14/ybasis-paper.html</link>
+                <guid isPermaLink="true">http://algassert.com/2023/02/14/ybasis-paper.html</guid>
+            </item>
+            <item>
                 <title>[Paper] Relaxing Hardware Requirements for Surface Code Circuits using Time-dynamics</title>
                 <description></description>
                 <pubDate>Sat, 04 Feb 2023 04:10:10 -0800</pubDate>
@@ -54,27 +75,6 @@
                 <pubDate>Sun, 10 Apr 2022 11:10:10 -0700</pubDate>
                 <link>http://algassert.com/post/2200</link>
                 <guid isPermaLink="true">http://algassert.com/post/2200</guid>
-            </item>
-            <item>
-                <title>[Paper] Benchmarking the Planar Honeycomb Code</title>
-                <description></description>
-                <pubDate>Thu, 24 Feb 2022 04:10:10 -0800</pubDate>
-                <link>http://algassert.com/2022/02/24/planar-honeycomb-paper.html</link>
-                <guid isPermaLink="true">http://algassert.com/2022/02/24/planar-honeycomb-paper.html</guid>
-            </item>
-            <item>
-                <title>[Talk at iQuHACK] Ideas for quantum computing projects</title>
-                <description></description>
-                <pubDate>Mon, 07 Feb 2022 08:10:10 -0800</pubDate>
-                <link>http://algassert.com/2022/02/07/iquhack-talk.html</link>
-                <guid isPermaLink="true">http://algassert.com/2022/02/07/iquhack-talk.html</guid>
-            </item>
-            <item>
-                <title>[Talk] Software and the Honeycomb Code</title>
-                <description></description>
-                <pubDate>Thu, 30 Sep 2021 09:10:10 -0700</pubDate>
-                <link>http://algassert.com/2021/09/30/honeycomb-talk.html</link>
-                <guid isPermaLink="true">http://algassert.com/2021/09/30/honeycomb-talk.html</guid>
             </item>
     </channel>
 </rss>
