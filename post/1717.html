@@ -110,18 +110,18 @@ It&#39;s possible to do so in 12 ops, and that site will show you how.</p>
 <p>One of the bit twiddling tasks on the site is &quot;swap two variables without using any extra space for a temporary variable&quot;.
 That is to say, rewrite the following code so that it operates only on <code>a</code> and <code>b</code> without using a temporary <code>t</code>:</p>
 <div class="highlight"><pre><code class="language-c" data-lang="c"><span></span><span class="cp"># swap a, b using temporary t</span>
-<span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
-<span class="n">b</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
+<span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">;</span>
 </code></pre></div>
 <p>(No, using a language that lets you write <code>a, b = b, a</code> doesn&#39;t count as a solution.)</p>
 
 <p>One solution to this problem, covered by the Bit Twiddling Hacks site, is called <a href="https://en.wikipedia.org/wiki/XOR_swap_algorithm">&quot;xor-swapping&quot;</a>.
 You just xor-assign the two variables back and forth and back, and they end up swapped:</p>
 <div class="highlight"><pre><code class="language-c" data-lang="c"><span></span><span class="cp"># swap a, b</span>
-<span class="n">a</span> <span class="o">^=</span> <span class="n">b</span>
-<span class="n">b</span> <span class="o">^=</span> <span class="n">a</span>
-<span class="n">a</span> <span class="o">^=</span> <span class="n">b</span>
+<span class="n">a</span><span class="w"> </span><span class="o">^=</span><span class="w"> </span><span class="n">b</span>
+<span class="n">b</span><span class="w"> </span><span class="o">^=</span><span class="w"> </span><span class="n">a</span>
+<span class="n">a</span><span class="w"> </span><span class="o">^=</span><span class="w"> </span><span class="n">b</span>
 </code></pre></div>
 <p>To really see why this works, I recommend doing a few examples by hand.
 For our purposes here in this post, the interesting thing about xor-swapping is that it only uses reversible operations.
@@ -228,7 +228,7 @@ You can think of either operation as being &quot;the control&quot; of the other.
 
 <span class="k">def</span> <span class="nf">control_product</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
     <span class="c1"># Note: A and B must commute.</span>
-    <span class="k">return</span> <span class="n">expm</span><span class="p">(</span><span class="mi">1j</span><span class="o">/</span><span class="n">pi</span> <span class="o">*</span> <span class="n">logm</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">logm</span><span class="p">(</span><span class="n">B</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">expm</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">/</span><span class="n">pi</span> <span class="o">*</span> <span class="n">logm</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">logm</span><span class="p">(</span><span class="n">B</span><span class="p">)))</span>
 
 <span class="n">I</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">mat</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
@@ -240,7 +240,7 @@ You can think of either operation as being &quot;the control&quot; of the other.
 <span class="n">X2</span> <span class="o">=</span> <span class="n">kron</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
 <span class="n">CNOT</span> <span class="o">=</span> <span class="n">control_product</span><span class="p">(</span><span class="n">Z1</span><span class="p">,</span> <span class="n">X2</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">CNOT</span><span class="o">.</span><span class="n">round</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">CNOT</span><span class="o">.</span><span class="n">round</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
 <span class="c1"># [[1 0 0 0]</span>
 <span class="c1">#  [0 1 0 0]</span>
 <span class="c1">#  [0 0 0 1]</span>
@@ -262,7 +262,7 @@ That&#39;s it.</p>
     <span class="n">control_product</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">Z2</span><span class="p">))</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
     <span class="n">control_product</span><span class="p">(</span><span class="n">Z1</span><span class="p">,</span> <span class="n">X2</span><span class="p">))</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">Swap</span><span class="o">.</span><span class="n">round</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Swap</span><span class="o">.</span><span class="n">round</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
 <span class="c1"># [[1 0 0 0]</span>
 <span class="c1">#  [0 0 1 0]</span>
 <span class="c1">#  [0 1 0 0]</span>
@@ -278,8 +278,8 @@ The fact that we call one particular axis the Z axis (or &quot;the computational
 The underlying math is independent of our naming conventions, so this alternating technique must work in some sense no matter which axis we use.</p>
 
 <p>Just to be sure, we can test in python if using X and Y instead of Z and X works:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">Y</span> <span class="o">=</span> <span class="n">mat</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1j</span><span class="p">],</span>
-         <span class="p">[</span><span class="mi">1j</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">Y</span> <span class="o">=</span> <span class="n">mat</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="p">],</span>
+         <span class="p">[</span><span class="mi">1</span><span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
 <span class="n">Y1</span> <span class="o">=</span> <span class="n">kron</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">I</span><span class="p">)</span>
 <span class="n">Y2</span> <span class="o">=</span> <span class="n">kron</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
 
@@ -287,7 +287,7 @@ The underlying math is independent of our naming conventions, so this alternatin
     <span class="n">control_product</span><span class="p">(</span><span class="n">Y1</span><span class="p">,</span> <span class="n">X2</span><span class="p">))</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
     <span class="n">control_product</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">Y2</span><span class="p">))</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">SwapXY</span><span class="o">.</span><span class="n">round</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">SwapXY</span><span class="o">.</span><span class="n">round</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
 <span class="c1"># [[1 0 0 0]</span>
 <span class="c1">#  [0 0 1 0]</span>
 <span class="c1">#  [0 1 0 0]</span>

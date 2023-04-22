@@ -98,18 +98,18 @@
 
 <p>You might be worrying that the &quot;ordering&quot; we&#39;re computing here is not transitive. That does make calling it an &quot;ordering&quot; a bit of a misnomer... but in practice we really do use it like a proper ordering. For example, we can make a priority queue that uses it:</p>
 <div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span></span><span class="c1">// note: relying on signed overflow wrapping</span>
-<span class="k">new</span> <span class="n">PriorityQueue</span><span class="p">&lt;</span><span class="n">Packet</span><span class="p">&gt;(</span><span class="n">comparator</span><span class="p">:</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">(</span><span class="kt">short</span><span class="p">)(</span><span class="n">b</span><span class="p">.</span><span class="n">seq</span> <span class="p">-</span> <span class="n">a</span><span class="p">.</span><span class="n">seq</span><span class="p">));</span>
+<span class="k">new</span><span class="w"> </span><span class="n">PriorityQueue</span><span class="o">&lt;</span><span class="n">Packet</span><span class="o">&gt;</span><span class="p">(</span><span class="n">comparator</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">(</span><span class="kt">short</span><span class="p">)(</span><span class="n">b</span><span class="p">.</span><span class="n">seq</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">seq</span><span class="p">));</span>
 </code></pre></div>
 <p>This priority queue will work great, <em>as long as you don&#39;t put an intransitive set of values in it</em>. In the case of RTP sequence numbers this is not a problem, because of the way packets slowly count forward and are quickly consumed. Packets arriving now are consumed way, <em>way</em> before you get to where they would cause trouble (on the other side of the sequence number cycle).</p>
 
 <p>A side-benefit of using subtraction to determine our ordering is that it gives us a <em>distance</em>. It tells us how <em>far</em> ahead, or behind, a sequence number is (relative to the current sequence number). We can use that to play it safe, detecting when sequence numbers &quot;skip&quot;:</p>
 <div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span></span><span class="c1">// priority queue with fail-fast check for big skips</span>
-<span class="k">new</span> <span class="n">PriorityQueue</span><span class="p">&lt;</span><span class="n">Packet</span><span class="p">&gt;((</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
-    <span class="kt">short</span> <span class="n">d</span> <span class="p">=</span> <span class="n">b</span><span class="p">.</span><span class="n">seq</span> <span class="p">-</span> <span class="n">a</span><span class="p">.</span><span class="n">seq</span><span class="p">;</span>
-    <span class="c1">// fail if sequence number is more than a quarter-turn away, because something is wrong</span>
-    <span class="c1">// (caller should not be detecting such suspicious packets before forwarding to us)</span>
-    <span class="n">assert</span><span class="p">(</span><span class="n">Math</span><span class="p">.</span><span class="n">abs</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">&lt;</span> <span class="p">(</span><span class="m">1</span><span class="p">&lt;&lt;</span><span class="m">14</span><span class="p">));</span>
-    <span class="k">return</span> <span class="n">d</span><span class="p">;</span>
+<span class="k">new</span><span class="w"> </span><span class="n">PriorityQueue</span><span class="o">&lt;</span><span class="n">Packet</span><span class="o">&gt;</span><span class="p">((</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">short</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">seq</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">seq</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// fail if sequence number is more than a quarter-turn away, because something is wrong</span>
+<span class="w">    </span><span class="c1">// (caller should not be detecting such suspicious packets before forwarding to us)</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">Math</span><span class="p">.</span><span class="n">abs</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">(</span><span class="m">1</span><span class="o">&lt;&lt;</span><span class="m">14</span><span class="p">));</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">d</span><span class="p">;</span>
 <span class="p">});</span>
 </code></pre></div>
 <p>Slightly perverting a priority queue in this way, to use our ordering that is not quite an ordering, is really useful. It automatically solves the problems of buffering and ordering RTP packets to be consumed.</p>
@@ -118,11 +118,11 @@
 
 <p>Knowing that subtraction with signed overflow gives us a distance makes the expanding-to-64-bits problem a lot simpler. Just keep adding in the (signed) distances:</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span></span><span class="c1">// expanding from 16 to 64 bits</span>
-<span class="kt">long</span> <span class="n">_expandedSeq</span><span class="o">;</span>
-<span class="kt">long</span> <span class="nf">expandRollingSequenceId</span><span class="o">(</span><span class="kt">short</span> <span class="n">seq</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">_expandedSeq</span> <span class="o">+=</span> <span class="o">(</span><span class="kt">short</span><span class="o">)(</span><span class="n">seq</span> <span class="o">-</span> <span class="n">_expandedSeq</span><span class="o">);</span>
-    <span class="k">return</span> <span class="n">_expandedSeq</span><span class="o">;</span>
-<span class="o">}</span>
+<span class="kt">long</span><span class="w"> </span><span class="n">_expandedSeq</span><span class="p">;</span>
+<span class="kt">long</span><span class="w"> </span><span class="nf">expandRollingSequenceId</span><span class="p">(</span><span class="kt">short</span><span class="w"> </span><span class="n">seq</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">_expandedSeq</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="kt">short</span><span class="p">)(</span><span class="n">seq</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">_expandedSeq</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">_expandedSeq</span><span class="p">;</span>
+<span class="p">}</span>
 </code></pre></div>
 <p>Seen above: beautifully simple code. (Gets uglier in C, where you have to manually wrap the signed overflow.)</p>
 
@@ -135,17 +135,17 @@
 <p>What about when the cycle you&#39;re dealing with isn&#39;t a 16 bit integer? What if it doesn&#39;t match up with a built-in numeric type? What if it&#39;s a continuous value, like an angle? Ordering and distance are still just a matter of subtraction, except you have to follow up with forcing the result into the interval $[-\frac{n}{2}, \frac{n}{2})$, where $n$ is the length of the cycle:</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span></span><span class="c1">// Returns the smallest value x, by absolute value,</span>
 <span class="c1">// such that start+x is congruent to end (mod cycleLength)</span>
-<span class="kt">int</span> <span class="nf">cycleDelta</span><span class="o">(</span><span class="kt">int</span> <span class="n">start</span><span class="o">,</span> <span class="kt">int</span> <span class="n">end</span><span class="o">,</span> <span class="kt">int</span> <span class="n">cycleLength</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">assert</span><span class="o">(</span><span class="n">cycleLength</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">);</span>
-    <span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="o">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">cycleDelta</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">cycleLength</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">assert</span><span class="p">(</span><span class="n">cycleLength</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start</span><span class="p">;</span>
 
-    <span class="c1">// make smaller</span>
-    <span class="n">d</span> <span class="o">%=</span> <span class="n">cycleLength</span><span class="o">;</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">d</span><span class="o">*</span><span class="mi">2</span> <span class="o">&gt;=</span> <span class="n">cycleLength</span><span class="o">)</span> <span class="n">d</span> <span class="o">-=</span> <span class="n">cycleLength</span><span class="o">;</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">d</span><span class="o">*</span><span class="mi">2</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">cycleLength</span><span class="o">)</span> <span class="n">d</span> <span class="o">+=</span> <span class="n">cycleLength</span><span class="o">;</span>
+<span class="w">    </span><span class="c1">// make smaller</span>
+<span class="w">    </span><span class="n">d</span><span class="w"> </span><span class="o">%=</span><span class="w"> </span><span class="n">cycleLength</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">d</span><span class="o">*</span><span class="mi">2</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">cycleLength</span><span class="p">)</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">cycleLength</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">d</span><span class="o">*</span><span class="mi">2</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="o">-</span><span class="n">cycleLength</span><span class="p">)</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">cycleLength</span><span class="p">;</span>
 
-    <span class="k">return</span> <span class="n">d</span><span class="o">;</span>
-<span class="o">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">d</span><span class="p">;</span>
+<span class="p">}</span>
 </code></pre></div>
 <p>Note that everything breaks if signed overflow occurs during the subtraction, so use a large enough numeric type. Changing all the <code>int</code>s to <code>float</code>s makes the code work on <code>float</code>s. If your language has a proper modulo operator, that returns non-negative results even for negative numerators (e.g. Python), you can remove the last adjustment line.</p>
 

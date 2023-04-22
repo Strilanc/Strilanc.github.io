@@ -129,15 +129,15 @@ Slap together some python code to hit the eigenvalues of a matrix with a functio
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="nn">numpy</span>
 
 <span class="k">def</span> <span class="nf">eigenterpolate</span><span class="p">(</span><span class="n">U0</span><span class="p">,</span> <span class="n">U1</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Interpolates between two matrices.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interpolates between two matrices.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">U0</span> <span class="o">*</span> <span class="n">eigenpow</span><span class="p">(</span><span class="n">U0</span><span class="o">.</span><span class="n">H</span> <span class="o">*</span> <span class="n">U1</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">eigenpow</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Raises a matrix to a power.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raises a matrix to a power.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">eigenlift</span><span class="p">(</span><span class="k">lambda</span> <span class="n">b</span><span class="p">:</span> <span class="n">b</span><span class="o">**</span><span class="n">t</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">eigenlift</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">M</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Lifts a numeric function to apply it to a matrix.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Lifts a numeric function to apply it to a matrix.&quot;&quot;&quot;</span>
     <span class="n">w</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
     <span class="n">T</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">mat</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">complex128</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">)):</span>

@@ -86,7 +86,7 @@ If you&#39;re unfamiliar with injection attacks, or enjoy puzzles based on them,
 
 <p>For example, suppose you have a game and decide that users should be able to define some kind of custom flair to execute when they win.
 You write something like this, to be maximally flexible:</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">let</span> <span class="nx">gameCode</span> <span class="o">=</span> <span class="sb">`</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">gameCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`</span>
 <span class="sb">    ...</span>
 <span class="sb">    if (isWinner) {</span>
 <span class="sb">        </span><span class="si">${</span><span class="nx">userFlairCode</span><span class="si">}</span><span class="sb">;</span>
@@ -103,11 +103,11 @@ Oops.</p>
 
 <p>I grappled with this specific problem when writing the javascript widgets for the <a href="/quantum/2015/10/11/Bell-Tests-vs-No-Communication.html">you-vs-bell-tests-vs-no-communication post</a>.
 Users can enter custom coordination strategies, and the code started off looking something like this:</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">let</span> <span class="nx">simulationCodeForWebWorker</span> <span class="o">=</span> <span class="sb">`</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">simulationCodeForWebWorker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`</span>
 <span class="sb">  ...</span>
 <span class="sb">  for (let i = 0; i &lt; RUN_COUNT; i++) {</span>
 <span class="sb">     let move = undefined;</span>
-<span class="sb">     </span><span class="si">${</span><span class="nx">userStrategyForAlice</span><span class="si">}</span><span class="sb"></span>
+<span class="sb">     </span><span class="si">${</span><span class="nx">userStrategyForAlice</span><span class="si">}</span>
 <span class="sb">     moves.push(move);</span>
 <span class="sb">  }</span>
 <span class="sb">  ...</span>
@@ -120,11 +120,11 @@ And that meant preventing control flow tampering, among other things.</p>
 
 <p>The workaround I used to protect the control flow is ironic, but straightforward: run the code inside an inner <code>eval</code>.
 Instead of directly inserting the user&#39;s code into the text of the code-to-be-executed, have the code-to-be-executed pass the user&#39;s code as a string literal into an <code>eval</code> within the code-to-be-executed:</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">let</span> <span class="nx">simulationCodeForWebWorker</span> <span class="o">=</span> <span class="sb">`</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">simulationCodeForWebWorker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`</span>
 <span class="sb">  ...</span>
 <span class="sb">  for (let i = 0; i &lt; RUN_COUNT; i++) {</span>
 <span class="sb">     let move = undefined;</span>
-<span class="sb">     eval(</span><span class="si">${</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">userStrategyForAlice</span><span class="p">)</span><span class="si">}</span><span class="sb">); // &lt;--- an eval within the code to evaluate</span>
+<span class="sb">     eval(</span><span class="si">${</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">userStrategyForAlice</span><span class="p">)</span><span class="si">}</span><span class="sb">); // &lt;--- an eval within the code to evaluate</span>
 <span class="sb">     moves.push(move);</span>
 <span class="sb">  }</span>
 <span class="sb">  ...</span>

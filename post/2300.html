@@ -6,7 +6,7 @@
     <meta name="author" content="Craig Gidney">
     <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
     <meta name="description" content="Craig Gidney's computer science blog">
-    <title>Bad Ideas #1: Java-Style Methods in Objective-C</title>
+    <title>The mundane uses of quantum computers</title>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <meta name="viewport" content="width=device-width">
 
@@ -40,8 +40,8 @@
     </div>
     <div class="site">
 
-      <h1 class="post_title">Bad Ideas #1: Java-Style Methods in Objective-C</h1>
-<p class="meta">25 Mar 2014</p>
+      <h1 class="post_title">The mundane uses of quantum computers</h1>
+<p class="meta">22 Apr 2023</p>
 
     <!-- MathJax latest -->
     <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
@@ -74,42 +74,70 @@
     </noscript>
 
 <div class="post">
-<p>Sometimes, when you&#39;re coding, you come up with ideas. Sometimes using those ideas is a bad idea. In this series of posts, &quot;bad ideas&quot;, I come up with tempting tricks that you shouldn&#39;t actually use.</p>
+<p><em>A spark plug pauses, waiting for its moment.
+A ship turns, adjusting to the current.
+A card opens, and plays a happy tune.</em></p>
 
-<p>Today&#39;s trick: How to make invoking methods in Objective-C look like Java.</p>
+<p>When I picture computers, what comes to mind is a laptop, or a data center, or maybe a phone.
+But most of the computers in the world aren&#39;t like that.
+They&#39;re hidden away, solving some mundane problem, like telling your microwave how long it takes to pop corn.
+They&#39;re microcontrollers, gluing the right input to the right output via the right function.
+Cars, boats, planes, ovens, stoves, grills, heaters, washers, dryers, humidifiers, drills, microphones, speakers, guitars, radios, flashlights, pregnancy tests, greeting cards... you name it, there&#39;s a version with a microcontroller in it.
+Because a huge variety of physical tasks can be cheaply solved by translating them into information, manipulating that information with a computer, then translating back.
+Computation used this way is like duct tape, a tool for linking everything to anything.</p>
 
-<p><strong>Invoke Nesting</strong></p>
+<p>Well... almost anything.</p>
 
-<p>One of the superficial things I don&#39;t like about Objective-C is the way methods are invoked. Unlike Java&#39;s invoke syntax, where you &quot;dot off&quot; an object then bracket the arguments (e.g. <code>instance.method(arg1, arg2)</code>), Objective-C&#39;s invoke syntax brackets the entire expression (e.g. <code>[instance message:arg1 anotherParam:arg2]</code>).</p>
+<p>To the best of our knowledge, our world is quantum mechanical.
+Objects have properties (position, charge, mass, spin, everything) that, at a fundamental level, are described using quantum information.
+Which is different from normal information, and can&#39;t be handled by normal computers.
+In fact, in the entire history of humanity, we&#39;ve never had a way to reliably store quantum information, or transmit quantum information, or manipulate quantum information.
+We can glimpse it, poke it, predict it, but we&#39;ve never truly held it.</p>
 
-<p>The issue I have with bracketing the entire expression is that it doesn&#39;t match how I think and write code. I tend to go in pipeline order, by starting from the input and repeatedly saying &quot;and then apply X to the intermediate result&quot; until I get what I want. As a result, when writing expressions in Objective-C, I&#39;m constantly bouncing back-and-forth balancing brackets. The extra nesting depth also makes the resulting code harder to read.</p>
+<p>Quantum computers fix that.
+They can store quantum information.
+Transmit it.
+Manipulate it.
+Truly hold it.</p>
 
-<p>There are languages that take advantage of bracketing entire invoke expressions, like LISP does as part of keeping its syntax amazingly simple, but I don&#39;t consider Objective-C to be part of that group. So, is there some way to force Java/C#/C++&#39;s invoke syntax into Objective-C?</p>
+<p>Typical summaries of quantum computers evoke the image of a golden chandelier falling on cryptography while solving chemistry problems.
+But I suspect most quantum computers in the world won&#39;t be like that.
+I think, like normal computers, most quantum computers will be solving &quot;mundane&quot; problems.
+Attaching one thing to another.
+Collecting and combining and synthesizing.
+When I picture a world steeped in quantum computation, what I see is...</p>
 
-<p><strong>Block Getters</strong></p>
+<p>Telescopes applying perfect software mirrors to transduced light, because it&#39;s cheaper than polishing glass.
+Quants pumping Bell inequalities out of the financial system.
+An Einstein-certified /dev/random.
+Elitzur-Vaidman microscopes counterfactually probing at sensitive samples.
+First year philosophy students grumbling about having to run loophole free violations of local realism.
+Unmeasured snapshots of the night sky, stored like tissue samples for unforeseen uses by future generations.
+A world finally grasping its foundations with ease!</p>
 
-<p>Objective-C does have a limited &quot;dotting off&quot; syntax, but only for methods that take no arguments. In addition to this syntactic sugar for getters, Objective-C has blocks (anonymous functions). Blocks are invoked the same way functions are invoked, by following them with bracketed arguments like <code>someBlock(arg1, arg2)</code>.</p>
+<p>Headlines focus on the computer part of quantum computers.
+Factoring.
+Simulating.
+Whatever.
+But maybe that will just be a sideshow to the mundane uses of quantum computers.
+To linking physical systems together, by operating on their quantum information.</p>
 
-<p>Also, you can return blocks from methods. Including getters.</p>
+<hr>
 
-<p>Yeah... we can expose a Java-esque invoke syntax by having a getter that returns a block. Instead of giving the arguments to the getter, they&#39;ll be given to the block. It looks like this:</p>
-<div class="highlight"><pre><code class="language-objective-c" data-lang="objective-c"><span></span><span class="c1">// [inside a category on NSString]</span>
-<span class="p">-(</span><span class="bp">NSString</span><span class="o">*</span><span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="bp">NSString</span><span class="o">*</span><span class="p">))</span><span class="nf">concat</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">^</span><span class="p">(</span><span class="bp">NSString</span><span class="o">*</span><span class="w"> </span><span class="n">second</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">[</span><span class="n">this</span><span class="w"> </span><span class="n">stringByAppendingString</span><span class="o">:</span><span class="n">second</span><span class="p">];</span>
-<span class="w">    </span><span class="p">};</span>
-<span class="p">}</span>
+<p><em>PS:
+Okay, fine, I admit it,  &quot;mundane&quot; isn&#39;t quite the right word to use here.
+But you get what I mean!</em></p>
 
-<span class="c1">// [... elsewhere ...]</span>
-<span class="bp">NSString</span><span class="o">*</span><span class="w"> </span><span class="n">farsight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">@&quot;far&quot;</span><span class="p">.</span><span class="n">concat</span><span class="p">(</span><span class="s">@&quot;sight&quot;</span><span class="p">);</span>
-</code></pre></div>
-<p>Of course, you should never do this. It&#39;s a clear example of fighting the language instead of using it. And readers will be very confused about what&#39;s going on. And IDEs will give poor auto-completion. And there will be few warnings when you get block parameter types wrong. And it&#39;s slower.</p>
+<p><em>PPS:
+This post is highly speculative.
+Transducers cheaper than polishing glass?
+That&#39;s ridiculously amazingly astoundingly better than we can do today.
+It&#39;s like going from the analytical engine to a modern computer (i.e. going from gears to finfets).
+Similarly, there might not be any Bell inequalities in the financial system in the first place!</em></p>
 
-<p>But it&#39;s still really tempting to me.</p>
-
-<p><strong>Summary</strong></p>
-
-<p>You can force Java&#39;s invoke syntax into Objective-C by abusing blocks and the syntactic sugar for properties. These &quot;block properties&quot; are a bad idea.</p>
+<p><em>PPPS:
+I&#39;d like to thank Adam Zalcman and Abe Asfaw and Matt McEwen and Kunal Arya for giving feedback on this post.
+This post doesn&#39;t necessarily represent their opinions, nor the opinions of my employer.</em></p>
 
 </div>
 

@@ -152,7 +152,7 @@ should be able to fly.
 <p>After suppressing the urge to roll my eyes at how wrong that line is, I grepped through the file trying to get a sense of what kinds of &quot;bee&quot; strings show up.
 Mostly there&#39;s lots of &quot;bee&quot; and &quot;bees&quot;, a few &quot;honeybee&quot; and &quot;beekeeper&quot;s, and some words like &quot;been&quot; to avoid.
 All in all, there seems to be 155 instances of a &quot;bee&quot; word:</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ cat Bee.Movie.eng.srt <span class="p">|</span> grep -owiE <span class="s2">&quot;(honey)?bee(keeper)?s?&quot;</span> <span class="p">|</span> wc -l
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$<span class="w"> </span>cat<span class="w"> </span>Bee.Movie.eng.srt<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-owiE<span class="w"> </span><span class="s2">&quot;(honey)?bee(keeper)?s?&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
 <span class="m">155</span>
 </code></pre></div>
 <p>Because I don&#39;t hate myself, I didn&#39;t use bash to parse the subtitles file and figure out when each &quot;bee&quot; word happens.
@@ -198,7 +198,7 @@ I used python for that:</p>
 </code></pre></div>
 <p>Then used the python code to parse the subtitles file I downloaded:</p>
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">subtitles_file_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">bee_times_from_srt</span><span class="p">(</span><span class="n">f</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">bee_times_from_srt</span><span class="p">(</span><span class="n">f</span><span class="p">)))</span>
 
 <span class="c1"># prints [27489, 34053, 36703, ..., 5163897, 5165846]</span>
 </code></pre></div>
@@ -217,7 +217,7 @@ Combine that with the times we have in hand, and we can compute how long the fir
 
 
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">subtitles_file_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">compute_time</span><span class="p">(</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">compute_time</span><span class="p">(</span>
         <span class="n">speedup_times</span><span class="o">=</span><span class="n">bee_times_from_srt</span><span class="p">(</span><span class="n">f</span><span class="p">),</span>
         <span class="n">speedup_factor</span><span class="o">=</span><span class="mf">1.15</span><span class="p">,</span>
         <span class="n">runtime</span><span class="o">=</span><span class="mi">95</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">1000</span><span class="p">))</span>

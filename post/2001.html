@@ -130,7 +130,7 @@ So all we need to do is pick some values of $d$ to try, prepare an EPR pair, app
 
 <p>Here is some python code that does that, using numpy and cirq:</p>
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="nn">cirq</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="k">def</span> <span class="nf">verify_random_d</span><span class="p">():</span>
     <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">*</span> <span class="mf">0.75</span>
@@ -213,9 +213,9 @@ Instead of attempting to solve the equation ourselves, we can delegate to the ma
     <span class="k">return</span> <span class="n">zero_polynomial</span><span class="o">.</span><span class="n">expand</span><span class="p">()</span>
 
 
-<span class="k">print</span><span class="p">(</span><span class="n">problem_polynomial</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">problem_polynomial</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
 <span class="c1"># -d/3 - p**2 + p</span>
-<span class="k">print</span><span class="p">(</span><span class="n">problem_polynomial</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">problem_polynomial</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
 <span class="c1"># -d/15 - 16*p**8 + 64*p**7 - 112*p**6 + 112*p**5 - 70*p**4 + 28*p**3 - 7*p**2 + p</span>
 </code></pre></div>
 <p>So the polynomial for the two qubit case is:</p>

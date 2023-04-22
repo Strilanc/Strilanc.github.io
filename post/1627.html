@@ -237,8 +237,8 @@ Let&#39;s add an <code>x_axis</code> function that applies the Hadamard transfor
 <p>It also works well in the context of the whole algorithm:</p>
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">grover_search</span><span class="p">(</span><span class="n">bit_count</span><span class="p">,</span> <span class="n">predicate</span><span class="p">):</span>
     <span class="n">qubits</span> <span class="o">=</span> <span class="n">qalloc</span><span class="p">(</span><span class="n">bit_count</span><span class="p">)</span>
-    <span class="nb">apply</span> <span class="n">X</span> <span class="n">to</span> <span class="n">qubits</span>
-    <span class="nb">apply</span> <span class="n">H</span> <span class="n">to</span> <span class="n">qubits</span>
+    <span class="n">apply</span> <span class="n">X</span> <span class="n">to</span> <span class="n">qubits</span>
+    <span class="n">apply</span> <span class="n">H</span> <span class="n">to</span> <span class="n">qubits</span>
     <span class="k">for</span> <span class="n">_</span> <span class="o">&lt;</span> <span class="n">pi</span><span class="o">/</span><span class="mi">4</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">bit_count</span><span class="o">/</span><span class="mi">2</span><span class="p">):</span>
         <span class="n">phase_flip_if</span><span class="p">(</span><span class="n">predicate</span><span class="p">(</span><span class="n">qubits</span><span class="p">))</span>
         <span class="n">phase_flip_if</span><span class="p">(</span><span class="nb">all</span><span class="p">(</span><span class="n">x_axis</span><span class="p">(</span><span class="n">qubits</span><span class="p">)))</span>
@@ -254,22 +254,22 @@ And the magic ends up being somewhat <em>fragile</em>.</p>
 Consider: what if the action changes the condition?
 For example, suppose you write this:</p>
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">if</span> <span class="n">x_axis</span><span class="p">(</span><span class="n">qubit</span><span class="p">):</span>
-    <span class="nb">apply</span> <span class="n">H</span> <span class="n">to</span> <span class="n">qubit</span>
+    <span class="n">apply</span> <span class="n">H</span> <span class="n">to</span> <span class="n">qubit</span>
 </code></pre></div>
 <p>Which would be compiled down into a sequence of basic operations like this:</p>
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># Compute condition for IF</span>
 <span class="n">ancilla</span> <span class="o">=</span> <span class="n">qalloc</span><span class="p">()</span>
-<span class="nb">apply</span> <span class="n">H</span> <span class="n">to</span> <span class="n">qubit</span>
-<span class="nb">apply</span> <span class="n">CNOT</span> <span class="n">to</span> <span class="n">qubit</span><span class="p">,</span> <span class="n">ancilla</span>
-<span class="nb">apply</span> <span class="n">H</span> <span class="n">to</span> <span class="n">qubit</span>
+<span class="n">apply</span> <span class="n">H</span> <span class="n">to</span> <span class="n">qubit</span>
+<span class="n">apply</span> <span class="n">CNOT</span> <span class="n">to</span> <span class="n">qubit</span><span class="p">,</span> <span class="n">ancilla</span>
+<span class="n">apply</span> <span class="n">H</span> <span class="n">to</span> <span class="n">qubit</span>
 
 <span class="c1"># Body of IF</span>
-<span class="nb">apply</span> <span class="n">CH</span> <span class="n">to</span> <span class="n">ancilla</span><span class="p">,</span> <span class="n">qubit</span>
+<span class="n">apply</span> <span class="n">CH</span> <span class="n">to</span> <span class="n">ancilla</span><span class="p">,</span> <span class="n">qubit</span>
 
 <span class="c1"># Uncompute condition for IF</span>
-<span class="nb">apply</span> <span class="n">H</span> <span class="n">to</span> <span class="n">qubit</span>
-<span class="nb">apply</span> <span class="n">CNOT</span> <span class="n">to</span> <span class="n">qubit</span><span class="p">,</span> <span class="n">ancilla</span>
-<span class="nb">apply</span> <span class="n">H</span> <span class="n">to</span> <span class="n">qubit</span>
+<span class="n">apply</span> <span class="n">H</span> <span class="n">to</span> <span class="n">qubit</span>
+<span class="n">apply</span> <span class="n">CNOT</span> <span class="n">to</span> <span class="n">qubit</span><span class="p">,</span> <span class="n">ancilla</span>
+<span class="n">apply</span> <span class="n">H</span> <span class="n">to</span> <span class="n">qubit</span>
 <span class="n">qfree</span> <span class="n">ancilla</span>
 </code></pre></div>
 <p>Or, equivalently, this circuit:</p>
@@ -288,7 +288,7 @@ It forces the system to decohere.</p>
 It&#39;s kind of hard to tell whether or not this action-affects-condition problem is present in code.
 For example, consider this code:</p>
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">if</span> <span class="n">x_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">)</span> <span class="o">!=</span> <span class="n">z_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">):</span>
-    <span class="nb">apply</span> <span class="n">Y</span> <span class="n">to</span> <span class="n">q1</span>
+    <span class="n">apply</span> <span class="n">Y</span> <span class="n">to</span> <span class="n">q1</span>
 </code></pre></div>
 <p>Notice that the code is operating on a qubit (<code>q1</code>) while conditioned on that same qubit.
 So you might expect this to break the uncomputation.
@@ -317,13 +317,13 @@ An analyzer that could unambiguously tell you if arbitrarily complicated conditi
 
 <p>Recall the x-parity-vs-z-parity example from the previous section:</p>
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">if</span> <span class="n">x_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">)</span> <span class="o">!=</span> <span class="n">z_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">):</span>
-    <span class="nb">apply</span> <span class="n">Y</span> <span class="n">to</span> <span class="n">q1</span>
+    <span class="n">apply</span> <span class="n">Y</span> <span class="n">to</span> <span class="n">q1</span>
 </code></pre></div>
 <p>I think it&#39;s pretty reasonable for a person to expect the following code to be equivalent to the preceding code:</p>
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">x_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">)</span> <span class="ow">and</span> <span class="n">z_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">):</span>
-    <span class="nb">apply</span> <span class="n">Y</span> <span class="n">to</span> <span class="n">q1</span>
+    <span class="n">apply</span> <span class="n">Y</span> <span class="n">to</span> <span class="n">q1</span>
 <span class="k">elif</span> <span class="n">x_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">z_parity</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">):</span>
-    <span class="nb">apply</span> <span class="n">Y</span> <span class="n">to</span> <span class="n">q1</span>
+    <span class="n">apply</span> <span class="n">Y</span> <span class="n">to</span> <span class="n">q1</span>
 </code></pre></div>
 <p>But they&#39;re not!
 In the second example, the conditions are stricter in a way that doesn&#39;t commute with the action being applied.

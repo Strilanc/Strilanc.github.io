@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>Algorithmic Assertions - Craig Gidney's Computer Science Blog</title>
+        <title>Algorithmic Assertions - Craig Gidney&apos;s Computer Science Blog</title>
         <description>A blog about computer science, software engineering, quantum computing, mathematical puzzles, and so forth.</description>
         <link>http://algassert.com</link>
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
+            <item>
+                <title>The mundane uses of quantum computers</title>
+                <description>&lt;p&gt;&lt;em&gt;A spark plug pauses, waiting for its moment. A ship turns, adjusting to the current. A card opens, and plays a happy tune.&lt;/em&gt;&lt;/p&gt; &lt;p&gt;When I picture computers, what comes to mind is a laptop, or a data center, or maybe a phone. But most of the computers in the world...</description>
+                <pubDate>Sat, 22 Apr 2023 11:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/2300</link>
+                <guid isPermaLink="true">http://algassert.com/post/2300</guid>
+            </item>
             <item>
                 <title>[Paper] Relaxing Hardware Requirements for Surface Code Circuits using Time-dynamics</title>
                 <description></description>
@@ -68,13 +75,6 @@
                 <pubDate>Thu, 30 Sep 2021 09:10:10 -0700</pubDate>
                 <link>http://algassert.com/2021/09/30/honeycomb-talk.html</link>
                 <guid isPermaLink="true">http://algassert.com/2021/09/30/honeycomb-talk.html</guid>
-            </item>
-            <item>
-                <title>[Video] Qubits vs Bits: The Kickback Effect</title>
-                <description></description>
-                <pubDate>Wed, 22 Sep 2021 09:10:10 -0700</pubDate>
-                <link>http://algassert.com/2021/09/22/honeycomb-video-2.html</link>
-                <guid isPermaLink="true">http://algassert.com/2021/09/22/honeycomb-video-2.html</guid>
             </item>
     </channel>
 </rss>

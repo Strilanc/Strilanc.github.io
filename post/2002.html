@@ -126,7 +126,7 @@ In detail: $S^\dagger Y S = S^\dagger (iXZ) S = i S^\dagger X (S^\dagger S) Z S 
 <p>If we&#39;re given two tableaus $A$ and $B$, we can compose them by creating a new tableau $T = BA$ where each column is what you get when conjugating by $A$&#39;s operation then by $B$&#39;s operation.</p>
 
 <p>Here is some pythonic pseudocode showing the general idea:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rhs</span><span class="p">:</span> <span class="s1">&#39;CliffordTableau&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;CliffordTableau&#39;</span><span class="p">:</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="fm">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rhs</span><span class="p">:</span> <span class="s1">&#39;CliffordTableau&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;CliffordTableau&#39;</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">CliffordTableau</span><span class="p">(</span><span class="n">mapping</span><span class="o">=</span><span class="p">{</span>
         <span class="n">generator</span><span class="p">:</span> <span class="bp">self</span><span class="p">(</span><span class="n">rhs</span><span class="p">(</span><span class="n">generator</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">qubits</span><span class="p">()</span> <span class="o">|</span> <span class="n">other</span><span class="o">.</span><span class="n">qubits</span><span class="p">()</span>
@@ -197,7 +197,7 @@ Even though the Clifford operation we&#39;re talking about may touch many qubits
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="nn">itertools</span>
 <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">([</span><span class="n">cirq</span><span class="o">.</span><span class="n">I</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Z</span><span class="p">],</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
     <span class="n">a2</span><span class="p">,</span> <span class="n">b2</span> <span class="o">=</span> <span class="n">_inverse_flow</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="s1">&#39;-&gt;&#39;</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">b2</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="s1">&#39;-&gt;&#39;</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">b2</span><span class="p">)</span>
 <span class="c1"># I I -&gt; I I</span>
 <span class="c1"># I X -&gt; I X</span>
 <span class="c1"># I Y -&gt; X X</span>
@@ -271,17 +271,17 @@ You can find it <a href="https://github.com/Strilanc/CliffordTableau">on github 
 <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">LineQubit</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">circuit</span> <span class="o">=</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Circuit</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">cirq</span><span class="o">.</span><span class="n">CNOT</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="n">cirq</span><span class="o">.</span><span class="n">H</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
 <span class="n">tableau</span> <span class="o">=</span> <span class="n">CliffordTableau</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">tableau</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tableau</span><span class="p">)</span>
 <span class="c1">#       | 0  1</span>
 <span class="c1"># ------+-xz-xz-</span>
 <span class="c1">#  0    | XZ Z_</span>
 <span class="c1">#  1    | Z_ XZ</span>
 <span class="c1">#  sign | ++ ++</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">tableau</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="n">a</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tableau</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="n">a</span><span class="p">)))</span>
 <span class="c1"># X(0)*Z(1)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">tableau</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Y</span><span class="p">(</span><span class="n">b</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tableau</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">cirq</span><span class="o">.</span><span class="n">Y</span><span class="p">(</span><span class="n">b</span><span class="p">)))</span>
 <span class="c1"># -Y(0)*X(1)</span>
 
 <span class="k">assert</span> <span class="n">tableau</span> <span class="o">==</span> <span class="n">CliffordTableau</span><span class="p">(</span><span class="n">cirq</span><span class="o">.</span><span class="n">CZ</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>

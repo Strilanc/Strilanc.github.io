@@ -121,11 +121,11 @@ That is a seriously disturbing mistake to find in a well-regarded crypto app.</p
 <p>At first, it wasn&#39;t clear where the mistake was in the Android code.
 The ConfirmPacket code (from 2013) did generate a random iv and write it into the packet, but somehow the iv was disappearing before the packet was written to the network.
 Very confusing... until I noticed this:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span></span><span class="kd">private</span> <span class="kt">byte</span><span class="o">[]</span> <span class="nf">getIv</span><span class="o">()</span> <span class="o">{</span>
-    <span class="kt">byte</span><span class="o">[]</span> <span class="n">iv</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[</span><span class="mi">16</span><span class="o">];</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">arraycopy</span><span class="o">(</span><span class="n">iv</span><span class="o">,</span> <span class="n">IV_OFFSET</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">data</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">iv</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
-    <span class="k">return</span> <span class="n">iv</span><span class="o">;</span>
-<span class="o">}</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span></span><span class="kd">private</span><span class="w"> </span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="nf">getIv</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">iv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">byte</span><span class="o">[</span><span class="mi">16</span><span class="o">]</span><span class="p">;</span>
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">arraycopy</span><span class="p">(</span><span class="n">iv</span><span class="p">,</span><span class="w"> </span><span class="n">IV_OFFSET</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">data</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">iv</span><span class="p">.</span><span class="na">length</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">iv</span><span class="p">;</span>
+<span class="p">}</span>
 </code></pre></div>
 <p>See it?</p>
 

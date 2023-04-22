@@ -207,7 +207,7 @@ Discard the other three.</p></li>
 </ol>
 
 <p>With a bit of cleanup, and some after-the-fact interpretation of what the operations mean, I produced the following python code:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="k">def</span> <span class="nf">fast_fractional_fourier_transform</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">exponent</span><span class="p">):</span>
     <span class="c1"># Compute Fourier transform powers of vec.</span>
@@ -218,22 +218,22 @@ Discard the other three.</p></li>
 
     <span class="c1"># Derive eigenbasis vectors from vec&#39;s Fourier transform powers.</span>
     <span class="n">b0</span> <span class="o">=</span> <span class="n">f0</span> <span class="o">+</span> <span class="n">f1</span> <span class="o">+</span> <span class="n">f2</span> <span class="o">+</span> <span class="n">f3</span>
-    <span class="n">b1</span> <span class="o">=</span> <span class="n">f0</span> <span class="o">+</span> <span class="mi">1j</span><span class="o">*</span><span class="n">f1</span> <span class="o">-</span> <span class="n">f2</span> <span class="o">-</span> <span class="mi">1j</span><span class="o">*</span><span class="n">f3</span>
+    <span class="n">b1</span> <span class="o">=</span> <span class="n">f0</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">f1</span> <span class="o">-</span> <span class="n">f2</span> <span class="o">-</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">f3</span>
     <span class="n">b2</span> <span class="o">=</span> <span class="n">f0</span> <span class="o">-</span> <span class="n">f1</span> <span class="o">+</span> <span class="n">f2</span> <span class="o">-</span> <span class="n">f3</span>
-    <span class="n">b3</span> <span class="o">=</span> <span class="n">f0</span> <span class="o">-</span> <span class="mi">1j</span><span class="o">*</span><span class="n">f1</span> <span class="o">-</span> <span class="n">f2</span> <span class="o">+</span> <span class="mi">1j</span><span class="o">*</span><span class="n">f3</span>
+    <span class="n">b3</span> <span class="o">=</span> <span class="n">f0</span> <span class="o">-</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">f1</span> <span class="o">-</span> <span class="n">f2</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">f3</span>
     <span class="c1"># Note: vec == (b0 + b1 + b2 + b3) / 4</span>
 
     <span class="c1"># Phase eigenbasis vectors by their eigenvalues raised to the exponent.</span>
-    <span class="n">b1</span> <span class="o">*=</span> <span class="mi">1j</span><span class="o">**</span><span class="n">exponent</span>
-    <span class="n">b2</span> <span class="o">*=</span> <span class="mi">1j</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">exponent</span><span class="p">)</span>
-    <span class="n">b3</span> <span class="o">*=</span> <span class="mi">1j</span><span class="o">**</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">exponent</span><span class="p">)</span>
+    <span class="n">b1</span> <span class="o">*=</span> <span class="mi">1</span><span class="n">j</span><span class="o">**</span><span class="n">exponent</span>
+    <span class="n">b2</span> <span class="o">*=</span> <span class="mi">1</span><span class="n">j</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">exponent</span><span class="p">)</span>
+    <span class="n">b3</span> <span class="o">*=</span> <span class="mi">1</span><span class="n">j</span><span class="o">**</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">exponent</span><span class="p">)</span>
 
     <span class="c1"># Recombine transformed basis vectors to get transformed vec.</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">b0</span> <span class="o">+</span> <span class="n">b1</span> <span class="o">+</span> <span class="n">b2</span> <span class="o">+</span> <span class="n">b3</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span>
 
 
 <span class="k">def</span> <span class="nf">negate_permutation</span><span class="p">(</span><span class="n">vec</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns the result of applying an FFT to the given vector twice.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the result of applying an FFT to the given vector twice.&quot;&quot;&quot;</span>
     <span class="n">head</span><span class="p">,</span> <span class="n">tail</span> <span class="o">=</span> <span class="n">vec</span><span class="p">[:</span><span class="mi">1</span><span class="p">],</span> <span class="n">vec</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">head</span><span class="p">,</span> <span class="n">tail</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
 </code></pre></div>
