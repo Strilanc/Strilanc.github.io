@@ -7,6 +7,48 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>[Talk at NFSQ] Halving the size of Surface Codes with Yokes</title>
+                <description></description>
+                <pubDate>Thu, 18 Jan 2024 08:10:10 -0800</pubDate>
+                <link>http://algassert.com/2024/01/18/yoke-talk.html</link>
+                <guid isPermaLink="true">http://algassert.com/2024/01/18/yoke-talk.html</guid>
+            </item>
+            <item>
+                <title>[Paper] New circuits and an open source decoder for the color code</title>
+                <description></description>
+                <pubDate>Thu, 14 Dec 2023 04:10:10 -0800</pubDate>
+                <link>http://algassert.com/2023/12/14/chromobius-paper.html</link>
+                <guid isPermaLink="true">http://algassert.com/2023/12/14/chromobius-paper.html</guid>
+            </item>
+            <item>
+                <title>[Paper] Yoked surface codes</title>
+                <description></description>
+                <pubDate>Thu, 07 Dec 2023 04:10:10 -0800</pubDate>
+                <link>http://algassert.com/2023/12/07/yoked-paper.html</link>
+                <guid isPermaLink="true">http://algassert.com/2023/12/07/yoked-paper.html</guid>
+            </item>
+            <item>
+                <title>[Paper] Tetrationally Compact Entanglement Purification</title>
+                <description></description>
+                <pubDate>Sat, 18 Nov 2023 04:10:10 -0800</pubDate>
+                <link>http://algassert.com/2023/11/18/tetrational-entanglement-purification-paper.html</link>
+                <guid isPermaLink="true">http://algassert.com/2023/11/18/tetrational-entanglement-purification-paper.html</guid>
+            </item>
+            <item>
+                <title>[Talk at QEC23] Less Bacon, More Threshold</title>
+                <description></description>
+                <pubDate>Thu, 02 Nov 2023 09:10:10 -0700</pubDate>
+                <link>http://algassert.com/2023/11/02/more-bacon-talk.html</link>
+                <guid isPermaLink="true">http://algassert.com/2023/11/02/more-bacon-talk.html</guid>
+            </item>
+            <item>
+                <title>[Paper] Less Bacon More Threshold</title>
+                <description></description>
+                <pubDate>Sat, 20 May 2023 05:10:10 -0700</pubDate>
+                <link>http://algassert.com/2023/05/20/more-bacon-paper.html</link>
+                <guid isPermaLink="true">http://algassert.com/2023/05/20/more-bacon-paper.html</guid>
+            </item>
+            <item>
                 <title>The mundane uses of quantum computers</title>
                 <description>&lt;p&gt;&lt;em&gt;A spark plug pauses, waiting for its moment. A ship turns, adjusting to the current. A card opens, and plays a happy tune.&lt;/em&gt;&lt;/p&gt; &lt;p&gt;When I picture computers, what comes to mind is a laptop, or a data center, or maybe a phone. But most of the computers in the world...</description>
                 <pubDate>Sat, 22 Apr 2023 11:10:10 -0700</pubDate>
@@ -33,48 +75,6 @@
                 <pubDate>Tue, 14 Feb 2023 04:10:10 -0800</pubDate>
                 <link>http://algassert.com/2023/02/14/ybasis-paper.html</link>
                 <guid isPermaLink="true">http://algassert.com/2023/02/14/ybasis-paper.html</guid>
-            </item>
-            <item>
-                <title>[Paper] Relaxing Hardware Requirements for Surface Code Circuits using Time-dynamics</title>
-                <description></description>
-                <pubDate>Sat, 04 Feb 2023 04:10:10 -0800</pubDate>
-                <link>http://algassert.com/2023/02/04/midout-surface-code-paper.html</link>
-                <guid isPermaLink="true">http://algassert.com/2023/02/04/midout-surface-code-paper.html</guid>
-            </item>
-            <item>
-                <title>[Talk at Quantum Summer Symposium] A short history of the honeycomb code</title>
-                <description></description>
-                <pubDate>Wed, 07 Sep 2022 09:10:10 -0700</pubDate>
-                <link>http://algassert.com/2022/09/07/history-of-honeycomb-talk.html</link>
-                <guid isPermaLink="true">http://algassert.com/2022/09/07/history-of-honeycomb-talk.html</guid>
-            </item>
-            <item>
-                <title>[Paper] A Pair Measurement Surface Code on Pentagons</title>
-                <description></description>
-                <pubDate>Sun, 26 Jun 2022 05:10:10 -0700</pubDate>
-                <link>http://algassert.com/2022/06/26/pentagon-surface-code-paper.html</link>
-                <guid isPermaLink="true">http://algassert.com/2022/06/26/pentagon-surface-code-paper.html</guid>
-            </item>
-            <item>
-                <title>[Paper] Stability Experiments: The Overlooked Dual of Memory Experiments</title>
-                <description></description>
-                <pubDate>Fri, 29 Apr 2022 06:10:10 -0700</pubDate>
-                <link>http://algassert.com/2022/04/29/stability-paper.html</link>
-                <guid isPermaLink="true">http://algassert.com/2022/04/29/stability-paper.html</guid>
-            </item>
-            <item>
-                <title>[Paper] Quantum Dictionaries without QRAM</title>
-                <description></description>
-                <pubDate>Fri, 29 Apr 2022 05:10:10 -0700</pubDate>
-                <link>http://algassert.com/2022/04/29/quantum-dicts-paper.html</link>
-                <guid isPermaLink="true">http://algassert.com/2022/04/29/quantum-dicts-paper.html</guid>
-            </item>
-            <item>
-                <title>Briskly Biased Bits</title>
-                <description>&lt;p&gt;Last year, I wrote a high performance simulator (&lt;a href=&quot;github.com/quantumlib/stim/&quot;&gt;stim&lt;/a&gt;) for noisy stabilizer circuits. One of the major bottlenecks on the speed of simulation was generating noise. Ultimately, I fixed this bottleneck. I wrote code that can produce streams of noisy bits, with each bit being independently true with probability...</description>
-                <pubDate>Sun, 10 Apr 2022 11:10:10 -0700</pubDate>
-                <link>http://algassert.com/post/2200</link>
-                <guid isPermaLink="true">http://algassert.com/post/2200</guid>
             </item>
     </channel>
 </rss>
