@@ -7,74 +7,83 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
-                <title>[Talk at NFSQ] Halving the size of Surface Codes with Yokes</title>
-                <description></description>
-                <pubDate>Thu, 18 Jan 2024 08:10:10 -0800</pubDate>
-                <link>http://algassert.com/2024/01/18/yoke-talk.html</link>
-                <guid isPermaLink="true">http://algassert.com/2024/01/18/yoke-talk.html</guid>
+                <title>Why haven&apos;t quantum computers factored 21 yet?</title>
+                <description>&lt;p&gt;In 2001, &lt;a href=&quot;https://arxiv.org/pdf/quant-ph/0112176&quot;&gt;quantum computers factored the number 15&lt;/a&gt;. It’s now 2025, and quantum computers haven’t yet factored the number 21. It’s sometimes claimed this is proof there’s been no progress in quantum computers. But there’s actually a much more surprising reason 21 hasn’t been factored yet, which jumps out...</description>
+                <pubDate>Sat, 30 Aug 2025 11:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/2500</link>
+                <guid isPermaLink="true">http://algassert.com/post/2500</guid>
             </item>
             <item>
-                <title>[Paper] New circuits and an open source decoder for the color code</title>
-                <description></description>
-                <pubDate>Thu, 14 Dec 2023 04:10:10 -0800</pubDate>
-                <link>http://algassert.com/2023/12/14/chromobius-paper.html</link>
-                <guid isPermaLink="true">http://algassert.com/2023/12/14/chromobius-paper.html</guid>
+                <title>[Talk at QEC2025] Yoked surface codes (and crosshair surface codes)</title>
+                <description>
+</description>
+                <pubDate>Mon, 18 Aug 2025 09:10:10 -0700</pubDate>
+                <link>http://algassert.com/2025/08/18/qec-yoke-talk.html</link>
+                <guid isPermaLink="true">http://algassert.com/2025/08/18/qec-yoke-talk.html</guid>
             </item>
             <item>
-                <title>[Paper] Yoked surface codes</title>
-                <description></description>
-                <pubDate>Thu, 07 Dec 2023 04:10:10 -0800</pubDate>
-                <link>http://algassert.com/2023/12/07/yoked-paper.html</link>
-                <guid isPermaLink="true">http://algassert.com/2023/12/07/yoked-paper.html</guid>
+                <title>[Paper] A Classical-Quantum Adder with Constant Workspace and Linear Gates</title>
+                <description>
+</description>
+                <pubDate>Wed, 30 Jul 2025 05:10:10 -0700</pubDate>
+                <link>http://algassert.com/2025/07/30/cq-adder-constant-workspace-paper.html</link>
+                <guid isPermaLink="true">http://algassert.com/2025/07/30/cq-adder-constant-workspace-paper.html</guid>
             </item>
             <item>
-                <title>[Paper] Tetrationally Compact Entanglement Purification</title>
-                <description></description>
-                <pubDate>Sat, 18 Nov 2023 04:10:10 -0800</pubDate>
-                <link>http://algassert.com/2023/11/18/tetrational-entanglement-purification-paper.html</link>
-                <guid isPermaLink="true">http://algassert.com/2023/11/18/tetrational-entanglement-purification-paper.html</guid>
+                <title>[Paper] How to factor 2048 bit RSA integers with less than a million noisy qubits</title>
+                <description>
+</description>
+                <pubDate>Wed, 21 May 2025 05:10:10 -0700</pubDate>
+                <link>http://algassert.com/2025/05/21/factor-less-than-million-paper.html</link>
+                <guid isPermaLink="true">http://algassert.com/2025/05/21/factor-less-than-million-paper.html</guid>
             </item>
             <item>
-                <title>[Talk at QEC23] Less Bacon, More Threshold</title>
-                <description></description>
-                <pubDate>Thu, 02 Nov 2023 09:10:10 -0700</pubDate>
-                <link>http://algassert.com/2023/11/02/more-bacon-talk.html</link>
-                <guid isPermaLink="true">http://algassert.com/2023/11/02/more-bacon-talk.html</guid>
+                <title>[Talk at Simons Quantum Colloqium] Magic state cultivation</title>
+                <description>
+</description>
+                <pubDate>Tue, 08 Apr 2025 09:10:10 -0700</pubDate>
+                <link>http://algassert.com/2025/04/08/magic-state-cultivation-talk-simons.html</link>
+                <guid isPermaLink="true">http://algassert.com/2025/04/08/magic-state-cultivation-talk-simons.html</guid>
             </item>
             <item>
-                <title>[Paper] Less Bacon More Threshold</title>
-                <description></description>
-                <pubDate>Sat, 20 May 2023 05:10:10 -0700</pubDate>
-                <link>http://algassert.com/2023/05/20/more-bacon-paper.html</link>
-                <guid isPermaLink="true">http://algassert.com/2023/05/20/more-bacon-paper.html</guid>
+                <title>[Paper (Sigbovik 2025)] Falling with Style: Factoring up to 255 &apos;with&apos; a QuantumComputer</title>
+                <description>
+</description>
+                <pubDate>Tue, 01 Apr 2025 05:10:10 -0700</pubDate>
+                <link>http://algassert.com/2025/04/01/falling-with-style-paper.html</link>
+                <guid isPermaLink="true">http://algassert.com/2025/04/01/falling-with-style-paper.html</guid>
             </item>
             <item>
-                <title>The mundane uses of quantum computers</title>
-                <description>&lt;p&gt;&lt;em&gt;A spark plug pauses, waiting for its moment. A ship turns, adjusting to the current. A card opens, and plays a happy tune.&lt;/em&gt;&lt;/p&gt; &lt;p&gt;When I picture computers, what comes to mind is a laptop, or a data center, or maybe a phone. But most of the computers in the world...</description>
-                <pubDate>Sat, 22 Apr 2023 11:10:10 -0700</pubDate>
-                <link>http://algassert.com/post/2300</link>
-                <guid isPermaLink="true">http://algassert.com/post/2300</guid>
+                <title>[Talk at QIP2025] Magic state cultivation</title>
+                <description>
+</description>
+                <pubDate>Thu, 06 Mar 2025 08:10:10 -0800</pubDate>
+                <link>http://algassert.com/2025/03/06/magic-state-cultivation-talk-qip.html</link>
+                <guid isPermaLink="true">http://algassert.com/2025/03/06/magic-state-cultivation-talk-qip.html</guid>
             </item>
             <item>
-                <title>[Paper] Sparse Blossom: correcting a million errors per core second with minimum-weight matching</title>
-                <description></description>
-                <pubDate>Tue, 28 Mar 2023 05:10:10 -0700</pubDate>
-                <link>http://algassert.com/2023/03/28/pymatching2-paper.html</link>
-                <guid isPermaLink="true">http://algassert.com/2023/03/28/pymatching2-paper.html</guid>
+                <title>[Paper] A Constant Rate Quantum Computer on a Line</title>
+                <description>
+</description>
+                <pubDate>Sat, 22 Feb 2025 04:10:10 -0800</pubDate>
+                <link>http://algassert.com/2025/02/22/constant-rate-on-a-line-paper.html</link>
+                <guid isPermaLink="true">http://algassert.com/2025/02/22/constant-rate-on-a-line-paper.html</guid>
             </item>
             <item>
-                <title>[Paper] Cleaner magic states with hook injection</title>
-                <description></description>
-                <pubDate>Thu, 23 Feb 2023 04:10:10 -0800</pubDate>
-                <link>http://algassert.com/2023/02/23/hook-injection-paper.html</link>
-                <guid isPermaLink="true">http://algassert.com/2023/02/23/hook-injection-paper.html</guid>
+                <title>[Paper] Magic state cultivation: growing T states as cheap as CNOT gates</title>
+                <description>
+</description>
+                <pubDate>Thu, 26 Sep 2024 05:10:10 -0700</pubDate>
+                <link>http://algassert.com/2024/09/26/magic-state-cultivation-paper.html</link>
+                <guid isPermaLink="true">http://algassert.com/2024/09/26/magic-state-cultivation-paper.html</guid>
             </item>
             <item>
-                <title>[Paper] Inplace Access to the Surface Code Y Basis</title>
-                <description></description>
-                <pubDate>Tue, 14 Feb 2023 04:10:10 -0800</pubDate>
-                <link>http://algassert.com/2023/02/14/ybasis-paper.html</link>
-                <guid isPermaLink="true">http://algassert.com/2023/02/14/ybasis-paper.html</guid>
+                <title>[Paper] Rise of conditionally clean ancillae for efficient quantum circuit constructions</title>
+                <description>
+</description>
+                <pubDate>Sun, 19 May 2024 05:10:10 -0700</pubDate>
+                <link>http://algassert.com/2024/05/19/conditionally-clean-ancilla-paper.html</link>
+                <guid isPermaLink="true">http://algassert.com/2024/05/19/conditionally-clean-ancilla-paper.html</guid>
             </item>
     </channel>
 </rss>
