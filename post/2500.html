@@ -173,8 +173,9 @@ Accounting for this, I could argue that factoring 21 will be ten thousand times 
 
 <p>There are papers that claim to have factored 21 with a quantum computer.
 For example, <a href="https://arxiv.org/abs/2103.13855">here’s one from 2021</a>.
-But, as far as I know, they are all guilty of using optimizations that imply the code generating the circuit had access to information equivalent to knowing the factors (as explained in <a href="https://arxiv.org/abs/1301.7007">“Pretending to factor large numbers on a quantum computer” by Smolin et al</a>).
-These experiments don’t do the multiplications, but in my view the multiplications are what make it factoring instead of just period finding.</p>
+But, as far as I know, all such experiments are guilty of using optimizations that imply the code generating the circuit had access to information equivalent to knowing the factors (as explained in <a href="https://arxiv.org/abs/1301.7007">“Pretending to factor large numbers on a quantum computer” by Smolin et al</a>).
+Basically: they don’t do the multiplications, because the multiplications are hard, but the multiplications are what make it factoring instead of simpler forms of period finding.
+So I don’t count them.</p>
 
 <p>There is unfortunately a trickle of bullshit results that claim to be quantum factoring demonstrations.
 For example, I have a <a href="https://sigbovik.org/2025/proceedings.pdf#page=146">joke paper in this year’s sigbovik proceedings that cheats in a particularly silly way</a>.
