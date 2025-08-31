@@ -118,7 +118,13 @@ Performing 100x more gates requires 100x lower error, and the most plausible way
 Error correction requires redundancy, and could easily add a 100x overhead on qubit count.
 Accounting for this, I could argue that factoring 21 will be ten thousand times more expensive than factoring 15, rather than "merely" a hundred times more expensive.
 
-There is unfortunately a constant stream of bullshit results that claim to be quantum factoring demonstrations.
+There are papers that claim to have factored 21 with a quantum computer.
+For example, [here's one from 2021](https://arxiv.org/abs/2103.13855).
+But, as far as I know, all such experiments are guilty of using optimizations that imply the code generating the circuit had access to information equivalent to knowing the factors (as explained in ["Pretending to factor large numbers on a quantum computer" by Smolin et al](https://arxiv.org/abs/1301.7007)).
+Basically: they don't do the multiplications, because the multiplications are hard, but the multiplications are what make it factoring instead of simpler forms of period finding.
+So I don't count them.
+
+There is unfortunately a trickle of bullshit results that claim to be quantum factoring demonstrations.
 For example, I have a [joke paper in this year's sigbovik proceedings that cheats in a particularly silly way](https://sigbovik.org/2025/proceedings.pdf#page=146).
 More seriously, I enjoyed ["Replication of Quantum Factorisation Records with an 8-bit Home Computer, an Abacus, and a Dog"](https://eprint.iacr.org/2025/1237.pdf) making fun of some recent egregious papers.
 I also recommend Scott Aaronson's post ["Quantum computing motte-and-baileys"](https://scottaaronson.blog/?p=4447), which complains about papers that benchmark "variational" factoring techniques while ignoring the lack of any reason to expect them to scale.
