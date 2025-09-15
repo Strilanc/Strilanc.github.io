@@ -40,7 +40,8 @@ So I'll try to explain why it happens.
 
 *(Quick aside: the amount of optimization that has gone into this factoring-21 circuit is probably unrepresentative of what would be possible when factoring big numbers.
 I think a more plausible amount of optimization would produce a circuit with 500x the cost of the factoring-15 circuit... but a 100x overhead is sufficient to make my point.
-Regardless, special thanks to Noah Shutty for running expensive computer searches to find the conditional-multiplication-by-4-mod-21 subroutine used by this circuit.)*
+Regardless, special thanks to Noah Shutty and Sid Madhuk for making tools and running expensive computer searches to find the conditional-multiplication-by-4-mod-21 subroutine used by this circuit.
+Also, I apologize for not doing any inter-multiplication optimizations, resulting in small amounts of waste at the boundaries between multiplications.)*
 
 
 # Where does the 100x come from?
@@ -114,7 +115,7 @@ These computers were known to have inherent scaling issues, and in fact it's deb
 If the 2001 NMR experiment doesn't count, I think the actually-did-the-multiplications runner-up is a [2015 experiment done with an ion trap quantum computer](https://arxiv.org/pdf/1507.08852#page=2) ([discussed by Scott Aaronson at the time](https://scottaaronson.blog/?p=2673)).
 
 Yet another contributor is the overhead of [quantum error correction](https://en.wikipedia.org/wiki/Quantum_error_correction).
-Performing 100x more gates requires 100x lower error, and the most plausible way of achieving that is error corection.
+Performing 100x more gates requires 100x lower error, and the most plausible way of achieving that is error correction.
 Error correction requires redundancy, and could easily add a 100x overhead on qubit count.
 Accounting for this, I could argue that factoring 21 will be ten thousand times more expensive than factoring 15, rather than "merely" a hundred times more expensive.
 
