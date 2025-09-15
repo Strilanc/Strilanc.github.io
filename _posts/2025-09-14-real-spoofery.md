@@ -214,6 +214,10 @@ Not allowing the players to come into the game with entangled states is *really,
 I had no idea they were making this assumption, and neither did anyone I asked.
 I only found out after I'd finished finding construction described in this post, while doing my due diligence to exactly characterize the nature of the mistake. 
 
+(**Update**: [@fariddiequantum pointed out](https://x.com/fariddiequantum/status/1967678516667052215) that the word "independent", for example as in "network scenarios comprising independent states and measurements" from the abstract, is communicating that the states aren't entangled.
+I completely failed to parse that meaning when reading the paper, but in hindsight it makes sense.
+I'll leave the end of the post unedited, but keep that in mind.)
+
 They could have put this caveat in the paper's abstract.
 They could have put it in the introduction, or in the conclusion, or somewhere in the body.
 Maybe in a figure caption.
