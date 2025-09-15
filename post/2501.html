@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Actually, you can't test if quantum uses complex numbers</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Actually, you can't test if quantum uses complex numbers</h1>
+<p class="meta">14 Sep 2025</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+
+<p>In 2021, Renou et al published the paper <a href="https://www.nature.com/articles/s41586-021-04160-4">“Quantum theory based on real numbers can be experimentally falsified”</a>
+in Nature.
+It caused a decent sized splash at the time.
+A quick search revealed articles in
+<a href="https://www.quantamagazine.org/imaginary-numbers-may-be-essential-for-describing-reality-20210303/">Quanta</a>
+and <a href="https://www.scientificamerican.com/article/quantum-physics-falls-apart-without-imaginary-numbers/">Scientific American</a>
+and <a href="https://www.aps.org/apsnews/2022/10/imaginary-numbers-quantum-physics">APS News</a>,
+as well as <a href="https://www.youtube.com/watch?v=93Vjj6CrZNc">a talk at QIP 2022</a>.</p>
+
+<p>In this post, I’m going to explain why the paper is wrong.</p>
+
+<h1 id="the-goal">The Goal</h1>
+
+<p>Before we get going, I need to warn you away from a common misunderstanding of Renou et al’s claim.
+Renou et al are NOT claiming that it’s impossible to write down math that behaves like quantum mechanics without using the word “complex” or the symbol “$\mathbb{C}$”.
+That would be vacuously wrong, because you can just mimic the behavior of complex numbers using pairs of real numbers (and appropriately tweaked definitions of operations).
+No one is claiming it’s impossible to write the C code <code>struct complex { float real; float imag; };</code>.
+What Renou et al are actually claiming is that if you start with quantum mechanics, and then remove all operations and states involving non-real numbers, and then try to emulate what was lost using what remains, you will fail in an experimentally detectable way.</p>
+
+<p>The way I like to think about this is in terms of quantum gatesets.
+The following gateset is known to be universal: the <a href="https://en.wikipedia.org/wiki/Toffoli_gate">Toffoli gate (“CCX”)</a>, the <a href="https://en.wikipedia.org/wiki/Hadamard_transform#Quantum_computing_applications">Hadamard gate (“H”)</a>, the <a href="https://en.wikipedia.org/wiki/Quantum_logic_gate#Measurement">Measurement gate (“M”)</a>, and the <a href="https://en.wikipedia.org/wiki/Quantum_logic_gate#Phase_shift_gates">45° phasing gate (“T”)</a>.
+Roughly speaking: the Toffoli provides classical computation, the Hadamard provides superposition, the measurement provides results, and the T gate provides the complex plane.
+Only the T gate needs complex numbers to describe; the other three can be described using real numbers.
+What Renou et al are trying to do is make a test that this CHMT gateset (CCX + H + M + T) can pass, but the T-missing CHM gateset (CCX + H + M) can’t pass.</p>
+
+<p>Imagine you’re buying a quantum computer from Eve.
+Eve claims the computer supports the CHMT gateset.
+You’re suspicious.
+You suspect it can’t actually do T gates, meaning it actually only supports the CHM gateset.
+Without T gates, you’d be stuck in the “real-only” subset of quantum computations.
+Is there some test you can do, some challenge you can give to Eve, that she can only pass if the T gate is working?
+Some kind of externally verifiable proof that the computer isn’t stuck in the real-only subset?</p>
+
+<p>(A trivial solution would be to bring a trusted quantum computer and ask Eve to produce 100 copies of the state $|0\rangle + i|1\rangle$ and transmit them to the trusted computer.
+The trusted computer then simply verifies they all produce +1 when measured in the Y basis.
+But this solution doesn’t translate back to the physics use case that Renou et al have in mind, where basically the whole universe isn’t trusted, so I’m not going to allow it.
+Assume the verifier only has a classical computer.)</p>
+
+<p>At first, you might think it’s easy to tell if the T gate is broken.
+Just ask Eve to do a quantum computation involving complex numbers.
+For example, Shor’s algorithm ends with a Quantum Fourier Transform which is defined in terms of complex values.
+Just ask Eve to factor some numbers.
+Alas, this doesn’t work.
+Although the gateset CHM isn’t <em>strictly</em> universal, <a href="https://arxiv.org/abs/quant-ph/0301040">it’s still <em>computationally</em> universal</a>.
+Any CHMT circuit can be efficiently compiled into, and emulated by, the CHM gateset.</p>
+
+<p>Hearing that, you may now think it’s obviously impossible to determine if Eve’s computer can’t do T gates.
+However, there’s still hope: the compilation into CHM may not be <em>locality preserving</em>.
+Operations that used to be local may now need to interact.
+This is how <a href="https://en.wikipedia.org/wiki/Bell_test">“Bell tests”</a> distinguish the classical gateset CMT from the universal gateset CHMT.
+Classical computers can simulate quantum computers with exponential overhead, so a fast enough classical computer can <em>technically</em> pass any computational test you give.
+But, crucially, the classical simulation of quantum circuits isn’t locality-preserving.
+And there’s provably no way to fix that.
+So all you need to do is ask Eve to distribute the computation over multiple computers, with crucial steps done under spacelike-separation.
+There are tests, such as the <a href="https://en.wikipedia.org/wiki/CHSH_inequality">CHSH test</a>, that CHMT computers can pass when spacelike-separated but that CMT computers cannot pass when spacelike-separated.</p>
+
+<p>What Renou et al attempt to do is come up with an analogue of the CHSH test: use locality to distinguish CHM vs CHMT.
+At this point in the post, it would perhaps be appropriate to describe the details of Renou et al’s test.
+Roughly speaking, they define a computation distributed over three quantum computers (Alice and Bob and Charlie) where Alice and Charlie are doing a generalized version of the CHSH inequality mediated by <a href="https://en.wikipedia.org/wiki/Entanglement_swapping">entanglement swapped through Bob</a>.
+However, ultimately these details don’t matter.
+There are locality-preserving ways to compile CHMT circuits into CHM circuits, making the whole idea moot.</p>
+
+<h1 id="the-spoof">The Spoof</h1>
+
+<p>It’s well known that phasing operations, like the T gate, can be achieved using <a href="https://en.wikipedia.org/wiki/Phase_kickback">phase kickback</a>.
+In particular, the T gate can be achieved with kickback from conditionally incrementing into a “phase gradient” state $|G\rangle = (|0\rangle - |1\rangle) \otimes (|0\rangle - i|1\rangle) \otimes (|0\rangle + \sqrt{-i}|1\rangle)$.
+Here is that fact as a circuit identity:</p>
+
+<p><img style="width:300px;" src="/assets/2025-09-14-real-spoofery/t-from-kickback.png" /></p>
+
+<p>This may seem like a silly rewrite to do, because the phase gradient preparation also has a T gate.
+We’re replacing a T gate with a T gate <em>plus more</em>.
+However, phase gradients are <em>reusable</em>.
+With access to classical reversible arithmetic (i.e. the Toffoli gate), one phase gradient can catalyze arbitrarily many T gates:</p>
+
+<p><img style="width:300px;" src="/assets/2025-09-14-real-spoofery/many-t-from-kickback.png" /></p>
+
+<p>Of course, we don’t want all T gates to be replaced with increments targeting one single phase gradient.
+That would require communicating the gradient back and forth, which would break in spacelike-separated contexts.
+Fortunately, the CHM gateset can also <em>duplicate</em> phase gradients.
+Initializing the state $|+\rangle \otimes |+\rangle \otimes |+\rangle$, and then subtracting out of an existing phase gradient, duplicates the phase gradient:</p>
+
+<p><img style="width:400px;" src="/assets/2025-09-14-real-spoofery/grad-duplication.png" /></p>
+
+<p>Before the test begins, Eve can create one phase gradient state and then use this duplication procedure to expand it into one copy for each computer.
+The copies must be distributed before the test begins so that during the test no locality-violating steps are needed.
+This reduces the number of T gates in the circuit from arbitrarily-many to $O(1)$.
+So we’ve made substantial progress, but still have a bit further to go.
+Because the phase gradient state isn’t a real-only state.</p>
+
+<p>Let $C$ refer to the circuit where T gates have been replaced by conditional increments, all ultimately leading back to a single phase gradient preparation at the beginning of the circuit.
+The only complex values that appear anywhere in $C$ are in the initial phase gradient preparation.
+Interestingly, this means $C$ will still function correctly if we replace the phase gradient with its conjugate.
+It’s well known that if you take any piece of math and globally replace the complex unit $i$ with its negation $(-i)$, all the equations remain true.
+For example, consider the equation $i^2 = -1$.
+Substituting $i \rightarrow (-i)$ produces $(-i)^2 = -1$, which is still true.
+The technical name for this fact is <a href="https://mathworld.wolfram.com/FieldAutomorphism.html">“the non-trivial field automorphism of the complex numbers”</a>.
+That’s a bit of a mouthful, so I’ll just call it “conjugation symmetry”.
+Because of conjugation symmetry, statements like “$C$ passes the test” must remain true when we globally substitute $i \rightarrow (-i)$.
+For $C$ this just means replacing the phase gradient $|G\rangle$ with its conjugate $|G^\ast\rangle = (|0\rangle - |1\rangle) \otimes (|0\rangle + i|1\rangle) \otimes (|0\rangle + \sqrt{i}|1\rangle)$.
+Said another way: it doesn’t matter if we use the “clockwise winding” phase gradient or the “counter-clockwise winding” phase gradient.
+It’s the consistency of the winding that matters, not the direction.</p>
+
+<p>Not only do the clockwise and counter-clockwise winding phase gradients work equally well, but <em>any superposition</em> $|G^\prime\rangle = \alpha |G\rangle + \beta |G^\ast\rangle$ of the two will work equally well.
+Let $C^\prime$ be a variant of $C$ that is preparing the superposition $|G^\prime\rangle$, instead of $|G\rangle$.
+Note that, after $|G^\prime\rangle$ is prepared, every operation in $C^\prime$ that acts on the qubits storing $|G^\prime\rangle$ are either subtracting out of or conditionally incrementing into those qubits.
+These operations have a common eigenspace over the qubits of $|G^\prime\rangle$: the frequency basis.
+Let $C^{\prime\prime}$ be $C^\prime$ with an additional discarded frequency basis measurement of the qubits storing $|G^\prime\rangle$, at the end of the circuit.
+By the <a href="https://en.wikipedia.org/wiki/No-communication_theorem">no-communication theorem</a>, $C^{\prime\prime}$ and $C^\prime$ are observationally indistinguishable.
+Let $C^{\prime\prime\prime}$ be $C^{\prime\prime}$, but with the discarded frequency basis measurement moved from the end of the circuit all the way back to immediately after $|G^\prime\rangle$ is prepared.
+By the <a href="https://en.wikipedia.org/wiki/Deferred_measurement_principle">deferred measurement theorem</a>, $C^{\prime\prime\prime}$ and $C^{\prime\prime}$ are observationally indistinguishable.
+In $C^{\prime\prime\prime}$, the frequency basis measurement immediately collapses $|G^\prime\rangle$ into either $|G\rangle$ or $|G^\ast\rangle$.
+The collapse either results in $C^{\prime\prime\prime}$ having the same gradient state as $C$ (which works) or its conjugate (which also works, due to conjugation symmetry).
+Therefore $C^{\prime\prime\prime}$ works, therefore $C^{\prime\prime}$ works, therefore $C^\prime$ works, therefore we can use any $|G^\prime\rangle = \alpha |G\rangle + \beta |G^\ast\rangle$ instead of $|G\rangle$.</p>
+
+<p>With this newfound freedom, I chose $|G^\prime\rangle$ to be a uniform superposition of the two windings.
+This causes their imaginary parts to cancel, leaving behind real amplitudes proportional to a cosine (because $e^{i\theta} + e^{-i \theta} \propto \cos \theta$):</p>
+
+\[\begin{aligned}
+    |G^\prime\rangle
+    &amp;= \frac{1}{\sqrt{2}} |G\rangle + \frac{1}{\sqrt{2}} |G^\ast\rangle
+    \\&amp;= \frac{1}{2} |0\rangle
+    + \frac{1}{\sqrt{8}}|1\rangle
+    - \frac{1}{\sqrt{8}}|3\rangle
+    - \frac{1}{2}|4\rangle
+    - \frac{1}{\sqrt{8}}|5\rangle
+    + \frac{1}{\sqrt{8}}|7\rangle
+    \\&amp;= \begin{bmatrix}
+       \sqrt{2}
+    \\ 1
+    \\ 0
+    \\ -1
+    \\ -\sqrt{2}
+    \\ -1
+    \\ 0
+    \\ 1
+    \end{bmatrix} / \sqrt{8}
+\end{aligned}\]
+
+<p>This state is real-only, and can be prepared using real-only gates:</p>
+
+<p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%2C1%2C%22H%22%5D%2C%5B%22%E2%80%A2%22%2C%22H%22%5D%2C%5B1%2C%22Z%22%2C%22Z%22%5D%2C%5B%22Chance3%22%5D%2C%5B%22Amps3%22%5D%2C%5B%5D%2C%5B1%2C1%2C%22%E2%80%A6%22%5D%2C%5B%22QFT3%22%5D%2C%5B%22X%22%2C1%2C%22%E2%80%A2%22%5D%2C%5B%22%E2%97%A6%22%2C%22X%22%2C%22X%22%5D%2C%5B%22H%22%5D%2C%5B%22Chance%22%2C%22Chance%22%2C%22Chance%22%5D%5D%7D"><img style="width:400px;" src="/assets/2025-09-14-real-spoofery/make-real-gradient.png" /></a></p>
+
+<p>Note that the above circuit uses gates like controlled-H and Z.
+The CHM gateset can approximate these gates to any desired precision, but it’s tedious to do.
+For the purposes of this post, it’s not worth going through the exercise.
+(Similarly, all the increments and subtractions and such in the other examples can be tediously compiled into CHM.)</p>
+
+<p>One note of caution: with the original phase gradient state $|G\rangle$, there was no distinction between using the duplication-by-subtraction circuit and simply independently preparing another instance of $|G\rangle$.
+Both processes perform $|G\rangle \rightarrow |G\rangle \otimes |G\rangle$.
+This isn’t true for $|G^\prime\rangle$.
+The duplication-by-subtraction circuit doesn’t perform $|G^\prime\rangle \rightarrow |G^\prime\rangle \otimes |G^\prime\rangle$.
+It creates an “entangled copy” instead of an independent copy.
+Replacing these entangled copies with independent copies of $|G^\prime\rangle$ would break the construction, so don’t do that.</p>
+
+<p>Summarizing, Eve can pretend to perform any complex-allowed distributed quantum computation using real-only quantum computers as follows.
+Before testing begins (perhaps even before the test is known) distribute entangled copies of $|G^\prime\rangle$ to each computer (by preparing one instance then using the duplication-by-subtraction circuit to get entangled copies).
+Once the testing circuits are specified, perform inplace compilation of the testing circuits into the CHMT gateset using <a href="https://en.wikipedia.org/wiki/Solovay%E2%80%93Kitaev_theorem">standard</a> <a href="https://www.mathstat.dal.ca/~selinger/newsynth/">techniques</a>.
+Once the test begins, run the CHMT circuits except replace every instance of T with a controlled increment into the local entangled copy of $|G^\prime\rangle$.
+This is provably observationally indistinguishable from running the original complex-allowed circuit.</p>
+
+<p>As an example, I applied manually this compilation to an arbitrary circuit I threw together.
+The green chance displays show that the <a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%2C1%2C%22H%22%5D%2C%5B%22Z%5E%C2%BC%22%2C1%2C%22Z%5E%C2%BC%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%2C%22%E2%80%A2%22%5D%2C%5B%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22X%22%2C%22%E2%80%A2%22%2C%22%E2%80%A2%22%5D%2C%5B1%2C1%2C%22Z%5E%C2%BC%22%5D%2C%5B%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22Z%5E%C2%BC%22%2C%22Z%5E%C2%BC%22%5D%2C%5B%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B1%2C%22X%22%2C%22%E2%80%A2%22%5D%2C%5B%22Z%5E%C2%BC%22%2C%22Z%5E%C2%BC%22%2C%22Z%5E%C2%BC%22%5D%2C%5B%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22Chance3%22%5D%5D%7D">original circuit</a> and the <a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%2C1%2C%22H%22%2C1%2C1%2C1%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22%E2%80%A2%22%2C%22H%22%5D%2C%5B1%2C%22Z%22%2C%22Z%22%5D%2C%5B%22-%3DA3%22%2C1%2C1%2C1%2C1%2C1%2C%22inputA3%22%5D%2C%5B%22%E2%80%A6%22%2C%22%E2%80%A6%22%2C%22%E2%80%A6%22%2C%22%E2%80%A6%22%2C%22%E2%80%A6%22%2C%22%E2%80%A6%22%2C%22%E2%80%A6%22%2C%22%E2%80%A6%22%2C%22%E2%80%A6%22%5D%2C%5B1%2C1%2C1%2C%22H%22%2C1%2C%22H%22%5D%2C%5B1%2C1%2C1%2C1%2C1%2C%22%E2%80%A2%22%2C%22inc3%22%5D%2C%5B%22inc3%22%2C1%2C1%2C%22%E2%80%A2%22%5D%2C%5B1%2C1%2C1%2C%22%E2%80%A2%22%2C%22X%22%2C%22%E2%80%A2%22%5D%2C%5B1%2C1%2C1%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B1%2C1%2C1%2C%22X%22%2C%22%E2%80%A2%22%2C%22%E2%80%A2%22%5D%2C%5B1%2C1%2C1%2C1%2C1%2C%22%E2%80%A2%22%2C%22inc3%22%5D%2C%5B1%2C1%2C1%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22inc3%22%2C1%2C1%2C1%2C%22%E2%80%A2%22%5D%2C%5B%22inc3%22%2C1%2C1%2C%22%E2%80%A2%22%5D%2C%5B1%2C1%2C1%2C%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B1%2C1%2C1%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B1%2C1%2C1%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B1%2C1%2C1%2C1%2C%22X%22%2C%22%E2%80%A2%22%5D%2C%5B1%2C1%2C1%2C1%2C1%2C%22%E2%80%A2%22%2C%22inc3%22%5D%2C%5B%22inc3%22%2C1%2C1%2C1%2C%22%E2%80%A2%22%5D%2C%5B%22inc3%22%2C1%2C1%2C%22%E2%80%A2%22%5D%2C%5B1%2C1%2C1%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B1%2C1%2C1%2C%22Chance3%22%5D%5D%7D">compiled circuit</a> output identical probability distributions:</p>
+
+<p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%2C1%2C%22H%22%2C1%2C1%2C1%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22%E2%80%A2%22%2C%22H%22%5D%2C%5B1%2C%22Z%22%2C%22Z%22%5D%2C%5B%22-%3DA3%22%2C1%2C1%2C1%2C1%2C1%2C%22inputA3%22%5D%2C%5B%22%E2%80%A6%22%2C%22%E2%80%A6%22%2C%22%E2%80%A6%22%2C%22%E2%80%A6%22%2C%22%E2%80%A6%22%2C%22%E2%80%A6%22%2C%22%E2%80%A6%22%2C%22%E2%80%A6%22%2C%22%E2%80%A6%22%5D%2C%5B1%2C1%2C1%2C%22H%22%2C1%2C%22H%22%5D%2C%5B1%2C1%2C1%2C1%2C1%2C%22%E2%80%A2%22%2C%22inc3%22%5D%2C%5B%22inc3%22%2C1%2C1%2C%22%E2%80%A2%22%5D%2C%5B1%2C1%2C1%2C%22%E2%80%A2%22%2C%22X%22%2C%22%E2%80%A2%22%5D%2C%5B1%2C1%2C1%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B1%2C1%2C1%2C%22X%22%2C%22%E2%80%A2%22%2C%22%E2%80%A2%22%5D%2C%5B1%2C1%2C1%2C1%2C1%2C%22%E2%80%A2%22%2C%22inc3%22%5D%2C%5B1%2C1%2C1%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B%22inc3%22%2C1%2C1%2C1%2C%22%E2%80%A2%22%5D%2C%5B%22inc3%22%2C1%2C1%2C%22%E2%80%A2%22%5D%2C%5B1%2C1%2C1%2C%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B1%2C1%2C1%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B1%2C1%2C1%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B1%2C1%2C1%2C1%2C%22X%22%2C%22%E2%80%A2%22%5D%2C%5B1%2C1%2C1%2C1%2C1%2C%22%E2%80%A2%22%2C%22inc3%22%5D%2C%5B%22inc3%22%2C1%2C1%2C1%2C%22%E2%80%A2%22%5D%2C%5B%22inc3%22%2C1%2C1%2C%22%E2%80%A2%22%5D%2C%5B1%2C1%2C1%2C%22H%22%2C%22H%22%2C%22H%22%5D%2C%5B1%2C1%2C1%2C%22Chance3%22%5D%5D%7D"><img style="width:100%;" src="/assets/2025-09-14-real-spoofery/example.png" /></a></p>
+
+<p>This spoofing procedure will work for any protocol, and so it will also happen to work on the one presented in <a href="https://www.nature.com/articles/s41586-021-04160-4">“Quantum theory based on real numbers can be experimentally falsified”</a>.</p>
+
+<h1 id="wheres-the-mistake">Where’s the mistake?</h1>
+
+<p>Renou et al’s paper includes a proof that real-only quantum mechanics can’t spoof their test.
+I just constructively proved that real-only quantum mechanics can spoof the test.
+These proofs contradict each other, so one of them must have a mistake.
+Where’s the mistake?</p>
+
+<p>The mistake occurs in the first sentence of section VI of the supplementary material to Renou et al’s paper.
+The spoofing construction I described in this post distributes entangled states to the real-only players before the test begins.
+Renou et al assume the real-only players start without any such entangled states:</p>
+
+<blockquote>
+  <p><a href="https://static-content.springer.com/esm/art%3A10.1038%2Fs41586-021-04160-4/MediaObjects/41586_2021_4160_MOESM1_ESM.pdf#page=5"><img style="width:100%; border:1px solid black;" src="/assets/2025-09-14-real-spoofery/mistake.png" /></a></p>
+
+  <p>(highlights and squiggly annotations are from me)</p>
+</blockquote>
+
+<p>However… it’s not quite right to call this a mistake.</p>
+
+<p>Digging further into the supplement, on page 14 out of 15, I found this:</p>
+
+<blockquote>
+  <p><a href="https://static-content.springer.com/esm/art%3A10.1038%2Fs41586-021-04160-4/MediaObjects/41586_2021_4160_MOESM1_ESM.pdf#page=15"><img style="width:100%; border:1px solid black;" src="/assets/2025-09-14-real-spoofery/intentional.png" /></a></p>
+</blockquote>
+
+<p>…they knew.</p>
+
+<p><strong>They KNEW.</strong></p>
+
+<p>They knew entanglement broke the test!</p>
+
+<p>Entanglement is not <em>rare</em> in quantum mechanics.
+Especially in the context of tests involving locality, the presence of entanglement is a common feature.
+For example, pre-sharing entanglement is the basis for all Bell inequality violations, which is the foundation that Renou et al’s paper is built upon.
+Not allowing the players to come into the game with entangled states is <em>really, really strange</em>.
+I had no idea they were making this assumption, and neither did anyone I asked.
+I only found out after I’d finished finding construction described in this post, while doing my due diligence to exactly characterize the nature of the mistake.</p>
+
+<p>They could have put this caveat in the paper’s abstract.
+They could have put it in the introduction, or in the conclusion, or somewhere in the body.
+Maybe in a figure caption.
+Instead, they hid it away on page 14 of the supplementary materials.
+Frankly, if this had been my paper, I’d have put this caveat in the <strong>TITLE</strong>.
+“Quantum theory based on real numbers can be experimentally falsified, unless entanglement is present, which it easily could be, and we have no way of testing that it isn’t”; it flows right off the tongue.</p>
+
+<p>Look, I’ll admit that doing a test fooled by entanglement is better than doing no test at all.
+Early Bell tests, done without spacelike-separation, were analogously better than nothing.
+But if you’re going to rest the correctness of your experiment on asking Eve to pinky promise not to cheat despite her means, motive, and opportunity… I would appreciate a clearer warning.</p>
+
+
+</div>
+
+
+    </div>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
