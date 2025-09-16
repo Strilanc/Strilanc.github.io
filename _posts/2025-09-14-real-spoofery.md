@@ -16,7 +16,7 @@ and [Scientific American](https://www.scientificamerican.com/article/quantum-phy
 and [APS News](https://www.aps.org/apsnews/2022/10/imaginary-numbers-quantum-physics),
 as well as [a talk at QIP 2022](https://www.youtube.com/watch?v=93Vjj6CrZNc).
 
-In this post, I'm going to explain why the paper is wrong.
+In this post, I'm going to explain why the title of the paper is wrong.
 
 
 # The Goal
