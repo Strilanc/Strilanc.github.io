@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Quantum Error Correction goes FOOM</title>
+                <description>&lt;p&gt;In this post: why I expect the maximum achievable qubit quality to increase drastically in the next few years.&lt;/p&gt; &lt;p&gt;In 2014, the John Martinis group at UCSB performed an experiment where they stored a classical bit using their quantum computer. They protected the bit with a &lt;a href=&quot;https://arxiv.org/pdf/1411.7403#page=4&quot;&gt;9 qubit&lt;/a&gt; &lt;a...</description>
+                <pubDate>Mon, 22 Sep 2025 15:10:10 -0300</pubDate>
+                <link>http://algassert.com/post/2503</link>
+                <guid isPermaLink="true">http://algassert.com/post/2503</guid>
+            </item>
+            <item>
                 <title>Actually, you can&apos;t test if quantum uses complex numbers</title>
                 <description>&lt;p&gt;In 2021, Renou et al published the paper &lt;a href=&quot;https://www.nature.com/articles/s41586-021-04160-4&quot;&gt;“Quantum theory based on real numbers can be experimentally falsified”&lt;/a&gt; in Nature. It caused a decent sized splash at the time. A quick search revealed articles in &lt;a href=&quot;https://www.quantamagazine.org/imaginary-numbers-may-be-essential-for-describing-reality-20210303/&quot;&gt;Quanta&lt;/a&gt; and &lt;a href=&quot;https://www.scientificamerican.com/article/quantum-physics-falls-apart-without-imaginary-numbers/&quot;&gt;Scientific American&lt;/a&gt; and &lt;a href=&quot;https://www.aps.org/apsnews/2022/10/imaginary-numbers-quantum-physics&quot;&gt;APS News&lt;/a&gt;, as well as &lt;a...</description>
                 <pubDate>Sun, 14 Sep 2025 11:10:10 -0700</pubDate>
@@ -75,14 +82,6 @@
                 <pubDate>Sat, 22 Feb 2025 04:10:10 -0800</pubDate>
                 <link>http://algassert.com/2025/02/22/constant-rate-on-a-line-paper.html</link>
                 <guid isPermaLink="true">http://algassert.com/2025/02/22/constant-rate-on-a-line-paper.html</guid>
-            </item>
-            <item>
-                <title>[Paper] Magic state cultivation: growing T states as cheap as CNOT gates</title>
-                <description>
-</description>
-                <pubDate>Thu, 26 Sep 2024 05:10:10 -0700</pubDate>
-                <link>http://algassert.com/2024/09/26/magic-state-cultivation-paper.html</link>
-                <guid isPermaLink="true">http://algassert.com/2024/09/26/magic-state-cultivation-paper.html</guid>
             </item>
     </channel>
 </rss>
