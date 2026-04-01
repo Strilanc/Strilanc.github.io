@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>On Eastin-Knill Being Wrong</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">On Eastin-Knill Being Wrong</h1>
+<p class="meta">01 Apr 2026</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+
+<p>There are many ways to perform fault tolerant quantum gates: lattice surgery, state injection and gate teleportation, braiding, gauge fixing, code deformation… the list goes on.
+But, by a large margin, people’s <em>favorite</em> way to do a fault tolerant gate is <a href="https://errorcorrectionzoo.org/list/quantum_transversal">transversally</a>.
+A transversal logical gate G is performed by broadcasting the physical gate G over the physical qubits making up the logical qubit.</p>
+
+<p>As you will hear stated in almost any talk about fault tolerant quantum gates, the <a href="https://en.wikipedia.org/wiki/Eastin%E2%80%93Knill_theorem">Eastin-Knill theorem</a> proves that no error correcting code has a universal set of transversal gates.
+We must perform some gates non-transversally.
+We can’t always get what we want.</p>
+
+<p>…or can we?</p>
+
+<h1 id="a-code-with-universal-transversal-gates">A Code with Universal Transversal Gates</h1>
+
+<p>The 15 qubit <a href="https://errorcorrectionzoo.org/c/quantum_reed_muller">quantum Reed-Muller code</a> is a very famous quantum error correcting code.
+Its main claim to fame is that it’s the simplest code with a transversal <a href="https://en.wikipedia.org/wiki/Quantum_logic_gate#Phase_shift_gates">T gate</a>, making it the foundation of <a href="https://arxiv.org/abs/quant-ph/0403025">15-to-1 T state distillation</a>.</p>
+
+<p>The quantum Reed-Muller code also has some other transversal gates.
+It has transversal <a href="https://en.wikipedia.org/wiki/Quantum_logic_gate#Pauli_gates_(X,Y,Z)">Pauli gates</a> and, because it’s a <a href="https://en.wikipedia.org/wiki/CSS_code">CSS code</a> with a single logical qubit,
+has transversal X-basis measurement, Z-basis measurement, and Controlled-NOT.</p>
+
+<p>Putting together an incomplete inventory, the quantum Reed-Muller code has the following transversal gates:</p>
+
+<ul>
+  <li>Transversal bit flip (<code>X</code>)</li>
+  <li>Transversal T (<code>T</code>)</li>
+  <li>Transversal X-basis measurement (<code>MX</code>)</li>
+  <li>Transversal Z-basis measurement (<code>MZ</code>)</li>
+  <li>Transversal Controlled-NOT (<code>CX</code>)</li>
+</ul>
+
+<p>…and we’re done.
+The above gateset is universal.
+We’ve violated the claim that no error correcting code has a universal set of transversal gates.</p>
+
+<p>You don’t believe me?
+It’s easy to prove.
+A much better known universal gateset is <a href="https://arxiv.org/abs/1212.0506">Clifford+T</a>, which is generated by the gates <code>H</code>, <code>S</code>, <code>CX</code>, <code>T</code>, <code>MZ</code>.
+The quantum Reed-Muller code already has transversal <code>CX</code>, <code>T</code>, and <code>MZ</code> so all we need to show is that we can synthesize <code>S</code> and <code>H</code> from <code>X,T,MX,MZ,CX</code>.</p>
+
+<p>Getting <code>S</code> is trivial, because $S = T^2$.
+It’s almost not even worth mentioning:</p>
+
+<p><img src="/assets/2026-04-01-transversal/decomp-s.png" /></p>
+
+<p>Getting <code>H</code> is a bit trickier.
+It’s easiest to understand the decomposition if we first get <code>SQRT_X</code>.
+We can perform <code>SQRT_X</code> by using <code>MX</code> and <code>S</code> to prepare an $|i\rangle$ state and then consuming that state in a gate teleportation:</p>
+
+<p><img style="width:100%" src="/assets/2026-04-01-transversal/decomp-sqrt-x.png" /></p>
+
+<p>You can verify this identity using Stim:</p>
+
+<pre><code class="language-python">import stim
+assert stim.Circuit("""
+    SQRT_X 0
+    MX 1
+    X 0
+    S 1
+    CX 1 0
+    MX 1
+    
+    # Pauli feedback.
+    CX rec[-2] 0
+    CX rec[-1] 0
+""").has_all_flows(stim.gate_data("SQRT_X").flows)
+</code></pre>
+
+<p>Once you have <code>S</code> and <code>SQRT_X</code> it’s easy to get <code>H</code> because $H = S \cdot \sqrt{X} \cdot S$:</p>
+
+<p><img style="width:100%" src="/assets/2026-04-01-transversal/decomp-h.png" /></p>
+
+<p>You can also verify this identity using Stim:</p>
+
+<pre><code class="language-python">import stim
+assert stim.Circuit("""
+    S 0
+    MX 1
+    X 0
+    S 1
+    CX 1 0
+    MX 1
+    CX rec[-2] 0
+    CX rec[-1] 0
+    S 0
+""").has_all_flows(stim.gate_data("H").flows)
+</code></pre>
+
+<p>QED.
+The quantum Reed-Muller code can implement Clifford+T transversally,
+therefore the quantum Reed-Muller code has a universal transversal gate set,
+therefore everything is amazing.</p>
+
+<p>…or is it?</p>
+
+<h1 id="the-catch">The Catch</h1>
+
+<p>If you actually attempt to perform logical computations using these transversal gates, you will find that there is a problem.
+In the <code>H</code> decomposition, there is an <code>MX</code> immediately followed by a <code>T</code> (inside of an <code>S</code>).
+But the <code>T</code> is only safe to do if you’re in the code state, and <strong>the <code>MX</code> gate destroys the Z basis stabilizers of the code</strong>.
+Therefore, although both gates are individually transversal, the combination of the two is not.
+They need to be separated by multiple rounds of stabilizer measurements, to restore the lost stabilizers.</p>
+
+<p>I would argue this is a knockdown argument that we should not consider the <code>MX</code> gate to be truly transversal.
+Transversal gates are supposed to preserve the code state, and <code>MX</code> does not.
+It is at best <em>conditionally</em> transversal; it can be done transversally if certain conditions are met (e.g. no other gates nearby).</p>
+
+<p>As for the Eastin-Knill theorem, it’s actually fine (happy April Fools!).
+What the theorem states (according to Wikipedia) is “No quantum error correcting code can have a continuous symmetry which acts transversely on physical qubits”.
+This is <em>crucially different</em> from what people usually say the theorem states (that no universal transversal gate set exists).
+In particular, gate decompositions that involve dissipative gates and ancilla qubits can be universal without being continuous symmetries.
+The <code>SQRT_X</code> decomposition shown above is a good example.</p>
+
+<p>So, in the end, we’re back where we started.
+We can declare that <code>MX</code> isn’t transversal, preserving the claim that no universal transversal gate set exists.
+Or we can say <code>MX</code> is transversal, and lose the notion that transversal gates are beautifully simple.
+Either way, we can’t always get what we want.
+Damn.</p>
+
+
+</div>
+
+
+    </div>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

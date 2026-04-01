@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>CCX+HMR isn't universal, unless you can prepare |+></title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">CCX+HMR isn't universal, unless you can prepare |+></h1>
+<p class="meta">22 Sep 2025</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+
+<p>Recently, I’ve been working on a fast simulator for reversible classical circuits <a href="https://algassert.com/post/1905">assisted by measurement based uncomputation</a>.
+Basically it’s just doing <a href="https://algassert.com/post/1903">the strategy I pointed out back in 2019</a>.
+The simulator supports the CCX gate for classical computation, the HMR (Hadamard+Measure+Reset) gate for measurement based computation, and phase gates like Z for correcting phase kickback from HMR gates.</p>
+
+<p>It’s surprising that CCX+HMR circuits can be efficiently classically simulated, because CCX+H is known to be universal for quantum computations.
+Something about forcing the H to only occur just before a demolition measurement prevents the universality.
+A natural question then is whether this constraint can be weakened.
+For example, suppose H was also allowed immediately after a reset (i.e. you were allowed to prepare $|+\rangle$).
+Can the resulting circuits still be simulated efficiently on a classical computer?
+That would be really useful if true, because it would give a cheap method for verifying <a href="https://arxiv.org/abs/1905.08488">constructions</a> <a href="https://arxiv.org/abs/2505.15917">based</a> <a href="https://arxiv.org/abs/quant-ph/0601097">on</a> <a href="https://arxiv.org/abs/2008.04577">superposition masking</a>.</p>
+
+<p>Unfortunately, as I will explain here, introducing $|+\rangle$ has a huge effect.
+CCX+HMR is cheap to simulate, but CCX+HMR+RX is computationally universal.
+In this post, I’m going to show that universality by constructing the gateset Clifford+T from the gateset CCX+HMR+RX.
+As a bonus, it turns out this construction achieves the goals of the construction in <a href="/post/2501">“Actually, you can’t test if quantum uses complex numbers”</a> but with a single-qubit catalyst rather than a three-qubit catalyst.</p>
+
+<h1 id="axiomatic-gates">Axiomatic gates</h1>
+
+<p>Here are the gates we are given:</p>
+
+<ul>
+  <li>
+    <p><strong>CCX</strong>.
+The Toffoli gate. The controlled-controlled-not. Flips the target when the two controls are ON.</p>
+  </li>
+  <li>
+    <p><strong>HMR</strong>.
+X basis demolition measurement.
+The “hammer” gate.
+Equivalent to a Hadamard followed by a computational basis measurement followed by a reset of the qubit into the $|0\rangle$ state.</p>
+  </li>
+  <li>
+    <p><strong>RX</strong>.
+X basis preparation. Resets the qubit into the state $|+\rangle = |0\rangle + |1\rangle$.</p>
+  </li>
+</ul>
+
+<p>These are the <em>only</em> quantum gates we have access to.
+Everything else must be built from these, including simple things like “prepare $|1\rangle$”.</p>
+
+<p>Note that we <em>are</em> allowed to perform arbitrary classical computation and feedback.
+We can do different gates depending on prior measurement results, including things like repeating a probabilistic state preparation until it succeeds.</p>
+
+<h1 id="constructed-gates">Constructed Gates</h1>
+
+<p>There are several gates you might just take for granted as being present, but which we must construct.</p>
+
+<h4 id="init_zero">INIT_ZERO</h4>
+
+<p>We can initialize a qubit into the
+$|0\rangle$
+state by performing an HMR gate and ignoring the measurement result:</p>
+
+<blockquote>
+  <p><em>INIT_ZERO from {HMR}:</em></p>
+
+  <p><img src="/assets/2025-09-23-gateset/init_zero.png" /></p>
+</blockquote>
+
+<h4 id="bootstrap_minus">BOOTSTRAP_MINUS</h4>
+
+<p>We can arduously initialize a qubit into the
+$|-\rangle = |0\rangle - |1\rangle$
+state using a repeat until success construction (RUS):</p>
+
+<blockquote>
+  <p><em>BOOTSTRAP_MINUS from {INIT_ZERO, RX, CCX, HMR} using RUS</em></p>
+
+  <p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22X%22%2C%22%E2%80%A2%22%2C%22%E2%80%A2%22%5D%2C%5B1%2C%22H%22%2C%22H%22%5D%2C%5B1%2C%22Measure%22%2C%22Measure%22%5D%2C%5B1%2C%22%7C1%E2%9F%A9%E2%9F%A81%7C%22%2C%22%7C1%E2%9F%A9%E2%9F%A81%7C%22%5D%2C%5B%22Amps1%22%5D%5D%2C%22init%22%3A%5B0%2C%22%2B%22%2C%22%2B%22%5D%7D"><img src="/assets/2025-09-23-gateset/bootstrap_minus.png" /></a></p>
+</blockquote>
+
+<p>It takes on average 9 attempts per success.</p>
+
+<h4 id="bootstrap_one">BOOTSTRAP_ONE</h4>
+
+<p>We can arduously initialize a qubit into the
+$|1\rangle$
+state using a repeat until success construction:</p>
+
+<blockquote>
+  <p><em>BOOTSTRAP_ONE from {RX, CCX, HMR} catalyzed by
+$|-\rangle$
+using RUS</em></p>
+
+  <p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B1%2C%22H%22%5D%2C%5B1%2C%22Measure%22%5D%2C%5B1%2C%22%7C1%E2%9F%A9%E2%9F%A81%7C%22%5D%2C%5B%22Amps1%22%5D%5D%2C%22init%22%3A%5B%22%2B%22%2C%22%2B%22%2C%22-%22%5D%7D"><img src="/assets/2025-09-23-gateset/bootstrap_one.png" /></a></p>
+</blockquote>
+
+<p>It takes on average 2 attempts per success.</p>
+
+<h4 id="init_one">INIT_ONE</h4>
+
+<p>Once we’ve bootstrapped multiple
+$|1\rangle$ states, we can catalyze the production of more
+$|1\rangle$ states:</p>
+
+<blockquote>
+  <p><em>INIT_ONE from {RX, CCX} catalyzed by
+$|1\rangle, |1\rangle$</em>:</p>
+
+  <p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22X%22%2C%22%E2%80%A2%22%2C%22%E2%80%A2%22%5D%2C%5B%22Amps1%22%5D%5D%2C%22init%22%3A%5B0%2C1%2C1%5D%7D"><img src="/assets/2025-09-23-gateset/init_one.png" /></a></p>
+</blockquote>
+
+<h4 id="init_minus">INIT_MINUS</h4>
+
+<p>Once we’ve bootstrapped
+$|1\rangle$
+and
+$|-\rangle$, we can catalyze the production of more
+$|-\rangle$ states:</p>
+
+<blockquote>
+  <p><em>INIT_MINUS from {RX, CCX} catalyzed by
+$|-\rangle, |1\rangle$</em>:</p>
+
+  <p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22Amps1%22%2C%22Amps1%22%2C%22Amps1%22%5D%2C%5B%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%2C%22%E2%80%A2%22%5D%2C%5B%22Amps1%22%2C%22Amps1%22%2C%22Amps1%22%5D%5D%2C%22init%22%3A%5B%22%2B%22%2C%22-%22%2C1%5D%7D"><img src="/assets/2025-09-23-gateset/init_minus.png" /></a></p>
+</blockquote>
+
+<h4 id="cx">CX</h4>
+
+<p>A CX is a CCX with a control in the
+$|1\rangle$ state:</p>
+
+<blockquote>
+  <p><em>CX from {CCX} catalyzed by
+$|1\rangle$</em>:</p>
+
+  <p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22%E2%80%A2%22%2C%22X%22%2C%22%E2%80%A2%22%5D%5D%2C%22init%22%3A%5B0%2C0%2C1%5D%7D"><img src="/assets/2025-09-23-gateset/cx.png" /></a></p>
+</blockquote>
+
+<h4 id="x">X</h4>
+
+<p>An X gate is a CCX with both controls in the
+$|1\rangle$ state:</p>
+
+<blockquote>
+  <p><em>X from {CCX} catalyzed by
+$|1\rangle$,
+$|1\rangle$</em>:</p>
+
+  <p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22%E2%80%A2%22%2C%22X%22%2C%22%E2%80%A2%22%5D%5D%2C%22init%22%3A%5B1%2C0%2C1%5D%7D"><img src="/assets/2025-09-23-gateset/x.png" /></a></p>
+</blockquote>
+
+<h4 id="cz">CZ</h4>
+
+<p>A CZ gate is a CCX with the target in the
+$|-\rangle$ state:</p>
+
+<blockquote>
+  <p><em>CZ from {CCX} catalyzed by
+$|-\rangle$</em>:</p>
+
+  <p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22X%22%5D%5D%2C%22init%22%3A%5B0%2C0%2C%22-%22%5D%7D"><img src="/assets/2025-09-23-gateset/cz.png" /></a></p>
+</blockquote>
+
+<h4 id="z">Z</h4>
+
+<p>A Z gate is a CCX with a control in the
+$|1\rangle$ state
+and the target in the
+$|-\rangle$ state:</p>
+
+<blockquote>
+  <p><em>Z from {CCX} catalyzed by
+$|1\rangle$,
+$|-\rangle$</em>:</p>
+
+  <p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22X%22%5D%5D%2C%22init%22%3A%5B1%2C0%2C%22-%22%5D%7D"><img src="/assets/2025-09-23-gateset/z.png" /></a></p>
+</blockquote>
+
+<h4 id="h">H</h4>
+
+<p>The basic gates are sufficient for performing a Hadamard gate:</p>
+
+<blockquote>
+  <p><em>H from {RX, CX, CZ, X, Z, HMR} using feedback</em></p>
+
+  <p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B1%2C%22H%22%5D%2C%5B1%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22%E2%80%A6%22%2C%22%E2%80%A6%22%2C%22%E2%80%A6%22%5D%2C%5B1%2C%22X%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22%E2%80%A2%22%2C%22Z%22%5D%2C%5B%22H%22%5D%2C%5B%22Measure%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22%E2%80%A2%22%2C%22Z%22%5D%2C%5B%22%E2%80%A6%22%2C%22%E2%80%A6%22%2C%22%E2%80%A6%22%5D%2C%5B1%2C%22Amps2%22%5D%5D%2C%22init%22%3A%5B%22%2B%22%5D%7D"><img src="/assets/2025-09-23-gateset/h.png" /></a></p>
+</blockquote>
+
+<h4 id="bootstrap_i">BOOTSTRAP_i</h4>
+
+<p>All the gates we’ve used so far are defined using only real numbers.
+To provide access to the complex plane, we can introduce a single
+$|i\rangle = |0\rangle + i|1\rangle$ catalyst.</p>
+
+<p>Later I will show this catalyst can be replaced with <em>literally any state whatsoever</em>.
+But for now we will pretend it is a true $|i\rangle$ state, of which <em>exactly one</em> is provided.</p>
+
+<h4 id="dupe_i">DUPE_i</h4>
+
+<p>A nice property of
+$|i\rangle$ states is they catalyze their own production:</p>
+
+<blockquote>
+  <p><em>DUPE_i from {RX, CX, CZ} catalyzed by
+$|i\rangle$</em></p>
+
+  <p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22%E2%80%A2%22%2C%22Z%22%5D%2C%5B%22Amps1%22%5D%5D%2C%22init%22%3A%5B%22%2B%22%2C%22i%22%5D%7D"><img src="/assets/2025-09-23-gateset/dupe_i.png" /></a></p>
+</blockquote>
+
+<h4 id="s">S</h4>
+
+<p>The S gate can also be catalyzed by
+$|i\rangle$ states:</p>
+
+<blockquote>
+  <p><em>S from {CX, CZ} catalyzed by
+$|i\rangle$</em></p>
+
+  <p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22%E2%80%A2%22%2C%22Z%22%5D%5D%2C%22init%22%3A%5B0%2C%22i%22%5D%7D"><img src="/assets/2025-09-23-gateset/s.png" /></a></p>
+</blockquote>
+
+<h4 id="all-cliffords">All Cliffords</h4>
+
+<p>We can now construct CX, H, and S.
+This is well known to be a universal gateset for Clifford operations.</p>
+
+<h4 id="all-pauli-product-measurements">All Pauli Product Measurements</h4>
+
+<p>Combining Cliffords with the HMR operation, we can now perform demolition and non-demolition measurements of any Pauli product operator.
+For example, we can now perform MZ (non-demolition Z basis measurement).</p>
+
+<h4 id="bootstrap_approx_t">BOOTSTRAP_APPROX_T</h4>
+
+<p>There is a repeat until success construction, using the operations we’ve defined so far, that produces an approximation of the state
+$|\sqrt{i}\rangle = |0\rangle + \sqrt{i}|1\rangle$ with a fidelity of 99.5%:</p>
+
+<blockquote>
+  <p><em>BOOTSTRAP_APPROX_T from {DUPE_i, RX, INIT_ZERO, X, CCX, H, MZ} using RUS</em>:</p>
+
+  <p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22X%22%5D%2C%5B%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22H%22%2C%22H%22%5D%2C%5B1%2C%22Measure%22%2C%22Measure%22%5D%2C%5B1%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%2C%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B%22Amps1%22%5D%2C%5B%5D%2C%5B%22Z%5E-%C2%BC%22%5D%2C%5B%22H%22%5D%2C%5B%22Chance%22%5D%5D%2C%22init%22%3A%5B%22i%22%2C%22%2B%22%5D%7D"><img src="/assets/2025-09-23-gateset/bootstrap_approx_t.png" /></a></p>
+</blockquote>
+
+<h4 id="bootstrap_distilled_t">BOOTSTRAP_DISTILLED_T</h4>
+
+<p>Because we have access to the Toffoli gate, rather than only Clifford gates, we can do substantially more efficient T state distillation than is normally possible.
+There is a 2-to-1 factory with quadratic suppression:</p>
+
+<blockquote>
+  <p><em>BOOTSTRAP_DISTILLED_T from {BOOTSTRAP_APPROX_T, CCX, S, X, H, MZ} catalyzed by
+$|0\rangle$ using RUS</em>:</p>
+
+  <p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22H%22%2C%22H%22%5D%2C%5B%22Z%5E%C2%BC%22%2C%22Z%5E%C2%BC%22%5D%2C%5B%7B%22id%22%3A%22Z%5Eft%22%2C%22arg%22%3A%220.2%20sin(10%20t)%22%7D%2C%7B%22id%22%3A%22Z%5Eft%22%2C%22arg%22%3A%220.1%20sin(-7%20t)%22%7D%5D%2C%5B%5D%2C%5B%5D%2C%5B%22Amps1%22%2C%22Amps1%22%5D%2C%5B%5D%2C%5B1%2C1%2C%22X%22%5D%2C%5B%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B1%2C1%2C%22Z%5E%C2%BD%22%5D%2C%5B%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%2C%22%E2%80%A2%22%5D%2C%5B1%2C1%2C%22X%22%5D%2C%5B%22H%22%5D%2C%5B%22Measure%22%5D%2C%5B%22%7C0%E2%9F%A9%E2%9F%A80%7C%22%5D%2C%5B1%2C%22Amps1%22%5D%5D%7D"><img style="max-width: 100%" src="/assets/2025-09-23-gateset/distill_approx_t.png" /></a></p>
+</blockquote>
+
+<p>This distillation procedure can be concatenated with itself in order to produce arbitrarily reliable
+$|\sqrt{i}\rangle$ states.</p>
+
+<h4 id="t">T</h4>
+
+<p>Once a sufficiently good approximation of
+$|\sqrt{i}\rangle$ has been distilled, T gates can be catalyzed by it:</p>
+
+<blockquote>
+  <p><em>T from {H, CCX, CX} catalyzed by
+$|\sqrt{i}\rangle, |i\rangle$</em>:</p>
+
+  <p><a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B1%2C1%2C%22H%22%5D%2C%5B1%2C1%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22H%22%2C%22H%22%5D%2C%5B%22Z%5E%C2%BC%22%2C%22Z%5E%C2%BD%22%5D%2C%5B%22Amps1%22%2C%22Amps1%22%2C%22Amps2%22%5D%2C%5B%5D%2C%5B1%2C%22H%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%2C%22%E2%80%A2%22%5D%2C%5B1%2C%22H%22%5D%2C%5B%22%E2%80%A2%22%2C%22X%22%2C%22%E2%80%A2%22%5D%2C%5B%22X%22%2C1%2C%22%E2%80%A2%22%5D%2C%5B%22Amps1%22%2C%22Amps1%22%2C%22Amps2%22%5D%5D%7D"><img style="max-width: 100%" src="/assets/2025-09-23-gateset/t.png" /></a></p>
+</blockquote>
+
+<p>Note that the chance of algorithm failure is at most as large as the infidelity of the
+$|\sqrt{i}\rangle$ catalyst (assuming there is only one), regardless of how many T gates it catalyzes.</p>
+
+<h1 id="removing-the-irangle">Removing the $|i\rangle$</h1>
+
+<p>At this point I have explained how to implement Clifford+T, but I have cheated in one place: the BOOTSTRAP_i construction uses an $|i\rangle$ state that
+clearly can’t be produced by RX+CCX+HMR because those gates are defined using only real numbers whereas $|i\rangle$ has imaginary parts.
+However, in a circuit constructed using the method specified so far in this post,
+the <em>only</em> operation that needed a non-real complex number was preparing the seed $|i\rangle$ state.
+Therefore, replacing that single $|i\rangle$ with its conjugate $|j\rangle = |0\rangle - i|1\rangle$ is equivalent to conjugating all complex numbers that
+appear in the entire circuit.
+By the conjugation symmetry of the complex numbers, this preserves the distribution of measurement results produced by the circuit.</p>
+
+<p>The fact we can replace the seed $|i\rangle$ with $|j\rangle$ implies we can replace it with anything.
+Consider that
+$X|i\rangle = |j\rangle$,
+$Z|i\rangle = |j\rangle$,
+and $XZ|i\rangle = |i\rangle$.
+All Pauli errors turn the $|i\rangle$ state into itself or $|j\rangle$.
+Applying Pauli errors to the $|i\rangle$ seed does not affect the function of the circuit!
+That means maximally depolarizing the seed, by hitting it with an X gate with 50% chance and a Z gate with 50% chance, won’t affect the circuit.
+But hitting a state with maximum depolarization turns it into the maximally mixed state and, if a maximally mixed state works with 100% chance, all states must work.
+Therefore the seed $|i\rangle$ state can be replaced with anything, such as
+$|0\rangle$ or
+$|-\rangle$ or a Bell pair entangled with some unknown qubit somewhere else in the world.
+I choose to replace it with $|0\rangle$, completing the proof that RX+CCX+HMR is computationally universal.</p>
+
+<p>As mentioned in the introduction, this construction is a strict improvement on the construction I described in <a href="/post/2501">this previous post</a>.
+It uses real-only gates, but only needs to store one entangled catalyst qubit per computer (rather than three) (the catalyst being what would have been $|i\rangle$
+if the seed $|i\rangle$ wasn’t replaced with $|0\rangle$).</p>
+
+
+</div>
+
+
+    </div>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -7,11 +7,33 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>On Eastin-Knill Being Wrong</title>
+                <description>&lt;p&gt;There are many ways to perform fault tolerant quantum gates: lattice surgery, state injection and gate teleportation, braiding, gauge fixing, code deformation… the list goes on. But, by a large margin, people’s &lt;em&gt;favorite&lt;/em&gt; way to do a fault tolerant gate is &lt;a href=&quot;https://errorcorrectionzoo.org/list/quantum_transversal&quot;&gt;transversally&lt;/a&gt;. A transversal logical gate G is performed...</description>
+                <pubDate>Wed, 01 Apr 2026 11:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/2600</link>
+                <guid isPermaLink="true">http://algassert.com/post/2600</guid>
+            </item>
+            <item>
+                <title>[Paper] Securing Elliptic Curve Cryptocurrencies against Quantum Vulnerabilities: Resource Estimates and Mitigations</title>
+                <description>
+</description>
+                <pubDate>Tue, 31 Mar 2026 05:10:10 -0700</pubDate>
+                <link>http://algassert.com/2026/03/31/ecc.html</link>
+                <guid isPermaLink="true">http://algassert.com/2026/03/31/ecc.html</guid>
+            </item>
+            <item>
                 <title>Quantum Error Correction goes FOOM</title>
                 <description>&lt;p&gt;In this post: why I expect the maximum achievable qubit quality to increase drastically in the next few years.&lt;/p&gt; &lt;p&gt;In 2014, the John Martinis group at UCSB performed an experiment where they stored a classical bit using their quantum computer. They protected the bit with a &lt;a href=&quot;https://arxiv.org/pdf/1411.7403#page=4&quot;&gt;9 qubit&lt;/a&gt; &lt;a...</description>
-                <pubDate>Wed, 24 Dec 2025 14:10:10 -0400</pubDate>
+                <pubDate>Wed, 24 Dec 2025 10:10:10 -0800</pubDate>
                 <link>http://algassert.com/post/2503</link>
                 <guid isPermaLink="true">http://algassert.com/post/2503</guid>
+            </item>
+            <item>
+                <title>CCX+HMR isn&apos;t universal, unless you can prepare |+&gt;</title>
+                <description>&lt;p&gt;Recently, I’ve been working on a fast simulator for reversible classical circuits &lt;a href=&quot;https://algassert.com/post/1905&quot;&gt;assisted by measurement based uncomputation&lt;/a&gt;. Basically it’s just doing &lt;a href=&quot;https://algassert.com/post/1903&quot;&gt;the strategy I pointed out back in 2019&lt;/a&gt;. The simulator supports the CCX gate for classical computation, the HMR (Hadamard+Measure+Reset) gate for measurement based computation, and phase...</description>
+                <pubDate>Mon, 22 Sep 2025 11:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/2502</link>
+                <guid isPermaLink="true">http://algassert.com/post/2502</guid>
             </item>
             <item>
                 <title>Actually, you can&apos;t test if quantum uses complex numbers</title>
@@ -58,30 +80,6 @@
                 <pubDate>Tue, 08 Apr 2025 09:10:10 -0700</pubDate>
                 <link>http://algassert.com/2025/04/08/magic-state-cultivation-talk-simons.html</link>
                 <guid isPermaLink="true">http://algassert.com/2025/04/08/magic-state-cultivation-talk-simons.html</guid>
-            </item>
-            <item>
-                <title>[Paper (Sigbovik 2025)] Falling with Style: Factoring up to 255 &apos;with&apos; a QuantumComputer</title>
-                <description>
-</description>
-                <pubDate>Tue, 01 Apr 2025 05:10:10 -0700</pubDate>
-                <link>http://algassert.com/2025/04/01/falling-with-style-paper.html</link>
-                <guid isPermaLink="true">http://algassert.com/2025/04/01/falling-with-style-paper.html</guid>
-            </item>
-            <item>
-                <title>[Talk at QIP2025] Magic state cultivation</title>
-                <description>
-</description>
-                <pubDate>Thu, 06 Mar 2025 08:10:10 -0800</pubDate>
-                <link>http://algassert.com/2025/03/06/magic-state-cultivation-talk-qip.html</link>
-                <guid isPermaLink="true">http://algassert.com/2025/03/06/magic-state-cultivation-talk-qip.html</guid>
-            </item>
-            <item>
-                <title>[Paper] A Constant Rate Quantum Computer on a Line</title>
-                <description>
-</description>
-                <pubDate>Sat, 22 Feb 2025 04:10:10 -0800</pubDate>
-                <link>http://algassert.com/2025/02/22/constant-rate-on-a-line-paper.html</link>
-                <guid isPermaLink="true">http://algassert.com/2025/02/22/constant-rate-on-a-line-paper.html</guid>
             </item>
     </channel>
 </rss>
