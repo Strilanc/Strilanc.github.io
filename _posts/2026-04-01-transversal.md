@@ -60,7 +60,6 @@ You can verify this identity using Stim:
 ```python
 import stim
 assert stim.Circuit("""
-    SQRT_X 0
     MX 1
     X 0
     S 1
