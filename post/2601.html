@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>The predictable failure of the QDay Prize</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">The predictable failure of the QDay Prize</h1>
+<p class="meta">25 Apr 2026</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+
+<p>On May 20th of last year, I received an email asking me to make a submission to the “<a href="https://www.qdayprize.com/">QDay Prize</a>”.
+It was a competition where whoever managed to solve the biggest problem using Shor’s algorithm on current quantum computers would receive a prize of 1 bitcoin (around 77 thousand USD as of this writing).
+Despite the large prize, I declined to make a submission.
+I thought it was a terrible idea for a competition, with two showstopping issues in the basic premise.</p>
+
+<p>The first showstopper is that Shor’s algorithm requires error correction.
+Current quantum computers experience on the order of one error per thousand gates, but cryptographically relevant instances of Shor’s algorithm require billions of gates.
+The only known way to cross this chasm is <a href="https://en.wikipedia.org/wiki/Quantum_error_correction">quantum error correction</a>.
+There are <a href="https://arxiv.org/abs/2408.13687">promising quantum error correction experiments being done</a>, but ultimately quantum error correction is still a work in progress.
+Participants in the competition would inevitably end up using non-error-corrected circuits, which have completely different costs and challenges and scaling properties.
+In other words, the competition would be measuring something irrelevant.</p>
+
+<p>The second showstopper is that it’s too easy for Shor’s algorithm to solve small problems by accident.
+On this point, I was somewhat assuaged by the email mentioning</p>
+
+<blockquote>
+  <p>[…] We understand this is not totally representative of how larger keys get broken, as there’s no error correction yet, and <strong>we’ll only award the prize if quantum computers are used legitimately - i.e. no Falling With Style-style tricks.</strong></p>
+</blockquote>
+
+<p>The “Falling With Style-style tricks” thing is a reference to my <a href="https://sigbovik.org/2025/proceedings.pdf#page=146">April Fools paper in Sigbovik 2025</a>.
+In that paper, I jokingly claimed that I factored all numbers up to 255 with a quantum computer.
+The joke is that it worked just as quickly when I replaced the quantum computer with a random number generator.
+Basically, for small problems, Shor’s algorithm succeeds regardless of how well your quantum computer works.
+The computer working well only matters for big problems.
+This makes judging a Shor’s-algorithm-applied-to-small-problems competition extremely difficult.
+In fact, as part of declining to particpate, I emphasized that this was a key risk.
+I said:</p>
+
+<blockquote>
+  <p>For the near future, the contribution of luck is going to massively outweigh any legitimate contribution of the quantum computer. So I suspect the winner in 2026 will be whoever did the best job at obfuscating how they made themselves unavoidably lucky. You’re going to find yourself in a philosophical debate, with 100K$ on the line, over where exactly the line for a quantum computer “really” breaking a key is.</p>
+</blockquote>
+
+<p>Anyways, a year went by, the competition ended, <a href="https://blog.projecteleven.com/posts/project-eleven-awards-1-btc-q-day-prize-for-largest-quantum-attack-on-elliptic-curve-cryptography-to-date">a winner was chosen</a>, and… <strong><a href="https://github.com/yuvadm/quantumslop/blob/25ad2e76ae58baa96f6219742459407db9dd17f5/URANDOM_DEMO.md">the winner’s code is a Falling with Style-style trick</a></strong>.
+Github user <a href="https://github.com/yuvadm">@yuvadm</a> (“Yuval Adam”) checked what happens when the quantum calls in the prize submission are replaced with random calls, and the random results are indistinguishable from the quantum results.</p>
+
+<p>Something I want to note in this otherwise very negative post: I looked over the submission’s code and the circuit construction looks fine.
+They’re implementing the ELDPC circuit described in <a href="https://arxiv.org/abs/1706.06752">Roetteler et al 2017</a>.
+That’s a weird choice because there’s been <a href="https://arxiv.org/abs/2306.08585">better papers since</a> and <a href="https://arxiv.org/abs/quant-ph/0301141">better papers before</a>, but it’s a valid choice.
+The choice to use <a href="https://arxiv.org/abs/quant-ph/0008033">Draper-style phase adders</a> instead of cheaper <a href="https://arxiv.org/abs/quant-ph/0410184">ripple-carry adders</a> is similarly weird but valid.</p>
+
+<p>Anyways, the fact that the circuit construction looks correct speaks to the insidiousness of the falling-with-style issue.
+You make a correct circuit, you get the expected result, you celebrate… but you got the right answer for the wrong reason.
+This is a fear that every competent experimentalist knows in their bones.
+It’s why they don’t just check that something works when it should work, they check that it breaks when it should break.
+Failing to do that is arguably <a href="https://www.youtube.com/watch?v=vKA4w2O61Xo">the most common failure of reasoning in humans</a>, so if you’re running a competition where this is a known possibility then <em><strong>YOU SHOULD BE CHECKING FOR IT</strong></em>.</p>
+
+<h1 id="the-drama">The Drama</h1>
+
+<p>On Twitter, <a href="https://x.com/projecteleven/status/2047661990605156796">this is how Project11 summarized the outcome of the competition</a>:</p>
+
+<blockquote>
+  <p>Researcher breaks 15-bit ECC key on publicly accessible quantum hardware in a 512x jump from the previous public demonstration.</p>
+</blockquote>
+
+<p>For reference, that “512x jump” is in comparison to a prior work by “Steve Tippeconnic” that had the <em>exact same problem</em> (<a href="https://x.com/CraigGidney/status/1965091975063130387">in addition to several others, such as using exponentially expensive circuit constructions</a>).
+The fact that Project11 is boosting these results instead of shunning them has hugely damaged my perception of their credibility.</p>
+
+<p>On Twitter, one of the competition runners <a href="https://x.com/apruden08/status/2047914287205941622">defended their decision</a>.
+Summarizing, they make two points:</p>
+
+<ol>
+  <li>
+    <p>The submission followed the rules of the contest,</p>
+
+    <blockquote>
+      <p>We had three independent physics experts judge submissions against a predefined rubric. […] But the work followed the rules, pushed the boundary on public hardware, and deserves recognition.</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>This still shows progress in quantum attacks.</p>
+
+    <blockquote>
+      <p>Still, claims like “quantum can’t break 16 bits” keep popping up. […] […] it was demonstrating the attack class (variant of Shor on ECDLP) on real quantum hardware, with public access, no custom silicon. A 512x jump from the prior public demo.</p>
+    </blockquote>
+  </li>
+</ol>
+
+<p>Here are my rebuttals to these two points:</p>
+
+<ol>
+  <li>
+    <p>If the rules accepted this submission, the rules were written wrong.
+The quantum computer should actually be contributing something of value in order for a submission to be accepted.
+You knew about this issue; you should have avoided it.</p>
+  </li>
+  <li>
+    <p>This submission would have yielded the same result if it were run in 1996 instead of 2026.
+Therefore this submission is not a measure of quantum progress.
+(In case it’s not clear: quantum computers have progressed enormously since 1996.
+They basically did not exist in 1996!
+For scale, over the intervening time, gate error rates improved from being <a href="https://arxiv.org/abs/1202.5707">on the order of 10%</a> to <a href="https://arxiv.org/abs/2408.13687v1">being on the order of 0.1%</a>.)</p>
+  </li>
+</ol>
+
+<h1 id="closing-remarks">Closing Remarks</h1>
+
+<p>There are <a href="https://words.filippo.io/crqc-timeline/">legitimate concerns</a> that quantum computers could become cryptographically relevant before the end of the decade.
+This is why companies like
+<a href="https://blog.google/innovation-and-ai/technology/safety-security/cryptography-migration-timeline/">Google</a> and
+<a href="https://blog.cloudflare.com/post-quantum-roadmap/">CloudFlare</a> are accelerating their post-quantum cryptography transitions.
+The ostensible goal of the QDay Prize was to raise awareness about this.
+Frustratingly, it has likely achieved the opposite result.
+It will no doubt be quipped alongside other gotcha-style arguments, like “call me back after you’ve factored 21”.</p>
+
+<p>At the moment, the competition runners seem to be doubling down and trying to defend the utility of the competition.
+I think that’s a waste of time.
+The competition failed in the way it was predictably going to fail.
+Save what credibility you have left and call a duck a duck.
+Take it on the chin, and be more careful next time.</p>
+
+
+</div>
+
+
+    </div>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney (opinions are my own, independent of my employer)<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

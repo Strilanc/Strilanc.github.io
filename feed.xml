@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>The predictable failure of the QDay Prize</title>
+                <description>&lt;p&gt;On May 20th of last year, I received an email asking me to make a submission to the “&lt;a href=&quot;https://www.qdayprize.com/&quot;&gt;QDay Prize&lt;/a&gt;”. It was a competition where whoever managed to solve the biggest problem using Shor’s algorithm on current quantum computers would receive a prize of 1 bitcoin (around 77 thousand...</description>
+                <pubDate>Sat, 25 Apr 2026 11:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/2601</link>
+                <guid isPermaLink="true">http://algassert.com/post/2601</guid>
+            </item>
+            <item>
                 <title>On Eastin-Knill Being Wrong</title>
                 <description>&lt;p&gt;There are many ways to perform fault tolerant quantum gates: lattice surgery, state injection and gate teleportation, braiding, gauge fixing, code deformation… the list goes on. But, by a large margin, people’s &lt;em&gt;favorite&lt;/em&gt; way to do a fault tolerant gate is &lt;a href=&quot;https://errorcorrectionzoo.org/list/quantum_transversal&quot;&gt;transversally&lt;/a&gt;. A transversal logical gate G is performed...</description>
                 <pubDate>Wed, 01 Apr 2026 11:10:10 -0700</pubDate>
@@ -72,14 +79,6 @@
                 <pubDate>Wed, 21 May 2025 05:10:10 -0700</pubDate>
                 <link>http://algassert.com/2025/05/21/factor-less-than-million-paper.html</link>
                 <guid isPermaLink="true">http://algassert.com/2025/05/21/factor-less-than-million-paper.html</guid>
-            </item>
-            <item>
-                <title>[Talk at Simons Quantum Colloqium] Magic state cultivation</title>
-                <description>
-</description>
-                <pubDate>Tue, 08 Apr 2025 09:10:10 -0700</pubDate>
-                <link>http://algassert.com/2025/04/08/magic-state-cultivation-talk-simons.html</link>
-                <guid isPermaLink="true">http://algassert.com/2025/04/08/magic-state-cultivation-talk-simons.html</guid>
             </item>
     </channel>
 </rss>
