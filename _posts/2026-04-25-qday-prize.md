@@ -7,6 +7,15 @@ permalink: post/2601
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
 
+# Update (April 26)
+
+The competition runners have taken my criticism and my advice [(1)](https://x.com/apruden08/status/2048455780811354298) [(2)](https://x.com/FinnMurphy12/status/2048168004710473897) [(3)](https://x.com/apruden08/status/2048495961450946654).
+They're looking for other ideas on how to incentivize open benchmarking of quantum cryptanalysis.
+I also want open benchmarking.
+I don't have an idea for how to do that but, for the near term, a blameless post-mortem of the competition could be a constructive next step.
+
+---
+
 On May 20th of last year, I received an email asking me to make a submission to the "[QDay Prize](https://www.qdayprize.com/)".
 It was a competition where whoever managed to solve the biggest problem using Shor's algorithm on current quantum computers would receive a prize of 1 bitcoin (around 77 thousand USD as of this writing).
 Despite the large prize, I declined to make a submission.
