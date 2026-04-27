@@ -11,8 +11,10 @@ permalink: post/2601
 
 The competition runners have taken my criticism and my advice [(1)](https://x.com/apruden08/status/2048455780811354298) [(2)](https://x.com/FinnMurphy12/status/2048168004710473897) [(3)](https://x.com/apruden08/status/2048495961450946654).
 They're looking for other ideas on how to incentivize open benchmarking of quantum cryptanalysis.
-I also want open benchmarking.
-I don't have an idea for how to do that but, for the near term, a blameless post-mortem of the competition could be a constructive next step.
+I also want open benchmarking, and also generally agree with Project11's mission and advocacy when it's done well.
+I don't have an idea for how to make open benchmarking a thing... for the near term, a blameless post-mortem of the competition could be a constructive next step.
+
+---
 
 ---
 
@@ -66,7 +68,7 @@ On Twitter, [this is how Project11 summarized the outcome of the competition](ht
 > Researcher breaks 15-bit ECC key on publicly accessible quantum hardware in a 512x jump from the previous public demonstration.
 
 For reference, that "512x jump" is in comparison to a prior work by "Steve Tippeconnic" that had the *exact same problem* ([in addition to several others, such as using exponentially expensive circuit constructions](https://x.com/CraigGidney/status/1965091975063130387)).
-The fact that Project11 is boosting these results instead of shunning them has hugely damaged my perception of their credibility.
+~~The fact that Project11 is boosting these results instead of shunning them has hugely damaged my perception of their credibility~~ (update: they've acknowledged the problems so my faith is somewhat restored).
 
 On Twitter, one of the competition runners [defended their decision](https://x.com/apruden08/status/2047914287205941622).
 Summarizing, they make two points:
