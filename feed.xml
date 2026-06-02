@@ -8,7 +8,7 @@
         
             <item>
                 <title>The French have the Quantum Circuits</title>
-                <description>&lt;p&gt;Almost exactly one year ago, I found a way to make quantum attacks on elliptic curve cryptosystems ten times cheaper. Specifically, I found a better way to perform &lt;a href=&quot;https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Point_addition&quot;&gt;elliptic curve point addition&lt;/a&gt; on a quantum computer. I wanted to publish these improved point addition circuits, to enable cryptographers to...</description>
+                <description>&lt;p&gt;A year ago, I found a way to make quantum attacks on elliptic curve cryptosystems ten times cheaper. Specifically, I found a better way to perform &lt;a href=&quot;https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Point_addition&quot;&gt;elliptic curve point addition&lt;/a&gt; on a quantum computer. I bounce between projects, so it can take me months to get around to writing...</description>
                 <pubDate>Mon, 01 Jun 2026 11:10:10 -0700</pubDate>
                 <link>http://algassert.com/post/2602</link>
                 <guid isPermaLink="true">http://algassert.com/post/2602</guid>
