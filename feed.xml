@@ -7,8 +7,15 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>The French have the Quantum Circuits</title>
+                <description>&lt;p&gt;Almost exactly one year ago, I found a way to make quantum attacks on elliptic curve cryptosystems ten times cheaper. Specifically, I found a better way to perform &lt;a href=&quot;https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Point_addition&quot;&gt;elliptic curve point addition&lt;/a&gt; on a quantum computer. I wanted to publish these improved point addition circuits, to enable cryptographers to...</description>
+                <pubDate>Mon, 01 Jun 2026 11:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/2602</link>
+                <guid isPermaLink="true">http://algassert.com/post/2602</guid>
+            </item>
+            <item>
                 <title>The predictable failure of the QDay Prize</title>
-                <description>&lt;p&gt;On May 20th of last year, I received an email asking me to make a submission to the “&lt;a href=&quot;https://www.qdayprize.com/&quot;&gt;QDay Prize&lt;/a&gt;”. It was a competition where whoever managed to solve the biggest problem using Shor’s algorithm on current quantum computers would receive a prize of 1 bitcoin (around 77 thousand...</description>
+                <description>&lt;h1 id=&quot;update-april-26&quot;&gt;Update (April 26)&lt;/strong&gt; &lt;p&gt;The competition runners have taken my criticism and my advice &lt;a href=&quot;https://x.com/apruden08/status/2048455780811354298&quot;&gt;(1)&lt;/a&gt; &lt;a href=&quot;https://x.com/FinnMurphy12/status/2048168004710473897&quot;&gt;(2)&lt;/a&gt; &lt;a href=&quot;https://x.com/apruden08/status/2048495961450946654&quot;&gt;(3)&lt;/a&gt;. They’re looking for other ideas on how to incentivize open benchmarking of quantum cryptanalysis. I also want open benchmarking, and also generally agree with Project11’s mission and advocacy when it’s...</description>
                 <pubDate>Sat, 25 Apr 2026 11:10:10 -0700</pubDate>
                 <link>http://algassert.com/post/2601</link>
                 <guid isPermaLink="true">http://algassert.com/post/2601</guid>
@@ -71,14 +78,6 @@
                 <pubDate>Wed, 30 Jul 2025 05:10:10 -0700</pubDate>
                 <link>http://algassert.com/2025/07/30/cq-adder-constant-workspace-paper.html</link>
                 <guid isPermaLink="true">http://algassert.com/2025/07/30/cq-adder-constant-workspace-paper.html</guid>
-            </item>
-            <item>
-                <title>[Paper] How to factor 2048 bit RSA integers with less than a million noisy qubits</title>
-                <description>
-</description>
-                <pubDate>Wed, 21 May 2025 05:10:10 -0700</pubDate>
-                <link>http://algassert.com/2025/05/21/factor-less-than-million-paper.html</link>
-                <guid isPermaLink="true">http://algassert.com/2025/05/21/factor-less-than-million-paper.html</guid>
             </item>
     </channel>
 </rss>

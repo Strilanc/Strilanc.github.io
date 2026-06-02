@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>The French have the Quantum Circuits</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">The French have the Quantum Circuits</h1>
+<p class="meta">01 Jun 2026</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+
+<p>Almost exactly one year ago, I found a way to make quantum attacks on elliptic curve cryptosystems ten times cheaper.
+Specifically, I found a better way to perform <a href="https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Point_addition">elliptic curve point addition</a> on a quantum computer.
+I wanted to publish these improved point addition circuits, to enable cryptographers to make informed decisions about when they’d need to transition away from quantum-vulnerable cryptosystems.
+I’ve done this <a href="https://arxiv.org/abs/1905.09749">several</a> <a href="https://arxiv.org/abs/2505.15917">times</a> over the past decade.
+However, this time, something new happened: I got pushback on publishing.</p>
+
+<p>The estimated cost of quantum attacks has plummeted over the past decade.
+It seems <a href="https://arxiv.org/abs/2603.28627">possible</a> that cryptographically relevant quantum computers (CRQCs) could exist within years.
+Now, to be clear, I don’t think that’s <em>likely</em> (as in &gt;50% chance).
+But it’s <em>possible</em> (as in &gt;10% chance), and if your job is security then <a href="https://words.filippo.io/crqc-timeline/">that’s dispositive</a>.
+Anyways, a short timeline is really inconvenient, because it means some companies (especially hardware companies) could fail to transition in time.
+Consequently, in a short CRQC timeline world, releasing information about quantum attacks might be a bad idea.
+It might help attackers more than defenders.
+And the sheer scale of the problem makes traditional disclosure mechanisms questionable.</p>
+
+<p>Eventually, a compromise was reached.
+Instead of publishing the details of the point addition circuits, we’d publish <a href="https://en.wikipedia.org/wiki/Zero-knowledge_proof">zero knowledge proofs</a> (ZKPs) that they existed.
+This would provide defenders the information they need for planning, without providing attackers the information they need for attacking.
+I have to admit, it wasn’t very hard to convince me to go the ZKP route.
+I think zero knowledge proofs are cool as fuck and I’ve always wanted to publish one.</p>
+
+<p>In March 2026, we published <a href="https://arxiv.org/abs/2603.28846">the paper with the zero knowledge proofs</a>.</p>
+
+<p>…but we didn’t expect the proofs to survive the year.</p>
+
+<h1 id="secrets-revealed">Secrets Revealed</h1>
+
+<p>The problem with secrets is that, like lies, they’re contagious.
+To keep one secret, you have to keep another.
+Elliptic curve circuits are built out of the same basic ingredients as other circuits: adders, multipliers, table lookups, and so forth.
+This commonality means that techniques used to improve one circuit inevitably improve another.</p>
+
+<p>The most expensive thing that happens during a quantum elliptic curve point addition is a multiplication (a quantum-quantum inplace modular multiplication, to be specific).
+Multiplication is also a key cost in an algorithm called Decoded Quantum Interferometry (DQI).
+Four months earlier, we’d published <a href="https://arxiv.org/abs/2510.10967v1">a paper on DQI</a> that explained a new technique for making multiplication more space efficient…
+are you seeing the glaring problem?
+We knew that all anyone had to do, to unmask our ZKPs, was read over our prior papers and put two and two together.</p>
+
+<p>Today, almost exactly two months after we published the ZKPs, André Schrottenloher
+(a researcher at <a href="https://www.inria.fr/fr/centre-inria-universite-rennes">le Centre Inria de l’Université de Rennes</a> in France)
+published <a href="https://arxiv.org/abs/2606.02235">a preprint showing how to construct circuits with similar costs to ours</a>.
+He read our prior papers, and he put two and two together.
+The exact details of his construction are a bit different, but the key ideas are the same.</p>
+
+<p>My congratulations to André on being the first to match our circuits.
+Not only did he get it done in two months, he improved the Toffoli count a little bit!
+Seriously, congratulations.</p>
+
+<h1 id="the-problem-with-zkps">The Problem with ZKPs</h1>
+
+<p>Even if the key ideas hidden behind the zero knowledge proofs weren’t betrayed by our prior papers, I wouldn’t have expected the secrets to last any substantial amount of time.
+I wanted to try the experiment, but there are clear reasons to expect ZKPs to fail for this use case in the future.
+Here’s three big ones.</p>
+
+<p>The first big problem with sharing research by ZKP is the <a href="https://en.wikipedia.org/wiki/Streisand_effect">Streisand effect</a>.
+Saying you have a solution, but that you won’t share it, is a great way to draw attention.
+Compared to computer science as a whole, or even to just cryptography, quantum computing is a tiny field.
+Drawing wide attention to a quantum computing problem could easily increase the number of people working on it by <em>two orders of magnitude</em>.
+For example, <a href="https://github.com/gpsanant/quantum_ecc_add/">the secp256k1 Point-Addition Challenge</a> is being created as a direct consequence of our paper.
+This is not the kind of environment where techniques stay secret for long.</p>
+
+<p>The second big problem with sharing research by ZKP is that, sometimes, just knowing a solution exists is enough to solve the problem.
+The famous case of George Dantzig <a href="https://en.wikipedia.org/wiki/George_Dantzig#Education">cracking two unsolved problems in statistics because he thought they were homework</a> comes to mind.
+Knowing that you don’t even need to consider that a solution won’t exist can be very helpful.
+Often the hard part is just knowing to work on a problem at all!</p>
+
+<p>The third big problem with sharing research by ZKP is <a href="https://www.schneier.com/blog/archives/2008/10/rubber_hose_cry.html">rubber-hose cryptanalysis</a>.
+This refers to beating someone with a rubber hose until they tell you their secrets (<a href="https://xkcd.com/538/">relevant xkcd</a>).
+Publishing a ZKP doesn’t reveal what your solution is, but it does reveal who to apply the hose to.
+In a world where CRQCs already existed, it would be idiotic to publish a ZKP that you and only you knew a way to make quantum attacks drastically cheaper.</p>
+
+<h1 id="closing-remarks">Closing Remarks</h1>
+
+<p>I enjoyed publishing some cheeky ZKPs, but I don’t think it’s the right strategy moving forward.
+The benefits are negligible, and the costs are many.
+We should just publish openly.</p>
+
+<p>Congrats again to André.
+Oh, and since I haven’t yet mentioned it here on the blog, congrats to Keegan Ryan for <a href="https://blog.trailofbits.com/2026/04/17/we-beat-googles-zero-knowledge-proof-of-quantum-cryptanalysis/">finding (now fixed) bugs in our public ZKP code that made it possible to accept invalid circuits</a>.</p>
+
+
+</div>
+
+
+    </div>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney (opinions are my own, independent of my employer)<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
