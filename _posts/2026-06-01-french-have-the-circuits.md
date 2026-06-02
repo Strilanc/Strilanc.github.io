@@ -7,24 +7,25 @@ permalink: post/2602
 
 {% assign loc = page.path | remove_first: '_posts/' | remove: '.md' %}
 
-Almost exactly one year ago, I found a way to make quantum attacks on elliptic curve cryptosystems ten times cheaper.
+A year ago, I found a way to make quantum attacks on elliptic curve cryptosystems ten times cheaper.
 Specifically, I found a better way to perform [elliptic curve point addition](https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Point_addition) on a quantum computer.
-I wanted to publish these improved point addition circuits, to enable cryptographers to make informed decisions about when they'd need to transition away from quantum-vulnerable cryptosystems.
-I've done this [several](https://arxiv.org/abs/1905.09749) [times](https://arxiv.org/abs/2505.15917) over the past decade.
-However, this time, something new happened: I got pushback on publishing.
+I bounce between projects, so it can take me months to get around to writing something like this up, but I wanted to eventually publish these improvements.
+I've [published](https://arxiv.org/abs/1905.09749) similar [improvements](https://arxiv.org/abs/2505.15917) before,
+because knowing the cost of attacks is crucial to making informed decisions about defense.
+However, this time, something new happened: pushback on the wisdom of publishing.
 
 The estimated cost of quantum attacks has plummeted over the past decade.
 It seems [possible](https://arxiv.org/abs/2603.28627) that cryptographically relevant quantum computers (CRQCs) could exist within years.
 Now, to be clear, I don't think that's *likely* (as in >50% chance).
 But it's *possible* (as in >10% chance), and if your job is security then [that's dispositive](https://words.filippo.io/crqc-timeline/).
-Anyways, a short timeline is really inconvenient, because it means some companies (especially hardware companies) could fail to transition in time.
+Anyways, a short timeline is really inconvenient, because it means some companies (especially hardware companies) could fail to transition away from quantum-vulnerable cryptosystems in time.
 Consequently, in a short CRQC timeline world, releasing information about quantum attacks might be a bad idea.
 It might help attackers more than defenders.
 And the sheer scale of the problem makes traditional disclosure mechanisms questionable.
 
 Eventually, a compromise was reached.
 Instead of publishing the details of the point addition circuits, we'd publish [zero knowledge proofs](https://en.wikipedia.org/wiki/Zero-knowledge_proof) (ZKPs) that they existed.
-This would provide defenders the information they need for planning, without providing attackers the information they need for attacking.
+This would provide defenders the information they need for planning, without providing attackers the information they'd need for attacking.
 I have to admit, it wasn't very hard to convince me to go the ZKP route.
 I think zero knowledge proofs are cool as fuck and I've always wanted to publish one.
 
@@ -89,4 +90,6 @@ We should just publish openly.
 
 Congrats again to André.
 Oh, and since I haven't yet mentioned it here on the blog, congrats to Keegan Ryan for [finding (now fixed) bugs in our public ZKP code that made it possible to accept invalid circuits](https://blog.trailofbits.com/2026/04/17/we-beat-googles-zero-knowledge-proof-of-quantum-cryptanalysis/).
+
+(Edited June 2: rewrote the introduction to be clearer)
 
