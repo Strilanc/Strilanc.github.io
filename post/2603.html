@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Unfathomable bugs #10: The Broken Windows Build</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Unfathomable bugs #10: The Broken Windows Build</h1>
+<p class="meta">27 Jun 2026</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+
+<p>It all started as I was showing one of our summer interns how to use <code>stimflow</code> to make a quantum circuit.
+We noticed a stupid bug: adding a flow with <code>start="auto"</code> was failing if the flow was named.
+Easy fix.
+I wrote it up, created a pull request on stim’s github repository, and the nightmare started.
+The windows builds were failing.</p>
+
+<p>The windows builds weren’t just failing for this PR, but for <em>all</em> PRs.
+Halfway through unit testing, continuous integration would crash with a vague but ominous message: “access violation”.
+Something had broken, and created an error that could plausibly lead to security exploits.</p>
+
+<h1 id="dependency-whinging">Dependency Whinging</h1>
+
+<p>One of the frustrating things about modern software engineering is that things never just keep working.
+You can get something <em>to</em> work, but nothing <em>keeps</em> working.
+Eventually someone somewhere changes something, and you lose your day figuring out what the hell happened.</p>
+
+<p>This “can’t just keep working” problem gets worse if you have a lot of dependencies.
+Fortunately, I took a principled stand on this when writing stim and use very few dependencies.
+…Except in the build system.</p>
+
+<p>In case you didn’t know: building python packages is bullshit.
+The process is known to be very brittle, and every year they <a href="https://xkcd.com/927/">make things more complicated by trying to fix that it’s complicated</a>.
+Currently, the recommended method for building a package is to use a docker container.
+Otherwise too many details about the system doing the building can make their way into the package and cause problems.
+But even this isn’t enough; after doing the containerized build you still need to run a tool called <a href="https://github.com/pypa/auditwheel"><code>auditwheel</code></a> over the package to fix some remaining problems.</p>
+
+<p>Of course, the bullshit of building a python package is layered on top of the usual bullshit of getting something to build cross-platform.
+For example, did you know that on Windows it’s so hard to find the location of the C++ compiler that they <a href="https://github.com/microsoft/vswhere">ship a program called <code>vswhere.exe</code></a> that specializes in solving this task?
+(How do you find <code>vswhere.exe</code>? Well it should be at <code>%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe</code> of course.)
+Even after you’ve used <code>vswhere.exe</code> to find the compiler, you’re not done.
+Compilation will fail due to the compiler complaining it can’t find standard headers, like <code>&lt;iostream&gt;</code>.
+Worry not; it’s known that finding standard headers is also very hard on Windows.
+There’s <em>another</em> program, <a href="https://learn.microsoft.com/en-us/cpp/build/building-on-the-command-line?view=msvc-170"><code>vcvarsall.bat</code></a>, which specializes in solving that task.</p>
+
+<p>…Perhaps now you have a sense of why one might throw up their hands, shout “FINE! I’ll let someone else solve it!”, and take on a build dependency.</p>
+
+<p>Because of how complicated it is to build cross-platform python packages, I use <a href="https://github.com/pypa/cibuildwheel"><code>cibuildwheel</code></a> to make stim’s packages.
+<code>cibuildwheel</code> solves my immediate problem, but it isn’t a flawless library.
+Libraries of this kind have a nasty tendency to solve 90% of your problem while making the remaining 10% ten times harder.
+The simple cases work great, but as soon as you do something non-standard (like runtime detection of SIMD support) the abstraction buckles.
+You inevitably end up needing to explain to tool A how to explain to tool B how to explain to tool C how to explain to tool D to please do this one simple thing, but unfortunately the layers of explanation turn that simple desire into some eldritch incantation that you write once and then try to never think of again.
+Solving these buckled abstractions yields no enduring lessons and creates no sense of satisfaction; at best it kindles a latent fear of abstraction.</p>
+
+<p>Anyways, all of this was to try to explain to you why “the windows builds are failing with an access violation” is such a nightmare.
+It could be a bug in my code.
+It could be a bug in <code>cibuildwheels</code>.
+It could be a bug in github actions.
+It could be a bug in visual studio.
+It could be a bug in the <em>interaction</em> between these systems.
+There’s very little to go on, and it’s invariably going to end in some unsatisfying way.</p>
+
+<p>Adding salt to the wound, I can’t reproduce the bug locally..
+I don’t have a windows machien, and Github actions doesn’t support local execution.
+The only environment I know the bug happens in is the Windows build within continuous integration triggered by pushing to github.
+(I’ve never managed to explain to <code>cibuildwheel</code> to explain to <code>setup.py</code> to explain to <code>cl.exe</code> to please build things in parallel, so these builds take several minutes.)
+Progress will be slow.</p>
+
+<h1 id="scorched-earth-debugging">Scorched Earth Debugging</h1>
+
+<p>When I’m stuck on a complicated debugging problem, I pull what I call the nuclear strategy.
+I start deleting everything.
+Find something irrelevant, delete it, check that the bug is still there, repeat.
+Keep going until the bug is small enough that you can understand your own stupidity.</p>
+
+<p>(I have a fond memory of demonstrating this to a coworker who’d been stuck debugging something for days.
+I’d say “can you delete those lines?”, they’d skeptically reply “they’re not relevant, so we don’t need to delete them”, and I’d reiterate “if they’re not relevant then we GET to delete them. Delete them!”.
+This repeated until we deleted the “obviously irrelevant” lines that were the source of the problem.)</p>
+
+<p>Stim has around a hundred thousand lines of C++ code.
+It’s a lot to delete to solve just one bug.
+But stim is my codebase, and I’m intimately familiar with what depends on what, so I had plenty of obviously irrelevant things to delete.
+I knew the specific call causing the access exception was <code>stim.Circuit.reference_sample</code>, which could touch a decent chunk of the codebase, but not all of it.
+And the more stuff I deleted the faster the Windows builds would be.
+So I rolled up my sleeves, procrastinated for a week, and got started.</p>
+
+<p>I deleted the code for generating diagrams.
+I deleted the code for deriving detector error models.
+Documentation?
+Deleted.
+Unit tests other than the failing test?
+Deleted.
+Parsing and serialization?
+Deleted.
+I cut and slashed and was generally having a great time.
+A little creative destruction now and then is kind of satisfying.</p>
+
+<p>In addition to deleting, I was also simplifying.
+For example, the circuit that was being sampled contained the instruction <code>MPP X0*X1 Y0*Y1 Z0*Z1</code>.
+This is a somewhat complex instruction, which the simulator implements by decomposing it into simpler ones.
+With the goal of being able to delete code related to decomposition, I replaced the <code>MPP</code> with simpler instructions.
+<strong>The bug went away.</strong>
+Suspect identified: decomposition methods.</p>
+
+<p>I restored the <code>MPP</code> instruction, and the bug came back.
+Good.
+I added some printf debugging.
+<strong>The bug went away.</strong>
+Wait, what?
+Fuck!
+It’s a <a href="https://en.wikipedia.org/wiki/Heisenbug">heisenbug</a>!</p>
+
+<p>Heisenbugs are nasty, but I know where I added the print statements.
+I don’t understand what’s going wrong yet, but I know where this bastard lives.
+It lives right here:</p>
+
+<pre><code class="language-cpp">uint64_t CircuitInstruction::count_measurement_results() const {
+    auto flags = GATE_DATA[gate_type].flags;
+    if (!(flags &amp; GATE_PRODUCES_RESULTS)) {
+        return 0;
+    }
+    uint64_t n = (uint64_t)targets.size();
+    if (flags &amp; GATE_TARGETS_PAIRS) {
+        return n &gt;&gt; 1;
+    } else if (flags &amp; GATE_TARGETS_COMBINERS) {
+        for (auto e : targets) {
+            if (e.is_combiner()) {
+                n -= 2;
+            }
+        }
+    }
+    return n;
+}
+</code></pre>
+
+<p>Taking stock: roughly 90% of the codebase was deleted, but this method was solidly entrenched amongst the remaining 10%.
+I needed to isolate it.
+You can’t understand a heisenbug any other way.
+For example, this <code>CircuitInstruction::count_measurement_results</code> method is called from a loop in <code>Circuit::count_measurements</code>.
+If the bug is actually triggered here, I shouldn’t need <code>Circuit::count_measurements</code>.
+So I tweaked the test to call <code>CircuitInstruction::count_measurement_results</code> directly, bypassing <code>Circuit::count_measurements</code>.
+That preserved the bug, as desired.
+Then I tried deleting the <code>Circuit::count_measurements</code> method, which is no longer even being executed by the failing test.
+<strong>The bug disappeared.</strong>
+That’s… ominous…</p>
+
+<p>For nearly three hours, I was cutting the ties between <code>Circuit</code> and <code>CircuitInstruction</code>.
+Random things would cause the bug to disappear.
+I learned to fear the <code>Circuit::max_operation_property</code> template.
+Because the Windows builds were slow, I often had sequences of 5+ changes being tested at any given time.
+I learned empathy for CPU branch predictors.
+But I snipped and I snipped, making small incisions when large ones failed.
+Slowly, very slowly, it pulled apart.</p>
+
+<p>Eventually, <code>Circuit::max_operation_property</code> fell.
+Then <code>Circuit</code>, and <code>CircuitInstruction</code> soon after.
+Until all that remained was this:</p>
+
+<pre><code>#include &lt;cstdint&gt;
+#include &lt;iostream&gt;
+
+uint64_t repro() {
+    uint32_t targets[6]{0, 27, 0, 0, 27, 0};
+    uint64_t t = 6;
+    for (size_t k = 0; k &lt; 6; k++) {
+        if (targets[k] == 27) {
+            t -= 2;
+        }
+    }
+    return t;
+}
+
+int main() {
+    std::cerr &lt;&lt; "t=" &lt;&lt; repro() &lt;&lt; "\n";
+    return 0;
+}
+</code></pre>
+
+<p>It’s a fucking compiler bug.</p>
+
+<p>Go to <a href="https://godbolt.org/">godbolt</a>, paste the above code, set the compiler to <code>x64 msvc v19.51 VS18.6</code>, set the flags to <code>/O2</code>, and the execution will print <code>t=8589934594</code>:</p>
+
+<blockquote>
+  <p><img style="width:100%; border: 1px solid black" src="/assets/2026-06-27-unfathomable-bugs-windows-build/godbolt-screenshot.jpg" /></p>
+</blockquote>
+
+<p>Disable optimizations (flag <code>/Od</code>), or the change the compiler to <code>x86-64 gcc 15.1</code>, and it will print the correct answer (<code>t=2</code>).</p>
+
+<p>Glancing at the assembly reported by godbolt, the bug has something to do with <a href="https://en.wikipedia.org/wiki/Automatic_vectorization">auto-vectorization</a>.
+The compiler is trying to pack the 32 bit words into an AVX register and then do the <code>== 27</code> checks and conditional <code>-= 2</code> accumulations in chunks of 8.
+It’s doing something wrong that ultimately results in an unwanted <code>0x2</code> being stored into the high half of the returned 64 bit word (<code>8589934594</code> is <code>0x200000002</code>).</p>
+
+<p>I attempted to report this bug to Microsoft.
+Based on searches, the correct place to do so was <a href="https://developercommunity.visualstudio.com/VisualStudio/report?webReport=true">their visual studio community website</a>.
+Alas, like their compiler, their website is broken.
+You can’t submit a bug without logging in, and it refused to let me log in with my github account because I have a secondary <code>@google.com</code> email address associated with it (why?!):</p>
+
+<blockquote>
+  <p><img style="max-width:100%; border: 1px solid black; padding: 10px" src="/assets/2026-06-27-unfathomable-bugs-windows-build/login-fail.jpg" /></p>
+</blockquote>
+
+<p>No, the “Next” button didn’t work.
+Neither did creating a new account on the website, because their “press and hold” captcha just kept failing.
+So I guess the compiler can stay broken and I’ll just complain here.</p>
+
+<h1 id="looking-backwards-looking-forwards">Looking Backwards, Looking Forwards</h1>
+
+<p>Looking over the <a href="https://github.com/quantumlib/Stim/pull/1077">168 (!) commits</a> it took me to scorched-earth-debug this problem, I see various ways I could have done better.</p>
+
+<p>First, I think I went scorched earth a bit too soon.
+The unit test only failed on the <em>second</em> call to the reference sampling method in the unit test,
+and the first call didn’t use an <code>MPP</code> instruction,
+so I suspected early on that <code>MPP</code> might be involved.
+If I’d put dense printf debugging along that execution path sooner, it would have saved a decent chunk of time.</p>
+
+<p>Second, I think I should have more strongly considered using an LLM for this task.
+The iterative process being followed is very easy to describe, but tedious to execute.
+Seems like a perfect fit for an LLM.
+The problem is that (a) I don’t have familiarity with using LLMs and
+(b) there is no fucking way I’m giving an AI unsupervised push access to stim.
+I could solve (a) by practicing with LLM tools.
+I could help (b) by switching from github actions to a continuous integration system that allowed local execution.
+I could also help (b) by removing dependencies from the build process.</p>
+
+<p>(Some days I dream of just telling Windows users they have to use Linux.
+They don’t necessarily need to switch operating systems, but if they wanted to use stim they’d at least have to do it in <a href="https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux">WSL</a>.
+There’s even precedent for it: that’s what <a href="https://www.tensorflow.org/install/pip#windows-native">tensorflow did</a> at least for some features.)</p>
+
+<p>As for actually fixing my failing builds, some people suggested adding <code>#pragma loop(no_vector)</code> to the relevant <code>for</code> loop.
+The problem with that fix is that I don’t know that this is the only affected loop.
+Even if it is, that may become false a month from now.
+This experience has fundamentally broken my trust in the visual studio compiler.
+So I’m taking away their optimization privileges.
+I explained to <code>cibuildwheel</code> to explain to <code>setup.py</code> to explain to <code>cl.exe</code> that it should stop doing compiler optimizations.
+It’ll make the windows version of stim worse, but at least it won’t segfault.</p>
+
+
+</div>
+
+
+    </div>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney (opinions are my own, independent of my employer)<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
