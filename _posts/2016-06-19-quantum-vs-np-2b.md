@@ -19,7 +19,7 @@ After reading the updated paper, I have the same objections as before:
 1. This is actually a classical algorithm in disguise.
 2. It runs in exponential time, not linear time.
 
-This time, I'll argue my point by simulating the algorithm with Microsoft's [LIQUi|>](http://research.microsoft.com/en-us/projects/liquid/) library.
+This time, I'll argue my point by simulating the algorithm with Microsoft's [LIQUi\|>](http://research.microsoft.com/en-us/projects/liquid/) library.
 
 # Walters' Algorithm
 
@@ -31,17 +31,17 @@ First, the paper defines a "QOR" gate (note: the "R" gates are rotating around t
 
 <img src="/assets/{{ loc }}/define-qor.png"/>
 
-This is supposed to set $s\_2$ to $c\_1 \lor c\_2$, and it does.
-The problem is $s\_1$, which ends up containing the parity of $c\_1$ vs $c\_2$.
-The paper recognizes that this is a problem (it will cause unwanted decoherence) but claims that measuring $s\_1$ along the X axis can fix the problem.
+This is supposed to set $s_2$ to $c_1 \lor c_2$, and it does.
+The problem is $s_1$, which ends up containing the parity of $c_1$ vs $c_2$.
+The paper recognizes that this is a problem (it will cause unwanted decoherence) but claims that measuring $s_1$ along the X axis can fix the problem.
 That's [simply wrong](/2016/06/05/erasure-is-postselection.html).
-The correct fix is to [uncompute](https://en.wikipedia.org/wiki/Uncomputation) $s\_1$, or avoid creating it in the first place via a doubly-controlled operation.
+The correct fix is to [uncompute](https://en.wikipedia.org/wiki/Uncomputation) $s_1$, or avoid creating it in the first place via a doubly-controlled operation.
 
 The paper doubles down on the how-erasure-works misconception when defining the "3OR" gate:
 
 <img src="/assets/{{ loc }}/define-3or.png"/>
 
-This gate initializes $s\_4$ to $c\_1 \lor c\_2 \lor c\_3$, but in the process it exposes $c\_1 \oplus c\_2$, $c\_1 \lor c\_2$, and $(c\_1 \lor c\_2) \oplus c\_3$ to the environment via $s\_1$, $s\_2$, and $s\_3$.
+This gate initializes $s_4$ to $c_1 \lor c_2 \lor c_3$, but in the process it exposes $c_1 \oplus c_2$, $c_1 \lor c_2$, and $(c_1 \lor c_2) \oplus c_3$ to the environment via $s_1$, $s_2$, and $s_3$.
 This is enough to reconstruct all three inputs, so all the qubits are decohered after this gate is applied.
 Once again the correct fix would be to uncompute or to use multi-controlled gates.
 
@@ -49,7 +49,7 @@ Finally we get to the pièce de résistance, the awesomely-named _**DECIMATION**
 
 <img src="/assets/{{ loc }}/define-decimation.png"/>
 
-The idea behind this gate is that, when $c\_1$ and $c\_2$ and $c\_3$ fail to meet a clause, they get rotated a bit.
+The idea behind this gate is that, when $c_1$ and $c_2$ and $c_3$ fail to meet a clause, they get rotated a bit.
 
 Note that this circuit has yet another attempt to destroy indestructible information by measuring it along a different axis.
 But this time we can't fix it by adding more controls or by uncomputing, because the values we need to do that no longer commute with the values we have.
