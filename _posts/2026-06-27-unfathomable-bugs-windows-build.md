@@ -10,7 +10,8 @@ permalink: post/2603
 It all started as I was showing one of our summer interns how to use `stimflow` to make a quantum circuit.
 We noticed a stupid bug: adding a flow with `start="auto"` was failing if the flow was named.
 Easy fix.
-I wrote it up, created a pull request on stim's github repository, and the nightmare started.
+I wrote it up, created a pull request on stim's github repository... and the nightmare started.
+
 The windows builds were failing.
 
 The windows builds weren't just failing for this PR, but for *all* PRs.
@@ -59,8 +60,8 @@ It could be a bug in visual studio.
 It could be a bug in the *interaction* between these systems.
 There's very little to go on, and it's invariably going to end in some unsatisfying way.
 
-Adding salt to the wound, I can't reproduce the bug locally..
-I don't have a windows machien, and Github actions doesn't support local execution.
+Adding salt to the wound, I can't reproduce the bug locally.
+I don't have a windows machine, and Github actions doesn't support local execution.
 The only environment I know the bug happens in is the Windows build within continuous integration triggered by pushing to github.
 (I've never managed to explain to `cibuildwheel` to explain to `setup.py` to explain to `cl.exe` to please build things in parallel, so these builds take several minutes.)
 Progress will be slow.
@@ -74,6 +75,7 @@ Find something irrelevant, delete it, check that the bug is still there, repeat.
 Keep going until the bug is small enough that you can understand your own stupidity.
 
 (I have a fond memory of demonstrating this to a coworker who'd been stuck debugging something for days.
+I agreed to help.
 I'd say "can you delete those lines?", they'd skeptically reply "they're not relevant, so we don't need to delete them", and I'd reiterate "if they're not relevant then we GET to delete them. Delete them!".
 This repeated until we deleted the "obviously irrelevant" lines that were the source of the problem.)
 
