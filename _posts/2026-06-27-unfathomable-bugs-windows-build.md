@@ -186,7 +186,7 @@ Go to [godbolt](https://godbolt.org/), paste the above code, set the compiler to
 
 > <img style="width:100%; border: 1px solid black" src="/assets/{{ loc }}/godbolt-screenshot.jpg"/>
 
-Disable optimizations (flag `/Od`), or the change the compiler to `x86-64 gcc 15.1`, and it will print the correct answer (`t=2`). 
+Disable optimizations (flag `/Od`), or change the compiler to `x86-64 gcc 15.1`, and it will print the correct answer (`t=2`). 
 
 Glancing at the assembly reported by godbolt, the bug has something to do with [auto-vectorization](https://en.wikipedia.org/wiki/Automatic_vectorization).
 The compiler is trying to pack the 32 bit words into an AVX register and then do the `== 27` checks and conditional `-= 2` accumulations in chunks of 8.
