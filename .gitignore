@@ -3,3 +3,4 @@ _site
 \.directory
 _posts/2222-*
 assets/2222-*
+*.swp
