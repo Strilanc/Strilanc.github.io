@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>Who is John Quarmack?</title>
+                <description>&lt;p&gt;In the Quake III Arena source code, there’s a &lt;a href=&quot;https://github.com/id-Software/Quake-III-Arena/blob/dbe4ddb10315479fc00086f08e25d968b4b43c49/code/game/q_math.c#L552&quot;&gt;famous code snippet&lt;/a&gt;:&lt;/p&gt; &lt;blockquote&gt; &lt;pre&gt;&lt;code&gt;float Q_rsqrt( float number ) { long i; float x2, y; const float threehalfs = 1.5F; x2 = number * 0.5F; y = number; i = * ( long * ) &amp;amp;y; // evil floating point...</description>
+                <pubDate>Thu, 22 Oct 2026 08:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/2605</link>
+                <guid isPermaLink="true">http://algassert.com/post/2605</guid>
+            </item>
+            <item>
                 <title>The Underappreciated Art of Superposition Masking</title>
                 <description>&lt;p&gt;In quantum circuit design, a common problem is computing too much. You’ll find some clever way to compute a result, only to realize it also computes something else. An &lt;em&gt;unwanted value&lt;/em&gt;. A value whose mere existence is splitting your carefully crafted superposition into jagged non-interfering pieces. A value that you...</description>
                 <pubDate>Wed, 21 Oct 2026 11:10:10 -0700</pubDate>
@@ -69,13 +76,6 @@
                 <pubDate>Sun, 14 Sep 2025 11:10:10 -0700</pubDate>
                 <link>http://algassert.com/post/2501</link>
                 <guid isPermaLink="true">http://algassert.com/post/2501</guid>
-            </item>
-            <item>
-                <title>Why haven&apos;t quantum computers factored 21 yet?</title>
-                <description>&lt;p&gt;In 2001, &lt;a href=&quot;https://arxiv.org/pdf/quant-ph/0112176&quot;&gt;quantum computers factored the number 15&lt;/a&gt;. It’s now 2025, and quantum computers haven’t yet factored the number 21. It’s sometimes claimed this is proof there’s been no progress in quantum computers. But there’s actually a much more surprising reason 21 hasn’t been factored yet, which jumps out...</description>
-                <pubDate>Sat, 30 Aug 2025 11:10:10 -0700</pubDate>
-                <link>http://algassert.com/post/2500</link>
-                <guid isPermaLink="true">http://algassert.com/post/2500</guid>
             </item>
     </channel>
 </rss>

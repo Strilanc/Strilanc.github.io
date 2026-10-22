@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>Who is John Quarmack?</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">Who is John Quarmack?</h1>
+<p class="meta">22 Oct 2026</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+
+<p>In the Quake III Arena source code, there’s a <a href="https://github.com/id-Software/Quake-III-Arena/blob/dbe4ddb10315479fc00086f08e25d968b4b43c49/code/game/q_math.c#L552">famous code snippet</a>:</p>
+
+<blockquote>
+  <pre><code>float Q_rsqrt( float number )
+{
+	long i;
+	float x2, y;
+	const float threehalfs = 1.5F;
+
+	x2 = number * 0.5F;
+	y  = number;
+	i  = * ( long * ) &amp;y;                       // evil floating point bit level hacking
+	i  = 0x5f3759df - ( i &gt;&gt; 1 );               // what the fuck?
+	y  = * ( float * ) &amp;i;
+	y  = y * ( threehalfs - ( x2 * y * y ) );   // 1st iteration
+//	y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed
+
+#ifndef Q3_VM
+#ifdef __linux__
+	assert( !isnan(y) ); // bk010122 - FPE?
+#endif
+#endif
+	return y;
+}
+</code></pre>
+</blockquote>
+
+<p>This code’s got it all.
+It’s got bit twiddling.
+It’s got secret calculus.
+It’s got cursing and confusion in the comments, naming “threehalfs” while <em>not</em> naming 0x5f35759df and, best of all, blatant violation of <a href="https://www.spec.org/cpu2017/flags/gcc.2018-02-16.html#user_F-fno-strict-aliasing">strict aliasing</a>.
+I hate strict aliasing, and I love this code.</p>
+
+<p>Sometimes I see this code attributed to legendary programmer <a href="https://en.wikipedia.org/wiki/John_Carmack">John Carmack</a>, but he’s <a href="https://web.archive.org/web/20061214183457/http://www.beyond3d.com/articles/fastinvsqrt/">on the record stating that he didn’t write it</a>:</p>
+
+<blockquote>
+  <pre><code>-----Original Message-----
+From: John Carmack
+Sent: 26 April 2004 19:51
+Subject: Re: Origin of fast approximated inverse square root
+
+At 06:38 PM 4/26/2004 +0100, you wrote:
+
+&gt;Hi John,
+&gt;
+&gt;There's a discussion on Beyond3D.com's forums about who the author of 
+&gt;the following is:
+&gt;
+&gt;float InvSqrt (float x){
+&gt;   float xhalf = 0.5f*x;
+&gt;   int i = *(int*)&amp;x;
+&gt;   i = 0x5f3759df - (i&gt;&gt;1);
+&gt;   x = *(float*)&amp;i;
+&gt;   x = x*(1.5f - xhalf*x*x);
+&gt;   return x;
+&gt;}
+&gt;
+&gt;Is that something we can attribute to you?  Analysis shows it to be
+&gt;extremely clever in its method and supposedly from the Q3 source.  
+&gt;Most people say it's your work, a few say it's Michael Abrash's.  Do 
+&gt;you know who's responsible, possibly with a history of sorts?
+
+
+Not me, and I don't think it is Michael.  Terje Matheson perhaps?
+
+John Carmack         
+</code></pre>
+</blockquote>
+
+<p>…but I digress.
+Why am I talking about this snippet?</p>
+
+<p>Back in the late 90s, when the above code was written, games had to pull these kinds of shenanigans to get the performance they needed.
+Nowadays we have dedicated processor instructions that are faster and more accurate than the above snippet (e.g. see <a href="https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=_mm256_rsqrt_ps&amp;ig_expand=5643"><code>_mm256_rsqrt_ps</code> in the intel intrinsics guide</a>).
+There’s little room for these particular shenanigans.</p>
+
+<p>…but what about quantum computers?</p>
+
+<p>A key potential application of quantum computers is chemistry simulation.
+There’s a variety of ways of doing these simulations, but one popular way involves the computer storing $x$, $y$, and $z$ coordinates for each particle.
+In that style of simulation, something the computer needs to repeatedly compute is the <a href="https://en.wikipedia.org/wiki/Electric_potential#Electric_potential_due_to_a_point_charge">eletric potential</a> between particles:</p>
+
+\[V_E = \frac{Q}{r} \frac{1}{4\pi\epsilon_0}\]
+
+<p>I’m not a chemist.
+I can’t explain the intricacies implied by the above equation (nevermind the <a href="/assets/2026-10-22-quarmack/scary-equation.png">scarier ones they put in papers</a>).
+But I understand that $r$ is the distance between two particles, and <a href="https://en.wikipedia.org/wiki/Pythagorean_theorem">the square of the distance is the sum of the squares of the coordinate differences</a>.
+Which implies…</p>
+
+\[V_e \propto \sqrt{\frac{1}{s}}, s = x^2 + y^2 + z^2\]
+
+<p>…this crucial chemistry calculation uses an inverse square root.
+Meaning that <strong>if you improve inverse square root calculations, you improve quantum chemistry simulations.</strong>
+More broadly, you don’t have to understand quantum chemistry to contribute to quantum chemistry simulation (<a href="https://arxiv.org/abs/1711.04789">trust</a> <a href="https://arxiv.org/abs/1711.10460">me</a>, <a href="https://arxiv.org/abs/1805.03662">I</a> <a href="https://arxiv.org/abs/1902.02134">know</a>).</p>
+
+<p>Anyways, about that inverse square root.
+Technically I’m oversimplifying when I say the simulation has to <em>compute</em> it.
+That’s certainly <em>sufficient</em> but, strictly speaking, the simulations only need to <em>phase by an amount proportional to</em> the inverse square root.
+There’s a whole world of potential shenanigans that could achieve that effect without explicitely producing the inverse square root.
+And a true Quarmack would— oh wait, I haven’t explained the terrible pun in the title.</p>
+
+<p>You probably noticed that the title of this post says John <strong>Qu</strong>armack (pronounced like “kwar-mak”, obviously).
+John <strong>Qu</strong>armack is not John Carmack.
+John Carmack is a legendary video game programmer (…who hopefully won’t be upset at my punnery).
+John <strong>Qu</strong>armack is an inside joke; a made up character whose defining attribute is being amazing at quantum circuits.
+A mythical being who can do to the quantum inverse square root what John Carmack didn’t do to the classical one.</p>
+
+<p>Pragmatically, <em>someone</em> has to turn the quantum inverse square root into a pile of disgusting hacks.
+And, in my mind, whoever that is; that’s Quarmack.
+In fact, if you’re feeling particularly Quarmacky, the Google quantum team happens to be <a href="https://www.kaggle.com/competitions/google-verifiable-quantum-circuit-compilation/overview">running a public Kaggle competition to <strong>improve the quantum inverse square root</strong></a> (and also a few other subroutines).
+There’s a 50K$ prize for first place.</p>
+
+<p>This competition was triggered by seeing all the public improvements being made to elliptic curve circuits by amateurs (and their LLMs) over at <a href="https://ecdsa.fail/">ecdsa.fail</a>.
+There’s clearly a lot of untapped potential out there in the world.
+Nascent Quarmacks, waiting to shine.</p>
+
+<p>Who is John Quarmack…?</p>
+
+<p>Maybe <em>you’re</em> John Quarmack.</p>
+
+
+</div>
+
+
+    </div>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney (opinions are my own, independent of my employer)<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
