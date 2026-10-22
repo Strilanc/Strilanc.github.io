@@ -7,6 +7,13 @@
         <atom:link href="http://algassert.com/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>The Underappreciated Art of Superposition Masking</title>
+                <description>&lt;p&gt;In quantum circuit design, a common problem is computing too much. You’ll find some clever way to compute a result, only to realize it also computes something else. An &lt;em&gt;unwanted value&lt;/em&gt;. A value whose mere existence is splitting your carefully crafted superposition into jagged non-interfering pieces. A value that you...</description>
+                <pubDate>Wed, 21 Oct 2026 11:10:10 -0700</pubDate>
+                <link>http://algassert.com/post/2604</link>
+                <guid isPermaLink="true">http://algassert.com/post/2604</guid>
+            </item>
+            <item>
                 <title>Unfathomable bugs #10: The Broken Windows Build</title>
                 <description>&lt;p&gt;It all started as I was showing one of our summer interns how to use &lt;code&gt;stimflow&lt;/code&gt; to make a quantum circuit. We noticed a stupid bug: adding a flow with &lt;code&gt;start=&quot;auto&quot;&lt;/code&gt; was failing if the flow was named. Easy fix. I wrote it up, created a pull request on stim’s...</description>
                 <pubDate>Sat, 27 Jun 2026 11:10:10 -0700</pubDate>
@@ -69,14 +76,6 @@
                 <pubDate>Sat, 30 Aug 2025 11:10:10 -0700</pubDate>
                 <link>http://algassert.com/post/2500</link>
                 <guid isPermaLink="true">http://algassert.com/post/2500</guid>
-            </item>
-            <item>
-                <title>[Talk at QEC2025] Yoked surface codes (and crosshair surface codes)</title>
-                <description>
-</description>
-                <pubDate>Mon, 18 Aug 2025 09:10:10 -0700</pubDate>
-                <link>http://algassert.com/2025/08/18/qec-yoke-talk.html</link>
-                <guid isPermaLink="true">http://algassert.com/2025/08/18/qec-yoke-talk.html</guid>
             </item>
     </channel>
 </rss>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Craig Gidney">
+    <meta name="keywords" content="computer science,algorithms,quantum computing,blog">
+    <meta name="description" content="Craig Gidney's computer science blog">
+    <title>The Underappreciated Art of Superposition Masking</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- RSS autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><img src="/assets/banner.png" alt="Algorithmic Assertions - Craig Gidney's Computer Science Blog" id="site_banner"/></a>
+    </div>
+    <div class="site">
+
+      <h1 class="post_title">The Underappreciated Art of Superposition Masking</h1>
+<p class="meta">21 Oct 2026</p>
+
+    <!-- MathJax latest -->
+    <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$']],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        },
+        TeX: {
+          Macros: {
+            ket: ["\\left|{#1}\\right\\rangle", 1],
+            bra: ["\\left\\langle{#1}\\right|", 1],
+            parens: ["\\left({#1}\\right)", 1],
+            bracket: ["\\left[{#1}\\right]", 1],
+            brace: ["\\left\\{ {#1} \\right\\}", 1],
+            Sum: ["\\underset{#1}{\\overset{#2}{\\Sigma}}", 2],
+            bimat: ["\\begin{bmatrix} {#1} & {#2} \\\\ {#3} & {#4} \\end{bmatrix}", 4]
+          }
+        }
+      });
+    </script>
+    <noscript>
+      <font color=red>
+        MathJax was blocked.
+        Formulas like <strong>$\frac{a}{b}$</strong> won't render into <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAYCAIAAACjjJBEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPY/hPCCBU/P1wamJqZFpBTnJcqLl9142fUHGYip93Znopuc55+Pv/zyv16kJ+W99DJaAq/r3bGiLA67cFJPxuo5eI8bSHf8ASQABR8e1krhSr+ZwnQOGvx9LlFPNPvnv37vs/sBxExc/rrToy8Ye+/P/7ekeKFK/H2guLsvuvQlwCdcefF1sKPX3ic8qaJkzKsTcPSKzY8PQ3RArmUtyAWioYcAOoCvyAyiq+nusIVGdl0O6+/QsqAgYoZnw5nCSlkHfqG5QLAcgqflyuVZeI3PMJyoUCJBV/Hk43YRFySSvIDHXyrNr75i9EGKHi35t1HvxKxUc+/vv/cYe/qNGEu5CIQaj4cjBBSrn03HewYUZsStWXfoDF4Sp+351gKB688yMwOb5c4cwlmngA6h64ir9P59lr5Jz89v/nrQnWsl4LH0MjH8mWvx9OdEUFJ6TEhGXPu/IFkr5AAKECO/j/HwCRTZMPA+AaqQAAAABJRU5ErkJggg==" />.
+      </font>
+      <br>
+      Allow scripts from <strong>algorithmicassertions.com</strong> and <strong>mathjax.org</strong> to fix.
+      <hr/>
+    </noscript>
+
+<div class="post">
+
+<p>In quantum circuit design, a common problem is computing too much.
+You’ll find some clever way to compute a result, only to realize it also computes something else.
+An <em>unwanted value</em>.
+A value whose mere existence is splitting your carefully crafted superposition into jagged non-interfering pieces.
+A value that you can’t discard, and can’t ignore.</p>
+
+<p>The typical way to deal with unwanted values is <a href="https://en.wikipedia.org/wiki/Uncomputation">uncomputation</a>.
+Find some series of operations that would make the value, and run them backwards.
+This unmakes the unwanted value.
+The downside of uncomputation is its cost.
+You pay to make the value, and then you pay <em>again</em> to get rid of it!
+There are tricks to reduce these costs, such as <a href="/post/1905">measurement based uncomputation</a>,
+but in this post I want to discuss a different kind of idea for dealing with unwanted values: “superposition masking”.</p>
+
+<p>Anecdotally, basically nobody knows about superposition masking.
+I rarely see it used in papers.
+And, when I mention it to other researchers, I don’t get many “oh that old thing” reactions.
+The typical reaction is more like “huh? why does that work?”, triggering an hour long explanatiathon.</p>
+
+<p>The core idea behind superposition masking is the following:
+<em>you can craft states that prevent unwanted values from forming in the first place</em>.
+It’s “An ounce of prevention is worth a pound of cure” but for quantum circuits instead of blood sugar.
+You can save a lot of effort by preventing the formation of an unwanted value, rather than intervening to get rid of it later.</p>
+
+<p>My goal in this post is to make you appreciate superposition masking.
+My plan?
+Just show it working.
+Over, and over, and over.
+So… let’s get started with something nice and simple.</p>
+
+<h1 id="level-0-parallel-parities">Level 0: Parallel Parities</h1>
+
+<p>Suppose you’re given a bunch of qubits, and told to measure whether an even or odd number of them are ON.
+In the lingo: build a circuit that measures $Z^{\otimes n}$.
+One way to do this is to initialize an ancilla qubit into the $|0\rangle$ state,
+and then for each input qubit perform a CNOT gate targeting the ancilla:</p>
+
+<blockquote>
+  <p><img style="max-width:100%; max-height: 300px;" src="/assets/2026-10-21-masking/z100.png" /></p>
+</blockquote>
+
+<p>This circuit is really deep.
+(Not deep as in insightful, deep as in <em>slow</em>.)
+Every gate touches the ancilla, which serializes the whole affair.
+But surely for something this simple there’s some way to introduce a bit of parallelism…?</p>
+
+<p>One way to add parallelism is to use multiple ancilla qubits.
+For example, if there were two ancillas instead of one,
+then half of the inputs could CNOT into one ancilla while the other half of the inputs CNOT into the other ancilla.
+The desired value is then the parity of the two ancilla qubits, which can be pushed into one of the ancillas using a final CNOT:</p>
+
+<blockquote>
+  <p><img style="max-width:100%; max-height: 300px;" src="/assets/2026-10-21-masking/z50.png" /></p>
+</blockquote>
+
+<p>…unfortunately, this circuit isn’t correct.
+See the red exclamation points in the top right?
+That’s an unwanted value.
+The extra ancilla is storing the parity of one half of the inputs.
+The circuit isn’t complete until this value is uncomputed.</p>
+
+<p>You’d never remove this particular unwanted value with normal uncomputation.
+Doing so would double the depth of the circuit,
+undoing all the progress you made by introducing the extra ancilla in the first place!
+Measurement-based uncomputation could save you from that fate,
+but superposition masking is an even better fit.</p>
+
+<p>The superposition masking strategy for this setup is very simple:
+initialize the ancilla qubits into the state $|00\rangle + |11\rangle$ (instead of $|00\rangle$).
+Then, at the end of the circuit, you can just measure both ancillas and recover the parity classically:</p>
+
+<blockquote>
+  <p><img style="max-width:100%; max-height: 300px;" src="/assets/2026-10-21-masking/z50-masked.png" /></p>
+</blockquote>
+
+<p>Why does this work?</p>
+
+<p>The key detail to understand is that the state $|00\rangle + |11\rangle$ doesn’t care
+which of its qubits you apply a NOT gate to.
+Bit flip the left qubit, and you transition to the state $|01\rangle + |10\rangle$.
+Bit flip the right qubit?
+Same transition.
+And $|01\rangle + |10\rangle$ has the <em>same property</em>.
+Regardless of which of its qubits you bit flip, you’ll transition back to the state $|00\rangle + |11\rangle$.
+Because the ancillary state doesn’t care which qubit you bit flip,
+it doesn’t matter that some of the CNOT gates are targeting one of its qubits while others are targeting the other.</p>
+
+<p>After all the CNOTs have been performed, the ancillary state will be $|00\rangle + |11\rangle$ if an
+even number of the qubits were ON and $|01\rangle + |10\rangle$ if an odd number were ON.
+We can distinguish the two possible cases by measuring the ancilla qubits and seeing if an even or odd number of the measurement bits were ON.</p>
+
+<p>In addition to the bit of information we wanted, we also learned a second bit.
+In a quantum computation, learning too many bits is a red flag.
+But here it’s benign; it’s just measuring the distinction between $00$ and $11$ in $|00\rangle + |11\rangle$.
+The state was used in a way where this detail can’t have become entangled with the input qubits, so it’s just an independent random bit.
+The 00-vs-11 distinction is where the unwanted value <em>would have</em> gone, but that degree of freedom was masked out by the superposition.</p>
+
+<p><strong>Exercise for the reader</strong>: improve the depth of measuring $Z^{\otimes n}$ to $n/3 + O(1)$ by using superposition masking on <em>three</em> ancilla qubits.</p>
+
+<p><strong>Exercise for the reader</strong>: construct a circuit that measures $Z^{\otimes n}$ in <strong>constant</strong> depth, up to Pauli feedback.
+(“Up to Pauli feedback” means non-constant-depth classical computations may be needed to finish the computation of the parity
+and to determine later Pauli corrections to apply to the qubits.)</p>
+
+<h1 id="level-1-parallel-sums">Level 1: Parallel Sums</h1>
+
+<p>Let’s do a harder example now, though you’ll see that ultimately it’s extremely similar to the first one.</p>
+
+<p>You’re asked to measure the sum of many superposed integers (many “quints”).
+One way to do this is to initialize an accumulator into the $|0\rangle$ state and then,
+one by one, add the integers into the accumulator:</p>
+
+<blockquote>
+  <p><img style="max-width:100%; max-height: 300px;" src="/assets/2026-10-21-masking/add100.png" /></p>
+</blockquote>
+
+<p>You might already see where this is going.
+As in the parity example, we don’t like how this forces us to process the quints serially.
+To introduce some parallelism, we can use multiple accumulators:</p>
+
+<blockquote>
+  <p><img style="max-width:100%; max-height: 300px;" src="/assets/2026-10-21-masking/add50.png" /></p>
+</blockquote>
+
+<p>…but once again the problem is that there’s an unwanted value.
+To avoid paying the cost of uncomputing it, we use superposition masking.
+This time, the special initial state is a superposition of all ways the ancillary registers can add up to 0.
+For $m$-qubit quints, that state is:</p>
+
+\[\sum_{k=0}^{2^m-1} |k\rangle \otimes |(-k) \bmod 2^m\rangle\]
+
+<p>An easy way to create this state is to initialize one of the registers to $|+\rangle^{\otimes m}$,
+and then subtract it out of the other register:</p>
+
+<blockquote>
+  <p><img style="max-width:100%; max-height: 300px;" src="/assets/2026-10-21-masking/add50-masked.png" /></p>
+</blockquote>
+
+<p>If you work through the algebra, you’ll see that adding into one of the accumulators has exactly the same effect as adding into the other.
+You’ll also see that the two values measured at the end contain the intended result (obtained by adding the measured accumulators),
+and a uniformly random value uncorrelated with the rest of the system (obtained by subtracting them).
+The random value is where the unwanted value would have gone, if not for the mask.
+Once again the superposition mask has prevented an unwanted value from forming, bypassing the need for an uncomputation.</p>
+
+<h1 id="level-2-streamed-fibonacci-products">Level 2: Streamed Fibonacci Products</h1>
+
+<p>The most recent usage of masking, that I’m aware of, was by my student researcher Katherine van Kirk.
+Her project was to reduce the space overhead of <a href="https://arxiv.org/abs/2308.06572">Regev’s factoring algorithm</a>.
+In particular, she was working on <a href="https://quantumcomputing.stackexchange.com/questions/35889/is-qft-qubit-recycling-compatible-with-zeckendorfs-fibonacci-representation-of">getting “qubit recycling” to work</a>.
+Qubit recycling is a very old trick for reducing the space cost of phase estimation,
+but it has a very strict constraint: you have to iterate through the “phase estimation qubits” <em>only once</em>
+(you have to <a href="https://en.wikipedia.org/wiki/Streaming_algorithm"><em>stream</em></a> them).</p>
+
+<p>There were various parts of Regev’s algorithm that were getting in the way of streaming.
+A key one was that <a href="https://arxiv.org/abs/2310.00899">Ragavan and Vaikuntanathan’s variant of Regev’s algorithm</a>, which fixed a bunch of <em>other</em> space costs, uses two accumulators.
+When it came time to measure the result, the second accumulator contained an unwanted value.
+Uncomputing this value forced a reverse pass over the phase estimation qubits, breaking streaming and doubling the gate count of the algorithm.</p>
+
+<p>Katherine had asked Seyoon Ragavan if he thought it was possible to fix the unwanted value.
+He said probably not.
+Martin Ekerå <a href="https://quantumcomputing.stackexchange.com/a/35892/119">also suspected it wasn’t possible to stream the algorithm</a>.
+Perhaps by now you suspect the opposite.
+Two accumulators?
+An unwanted value?
+What if we… <em>initialized the second register to a uniform superposition</em>?</p>
+
+<p>…Yeah that just works.
+Plug in the superposition, carefully analyze its effect, and at the crucial moment you find that you can simply measure both accumulators instead of turning back and uncomputing.
+I’d go into detail, but explaining this example actually gets quite involved.
+In particular, I’d need to explain a huge chunk of Regev’s algorithm to provide context.
+Plus, <a href="https://arxiv.org/abs/2610.06733">Katherine just explained it in our preprint</a>.
+(The preprint also explains how to resolve the other former streaming showstopper, which was that it was unclear how to do phase estimation using Fibonacci powers of operations rather than power-of-two powers.)</p>
+
+<h1 id="level-3-the-coset-representation">Level 3: The Coset Representation</h1>
+
+<p>Often, quantum arithmetic is done modulo some classically known constant $N$ (rather than modulo a power of 2).
+This is annoying, because adders are more expensive when $N$ isn’t a power of 2.
+A typical modular addition decomposes into a non-modular addition,
+a comparison (to check if it passed $N$),
+a <em>second</em> non-modular addition (to conditionally subtract $N$ to get back into range),
+and a <em>second</em> comparison (to uncompute the first comparison).
+Modular arithmetic is really expensive!</p>
+
+<p>In 2006, Zalka found a way to bypass this expense.
+He found a way to perform a modular addition with a normal adder.
+His basic insight is that we have a value we want (the remainder $x \bmod N$),
+a value we don’t want (the quotient $\lfloor x / N \rfloor$),
+and instead of constantly ensuring the unwanted quotient is 0 we can mask away the problem.</p>
+
+<p>The normal representation of a remainder $r$ modulo $N$ is the state $|r\rangle$.
+Zalka’s coset representation instead uses:</p>
+
+\[|C(r)\rangle = \sum_{q=0}^{2^m-1} |r + Nq\rangle\]
+
+<p>A crucial difference between this example of masking and the prior ones is that this one is <em>approximate</em>.
+For example, if you increment the register, you might push the lowest value in the superposition past a multiple of $N$.
+That is to say, you might increment the quotient.
+The key thing to realize is that the quotient’s state is affected <em>very little</em> by that unwanted increment.
+The infidelity between the quotient-incremented state $|C(r + N)\rangle$ and the ideal state $|C(r)\rangle$ can be exponentially suppressed by increasing $m$:</p>
+
+\[1 - \Big|\langle C(r + N) | C(r) \rangle\Big|^2 \leq \frac{2}{2^m}\]
+
+<p>In general, as long as the total amount you offset the register by is substantially less than $2^mN$, Zalka’s coset representation is a good approximation of storing the remainder without storing the quotient.
+A small amount of approximate masking yields a large cost reduction.</p>
+
+<h1 id="level-4-quantum-nails">Level 4: Quantum Nails</h1>
+
+<p>Another annoying thing about quantum adders is that the low depth ones cost a lot of Toffolis.
+A linear-depth ripple carry adder?
+That costs an understandable $n$ Toffolis.
+A log-depth carry-lookahead adder?
+Suddenly <a href="https://arxiv.org/abs/2004.01826">four times as many Toffolis</a>!
+Can’t we get a better deal somehow??</p>
+
+<p>Classically, there’s a technique called <a href="https://stackoverflow.com/a/78624935/52239">“nails”</a> for splitting operations into pieces.
+Basically, instead of storing a number using as few bits as possible, you introduce some extra padding bits here and there across the register (these extra bits are the nails).
+When you operate on numbers with nails, you can use the nails as pressure relief for effects that would otherwise have to propagate long distances.
+For example, carries produced during an addition can be dumped into the nails rather than potentially continuing all the way across the register.
+(An extreme version of this is the <a href="https://en.wikipedia.org/wiki/Carry-save_adder">carry-save adder</a>, which is an adder that achieves constant depth by having a nail at every bit position.)</p>
+
+<p>It would be great to be able to use nails quantumly.
+It would let us split adders into independent blocks.
+We could use a ripple carry adder on each block, which wouldn’t cost too many more Toffolis but would be a lot lower depth (because blocks are shorter than entire registers).
+Alas, there is the obvious problem: at the end of the computation, the nails are unwanted values.
+To get rid of them, you’ll have to undo the entire– nope, not doing that, <a href="https://arxiv.org/abs/1905.08488">we’re doing masking</a>.</p>
+
+<p>Instead of initializing the nails of the register to $|0\rangle$, initialize the register into a superposition of all possible representations of 0.
+For example, if there’s a 50 qubit nail at offsets 500, 1000, and 1500 of a 2050 qubit register, then the initial state is:</p>
+
+\[\sum_{a=0}^{2^{50}-1}
+\sum_{b=0}^{2^{50}-1}
+\sum_{c=0}^{2^{50}-1}
+\Big|-2^{500}a-2^{1000}b-2^{1500}c \pmod{2^{2050}}\Big\rangle \otimes |a\rangle \otimes |b\rangle \otimes |c\rangle\]
+
+<p>Concretely, this state is created by initializing the nails into uniform superpositions and then subtracting them out of the main register at the appropriate bit offsets.
+You can add values into the resulting state by adding separately into each of the 550-qubit blocks.
+Using a ripple carry adder on each block (rather than the entire register) improves depth by ~73% (2050 to 550) while only increasing the Toffoli count by ~8% (from 2050 to 2200).
+This is a much more practical tradeoff than the one offered by carry-lookahead adders.</p>
+
+<p>As with Zalka’s coset representation, this masked nail representation is approximate.
+The mask doesn’t completely stop unwanted information from entering the nails.
+But the rate of information leakage is suppressed exponentially as you increase the length of the nails,
+and in practice it’s possible to find good tradeoffs.</p>
+
+<h1 id="level-5-un-approximation">Level 5: Un-approximation</h1>
+
+<p>In 2024, <a href="https://eprint.iacr.org/2024/222">Chevignard et al revolutionized quantum factoring</a>.
+They found a way to compute an approximate modular exponentiation which,
+combined with <a href="https://arxiv.org/abs/1905.10074">prior</a> <a href="https://arxiv.org/abs/1702.00249">work</a>,
+made it possible to factor $n$-bit semiprimes using only $n/2 + \epsilon n$ qubits.
+However, they paid a huge gate count overhead to save this space.</p>
+
+<p>The gate count overhead came from many places, but one of them is particularly relevant to this post.
+The approximate value that Chevignard et al compute is perturbed away from the value normally computed during Shor’s algorithm.
+This perturbation is information that was produced by the computation, but that you don’t want to measure and ultimately need to get rid of.
+Sound familiar?
+<em>The perturbation is an unwanted value</em>.</p>
+
+<p>Chevignard et al got rid of the unwanted perturbation by uncomputing it the normal way.
+When I <a href="https://arxiv.org/abs/2505.15917">built on Chevignard et al’s work</a>, a key goal was to fix the Toffoli overhead.
+This unwanted value was doubling the gate count, so I really wanted to get rid of it.
+And, looking at it, the obvious thought occurred: “I bet I can mask it.”.</p>
+
+<p>The computation of the approximation is done by a series of additions into an accumulator.
+Chevignard et al initialized the accumulator to $|0\rangle$.
+I instead initialized the accumulator to a uniform superposition over the integers less than a custom value $M$.
+The tricky bit was picking an $M$ that wasn’t too large or too small.
+It needed to be large enough to prevent almost all information about the perturbation from entering the accumulator,
+but not so large that it prevented <em>useful</em> information from entering the accumulator.
+I picked an appropriate $M$, and collected my factor of 2 fewer gates.</p>
+
+<p>Interestingly, this case is essentially the opposite of Zalka’s coset representation.
+He needed to get rid of an unwanted value in the high bits (the quotient).
+I needed to get rid of an unwanted value in the low bits (the perturbation).
+They were both solved by carefully targeted masking.</p>
+
+<h1 id="level-6-offloading-inversion">Level 6: Offloading Inversion</h1>
+
+<p>The craziest use of masking that I know of is a trick for computing $x^{-1} \pmod{N}$ under superposition.
+Although there’s been quite a lot of
+<a href="https://arxiv.org/abs/2603.28846">progress</a> <a href="https://ecdsa.fail/">improving</a> <a href="https://github.com/trailofbits/trailmix">multiplicative</a> <a href="https://arxiv.org/abs/2606.02235">inverse</a> <a href="https://arxiv.org/abs/2607.13816">subroutines</a> <a href="https://www.anthropic.com/research/designing-efficient-quantum-circuits">recently</a>,
+it’s still a very expensive operation.
+Amazingly, masking can produce an inversion far more cheaply than in even the most recent papers.
+…Sort of.
+You’ll see.</p>
+
+<p>There’s an old classical trick for batching modular inversions called <a href="https://www.johndcook.com/blog/2026/01/14/montgomerys-trick/">Montgomery’s trick</a>.
+Instead of computing $x^{-1}$ and $y^{-1}$ separately, compute the inverse $z^{-1}$ of their product $z = xy$.
+Then, by multiplying $x\cdot z^{-1}$, you recover the multiplicative inverse of $y$ (because $x \cdot z^{-1} = x \cdot (xy)^{-1} = x \cdot x^{-1} \cdot y^{-1} = y^{-1}$).
+Similarly, multiplying $y \cdot z^{-1}$ yields $x^{-1}$.
+Thus Montgomery’s trick replaces two inversions with three multiplications and just one inversion.
+Multiplication is cheaper than inversion, so that’s a savings.</p>
+
+<p>Here’s the concept: can you apply Montgomery’s trick to a quantum $x$, while keeping $z$ classical?
+If by some miracle this was possible, then we’d be able to offload the incredibly expensive inversion to a classical computer.
+The quantum computer would only have to do a few multiplications.
+This sounds impossible… but it’s not.
+Samuel Jacques figured out how to do it.
+He told me about it in 2020, I got excited, and we (well… mostly he) wrote the preprint <a href="https://arxiv.org/abs/2008.04577">“Offloading Quantum Computation by Superposition Masking”</a> describing it.</p>
+
+<p>Here’s how it works.
+To get a classical $z$ from a quantum $x$, introduce a uniformly superposed $y$ and then measure $x \cdot y$.
+This measurement tells you how $x$ relates to $y$, but because $y$ was uniformly superposed it doesn’t actually reveal anything about $x$.
+$y$ masks $x$.
+Instead of revealing $x$, what the measurement effectively did was force $y$ to become equal to $x^{-1} \cdot m \pmod{N}$, where $m$ is the measurement result.
+By classically computing $m^{-1}$, and multiplying it into $y$, you recover $x^{-1}$ without ever performing an inversion on the quantum computer:</p>
+
+<blockquote>
+  <p><img style="max-width:100%; max-height: 300px;" src="/assets/2026-10-21-masking/offload-div.png" /></p>
+</blockquote>
+
+<p>(Note: there are some nitpicky details here about accidentally making values of $y$ that aren’t in the multiplicative group of $N$.
+However, in typical cases that’s so unlikely that it can be ignored.)</p>
+
+<p>Now comes the irony.
+There’s a teeny weeny major showstopping problem with this technique: it doesn’t turn $|x\rangle$ into $|x^{-1}\rangle$; it turns it into $|x\rangle \otimes |x^{-1}\rangle$.
+It leaves behind <em>an unwanted value</em>.
+Masking has created the exact problem it normally solves!
+It can efficiently compute $x^{-1}$ out of place, but what algorithms need is <em>inplace</em> inversion.
+The only known way to get rid of the out-of-place inverse is via other slower methods, defeating the entire purpose.</p>
+
+<p>I find this problem <em>so frustrating</em>.
+It’s the <em>only</em> example I know where measurement makes it easier to compute something, rather than easier to uncompute it.
+<em>Surely</em> there must be a way to fix it!
+And it’s <em>important</em> if it can be fixed, because it’d probably yield efficient elliptic curve point addition circuits!</p>
+
+<p>Come to think of it, this problem has nagged at me since 2020. I’m tired of it. How about <em>YOU</em> solve it:</p>
+
+<p><strong>Hard exercise for the reader</strong>: offload the expensive part of this transformation to a classical computer:</p>
+
+\[|x^{-1} \pmod{N}\rangle \otimes |x\rangle \rightarrow |x\rangle\]
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>Superposition masking is a useful tool.
+I’ve used it over and over throughout my career.
+It’s not particularly complicated, it has lots of applications, and it’s underutilized.
+Add it to your toolbelt.</p>
+
+<p>A notable downside of superposition masking is that, to the best of my knowledge, there’s no easy way to test it numerically.
+The proofs that these circuits work are typically analytic.
+They appeal to <em>structure</em>, rather than to sampling or to case enumeration.
+This is in stark contrast to, for example, <a href="https://github.com/tanujkhattar/zkp_ecc/blob/main/docs/kickmix_instruction_set.md">kickmix circuits</a>.
+Maybe superposition masking <em>isn’t</em> underappreciated; maybe it’s just waiting for someone to find an easier way to verify the amazing constructions it produces.</p>
+
+
+</div>
+
+
+    </div>
+
+    <div class="footer-container">
+      <div class="site">
+        <div class="footer">
+          <div class="contact">
+            by: Craig Gidney (opinions are my own, independent of my employer)<br />
+            more: <a href="/">All Posts</a>, <a href="/feed.xml">Posts Feed<img src="/assets/feed-icon.png" width="16px" alt="Posts Feed" title="Posts Feed" /></a><br/>
+            meta: <a href="/about.html">About the Author/Blog</a><br/>
+          </div>
+          <div class="license">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="Creative Commons License" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" />
+            </a><br />
+            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
